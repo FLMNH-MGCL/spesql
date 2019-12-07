@@ -1,25 +1,63 @@
-import React from 'react';
-import logo from '../../assets/logo.svg';
-import './Home.css';
+import React from 'react'
+//import Header from '../../components/Header/Header'
+import Navigation from '../../components/Navigation/TopBar'
+import Footer from '../../components/Footer/Footer'
 
-function Home() {
-    return (
-        <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                </a>
-            </header>
-        </div>
-    );
+import './Home.css'
+import CollectionList from '../../components/CollectionList/CollectionList'
+
+import data from '../../components/CollectionList/test_data'
+import { Col, Row } from 'react-bootstrap'
+import SideBar from '../../components/Navigation/SideBar'
+import DBToolbar from '../../components/Toolbar/DBToolbar'
+import SideToolbar from '../../components/Toolbar/SideToolbar'
+import SpecimenView from '../../components/SpecimenView/SpecimenView'
+
+class Home extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            filteredText: '',
+            selectedSpecimen: 0,
+            data: data
+        }
+    }
+
+    filterUpdate(value) {
+        this.setState({
+            filteredText: value
+        })
+    }
+
+    selectedUpdate(id) {
+        this.setState({
+            selectedSpecimen: id
+        })
+    }
+
+    render() {
+        return (
+            <div>
+                <Navigation />
+                <Row>
+                    <Col sm={2}>
+                        <SideToolbar />
+                        <SideBar />
+                    </Col>
+                    <Col sm={6}>
+                        <DBToolbar filterUpdate={this.filterUpdate.bind(this)}/>
+                        <CollectionList data={this.state.data} filteredText={this.state.filteredText} selectedUpdate={this.selectedUpdate.bind(this)}/>
+                    </Col>
+                    <Col sm={4}>
+                        <SpecimenView data={this.state.data} selectedSpecimen={this.state.selectedSpecimen}/>
+                    </Col>
+                </Row>
+                <Footer />
+            </div>
+        )
+    }
+    
 }
 
-export default Home;
+export default Home
