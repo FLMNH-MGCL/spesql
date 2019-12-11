@@ -4,7 +4,7 @@ export default [
         genus: 'Collema',
         species: 'furfuraceum',
         dateCollected: '05/2017',
-        locality: 'Not Florida'
+        locality: 'Florida'
     },
     {
         id: 2,
@@ -24,14 +24,14 @@ export default [
         id: 4,
         genus: 'Actias',
         species: 'luna',
-        dateCollected: '05/2017',
-        locality: 'Not Florida'
+        dateCollected: '11/2017',
+        locality: 'Florida'
     },
     {
         id: 5,
         genus: 'Actias',
         species: 'luna',
-        dateCollected: '05/2017',
+        dateCollected: '01/2017',
         locality: 'Not Florida'
     }
 ];

@@ -1,6 +1,7 @@
 import React from 'react'
+import axios from 'axios'
 //import Header from '../../components/Header/Header'
-import Navigation from '../../components/Navigation/TopBar'
+//import Navigation from '../../components/Navigation/TopBar'
 import Footer from '../../components/Footer/Footer'
 
 import './Home.css'
@@ -22,6 +23,11 @@ class Home extends React.Component {
             selectedSpecimen: 0,
             data: data
         }
+
+        axios.get('/api/fetch-all').then(res => {
+            const data = res.data
+            console.log(data)
+        })
     }
 
     filterUpdate(value) {
@@ -39,7 +45,7 @@ class Home extends React.Component {
     render() {
         return (
             <div>
-                <Navigation />
+                {/* <Navigation /> */}
                 <Row>
                     <Col sm={2}>
                         <SideToolbar />
