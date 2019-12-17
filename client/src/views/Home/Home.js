@@ -24,6 +24,7 @@ class Home extends React.Component {
             data: data
         }
 
+        // alter for component did mount research
         axios.get('/api/fetch-all').then(res => {
             const data = res.data
             console.log(data)

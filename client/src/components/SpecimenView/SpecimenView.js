@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 class SpecimenView extends React.Component {
     // change to query
     render() {
@@ -20,7 +21,7 @@ class SpecimenView extends React.Component {
                 <div>
                     <p>Genus: {selectedSpecimen.genus}</p>
                     <p>species: {selectedSpecimen.species}</p>
-                    <p>Collected: {selectedSpecimen.dateCollected}</p>
+                    <p>Collected: {selectedSpecimen.date_collected}</p>
                     <p>Locality: {selectedSpecimen.locality}</p>
                 </div>
             )
