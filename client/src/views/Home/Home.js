@@ -27,6 +27,7 @@ class Home extends React.Component {
         axios.get('/api/fetch-all').then(res => {
             const data = res.data
             console.log(data)
+            this.setState({data: data.specimen})
         })
     }
 
