@@ -34,6 +34,14 @@ class Home extends React.Component {
         })
     }
 
+    updateList() {
+        axios.get('/api/fetch-all').then(res => {
+            const data = res.data
+            console.log(data)
+            this.setState({data: data.specimen})
+        })
+    }
+
     updateFilterCategory(category) {
         this.setState({
             filterCategory: category
@@ -67,6 +75,7 @@ class Home extends React.Component {
                     updateFilteredText={this.updateFilteredText.bind(this)} 
                     updateFilterCategory={this.updateFilterCategory.bind(this)}
                     updateSortBy={this.updateSortBy.bind(this)}
+                    updateList={this.updateList.bind(this)}
                 />
                 <Grid columns='equal' padded>
                     <Grid.Column width={11}>
@@ -79,10 +88,9 @@ class Home extends React.Component {
                         />
                     </Grid.Column>
                     <Grid.Column>
-                        <SpecimenView data={this.state.data} selectedSpecimen={this.state.selectedSpecimen}/>
+                        <SpecimenView data={this.state.data} selectedSpecimen={this.state.selectedSpecimen} updateList={this.updateList.bind(this)}/>
                     </Grid.Column>
                 </Grid>
-
                 <Footer />
             </div>
         )

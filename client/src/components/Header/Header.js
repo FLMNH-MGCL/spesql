@@ -3,6 +3,7 @@ import { Menu } from 'semantic-ui-react'
 import SearchFilter from '../Search/SearchFilter'
 import DBSearch from '../Search/DBSearch'
 import SortCollection from '../CollectionList/SortCollection'
+import InsertDocument from '../InsertDocument/InsertDocument'
 
 export default class Header extends Component {
     state = { activeItem: 'home' }
@@ -31,6 +32,9 @@ export default class Header extends Component {
                         </Menu.Item>
                         <Menu.Item position='middle'>
                             <SortCollection updateSortBy={this.props.updateSortBy.bind(this)}/>
+                        </Menu.Item>
+                        <Menu.Item position='middle'>
+                            <InsertDocument updateList={this.props.updateList.bind(this)}/>
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>
