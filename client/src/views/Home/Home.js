@@ -6,13 +6,13 @@ import Footer from '../../components/Footer/Footer'
 
 import './Home.css'
 import CollectionList from '../../components/CollectionList/CollectionList'
-
-import data from '../../components/CollectionList/test_data'
-import { Col, Row } from 'react-bootstrap'
-import SideBar from '../../components/Navigation/SideBar'
-import DBToolbar from '../../components/Toolbar/DBToolbar'
-import SideToolbar from '../../components/Toolbar/SideToolbar'
+// import { Col, Row } from 'react-bootstrap'
+// import SideBar from '../../components/Navigation/SideBar'
+// import DBToolbar from '../../components/Toolbar/DBToolbar'
+// import SideToolbar from '../../components/Toolbar/SideToolbar'
 import SpecimenView from '../../components/SpecimenView/SpecimenView'
+import Header from '../../components/Header/Header'
+import { Grid } from 'semantic-ui-react'
 
 class Home extends React.Component {
     constructor(props) {
@@ -20,8 +20,10 @@ class Home extends React.Component {
 
         this.state = {
             filteredText: '',
+            filterCategory: 'Species',
             selectedSpecimen: 0,
-            data: data
+            sortBy: '',
+            data: []
         }
 
         // alter for component did mount research
@@ -32,9 +34,22 @@ class Home extends React.Component {
         })
     }
 
-    filterUpdate(value) {
+    updateFilterCategory(category) {
+        this.setState({
+            filterCategory: category
+        })
+    }
+
+    updateFilteredText(value) {
+        console.log(value)
         this.setState({
             filteredText: value
+        })
+    }
+
+    updateSortBy(value) {
+        this.setState({
+            sortBy: value
         })
     }
 
@@ -45,22 +60,29 @@ class Home extends React.Component {
     }
 
     render() {
+        console.log(this.state)
         return (
             <div>
-                {/* <Navigation /> */}
-                <Row>
-                    <Col sm={2}>
-                        <SideToolbar />
-                        <SideBar />
-                    </Col>
-                    <Col sm={6}>
-                        <DBToolbar filterUpdate={this.filterUpdate.bind(this)}/>
-                        <CollectionList data={this.state.data} filteredText={this.state.filteredText} selectedUpdate={this.selectedUpdate.bind(this)}/>
-                    </Col>
-                    <Col sm={4}>
+                <Header 
+                    updateFilteredText={this.updateFilteredText.bind(this)} 
+                    updateFilterCategory={this.updateFilterCategory.bind(this)}
+                    updateSortBy={this.updateSortBy.bind(this)}
+                />
+                <Grid columns='equal' padded>
+                    <Grid.Column width={11}>
+                        <CollectionList 
+                            data={this.state.data} 
+                            filteredText={this.state.filteredText} 
+                            filterCategory={this.state.filterCategory} 
+                            selectedUpdate={this.selectedUpdate.bind(this)}
+                            sortBy={this.state.sortBy}
+                        />
+                    </Grid.Column>
+                    <Grid.Column>
                         <SpecimenView data={this.state.data} selectedSpecimen={this.state.selectedSpecimen}/>
-                    </Col>
-                </Row>
+                    </Grid.Column>
+                </Grid>
+
                 <Footer />
             </div>
         )

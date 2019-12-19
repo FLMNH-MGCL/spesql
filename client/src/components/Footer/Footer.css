@@ -1,9 +1,11 @@
 .footer-container {
-    background-color: lightblue;
+    background-color: lightgrey;
     position: absolute;
     left: 0;
     bottom: 0;
-    height: 4rem;
+    
     width: 100%;
     overflow:hidden;
+    text-align: center;
+    padding: 2rem;
 }
