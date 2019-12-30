@@ -54,7 +54,7 @@ class InsertDocument extends React.Component {
     render() {
         const { id, superfamily, family, genus, species, locality, rack, date_collected } = this.state
         return (
-            <div >
+            <div className='content'>
                 <Modal trigger={
                     <Button icon labelPosition='left'>
                         <Icon name='upload' />

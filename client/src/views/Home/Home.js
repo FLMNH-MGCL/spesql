@@ -76,6 +76,7 @@ class Home extends React.Component {
                     updateFilterCategory={this.updateFilterCategory.bind(this)}
                     updateSortBy={this.updateSortBy.bind(this)}
                     updateList={this.updateList.bind(this)}
+                    data={this.state.data}
                 />
                 <Grid columns='equal' padded>
                     <Grid.Column width={11}>

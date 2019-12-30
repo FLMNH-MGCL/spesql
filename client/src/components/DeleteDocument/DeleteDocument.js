@@ -1,9 +1,14 @@
 import React from 'react'
-import { Button } from 'semantic-ui-react'
+import { Button, Confirm } from 'semantic-ui-react'
 import axios from 'axios'
+import './DeleteDocument.css'
 
 class DeleteDocument extends React.Component {
-    handleClick = () => {
+    state = { open: false}
+
+    show = () => this.setState({ open: true })
+
+    handleConfirm= () => {
         axios.post(`/api/delete/${this.props.target}`).then(res => {
             const data = res.data
             console.log(data)
@@ -11,9 +16,21 @@ class DeleteDocument extends React.Component {
         this.props.updateList()
     }
 
+    handleCancel = () => this.setState({ open: false })
+
     render() {
         return(
-            <Button negative onClick={this.handleClick}>DELETE</Button>
+            <React.Fragment>
+                <Button negative onClick={this.show}>DELETE</Button>
+                <Confirm
+                    open={this.state.open}
+                    header="Are you sure?"
+                    onCancel={this.handleCancel}
+                    onConfirm={this.handleConfirm}
+                    size='small'
+                />
+            </React.Fragment>
+            
         )
     }
 }
