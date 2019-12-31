@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Icon, Modal, Grid, Form, Input, Select } from 'semantic-ui-react'
+import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea } from 'semantic-ui-react'
 import axios from 'axios'
 import './InsertDocument.css'
 
@@ -30,7 +30,8 @@ class InsertDocument extends React.Component {
         species : '',
         locality : '',
         rack : '',
-        date_collected : ''
+        date_collected : '',
+        text_area: ''
     }
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -47,12 +48,28 @@ class InsertDocument extends React.Component {
             species : '',
             locality : '',
             rack : '',
-            date_collected : ''
+            date_collected : '',
+            text_area: ''
+        })
+    }
+
+    handleCSVSubmit = () => {
+        alert(this.state.text_area)
+        this.setState({
+            id: '',
+            superfamily : '',
+            family : '',
+            genus : '',
+            species : '',
+            locality : '',
+            rack : '',
+            date_collected : '',
+            text_area: ''
         })
     }
 
     render() {
-        const { id, superfamily, family, genus, species, locality, rack, date_collected } = this.state
+        const { id, superfamily, family, genus, species, locality, rack, date_collected, text_area } = this.state
         return (
             <div className='content'>
                 <Modal trigger={
@@ -65,7 +82,33 @@ class InsertDocument extends React.Component {
                     <Modal.Content>
                         <Grid padded>
                             <Grid.Row>
-                                <p style={{padding: '1rem'}}>Upload a CSV file: </p>
+                                <p style={{padding: '1rem'}}>CSV Paste Entry: </p>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={16}>
+                                    <Form padded onSubmit={this.handleCSVSubmit}>
+                                        <Form.Group>
+                                            <TextArea
+                                                id='form-text-area'
+                                                control={TextArea}
+                                                name='text_area'
+                                                value={text_area}
+                                                onChange={this.handleChange}
+                                            />                                            
+                                        </Form.Group>
+                                        <Form.Field
+                                            id='form-button-control-ta-submit'
+                                            control={Button}
+                                            content='Confirm'
+                                        />
+                                    </Form>
+                                </Grid.Column>
+                            </Grid.Row>
+
+
+
+                            <Grid.Row>
+                                <p>Upload a CSV file: </p>
                             </Grid.Row>
                             <Grid.Row>
                                 <Button icon labelPosition='left'>

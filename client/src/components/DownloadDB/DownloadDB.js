@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Icon } from 'semantic-ui-react'
-import { CSVLink, CSVDownload } from 'react-csv'
+import { CSVLink } from 'react-csv'
 
 class DownloadDB extends React.Component {
     render() {
@@ -19,3 +19,6 @@ class DownloadDB extends React.Component {
 } 
 
 export default DownloadDB
+
+
+// https://stackoverflow.com/questions/48760815/export-to-csv-button-in-react-table
