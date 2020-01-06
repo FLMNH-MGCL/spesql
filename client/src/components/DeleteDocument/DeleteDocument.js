@@ -14,6 +14,7 @@ class DeleteDocument extends React.Component {
             console.log(data)
         })
         this.props.updateList()
+        this.setState({ open: false })
     }
 
     handleCancel = () => this.setState({ open: false })

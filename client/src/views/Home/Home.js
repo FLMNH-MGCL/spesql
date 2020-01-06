@@ -3,6 +3,7 @@ import axios from 'axios'
 //import Header from '../../components/Header/Header'
 //import Navigation from '../../components/Navigation/TopBar'
 import Footer from '../../components/Footer/Footer'
+import Papa from 'papaparse';
 
 import './Home.css'
 import CollectionList from '../../components/CollectionList/CollectionList'
@@ -32,6 +33,20 @@ class Home extends React.Component {
             console.log(data)
             this.setState({data: data.specimen})
         })
+    }
+
+    isValidCSV(csv) {
+        // return object with valid param
+        let obj = Papa.parse(csv)
+        // console.log(obj)
+        let data = obj.data
+
+        var ret = {
+            "valid" : true,
+            "data" : data
+        }
+
+        return ret
     }
 
     updateList() {
@@ -77,6 +92,7 @@ class Home extends React.Component {
                     updateSortBy={this.updateSortBy.bind(this)}
                     updateList={this.updateList.bind(this)}
                     data={this.state.data}
+                    isValidCSV={this.isValidCSV.bind(this)}
                 />
                 <Grid columns='equal' padded>
                     <Grid.Column width={11}>
@@ -92,7 +108,6 @@ class Home extends React.Component {
                         <SpecimenView data={this.state.data} selectedSpecimen={this.state.selectedSpecimen} updateList={this.updateList.bind(this)}/>
                     </Grid.Column>
                 </Grid>
-                <Footer />
             </div>
         )
     }

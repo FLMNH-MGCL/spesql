@@ -24,14 +24,35 @@ const localityOptions = [
 class InsertDocument extends React.Component {
     state = {
         id: '',
-        superfamily : '',
-        family : '',
-        genus : '',
-        species : '',
-        locality : '',
-        rack : '',
-        date_collected : '',
-        text_area: ''
+            mgcl_num: '',
+            lep_num: '',
+            order_: '',
+            superfamily : '',
+            family : '',
+            subfamily: '',
+            tribe: '',
+            section: '',
+            genus : '',
+            species : '',
+            subspecies: '',
+            sex: '',
+            country: '',
+            province: '',
+            locality : '',
+            latitude: '',
+            longitude: '',
+            elevation: '',
+            mv_lamp: '',
+            days: '',
+            month: '',
+            year: '',
+            collectors: '',
+            freezer: '',
+            rack : '',
+            box: '',
+            size: '',
+            note: '',
+            text_area: ''
     }
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -42,34 +63,160 @@ class InsertDocument extends React.Component {
         this.props.updateList()
         this.setState({
             id: '',
+            mgcl_num: '',
+            lep_num: '',
+            order_: '',
             superfamily : '',
             family : '',
+            subfamily: '',
+            tribe: '',
+            section: '',
             genus : '',
             species : '',
+            subspecies: '',
+            sex: '',
+            country: '',
+            province: '',
             locality : '',
+            latitude: '',
+            longitude: '',
+            elevation: '',
+            mv_lamp: '',
+            days: '',
+            month: '',
+            year: '',
+            collectors: '',
+            freezer: '',
             rack : '',
-            date_collected : '',
+            box: '',
+            size: '',
+            note: '',
             text_area: ''
         })
     }
 
     handleCSVSubmit = () => {
-        alert(this.state.text_area)
+        // alert(this.state.text_area)
+        // check valid data
+        // if data is valid, loop through and axios.post each item
+        const ret = this.props.isValidCSV(this.state.text_area)
+        console.log(ret.data)
+        // console.log(ret.valid)
+        if (ret.valid === true) {
+            console.log(ret.data.length)
+            // ret.data[0] is header row
+
+            for (var i = 1; i < ret.data.length; i++) { 
+                let specimen = ret.data[i]
+                const doc = {
+                    mgcl_num: specimen[0],
+                    lep_num: specimen[1],
+                    order_: specimen[2],
+                    superfamily : specimen[3],
+                    family : specimen[4],
+                    subfamily: specimen[5],
+                    tribe: specimen[6],
+                    section: specimen[7],
+                    genus : specimen[8],
+                    species : specimen[9],
+                    subspecies: specimen[10],
+                    sex: specimen[11],
+                    country: specimen[12],
+                    province: specimen[13],
+                    locality : specimen[14],
+                    latitude: specimen[15],
+                    longitude: specimen[16],
+                    elevation: specimen[17],
+                    mv_lamp: specimen[18],
+                    days: specimen[19],
+                    month: specimen[20],
+                    year: specimen[21],
+                    collectors: specimen[22],
+                    freezer: specimen[23],
+                    rack : specimen[24],
+                    box: specimen[25],
+                    size: specimen[26],
+                    note: specimen[27],
+                }
+
+                // console.log(doc)
+                axios.post('/api/insert', doc)
+                this.props.updateList()
+            }
+        }
+        else { 
+            alert(ret.error_log)
+        }
+
+        
+
         this.setState({
             id: '',
+            mgcl_num: '',
+            lep_num: '',
+            order_: '',
             superfamily : '',
             family : '',
+            subfamily: '',
+            tribe: '',
+            section: '',
             genus : '',
             species : '',
+            subspecies: '',
+            sex: '',
+            country: '',
+            province: '',
             locality : '',
+            latitude: '',
+            longitude: '',
+            elevation: '',
+            mv_lamp: '',
+            days: '',
+            month: '',
+            year: '',
+            collectors: '',
+            freezer: '',
             rack : '',
-            date_collected : '',
+            box: '',
+            size: '',
+            note: '',
             text_area: ''
         })
     }
 
     render() {
-        const { id, superfamily, family, genus, species, locality, rack, date_collected, text_area } = this.state
+        const { 
+            id,
+            mgcl_num,
+            lep_num,
+            order_,
+            superfamily ,
+            family ,
+            subfamily,
+            tribe,
+            section,
+            genus ,
+            species ,
+            subspecies,
+            sex,
+            country,
+            province,
+            locality ,
+            latitude,
+            longitude,
+            elevation,
+            mv_lamp,
+            days,
+            month,
+            year,
+            collectors,
+            freezer,
+            rack,
+            box,
+            size,
+            note,
+            text_area
+        } = this.state
         return (
             <div className='content'>
                 <Modal trigger={
@@ -185,10 +332,10 @@ class InsertDocument extends React.Component {
                                         <Form.Field
                                             id='form-input-control-date-collected'
                                             control={Input}
-                                            label='Date Collected'
+                                            label='Year Collected'
                                             placeholder='05/2017'
-                                            name='date_collected'
-                                            value={date_collected}
+                                            name='year'
+                                            value={year}
                                             onChange={this.handleChange}
                                         />
                                         <Form.Field

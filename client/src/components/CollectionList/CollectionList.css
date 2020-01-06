@@ -1,0 +1,16 @@
+tbody {
+    display: block;
+    height: 80vh;
+    overflow: auto;
+    scrollbar-width: none;
+}::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* Chrome/Safari/Webkit */
+}
+
+thead,
+tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}

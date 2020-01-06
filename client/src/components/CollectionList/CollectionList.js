@@ -1,5 +1,6 @@
 import React from 'react'
 import { Table } from 'semantic-ui-react'
+import './CollectionList.css'
 //import SpecimenCard from './SpecimenCard'
 
 export default ({data, filteredText, filterCategory, selectedUpdate, sortBy}) => {
@@ -61,13 +62,13 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy}) =>
                 //     </td>
                 // </tr>
                 <Table.Row key={specimen.id} onClick={() => selectedUpdate(specimen)}>
-                    <Table.Cell>{specimen.id}</Table.Cell>
+                    <Table.Cell>{specimen.lep_num}</Table.Cell>
                     <Table.Cell>{specimen.superfamily}</Table.Cell>
                     <Table.Cell>{specimen.family}</Table.Cell>
                     <Table.Cell>{specimen.genus}</Table.Cell>
                     <Table.Cell>{specimen.species}</Table.Cell>
                     <Table.Cell>{specimen.locality}</Table.Cell>
-                    <Table.Cell>{specimen.id}</Table.Cell>
+                    <Table.Cell>{specimen.rack}</Table.Cell>
                 </Table.Row>
             )
         })
@@ -86,10 +87,12 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy}) =>
                         <Table.HeaderCell>Rack #</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-                    
+                
                 <Table.Body>
                     {collectionList}
                 </Table.Body>
             </Table>
         )
 }
+
+// SCROLLABLE https://codesandbox.io/s/p2pr9zjrvj
