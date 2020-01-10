@@ -8,6 +8,11 @@ const queryActions = [
 const headerSelection = [
     { key: '1', text: 'ALL', value: '*' },
     { key: '2', text: 'Genus', value: 'genus' },
+    { key: '10', text: 'Species', value: 'species' },
+    { key: '11', text: 'Family', value: 'family' },
+    { key: '12', text: 'Subfamily', value: 'subfamily' },
+    { key: '13', text: 'Superfamily', value: 'superfamily' },
+    { key: '14', text: 'Order', value: 'order_' },
 ]
 
 const dbSelection = [
@@ -36,8 +41,47 @@ class QueryGrid extends React.Component {
         operator: ''
     }
 
+    // DANGEROUS, EASY TO BREAK NEED MORE CHECKS
     handleSubmit = () => {
+        let command = String(this.state.query_action + ' ')
 
+        for (let i = 0; i < this.state.fields.length; i++) {
+            command += this.state.fields[i]
+
+            if (i !== this.state.fields.length - 1) {
+                command += ','
+            }
+            else {
+                command += ' '
+            }
+        }
+
+        command += 'FROM ' + this.state.db
+
+        if (this.state.where) {
+            command += ' WHERE '
+        }
+
+        let search_terms = this.state.search_.split(',')
+
+        if (search_terms.length === this.state.fields_search.length) {
+            for (let i = 0; i < this.state.fields_search.length; i++) {
+                command += this.state.fields_search[i] + this.state.operator + '"' + search_terms[i] + '"'
+
+                if (i !== this.state.fields_search.length - 1) {
+                    command += ' AND '
+                }
+                // else {
+                //     command += ' '
+                // }
+            }
+        }
+
+
+        command += ';'
+        console.log(command)
+
+        this.props.updateQuery(command)
     }
 
     handleAdvancedSubmit = () => {
@@ -60,6 +104,8 @@ class QueryGrid extends React.Component {
             search_,
             operator
         } = this.state
+
+        console.log(this.state)
 
         return(
             <div className='content'>
