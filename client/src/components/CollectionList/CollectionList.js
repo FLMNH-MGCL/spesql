@@ -15,8 +15,8 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy}) =>
             else if (filterCategory === 'Genus') {
                 return specimen.genus.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
             }
-            else if (filterCategory === 'Locality') {
-                return specimen.locality.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
+            else if (filterCategory === 'Country') {
+                return specimen.country.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
             }
             else if (filterCategory === 'Collection Date') {
                 return specimen.date_collected.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
@@ -41,8 +41,8 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy}) =>
             else if (sortBy === 'Species') {
                 return (specimen_a.species > specimen_b.species) ? 1 : ((specimen_b.species > specimen_a.species) ? -1 : 0)
             }
-            else if (sortBy === 'Locality') {
-                return (specimen_a.locality > specimen_b.locality) ? 1 : ((specimen_b.locality > specimen_a.locality) ? -1 : 0)
+            else if (sortBy === 'Country') {
+                return (specimen_a.country > specimen_b.country) ? 1 : ((specimen_b.country > specimen_a.country) ? -1 : 0)
             }
             else if (sortBy === 'Collection Date') {
                 return (specimen_a.date_collected > specimen_b.date_collected) ? 1 : ((specimen_b.date_collected > specimen_a.date_collected) ? -1 : 0)
@@ -67,7 +67,7 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy}) =>
                     <Table.Cell>{specimen.family}</Table.Cell>
                     <Table.Cell>{specimen.genus}</Table.Cell>
                     <Table.Cell>{specimen.species}</Table.Cell>
-                    <Table.Cell>{specimen.locality}</Table.Cell>
+                    <Table.Cell>{specimen.country}</Table.Cell>
                     <Table.Cell>{specimen.rack}</Table.Cell>
                 </Table.Row>
             )
@@ -83,7 +83,7 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy}) =>
                         <Table.HeaderCell>Family</Table.HeaderCell>
                         <Table.HeaderCell>Genus</Table.HeaderCell>
                         <Table.HeaderCell>Species</Table.HeaderCell>
-                        <Table.HeaderCell>Locality</Table.HeaderCell>
+                        <Table.HeaderCell>Country</Table.HeaderCell>
                         <Table.HeaderCell>Rack #</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>

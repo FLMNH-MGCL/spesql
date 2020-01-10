@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Popup } from 'semantic-ui-react'
 
 const tagOptions = [
     {
@@ -33,9 +33,9 @@ const tagOptions = [
         label: { color: 'black', empty: true, circular: true },
     },
     {
-        key: 'Locality',
-        text: 'Locality',
-        value: 'Locality',
+        key: 'Country',
+        text: 'Country',
+        value: 'Country',
         label: { color: 'purple', empty: true, circular: true },
     },
     {
@@ -64,18 +64,23 @@ class SearchFilter extends React.Component {
     render() {
         const { filterCategory } = this.state
         return(
-            <Dropdown
-                text='Filter'
-                icon='filter'
-                floating
-                labeled
-                button
-                className='icon'
-                value={filterCategory}
-                options={tagOptions}
-                onChange={this.handleChange}
-            >
-            </Dropdown>
+            <Popup
+                content='Change source header for search'
+                trigger={
+                    <Dropdown
+                        text='Filter'
+                        icon='filter'
+                        floating
+                        labeled
+                        button
+                        className='icon'
+                        value={filterCategory}
+                        options={tagOptions}
+                        onChange={this.handleChange}
+                    >
+                    </Dropdown> 
+                }
+            />
 
         )
     }

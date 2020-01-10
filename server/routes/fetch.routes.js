@@ -1,8 +1,9 @@
 const mysql = require('mysql')
 
 module.exports = function(connection, app) {
-    app.get('/api/fetch-all', function(req, res) {
-        connection.query('SELECT * FROM collection', (err, data) => {
+    app.post('/api/fetch/', function(req, res) {
+        let command = req.body
+        connection.query(command.command, (err, data) => {
             if (err) {
                 res.send(err);
             }

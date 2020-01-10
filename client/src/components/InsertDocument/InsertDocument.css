@@ -3,3 +3,13 @@
     display: inline-block !important;
     position: absolute;
 }
+
+.scrolling {
+    height: 30vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* Chrome/Safari/Webkit */
+}

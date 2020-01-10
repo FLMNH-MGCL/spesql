@@ -6,6 +6,7 @@ import SortCollection from '../CollectionList/SortCollection'
 import InsertDocument from '../InsertDocument/InsertDocument'
 import { Link } from 'react-router-dom'
 import DownloadDB from '../DownloadDB/DownloadDB'
+import QueryGrid from '../Query/QueryGrid'
 
 export default class Header extends Component {
     state = { activeItem: 'home' }
@@ -38,6 +39,9 @@ export default class Header extends Component {
                         <Menu.Item>
                             {/* <Input icon='search' placeholder='Search...' /> */}
                             <DBSearch updateFilteredText={this.props.updateFilteredText.bind(this)}/>
+                        </Menu.Item>
+                        <Menu.Item position='middle'>
+                            <QueryGrid updateQuery={this.props.updateQuery.bind(this)} runQuery={this.props.runQuery.bind(this)}/>
                         </Menu.Item>
                         <Menu.Item position='middle'>
                             <SearchFilter updateFilterCategory={this.props.updateFilterCategory.bind(this)}/>

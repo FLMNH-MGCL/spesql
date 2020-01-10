@@ -24,15 +24,16 @@ class Home extends React.Component {
             filterCategory: 'Species',
             selectedSpecimen: 0,
             sortBy: '',
-            data: []
+            data: [],
+            current_query: ''
         }
 
         // alter for component did mount research
-        axios.get('/api/fetch-all').then(res => {
-            const data = res.data
-            console.log(data)
-            this.setState({data: data.specimen})
-        })
+        // axios.get('/api/fetch-all').then(res => {
+        //     const data = res.data
+        //     console.log(data)
+        //     this.setState({data: data.specimen})
+        // })
     }
 
     isValidCSV(csv) {
@@ -82,6 +83,28 @@ class Home extends React.Component {
         })
     }
 
+    runQuery(query) {
+        // check validity, return errors in log
+        console.log(this.state)
+
+        let data = { command: query}
+        console.log(data)
+
+        axios.post('/api/fetch/', data)
+        .then(response => {
+            const data = response.data
+            this.setState({data: data.specimen})
+        })
+    }
+
+    updateQuery(new_query) {
+        this.setState({
+            current_query: new_query
+        })
+
+        this.runQuery(new_query)
+    }
+
     render() {
         console.log(this.state)
         return (
@@ -93,6 +116,8 @@ class Home extends React.Component {
                     updateList={this.updateList.bind(this)}
                     data={this.state.data}
                     isValidCSV={this.isValidCSV.bind(this)}
+                    updateQuery={this.updateQuery.bind(this)}
+                    runQuery={this.runQuery.bind(this)}
                 />
                 <Grid columns='equal' padded>
                     <Grid.Column width={11}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Popup } from 'semantic-ui-react'
 
 const tagOptions = [
     {
@@ -33,9 +33,9 @@ const tagOptions = [
         label: { color: 'black', empty: true, circular: true },
     },
     {
-        key: 'Locality',
-        text: 'Locality',
-        value: 'Locality',
+        key: 'Country',
+        text: 'Country',
+        value: 'Country',
         label: { color: 'purple', empty: true, circular: true },
     },
     {
@@ -64,18 +64,23 @@ class SortCollection extends React.Component {
     render() {
         const { sortBy } = this.state
         return(
-            <Dropdown
-                text='Sort'
-                icon='sort'
-                floating
-                labeled
-                button
-                className='icon'
-                value={sortBy}
-                options={tagOptions}
-                onChange={this.handleChange}
-            >
-            </Dropdown>
+            <Popup
+                content='Sort query A-to-Z based on selection'
+                trigger ={
+                    <Dropdown
+                        text='Sort'
+                        icon='sort'
+                        floating
+                        labeled
+                        button
+                        className='icon'
+                        value={sortBy}
+                        options={tagOptions}
+                        onChange={this.handleChange}
+                    >
+                    </Dropdown>
+                }
+            />
 
         )
     }
