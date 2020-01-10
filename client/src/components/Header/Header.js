@@ -34,25 +34,25 @@ export default class Header extends Component {
                         to='/About'
                     />
 
-                    <Menu.Menu position='middle'>
+                    <Menu.Menu position='right'>
                         <Menu.Item style={{width: '15rem'}}></Menu.Item>
                         <Menu.Item>
                             {/* <Input icon='search' placeholder='Search...' /> */}
                             <DBSearch updateFilteredText={this.props.updateFilteredText.bind(this)}/>
                         </Menu.Item>
-                        <Menu.Item position='middle'>
+                        <Menu.Item>
                             <QueryGrid updateQuery={this.props.updateQuery.bind(this)} runQuery={this.props.runQuery.bind(this)}/>
                         </Menu.Item>
-                        <Menu.Item position='middle'>
+                        <Menu.Item>
                             <SearchFilter updateFilterCategory={this.props.updateFilterCategory.bind(this)}/>
                         </Menu.Item>
-                        <Menu.Item position='middle'>
+                        <Menu.Item>
                             <SortCollection updateSortBy={this.props.updateSortBy.bind(this)}/>
                         </Menu.Item>
-                        <Menu.Item position='middle'>
+                        <Menu.Item>
                             <InsertDocument updateList={this.props.updateList.bind(this)} isValidCSV={this.props.isValidCSV.bind(this)} />
                         </Menu.Item>
-                        <Menu.Item position='middle'>
+                        <Menu.Item>
                             <DownloadDB data={this.props.data} />
                         </Menu.Item>
                     </Menu.Menu>

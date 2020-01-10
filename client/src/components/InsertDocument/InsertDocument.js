@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea, Popup } from 'semantic-ui-react'
+import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea } from 'semantic-ui-react'
 import axios from 'axios'
 import './InsertDocument.css'
 
@@ -17,9 +17,9 @@ const familyOptions = [
     { key: '10', text: 'Tineidae', value: 'Tineidae' },
 ]
 
-const localityOptions = [
-    { key: '0', text: 'United States', value: 'United States' },
-]
+// const localityOptions = [
+//     { key: '0', text: 'United States', value: 'United States' },
+// ]
 
 class InsertDocument extends React.Component {
     state = {
@@ -230,10 +230,10 @@ class InsertDocument extends React.Component {
         return (
             <div className='content'>
                 <Modal trigger={
-                    <Popup content='Insert new data' trigger={<Button icon labelPosition='left'>
+                    <Button icon labelPosition='left'>
                         <Icon name='upload' />
                         New Insert
-                </Button> } />
+                </Button>
                 } centered>
                     <Modal.Header>Insert New Data into Database</Modal.Header>
                     <Modal.Content>

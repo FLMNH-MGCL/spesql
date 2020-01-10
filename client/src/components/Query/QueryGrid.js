@@ -1,27 +1,26 @@
 import React from 'react'
-import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea, Checkbox } from 'semantic-ui-react'
-import axios from 'axios'
+import { Button, Icon, Modal, Grid, Form, Input, Select, Checkbox } from 'semantic-ui-react'
 
 const queryActions = [
     { key: '0', text: 'SELECT', value: 'SELECT' },
 ]
 
 const headerSelection = [
-    { key: '0', text: 'ALL', value: '*' },
-    { key: '1', text: 'Genus', value: 'genus' },
+    { key: '1', text: 'ALL', value: '*' },
+    { key: '2', text: 'Genus', value: 'genus' },
 ]
 
 const dbSelection = [
-    { key: '0', text: 'Collection', value: 'collection' },
+    { key: '3', text: 'Collection', value: 'collection' },
 ]
 
 const operatorOptions = [
-    { key: '0', text: '=', value: '=' },
-    { key: '1', text: '!=', value: '!=' },
-    { key: '2', text: '<', value: '<' },
-    { key: '3', text: '>', value: '>' },
-    { key: '0', text: '<=', value: '<=' },
-    { key: '0', text: '>=', value: '>=' },
+    { key: '4', text: '=', value: '=' },
+    { key: '5', text: '!=', value: '!=' },
+    { key: '6', text: '<', value: '<' },
+    { key: '7', text: '>', value:'>' },
+    { key: '8', text: '<=', value: '<=' },
+    { key: '9', text: '>=', value: '>=' },
 ]
 
 class QueryGrid extends React.Component {
@@ -33,7 +32,7 @@ class QueryGrid extends React.Component {
         db: '',
         where: false,
         fields_search: [],
-        search: '',
+        search_: '',
         operator: ''
     }
 
@@ -54,13 +53,11 @@ class QueryGrid extends React.Component {
     render() {
         const {
             advanced_query,
-            basic_query,
             query_action,
             fields,
             db,
-            where,
             fields_search,
-            search,
+            search_,
             operator
         } = this.state
 
@@ -77,13 +74,13 @@ class QueryGrid extends React.Component {
                         <Grid padded>
                             <Grid.Row>
                                 <Grid.Column width={16}>
-                                <Form padded onSubmit={this.handleAdvancedSubmit}>
+                                <Form onSubmit={this.handleAdvancedSubmit}>
                                     <Form.Group>
                                         <Form.Field 
                                             control={Checkbox}
                                             label='Advanced Query'
                                             name='basic_query'
-                                            value={basic_query}
+                                            value=""
                                             onChange={this.handleAdvancedCheck}
                                             width={3}
                                         />
@@ -105,7 +102,7 @@ class QueryGrid extends React.Component {
                                     </Form.Group>
                                 </Form>
 
-                                <Form padded onSubmit={this.handleSubmit}>
+                                <Form onSubmit={this.handleSubmit}>
                                     <Form.Group widths='equal'>
                                         <Form.Field
                                             control={Select}
@@ -113,7 +110,6 @@ class QueryGrid extends React.Component {
                                             label='QUERY'
                                             placeholder='SELECT'
                                             search
-                                            searchInput={{ id: 'form-select-control-query-action' }}
                                             name='query_action'
                                             value={query_action}
                                             onChange={this.handleChange}
@@ -126,7 +122,6 @@ class QueryGrid extends React.Component {
                                             placeholder='FIELD'
                                             search
                                             multiple
-                                            searchInput={{ id: 'form-select-control-header-selection' }}
                                             name='fields'
                                             value={fields}
                                             onChange={this.handleChange}
@@ -138,7 +133,6 @@ class QueryGrid extends React.Component {
                                             label='Database'
                                             placeholder='Collection'
                                             search
-                                            searchInput={{ id: 'form-select-control-db-selection' }}
                                             name='db'
                                             value={db}
                                             onChange={this.handleChange}
@@ -150,7 +144,7 @@ class QueryGrid extends React.Component {
                                             control={Checkbox}
                                             label='WHERE'
                                             name='where'
-                                            value={where}
+                                            value=""
                                             onChange={this.handleCheck}
                                             disabled={!this.state.basic_query}
                                         />
@@ -163,7 +157,6 @@ class QueryGrid extends React.Component {
                                             placeholder='FIELD'
                                             search
                                             multiple
-                                            searchInput={{ id: 'form-select-control-header-selection-2' }}
                                             name='fields_search'
                                             value={fields_search}
                                             onChange={this.handleChange}
@@ -184,9 +177,8 @@ class QueryGrid extends React.Component {
                                             label='Search'
                                             placeholder='Search Term(s)'
                                             search
-                                            searchInput={{ id: 'form-select-control-search' }}
-                                            name='search'
-                                            value={search}
+                                            name='search_'
+                                            value={search_}
                                             onChange={this.handleChange}
                                             disabled={!this.state.where}
                                         />

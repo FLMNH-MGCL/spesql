@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 //import Header from '../../components/Header/Header'
 //import Navigation from '../../components/Navigation/TopBar'
-import Footer from '../../components/Footer/Footer'
+// import Footer from '../../components/Footer/Footer'
 import Papa from 'papaparse';
 
 import './Home.css'
@@ -105,6 +105,13 @@ class Home extends React.Component {
         this.runQuery(new_query)
     }
 
+    clearQuery() {
+        this.setState({
+            data: [],
+            current_query: ''
+        })
+    }
+
     render() {
         console.log(this.state)
         return (
@@ -127,6 +134,8 @@ class Home extends React.Component {
                             filterCategory={this.state.filterCategory} 
                             selectedUpdate={this.selectedUpdate.bind(this)}
                             sortBy={this.state.sortBy}
+                            clearQuery={this.clearQuery.bind(this)}
+                            current_query={this.state.current_query}
                         />
                     </Grid.Column>
                     <Grid.Column>

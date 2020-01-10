@@ -1,9 +1,9 @@
 import React from 'react'
-import { Table } from 'semantic-ui-react'
+import { Table, Button } from 'semantic-ui-react'
 import './CollectionList.css'
 //import SpecimenCard from './SpecimenCard'
 
-export default ({data, filteredText, filterCategory, selectedUpdate, sortBy}) => {
+export default ({data, filteredText, filterCategory, selectedUpdate, sortBy, clearQuery, current_query}) => {
     //console.log(data[0].species)
     // change to api call to databaseS
     const collectionList = data
@@ -74,8 +74,8 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy}) =>
         })
 
         return (
-            // <div>{collectionList}</div>
-                <Table celled selectable>
+            <React.Fragment>
+            <Table celled selectable>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>LEP #</Table.HeaderCell>
@@ -92,6 +92,14 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy}) =>
                     {collectionList}
                 </Table.Body>
             </Table>
+            <Button 
+                negative 
+                onClick={clearQuery}
+                disabled={current_query === '' ? true : false}
+            >
+                    Clear Query
+                </Button>
+            </React.Fragment>
         )
 }
 
