@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Icon, Modal, Grid, Form, Input, Select, Checkbox } from 'semantic-ui-react'
+import './QueryGrid.css'
 
 const queryActions = [
     { key: '0', text: 'SELECT', value: 'SELECT' },
@@ -243,12 +244,14 @@ class QueryGrid extends React.Component {
                                             disabled={!this.state.where}
                                         />
                                     </Form.Group>
-                                    <Form.Field
-                                        id='form-button-control-ta-submit'
-                                        control={Button}
-                                        content='Submit'
-                                        disabled={!this.state.basic_query}
-                                    />
+                                    <Form.Group className='float-right'>                                    
+                                        <Form.Field
+                                            id='form-button-control-ta-submit'
+                                            control={Button}
+                                            content='Submit'
+                                            disabled={!this.state.basic_query}
+                                        />
+                                    </Form.Group>
                                 </Form>
                                 </Grid.Column>
                             </Grid.Row>                         
