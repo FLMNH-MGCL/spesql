@@ -94,6 +94,20 @@ class QueryGrid extends React.Component {
 
     handleAdvancedCheck = (e, { name, value }) => this.setState({ basic_query: !this.state.basic_query})
 
+    closeModal = () => {
+        this.setState({
+            advanced_query: '',
+            basic_query: true,
+            query_action: '',
+            fields: [],
+            db: '',
+            where: false,
+            fields_search: [],
+            search_: '',
+            operator: ''
+        })
+    }
+
     render() {
         const {
             advanced_query,
@@ -114,7 +128,7 @@ class QueryGrid extends React.Component {
                         <Icon name='archive' />
                         Query
                     </Button>
-                } centered closeIcon>
+                } centered closeIcon onClose={this.closeModal}>
                     <Modal.Header>Query Selector</Modal.Header>
                     <Modal.Content>
                         <Grid padded>
