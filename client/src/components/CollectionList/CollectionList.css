@@ -14,3 +14,16 @@ tbody tr {
     width: 100%;
     table-layout: fixed;
 }
+
+.query-info div,h4,p{
+    display: inline-block;
+}
+
+.query-text {
+    padding-left: 2vw;
+}
+
+.query-text p {
+    padding-left: .5vw;
+    font-style: italic;
+}

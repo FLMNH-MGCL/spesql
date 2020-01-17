@@ -16,20 +16,18 @@ export default class Header extends Component {
     }
 
     render() {
-        const { activeItem } = this.state
-
         return (
             <div>
                 <Menu>
                     <Menu.Item as={ Link }
                         name='home'
-                        active={activeItem === 'home'}
+                        active={'home' === this.props.current_view}
                         onClick={this.handleItemClick}
                         to='/Home'
                     />
                     <Menu.Item as={ Link }
                         name='about'
-                        active={activeItem === 'about'}
+                        active={'view' === this.props.current_view}
                         onClick={this.handleItemClick}
                         to='/About'
                     />

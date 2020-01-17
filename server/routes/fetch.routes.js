@@ -2,13 +2,18 @@ const mysql = require('mysql')
 
 module.exports = function(connection, app) {
     app.post('/api/fetch/', function(req, res) {
+        //console.log(connection)
         let command = req.body
+        //console.log(command)
         connection.query(command.command, (err, data) => {
+            console.log(data)
             if (err) {
                 res.send(err);
             }
-
-            res.json({specimen: data})
+            else {
+                res.json({specimen: data})
+            }
+            
         }) 
     })
 }

@@ -92,13 +92,18 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy, cle
                     {collectionList}
                 </Table.Body>
             </Table>
+            <div className='query-info'>
             <Button 
                 negative 
                 onClick={clearQuery}
                 disabled={current_query === '' ? true : false}
             >
-                    Clear Query
-                </Button>
+                Clear Query
+            </Button>
+                <div className='query-text'><h4>Current Query:</h4><p>{current_query}</p></div>
+            </div>
+
+            
             </React.Fragment>
         )
 }

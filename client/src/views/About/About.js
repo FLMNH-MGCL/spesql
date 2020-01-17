@@ -1,26 +1,17 @@
-// import React from 'react'
-// // import { Menu } from 'semantic-ui-react'
-// // import { Link } from 'react-router-dom'
-// // import Header from '../../components/Header/Header'
+import React from 'react'
+import HeaderBase from '../../components/Header/HeaderBase'
 
 
-// class About extends React.Component {
-//     state = { activeItem: 'home' }
+class About extends React.Component {
+    render() {
 
-//     handleItemClick = (e, { name }) => { 
-//         this.setState({ activeItem: name })
-//     }
+        return (
+            <div>
+                <HeaderBase />
+            </div>
+        )
+    }
+}
 
-//     render() {
-//         const { activeItem } = this.state
-
-//         return (
-//             <div>
-//                 this will be the about page
-//             </div>
-//         )
-//     }
-// }
-
-// export default About
+export default About
 
