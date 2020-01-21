@@ -120,7 +120,7 @@ class QueryGrid extends React.Component {
             operator
         } = this.state
 
-        console.log(this.state)
+        //console.log(this.state)
 
         return(
             <div className='content'>

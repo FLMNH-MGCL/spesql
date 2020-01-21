@@ -9,7 +9,7 @@ class Login extends React.Component {
     constructor() {
         super()
 
-        let authenticated = localStorage.getItem('authenticated') === "true" ? true : false
+        let authenticated = sessionStorage.getItem('authenticated') === "true" ? true : false
 
 
         this.state = {
@@ -28,7 +28,7 @@ class Login extends React.Component {
             // console.log(data.logged_in)
             if (data.logged_in) {
                 this.setState({authenticated: data.logged_in}, () => {
-                    localStorage.setItem('authenticated', data.logged_in)
+                    sessionStorage.setItem('authenticated', data.logged_in)
                 })
             }
             else {

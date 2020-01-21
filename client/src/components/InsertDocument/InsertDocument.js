@@ -1,6 +1,7 @@
 import React from 'react'
-import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea } from 'semantic-ui-react'
+import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea, Checkbox } from 'semantic-ui-react'
 import axios from 'axios'
+import checkQuery from '../../functions/checkQuery'
 import './InsertDocument.css'
 
 const familyOptions = [
@@ -23,45 +24,42 @@ const familyOptions = [
 
 class InsertDocument extends React.Component {
     state = {
+        paste_entry: false,
         id: '',
-            mgcl_num: '',
-            lep_num: '',
-            order_: '',
-            superfamily : '',
-            family : '',
-            subfamily: '',
-            tribe: '',
-            section: '',
-            genus : '',
-            species : '',
-            subspecies: '',
-            sex: '',
-            country: '',
-            province: '',
-            locality : '',
-            latitude: '',
-            longitude: '',
-            elevation: '',
-            mv_lamp: '',
-            days: '',
-            month: '',
-            year: '',
-            collectors: '',
-            freezer: '',
-            rack : '',
-            box: '',
-            size: '',
-            note: '',
-            text_area: ''
+        mgcl_num: '',
+        lep_num: '',
+        order_: '',
+        superfamily : '',
+        family : '',
+        subfamily: '',
+        tribe: '',
+        section: '',
+        genus : '',
+        species : '',
+        subspecies: '',
+        sex: '',
+        country: '',
+        province: '',
+        locality : '',
+        latitude: '',
+        longitude: '',
+        elevation: '',
+        mv_lamp: '',
+        days: '',
+        month: '',
+        year: '',
+        collectors: '',
+        freezer: '',
+        rack : '',
+        box: '',
+        size: '',
+        note: '',
+        text_area: ''
     }
 
-    handleChange = (e, { name, value }) => this.setState({ [name]: value })
-
-    handleSubmit = () => {
-        alert(JSON.stringify(this.state, null, 2))
-        axios.post('/api/insert', this.state)
-        this.props.updateList()
+    resetState = () => {
         this.setState({
+            paste_entry: false,
             id: '',
             mgcl_num: '',
             lep_num: '',
@@ -93,6 +91,25 @@ class InsertDocument extends React.Component {
             note: '',
             text_area: ''
         })
+    }
+
+    closeModal = () => {
+        this.resetState()
+    }
+
+    handleCSVCheck = () => { this.setState({paste_entry: !this.state.paste_entry}) }
+
+    handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
+    handleSubmit = () => {
+        alert(JSON.stringify(this.state, null, 2))
+        let ret = checkQuery(0, this.state)
+
+        if (ret.errs.lenth === 0) {
+            axios.post('/api/insert', this.state)
+            this.props.updateList()
+            this.resetState()
+        }
     }
 
     handleCSVSubmit = () => {
@@ -162,37 +179,7 @@ class InsertDocument extends React.Component {
 
         
 
-        this.setState({
-            mgcl_num: '',
-            lep_num: '',
-            order_: '',
-            superfamily : '',
-            family : '',
-            subfamily: '',
-            tribe: '',
-            section: '',
-            genus : '',
-            species : '',
-            subspecies: '',
-            sex: '',
-            country: '',
-            province: '',
-            locality : '',
-            latitude: '',
-            longitude: '',
-            elevation: '',
-            mv_lamp: '',
-            days: '',
-            month: '',
-            year: '',
-            collectors: '',
-            freezer: '',
-            rack : '',
-            box: '',
-            size: '',
-            note: '',
-            text_area: ''
-        })
+        this.resetState()
     }
 
     render() {
@@ -227,6 +214,7 @@ class InsertDocument extends React.Component {
             note,
             text_area
         } = this.state
+
         return (
             <div className='content'>
                 <Modal trigger={
@@ -234,16 +222,24 @@ class InsertDocument extends React.Component {
                         <Icon name='upload' />
                         New Insert
                 </Button>
-                } centered>
+                } centered closeIcon onClose={this.closeModal}>
                     <Modal.Header>Insert New Data into Database</Modal.Header>
                     <Modal.Content>
                         <Grid padded>
                             <Grid.Row>
-                                <p style={{padding: '1rem'}}>CSV Paste Entry: </p>
-                            </Grid.Row>
-                            <Grid.Row>
                                 <Grid.Column width={16}>
                                     <Form padded onSubmit={this.handleCSVSubmit}>
+                                        <Form.Group>
+                                            <Form.Field 
+                                                    control={Checkbox}
+                                                    label='CSV Paste Entry'
+                                                    name='paste_entry'
+                                                    value=""
+                                                    onChange={this.handleCSVCheck}
+                                                    width={3}
+                                                    
+                                            />
+                                        </Form.Group>
                                         <Form.Group>
                                             <TextArea
                                                 id='form-text-area'
@@ -251,31 +247,19 @@ class InsertDocument extends React.Component {
                                                 name='text_area'
                                                 value={text_area}
                                                 onChange={this.handleChange}
+                                                disabled={!this.state.paste_entry}
                                             />                                            
                                         </Form.Group>
                                         <Form.Field
                                             id='form-button-control-ta-submit'
                                             control={Button}
                                             content='Confirm'
+                                            disabled={!this.state.paste_entry}
                                         />
                                     </Form>
                                 </Grid.Column>
                             </Grid.Row>
 
-
-{/* 
-                            <Grid.Row>
-                                <p>Upload a CSV file: </p>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Button icon labelPosition='left'>
-                                    <Icon name='upload' />
-                                    Upload
-                                </Button>                                 
-                            </Grid.Row> */}
-                            <Grid.Row>
-                                <p style={{padding: '1rem'}}>Manual Entry: </p>
-                            </Grid.Row>
                             <Grid.Row>
                                 <Form padded onSubmit={this.handleSubmit}>
                                     <div className='scrolling'>
@@ -288,6 +272,7 @@ class InsertDocument extends React.Component {
                                             name='lep_num'
                                             value={lep_num}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-mgcl'
@@ -297,6 +282,7 @@ class InsertDocument extends React.Component {
                                             name='mgcl_num'
                                             value={mgcl_num}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-order'
@@ -306,6 +292,7 @@ class InsertDocument extends React.Component {
                                             name='order_'
                                             value={order_}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-superfamily'
@@ -315,6 +302,7 @@ class InsertDocument extends React.Component {
                                             name='superfamily'
                                             value={superfamily}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />                                    
                                     </Form.Group>
 
@@ -330,6 +318,7 @@ class InsertDocument extends React.Component {
                                             name='family'
                                             value={family}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-subfamily'
@@ -339,6 +328,7 @@ class InsertDocument extends React.Component {
                                             name='subfamily'
                                             value={subfamily}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-tribe'
@@ -348,6 +338,7 @@ class InsertDocument extends React.Component {
                                             name='tribe'
                                             value={tribe}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-section'
@@ -357,6 +348,7 @@ class InsertDocument extends React.Component {
                                             name='section'
                                             value={section}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />                                    
                                     </Form.Group>
 
@@ -370,6 +362,7 @@ class InsertDocument extends React.Component {
                                             name='genus'
                                             value={genus}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-species'
@@ -379,6 +372,7 @@ class InsertDocument extends React.Component {
                                             name='species'
                                             value={species}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-subspecies'
@@ -388,6 +382,7 @@ class InsertDocument extends React.Component {
                                             name='subspecies'
                                             value={subspecies}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-sex'
@@ -397,6 +392,7 @@ class InsertDocument extends React.Component {
                                             name='sex'
                                             value={sex}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                     </Form.Group>
 
@@ -409,6 +405,7 @@ class InsertDocument extends React.Component {
                                             name='country'
                                             value={country}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-province'
@@ -418,6 +415,7 @@ class InsertDocument extends React.Component {
                                             name='province'
                                             value={province}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-locality'
@@ -427,6 +425,7 @@ class InsertDocument extends React.Component {
                                             name='locality'
                                             value={locality}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-latitude'
@@ -436,6 +435,7 @@ class InsertDocument extends React.Component {
                                             name='latitude'
                                             value={latitude}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />                              
                                     </Form.Group>
 
@@ -449,6 +449,7 @@ class InsertDocument extends React.Component {
                                             name='longitude'
                                             value={longitude}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-elevation'
@@ -458,6 +459,7 @@ class InsertDocument extends React.Component {
                                             name='elevation'
                                             value={elevation}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-mv-lamp'
@@ -467,6 +469,7 @@ class InsertDocument extends React.Component {
                                             name='mv_lamp'
                                             value={mv_lamp}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-days'
@@ -476,6 +479,7 @@ class InsertDocument extends React.Component {
                                             name='days'
                                             value={days}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                     </Form.Group>
                                     <Form.Group widths='equal'>
@@ -487,6 +491,7 @@ class InsertDocument extends React.Component {
                                             name='month'
                                             value={month}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-year'
@@ -496,6 +501,7 @@ class InsertDocument extends React.Component {
                                             name='year'
                                             value={year}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-collectors'
@@ -505,6 +511,7 @@ class InsertDocument extends React.Component {
                                             name='collectors'
                                             value={collectors}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
 
                                         <Form.Field
@@ -515,6 +522,7 @@ class InsertDocument extends React.Component {
                                             name='freezer'
                                             value={freezer}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />                                    
                                     </Form.Group>
                                     
@@ -528,6 +536,7 @@ class InsertDocument extends React.Component {
                                             name='rack'
                                             value={rack}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-box'
@@ -537,6 +546,7 @@ class InsertDocument extends React.Component {
                                             name='box'
                                             value={box}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />
                                         <Form.Field
                                             id='form-input-control-size'
@@ -546,6 +556,7 @@ class InsertDocument extends React.Component {
                                             name='size'
                                             value={size}
                                             onChange={this.handleChange}
+                                            disabled={this.state.paste_entry}
                                         />                                
                                     </Form.Group>
                                     
@@ -559,15 +570,19 @@ class InsertDocument extends React.Component {
                                                 name='note'
                                                 value={note}
                                                 onChange={this.handleChange}
+                                                disabled={this.state.paste_entry}
                                         />    
                                     </Form.Group>
+                                    
+                                    <Form.Group>
+                                        <Form.Field className='float-right'
+                                            id='form-button-control-submit'
+                                            control={Button}
+                                            content='Confirm'
+                                            disabled={this.state.paste_entry}
+                                        />
+                                    </Form.Group>
                                     </div>
-
-                                    <Form.Field
-                                        id='form-button-control-submit'
-                                        control={Button}
-                                        content='Confirm'
-                                    />
                                 </Form>
                             </Grid.Row>
                         

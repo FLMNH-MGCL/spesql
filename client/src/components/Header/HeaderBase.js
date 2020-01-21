@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu } from 'semantic-ui-react'
+import { Menu, Form, Button, Dropdown, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 export default class HeaderBase extends Component {
@@ -26,6 +26,64 @@ export default class HeaderBase extends Component {
                         onClick={this.handleItemClick}
                         to='/About'
                     />
+
+                    <Menu.Menu position='right'>
+                        <Menu.Item style={{width: '15rem'}}></Menu.Item>
+                        <Menu.Item>
+                            {/* <Input icon='search' placeholder='Search...' /> */}
+                            <Form>
+                                <Form.Input 
+                                type="text"
+                                icon='search' 
+                                placeholder='Search...' 
+                                disabled={true}
+                                />
+                            </Form>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Button icon labelPosition='left' disabled={true}>
+                                <Icon name='archive' />
+                                Query
+                            </Button>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Dropdown
+                                text='Filter'
+                                icon='filter'
+                                floating
+                                labeled
+                                button
+                                className='icon'
+                                disabled={true}
+                            >
+                            </Dropdown> 
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Dropdown
+                                text='Sort'
+                                icon='sort'
+                                floating
+                                labeled
+                                button
+                                className='icon'
+                                disabled={true}
+                            >
+                            </Dropdown>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Button icon labelPosition='left' disabled={true}>
+                                <Icon name='upload' />
+                                New Insert
+                            </Button>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <Button icon labelPosition='left' disabled={true}>
+                                <Icon name='download' />
+                                Download
+                            </Button>
+                        </Menu.Item>
+                    </Menu.Menu>
+
                 </Menu>
             </div>
         )

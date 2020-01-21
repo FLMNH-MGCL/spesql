@@ -5,7 +5,7 @@ const ProtectedRoute = ({component: Component, checkAuth, ...rest}) => {
     return (
         <Route {...rest} render={
             (props) => (
-                localStorage.getItem('authenticated') === "true"
+                sessionStorage.getItem('authenticated') === "true"
                 ? <Component {...props} />
                 : <Redirect to='Login' />
             )

@@ -12,7 +12,7 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
 
-        let authenticated = localStorage.getItem('authenticated') === "true" ? true : false
+        let authenticated = sessionStorage.getItem('authenticated') === "true" ? true : false
         console.log(authenticated)
 
         this.state = {
@@ -75,10 +75,10 @@ class Home extends React.Component {
 
     runQuery(query) {
         // check validity, return errors in log
-        console.log(this.state)
+        //console.log(this.state)
 
         let data = { command: query}
-        console.log(data)
+        //console.log(data)
 
         axios.post('/api/fetch/', data)
         .then(response => {

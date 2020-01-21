@@ -13,3 +13,11 @@
     width: 0px;
     background: transparent; /* Chrome/Safari/Webkit */
 }
+
+.float-right {
+    justify-content: right;
+}
+
+.pad-top {
+    padding-top: 1rem;
+}
