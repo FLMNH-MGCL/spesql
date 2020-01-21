@@ -25,11 +25,12 @@ class DBSearch extends React.Component {
 		return (
 			<Form>
 				<Form.Input 
-				type="text"
-				icon='search' 
-				placeholder='Search...' 
-				value={filteredText}
-				onChange={this.handleChange}
+					type="text"
+					icon='search' 
+					placeholder='Search...' 
+					value={filteredText}
+					onChange={this.handleChange}
+					disabled={this.props.disabled}
 				/>
 			</Form>
 		

@@ -8,7 +8,7 @@ class DownloadDB extends React.Component {
 
         return (
             <CSVLink data={data} target="_blank">
-                <Button icon labelPosition='left'>
+                <Button icon labelPosition='left' disabled={this.props.disabled}>
                     <Icon name='download' />
                     Download
                 </Button>

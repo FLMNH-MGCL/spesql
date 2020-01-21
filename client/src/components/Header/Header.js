@@ -36,22 +36,22 @@ export default class Header extends Component {
                         <Menu.Item style={{width: '15rem'}}></Menu.Item>
                         <Menu.Item>
                             {/* <Input icon='search' placeholder='Search...' /> */}
-                            <DBSearch updateFilteredText={this.props.updateFilteredText.bind(this)}/>
+                            <DBSearch updateFilteredText={this.props.updateFilteredText.bind(this)} disabled={this.props.data.length === 0} />
                         </Menu.Item>
                         <Menu.Item>
                             <QueryGrid updateQuery={this.props.updateQuery.bind(this)} runQuery={this.props.runQuery.bind(this)}/>
                         </Menu.Item>
                         <Menu.Item>
-                            <SearchFilter updateFilterCategory={this.props.updateFilterCategory.bind(this)}/>
+                            <SearchFilter updateFilterCategory={this.props.updateFilterCategory.bind(this)} disabled={this.props.data.length === 0} />
                         </Menu.Item>
                         <Menu.Item>
-                            <SortCollection updateSortBy={this.props.updateSortBy.bind(this)}/>
+                            <SortCollection updateSortBy={this.props.updateSortBy.bind(this)} disabled={this.props.data.length === 0} />
                         </Menu.Item>
                         <Menu.Item>
                             <InsertDocument updateList={this.props.updateList.bind(this)} isValidCSV={this.props.isValidCSV.bind(this)} />
                         </Menu.Item>
                         <Menu.Item>
-                            <DownloadDB data={this.props.data} />
+                            <DownloadDB data={this.props.data} disabled={this.props.data.length === 0} />
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>

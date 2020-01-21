@@ -77,6 +77,7 @@ class SearchFilter extends React.Component {
                         value={filterCategory}
                         options={tagOptions}
                         onChange={this.handleChange}
+                        disabled={this.props.disabled}
                     >
                     </Dropdown> 
                 }

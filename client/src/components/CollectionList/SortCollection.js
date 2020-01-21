@@ -77,6 +77,7 @@ class SortCollection extends React.Component {
                         value={sortBy}
                         options={tagOptions}
                         onChange={this.handleChange}
+                        disabled={this.props.disabled}
                     >
                     </Dropdown>
                 }
