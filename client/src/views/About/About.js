@@ -53,10 +53,26 @@ class About extends React.Component {
                                 </List.Item>
                                 <List.Item float='left'>
                                     <List.Content>
+                                        <b className='description-heading'>Clear Query:  </b><br />
+                                        <p className='description-text'>
+                                            The clear query button below the collection list will allow you to clear the data from the latest query to the database.
+                                            If not query has been sent, there button is disabled. Displayed to the right of the button will be the text value of the
+                                            query sent. 
+                                        </p>
+                                    </List.Content>
+                                </List.Item>
+                                <List.Item float='left'>
+                                    <List.Content>
                                         <b className='description-heading'>Specimen View:  </b><br />
                                         <p className='description-text'>
                                             Once a SELECT query is ran and the collection list has documents, you may click on any document
-                                            in the collection list to view a more detailed transcription infosheet on the right.
+                                            in the collection list to view a more detailed transcription infosheet on the right.<br /><br />
+
+                                            It is important to note that while the specimen view will display more detail, it will only display
+                                            information that both exists and is queried for. For example, if you were to query "SELECT genus,species from
+                                            db_name" then both the collection list and the speciment view will only have the genus and species values for
+                                            all returned documents. See 'Query' below for more examples of this. Additionally, it may be beneficial top
+                                            review the <a href='https://www.guru99.com/select-statement.html' target='_blank'>fundamentals of a MySQL SELECT query.</a>
                                         </p>
                                     </List.Content>
                                 </List.Item>
@@ -77,7 +93,15 @@ class About extends React.Component {
                                         <b className='description-heading'>Query:  </b><br />
                                         <p className='description-text'>
                                             The query button on the header brings up the query selection menu. For now, only SELECT queries are
-                                            supported. Future support will be widened to accomadate researchers' needs.
+                                            supported. Future support will be widened to accomadate researchers' needs.<br /><br />
+
+                                            It is important to understand you will only recieve data on the headers you query. As a result, 
+                                            be sure to include at least one of the headers in the collection list in your SELECT query if using
+                                            restrictive queries, otherwise it will not be displayed (and therefore inaccessible). 
+                                            For example, if you were to run a query such as "SELECT latitude from db_name"
+                                            then the data returned will not be in the collection list, as the only field returned will be latitude of all
+                                            documents in the database table. Instead, run "SELECT lep_num,latitude"
+                                            if you do not need ANY of the other header information. This is intended for organizational purposes.
                                         </p>
                                     </List.Content>
                                 </List.Item>
