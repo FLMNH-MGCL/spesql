@@ -15,5 +15,5 @@ to visit the <a href='https://github.com/FLMNH-MGCL/Database-App' target='_blank
 detail the errors, bugs or glitches that have occurred, and include the steps to reproduce the error. 
 
 
-### About This Project ###
+### Citation ###
 <b>Pending its first release,</b> this software will be paired with a DOI number. On first release, the DOI number generated will be here for citation purposes.
