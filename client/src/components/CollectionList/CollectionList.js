@@ -3,26 +3,64 @@ import { Table, Button } from 'semantic-ui-react'
 import './CollectionList.css'
 //import SpecimenCard from './SpecimenCard'
 
+// function getHeaders(specimen) {
+//     // console.log(specimen)
+//     let ret = []
+//     if (specimen) {
+//         if (specimen.mgcl) { ret.push('MGCL #') }
+//         if (specimen.lep_num) { ret.push('Lep #') }
+//         if (specimen.order_) { ret.push('Order') }
+//         if (specimen.superfamily) { ret.push('Superfamily') }
+//         if (specimen.family) { ret.push('Family') }
+//         if (specimen.subfamily) { ret.push('Subfamily') }
+//         if (specimen.tribe) { ret.push('Tribe') }
+//         if (specimen.section) { ret.push('Section') }
+//         if (specimen.genus) { ret.push('Genus') }
+//         if (specimen.species) { ret.push('Species') }
+//         if (specimen.subspecies) { ret.push('Subspecies') }
+//         if (specimen.sex) { ret.push('Sex') }
+//         if (specimen.country) { ret.push('Country') }
+//         if (specimen.province) { ret.push('Province') }
+//         if (specimen.locality) { ret.push('Locality') }
+//         if (specimen.latitude) { ret.push('Latitude') }
+//         if (specimen.longitude) { ret.push('Longitude') }
+//     }
+//     else {
+//         ret = ['LEP #', 'Superfamily', 'Family', 'Genus', 'Species', 'Country', 'Rack #']
+//     }
+//     return ret
+// }
+
 export default ({data, filteredText, filterCategory, selectedUpdate, sortBy, clearQuery, current_query}) => {
     //console.log(data[0].species)
-    // change to api call to databaseS
+
     const collectionList = data
         .filter(specimen => {
             // LARGE SWITCH TO FILTER ITEMS
-            if (filterCategory === 'Species') {
-                return specimen.species.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
+            if (filterCategory === 'Lep #' && specimen.lep_num) {
+                return specimen.lep_num.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
             }
-            else if (filterCategory === 'Genus') {
+            else if (filterCategory === 'Superfamily' && specimen.superfamily) {
+                return specimen.superfamily.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
+            }
+            else if (filterCategory === 'Family' && specimen.family) {
+                return specimen.family.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
+            }
+            else if (filterCategory === 'Genus' && specimen.genus) {
                 return specimen.genus.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
             }
-            else if (filterCategory === 'Country') {
+            else if (filterCategory === 'Species' && specimen.species) {
+                return specimen.species.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
+            }
+            else if (filterCategory === 'Country' && specimen.country) {
                 return specimen.country.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
             }
-            else if (filterCategory === 'Collection Date') {
+            else if (filterCategory === 'Collection Date' && specimen.date_collected) {
                 return specimen.date_collected.toLowerCase().indexOf(filteredText.toLowerCase()) >= 0
             }
             else {
-                return specimen.species.toLowerCase().indexOf('') >= 0
+                // return specimen.species.toLowerCase().indexOf('') >= 0
+                return specimen
             } 
         })        
         .sort((specimen_a, specimen_b) => {
@@ -72,6 +110,10 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy, cle
                 </Table.Row>
             )
         })
+
+        // let specimenHeaders = getHeaders(collectionList[0])
+        // console.log(specimenHeaders)
+
 
         return (
             <React.Fragment>

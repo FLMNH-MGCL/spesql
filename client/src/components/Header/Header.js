@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu } from 'semantic-ui-react'
+import { Menu, Button, Icon } from 'semantic-ui-react'
 import SearchFilter from '../Search/SearchFilter'
 import DBSearch from '../Search/DBSearch'
 import SortCollection from '../CollectionList/SortCollection'
@@ -7,6 +7,7 @@ import InsertDocument from '../InsertDocument/InsertDocument'
 import { Link } from 'react-router-dom'
 import DownloadDB from '../DownloadDB/DownloadDB'
 import QueryGrid from '../Query/QueryGrid'
+import Logout from '../Logout/Logout'
 
 export default class Header extends Component {
     state = { activeItem: 'home' }
@@ -52,6 +53,13 @@ export default class Header extends Component {
                         </Menu.Item>
                         <Menu.Item>
                             <DownloadDB data={this.props.data} disabled={this.props.data.length === 0} />
+                        </Menu.Item>
+                        <Menu.Item>
+                            {/* <Button icon labelPosition='left' basic color='red'>
+                                <Icon name='user circle' />
+                                Logout
+                            </Button> */}
+                            <Logout logout={this.props.logout.bind(this)} />
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>

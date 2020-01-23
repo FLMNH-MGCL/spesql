@@ -6,15 +6,24 @@ class DownloadDB extends React.Component {
     render() {
         const data = this.props.data
 
-        return (
-            <CSVLink data={data} target="_blank">
+        if (this.props.disabled) {
+            return (
                 <Button icon labelPosition='left' disabled={this.props.disabled}>
                     <Icon name='download' />
                     Download
                 </Button>
-            </CSVLink>
-
-        )
+            )
+        }
+        else {
+            return (
+                <CSVLink data={data} target="_blank">
+                    <Button icon labelPosition='left' disabled={this.props.disabled}>
+                        <Icon name='download' />
+                        Download
+                    </Button>
+                </CSVLink>
+            )
+        }
     }
 } 
 

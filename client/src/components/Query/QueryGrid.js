@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, Icon, Modal, Grid, Form, Input, Select, Checkbox } from 'semantic-ui-react'
+import axios from 'axios'
+import { Button, Icon, Modal, Grid, Form, Input, Select, Checkbox, Pagination, Label } from 'semantic-ui-react'
 import './QueryGrid.css'
 
 const queryActions = [
@@ -16,9 +17,18 @@ const headerSelection = [
     { key: '14', text: 'Order', value: 'order_' },
 ]
 
-const dbSelection = [
-    { key: '3', text: 'Collection', value: 'collection' },
-]
+let dbSelection = []
+axios.post('/api/list-tables/')
+.then(response => {
+    if (response.data.error) {
+
+    }
+    else {
+        dbSelection = response.data.tables.map((table, index) => {
+            return {key: index+1 * 1002, text: table, value: table}
+        })
+    }
+})
 
 const operatorOptions = [
     { key: '4', text: '=', value: '=' },
@@ -39,7 +49,8 @@ class QueryGrid extends React.Component {
         where: false,
         fields_search: [],
         search_: '',
-        operator: ''
+        operator: '',
+        activePage: 1
     }
 
     // DANGEROUS, EASY TO BREAK NEED MORE CHECKS
@@ -95,6 +106,8 @@ class QueryGrid extends React.Component {
 
     handleAdvancedCheck = (e, { name, value }) => this.setState({ basic_query: !this.state.basic_query})
 
+    handlePaginationChange = (e, {activePage}) => this.setState({activePage: activePage})
+
     closeModal = () => {
         this.setState({
             advanced_query: '',
@@ -105,7 +118,8 @@ class QueryGrid extends React.Component {
             where: false,
             fields_search: [],
             search_: '',
-            operator: ''
+            operator: '',
+            activePage: 1
         })
     }
 
@@ -117,149 +131,200 @@ class QueryGrid extends React.Component {
             db,
             fields_search,
             search_,
-            operator
+            operator,
+            activePage
         } = this.state
 
-        //console.log(this.state)
-
-        return(
-            <div className='content'>
-                <Modal trigger={
-                    <Button icon labelPosition='left'>
-                        <Icon name='archive' />
-                        Query
-                    </Button>
-                } centered closeIcon onClose={this.closeModal}>
-                    <Modal.Header>Query Selector</Modal.Header>
-                    <Modal.Content>
-                        <Grid padded>
-                            <Grid.Row>
-                                <Grid.Column width={16}>
-                                <Form onSubmit={this.handleAdvancedSubmit}>
-                                    <Form.Group>
-                                        <Form.Field 
-                                            control={Checkbox}
-                                            label='Advanced Query'
-                                            name='basic_query'
-                                            value=""
-                                            onChange={this.handleAdvancedCheck}
-                                            width={3}
-                                        />
-                                        <Form.Field 
-                                            control={Input}
-                                            name='advanced_query'
-                                            value={advanced_query}
-                                            onChange={this.handleChange}
-                                            disabled={this.state.basic_query}
-                                            width={10}
-                                        />
-                                        <Form.Field
-                                        id='form-button-control-ta-submit-adv'
-                                        control={Button}
-                                        content='Submit'
-                                        disabled={this.state.basic_query}
-                                        width={3}
-                                    />
-                                    </Form.Group>
-                                </Form>
-
-                                <Form onSubmit={this.handleSubmit}>
-                                    <Form.Group widths='equal'>
-                                        <Form.Field
-                                            control={Select}
-                                            options={queryActions}
-                                            label='QUERY'
-                                            placeholder='SELECT'
-                                            search
-                                            name='query_action'
-                                            value={query_action}
-                                            onChange={this.handleChange}
-                                            disabled={!this.state.basic_query}
-                                        />
-                                        <Form.Field
-                                            control={Select}
-                                            options={headerSelection}
-                                            label='FIELD'
-                                            placeholder='FIELD'
-                                            search
-                                            multiple
-                                            name='fields'
-                                            value={fields}
-                                            onChange={this.handleChange}
-                                            disabled={!this.state.basic_query}
-                                        />
-                                        <Form.Field
-                                            control={Select}
-                                            options={dbSelection}
-                                            label='Database'
-                                            placeholder='Collection'
-                                            search
-                                            name='db'
-                                            value={db}
-                                            onChange={this.handleChange}
-                                            disabled={!this.state.basic_query}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group widths='equal'>
-                                        <Form.Field
-                                            control={Checkbox}
-                                            label='WHERE'
-                                            name='where'
-                                            value=""
-                                            onChange={this.handleCheck}
-                                            disabled={!this.state.basic_query}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group widths='equal'>
-                                        <Form.Field
-                                            control={Select}
-                                            options={headerSelection}
-                                            label='FIELD'
-                                            placeholder='FIELD'
-                                            search
-                                            multiple
-                                            name='fields_search'
-                                            value={fields_search}
-                                            onChange={this.handleChange}
-                                            disabled={!this.state.where}
-                                        />
-                                        <Form.Field
-                                            control={Select}
-                                            options={operatorOptions}
-                                            label='Operator'
-                                            placeholder='='
-                                            name='operator'
-                                            value={operator}
-                                            onChange={this.handleChange}
-                                            disabled={!this.state.where}
-                                        />
-                                        <Form.Field
-                                            control={Input}
-                                            label='Search'
-                                            placeholder='Search Term(s)'
-                                            search
-                                            name='search_'
-                                            value={search_}
-                                            onChange={this.handleChange}
-                                            disabled={!this.state.where}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group className='float-right'>                                    
-                                        <Form.Field
-                                            id='form-button-control-ta-submit'
+        if (this.state.activePage === 1) {
+            return(
+                <div className='content'>
+                    <Modal trigger={
+                        <Button icon labelPosition='left'>
+                            <Icon name='archive' />
+                            Query
+                        </Button>
+                    } centered closeIcon onClose={this.closeModal}>
+                        <Modal.Header>Query Selector - SELECT Queries</Modal.Header>
+                        <Modal.Content>
+                            <Grid padded>
+                                <Grid.Row>
+                                    <Grid.Column width={16}>
+                                    <Form onSubmit={this.handleAdvancedSubmit}>
+                                        <Form.Group>
+                                            <Form.Field 
+                                                control={Checkbox}
+                                                label='Advanced Query'
+                                                name='basic_query'
+                                                value=""
+                                                onChange={this.handleAdvancedCheck}
+                                                width={3}
+                                            />
+                                            <Form.Field 
+                                                control={Input}
+                                                name='advanced_query'
+                                                value={advanced_query}
+                                                onChange={this.handleChange}
+                                                disabled={this.state.basic_query}
+                                                width={10}
+                                                // error={{
+                                                //     content: 'This query must be a SELECT command.',
+                                                //     active: false,
+                                                // }}
+                                            />
+                                            <Form.Field
+                                            id='form-button-control-ta-submit-adv'
                                             control={Button}
                                             content='Submit'
-                                            disabled={!this.state.basic_query}
+                                            disabled={this.state.basic_query}
+                                            width={3}
                                         />
-                                    </Form.Group>
-                                </Form>
-                                </Grid.Column>
-                            </Grid.Row>                         
-                        </Grid>
-                    </Modal.Content>
-                </Modal>
-            </div>
-        )
+                                        </Form.Group>
+                                    </Form>
+    
+                                    <Form onSubmit={this.handleSubmit}>
+                                        <Form.Group widths='equal'>
+                                            <Form.Field
+                                                control={Select}
+                                                options={queryActions}
+                                                label='QUERY'
+                                                placeholder='SELECT'
+                                                search
+                                                name='query_action'
+                                                value={query_action}
+                                                onChange={this.handleChange}
+                                                disabled={!this.state.basic_query}
+                                            />
+                                            <Form.Field
+                                                control={Select}
+                                                options={headerSelection}
+                                                label='FIELD'
+                                                placeholder='FIELD'
+                                                search
+                                                multiple
+                                                name='fields'
+                                                value={fields}
+                                                onChange={this.handleChange}
+                                                disabled={!this.state.basic_query}
+                                            />
+                                            <Form.Field
+                                                control={Select}
+                                                options={dbSelection}
+                                                label='Database'
+                                                placeholder='Collection'
+                                                search
+                                                name='db'
+                                                value={db}
+                                                onChange={this.handleChange}
+                                                disabled={!this.state.basic_query}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group widths='equal'>
+                                            <Form.Field
+                                                control={Checkbox}
+                                                label='WHERE'
+                                                name='where'
+                                                value=""
+                                                onChange={this.handleCheck}
+                                                disabled={!this.state.basic_query}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group widths='equal'>
+                                            <Form.Field
+                                                control={Select}
+                                                options={headerSelection}
+                                                label='FIELD'
+                                                placeholder='FIELD'
+                                                search
+                                                multiple
+                                                name='fields_search'
+                                                value={fields_search}
+                                                onChange={this.handleChange}
+                                                disabled={!this.state.where}
+                                            />
+                                            <Form.Field
+                                                control={Select}
+                                                options={operatorOptions}
+                                                label='Operator'
+                                                placeholder='='
+                                                name='operator'
+                                                value={operator}
+                                                onChange={this.handleChange}
+                                                disabled={!this.state.where}
+                                            />
+                                            <Form.Field
+                                                control={Input}
+                                                label='Search'
+                                                placeholder='Search Term(s)'
+                                                search
+                                                name='search_'
+                                                value={search_}
+                                                onChange={this.handleChange}
+                                                disabled={!this.state.where}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group className='float-right'>                                    
+                                            <Form.Field
+                                                id='form-button-control-ta-submit'
+                                                control={Button}
+                                                content='Submit'
+                                                disabled={!this.state.basic_query}
+                                            />
+                                        </Form.Group>
+                                    </Form>
+                                    </Grid.Column>
+                                </Grid.Row>                    
+                            </Grid>
+                            <Pagination
+                                activePage={activePage}
+                                boundaryRange={0}
+                                defaultActivePage={this.state.page}
+                                ellipsisItem={null}
+                                firstItem={null}
+                                lastItem={null}
+                                siblingRange={1}
+                                totalPages={2}
+                                onPageChange={this.handlePaginationChange}
+                            />  
+                        </Modal.Content>
+                    </Modal>
+                </div>
+            )
+        }
+        else {
+            return(
+                <div className='content'>
+                    <Modal trigger={
+                        <Button icon labelPosition='left'>
+                            <Icon name='archive' />
+                            Query
+                        </Button>
+                    } centered closeIcon onClose={this.closeModal}>
+                        <Modal.Header>Query Selector</Modal.Header>
+                        <Modal.Content>
+                            <Grid padded>
+                                <Grid.Row>
+                                    <Grid.Column width={16}>
+
+                                    </Grid.Column>
+                                </Grid.Row>                         
+                            </Grid>
+                            <Pagination
+                                activePage={activePage}
+                                boundaryRange={0}
+                                defaultActivePage={this.state.page}
+                                ellipsisItem={null}
+                                firstItem={null}
+                                lastItem={null}
+                                siblingRange={1}
+                                totalPages={2}
+                                onPageChange={this.handlePaginationChange}
+                            /> 
+                        </Modal.Content>
+                    </Modal>
+                </div>
+            )
+        }
+
     }
 }
 

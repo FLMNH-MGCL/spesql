@@ -26,6 +26,11 @@ class Home extends React.Component {
         }
     }
 
+    logout() {
+        sessionStorage.setItem('authenticated', false)
+        this.setState({authenticated: false})
+    }
+
     isValidCSV(csv) {
         // return object with valid param
         let obj = Papa.parse(csv)
@@ -77,6 +82,8 @@ class Home extends React.Component {
         // check validity, return errors in log
         //console.log(this.state)
 
+        sessionStorage.setItem('current_query', query)
+
         let data = { command: query}
         //console.log(data)
 
@@ -88,6 +95,10 @@ class Home extends React.Component {
     }
 
     updateQuery(new_query) {
+        if (!new_query.endsWith(';')) {
+            new_query += ';'
+        }
+
         this.setState({
             current_query: new_query
         })
@@ -100,6 +111,8 @@ class Home extends React.Component {
             data: [],
             current_query: ''
         })
+
+        sessionStorage.setItem('current_query', '')
     }
 
     render() {
@@ -108,6 +121,10 @@ class Home extends React.Component {
                 <Redirect to={{pathname: '/Login', state: {
                 }}} />
             )
+        }
+
+        if (this.state.current_query === '' && sessionStorage.getItem('current_query') && this.state.data.length === 0) {
+            this.updateQuery(sessionStorage.getItem('current_query'))
         }
 
         return (
@@ -122,6 +139,7 @@ class Home extends React.Component {
                     isValidCSV={this.isValidCSV.bind(this)}
                     updateQuery={this.updateQuery.bind(this)}
                     runQuery={this.runQuery.bind(this)}
+                    logout={this.logout.bind(this)}
                 />
                 <Grid columns='equal' padded>
                     <Grid.Column width={11}>

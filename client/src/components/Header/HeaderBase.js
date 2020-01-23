@@ -82,6 +82,12 @@ export default class HeaderBase extends Component {
                                 Download
                             </Button>
                         </Menu.Item>
+                        <Menu.Item>
+                            <Button icon labelPosition='left' basic color='red' disabled={true}>
+                                <Icon name='user circle' />
+                                Logout
+                            </Button>
+                        </Menu.Item>
                     </Menu.Menu>
 
                 </Menu>

@@ -26,16 +26,23 @@ const correct_headers = [
     'RACK',
     'BOX',
     'SIZE',
-    'Note',
+    'NOTE',
 ]
 
 function checkHeaders(headers) {
+    let ret = true
     if (correct_headers.length === headers.length) {
-        return (JSON.stringify(headers, (a, b) => {
-            return typeof b === "string" ? b.toUpperCase() : b
-        }) == JSON.stringify(correct_headers))
+        headers.forEach((header, index) => {
+            if (header.toLowerCase() !== correct_headers[index].toLowerCase()) {
+                ret = false
+            }
+        });
     }
-    else return false
+    else {
+        ret = false
+    }
+
+    return ret
 
 }
 

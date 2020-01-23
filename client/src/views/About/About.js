@@ -45,7 +45,7 @@ class About extends React.Component {
                             <List divided verticalAlign='middle' relaxed>
                                 <List.Item float='left'>
                                     <List.Content>
-                                        <b className='description-heading'>Collection List:  </b><br />
+                                        <b className='description-heading'>Specimen Table:  </b><br />
                                         <p className='description-text'>
                                             The left side of the screen will fill as you query the database with SELECT queries.
                                         </p>
@@ -55,7 +55,7 @@ class About extends React.Component {
                                     <List.Content>
                                         <b className='description-heading'>Clear Query:  </b><br />
                                         <p className='description-text'>
-                                            The clear query button below the collection list will allow you to clear the data from the latest query to the database.
+                                            The clear query button below the specimen table will allow you to clear the data from the latest query to the database.
                                             If not query has been sent, there button is disabled. Displayed to the right of the button will be the text value of the
                                             query sent. 
                                         </p>
@@ -65,12 +65,12 @@ class About extends React.Component {
                                     <List.Content>
                                         <b className='description-heading'>Specimen View:  </b><br />
                                         <p className='description-text'>
-                                            Once a SELECT query is ran and the collection list has documents, you may click on any document
-                                            in the collection list to view a more detailed transcription infosheet on the right.<br /><br />
+                                            Once a SELECT query is ran and the specimen table has documents, you may click on any document
+                                            in the specimen table to view a more detailed transcription infosheet on the right.<br /><br />
 
                                             It is important to note that while the specimen view will display more detail, it will only display
                                             information that both exists and is queried for. For example, if you were to query "SELECT genus,species from
-                                            db_name" then both the collection list and the speciment view will only have the genus and species values for
+                                            db_name" then both the specimen table and the speciment view will only have the genus and species values for
                                             all returned documents. See 'Query' below for more examples of this. Additionally, it may be beneficial top
                                             review the <a href='https://www.guru99.com/select-statement.html' target='_blank'>fundamentals of a MySQL SELECT query.</a>
                                         </p>
@@ -96,10 +96,10 @@ class About extends React.Component {
                                             supported. Future support will be widened to accomadate researchers' needs.<br /><br />
 
                                             It is important to understand you will only recieve data on the headers you query. As a result, 
-                                            be sure to include at least one of the headers in the collection list in your SELECT query if using
+                                            be sure to include at least one of the headers in the specimen table in your SELECT query if using
                                             restrictive queries, otherwise it will not be displayed (and therefore inaccessible). 
                                             For example, if you were to run a query such as "SELECT latitude from db_name"
-                                            then the data returned will not be in the collection list, as the only field returned will be latitude of all
+                                            then the data returned will not be in the specimen table, as the only field returned will be latitude of all
                                             documents in the database table. Instead, run "SELECT lep_num,latitude"
                                             if you do not need ANY of the other header information. This is intended for organizational purposes.
                                         </p>
@@ -121,7 +121,7 @@ class About extends React.Component {
                                         <b className='description-heading'>Sort:  </b><br />
                                         <p className='description-text'>
                                             The sort button on the header is how you would change the sorted order of documents from a SELECT query. By default, queries will be
-                                            sorted by catalog number (Lep #). If you were to change this to Species, for example, then the collection list will be displayed in
+                                            sorted by catalog number (Lep #). If you were to change this to Species, for example, then the specimen table will be displayed in
                                             alphabetical order of the species names.
                                         </p>
                                     </List.Content>
