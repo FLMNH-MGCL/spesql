@@ -17,7 +17,7 @@ export default class QueryHelp extends React.Component {
                     onClose={this.close}
                     size='small'
                     trigger={
-                    <Button primary icon>
+                    <Button primary icon type="button">
                         See Help <Icon name='question' />
                     </Button>
                     }
@@ -43,7 +43,7 @@ export default class QueryHelp extends React.Component {
                     onClose={this.close}
                     size='small'
                     trigger={
-                    <Button primary icon>
+                    <Button primary icon type="button">
                         See Help <Icon name='question' />
                     </Button>
                     }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea, Checkbox, Message, Menu } from 'semantic-ui-react'
+import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea, Message, Menu } from 'semantic-ui-react'
 import axios from 'axios'
 import checkQuery from '../../functions/checkEntry'
 import './InsertDocument.css'
@@ -194,7 +194,6 @@ class InsertDocument extends React.Component {
 
     render() {
         const {
-            activePage,
             mgcl_num,
             lep_num,
             order_,

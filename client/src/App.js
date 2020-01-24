@@ -4,8 +4,6 @@ import Home from "./views/Home/Home"
 import NotFound from "./views/NotFound"
 import Login from './views/Login/Login';
 import About from './views/About/About';
-import decode from 'jwt-decode'
-import axios from 'axios'
 import ProtectedRoute from './components/Auth/ProtectedRoute'
 
 

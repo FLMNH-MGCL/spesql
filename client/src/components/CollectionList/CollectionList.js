@@ -33,8 +33,9 @@ import './CollectionList.css'
 
 export default ({data, filteredText, filterCategory, selectedUpdate, sortBy, clearQuery, current_query}) => {
     //console.log(data[0].species)
-
-    const collectionList = data
+    let collectionList = data
+    try {
+        collectionList = collectionList
         .filter(specimen => {
             // LARGE SWITCH TO FILTER ITEMS
             if (filterCategory === 'Lep #' && specimen.lep_num) {
@@ -110,6 +111,11 @@ export default ({data, filteredText, filterCategory, selectedUpdate, sortBy, cle
                 </Table.Row>
             )
         })
+    } catch(error) {
+        console.log(error)
+        collectionList = []
+    }
+
 
         // let specimenHeaders = getHeaders(collectionList[0])
         // console.log(specimenHeaders)

@@ -1,6 +1,6 @@
 import React from 'react'
 import HeaderBase from '../../components/Header/HeaderBase'
-import { Grid, Container, Header, List } from 'semantic-ui-react'
+import { Container, Header, List } from 'semantic-ui-react'
 import './About.css'
 
 
@@ -10,37 +10,33 @@ class About extends React.Component {
         return (
             <div className='about-container'>
                 <HeaderBase />
-                <div className='pad-top'>                
-                    <Grid columns='equal' padded>
-                        <Grid.Column width={9}>
-                            <Container textAlign='justified'>
-                                <Header as='h2'>About This Project</Header>
-                                <p>
-                                    This project is intented for use by the McGuire Center of Lepidoptera and Biodiversity (MGCL) at the Florida Museum of Natural History (FLMNH). As such, by default, the
-                                    application is only compatible with institutions having identical, MySQL database schemes. It is possible to adapt this software to another isntitution's requirements, 
-                                    however the more closely structured to MGCL's configuration the more seamless the conversion. For more information regarding the structures neccessary for adopting this software,
-                                    please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly. To see the source code for this project, feel free 
-                                    to visit the <a href='https://github.com/FLMNH-MGCL/Database-App' target='_blank'>GitHub Repository</a>.
-                                </p>
-                            </Container>
-                            <Container textAlign='justified' style={{paddingTop: '3rem'}}>
-                                <Header as='h2'>Contact / Issue Reporting</Header>
-                                <p>
-                                    <a href='http://www.aaronbleopold.com' target="_blank">Aaron Leopold</a> is the sole developer of this project. If any questions regarding usage remain after reviewing the right-side panel of this
-                                    page, please contact him via email (his current email can be found on his site). Additionally, refer to the recorded <a href=''>instructional videos</a> for more in-depth demonstrations.
-                                    For issues relating to software bugs, glitches or unexpected errors, please submit a <a href='https://github.com/FLMNH-MGCL/Database-App/issues/new' target="_blank">GitHub issue</a>. Be sure to describe in
-                                    detail the errors, bugs or glitches that have occurred, and include the steps to reproduce the error. 
-                                </p>
-                            </Container>
-                            <Container textAlign='justified' style={{paddingTop: '3rem'}}>
-                                <Header as='h2'>Citation</Header>
-                                <p>
-                                    <b>Pending its first release,</b> this software will be paired with a DOI number. On first release, the DOI number generated will be here for citation purposes.
-                                </p>
-                            </Container>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Container textAlign='justified' className='scrollable' >
+                <div className='pad-top about-text'>                
+                    <Container textAlign='justified'>
+                        <Header as='h2'>About This Project</Header>
+                        <p>
+                            This project is intented for use by the McGuire Center of Lepidoptera and Biodiversity (MGCL) at the Florida Museum of Natural History (FLMNH). As such, by default, the
+                            application is only compatible with institutions having identical, MySQL database schemes. It is possible to adapt this software to another isntitution's requirements, 
+                            however the more closely structured to MGCL's configuration the more seamless the conversion. For more information regarding the structures neccessary for adopting this software,
+                            please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank' rel="noopener noreferrer">Kawahara Lab</a> directly. To see the source code for this project, feel free 
+                            to visit the <a href='https://github.com/FLMNH-MGCL/Database-App' target='_blank' rel="noopener noreferrer">GitHub Repository</a>.
+                        </p>
+                    </Container>
+                    <Container textAlign='justified' style={{paddingTop: '3rem'}}>
+                        <Header as='h2'>Contact / Issue Reporting</Header>
+                        <p>
+                            <a href='http://www.aaronbleopold.com' target="_blank" rel="noopener noreferrer">Aaron Leopold</a> is the sole developer of this project. If any questions regarding usage remain after reviewing the right-side panel of this
+                            page, please contact him via email (his current email can be found on his site). Additionally, refer to the recorded <a href=''>instructional videos</a> for more in-depth demonstrations.
+                            For issues relating to software bugs, glitches or unexpected errors, please submit a <a href='https://github.com/FLMNH-MGCL/Database-App/issues/new' target="_blank" rel="noopener noreferrer">GitHub issue</a>. Be sure to describe in
+                            detail the errors, bugs or glitches that have occurred, and include the steps to reproduce the error. 
+                        </p>
+                    </Container>
+                    <Container textAlign='justified' style={{paddingTop: '3rem'}}>
+                        <Header as='h2'>Citation</Header>
+                        <p>
+                            <b>Pending its first release,</b> this software will be paired with a DOI number. On first release, the DOI number generated will be here for citation purposes.
+                        </p>
+                    </Container>
+                    <Container textAlign='justified' style={{paddingTop: '3rem'}}>
                             <Header as='h2'>Usage</Header>
                             <List divided verticalAlign='middle' relaxed>
                                 <List.Item float='left'>
@@ -72,7 +68,7 @@ class About extends React.Component {
                                             information that both exists and is queried for. For example, if you were to query "SELECT genus,species from
                                             db_name" then both the specimen table and the speciment view will only have the genus and species values for
                                             all returned documents. See 'Query' below for more examples of this. Additionally, it may be beneficial top
-                                            review the <a href='https://www.guru99.com/select-statement.html' target='_blank'>fundamentals of a MySQL SELECT query.</a>
+                                            review the <a href='https://www.guru99.com/select-statement.html' target='_blank' rel="noopener noreferrer">fundamentals of a MySQL SELECT query.</a>
                                         </p>
                                     </List.Content>
                                 </List.Item>
@@ -152,8 +148,6 @@ class About extends React.Component {
                                 </List.Item>
                             </List>
                             </Container>
-                        </Grid.Column>
-                    </Grid>
                 </div>
             </div>
         )
