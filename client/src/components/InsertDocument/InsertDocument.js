@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea, Checkbox, Pagination, Message } from 'semantic-ui-react'
+import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea, Checkbox, Message, Menu } from 'semantic-ui-react'
 import axios from 'axios'
-import checkQuery from '../../functions/checkQuery'
+import checkQuery from '../../functions/checkEntry'
 import './InsertDocument.css'
 
 const familyOptions = [
@@ -24,7 +24,7 @@ const familyOptions = [
 
 class InsertDocument extends React.Component {
     state = {
-        activePage: 1,
+        activePage: 'Manual Insert',
         id: '',
         mgcl_num: '',
         lep_num: '',
@@ -59,7 +59,7 @@ class InsertDocument extends React.Component {
 
     resetState = () => {
         this.setState({
-            activePage: 1,
+            activePage: 'Manual Insert',
             id: '',
             mgcl_num: '',
             lep_num: '',
@@ -180,7 +180,17 @@ class InsertDocument extends React.Component {
         this.resetState()
     }
 
-    handlePaginationChange = (e, {activePage}) => this.setState({activePage: activePage})
+    handlePaginationChange = (e, {name}) => this.setState({activePage: name})
+
+    handlePageBack = (e) => {
+        if (this.state.activePage === 'Manual Insert') {return}
+        else if (this.state.activePage === 'Paste Insert') {this.setState({activePage: 'Manual Insert'})}
+    }
+
+    handlePageForward = (e) => {
+        if (this.state.activePage === 'Manual Insert') {this.setState({activePage: 'Paste Insert'})}
+        else if (this.state.activePage === 'Paste Insert') {return}
+    }
 
     render() {
         const {
@@ -217,7 +227,7 @@ class InsertDocument extends React.Component {
         } = this.state
 
 
-        if (this.state.activePage === 1) {
+        if (this.state.activePage === 'Manual Insert') {
             return (
                 <div className='content'>
                     <Modal trigger={
@@ -228,6 +238,16 @@ class InsertDocument extends React.Component {
                     } centered closeIcon onClose={this.closeModal}>
                         <Modal.Header>Manual Insert into Database (Single Insert)</Modal.Header>
                         <Modal.Content>
+                            <Message>
+                                <Message.Header>Usage:</Message.Header>
+                                <p>
+                                    Manually enter the transcription data of the speciment you are entering into the database. Be sure to
+                                    fill out all required fields (denoted with *). When all fields are completed, click the Confirm button
+                                    at the bottom of the scroll-view. If any syntactic errors are present, a popup will appear with 
+                                    information to help you correct it. If you have more than one specimen to enter, consider using the
+                                    paste option on the next page.
+                                </p>
+                            </Message>
                             <Grid padded>
                                 <Grid.Row>
                                     <Form padded onSubmit={this.handleSubmit}>
@@ -556,17 +576,28 @@ class InsertDocument extends React.Component {
                                 </Grid.Row>
                             
                             </Grid>
-                            <Pagination
-                                activePage={activePage}
-                                boundaryRange={0}
-                                defaultActivePage={this.state.page}
-                                ellipsisItem={null}
-                                firstItem={null}
-                                lastItem={null}
-                                siblingRange={1}
-                                totalPages={2}
-                                onPageChange={this.handlePaginationChange}
-                            /> 
+                            <Menu pagination>
+                                <Menu.Item 
+                                    onClick={this.handlePageBack}
+                                >
+                                    <Icon name='arrow left' />
+                                </Menu.Item>
+                                <Menu.Item 
+                                    name='Manual Insert'
+                                    active={this.state.activePage === 'Manual Insert'}
+                                    onClick={this.handlePaginationChange}
+                                />
+                                <Menu.Item 
+                                    name='Paste Insert'
+                                    active={this.state.activePage === 'Paste Insert'}
+                                    onClick={this.handlePaginationChange}
+                                />
+                                <Menu.Item 
+                                    onClick={this.handlePageForward}
+                                >
+                                    <Icon name='arrow right' />
+                                </Menu.Item>
+                            </Menu> 
                         </Modal.Content>
                     </Modal>
                 </div>
@@ -589,8 +620,9 @@ class InsertDocument extends React.Component {
                                         <Message>
                                             <Message.Header>Usage:</Message.Header>
                                             <p>
-                                                Copy & paste CSV data into this text area. Be sure to include the
-                                                headers.
+                                                Copy & paste CSV data into this text area. Be sure to include the proper
+                                                headers. <a href='../../assets/CORRECT_HEADERS_TEMPLATE.csv' download>Click here</a> to download an
+                                                example template for the correct headers. 
                                             </p>
                                         </Message>
                                         <Form padded onSubmit={this.handleCSVSubmit}>
@@ -613,17 +645,28 @@ class InsertDocument extends React.Component {
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
-                            <Pagination
-                                activePage={activePage}
-                                boundaryRange={0}
-                                defaultActivePage={this.state.page}
-                                ellipsisItem={null}
-                                firstItem={null}
-                                lastItem={null}
-                                siblingRange={1}
-                                totalPages={2}
-                                onPageChange={this.handlePaginationChange}
-                            /> 
+                            <Menu pagination>
+                                <Menu.Item 
+                                    onClick={this.handlePageBack}
+                                >
+                                    <Icon name='arrow left' />
+                                </Menu.Item>
+                                <Menu.Item 
+                                    name='Manual Insert'
+                                    active={this.state.activePage === 'Manual Insert'}
+                                    onClick={this.handlePaginationChange}
+                                />
+                                <Menu.Item 
+                                    name='Paste Insert'
+                                    active={this.state.activePage === 'Paste Insert'}
+                                    onClick={this.handlePaginationChange}
+                                />
+                                <Menu.Item 
+                                    onClick={this.handlePageForward}
+                                >
+                                    <Icon name='arrow right' />
+                                </Menu.Item>
+                            </Menu> 
                         </Modal.Content>
                     </Modal>
                 </div>

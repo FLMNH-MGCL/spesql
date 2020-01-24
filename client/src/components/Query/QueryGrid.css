@@ -1,3 +1,9 @@
 .float-right {
     justify-content: right;
 }
+
+.help-button {
+    display: inline-block;
+    margin-left: 1vw;
+    padding-top: 10px;
+}

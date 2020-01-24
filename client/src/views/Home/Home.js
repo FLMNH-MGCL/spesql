@@ -28,6 +28,7 @@ class Home extends React.Component {
 
     logout() {
         sessionStorage.setItem('authenticated', false)
+        sessionStorage.removeItem('current_query')
         this.setState({authenticated: false})
     }
 
@@ -36,6 +37,10 @@ class Home extends React.Component {
         let obj = Papa.parse(csv)
         // console.log(obj)
         let data = obj.data
+
+        // check headers
+
+        // if headers correct, check each row and only add valid rows to insertion query
 
         var ret = {
             "valid" : true,

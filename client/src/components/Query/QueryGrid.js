@@ -1,7 +1,8 @@
 import React from 'react'
 import axios from 'axios'
-import { Button, Icon, Modal, Grid, Form, Input, Select, Checkbox, Pagination, Label } from 'semantic-ui-react'
+import { Button, Icon, Modal, Grid, Form, Input, Select, Checkbox, Pagination, Label, Menu } from 'semantic-ui-react'
 import './QueryGrid.css'
+import QueryHelp from './QueryHelp'
 
 const queryActions = [
     { key: '0', text: 'SELECT', value: 'SELECT' },
@@ -44,13 +45,13 @@ class QueryGrid extends React.Component {
         advanced_query: '',
         basic_query: true,
         query_action: '',
-        fields: [],
+        fields: ['*'],
         db: '',
         where: false,
         fields_search: [],
         search_: '',
         operator: '',
-        activePage: 1
+        activePage: 'SELECT'
     }
 
     // DANGEROUS, EASY TO BREAK NEED MORE CHECKS
@@ -106,7 +107,17 @@ class QueryGrid extends React.Component {
 
     handleAdvancedCheck = (e, { name, value }) => this.setState({ basic_query: !this.state.basic_query})
 
-    handlePaginationChange = (e, {activePage}) => this.setState({activePage: activePage})
+    handlePaginationChange = (e, {name}) => this.setState({activePage: name})
+
+    handlePageBack = (e) => {
+        if (this.state.activePage === 'SELECT') {return}
+        else if (this.state.activePage === 'TBA') {this.setState({activePage: 'SELECT'})}
+    }
+
+    handlePageForward = (e) => {
+        if (this.state.activePage === 'SELECT') {this.setState({activePage: 'TBA'})}
+        else if (this.state.activePage === 'TBA') {return}
+    }
 
     closeModal = () => {
         this.setState({
@@ -119,7 +130,7 @@ class QueryGrid extends React.Component {
             fields_search: [],
             search_: '',
             operator: '',
-            activePage: 1
+            activePage: 'SELECT'
         })
     }
 
@@ -135,7 +146,7 @@ class QueryGrid extends React.Component {
             activePage
         } = this.state
 
-        if (this.state.activePage === 1) {
+        if (this.state.activePage === 'SELECT') {
             return(
                 <div className='content'>
                     <Modal trigger={
@@ -274,17 +285,28 @@ class QueryGrid extends React.Component {
                                     </Grid.Column>
                                 </Grid.Row>                    
                             </Grid>
-                            <Pagination
-                                activePage={activePage}
-                                boundaryRange={0}
-                                defaultActivePage={this.state.page}
-                                ellipsisItem={null}
-                                firstItem={null}
-                                lastItem={null}
-                                siblingRange={1}
-                                totalPages={2}
-                                onPageChange={this.handlePaginationChange}
-                            />  
+                            <Menu pagination>
+                                <Menu.Item 
+                                    onClick={this.handlePageBack}
+                                >
+                                    <Icon name='arrow left' />
+                                </Menu.Item>
+                                <Menu.Item 
+                                    name='SELECT'
+                                    active={this.state.activePage === 'SELECT'}
+                                    onClick={this.handlePaginationChange}
+                                />
+                                <Menu.Item 
+                                    name='TBA'
+                                    onClick={this.handlePaginationChange}
+                                />
+                                <Menu.Item 
+                                    onClick={this.handlePageForward}
+                                >
+                                    <Icon name='arrow right' />
+                                </Menu.Item>
+                            </Menu>
+                            <div className='help-button float-right'><QueryHelp queryType='SELECT'/></div>
                         </Modal.Content>
                     </Modal>
                 </div>
@@ -308,7 +330,7 @@ class QueryGrid extends React.Component {
                                     </Grid.Column>
                                 </Grid.Row>                         
                             </Grid>
-                            <Pagination
+                            {/* <Pagination
                                 activePage={activePage}
                                 boundaryRange={0}
                                 defaultActivePage={this.state.page}
@@ -318,7 +340,28 @@ class QueryGrid extends React.Component {
                                 siblingRange={1}
                                 totalPages={2}
                                 onPageChange={this.handlePaginationChange}
-                            /> 
+                            />  */}
+                            <Menu pagination>
+                                <Menu.Item 
+                                    onClick={this.handlePageBack}
+                                >
+                                    <Icon name='arrow left' />
+                                </Menu.Item>
+                                <Menu.Item 
+                                    name='SELECT'
+                                    onClick={this.handlePaginationChange}
+                                />
+                                <Menu.Item 
+                                    name='TBA'
+                                    active={this.state.activePage === 'TBA'}
+                                    onClick={this.handlePaginationChange}
+                                />
+                                <Menu.Item 
+                                    onClick={this.handlePageForward}
+                                >
+                                    <Icon name='arrow right' />
+                                </Menu.Item>
+                            </Menu>
                         </Modal.Content>
                     </Modal>
                 </div>
