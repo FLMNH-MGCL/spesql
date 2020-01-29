@@ -6,7 +6,6 @@ module.exports = function(connection, app) {
         let command = req.body
         //console.log(command)
         connection.query(command.command, (err, data) => {
-            console.log(data)
             if (err) {
                 res.send(err);
             }

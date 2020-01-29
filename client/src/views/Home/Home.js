@@ -7,13 +7,13 @@ import CollectionList from '../../components/CollectionList/CollectionList'
 import SpecimenView from '../../components/SpecimenView/SpecimenView'
 import Header from '../../components/Header/Header'
 import { Grid } from 'semantic-ui-react'
+import getQueryHeaders from '../../functions/getQueryHeaders'
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
 
         let authenticated = sessionStorage.getItem('authenticated') === "true" ? true : false
-        console.log(authenticated)
 
         this.state = {
             authenticated: authenticated,
@@ -22,7 +22,9 @@ class Home extends React.Component {
             selectedSpecimen: 0,
             sortBy: '',
             data: [],
-            current_query: ''
+            displayed: [],
+            current_query: '',
+            query_headers: []
         }
     }
 
@@ -48,6 +50,12 @@ class Home extends React.Component {
         }
 
         return ret
+    }
+
+    updatedDisplayed(data) {
+        this.setState({
+            displayed: data
+        })
     }
 
     updateList() {
@@ -83,7 +91,7 @@ class Home extends React.Component {
         })
     }
 
-    runQuery(query) {
+    async runQuery(query) {
         // check validity, return errors in log
         //console.log(this.state)
 
@@ -92,10 +100,13 @@ class Home extends React.Component {
         let data = { command: query}
         //console.log(data)
 
-        axios.post('/api/fetch/', data)
+        await axios.post('/api/fetch/', data)
         .then(response => {
             const data = response.data
             this.setState({data: data.specimen})
+
+            const query_headers = getQueryHeaders(data.specimen[0])
+            this.setState({query_headers: query_headers})
         })
     }
 
@@ -114,7 +125,8 @@ class Home extends React.Component {
     clearQuery() {
         this.setState({
             data: [],
-            current_query: ''
+            current_query: '',
+            query_headers: []
         })
 
         sessionStorage.setItem('current_query', '')
@@ -156,10 +168,12 @@ class Home extends React.Component {
                             sortBy={this.state.sortBy}
                             clearQuery={this.clearQuery.bind(this)}
                             current_query={this.state.current_query}
+                            query_headers={this.state.query_headers}
+                            updatedDisplayed={this.updatedDisplayed.bind(this)}
                         />
                     </Grid.Column>
                     <Grid.Column>
-                        <SpecimenView data={this.state.data} selectedSpecimen={this.state.selectedSpecimen} updateList={this.updateList.bind(this)}/>
+                        <SpecimenView data={this.state.displayed} selectedSpecimen={this.state.selectedSpecimen} updateList={this.updateList.bind(this)}/>
                     </Grid.Column>
                 </Grid>
             </div>

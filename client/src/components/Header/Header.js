@@ -45,9 +45,9 @@ export default class Header extends Component {
                         <Menu.Item>
                             <SearchFilter updateFilterCategory={this.props.updateFilterCategory.bind(this)} disabled={this.props.data === undefined || this.props.data.length === 0} />
                         </Menu.Item>
-                        <Menu.Item>
+                        {/* <Menu.Item>
                             <SortCollection updateSortBy={this.props.updateSortBy.bind(this)} disabled={this.props.data === undefined || this.props.data.length === 0} />
-                        </Menu.Item>
+                        </Menu.Item> */}
                         <Menu.Item>
                             <InsertDocument updateList={this.props.updateList.bind(this)} isValidCSV={this.props.isValidCSV.bind(this)} />
                         </Menu.Item>

@@ -1,11 +1,9 @@
-tbody {
-    display: block;
-    height: 80vh;
+#scrollableDiv {
     overflow: auto;
     scrollbar-width: none;
 }::-webkit-scrollbar {
     width: 0px;
-    background: transparent; /* Chrome/Safari/Webkit */
+    background: transparent;
 }
 
 thead,
@@ -26,4 +24,8 @@ tbody tr {
 .query-text p {
     padding-left: .5vw;
     font-style: italic;
+}
+
+.loader-style {
+    top: 50vh;
 }

@@ -33,6 +33,7 @@
     "nodemon": "^1.18.10",
     "papaparse": "^5.1.1",
     "react-csv": "^1.1.2",
+    "react-infinite-scroll-component": "^5.0.4",
     "react-scroll": "^1.7.14",
     "semantic-ui-react": "^0.88.2",
     "should": "^13.2.3",

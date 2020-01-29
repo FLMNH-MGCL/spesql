@@ -110,7 +110,7 @@ class QueryGrid extends React.Component {
         this.setState({
             advanced_query: '',
             basic_query: true,
-            query_action: '',
+            query_action: 'SELECT',
             fields: ['*'],
             db: '',
             where: false,
@@ -131,9 +131,7 @@ class QueryGrid extends React.Component {
             operator,
         } = this.state
 
-    
         return(
-            <div className='content'>
                 <Modal trigger={
                     <Button icon labelPosition='left'>
                         <Icon name='archive' />
@@ -198,6 +196,7 @@ class QueryGrid extends React.Component {
                                             value={query_action}
                                             onChange={this.handleChange}
                                             disabled={!this.state.basic_query}
+                                            required
                                         />
                                         <Form.Field
                                             control={Select}
@@ -341,7 +340,7 @@ class QueryGrid extends React.Component {
                         </Grid>
                     </Modal.Content>
                 </Modal>
-            </div>
+            
         )
         
     }
