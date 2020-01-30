@@ -6,32 +6,22 @@ import './Home.css'
 import CollectionList from '../../components/CollectionList/CollectionList'
 import SpecimenView from '../../components/SpecimenView/SpecimenView'
 import Header from '../../components/Header/Header'
-import { Grid } from 'semantic-ui-react'
+import { Grid, Loader } from 'semantic-ui-react'
 import getQueryHeaders from '../../functions/getQueryHeaders'
+import { runSelectQuery } from '../../functions/queries'
+import { mapStateToProps, mapDispatchToProps } from '../../redux/mapFunctions'
+import { connect } from 'react-redux'
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
-
-        let authenticated = sessionStorage.getItem('authenticated') === "true" ? true : false
-
-        this.state = {
-            authenticated: authenticated,
-            filteredText: '',
-            filterCategory: 'Species',
-            selectedSpecimen: 0,
-            sortBy: '',
-            data: [],
-            displayed: [],
-            current_query: '',
-            query_headers: []
-        }
     }
 
     logout() {
         sessionStorage.setItem('authenticated', false)
         sessionStorage.removeItem('current_query')
-        this.setState({authenticated: false})
+        this.props.logout()
+        // this.setState({authenticated: false})
     }
 
     isValidCSV(csv) {
@@ -52,128 +42,58 @@ class Home extends React.Component {
         return ret
     }
 
-    updatedDisplayed(data) {
-        this.setState({
-            displayed: data
-        })
-    }
-
-    updateList() {
-        axios.get('/api/fetch-all').then(res => {
-            const data = res.data
-            // console.log(data)
-            this.setState({data: data.specimen})
-        })
-    }
-
-    updateFilterCategory(category) {
-        this.setState({
-            filterCategory: category
-        })
-    }
-
-    updateFilteredText(value) {
-        console.log(value)
-        this.setState({
-            filteredText: value
-        })
-    }
-
-    updateSortBy(value) {
-        this.setState({
-            sortBy: value
-        })
-    }
-
-    selectedUpdate(id) {
-        this.setState({
-            selectedSpecimen: id
-        })
-    }
-
     async runQuery(query) {
-        // check validity, return errors in log
-        //console.log(this.state)
+        // fetch & update data
+        let data = await runSelectQuery(query)
+        this.props.updateQueryData(data.specimen)
 
-        sessionStorage.setItem('current_query', query)
-
-        let data = { command: query}
-        //console.log(data)
-
-        await axios.post('/api/fetch/', data)
-        .then(response => {
-            const data = response.data
-            this.setState({data: data.specimen})
-
-            const query_headers = getQueryHeaders(data.specimen[0])
-            this.setState({query_headers: query_headers})
-        })
-    }
-
-    updateQuery(new_query) {
-        if (!new_query.endsWith(';')) {
-            new_query += ';'
-        }
-
-        this.setState({
-            current_query: new_query
-        })
-
-        this.runQuery(new_query)
-    }
-
-    clearQuery() {
-        this.setState({
-            data: [],
-            current_query: '',
-            query_headers: []
-        })
-
-        sessionStorage.setItem('current_query', '')
+        let headers = getQueryHeaders(data.specimen[0])
+        this.props.updateHeaders(headers)
+        this.props.updateQuery(query)
     }
 
     render() {
-        if (!this.state.authenticated) {
+        if (!this.props.authenticated) {
             return (
                 <Redirect to={{pathname: '/Login', state: {
                 }}} />
             )
         }
 
-        if (this.state.current_query === '' && sessionStorage.getItem('current_query') && this.state.data.length === 0) {
-            this.updateQuery(sessionStorage.getItem('current_query'))
+        if (this.props.current_query === '' && sessionStorage.getItem('current_query') && this.props.data.length === 0) {
+            this.runQuery(sessionStorage.getItem('current_query'))
         }
 
         return (
             <div>
                 <Header
                     current_view='home'
-                    updateFilteredText={this.updateFilteredText.bind(this)} 
-                    updateFilterCategory={this.updateFilterCategory.bind(this)}
-                    updateSortBy={this.updateSortBy.bind(this)}
-                    updateList={this.updateList.bind(this)}
-                    data={this.state.data}
+                    filterCategory={this.props.filterCategory}
+                    updateFilteredText={this.props.updateFilteredText} 
+                    updateFilterCategory={this.props.updateFilteredCategory}
+                    data={this.props.data}
+                    displayed={this.props.displayed}
                     isValidCSV={this.isValidCSV.bind(this)}
-                    updateQuery={this.updateQuery.bind(this)}
                     runQuery={this.runQuery.bind(this)}
                     logout={this.logout.bind(this)}
                 />
                 <Grid columns='equal' padded>
                     <Grid.Column width={11}>
+                    <Loader content='Loading' active disabled={!this.props.loading} />
                         <CollectionList 
-                            data={this.state.data} 
-                            filteredText={this.state.filteredText} 
-                            filterCategory={this.state.filterCategory} 
-                            selectedUpdate={this.selectedUpdate.bind(this)}
-                            sortBy={this.state.sortBy}
-                            clearQuery={this.clearQuery.bind(this)}
-                            current_query={this.state.current_query}
-                            query_headers={this.state.query_headers}
-                            updatedDisplayed={this.updatedDisplayed.bind(this)}
+                            data={this.props.data}
+                            updateDisplayData={this.props.updateDisplayData}
+                            filteredText={this.props.filteredText} 
+                            filterCategory={this.props.filterCategory} 
+                            selectedUpdate={this.props.updateSelectedSpecimen}
+                            clearQuery={this.props.clearQuery}
+                            current_query={this.props.current_query}
+                            query_headers={this.props.query_headers}
+                            updateLoadingStatus={this.props.updateLoadingStatus}
                         />
                     </Grid.Column>
                     <Grid.Column>
-                        <SpecimenView data={this.state.displayed} selectedSpecimen={this.state.selectedSpecimen} updateList={this.updateList.bind(this)}/>
+                        <SpecimenView data={this.props.displayed} selectedSpecimen={this.props.selectedSpecimen}/>
                     </Grid.Column>
                 </Grid>
             </div>
@@ -182,4 +102,4 @@ class Home extends React.Component {
     
 }
 
-export default Home
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

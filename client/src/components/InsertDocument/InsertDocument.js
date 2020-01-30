@@ -105,7 +105,6 @@ class InsertDocument extends React.Component {
 
         if (ret.errs.lenth === 0) {
             axios.post('/api/insert', this.state)
-            this.props.updateList()
             this.resetState()
         }
     }

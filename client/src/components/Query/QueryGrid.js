@@ -91,13 +91,12 @@ class QueryGrid extends React.Component {
 
 
         command += ';'
-        console.log(command)
 
-        this.props.updateQuery(command)
+        this.props.runQuery(command)
     }
 
     handleAdvancedSubmit = () => {
-        this.props.updateQuery(this.state.advanced_query)
+        this.props.runQuery(this.state.advanced_query)
     }
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -137,9 +136,9 @@ class QueryGrid extends React.Component {
                         <Icon name='archive' />
                         Query
                     </Button>
-                } centered closeIcon onClose={this.closeModal}>
+                } centered closeIcon onClose={this.closeModal} style={{maxHeight: '85vh'}}>
                     <Modal.Header>Query Selector</Modal.Header>
-                    <Modal.Content>
+                    <Modal.Content scrolling style={{minHeight: '80vh'}}>
                         <Grid padded>
                         {/* <Header>SELECT Query Selection</Header> */}
                             <Grid.Row>
@@ -280,8 +279,7 @@ class QueryGrid extends React.Component {
                                 </Grid.Column>
                             </Grid.Row>                    
                         </Grid>
-                    </Modal.Content>
-                    <Modal.Content>
+
                         <Grid padded>
                             <Grid.Row>
                                     <Grid.Column width={16}>

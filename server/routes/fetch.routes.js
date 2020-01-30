@@ -7,7 +7,7 @@ module.exports = function(connection, app) {
         //console.log(command)
         connection.query(command.command, (err, data) => {
             if (err) {
-                res.send(err);
+                res.send({error: err});
             }
             else {
                 res.json({specimen: data})

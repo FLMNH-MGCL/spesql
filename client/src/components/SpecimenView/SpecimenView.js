@@ -15,10 +15,10 @@ class SpecimenView extends React.Component {
             )
         }
         else {
-            const selectedSpecimen = this.props.data.find(specimen => {
-                return specimen.id === this.props.selectedSpecimen.id
-            })
-    
+            // const selectedSpecimen = this.props.data.find(specimen => {
+            //     return specimen.id === this.props.selectedSpecimen.id
+            // })
+            const { selectedSpecimen } = this.props
             if (selectedSpecimen === undefined) {
                 return (
                     <div>
@@ -28,30 +28,13 @@ class SpecimenView extends React.Component {
             }
     
             else {
-                return (
-                    // <div>
-                    //     <p>Genus: {selectedSpecimen.genus}</p>
-                    //     <p>species: {selectedSpecimen.species}</p>
-                    //     <p>Collected: {selectedSpecimen.date_collected}</p>
-                    //     <p>Locality: {selectedSpecimen.locality}</p>
-                    // </div>
-            
+                return (            
                     <Grid columns='equal' padded>
                         <Grid.Column>
                             <Card><Image src={require('./test.jpg')} wrapped /></Card>
-                            <DeleteDocument target={selectedSpecimen.id} updateList={this.props.updateList.bind(this)}/>
+                            <DeleteDocument target={selectedSpecimen.id} />
                         </Grid.Column>
                         <Grid.Column>
-                            {/* <Table selectable>
-                                <Table.Body>
-                                    <Table.Row>
-                                        <p><b>Genus:  </b> {selectedSpecimen.genus}</p>
-                                    </Table.Row>
-                                    <Table.Row>
-                                        <p><b>species:  </b> {selectedSpecimen.species}</p>
-                                    </Table.Row>
-                                </Table.Body>
-                            </Table> */}
                             <List divided verticalAlign='middle' relaxed>
                                 <List.Item float='left'>
                                     <List.Content><b>LEP #:  </b> {selectedSpecimen.lep_num}</List.Content>

@@ -13,7 +13,7 @@ class DeleteDocument extends React.Component {
             const data = res.data
             console.log(data)
         })
-        this.props.updateList()
+        // this.props.updateList()
         this.setState({ open: false })
     }
 

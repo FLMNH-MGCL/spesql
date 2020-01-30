@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect  } from 'react-router-dom';
-import Home from "./views/Home/Home"
+import HomeWrapper from "./views/Home/HomeWrapper"
 import NotFound from "./views/NotFound"
 import Login from './views/Login/Login';
 import About from './views/About/About';
@@ -12,7 +12,7 @@ class App extends React.Component {
     return (
       <div>
         <Switch>
-          <ProtectedRoute exact path='/Home' component={Home}/>
+          <ProtectedRoute exact path='/Home' component={HomeWrapper}/>
           <Route exact path='/Login' render={(props) => <Login {...props} />} />
           <Route exact path="/">
             <Redirect to="/Home" />

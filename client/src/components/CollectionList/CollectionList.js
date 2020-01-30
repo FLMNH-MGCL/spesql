@@ -81,12 +81,39 @@ export default class CollectionList extends React.Component {
     constructor(props) {
         super(props)
 
+        this.props.updateLoadingStatus(true)
+
         this.state = {
             column: null,
-            data: [],
-            display: Array.from({length: 50}),
-            hasMore: true,
+            data: this.props.data,
+            display: Array.from({length: 0}),
+            prevFetchAmount: 0,
+            hasMore: false,
             direction: null,
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.props.data.length !== 0 && this.state.display.length === 0) {
+            let fetchAmount = this.props.data.length <= 50 ? this.props.data.length : 50
+            let hasMore = fetchAmount === this.props.data.length ? false : true
+            // console.log(`has more ${hasMore}`)
+            const newDisplay = this.props.data.slice(0, fetchAmount)
+            this.props.updateDisplayData(newDisplay)
+            this.setState({display: newDisplay, hasMore: hasMore, prevFetchAmount: fetchAmount})
+        }  
+
+        if (this.props.current_query != '' && this.props.data.length >= 0) {
+            this.props.updateLoadingStatus(false)
+        }
+        else if (this.props.current_query === '' && this.props.data.length === 0) {
+            this.props.updateLoadingStatus(false)
+        }
+        else if (this.props.current_query === '' && this.props.data.length === 0) {
+            this.props.updateLoadingStatus(false)
+        }
+        else if (this.props.current_query === '' && this.props.data.length !== 0) {
+            this.props.updateLoadingStatus(true)
         }
     }
 
@@ -110,7 +137,7 @@ export default class CollectionList extends React.Component {
 
     fetchMoreData = () => {
         let fetchAmount = (this.props.data.length - this.state.display.length) <= 50 ? (this.props.data.length - this.state.display.length) : 50
-        console.log(fetchAmount)
+
         if (fetchAmount === 0) {
             this.setState({ hasMore: false });
             return;
@@ -119,9 +146,13 @@ export default class CollectionList extends React.Component {
         // a fake async api call like which sends
         // 20 more records in .5 secs
         setTimeout(() => {
-
+            let newDisplay = this.state.display.concat(Array.from({ length: fetchAmount }))
+            newDisplay = newDisplay.map((item, index) => {
+                return this.props.data[index]
+            })
+            this.props.updateDisplayData(newDisplay)
             this.setState({
-                display: this.state.display.concat(Array.from({ length: fetchAmount }))
+                display: newDisplay
             })
         }, 500);
     }
@@ -148,37 +179,59 @@ export default class CollectionList extends React.Component {
 
 
     render() {
-        // console.log(this.state)
         let collectionList = this.props.data
         try {
             collectionList = collectionList
             .filter(specimen => {
-                // LARGE SWITCH TO FILTER ITEMS
-                if (this.props.filterCategory === 'Lep #' && specimen.lep_num) {
-                    return specimen.lep_num.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                switch(this.props.filterCategory) {
+                    case 'Lep #':
+                        if (specimen.lep_num) {
+                            return specimen.lep_num.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                        }
+                        else return false
+
+                    case 'Superfamily':
+                        if (specimen.superfamily) {
+                            return specimen.superfamily.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                        }
+                        else return false
+
+                    case'Family':
+                        if (specimen.family) {
+                            return specimen.family.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                        }
+                        else return false
+
+                    case'Genus': 
+                        if(specimen.genus || specimen.genus === '') {
+                            return specimen.genus.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                        }
+                        else return false
+
+                    case'Species':
+                        if (specimen.species || specimen.species === '') {
+                            return specimen.species.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                        }
+                        else return false
+
+                    case 'Country': 
+                        if (specimen.country) {
+                            return specimen.country.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                        }
+                        else return false
+
+                    case 'Collection Date':
+                        if(specimen.date_collected) {
+                            return specimen.date_collected.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                        }
+                        else return false
+
+                    case '':
+                        return true
+
+                    default: 
+                        return false
                 }
-                else if (this.props.filterCategory === 'Superfamily' && specimen.superfamily) {
-                    return specimen.superfamily.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                }
-                else if (this.props.filterCategory === 'Family' && specimen.family) {
-                    return specimen.family.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                }
-                else if (this.props.filterCategory === 'Genus' && specimen.genus) {
-                    return specimen.genus.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                }
-                else if (this.props.filterCategory === 'Species' && specimen.species) {
-                    return specimen.species.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                }
-                else if (this.props.filterCategory === 'Country' && specimen.country) {
-                    return specimen.country.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                }
-                else if (this.props.filterCategory === 'Collection Date' && specimen.date_collected) {
-                    return specimen.date_collected.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                }
-                else {
-                    // return specimen.species.toLowerCase().indexOf('') >= 0
-                    return specimen
-                } 
             })        
             // .sort((specimen_a, specimen_b) => {
             //     if (this.props.sortBy === 'Lep #') {
@@ -209,11 +262,11 @@ export default class CollectionList extends React.Component {
             //         return 0
             //     }
             // })
-            .map(specimen => {
+            .map((specimen, index) => {
                 let cells = getCells(specimen, this.props.query_headers)
 
                 return (
-                    <Table.Row key={specimen.id} onClick={() => this.props.selectedUpdate(specimen)}>
+                    <Table.Row key={index} onClick={() => this.props.selectedUpdate(specimen)}>
                         {cells}
                     </Table.Row>
                 )
@@ -235,13 +288,13 @@ export default class CollectionList extends React.Component {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    <div id="scrollableDiv" style={{ height: "80vh", overflow: "auto" }}>
+                    <div id="scrollableDiv" style={{ height: "75vh", overflow: "auto" }}>
                     <InfiniteScroll
                         dataLength={this.state.display.length}
                         next={this.fetchMoreData}
                         hasMore={this.state.hasMore}
                         scrollableTarget='scrollableDiv'
-                        loader={<Loader active style={{marginTop: '35vh'}} className='loader-style'/>}
+                        loader={<Loader active style={{marginTop: '30vh'}} content='Loading' className='loader-style'/>}
                     >
                         {this.state.display.map((row, index) => {
                             return collectionList[index]
