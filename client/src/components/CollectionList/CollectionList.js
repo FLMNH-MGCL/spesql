@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Loader } from 'semantic-ui-react'
+import { Table, Button, Loader, Icon } from 'semantic-ui-react'
 import _ from 'lodash'
 import './CollectionList.css'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -104,15 +104,20 @@ export default class CollectionList extends React.Component {
         }  
 
         if (this.props.current_query != '' && this.props.data.length >= 0) {
+            // console.log('first')
+            this.props.updateLoadingStatus(false)
+            this.props.updateRefreshStatus(false)
+        }
+        else if (this.props.current_query === '' && this.props.data.length === 0 && !this.props.refreshing) {
+            // console.log('second')
             this.props.updateLoadingStatus(false)
         }
-        else if (this.props.current_query === '' && this.props.data.length === 0) {
-            this.props.updateLoadingStatus(false)
-        }
-        else if (this.props.current_query === '' && this.props.data.length === 0) {
-            this.props.updateLoadingStatus(false)
+        else if (this.props.current_query === '' && this.props.data.length === 0 && this.props.refreshing) {
+            // console.log('third')
+            this.props.updateLoadingStatus(true)
         }
         else if (this.props.current_query === '' && this.props.data.length !== 0) {
+            // console.log('fourth')
             this.props.updateLoadingStatus(true)
         }
     }
@@ -179,6 +184,7 @@ export default class CollectionList extends React.Component {
 
 
     render() {
+        console.log(this.state)
         let collectionList = this.props.data
         try {
             collectionList = collectionList
@@ -306,10 +312,27 @@ export default class CollectionList extends React.Component {
             <div className='query-info'>
             <Button 
                 negative 
-                onClick={this.props.clearQuery}
+                onClick={() => {
+                    this.props.clearQuery()
+                    this.setState({hasMore: false})
+                }}
                 disabled={this.props.current_query === '' ? true : false}
             >
                 Clear Query
+            </Button>
+            <Button
+                icon
+                onClick={() => {
+                    // console.log('refreshed!')
+                    let command = this.props.current_query
+                    this.props.clearQuery()
+                    this.props.updateRefreshStatus(true)
+                    this.props.updateLoadingStatus(true)
+                    this.props.runQuery(command)
+                }}
+                disabled={this.props.current_query === '' ? true : false}
+            >
+                <Icon name='refresh'  />
             </Button>
                 <div className='query-text'><h4>Current Query:</h4><p>{this.props.current_query}</p></div>
                 <div className='query-text'><h4>Query Size:</h4><p>{this.props.data.length}</p></div>

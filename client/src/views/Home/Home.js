@@ -44,6 +44,11 @@ class Home extends React.Component {
 
     async runQuery(query) {
         // fetch & update data
+        console.log('here')
+        // this.props.clearQuery()
+        this.props.updateLoadingStatus(true)
+        this.props.updateRefreshStatus(true)
+
         let data = await runSelectQuery(query)
         this.props.updateQueryData(data.specimen)
 
@@ -53,6 +58,7 @@ class Home extends React.Component {
     }
 
     render() {
+        console.log(this.props.loading)
         if (!this.props.authenticated) {
             return (
                 <Redirect to={{pathname: '/Login', state: {
@@ -75,7 +81,9 @@ class Home extends React.Component {
                     displayed={this.props.displayed}
                     isValidCSV={this.isValidCSV.bind(this)}
                     runQuery={this.runQuery.bind(this)}
+                    clearQuery={this.props.clearQuery}
                     logout={this.logout.bind(this)}
+                    loading={this.props.loading}
                 />
                 <Grid columns='equal' padded>
                     <Grid.Column width={11}>
@@ -90,6 +98,9 @@ class Home extends React.Component {
                             current_query={this.props.current_query}
                             query_headers={this.props.query_headers}
                             updateLoadingStatus={this.props.updateLoadingStatus}
+                            updateRefreshStatus={this.props.updateRefreshStatus}
+                            runQuery={this.runQuery.bind(this)}
+                            refreshing={this.props.refreshing}
                         />
                     </Grid.Column>
                     <Grid.Column>

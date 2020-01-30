@@ -12,6 +12,7 @@ export const UPDATE_FILTER_CATEGORY = 'UPDATE_FILTER_CATEGORY'
 export const UPDATE_SELECTED_SPECIMEN = 'UPDATE_SELECTED_SPECIMEN'
 export const CLEAR_ERROR_MESSAGE = 'CLEAR_ERROR_MESSAGE'
 export const UPDATE_LOADING_STATUS = 'UPDATE_LOADING_STATUS'
+export const UPDATE_REFRESH_STATUS = 'UPDATE_REFRESH_STATUS'
 export const LOGOUT = 'LOGOUT'
 
 let authenticated = sessionStorage.getItem('authenticated') === "true" ? true : false
@@ -26,7 +27,8 @@ const initialState = {
     current_query: '',
     query_headers: [],
     error_message: null,
-    loading: true
+    loading: false,
+    refreshing: false
 }
 
 export default function reducer(state = initialState, action) {
@@ -61,9 +63,11 @@ export default function reducer(state = initialState, action) {
                 displayed: [],
                 current_query: '',
                 query_headers: [],
-                error_message: null
+                error_message: null,
+                loading: false,
+                refreshing: false
             }
-            sessionStorage.setItem('current_query', '')
+            sessionStorage.removeItem('current_query')
             return newState
 
         case 'UPDATE_QUERY_HEADERS':
@@ -84,6 +88,10 @@ export default function reducer(state = initialState, action) {
 
         case 'UPDATE_LOADING_STATUS':
             newState.loading = action.loadingStatus
+            return newState
+
+        case 'UPDATE_REFRESH_STATUS':
+            newState.refreshing = action.refreshStatus
             return newState
 
         case 'LOGOUT':

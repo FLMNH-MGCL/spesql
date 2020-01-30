@@ -50,7 +50,10 @@ export default class Header extends Component {
                             />
                         </Menu.Item>
                         <Menu.Item>
-                            <QueryGrid runQuery={this.props.runQuery.bind(this)}/>
+                            <QueryGrid 
+                                runQuery={this.props.runQuery.bind(this)}
+                                clearQuery={this.props.clearQuery}
+                            />
                         </Menu.Item>
                         {/* <Menu.Item>
                             <SortCollection updateSortBy={this.props.updateSortBy.bind(this)} disabled={this.props.data === undefined || this.props.data.length === 0} />

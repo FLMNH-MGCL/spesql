@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Button, Icon, Modal, Grid, Form, Input, Select, Checkbox, Message } from 'semantic-ui-react'
+import { Button, Icon, Modal, Grid, Form, Input, Select, Checkbox, Message, Loader, Dimmer } from 'semantic-ui-react'
 import './QueryGrid.css'
 import QueryHelp from './QueryHelp'
 
@@ -51,6 +51,7 @@ class QueryGrid extends React.Component {
         fields_search: [],
         search_: '',
         operator: '',
+        showModal: false
     }
 
     // DANGEROUS, EASY TO BREAK NEED MORE CHECKS
@@ -91,12 +92,17 @@ class QueryGrid extends React.Component {
 
 
         command += ';'
-
+        this.setState({showModal: false})
+        this.props.clearQuery()
         this.props.runQuery(command)
+        this.closeModal()
     }
 
     handleAdvancedSubmit = () => {
+        this.setState({showModal: false})
+        this.props.clearQuery()
         this.props.runQuery(this.state.advanced_query)
+        this.closeModal()
     }
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -116,6 +122,7 @@ class QueryGrid extends React.Component {
             fields_search: [],
             search_: '',
             operator: '',
+            showModal: false
         })
     }
 
@@ -132,13 +139,17 @@ class QueryGrid extends React.Component {
 
         return(
                 <Modal trigger={
-                    <Button icon labelPosition='left'>
+                    <Button icon labelPosition='left' onClick={() => this.setState({showModal: true})}>
                         <Icon name='archive' />
                         Query
                     </Button>
-                } centered closeIcon onClose={this.closeModal} style={{maxHeight: '85vh'}}>
+                } centered closeIcon open={this.state.showModal} onClose={this.closeModal} style={{maxHeight: '85vh'}}>
+                    {/* <Dimmer active disabled={!this.props.loading} inverted style={{height: '87.3vh'}}>
+                        <Loader active disabled={!this.props.loading} inline='centered'/>
+                    </Dimmer> */}
                     <Modal.Header>Query Selector</Modal.Header>
                     <Modal.Content scrolling style={{minHeight: '80vh'}}>
+                    {/* <Loader active size='big'/> */}
                         <Grid padded>
                         {/* <Header>SELECT Query Selection</Header> */}
                             <Grid.Row>

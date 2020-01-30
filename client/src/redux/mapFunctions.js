@@ -10,7 +10,8 @@ export function mapStateToProps(state) {
         current_query: state.current_query,
         query_headers: state.query_headers,
         error_message: state.error_message,
-        loading: state.loading
+        loading: state.loading,
+        refreshing: state.refreshing
     }
 }
 
@@ -26,6 +27,7 @@ export function mapDispatchToProps(dispatch) {
         updateFilteredCategory: (value) => dispatch({type: 'UPDATE_FILTER_CATEGORY', filterCategory: value}),
         updateSelectedSpecimen: (selectedSpecimen) => dispatch({type: 'UPDATE_SELECTED_SPECIMEN', selectedSpecimen: selectedSpecimen}),
         updateLoadingStatus: (loadingStatus) => dispatch({type: 'UPDATE_LOADING_STATUS', loadingStatus: loadingStatus}),
+        updateRefreshStatus: (refreshStatus) => dispatch({type: 'UPDATE_REFRESH_STATUS', refreshStatus: refreshStatus}),
         logout: () => dispatch({type: 'LOGOUT'}),
     }
 }
