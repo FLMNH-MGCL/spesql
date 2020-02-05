@@ -1,62 +1,81 @@
 import React from 'react'
-import { Form, Grid, Input, Button} from 'semantic-ui-react'
+import { Form, Grid, Input, Button, Message} from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import './Login.css'
 import axios from 'axios'
 // import HeaderBase from '../../components/Header/HeaderBase'
 
-class Login extends React.Component {
-    constructor() {
-        super()
-
-        let authenticated = sessionStorage.getItem('authenticated') === "true" ? true : false
-
-
-        this.state = {
-            username: '',
-            password: '',
-            authenticated: authenticated
+async function attemptLogin(username, password) {
+    let loggedIn = axios.post('/api/login/', {user: username, password: password})
+    .then(response => {
+        console.log(response)
+            const data = response.data
+            return data.logged_in
         }
+    )
+
+    return loggedIn
+}
+
+async function onSubmit() {
+    let loggedIn = await attemptLogin(this.state.username, this.state.password)
+    console.log(loggedIn)
+
+    if (loggedIn) {
+        sessionStorage.setItem('authenticated', true)
+        this.onSuccess()
     }
+    else {
+        sessionStorage.setItem('authenticated', false)
+        this.onFail()
+    }
+}
+
+class Login extends React.Component {
+    state = {
+        username: '',
+        password: '',
+        loginError: false,
+        authenticated: sessionStorage.getItem('authenticated') ? this.props.isLoggedIn : false
+    }
+
+    componentDidUpdate() {
+        console.log('updated!')
+        this.props.setAuthentication(this.state.authenticated)
+    }
+
+    onSuccess = (e) => this.setState({authenticated: true})
+
+    onFail = (e) => this.setState({authenticated: false})
 
     onChange = (e, {name, value}) => this.setState({[name]: value})
 
-    onSubmit = () => {
-        axios.post('/api/login/', {user: this.state.username, password: this.state.password})
-        .then(response => {
-            const data = response.data
-            // console.log(data.logged_in)
-            if (data.logged_in) {
-                this.setState({authenticated: data.logged_in}, () => {
-                    sessionStorage.setItem('authenticated', data.logged_in)
-                })
-            }
-            else {
-                alert('Login error. Please ensure correct username and password combination.')
-            }
-        })
-    }
-
     render() {
+        console.log(this.state.authenticated)
         const {
             username,
-            password
+            password,
+            authenticated,
         } = this.state
-        console.log(this.state)
-        console.log(`IN RENDER LOGIN ${this.state.authenticated}`)
 
-        if (this.state.authenticated) {
+        if (authenticated) {
+            console.log('made it')
             return (
-                <Redirect to={{pathname: '/Home', state: {
-                }}} />
+                <Redirect to='/Home' />
             )
         }
 
         return(
             <div>
                 <div className='form-pad'>
-                    <Grid centered columns={1} padded>
-                            <Form onSubmit={this.onSubmit}>
+                    {/* <Message
+                        error
+                        header='Action Forbidden'
+                        content='Logging in as root is forbidden. If you need a user account, please contact the Kawahara Lab.'
+                    /> */}
+                    <Grid centered padded>
+                        <Grid.Column textAlign='centered' width={5}>
+                            <Form onSubmit={() => setTimeout(onSubmit.bind(this), 1000)}>
                                 <Form.Group>
                                     <Form.Field
                                         control={Input}
@@ -65,6 +84,11 @@ class Login extends React.Component {
                                         name='username'
                                         value={username}
                                         onChange={this.onChange}
+                                        error={this.state.username === 'root' ? {
+                                            content: 'Logging in as root is forbidden.',
+                                            pointing: 'above'
+                                        } : false}
+                                        width={16}
                                     />
                                 </Form.Group>
                                 <Form.Group>
@@ -76,6 +100,7 @@ class Login extends React.Component {
                                         name='password'
                                         value={password}
                                         onChange={this.onChange}
+                                        width={16}
                                     />
                                 </Form.Group>
                                 <Form.Group className='form-button'>                                    
@@ -85,7 +110,11 @@ class Login extends React.Component {
                                     />
                                 </Form.Group>
                             </Form>
-                        
+                            <Message error hidden={!this.state.loginError}>
+                            <Message.Header>Login error</Message.Header>
+                                <p></p>
+                            </Message>
+                        </Grid.Column>
                     </Grid>
                 </div>
             </div>

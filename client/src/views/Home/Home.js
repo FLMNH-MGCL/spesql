@@ -8,7 +8,7 @@ import SpecimenView from '../../components/SpecimenView/SpecimenView'
 import Header from '../../components/Header/Header'
 import { Grid, Loader } from 'semantic-ui-react'
 import getQueryHeaders from '../../functions/getQueryHeaders'
-import { runSelectQuery } from '../../functions/queries'
+import { runSelectQuery, runCountQuery } from '../../functions/queries'
 import { mapStateToProps, mapDispatchToProps } from '../../redux/mapFunctions'
 import { connect } from 'react-redux'
 
@@ -18,10 +18,9 @@ class Home extends React.Component {
     }
 
     logout() {
-        sessionStorage.setItem('authenticated', false)
+        sessionStorage.removeItem('authenticated')
         sessionStorage.removeItem('current_query')
         this.props.logout()
-        // this.setState({authenticated: false})
     }
 
     isValidCSV(csv) {
@@ -43,26 +42,60 @@ class Home extends React.Component {
     }
 
     async runQuery(query) {
-        // fetch & update data
-        console.log('here')
-        // this.props.clearQuery()
-        this.props.updateLoadingStatus(true)
-        this.props.updateRefreshStatus(true)
+        let queryType = ''
+        
+        if (query.startsWith('COUNT')) {
+            queryType = 'COUNT'
+        }
+        else {
+            queryType = query.replace(/ .*/, '')
+        }
 
-        let data = await runSelectQuery(query)
-        this.props.updateQueryData(data.specimen)
+        switch(queryType.toUpperCase()) {
+            case 'SELECT':
+                this.props.clearQuery()
+                this.props.updateLoadingStatus(true)
+                this.props.updateRefreshStatus(true)
 
-        let headers = getQueryHeaders(data.specimen[0])
-        this.props.updateHeaders(headers)
-        this.props.updateQuery(query)
+                let data = await runSelectQuery(query)
+                this.props.updateQueryData(data.specimen)
+
+                let headers = getQueryHeaders(data.specimen[0])
+                this.props.updateHeaders(headers)
+                this.props.updateQuery(query)
+                break
+            case 'COUNT':
+                // let data = await runSelectQuery(query)
+                let fullQuery = 'SELECT ' + query
+
+                let countData = await runCountQuery(fullQuery)
+
+                if (!countData.error) {
+                    countData = countData.data[Object.keys(countData.data)[0]]
+                    console.log(countData)
+                }
+                else {
+
+                }
+
+                this.props.updateCountQueryCount(Object.values(countData)[0]) // isolate the number
+                break
+            case 'UPDATE':
+                console.log(query)
+                break
+            default:
+                console.log('not yet')
+                break
+        }
+
+
+
     }
 
     render() {
-        console.log(this.props.loading)
         if (!this.props.authenticated) {
             return (
-                <Redirect to={{pathname: '/Login', state: {
-                }}} />
+                <Redirect to='/Login' />
             )
         }
 
@@ -82,6 +115,8 @@ class Home extends React.Component {
                     isValidCSV={this.isValidCSV.bind(this)}
                     runQuery={this.runQuery.bind(this)}
                     clearQuery={this.props.clearQuery}
+                    countQueryCount={this.props.countQueryCount}
+                    updateCountQueryCount={this.props.updateCountQueryCount}
                     logout={this.logout.bind(this)}
                     loading={this.props.loading}
                 />

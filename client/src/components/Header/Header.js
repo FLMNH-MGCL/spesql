@@ -53,6 +53,8 @@ export default class Header extends Component {
                             <QueryGrid 
                                 runQuery={this.props.runQuery.bind(this)}
                                 clearQuery={this.props.clearQuery}
+                                countQueryCount={this.props.countQueryCount}
+                                updateCountQueryCount={this.props.updateCountQueryCount}
                             />
                         </Menu.Item>
                         {/* <Menu.Item>

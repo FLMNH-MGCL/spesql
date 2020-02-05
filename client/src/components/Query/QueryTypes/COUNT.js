@@ -2,38 +2,35 @@ import React from 'react'
 import axios from 'axios'
 import { Button, Grid, Form, Input, Select, Checkbox, Message } from 'semantic-ui-react'
 import { 
-    selectQueryOption, headerSelection, setOperatorOptions, conditionalOperatorOptions, setCountOptions, conditionalCountOptions
+    countQueryOption, headerSelection, setOperatorOptions, conditionalOperatorOptions, setCountOptions, conditionalCountOptions
 } from '../QueryConstants/constants'
+import CountTerminal from '../QueryTerminals/CountTerminal'
 import QueryHelp from '../QueryHelp'
 
-
-export default class SELECT extends React.Component {
+export default class COUNT extends React.Component {
     state = {
         advanced_query: '',
         basic_query: true,
-        query_action: '',
+        query_action: 'COUNT',
         fields: ['*'],
         db: '',
         conditionalCount: 0,
         conditionals: [],
-        fields_search: [],
-        search_: '',
-        operator: '',
-        showModal: false
+        waiting: true,
+        submitted: false
     }
 
-    // DANGEROUS, EASY TO BREAK NEED MORE CHECKS
     handleSubmit = () => {
-        let command = String(this.state.query_action + ' ')
+        let command = String(this.state.query_action + '(')
 
         for (let i = 0; i < this.state.fields.length; i++) {
             command += this.state.fields[i]
 
             if (i !== this.state.fields.length - 1) {
-                command += ','
+                command += ' AND '
             }
             else {
-                command += ' '
+                command += ') '
             }
         }
 
@@ -62,22 +59,15 @@ export default class SELECT extends React.Component {
 
         else command += ';'
 
-        // console.log(command)
-        this.props.closeModal()
-        this.props.clearQuery()
+        // this.setState({submitted: true})
         this.props.runQuery(command)
     }
 
     handleAdvancedSubmit = () => {
-        this.setState({showModal: false})
-        this.props.clearQuery()
-        this.props.runQuery(this.state.advanced_query)
-        this.closeModal()
+        this.setState({submitted: true})
     }
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
-
-    handleCheck = (e, { name, value }) => this.setState({ where: !this.state.where})
 
     handleAdvancedCheck = (e, { name, value }) => this.setState({ basic_query: !this.state.basic_query})
 
@@ -167,8 +157,75 @@ export default class SELECT extends React.Component {
         return conditionals
     }
 
+    renderBasicForm = (query_action, fields, db, conditionalCount) => {
+        let conditionals = this.renderConditions()
+        return (
+            <Form onSubmit={this.handleSubmit}>
+                <Form.Group widths='equal'>
+                    <Form.Field
+                        control={Select}
+                        options={countQueryOption}
+                        label='QUERY'
+                        placeholder='COUNT'
+                        search
+                        name='query_action'
+                        value={query_action}
+                        onChange={this.handleChange}
+                        disabled={!this.state.basic_query}
+                        required
+                    />
+                    <Form.Field
+                        control={Select}
+                        options={headerSelection}
+                        label='FIELD'
+                        placeholder='FIELD'
+                        search
+                        multiple
+                        name='fields'
+                        value={fields}
+                        onChange={this.handleChange}
+                        disabled={!this.state.basic_query}
+                    />
+                    <Form.Field
+                        control={Select}
+                        options={this.props.dbSelection}
+                        label='Database'
+                        placeholder='Collection'
+                        search
+                        name='db'
+                        value={db}
+                        onChange={this.handleChange}
+                        disabled={!this.state.basic_query}
+                    />
+                </Form.Group>
+                <Form.Group widths='equal'>
+                    <Form.Field
+                        control={Select}
+                        label='WHERE count (how many conditionals)'
+                        options={conditionalCountOptions}
+                        name='conditionalCount'
+                        value={conditionalCount}
+                        onChange={this.handleConditionalCountChange}
+                        disabled={!this.state.basic_query}
+                    />
+                </Form.Group>
+                {conditionals}
+                <Form.Group className='float-right'>
+                    <QueryHelp queryType='SELECT'/> 
+                    <Form.Field
+                        id='form-button-control-ta-submit'
+                        control={Button}
+                        content='Submit'
+                        disabled={!this.state.basic_query}
+                    />
+                    
+                </Form.Group>
+            </Form>
+        )
+    }
+    
+
     render() {
-        // console.log(this.state)
         const {
             advanced_query,
             query_action,
@@ -177,25 +234,25 @@ export default class SELECT extends React.Component {
             conditionalCount,
         } = this.state
 
-        const conditionals = this.renderConditions()
-
         return (
-            <Grid padded>
+            <Grid padded style={{paddingBottom: '2rem'}}>
                 <Grid.Row>
                     <Grid.Column width={16}>
                         <Message>
-                            <Message.Header>SELECT Query Selection</Message.Header>
+                            <Message.Header>COUNT Query Selection</Message.Header>
                             <p>
-                                This section is for SELECT queries. SELECT queries are those that simply fetch information
-                                from the database. If you have terminal/CLI experience using MySQL commands, there is an 
+                                This section is for COUNT queries. COUNT queries are very similar to SELECT queries, and actually involve a  
+                                SELECT query directly. This query will count the number of entries in the database table 
+                                based on the SELECT query provided. If you have terminal/CLI experience using MySQL commands, there is an 
                                 advanced query option available if checked. Click the Help button for more detailed information
                             </p>
                         </Message>
+
                         <Form onSubmit={this.handleAdvancedSubmit}>
                             <Form.Group>
                                 <Form.Field 
                                     control={Checkbox}
-                                    label='Advanced SELECT Query'
+                                    label='Advanced COUNT Query'
                                     name='basic_query'
                                     value=""
                                     onChange={this.handleAdvancedCheck}
@@ -223,69 +280,12 @@ export default class SELECT extends React.Component {
                             </Form.Group>
                         </Form>
 
-                        <Form onSubmit={this.handleSubmit}>
-                            <Form.Group widths='equal'>
-                                <Form.Field
-                                    control={Select}
-                                    options={selectQueryOption}
-                                    label='QUERY'
-                                    placeholder='SELECT'
-                                    search
-                                    name='query_action'
-                                    value={query_action}
-                                    onChange={this.handleChange}
-                                    disabled={!this.state.basic_query}
-                                    required
-                                />
-                                <Form.Field
-                                    control={Select}
-                                    options={headerSelection}
-                                    label='FIELD'
-                                    placeholder='FIELD'
-                                    search
-                                    multiple
-                                    name='fields'
-                                    value={fields}
-                                    onChange={this.handleChange}
-                                    disabled={!this.state.basic_query}
-                                />
-                                <Form.Field
-                                    control={Select}
-                                    options={this.props.dbSelection}
-                                    label='Database'
-                                    placeholder='Collection'
-                                    search
-                                    name='db'
-                                    value={db}
-                                    onChange={this.handleChange}
-                                    disabled={!this.state.basic_query}
-                                />
-                            </Form.Group>
-                            <Form.Group widths='equal'>
-                                <Form.Field
-                                    control={Select}
-                                    label='WHERE count (how many conditionals)'
-                                    options={conditionalCountOptions}
-                                    name='conditionalCount'
-                                    value={conditionalCount}
-                                    onChange={this.handleConditionalCountChange}
-                                    disabled={!this.state.basic_query}
-                                />
-                            </Form.Group>
-                            {conditionals}
-                            <Form.Group className='float-right'>
-                                <QueryHelp queryType='SELECT'/> 
-                                <Form.Field
-                                    id='form-button-control-ta-submit'
-                                    control={Button}
-                                    content='Submit'
-                                    disabled={!this.state.basic_query}
-                                />
-                                
-                            </Form.Group>
-                        </Form>
+                        {this.state.basic_query ? this.renderBasicForm(query_action, fields, db, conditionalCount) : () => console.log('no form needed')}
+
+                        <CountTerminal waiting={this.state.waiting} submitted={this.state.submitted} countQueryCount={this.props.countQueryCount} />
+                        <Button color='red' style={{float: 'right'}} onClick={() => this.props.updateCountQueryCount(null)}>Clear</Button>
                     </Grid.Column>
-                </Grid.Row>                    
+                </Grid.Row>
             </Grid>
         )
     }

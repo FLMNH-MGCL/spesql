@@ -184,7 +184,7 @@ export default class CollectionList extends React.Component {
 
 
     render() {
-        console.log(this.state)
+        // console.log(this.state)
         let collectionList = this.props.data
         try {
             collectionList = collectionList

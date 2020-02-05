@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { Button, Grid, Form, Input, Select, Checkbox, Message, Dropdown } from 'semantic-ui-react'
-import { updateQueryOption, headerSelection, operatorOptions, setCountOptions } from '../QueryConstants/constants'
+import { updateQueryOption, headerSelection, setOperatorOptions, setCountOptions } from '../QueryConstants/constants'
 import QueryHelp from '../QueryHelp'
 
 export default class UPDATE extends React.Component {
@@ -19,17 +19,43 @@ export default class UPDATE extends React.Component {
             field: '', operator: '', searchTerms: ''
         }],
         fields_search: [],
-        newValue: '',
-        serachTerms: '',
-        operator: '',
     }
 
     handleSubmit = () => {
-        // command += ';'
-        // this.setState({showModal: false})
-        // this.props.clearQuery()
-        // this.props.runQuery(command)
-        // this.props.closeModal()
+        let command = String(this.state.query_action + ' ' + this.state.db + ' SET ')
+
+        let setString = ''
+        this.state.sets.forEach((set, index) => {
+            setString += set.field + ' '
+            setString += set.operator + ' '
+            setString += '\'' + set.newValue + '\''
+
+            if (index !== this.state.conditionalCount - 1) {
+                setString += ' AND '
+            }
+        })
+
+        let conditionalString = ' WHERE '
+
+        this.state.conditionals.forEach((conditional, index) => {
+            conditionalString += conditional.field + ' '
+            conditionalString += conditional.operator + ' '
+            conditionalString += '\'' + conditional.searchTerms + '\''
+
+            if (index !== this.state.conditionalCount - 1) {
+                conditionalString += ' AND '
+            }
+        })
+
+        command += setString
+        command += conditionalString
+
+        command += ';'
+
+        // console.log(command)
+        this.props.closeModal()
+        this.props.clearQuery()
+        this.props.runQuery(command) 
     }
 
     handleAdvancedSubmit = () => {
@@ -83,6 +109,48 @@ export default class UPDATE extends React.Component {
         })
     }
 
+    handleConditionalCountChange = (e, {name, value}) => {
+        // get previous count
+        let prevCount = this.state.conditionalCount
+        // if previous if smaller, concat more items to array
+        if (prevCount < value) {
+            let newConditionals = [...this.state.conditionals].concat(Array.from({length: value - prevCount}, () => {
+                return {
+                    field: '', operator: '=', searchTerms: ''
+                }
+            }))
+            console.log(newConditionals)
+
+            this.setState({
+                [name]: value,
+                conditionals: newConditionals
+            })
+        }
+        else if (prevCount > value) {
+            let newConditionals = [...this.state.conditionals].slice(0, value)
+            this.setState({
+                [name]: value,
+                conditionals: newConditionals
+            })
+        }
+        // if previous is bigger, slice to match new count
+    }
+
+    handleConditionalItemChange = (e, {name, value, id}) => {
+        const newConditional = {
+            ...this.state.conditionals[id],
+            [name]: value
+        }
+
+        this.setState({
+            conditionals: [
+                ...this.state.conditionals.slice(0, id),
+                Object.assign({}, this.state.conditionals[id], newConditional),
+                ...this.state.conditionals.slice(id + 1)
+            ]
+        })
+    }
+
     handleAdvancedCheck = (e, { name, value }) => this.setState({ basic_query: !this.state.basic_query})
 
     renderSets = () => {
@@ -106,7 +174,7 @@ export default class UPDATE extends React.Component {
                 />
                 <Form.Field
                     control={Select}
-                    options={operatorOptions}
+                    options={setOperatorOptions}
                     label='Operator'
                     placeholder='='
                     name='operator'
@@ -132,67 +200,62 @@ export default class UPDATE extends React.Component {
         return sets
     }
 
-    // renderConditions = () => {
-    //     let conditionals = Array.from({length: this.state.conditionalCount}, (item, index) => {
-    //         return (
-    //             <Form.Group widths='equal'>
-    //             <Form.Field
-    //                 control={Select}
-    //                 options={headerSelection}
-    //                 label='Field'
-    //                 placeholder='FIELD'
-    //                 search
-    //                 name='fields_search'
-    //                 value={fields_search}
-    //                 onChange={this.handleChange}
-    //                 id={index}
-    //                 disabled={!this.state.basic_query}
-    //             />
-    //             <Form.Field
-    //                 control={Select}
-    //                 options={operatorOptions}
-    //                 label='Operator'
-    //                 placeholder='='
-    //                 name='operator'
-    //                 value={operator}
-    //                 onChange={this.handleChange}
-    //                 id={index}
-    //                 disabled={!this.state.basic_query}
-    //             />
-    //             <Form.Field
-    //                 control={Input}
-    //                 label='Search'
-    //                 placeholder='Search Term(s)'
-    //                 search
-    //                 name='serachTerms'
-    //                 value={searchTerms}
-    //                 onChange={this.handleChange}
-    //                 id={index}
-    //                 disabled={!this.state.basic_query}
-    //             />
-    //         </Form.Group>
-    //         )
-    //     })
-    //     return conditionals
-    // }
+    renderConditions = () => {
+        let conditionals = Array.from({length: this.state.conditionalCount}, (item, index) => {
+            return (
+                <Form.Group widths='equal'>
+                <Form.Field
+                    control={Select}
+                    options={headerSelection}
+                    label='Field'
+                    placeholder='FIELD'
+                    search
+                    name='field'
+                    value={this.state.conditionals[index].field}
+                    onChange={this.handleConditionalItemChange}
+                    id={index}
+                    disabled={!this.state.basic_query}
+                />
+                <Form.Field
+                    control={Select}
+                    options={setOperatorOptions}
+                    label='Operator'
+                    placeholder='='
+                    name='operator'
+                    value={this.state.conditionals[index].operator}
+                    onChange={this.handleConditionalItemChange}
+                    id={index}
+                    disabled={!this.state.basic_query}
+                />
+                <Form.Field
+                    control={Input}
+                    label='Search'
+                    placeholder='Search Term(s)'
+                    search
+                    name='searchTerms'
+                    value={this.state.conditionals[index].searchTerms}
+                    onChange={this.handleConditionalItemChange}
+                    id={index}
+                    disabled={!this.state.basic_query}
+                />
+            </Form.Group>
+            )
+        })
+        return conditionals
+    }
 
     render() {
-        // this.renderConditions()
         const {
             advanced_query,
             query_action,
-            fields,
             db,
-            fields_search,
-            newValue,
-            searchTerms,
-            operator,
             setCount,
             conditionalCount,
         } = this.state
 
         console.log(this.state)
         let sets = this.renderSets()
+        let conditionals = this.renderConditions()
 
         return (
             <Grid padded>
@@ -280,11 +343,11 @@ export default class UPDATE extends React.Component {
                                     options={setCountOptions}
                                     name='conditionalCount'
                                     value={conditionalCount}
-                                    onChange={this.handleChange}
+                                    onChange={this.handleConditionalCountChange}
                                     disabled={!this.state.basic_query}
                                 />
                             </Form.Group>
-                            {/* {conditionals} */}
+                            {conditionals}
                             <Form.Group className='float-right'>
                                 <QueryHelp queryType='UPDATE'/> 
                                 <Form.Field

@@ -5,6 +5,7 @@ export const REFRESH_LIST = 'REFRESH_LIST'
 export const RUN_SELECT_QUERY = 'UPDATE_QUERY_DATA'
 export const UPDATE_DISPLAYED_DATA = 'UPDATE_DISPLAY_DATA'
 export const UPDATE_QUERY_HEADERS = 'UPDATE_QUERY_HEADERS'
+export const UPDATE_COUNT_QUERY_COUNT = 'UPDATE_COUNT_QUERY_COUNT'
 export const CLEAR_CURRENT_QUERY = 'CLEAR_CURRENT_QUERY'
 export const UPDATE_CURRENT_QUERY = 'UPDATE_CURRENT_QUERY'
 export const UPDATE_FILTER_TEXT = 'UPDATE_FILTER_TEXT'
@@ -26,6 +27,7 @@ const initialState = {
     displayed: [],
     current_query: '',
     query_headers: [],
+    countQuerycount: null,
     error_message: null,
     loading: false,
     refreshing: false
@@ -63,6 +65,7 @@ export default function reducer(state = initialState, action) {
                 displayed: [],
                 current_query: '',
                 query_headers: [],
+                countQueryCount: null,
                 error_message: null,
                 loading: false,
                 refreshing: false
@@ -72,6 +75,10 @@ export default function reducer(state = initialState, action) {
 
         case 'UPDATE_QUERY_HEADERS':
             newState.query_headers = action.headers
+            return newState
+
+        case 'UPDATE_COUNT_QUERY_COUNT':
+            newState.countQueryCount = action.newCount
             return newState
 
         case 'UPDATE_FILTER_TEXT':

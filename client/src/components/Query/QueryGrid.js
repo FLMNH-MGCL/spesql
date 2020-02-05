@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { Button, Icon, Modal, Grid, Form, Input, Select, Checkbox, Message, Loader, Dimmer } from 'semantic-ui-react'
-import { SELECT, UPDATE } from './QueryTypes'
+import { SELECT, UPDATE, COUNT } from './QueryTypes'
 import QueryHelp from './QueryHelp'
 import './QueryGrid.css'
 
@@ -42,8 +42,9 @@ class QueryGrid extends React.Component {
 
                     <Modal.Header>Query Selector</Modal.Header>
                     <Modal.Content scrolling style={{minHeight: '80vh'}}>
-                        <SELECT dbSelection={dbSelection} />
-                        <UPDATE dbSelection={dbSelection} />
+                        <SELECT dbSelection={dbSelection} runQuery={this.props.runQuery} clearQuery={this.props.clearQuery} closeModal={this.closeModal} />
+                        <COUNT dbSelection={dbSelection} runQuery={this.props.runQuery} countQueryCount={this.props.countQueryCount} updateCountQueryCount={this.props.updateCountQueryCount}/>
+                        <UPDATE dbSelection={dbSelection} runQuery={this.props.runQuery} clearQuery={this.props.clearQuery} closeModal={this.closeModal} />
                     </Modal.Content>
                 </Modal>
             
