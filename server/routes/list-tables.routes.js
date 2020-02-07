@@ -6,7 +6,6 @@ module.exports = function(connection, app) {
         let command = 'SHOW TABLES;'
         //console.log(command)
         connection.query(command, (err, data) => {
-            console.log(data)
             if (err) {
                 res.json({tables: [], error: err});
             }

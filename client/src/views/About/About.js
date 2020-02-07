@@ -88,16 +88,28 @@ class About extends React.Component {
                                     <List.Content>
                                         <b className='description-heading'>Query:  </b><br />
                                         <p className='description-text'>
-                                            The query button on the header brings up the query selection menu. For now, only SELECT queries are
+                                            The query button on the header brings up the query selection menu. For now, only a select few queries are
                                             supported. Future support will be widened to accomadate researchers' needs.<br /><br />
 
-                                            It is important to understand you will only recieve data on the headers you query. As a result, 
-                                            be sure to include at least one of the headers in the specimen table in your SELECT query if using
-                                            restrictive queries, otherwise it will not be displayed (and therefore inaccessible). 
-                                            For example, if you were to run a query such as "SELECT latitude from db_name"
-                                            then the data returned will not be in the specimen table, as the only field returned will be latitude of all
-                                            documents in the database table. Instead, run "SELECT lep_num,latitude"
-                                            if you do not need ANY of the other header information. This is intended for organizational purposes.
+                                            <b style={{fontSize: '15px'}}>SELECT QUERIES:</b> It is important to understand you will only recieve data on the headers you query. As a result, 
+                                            it is a better practice to include all headers/fields in your SELECT queries and you conditional statements and/or the provided 
+                                            filterable search to further narrow your results. For example, if you were to run a query such as "SELECT latitude from db_name"
+                                            then the data returned will only contain one piece of information for each entry, as the only field requested was latitude.
+                                            This behavior is inherent to MySQL itself.<br /><br />
+
+                                            <b style={{fontSize: '15px'}}>COUNT QUERIES:</b> Count queries are a subset of a SELECT query, in that instead of returning the 
+                                            selected data queried for, it will return a count of how many entries their are in the query. Please note that normal SELECT queries 
+                                            will have the count displayed underneath the specimen table, however I added a query selector selection incase just the count was needed 
+                                            and quicker returns were required. <br /><br />
+
+                                            <b style={{fontSize: '15px'}}>UPDATE QUERIES:</b> It is important to understand you will only recieve data on the headers you query. As a result, 
+                                            it is a better practice to include all headers/fields in your SELECT queries and you conditional statements and/or the provided 
+                                            filterable search to further narrow your results. For example, if you were to run a query such as "SELECT latitude from db_name"
+                                            then the data returned will only contain one piece of information for each entry, as the only field requested was latitude.
+                                            This behavior is inherent to MySQL itself.<br /><br />
+                                            
+                                            If you would like more information on any of the queries available to you, please reference their respective help guides found 
+                                            in the query selection menu on the application's mainpage.
                                         </p>
                                     </List.Content>
                                 </List.Item>

@@ -9,64 +9,66 @@ function getCells(specimen, headers) {
     if (headers === [] || headers === undefined || specimen === undefined) {
         return []
     }
-    let ret = headers.map(header => {
+    let ret = headers.map((header, index) => {
         switch (header) {
             case 'MGCL #':
-                return <Table.Cell>{specimen.mgcl_num}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.mgcl_num}</Table.Cell>
             case 'Lep #':
-                return <Table.Cell>{specimen.lep_num}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.lep_num}</Table.Cell>
             case 'Order':
-                return <Table.Cell>{specimen.order_}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.order_}</Table.Cell>
             case 'Superfamily':
-                return <Table.Cell>{specimen.superfamily}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.superfamily}</Table.Cell>
             case 'Family':
-                return <Table.Cell>{specimen.family}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.family}</Table.Cell>
             case 'Subfamily':
-                return <Table.Cell>{specimen.subfamily}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.subfamily}</Table.Cell>
             case 'Tribe':
-                return <Table.Cell>{specimen.tribe}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.tribe}</Table.Cell>
             case 'Section':
-                return <Table.Cell>{specimen.section}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.section}</Table.Cell>
             case 'Genus':
-                return <Table.Cell>{specimen.genus}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.genus}</Table.Cell>
             case 'Species':
-                return <Table.Cell>{specimen.species}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.species}</Table.Cell>
             case 'Subspecies':
-                return <Table.Cell>{specimen.subspecies}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.subspecies}</Table.Cell>
             case 'Sex':
-                return <Table.Cell>{specimen.sex}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.sex}</Table.Cell>
             case 'Country':
-                return <Table.Cell>{specimen.country}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.country}</Table.Cell>
             case 'Province':
-                return <Table.Cell>{specimen.province}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.province}</Table.Cell>
             case 'Locality':
-                return <Table.Cell>{specimen.locality}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.locality}</Table.Cell>
             case 'Latitude':
-                return <Table.Cell>{specimen.latitude}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.latitude}</Table.Cell>
             case 'Longitude':
                 return <Table.Cell>{specimen.longitude}</Table.Cell>
             case 'Elevation':
-                return <Table.Cell>{specimen.elevation}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.elevation}</Table.Cell>
             case 'MV Lamp':
-                return <Table.Cell>{specimen.mv_lamp}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.mv_lamp}</Table.Cell>
             case 'Days':
-                return <Table.Cell>{specimen.days}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.days}</Table.Cell>
             case 'Month':
-                return <Table.Cell>{specimen.month}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.month}</Table.Cell>
             case 'Year':
-                return <Table.Cell>{specimen.year}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.year}</Table.Cell>
             case 'Collector(s)':
-                return <Table.Cell>{specimen.collectors}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.collectors}</Table.Cell>
             case 'Freezer':
-                    return <Table.Cell>{specimen.freezer}</Table.Cell>
+                    return <Table.Cell key={index}>{specimen.freezer}</Table.Cell>
             case 'Rack #':
-                return <Table.Cell>{specimen.rack}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.rack}</Table.Cell>
             case 'Box':
-                return <Table.Cell>{specimen.box}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.box}</Table.Cell>
             case 'Size':
-                return <Table.Cell>{specimen.size}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.size}</Table.Cell>
             case 'Note':
-                return <Table.Cell>{specimen.note}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.note}</Table.Cell>
+            default: 
+                return null
         }
     })
 
@@ -101,9 +103,16 @@ export default class CollectionList extends React.Component {
             const newDisplay = this.props.data.slice(0, fetchAmount)
             this.props.updateDisplayData(newDisplay)
             this.setState({display: newDisplay, hasMore: hasMore, prevFetchAmount: fetchAmount})
-        }  
+        }
 
-        if (this.props.current_query != '' && this.props.data.length >= 0) {
+        else if (this.props.data.length === 0 && this.state.display.length !== 0) {
+            this.setState({
+                display: Array.from({length: 0}),
+                prevFetchAmount: 0
+            })
+        }
+
+        if (this.props.current_query !== '' && this.props.data.length >= 0) {
             // console.log('first')
             this.props.updateLoadingStatus(false)
             this.props.updateRefreshStatus(false)
@@ -126,11 +135,12 @@ export default class CollectionList extends React.Component {
         if (headers === [] || headers === undefined) {
             return []
         }
-        let ret = headers.map(header => {
+        let ret = headers.map((header, index) => {
             return (
                 <Table.HeaderCell
                     sorted={this.state.column === header ? this.state.direction : null}
                     onClick={this.handleSort(header)}
+                    key={index}
                 >
                     {header}
                 </Table.HeaderCell>
@@ -287,7 +297,7 @@ export default class CollectionList extends React.Component {
 
         return (
             <React.Fragment>
-            <Table sortable celled selectable>
+            <Table sortable celled selectable stackable>
                 <Table.Header>
                     <Table.Row>
                         {specimenHeaders}
@@ -314,7 +324,10 @@ export default class CollectionList extends React.Component {
                 negative 
                 onClick={() => {
                     this.props.clearQuery()
-                    this.setState({hasMore: false})
+                    this.setState({
+                        hasMore: false,
+                        display: Array.from({length: 0})
+                    })
                 }}
                 disabled={this.props.current_query === '' ? true : false}
             >

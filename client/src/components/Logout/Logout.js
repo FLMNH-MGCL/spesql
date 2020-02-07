@@ -16,8 +16,7 @@ class Logout extends React.Component {
     render() {
         return(
             <React.Fragment>
-                <Button negative icon labelPosition='left' basic onClick={this.show}>
-                    <Icon name='user circle' />
+                <Button negative basic onClick={this.show}>
                     Logout
                 </Button>
                 <Confirm

@@ -21,6 +21,7 @@ connection.connect((err) => {
 })
 
 
+
 const app = express.init()
 require('./routes/list-tables.routes')(connection, app)
 require('./routes/fetch.routes')(connection, app)
@@ -28,6 +29,7 @@ require('./routes/select-count.routes')(connection, app)
 require('./routes/insert.routes')(connection, app)
 require('./routes/delete.routes')(connection, app)
 require('./routes/sql-login.routes')(connection, app)
+require('./routes/get-user.routes')(connection, app)
 
 app.listen(port, () => console.log(`Server now running on port ${port}!`));
 

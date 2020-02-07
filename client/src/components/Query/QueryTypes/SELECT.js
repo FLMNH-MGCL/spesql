@@ -1,17 +1,18 @@
 import React from 'react'
 import axios from 'axios'
-import { Button, Grid, Form, Input, Select, Checkbox, Message } from 'semantic-ui-react'
+import { Button, Grid, Form, Input, Select, Checkbox, Message, Header, Divider } from 'semantic-ui-react'
 import { 
     selectQueryOption, headerSelection, setOperatorOptions, conditionalOperatorOptions, setCountOptions, conditionalCountOptions
 } from '../QueryConstants/constants'
 import QueryHelp from '../QueryHelp'
+import ErrorTerminal from '../QueryTerminals/ErrorTerminal'
 
 
 export default class SELECT extends React.Component {
     state = {
         advanced_query: '',
         basic_query: true,
-        query_action: '',
+        query_action: 'SELECT',
         fields: ['*'],
         db: '',
         conditionalCount: 0,
@@ -22,50 +23,84 @@ export default class SELECT extends React.Component {
         showModal: false
     }
 
+    checkBasicQueryErrors = () => {
+        // return ['test 1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test 1', 'test2', 'test3', 'test4', 'test5', 'test6']
+        let errors = []
+        if (this.state.query_action.toUpperCase() !== 'SELECT') {
+            errors.push('Syntax Error: Invalid query type. This section is reserved for SELECT queries only.')
+        }
+        if (this.state.fields.length > 1 && this.state.fields.indexOf('*') > -1) {
+            errors.push('Formatting Error: If ALL is selected, no other fields should be selected.')
+        }
+        if (this.state.fields.length === 0) {
+            errors.push('Syntax Error: A field must be selected.')
+        }
+        if (this.state.db === '') {
+            errors.push('Syntax Error: A database table must be selected.')
+        }
+        // if () {
+        //     errors.push()
+        // }
+        // if () {
+        //     errors.push()
+        // }
+
+        return errors
+    }
+
     // DANGEROUS, EASY TO BREAK NEED MORE CHECKS
     handleSubmit = () => {
-        let command = String(this.state.query_action + ' ')
-
-        for (let i = 0; i < this.state.fields.length; i++) {
-            command += this.state.fields[i]
-
-            if (i !== this.state.fields.length - 1) {
-                command += ','
-            }
-            else {
-                command += ' '
-            }
+        let errors = this.checkBasicQueryErrors()
+        if (errors.length > 0) {
+            // errors found, update redux error for select query
+            this.props.updateSelectErrorMessage(errors)
+            return
         }
+        else {
+            console.log('made it to else???')
+            let command = String(this.state.query_action + ' ')
 
-        command += 'FROM ' + this.state.db
-
-        if (this.state.conditionalCount > 0) {
-            command += ' WHERE '
-
-            let conditionalString = ''
-
-            this.state.conditionals.forEach((conditional, index) => {
-                conditionalString += conditional.field + ' '
-                conditionalString += conditional.operator + ' '
-                conditionalString += '\'' + conditional.searchTerms + '\''
-
-                if (index === this.state.conditionalCount - 1) {
-                    conditionalString += ';'
+            for (let i = 0; i < this.state.fields.length; i++) {
+                command += this.state.fields[i]
+    
+                if (i !== this.state.fields.length - 1) {
+                    command += ','
                 }
                 else {
-                    conditionalString += ' AND '
+                    command += ' '
                 }
-            })
-
-            command += conditionalString
+            }
+    
+            command += 'FROM ' + this.state.db
+    
+            if (this.state.conditionalCount > 0) {
+                command += ' WHERE '
+    
+                let conditionalString = ''
+    
+                this.state.conditionals.forEach((conditional, index) => {
+                    conditionalString += conditional.field + ' '
+                    conditionalString += conditional.operator + ' '
+                    conditionalString += '\'' + conditional.searchTerms + '\''
+    
+                    if (index === this.state.conditionalCount - 1) {
+                        conditionalString += ';'
+                    }
+                    else {
+                        conditionalString += ' AND '
+                    }
+                })
+    
+                command += conditionalString
+            }
+    
+            else command += ';'
+    
+            // console.log(command)
+            this.props.closeModal()
+            this.props.clearQuery()
+            this.props.runQuery(command)
         }
-
-        else command += ';'
-
-        // console.log(command)
-        this.props.closeModal()
-        this.props.clearQuery()
-        this.props.runQuery(command)
     }
 
     handleAdvancedSubmit = () => {
@@ -167,8 +202,16 @@ export default class SELECT extends React.Component {
         return conditionals
     }
 
+    renderErrorTerminal = () => (
+        <React.Fragment>
+            <ErrorTerminal errorLog={this.props.errorMessages.selectError} />
+            <Button onClick={() => this.props.updateSelectErrorMessage(null)} color='red' style={{float: 'right'}}>Clear</Button>
+        </React.Fragment>
+    )
+
     render() {
-        // console.log(this.state)
+        console.log(this.props.errorMessages)
+        console.log(this.state)
         const {
             advanced_query,
             query_action,
@@ -183,8 +226,8 @@ export default class SELECT extends React.Component {
             <Grid padded>
                 <Grid.Row>
                     <Grid.Column width={16}>
+                        <Header as='h2' dividing>SELECT Query: </Header>
                         <Message>
-                            <Message.Header>SELECT Query Selection</Message.Header>
                             <p>
                                 This section is for SELECT queries. SELECT queries are those that simply fetch information
                                 from the database. If you have terminal/CLI experience using MySQL commands, there is an 
@@ -208,10 +251,9 @@ export default class SELECT extends React.Component {
                                     onChange={this.handleChange}
                                     disabled={this.state.basic_query}
                                     width={10}
-                                    // error={{
-                                    //     content: 'This query must be a SELECT command.',
-                                    //     active: false,
-                                    // }}
+                                    error={this.state.basic_query === false && !advanced_query.toUpperCase().startsWith('SELECT') ?  {
+                                        content: 'This query must be a SELECT command.',
+                                    } : false }
                                 />
                                 <Form.Field
                                 id='form-button-control-ta-submit-adv'
@@ -284,8 +326,11 @@ export default class SELECT extends React.Component {
                                 
                             </Form.Group>
                         </Form>
+
+                        {this.props.errorMessages.selectError ? this.renderErrorTerminal() : null}
+
                     </Grid.Column>
-                </Grid.Row>                    
+                </Grid.Row>
             </Grid>
         )
     }

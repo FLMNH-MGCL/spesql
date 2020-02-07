@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Button, Grid, Form, Input, Select, Checkbox, Message, Dropdown } from 'semantic-ui-react'
+import { Button, Grid, Form, Input, Select, Checkbox, Message, Header } from 'semantic-ui-react'
 import { updateQueryOption, headerSelection, setOperatorOptions, setCountOptions } from '../QueryConstants/constants'
 import QueryHelp from '../QueryHelp'
 
@@ -244,6 +244,29 @@ export default class UPDATE extends React.Component {
         return conditionals
     }
 
+    checkAdvancedPreSubmit = () => {
+        // check if its prefixed correctly
+        if (!this.state.advanced_query.toUpperCase().startsWith('UPDATE') && this.state.advanced_query !== '' && !this.state.basic_query) {
+            return {
+                content: 'This query must be an UPDATE query.',
+            }
+        }
+
+        // check for conditionals present
+        else if (!this.state.advanced_query.toUpperCase().includes('WHERE') && this.state.advanced_query !== '' && !this.state.basic_query) {
+            return {
+                content: 'You must include conditionals, only root can exclude them.'
+            }
+        }
+
+        // check punctuation
+        if (this.state.advanced_query.includes('\'') || this.state.advanced_query.endsWith(';') && !this.state.basic_query) {
+            return {
+                content: 'Remove any \', ` or ; punctuation marks, as these will be handled for you.'
+            }
+        }
+    }
+
     render() {
         const {
             advanced_query,
@@ -261,8 +284,8 @@ export default class UPDATE extends React.Component {
             <Grid padded>
                 <Grid.Row>
                     <Grid.Column width={16}>
+                        <Header as='h2' dividing style={{paddingTop: '2rem'}}>UPDATE Query: </Header>
                         <Message>
-                            <Message.Header>UPDATE Query Selection</Message.Header>
                             <p>
                                 This section is for UPDATE queries. UPDATE queries are those that update values of entries
                                 within the database. If you have terminal/CLI experience using MySQL commands, there is an 
@@ -287,6 +310,7 @@ export default class UPDATE extends React.Component {
                                     onChange={this.handleChange}
                                     disabled={this.state.basic_query}
                                     width={10}
+                                    error={this.checkAdvancedPreSubmit() !== {} ? this.checkAdvancedPreSubmit() : false }
                                 />
                                 <Form.Field
                                 id='form-button-control-ta-submit-adv'

@@ -93,6 +93,8 @@ class Home extends React.Component {
     }
 
     render() {
+
+
         if (!this.props.authenticated) {
             return (
                 <Redirect to='/Login' />
@@ -117,10 +119,14 @@ class Home extends React.Component {
                     clearQuery={this.props.clearQuery}
                     countQueryCount={this.props.countQueryCount}
                     updateCountQueryCount={this.props.updateCountQueryCount}
+                    errorMessages={this.props.errorMessages}
+                    updateSelectErrorMessage={this.props.updateSelectErrorMessage}
+                    updateCountErrorMessage={this.props.updateCountErrorMessage}
+                    updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
                     logout={this.logout.bind(this)}
                     loading={this.props.loading}
                 />
-                <Grid columns='equal' padded>
+                <Grid columns='equal' padded stackable>
                     <Grid.Column width={11}>
                     <Loader content='Loading' active disabled={!this.props.loading} />
                         <CollectionList 
@@ -139,7 +145,7 @@ class Home extends React.Component {
                         />
                     </Grid.Column>
                     <Grid.Column>
-                        <SpecimenView data={this.props.displayed} selectedSpecimen={this.props.selectedSpecimen}/>
+                        <SpecimenView data={this.props.displayed} selectedSpecimen={this.props.selectedSpecimen} currentQuery={this.props.current_query} />
                     </Grid.Column>
                 </Grid>
             </div>

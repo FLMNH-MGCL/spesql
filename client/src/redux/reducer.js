@@ -11,7 +11,11 @@ export const UPDATE_CURRENT_QUERY = 'UPDATE_CURRENT_QUERY'
 export const UPDATE_FILTER_TEXT = 'UPDATE_FILTER_TEXT'
 export const UPDATE_FILTER_CATEGORY = 'UPDATE_FILTER_CATEGORY'
 export const UPDATE_SELECTED_SPECIMEN = 'UPDATE_SELECTED_SPECIMEN'
-export const CLEAR_ERROR_MESSAGE = 'CLEAR_ERROR_MESSAGE'
+
+export const UPDATE_SELECT_ERROR_LOG = 'UPDATE_SELECT_ERROR_LOG'
+export const UPDATE_COUNT_ERROR_LOG = 'UPDATE_COUNT_ERROR_LOG'
+export const UPDATE_UPDATE_ERROR_LOG = 'UPDATE_UPDATE_ERROR_LOG'
+
 export const UPDATE_LOADING_STATUS = 'UPDATE_LOADING_STATUS'
 export const UPDATE_REFRESH_STATUS = 'UPDATE_REFRESH_STATUS'
 export const LOGOUT = 'LOGOUT'
@@ -28,7 +32,11 @@ const initialState = {
     current_query: '',
     query_headers: [],
     countQuerycount: null,
-    error_message: null,
+    errorMessages: {
+        selectError: null,
+        countError: null,
+        updateError: null
+    },
     loading: false,
     refreshing: false
 }
@@ -66,7 +74,11 @@ export default function reducer(state = initialState, action) {
                 current_query: '',
                 query_headers: [],
                 countQueryCount: null,
-                error_message: null,
+                errorMessages: {
+                    selectError: null,
+                    countError: null,
+                    updateError: null
+                },
                 loading: false,
                 refreshing: false
             }
@@ -92,6 +104,23 @@ export default function reducer(state = initialState, action) {
         case 'UPDATE_SELECTED_SPECIMEN':
             newState.selectedSpecimen = action.selectedSpecimen
             return newState
+
+        case 'UPDATE_SELECT_ERROR_LOG':
+            let newErrorMessages = {
+                selectError: action.selectError,
+                countError: state.errorMessages.countError,
+                updateError: state.errorMessages.updateError,
+            }
+            newState.errorMessages = newErrorMessages
+            return newState
+
+        case 'UPDATE_COUNT_ERROR_LOG':
+                newState.errorMessages.countError = action.countError
+                return newState
+
+        case 'UPDATE_UPDATE_ERROR_LOG':
+                newState.errorMessages.updateError = action.updateError
+                return newState
 
         case 'UPDATE_LOADING_STATUS':
             newState.loading = action.loadingStatus

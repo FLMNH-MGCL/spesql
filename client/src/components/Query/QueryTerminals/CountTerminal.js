@@ -18,7 +18,7 @@ export default class CountTerminal extends React.Component {
             <Segment.Group style={{minHeight: '35vh', backgroundColor: '#53596c', color: 'white'}}>
                 <Segment textAlign='center' style={{backgroundColor: '#53596c'}}>Count Return</Segment>
                 <Segment.Group style={{minHeight: '25vh', backgroundColor: '#353c51'}}>
-                    <Segment loading={this.props.waiting && this.props.submitted} textAlign='center' vertical={true} style={{minHeight: '25vh', backgroundColor: '#353c51'}}>
+                    <Segment loading={this.props.waiting && this.props.submitted} textAlign='center' style={{minHeight: '25vh', backgroundColor: '#353c51', paddingTop: '7vh'}}>
                         {!this.props.countQueryCount &&  this.props.countQueryCount !== 0 ? emptyMessage : this.renderCount()}
                     </Segment>
                 </Segment.Group>

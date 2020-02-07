@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Button, Grid, Form, Input, Select, Checkbox, Message } from 'semantic-ui-react'
+import { Button, Grid, Form, Input, Select, Checkbox, Message, Header } from 'semantic-ui-react'
 import { 
     countQueryOption, headerSelection, setOperatorOptions, conditionalOperatorOptions, setCountOptions, conditionalCountOptions
 } from '../QueryConstants/constants'
@@ -211,7 +211,7 @@ export default class COUNT extends React.Component {
                 </Form.Group>
                 {conditionals}
                 <Form.Group className='float-right'>
-                    <QueryHelp queryType='SELECT'/> 
+                    <QueryHelp queryType='COUNT'/> 
                     <Form.Field
                         id='form-button-control-ta-submit'
                         control={Button}
@@ -238,8 +238,8 @@ export default class COUNT extends React.Component {
             <Grid padded style={{paddingBottom: '2rem'}}>
                 <Grid.Row>
                     <Grid.Column width={16}>
+                        <Header as='h2' dividing style={{paddingTop: '2rem'}}>COUNT Query: </Header>
                         <Message>
-                            <Message.Header>COUNT Query Selection</Message.Header>
                             <p>
                                 This section is for COUNT queries. COUNT queries are very similar to SELECT queries, and actually involve a  
                                 SELECT query directly. This query will count the number of entries in the database table 

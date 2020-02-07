@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, Image, Grid, List } from 'semantic-ui-react'
 import './SpecimenView.css'
 import DeleteDocument from '../DeleteDocument/DeleteDocument'
+import UpdateDocument from '../UpdateDocument/UpdateDocument'
 
 
 class SpecimenView extends React.Component {
@@ -33,6 +34,7 @@ class SpecimenView extends React.Component {
                         <Grid.Column>
                             <Card><Image src={require('./test.jpg')} wrapped /></Card>
                             <DeleteDocument target={selectedSpecimen.id} />
+                            <UpdateDocument selectedSpecimen={selectedSpecimen} currentQuery={this.props.currentQuery} />
                         </Grid.Column>
                         <Grid.Column>
                             <List divided verticalAlign='middle' relaxed>

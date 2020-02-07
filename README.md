@@ -1,7 +1,7 @@
-# MGCL-FLMNH Database Portal App #
+# SpeSQL (NAME NOT FINAL) #
 
 ### Development ###
-This project was developed using ReactJS and Node
+This project was developed using ReactJS, Redux and Node
 
 ### About This Project ###
 This project is intented for use by the McGuire Center of Lepidoptera and Biodiversity (MGCL) at the Florida Museum of Natural History (FLMNH). As such, by default, the

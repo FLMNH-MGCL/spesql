@@ -304,6 +304,202 @@ export default class QueryHelp extends React.Component {
                         </Modal.Actions>
                     </Modal>
                 )
+            case 'COUNT':
+                return (
+                    <Modal
+                        open={open}
+                        onOpen={this.open}
+                        onClose={this.close}
+                        size='small'
+                        trigger={
+                        <Button primary icon type="button">
+                            See Help <Icon name='question' />
+                        </Button>
+                        }
+                    >
+                        <Modal.Header>UPDATE Query Help</Modal.Header>
+                        <Modal.Content>
+                            <Message>
+                                <Message.Header>Count Query:    Basic Structure</Message.Header>
+                                <Message.Content><br />UPDATE `table_name` SET `column_name` = `new_value' [WHERE condition];</Message.Content>
+                            </Message>
+                            <p>
+                                In simple terms, this line queries the database to: inside the table, update the 
+                                field entitled `column_name` to a new value of `new_value`. If you were to exclude
+                                the WHERE condition clause, something that is not allowed in this program for data-security
+                                purposes, then the update would act on ALL of the entries' field denoted by the provided 
+                                `column name`. For example: 
+                            </p>
+                            <Message>
+                                <Message.Content>
+                                    UPDATE `collection` SET `genus` = `fake` WHERE `genus` = `Catacola`;
+                                </Message.Content>
+                            </Message>
+                            <p>
+                                While being a silly request, this query would tell the database to update all entries' `genus` field, in the table `collection,`
+                                with the value `fake,` given that the `genus` field currently contains the value `Catacola.` <br />
+                                To visualize this: 
+                            </p>
+
+                            <Grid width={16}>
+                                <Grid.Column width={7}>
+                                    <Table celled selectable>
+                                        <Table.Header>
+                                            <Table.Row textAlign='center'>
+                                                <Table.HeaderCell>collection</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell>id</Table.HeaderCell>
+                                                <Table.HeaderCell>...</Table.HeaderCell>
+                                                <Table.HeaderCell positive>genus</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Body>
+                                            <Table.Row>
+                                                <Table.Cell>1</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell negative>Catacola</Table.Cell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.Cell>2</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>Papilio</Table.Cell>
+                                            </Table.Row>
+                                        </Table.Body>
+                                    </Table>
+                                </Grid.Column>
+                                <Grid.Column width={2} textAlign='center' verticalAlign='middle'>
+                                    <Icon name='arrow right' />
+                                </Grid.Column>
+                                <Grid.Column width={7}>
+                                    <Table celled selectable>
+                                        <Table.Header>
+                                            <Table.Row textAlign='center'>
+                                                <Table.HeaderCell>collection</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell>id</Table.HeaderCell>
+                                                <Table.HeaderCell>...</Table.HeaderCell>
+                                                <Table.HeaderCell>genus</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Body>
+                                            <Table.Row>
+                                                <Table.Cell>1</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell negative>fake</Table.Cell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.Cell>2</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>Papilio</Table.Cell>
+                                            </Table.Row>
+                                        </Table.Body>
+                                    </Table>
+                                </Grid.Column>
+                            </Grid>
+                        </Modal.Content>
+                        <Modal.Actions>
+                        <Button icon='check' content='Got it!' onClick={this.close} />
+                        </Modal.Actions>
+                    </Modal>
+                )
+
+            case 'UPDATE_SINGLE':
+                return (
+                    <Modal
+                        open={open}
+                        onOpen={this.open}
+                        onClose={this.close}
+                        size='small'
+                        trigger={
+                        <Button primary icon type="button">
+                            See Help <Icon name='question' />
+                        </Button>
+                        }
+                    >
+                        <Modal.Header>UPDATE (Single Entry) Query Help</Modal.Header>
+                        <Modal.Content scrolling style={{minHeight: '70vh'}}>
+                            <p>
+                                This query selector is a barebones version of what is available in the Query Selector Menu (click the Query 
+                                button the in header menu). The query will only affect one specimen (the one selected). The table displayed 
+                                will show you what information is currently set for the selected specimen, and allow for typed entries to change 
+                                the data. Once you submit your edits, errors will be checked. If no errors are present, only the entry fields you changed 
+                                will be updated to the database. To visualize this:
+                            </p>
+
+                            <Grid width={16}>
+                                <Grid.Column width={7}>
+                                    <Table celled selectable>
+                                        <Table.Header>
+                                            <Table.Row textAlign='center'>
+                                                <Table.HeaderCell>selected specimen</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell>field</Table.HeaderCell>
+                                                <Table.HeaderCell>current data</Table.HeaderCell>
+                                                <Table.HeaderCell>proposed change</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Body>
+                                            <Table.Row>
+                                                <Table.Cell>genus</Table.Cell>
+                                                <Table.Cell>Catocala</Table.Cell>
+                                                <Table.Cell negative>new value</Table.Cell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.Cell>species</Table.Cell>
+                                                <Table.Cell>violenta</Table.Cell>
+                                                <Table.Cell>violenta</Table.Cell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.Cell>lep #</Table.Cell>
+                                                <Table.Cell>LEP-13417</Table.Cell>
+                                                <Table.Cell negative>LEP-13417K</Table.Cell>
+                                            </Table.Row>
+                                        </Table.Body>
+                                    </Table>
+                                </Grid.Column>
+                                <Grid.Column width={2} textAlign='center' verticalAlign='middle'>
+                                    <Icon name='arrow right' />
+                                </Grid.Column>
+                                <Grid.Column width={7}>
+                                    <Table celled selectable>
+                                        <Table.Header>
+                                            <Table.Row textAlign='center'>
+                                                <Table.HeaderCell>collection</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell>genus</Table.HeaderCell>
+                                                <Table.HeaderCell>species</Table.HeaderCell>
+                                                <Table.HeaderCell>lep #</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Body>
+                                            <Table.Row>
+                                                <Table.Cell negative>new value</Table.Cell>
+                                                <Table.Cell>violenta</Table.Cell>
+                                                <Table.Cell negative>LEP-13417K</Table.Cell>
+                                            </Table.Row>
+                                        </Table.Body>
+                                    </Table>
+                                </Grid.Column>
+                            </Grid>
+                        </Modal.Content>
+                        <Modal.Actions>
+                        <Button icon='check' content='Got it!' onClick={this.close} />
+                        </Modal.Actions>
+                    </Modal>
+                )
+
             default:
                 return (
                     <Modal
