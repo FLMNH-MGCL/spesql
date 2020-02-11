@@ -94,12 +94,13 @@ class Home extends React.Component {
 
     render() {
 
+        console.log(this.props)
 
-        if (!this.props.authenticated) {
-            return (
-                <Redirect to='/Login' />
-            )
-        }
+        // if (!this.props.authenticated) {
+        //     return (
+        //         <Redirect to='/Login' />
+        //     )
+        // }
 
         if (this.props.current_query === '' && sessionStorage.getItem('current_query') && this.props.data.length === 0) {
             this.runQuery(sessionStorage.getItem('current_query'))
@@ -129,19 +130,9 @@ class Home extends React.Component {
                 <Grid columns='equal' padded stackable>
                     <Grid.Column width={11}>
                     <Loader content='Loading' active disabled={!this.props.loading} />
-                        <CollectionList 
-                            data={this.props.data}
-                            updateDisplayData={this.props.updateDisplayData}
-                            filteredText={this.props.filteredText} 
-                            filterCategory={this.props.filterCategory} 
-                            selectedUpdate={this.props.updateSelectedSpecimen}
-                            clearQuery={this.props.clearQuery}
-                            current_query={this.props.current_query}
-                            query_headers={this.props.query_headers}
-                            updateLoadingStatus={this.props.updateLoadingStatus}
-                            updateRefreshStatus={this.props.updateRefreshStatus}
+                        <CollectionList
+                            {...this.props}
                             runQuery={this.runQuery.bind(this)}
-                            refreshing={this.props.refreshing}
                         />
                     </Grid.Column>
                     <Grid.Column>

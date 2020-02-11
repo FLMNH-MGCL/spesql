@@ -39,10 +39,10 @@ class SpecimenView extends React.Component {
                         <Grid.Column>
                             <List divided verticalAlign='middle' relaxed>
                                 <List.Item float='left'>
-                                    <List.Content><b>LEP #:  </b> {selectedSpecimen.lep_num}</List.Content>
+                                    <List.Content><b>LEP #:  </b> {selectedSpecimen.recordNumber}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>MGCL #:  </b> {selectedSpecimen.mgcl_num}</List.Content>
+                                    <List.Content><b>MGCL #:  </b> {selectedSpecimen.catalogNumber}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
                                     <List.Content><b>Order:  </b> {selectedSpecimen.order_}</List.Content>
@@ -60,52 +60,76 @@ class SpecimenView extends React.Component {
                                     <List.Content><b>Tribe:  </b> {selectedSpecimen.tribe}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Section:  </b> {selectedSpecimen.section}</List.Content>
-                                </List.Item>
-                                <List.Item float='left'>
                                     <List.Content><b>Genus:  </b> {selectedSpecimen.genus}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Species:  </b> {selectedSpecimen.species}</List.Content>
+                                    <List.Content><b>Species:  </b> {selectedSpecimen.specificEpithet}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Subspecies:  </b> {selectedSpecimen.subspecies}</List.Content>
+                                    <List.Content><b>Qualifier:  </b> {selectedSpecimen.identificationQualifier}</List.Content>
+                                </List.Item>
+                                <List.Item float='left'>
+                                    <List.Content><b>Recorded by:  </b> {selectedSpecimen.recordedBy}</List.Content>
+                                </List.Item>
+                                <List.Item float='left'>
+                                    <List.Content><b>Identified by:  </b> {selectedSpecimen.identifiedBy}</List.Content>
+                                </List.Item>
+                                <List.Item float='left'>
+                                    <List.Content><b>Date:  </b> {selectedSpecimen.dateIdentified}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
                                     <List.Content><b>Sex:  </b> {selectedSpecimen.sex}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
+                                    <List.Content><b>Life Stage:  </b> {selectedSpecimen.lifeStage}</List.Content>
+                                </List.Item>
+                                <List.Item float='left'>
+                                    <List.Content><b>Habitat:  </b> {selectedSpecimen.habitat}</List.Content>
+                                </List.Item>
+                                <List.Item float='left'>
+                                    <List.Content><b>Occurrence Remarks:  </b> {selectedSpecimen.occurrenceRemarks}</List.Content>
+                                </List.Item>
+                                <List.Item float='left'>
                                     <List.Content><b>Country:  </b> {selectedSpecimen.country}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Province:  </b> {selectedSpecimen.province}</List.Content>
+                                    <List.Content><b>State / Province:  </b> {selectedSpecimen.stateProvince}</List.Content>
+                                </List.Item>
+                                <List.Item float='left'>
+                                    <List.Content><b>County:  </b> {selectedSpecimen.county}</List.Content>
+                                </List.Item>
+                                <List.Item float='left'>
+                                    <List.Content><b>Municipality:  </b> {selectedSpecimen.municipality}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
                                     <List.Content><b>Locality:  </b> {selectedSpecimen.locality}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Latitude:  </b> {selectedSpecimen.latitude}</List.Content>
+                                    <List.Content><b>Elevation:  </b> {selectedSpecimen.verbatimElevation}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Longitude:  </b> {selectedSpecimen.longitude}</List.Content>
+                                    <List.Content><b>Latitude (Dec.):  </b> {selectedSpecimen.decimalLatitude}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Elevation:  </b> {selectedSpecimen.elevation}</List.Content>
+                                    <List.Content><b>Longitude (Dec.):  </b> {selectedSpecimen.decimalLongitude}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>MV Lamp:  </b> {selectedSpecimen.mv_lamp}</List.Content>
+                                    <List.Content><b>Geodetic Datum:  </b> {selectedSpecimen.geodeticDatum}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Day(s):  </b> {selectedSpecimen.day}</List.Content>
+                                    <List.Content><b>Coord. Uncertainty:  </b> {selectedSpecimen.coordinateUncertainty}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Month:  </b> {selectedSpecimen.month}</List.Content>
+                                    <List.Content><b>Latitude (Ver.):  </b> {selectedSpecimen.verbatimLatitude}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Year:  </b> {selectedSpecimen.year}</List.Content>
+                                    <List.Content><b>Latitude (Ver.):  </b> {selectedSpecimen.verbatimLongitude}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Collector(s):  </b> {selectedSpecimen.collectors}</List.Content>
+                                    <List.Content><b>Loaned:  </b> {selectedSpecimen.loanInfo}</List.Content>
+                                </List.Item>
+                                <List.Item float='left'>
+                                    <List.Content><b>Preparations:  </b> {selectedSpecimen.preparations}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
                                     <List.Content><b>Freezer:  </b> {selectedSpecimen.freezer}</List.Content>
@@ -117,10 +141,10 @@ class SpecimenView extends React.Component {
                                     <List.Content><b>Box:  </b> {selectedSpecimen.box}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Size:  </b> {selectedSpecimen.size}</List.Content>
+                                    <List.Content><b>Tube Size (mL):  </b> {selectedSpecimen.tubeSize}</List.Content>
                                 </List.Item>
                                 <List.Item float='left'>
-                                    <List.Content><b>Notes:  </b> {selectedSpecimen.note}</List.Content>
+                                    <List.Content><b>Collector(s):  </b> {selectedSpecimen.collectors}</List.Content>
                                 </List.Item>
                             </List>
                         </Grid.Column>

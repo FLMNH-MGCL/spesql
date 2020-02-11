@@ -12,9 +12,9 @@ function getCells(specimen, headers) {
     let ret = headers.map((header, index) => {
         switch (header) {
             case 'MGCL #':
-                return <Table.Cell key={index}>{specimen.mgcl_num}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.catalogNumber}</Table.Cell>
             case 'Lep #':
-                return <Table.Cell key={index}>{specimen.lep_num}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.recordNumber}</Table.Cell>
             case 'Order':
                 return <Table.Cell key={index}>{specimen.order_}</Table.Cell>
             case 'Superfamily':
@@ -25,20 +25,16 @@ function getCells(specimen, headers) {
                 return <Table.Cell key={index}>{specimen.subfamily}</Table.Cell>
             case 'Tribe':
                 return <Table.Cell key={index}>{specimen.tribe}</Table.Cell>
-            case 'Section':
-                return <Table.Cell key={index}>{specimen.section}</Table.Cell>
             case 'Genus':
                 return <Table.Cell key={index}>{specimen.genus}</Table.Cell>
             case 'Species':
-                return <Table.Cell key={index}>{specimen.species}</Table.Cell>
-            case 'Subspecies':
-                return <Table.Cell key={index}>{specimen.subspecies}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.specificEpithet}</Table.Cell>
             case 'Sex':
                 return <Table.Cell key={index}>{specimen.sex}</Table.Cell>
             case 'Country':
                 return <Table.Cell key={index}>{specimen.country}</Table.Cell>
             case 'Province':
-                return <Table.Cell key={index}>{specimen.province}</Table.Cell>
+                return <Table.Cell key={index}>{specimen.stateProvince}</Table.Cell>
             case 'Locality':
                 return <Table.Cell key={index}>{specimen.locality}</Table.Cell>
             case 'Latitude':
@@ -282,7 +278,7 @@ export default class CollectionList extends React.Component {
                 let cells = getCells(specimen, this.props.query_headers)
 
                 return (
-                    <Table.Row key={index} onClick={() => this.props.selectedUpdate(specimen)}>
+                    <Table.Row key={index} onClick={() => this.props.updateSelectedSpecimen(specimen)}>
                         {cells}
                     </Table.Row>
                 )
@@ -294,6 +290,7 @@ export default class CollectionList extends React.Component {
 
 
         let specimenHeaders = this.getHeaderCells(this.props.query_headers)
+        console.log(specimenHeaders)
 
         return (
             <React.Fragment>

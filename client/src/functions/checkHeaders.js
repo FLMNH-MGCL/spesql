@@ -1,39 +1,49 @@
-const correct_headers = [
-    'MGCL',
-    'LEP #',
-    'ORDER',
-    'SUPERFAMILY',
-    'FAMILY',
-    'SUBFAMILY',
-    'TRIBE',
-    'SECTION',
-    'GENUS',
-    'SPECIES',
-    'SUB-SPECIES',
-    'SEX',
-    'COUNTRY',
-    'PROVINCE',
-    'LOCALITY',
-    'Latitude',
-    'Longitude',
-    'ELEVATION',
-    'MV',
-    'DAYS',
-    'MONTH',
-    'YEAR',
-    'COLLECTORS',
-    'FREEZER',
-    'RACK',
-    'BOX',
-    'SIZE',
-    'NOTE',
+
+const correctHeaders = [
+    "catalogNumber",
+    "recordNumber",
+    "order_",
+    "superfamily",
+    "family",
+    "subfamily",
+    "tribe",
+    "genus",
+    "subgenus",	
+    "specificEpithet",	
+    "identificationQualifier",	
+    "recordedBy",
+    "identifiedBy",
+    "dateIdentified",
+    "sex",
+    "lifeStage",
+    "habitat",
+    "occurrenceRemarks",
+    "country",
+    "stateProvince",
+    "county",
+    "municipality",
+    "locality",
+    "verbatimElevation",
+    "decimalLatitude",
+    "decimalLongitude",
+    "geodeticDatum",
+    "coordinateUncertainty",
+    "verbatimLatitude",
+    "verbatimLongitude",
+    "loanInfo",
+    "preparations",
+    "freezer",
+    "rack",
+    "box",
+    "tubeSize",
+    "collectors"								
 ]
 
 function checkHeaders(headers) {
     let ret = true
-    if (correct_headers.length === headers.length) {
+    if (correctHeaders.length === headers.length) {
         headers.forEach((header, index) => {
-            if (header.toLowerCase() !== correct_headers[index].toLowerCase()) {
+            if (header.toLowerCase() !== correctHeaders[index].toLowerCase()) {
                 ret = false
             }
         });

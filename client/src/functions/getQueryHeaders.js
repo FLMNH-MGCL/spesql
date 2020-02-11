@@ -3,10 +3,10 @@ function getQueryHeaders(specimen) {
         return []
     }
     // test for ideal headers first
-    let ret = ['Lep #', 'Superfamily', 'Family', 'Genus', 'Species', 'Country', 'Rack #']
+    let ret = ['Lep #', 'Superfamily', 'Family', 'Genus', 'Species', 'Country', 'Freezer']
     if (
-        specimen.id && specimen.lep_num && specimen.superfamily && specimen.family &&
-        specimen.genus && specimen.species && specimen.country && specimen.rack
+        specimen.id && specimen.recordNumber && specimen.superfamily && specimen.family &&
+        specimen.genus && specimen.specificEpithet && specimen.country && specimen.freezer
     ) {
         return ret
     }
@@ -15,11 +15,11 @@ function getQueryHeaders(specimen) {
         ret = []
         let count = 0
 
-        if (count < 8 && specimen.mgcl_num) {
+        if (count < 8 && specimen.catalogNumber) {
             ret.push('MGCL #')
             count += 1
         }
-        if (count < 8 && specimen.lep_num) {
+        if (count < 8 && specimen.recordNumber) {
             ret.push('LEP #')
             count += 1
         }
@@ -43,15 +43,15 @@ function getQueryHeaders(specimen) {
             ret.push('Tribe')
             count += 1
         }
-        if (count < 8 && specimen.section) {
-            ret.push('Section')
-            count += 1
-        }
         if (count < 8 && specimen.genus) {
             ret.push('Genus')
             count += 1
         }
-        if (count < 8 && specimen.species) {
+        if (count < 8 && specimen.subgenus) {
+            ret.push('Subgenus')
+            count += 1
+        }
+        if (count < 8 && specimen.specificEpithet) {
             ret.push('Species')
             count += 1
         }
@@ -67,7 +67,7 @@ function getQueryHeaders(specimen) {
             ret.push('Country')
             count += 1
         }
-        if (count < 8 && specimen.province) {
+        if (count < 8 && specimen.stateProvince) {
             ret.push('Province')
             count += 1
         }

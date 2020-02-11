@@ -6,9 +6,9 @@ const port = process.env.PORT || 5000;
 let connection = mysql.createConnection({
     host: 'localhost',
     port: '3306',
-    user: 'guest',
-    password: 'guestp@ssword',
-    database: 'mtest'
+    user: 'root',
+    password: '',
+    database: 'test'
 })
 
 connection.connect((err) => {

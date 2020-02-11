@@ -11,7 +11,7 @@ module.exports = function(connection, app) {
             }
             else {
                 const tables = data.map(table => {
-                    return table.Tables_in_mtest
+                    return table.Tables_in_test
                 })
                 res.json({tables: tables})
             }
