@@ -12,7 +12,9 @@ import { currentUser } from '../../functions/queries'
 
 let user = null
 currentUser().then(result => {
-    user = result.split('@')[0]
+    if (result !== null) {
+        user = result.split('@')[0]
+    }
 })
 
 export default class Header extends Component {
