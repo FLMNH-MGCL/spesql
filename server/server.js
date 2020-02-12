@@ -30,8 +30,38 @@ require('./routes/insert.routes')(connection, app)
 require('./routes/delete.routes')(connection, app)
 require('./routes/sql-login.routes')(connection, app)
 require('./routes/get-user.routes')(connection, app)
+require('./routes/shutdown.routes')(connection, app)
 
 app.listen(port, () => console.log(`Server now running on port ${port}!`));
 
+// const frontListener = express.init(3000, () => console.log('tracking client port')).on('close', () => {
+//     console.log('its closed wow')
+// }).on('end', () => {
+//     console.log('it ended wow')
+// })
+
+process.on('SIGTERM', () => {
+    console.info('SIGTERM signal recieved...')
+    console.log('Shutting down the server.')
+
+    app.close(() => {
+        connection.end((error) => {
+            if (error) {
+                console.info('Error occurred while closing the MySQL Connection.')
+                console.log(error)
+                process.exit(1)
+            }
+            else {
+                console.log('MySQL connection sucessfully closed.')
+                process.exit(0)
+            }
+        })
+    })
+})
+
 
 // https://stackoverflow.com/questions/18087696/express-framework-app-post-and-app-get
+
+// https://hackernoon.com/graceful-shutdown-in-nodejs-2f8f59d1c357
+
+// https://stackoverflow.com/questions/35836582/nodejs-check-to-see-if-client-is-still-connected

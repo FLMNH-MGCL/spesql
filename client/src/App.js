@@ -14,8 +14,6 @@ const store = createStore(reducer)
 
 
 function App() {
-  // const [authenticated, setAuthentication] = useState(sessionStorage.getItem("authenticated") ? true : false);
-
   return (
     <Provider store={store}>
       <Switch>

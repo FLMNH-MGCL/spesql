@@ -10,24 +10,24 @@ const correctHeaders = [
     "genus",
     "subgenus",	
     "specificEpithet",	
-    "identificationQualifier",	
-    "recordedBy",
-    "identifiedBy",
-    "dateIdentified",
+    "identificationQualifier",	//
+    "recordedBy", //
+    "identifiedBy", //
+    "dateIdentified", //
     "sex",
-    "lifeStage",
-    "habitat",
-    "occurrenceRemarks",
-    "country",
+    "lifeStage", //
+    "habitat", //
+    "occurrenceRemarks", //
+    "country", 
     "stateProvince",
-    "county",
-    "municipality",
-    "locality",
+    "county", //
+    "municipality", //
+    "locality", 
     "verbatimElevation",
-    "decimalLatitude",
-    "decimalLongitude",
-    "geodeticDatum",
-    "coordinateUncertainty",
+    "decimalLatitude", //
+    "decimalLongitude", //
+    "geodeticDatum", //
+    "coordinateUncertainty", //
     "verbatimLatitude",
     "verbatimLongitude",
     "loanInfo",

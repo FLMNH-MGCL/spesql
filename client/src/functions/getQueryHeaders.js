@@ -55,10 +55,6 @@ function getQueryHeaders(specimen) {
             ret.push('Species')
             count += 1
         }
-        if (count < 8 && specimen.subspecies) {
-            ret.push('Subspecies')
-            count += 1
-        }
         if (count < 8 && specimen.sex) {
             ret.push('Sex')
             count += 1
@@ -75,32 +71,16 @@ function getQueryHeaders(specimen) {
             ret.push('Locality')
             count += 1
         }
-        if (count < 8 && specimen.latitude) {
+        if (count < 8 && specimen.verbatimLatitude) {
             ret.push('Latitude')
             count += 1
         }
-        if (count < 8 && specimen.longitude) {
+        if (count < 8 && specimen.verbatimLongitude) {
             ret.push('Longitude')
             count += 1
         }
-        if (count < 8 && specimen.elevation) {
+        if (count < 8 && specimen.verbatimElevation) {
             ret.push('Elevation')
-            count += 1
-        }
-        if (count < 8 && specimen.mv_lamp) {
-            ret.push('MV Lamp')
-            count += 1
-        }
-        if (count < 8 && specimen.days) {
-            ret.push('Days')
-            count += 1
-        }
-        if (count < 8 && specimen.month) {
-            ret.push('Month')
-            count += 1
-        }
-        if (count < 8 && specimen.year) {
-            ret.push('Year')
             count += 1
         }
         if (count < 8 && specimen.collectors) {
@@ -121,10 +101,6 @@ function getQueryHeaders(specimen) {
         }
         if (count < 8 && specimen.size) {
             ret.push('Size')
-            count += 1
-        }
-        if (count < 8 && specimen.note) {
-            ret.push('Note')
             count += 1
         }
 

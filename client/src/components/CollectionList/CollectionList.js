@@ -43,14 +43,6 @@ function getCells(specimen, headers) {
                 return <Table.Cell>{specimen.longitude}</Table.Cell>
             case 'Elevation':
                 return <Table.Cell key={index}>{specimen.elevation}</Table.Cell>
-            case 'MV Lamp':
-                return <Table.Cell key={index}>{specimen.mv_lamp}</Table.Cell>
-            case 'Days':
-                return <Table.Cell key={index}>{specimen.days}</Table.Cell>
-            case 'Month':
-                return <Table.Cell key={index}>{specimen.month}</Table.Cell>
-            case 'Year':
-                return <Table.Cell key={index}>{specimen.year}</Table.Cell>
             case 'Collector(s)':
                 return <Table.Cell key={index}>{specimen.collectors}</Table.Cell>
             case 'Freezer':
