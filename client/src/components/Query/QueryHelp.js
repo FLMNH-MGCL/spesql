@@ -500,6 +500,173 @@ export default class QueryHelp extends React.Component {
                     </Modal>
                 )
 
+
+            case 'PASTE_INSERT':
+                return (
+                    <Modal
+                        open={open}
+                        onOpen={this.open}
+                        onClose={this.close}
+                        size='small'
+                        trigger={
+                        <Button primary icon type="button">
+                            See Help <Icon name='question' />
+                        </Button>
+                        }
+                    >
+                        <Modal.Header>Insert Query Help (Paste CSV)</Modal.Header>
+                        <Modal.Content scrolling style={{minHeight: '70vh'}}>
+                            <Message>
+                                <Message.Header>Insert Query:    Basic Structure</Message.Header>
+                                <Message.Content><br />INSERT INTO `table_name`(table_headers_inserting) VALUES(table_headers_values);</Message.Content>
+                            </Message>
+                            <p>
+                                While this is the basic structure of an INSERT query, this program won't actually let you
+                                perform it manually, and therefore you will not be using that structure in any advanced INSERT 
+                                query forms (as they do not exist). This is intended, as INSERT queries can be rather large, especially
+                                for tables with many headers / columns. This page allows for batch insertions into the database, where you 
+                                provide a CSV of the data you'd like to insert and, one row at a time, it gets inserted (assuming no errors). <br /><br />
+
+                                The header row of the CSV file you paste into the text box must match exactly (disregarding capitalizations) 
+                                with the header of the template CSV of the target table. For example, if you are inserting into the molecularLab 
+                                table, then you much ensure the header you paste matches the molecularLab_template.csv. Templates are available on the 
+                                previous page, above the insert form. PLEASE NOTE: you must paste in the headers in addition to the data, this is intended as 
+                                a means of checking the data is properly formatted.<br /><br />
+
+                                On the next page, there is a single INSERT option for manually entering the data to insert a single specimen into the 
+                                database table.<br /><br /><br />
+                            </p>
+
+                            <Grid width={16}>
+                                <Grid.Column width={16}>
+                                    <Table celled selectable>
+                                        <Table.Header>
+                                            <Table.Row textAlign='center'>
+                                                <Table.HeaderCell>molecularLab_template.csv</Table.HeaderCell>
+                                            </Table.Row>
+                                        </Table.Header>
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell>catalogNumber</Table.HeaderCell>
+                                                <Table.HeaderCell>recordNumber</Table.HeaderCell>
+                                                <Table.HeaderCell>genus</Table.HeaderCell>
+                                                <Table.HeaderCell>...</Table.HeaderCell>
+                                            </Table.Row>
+                                        </Table.Header>
+                                        <Table.Body>
+                                            <Table.Row>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                            </Table.Row>
+                                        </Table.Body>
+                                    </Table>
+                                </Grid.Column>
+
+                                <Grid.Column width={16}>
+                                    <Table celled selectable>
+                                        <Table.Header>
+                                            <Table.Row textAlign='center'>
+                                                <Table.HeaderCell>Passing CSV Paste</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell>catalogNumber</Table.HeaderCell>
+                                                <Table.HeaderCell>recordNumber</Table.HeaderCell>
+                                                <Table.HeaderCell>genus</Table.HeaderCell>
+                                                <Table.HeaderCell>...</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Body>
+                                            <Table.Row>
+                                                <Table.Cell>MGCL-000000</Table.Cell>
+                                                <Table.Cell>LEP-05339</Table.Cell>
+                                                <Table.Cell>Catacola</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                            </Table.Row>
+                                        </Table.Body>
+                                    </Table>
+                                </Grid.Column>
+
+                                <Grid.Column width={16}>
+                                    <Table celled selectable>
+                                        <Table.Header>
+                                            <Table.Row textAlign='center'>
+                                                <Table.HeaderCell>Passing CSV Paste 2</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell>cAtaLogNumbEr</Table.HeaderCell>
+                                                <Table.HeaderCell>recOrdNuMber</Table.HeaderCell>
+                                                <Table.HeaderCell>Genus</Table.HeaderCell>
+                                                <Table.HeaderCell>...</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Body>
+                                            <Table.Row>
+                                                <Table.Cell>MGCL-000000</Table.Cell>
+                                                <Table.Cell>LEP-05339</Table.Cell>
+                                                <Table.Cell>Catacola</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                            </Table.Row>
+                                        </Table.Body>
+                                    </Table>
+                                </Grid.Column>
+
+                                <Grid.Column width={16}>
+                                    <Table celled selectable>
+                                        <Table.Header>
+                                            <Table.Row textAlign='center'>
+                                                <Table.HeaderCell>Failing CSV Paste</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell>catalgNumber</Table.HeaderCell>
+                                                <Table.HeaderCell>record-number</Table.HeaderCell>
+                                                <Table.HeaderCell>genus</Table.HeaderCell>
+                                                <Table.HeaderCell>...</Table.HeaderCell>
+                                            </Table.Row>    
+                                        </Table.Header>
+                                        <Table.Body>
+                                            <Table.Row>
+                                                <Table.Cell>MGCL-000000</Table.Cell>
+                                                <Table.Cell>LEP-05339</Table.Cell>
+                                                <Table.Cell>Catacola</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                                <Table.Cell>...</Table.Cell>
+                                            </Table.Row>
+                                        </Table.Body>
+                                    </Table>
+                                </Grid.Column>
+                            </Grid>
+                        </Modal.Content>
+                        <Modal.Actions>
+                        <Button icon='check' content='Got it!' onClick={this.close} />
+                        </Modal.Actions>
+                    </Modal>
+                )
+
             default:
                 return (
                     <Modal

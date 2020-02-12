@@ -7,7 +7,8 @@ import CollectionList from '../../components/CollectionList/CollectionList'
 import SpecimenView from '../../components/SpecimenView/SpecimenView'
 import Header from '../../components/Header/Header'
 import { Grid, Loader } from 'semantic-ui-react'
-import getQueryHeaders from '../../functions/getQueryHeaders'
+import { getQueryHeaders } from '../../functions/helpers'
+import { checkHeaders } from '../../functions/queryChecks'
 import { runSelectQuery, runCountQuery } from '../../functions/queries'
 import { mapStateToProps, mapDispatchToProps } from '../../redux/mapFunctions'
 import { connect } from 'react-redux'
@@ -29,13 +30,43 @@ class Home extends React.Component {
         // console.log(obj)
         let data = obj.data
 
-        // check headers
+        let valid = true
+        let errors = []
+        console.log(data)
+
+        if (data === undefined || data.length === 0) {
+            valid = false
+            errors.push('Invalid CSV Formatting. (Detected empty submission)')
+        }
+
+        else if (data.length <= 1) {
+            valid = false
+            errors.push('Invalid CSV Formatting. (Are you missing the headers / data?)')
+        }
+
+        else {
+            // check headers
+            valid = checkHeaders(data[0])
+            if (!valid) {
+                errors.push('Error(s) detected in headers. Please ensure they match the example CSV document.')
+            }
+        }
+
+
 
         // if headers correct, check each row and only add valid rows to insertion query
-
-        var ret = {
-            "valid" : true,
-            "data" : data
+        let ret = {}
+        if (valid) {
+            ret = {
+                "valid" : valid,
+                "data" : data
+            }
+        } 
+        else {
+            ret = {
+                "valid" : valid,
+                "data" : errors
+            }
         }
 
         return ret
@@ -121,6 +152,7 @@ class Home extends React.Component {
                     countQueryCount={this.props.countQueryCount}
                     updateCountQueryCount={this.props.updateCountQueryCount}
                     errorMessages={this.props.errorMessages}
+                    updateInsertErrorMessage={this.props.updateInsertErrorMessage}
                     updateSelectErrorMessage={this.props.updateSelectErrorMessage}
                     updateCountErrorMessage={this.props.updateCountErrorMessage}
                     updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}

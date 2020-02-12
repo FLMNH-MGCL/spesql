@@ -29,6 +29,7 @@ export function mapDispatchToProps(dispatch) {
         updateFilteredCategory: (value) => dispatch({type: 'UPDATE_FILTER_CATEGORY', filterCategory: value}),
         updateSelectedSpecimen: (selectedSpecimen) => dispatch({type: 'UPDATE_SELECTED_SPECIMEN', selectedSpecimen: selectedSpecimen}),
         updateSelectErrorMessage: (selectError) => dispatch({type: 'UPDATE_SELECT_ERROR_LOG', selectError: selectError}),
+        updateInsertErrorMessage: (insertError) => dispatch({type: 'UPDATE_INSERT_ERROR_LOG', insertError: insertError}),
         updateCountErrorMessage: (countError) => dispatch({type: 'UPDATE_COUNT_ERROR_LOG', countError: countError}),
         updateUpdateErrorMessage: (updateError) => dispatch({type: 'UPDATE_UPDATE_ERROR_LOG', updateError: updateError}),
         updateLoadingStatus: (loadingStatus) => dispatch({type: 'UPDATE_LOADING_STATUS', loadingStatus: loadingStatus}),

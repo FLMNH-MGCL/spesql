@@ -65,3 +65,5 @@ process.on('SIGTERM', () => {
 // https://hackernoon.com/graceful-shutdown-in-nodejs-2f8f59d1c357
 
 // https://stackoverflow.com/questions/35836582/nodejs-check-to-see-if-client-is-still-connected
+
+// https://stackoverflow.com/questions/40141332/node-js-mysql-error-handling

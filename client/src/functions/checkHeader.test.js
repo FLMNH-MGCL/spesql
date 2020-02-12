@@ -1,4 +1,4 @@
-import checkHeaders from './checkHeaders'
+import checkHeaders from './insertChecks/checkHeaders'
 
 const header1 = [
     'ORDER',

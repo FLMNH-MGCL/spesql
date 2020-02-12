@@ -89,7 +89,11 @@ export default class Header extends Component {
                         <SortCollection updateSortBy={this.props.updateSortBy.bind(this)} disabled={this.props.data === undefined || this.props.data.length === 0} />
                     </Menu.Item> */}
                     <Menu.Item>
-                        <InsertDocument isValidCSV={this.props.isValidCSV.bind(this)} />
+                        <InsertDocument 
+                            isValidCSV={this.props.isValidCSV.bind(this)} 
+                            errorMessages={this.props.errorMessages} 
+                            updateInsertErrorMessage={this.props.updateInsertErrorMessage}
+                        />
                     </Menu.Item>
                     <Menu.Item>
                         <DownloadDB 
