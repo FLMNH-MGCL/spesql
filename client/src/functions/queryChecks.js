@@ -40,24 +40,61 @@ const correctHeaders = [
 ]
 
 export function checkHeaders(headers) {
+    let errors = []
     if (headers === undefined) {
-        return false
+        return errors
     } 
 
-    let ret = true
     if (correctHeaders.length === headers.length) {
         headers.forEach((header, index) => {
-            console.log(`${header.toLowerCase()} vs ${correctHeaders[index].toLowerCase()}`)
+            // console.log(`${header.toLowerCase()} vs ${correctHeaders[index].toLowerCase()}`)
             if (header.toLowerCase() !== correctHeaders[index].toLowerCase()) {
-                ret = false
+                errors.push(`INVALID COLUMN HEADER: Expected ${correctHeaders[index]}, Recieved ${header}`)
             }
         });
     }
-    else {
-        ret = false
+
+    else if (headers.length < correctHeaders.length) {
+        errors.push(`Detected missing headers: Expected ${correctHeaders.length}, Recieved ${headers.length}`)
+
+        // check for correctness in the headers that exist:
+        correctHeaders.forEach((header, index) => {
+            if (index < headers.length) {
+                if (header.toLowerCase() !== headers[index].toLowerCase()) {
+                    errors.push(`INVALID COLUMN HEADER: Expected ${header}, Recieved ${headers[index]}`)
+                }
+            }
+            else {
+                errors.push(`INVALID COLUMN HEADER: Expected ${header}, Recieved ''`)
+            }
+        })
     }
 
-    return ret
+    else if (headers.length > correctHeaders.length) {
+        errors.push(`Detected too many headers: Expected ${correctHeaders.length}, Recieved ${headers.length}`)
+
+        headers.forEach((header, index) => {
+            if (index < correctHeaders.length) {
+                if (header.toLowerCase() !== correctHeaders[index].toLowerCase()) {
+                    errors.push(`INVALID COLUMN HEADER: Expected ${correctHeaders[index]}, Recieved ${header}`)
+                }
+            }
+            else {
+                let correctPosition = correctHeaders.indexOf(header)
+                if (correctPosition > -1) {
+                    // it exists, just positioned wrong
+                    errors.push(`EXCESS HEADER FOUND: Found ${header}. (This header is valid, however it is positioned incorrectly)`)
+                }
+                else {
+                    errors.push(`EXCESS HEADER FOUND: Found ${header}. (This header is invalid regardless of its position)`)
+                }
+            }
+        })
+    }
+
+    console.log(errors)
+
+    return errors
 
 }
 

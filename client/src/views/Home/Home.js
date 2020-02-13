@@ -46,9 +46,12 @@ class Home extends React.Component {
 
         else {
             // check headers
-            valid = checkHeaders(data[0])
-            if (!valid) {
-                errors.push('Error(s) detected in headers. Please ensure they match the example CSV document.')
+            let headerErrors = checkHeaders(data[0])
+            console.log(headerErrors)
+            if (headerErrors.length !== 0) {
+                errors = errors.concat(headerErrors)
+                console.log(errors)
+                valid = false
             }
         }
 
@@ -58,14 +61,14 @@ class Home extends React.Component {
         let ret = {}
         if (valid) {
             ret = {
-                "valid" : valid,
-                "data" : data
+                valid : valid,
+                data : data
             }
         } 
         else {
             ret = {
-                "valid" : valid,
-                "data" : errors
+                valid : valid,
+                data : errors
             }
         }
 
@@ -125,7 +128,7 @@ class Home extends React.Component {
 
     render() {
 
-        console.log(this.props)
+        // console.log(this.props.errorMessages)
 
         // if (!this.props.authenticated) {
         //     return (

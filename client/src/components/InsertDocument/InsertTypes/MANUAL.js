@@ -63,6 +63,51 @@ export default class MANUAL extends React.Component {
         hasError: false
     }
 
+    resetState = () => {
+        this.setState({
+            activePage: 'Manual Insert',
+            catalogNumber: '',
+            recordNumber: '',
+            order_: '',
+            superfamily: '',
+            family: '',
+            subfamily: '',
+            tribe: '',
+            genus: '',
+            subgenus: '',
+            specificEpithet: '',
+            identificationQualifier: '',
+            recordedBy: '',
+            identifiedBy: '',
+            dateIdentified: '',
+            sex: '',
+            lifeStage: '',
+            habitat: '',
+            occurrenceRemarks: '',
+            country: '',
+            stateProvince: '',
+            county: '',
+            municipality: '',
+            locality: '',
+            verbatimElevation: '',
+            decimalLatitude: '',
+            decimalLongitude: '',
+            geodeticDatum: '',
+            coordinateUncertainty: '',
+            verbatimLatitude: '',
+            verbatimLongitude: '',
+            loanInfo: '',
+            preparations: '',
+            freezer: '',
+            rack: '',
+            box: '',
+            tubeSize: '',
+            collectors: '',
+            modifiedInfo: '',
+            hasError: false
+        })
+    }
+
     // FIXME: BROKEN
     handleSubmit = () => {
         alert(JSON.stringify(this.state, null, 2))
@@ -95,34 +140,43 @@ export default class MANUAL extends React.Component {
         }
 
         const {
-            mgcl_num,
-            lep_num,
+            catalogNumber,
+            recordNumber,
             order_,
-            superfamily ,
-            family ,
+            superfamily,
+            family,
             subfamily,
             tribe,
-            section,
-            genus ,
-            species ,
-            subspecies,
+            genus,
+            subgenus,
+            specificEpithet,
+            identificationQualifier,
+            recordedBy,
+            identifiedBy,
+            dateIdentified,
             sex,
+            lifeStage,
+            habitat,
+            occurrenceRemarks,
             country,
-            province,
-            locality ,
-            latitude,
-            longitude,
-            elevation,
-            mv_lamp,
-            days,
-            month,
-            year,
-            collectors,
+            stateProvince,
+            county,
+            municipality,
+            locality,
+            verbatimElevation,
+            decimalLatitude,
+            decimalLongitude,
+            geodeticDatum,
+            coordinateUncertainty,
+            verbatimLatitude,
+            verbatimLongitude,
+            loanInfo,
+            preparations,
             freezer,
             rack,
             box,
-            size,
-            note,
+            tubeSize,
+            collectors,
         } = this.state
 
         return (
@@ -140,32 +194,32 @@ export default class MANUAL extends React.Component {
                 <Grid padded>
                     <Grid.Row>
                         <Form padded onSubmit={this.handleSubmit}>
-                            <div className='scrolling'>
+                            <div className='scrolling' style={{paddingLeft: '1vw'}}>
                             <Form.Group widths='equal'>
                                 <Form.Field
-                                    id='form-input-control-lep-num'
+                                    id='form-input-control-mgcl'
                                     control={Input}
-                                    label='Lep #'
-                                    placeholder='Lep #'
-                                    name='lep_num'
-                                    value={lep_num}
+                                    label='catalogNumber'
+                                    placeholder='MGCL-#######'
+                                    name='catalogNumber'
+                                    value={catalogNumber}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
-                                    id='form-input-control-mgcl'
+                                    id='form-input-control-lep-num'
                                     control={Input}
-                                    label='MGCL #'
-                                    placeholder='MGCL#######'
-                                    name='mgcl_num'
-                                    value={mgcl_num}
+                                    label='recordNumber'
+                                    placeholder='Lep #'
+                                    name='recordNumber'
+                                    value={recordNumber}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
                                     id='form-input-control-order'
                                     control={Input}
-                                    label='Order'
+                                    label='order_'
                                     placeholder='Order'
                                     name='order_'
                                     value={order_}
@@ -175,7 +229,7 @@ export default class MANUAL extends React.Component {
                                 <Form.Field
                                     id='form-input-control-superfamily'
                                     control={Input}
-                                    label='Superfamily'
+                                    label='superfamily'
                                     placeholder='Superfamily'
                                     name='superfamily'
                                     value={superfamily}
@@ -189,7 +243,7 @@ export default class MANUAL extends React.Component {
                                 <Form.Field
                                     control={Select}
                                     options={familyOptions}
-                                    label='Family'
+                                    label='family'
                                     placeholder='Family'
                                     search
                                     searchInput={{ id: 'form-select-control-family' }}
@@ -201,7 +255,7 @@ export default class MANUAL extends React.Component {
                                 <Form.Field
                                     id='form-input-control-subfamily'
                                     control={Input}
-                                    label='Subfamily'
+                                    label='subfamily'
                                     placeholder='Subfamily'
                                     name='subfamily'
                                     value={subfamily}
@@ -211,7 +265,7 @@ export default class MANUAL extends React.Component {
                                 <Form.Field
                                     id='form-input-control-tribe'
                                     control={Input}
-                                    label='Tribe'
+                                    label='tribe'
                                     placeholder='Tribe'
                                     name='tribe'
                                     value={tribe}
@@ -219,12 +273,12 @@ export default class MANUAL extends React.Component {
                                     disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
-                                    id='form-input-control-section'
+                                    id='form-input-control-genus'
                                     control={Input}
-                                    label='Section'
-                                    placeholder='Section'
-                                    name='section'
-                                    value={section}
+                                    label='genus'
+                                    placeholder='Genus'
+                                    name='genus'
+                                    value={genus}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
                                 />                                    
@@ -233,227 +287,308 @@ export default class MANUAL extends React.Component {
 
                             <Form.Group widths='equal'>
                                 <Form.Field
-                                    id='form-input-control-genus'
+                                    id='form-input-control-subgenus'
                                     control={Input}
-                                    label='Genus'
-                                    placeholder='Genus'
-                                    name='genus'
-                                    value={genus}
+                                    label='subgenus'
+                                    placeholder='Subgenus'
+                                    name='subgenus'
+                                    value={subgenus}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
                                     id='form-input-control-species'
                                     control={Input}
-                                    label='Species'
+                                    label='specificEpithet'
                                     placeholder='Species'
-                                    name='species'
-                                    value={species}
+                                    name='specificEpithet'
+                                    value={specificEpithet}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
-                                    id='form-input-control-subspecies'
+                                    id='form-input-control-identificationQualifier'
                                     control={Input}
-                                    label='Subspecies'
-                                    placeholder='Subspecies'
-                                    name='subspecies'
-                                    value={subspecies}
+                                    label='identificationQualifier'
+                                    placeholder='Identification Qualifier'
+                                    name='identificationQualifier'
+                                    value={identificationQualifier}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
-                                    id='form-input-control-sex'
+                                    id='form-input-control-recordedBy'
                                     control={Input}
-                                    label='Sex'
-                                    placeholder='Sex'
+                                    label='recordedBy'
+                                    placeholder='Last Name, First Initial'
+                                    name='recordedBy'
+                                    value={recordedBy}
+                                    onChange={this.handleChange}
+                                    disabled={this.state.paste_entry}
+                                />
+                            </Form.Group>
+
+                            <Form.Group widths='equal'>
+                                <Form.Field
+                                    id='form-input-control-identifiedBy'
+                                    control={Input}
+                                    label='identifiedBy'
+                                    placeholder='Last Name, First Initial'
+                                    name='identifiedBy'
+                                    value={identifiedBy}
+                                    onChange={this.handleChange}
+                                    disabled={this.state.paste_entry}
+                                />
+                                <Form.Field
+                                    id='form-input-control-dateIdentified'
+                                    control={Input}
+                                    label='dateIdentified'
+                                    placeholder='YYYY-MM-DD'
+                                    name='dateIdentified'
+                                    value={dateIdentified}
+                                    onChange={this.handleChange}
+                                    disabled={this.state.paste_entry}
+                                />
+                                <Form.Field
+                                    control={Select}
+                                    options={[{key: 11, text: 'M', value: 'M'}, {key: 12, text: 'F', value: 'F'}, {key: 13, text: 'I', value: 'I'}]}
+                                    label='sex'
+                                    placeholder='M/F/I'
                                     name='sex'
                                     value={sex}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
                                 />
-                            </Form.Group>
-
-                            <Form.Group widths='equal'>
                                 <Form.Field
-                                    id='form-input-control-country'
+                                    id='form-input-control-lifeStage'
                                     control={Input}
-                                    label='Country'
-                                    placeholder='Country'
-                                    name='country'
-                                    value={country}
-                                    onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
-                                />
-                                <Form.Field
-                                    id='form-input-control-province'
-                                    control={Input}
-                                    label='Province'
-                                    placeholder='Province'
-                                    name='province'
-                                    value={province}
-                                    onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
-                                />
-                                <Form.Field
-                                    id='form-input-control-locality'
-                                    control={Input}
-                                    label='Locality'
-                                    placeholder='Locality'
-                                    name='locality'
-                                    value={locality}
-                                    onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
-                                />
-                                <Form.Field
-                                    id='form-input-control-latitude'
-                                    control={Input}
-                                    label='Latitude'
-                                    placeholder='Latitude'
-                                    name='latitude'
-                                    value={latitude}
+                                    label='lifeStage'
+                                    placeholder='Life Stage'
+                                    name='lifeStage'
+                                    value={lifeStage}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
                                 />                              
                             </Form.Group>
 
+                            <Form.Group widths='sixteen'>
+                                <Form.Field
+                                    id='form-input-control-occurrenceRemarks'
+                                    width='sixteen'
+                                    control={TextArea}
+                                    label='occurrenceRemarks'
+                                    placeholder='Remarks about occurrence'
+                                    value={occurrenceRemarks}
+                                    onChange={this.handleChange}
+                                />
+                            </Form.Group>
+
 
                             <Form.Group widths='equal'>
                                 <Form.Field
-                                    id='form-input-control-longitude'
+                                    id='form-input-control-habitat'
                                     control={Input}
-                                    label='Longitude'
-                                    placeholder='Longitude'
-                                    name='longitude'
-                                    value={longitude}
+                                    label='habitat'
+                                    placeholder='Habitat'
+                                    name='habitat'
+                                    value={habitat}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
-                                    id='form-input-control-elevation'
+                                    id='form-input-control-country'
                                     control={Input}
-                                    label='Elevation'
-                                    placeholder='Elevation'
-                                    name='elevation'
-                                    value={elevation}
+                                    label='country'
+                                    placeholder='Country'
+                                    name='country'
+                                    value={country}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
-                                    id='form-input-control-mv-lamp'
+                                    id='form-input-control-stateProvince'
                                     control={Input}
-                                    label='MV Lamp'
-                                    placeholder='MV Lamp'
-                                    name='mv_lamp'
-                                    value={mv_lamp}
+                                    label='stateProvince'
+                                    placeholder='State or Province'
+                                    name='stateProvince'
+                                    value={stateProvince}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
-                                    id='form-input-control-days'
+                                    id='form-input-control-county'
                                     control={Input}
-                                    label='Days'
-                                    placeholder='Days'
-                                    name='days'
-                                    value={days}
+                                    label='county'
+                                    placeholder='County'
+                                    name='county'
+                                    value={county}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
                                 />
                             </Form.Group>
                             <Form.Group widths='equal'>
                                 <Form.Field
-                                    id='form-input-control-month'
+                                    id='form-input-control-municipality'
                                     control={Input}
-                                    label='Month'
-                                    placeholder='Month'
-                                    name='month'
-                                    value={month}
+                                    label='municipality'
+                                    placeholder='Municipality'
+                                    name='municipality'
+                                    value={municipality}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
-                                    id='form-input-control-year'
+                                    id='form-input-control-locality'
                                     control={Input}
-                                    label='Year'
-                                    placeholder='05/2017'
-                                    name='year'
-                                    value={year}
+                                    label='locality'
+                                    placeholder='Locality'
+                                    name='locality'
+                                    value={locality}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
-                                    id='form-input-control-collectors'
+                                    id='form-input-control-verbatimElevation'
                                     control={Input}
-                                    label='Collector(s)'
-                                    placeholder='Collector(s)'
-                                    name='collectors'
-                                    value={collectors}
+                                    label='verbatimElevation'
+                                    placeholder='Verbatim Elevation'
+                                    name='verbatimElevation'
+                                    value={verbatimElevation}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
                                 />
 
+                                <Form.Field
+                                    id='form-input-control-decimalLatitude'
+                                    control={Input}
+                                    label='decimalLatitude'
+                                    placeholder='Decimal Latitude'
+                                    name='decimalLatitude'
+                                    value={decimalLatitude}
+                                    onChange={this.handleChange}
+                                />                                    
+                            </Form.Group>
+
+                            <Form.Group widths='equal'>
+                                <Form.Field
+                                    id='form-input-control-decimalLongitude'
+                                    control={Input}
+                                    label='decimalLongitude'
+                                    placeholder='Decimal Longitude'
+                                    name='decimalLongitude'
+                                    value={decimalLongitude}
+                                    onChange={this.handleChange}
+                                />
+                                <Form.Field
+                                    id='form-input-control-geodeticDatum'
+                                    control={Input}
+                                    label='geodeticDatum'
+                                    placeholder='Geodetic Datum'
+                                    name='geodeticDatum'
+                                    value={geodeticDatum}
+                                    onChange={this.handleChange}
+                                />
+                                <Form.Field
+                                    id='form-input-control-coordinateUncertainty'
+                                    control={Input}
+                                    label='coordinateUncertainty'
+                                    placeholder='Coordinate Uncertainty'
+                                    name='coordinateUncertainty'
+                                    value={coordinateUncertainty}
+                                    onChange={this.handleChange}
+                                />
+                                <Form.Field
+                                    id='form-input-control-verbatimLatitude'
+                                    control={Input}
+                                    label='verbatimLatitude'
+                                    placeholder='Verbatim Latitude'
+                                    name='verbatimLatitude'
+                                    value={verbatimLatitude}
+                                    onChange={this.handleChange}
+                                />                                    
+                            </Form.Group>
+
+
+                            <Form.Group widths='equal'>
+                                <Form.Field
+                                    id='form-input-control-verbatimLongitude'
+                                    control={Input}
+                                    label='verbatimLongitude'
+                                    placeholder='Verbatim Longitude'
+                                    name='verbatimLongitude'
+                                    value={verbatimLongitude}
+                                    onChange={this.handleChange}
+                                />
+                                <Form.Field
+                                    id='form-input-control-loanInfo'
+                                    control={Input}
+                                    label='loanInfo'
+                                    placeholder='CHANGE THIS FORM'
+                                    name='loanInfo'
+                                    value={loanInfo}
+                                    onChange={this.handleChange}
+                                />
+                                <Form.Field
+                                    id='form-input-control-preparations'
+                                    control={Input}
+                                    label='preparations'
+                                    placeholder='Preparations'
+                                    name='preparations'
+                                    value={preparations}
+                                    onChange={this.handleChange}
+                                />
                                 <Form.Field
                                     id='form-input-control-freezer'
                                     control={Input}
-                                    label='Freezer'
+                                    label='freezer'
                                     placeholder='Freezer'
                                     name='freezer'
-                                    value={freezer}
+                                    value={verbatimLatitude}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
                                 />                                    
                             </Form.Group>
-                            
+
 
                             <Form.Group widths='equal'>
                                 <Form.Field
                                     id='form-input-control-rack'
                                     control={Input}
-                                    label='Rack'
-                                    placeholder='1-2'
+                                    label='rack'
+                                    placeholder='rack'
                                     name='rack'
                                     value={rack}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
                                     id='form-input-control-box'
                                     control={Input}
-                                    label='Box'
+                                    label='box'
                                     placeholder='Box'
                                     name='box'
-                                    value={box}
+                                    value={loanInfo}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
                                 />
                                 <Form.Field
-                                    id='form-input-control-size'
+                                    id='form-input-control-tubeSize'
                                     control={Input}
-                                    label='Size'
-                                    placeholder='Size'
-                                    name='size'
-                                    value={size}
+                                    label='tubeSize'
+                                    placeholder='Tube Size (in mL)'
+                                    name='tubeSize'
+                                    value={tubeSize}
                                     onChange={this.handleChange}
-                                    disabled={this.state.paste_entry}
-                                />                                
-                            </Form.Group>
+                                />                             
+                            </Form.Group>            
                             
 
-                            <Form.Group widths='equal'>
+                            <Form.Group widths='sixteen'>
                                 <Form.Field
-                                        id='form-input-control-note'
+                                        id='form-input-control-collectors'
+                                        width='sixteen'
                                         control={TextArea}
-                                        label='Notes'
-                                        placeholder='Notes about this specimen go here'
-                                        name='note'
-                                        value={note}
+                                        label='collectors'
+                                        placeholder='List Collectors here: Last, First initial;Last, First intial;etc...'
+                                        name='collectors'
+                                        value={collectors}
                                         onChange={this.handleChange}
-                                        disabled={this.state.paste_entry}
                                 />    
                             </Form.Group>
                             
                             <Form.Group style={{float: 'right'}}>
                                 <QueryHelp queryType='MANUAL_INSERT'/>
+                                <Button type="button" color='yellow' onClick={() => this.resetState()} style={{marginLeft: '.5rem'}}>Clear</Button>
                                 <Form.Field className='float-right'
                                     id='form-button-control-submit'
                                     control={Button}
@@ -465,7 +600,7 @@ export default class MANUAL extends React.Component {
                         </Form>
                     </Grid.Row>
                 </Grid>
-                {this.state.hasError ? this.renderErrorTerminal() : console.log('nope')}
+                {this.state.hasError ? this.renderErrorTerminal() : null}
             </React.Fragment>
 
         )

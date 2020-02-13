@@ -108,3 +108,6 @@ export function getQueryHeaders(specimen) {
         return ret
     }
 }
+
+
+// export function headerToField

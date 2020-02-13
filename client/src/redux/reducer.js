@@ -109,6 +109,7 @@ export default function reducer(state = initialState, action) {
             return newState
 
         case 'UPDATE_INSERT_ERROR_LOG':
+            console.log('made it')
             newState.errorMessages.insertError = action.insertError
             return newState
 

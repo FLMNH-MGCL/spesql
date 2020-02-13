@@ -15,7 +15,7 @@ module.exports = function(connection, app) {
         connection.query(command, (err, data) => {
             if (err) {
                 console.log('Insertion Failure. Error logged.')
-                console.log(err)
+                // console.log(err)
                 res.json({
                         success: false,
                         data: err

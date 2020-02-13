@@ -9,34 +9,42 @@ class UpdateDocument extends React.Component {
         console.log(props)
         this.state = { 
             open: false,
-            mgcl_num: props.selectedSpecimen.mgcl_num,
-            lep_num: props.selectedSpecimen.lep_num,
+            catalogNumber: props.selectedSpecimen.catalogNumber,
+            recordNumber: props.selectedSpecimen.recordNumber,
             order_: props.selectedSpecimen.order_,
             superfamily : this.props.selectedSpecimen.superfamily,
             family : this.props.selectedSpecimen.family,
             subfamily: this.props.selectedSpecimen.subfamily,
             tribe: this.props.selectedSpecimen.tribe,
-            section: this.props.selectedSpecimen.section,
             genus : this.props.selectedSpecimen.genus,
-            species : this.props.selectedSpecimen.species,
-            subspecies: this.props.selectedSpecimen.subspecies,
+            subgenus: this.props.selectedSpecimen.subgenus,
+            specificEpithet : this.props.selectedSpecimen.specificEpithet,
+            identificationQualifier: this.props.selectedSpecimen.identificationQualifier,
+            recordedBy: this.props.selectedSpecimen.recordedBy,
+            identifiedBy: this.props.selectedSpecimen.identifiedBy,
+            dateIdentified: this.props.selectedSpecimen.dateIdentified,
             sex: this.props.selectedSpecimen.sex,
+            lifeStage: this.props.selectedSpecimen.lifeStage,
+            habitat: this.props.selectedSpecimen.habitat,
+            occurrenceRemarks: this.props.selectedSpecimen.occurrenceRemarks,
             country: this.props.selectedSpecimen.country,
-            province: this.props.selectedSpecimen.province,
-            locality : this.props.selectedSpecimen.locality,
-            latitude: this.props.selectedSpecimen.latitude,
-            longitude: this.props.selectedSpecimen.longitude,
-            elevation: this.props.selectedSpecimen.elevation,
-            mv_lamp: this.props.selectedSpecimen.mv_lamp,
-            days: this.props.selectedSpecimen.days,
-            month: this.props.selectedSpecimen.month,
-            year: this.props.selectedSpecimen.year,
-            collectors: this.props.selectedSpecimen.collectors,
+            stateProvince: this.props.selectedSpecimen.stateProvince,
+            county: this.props.selectedSpecimen.county,
+            municipality: this.props.selectedSpecimen.municipality,
+            verbatimElevation : this.props.selectedSpecimen.verbatimElevation,
+            decimalLatitude: this.props.selectedSpecimen.decimalLatitude,
+            decimalLongitude: this.props.selectedSpecimen.decimalLongitude,
+            geodeticDatum: this.props.selectedSpecimen.geodeticDatum,
+            coordinateUncertainty: this.props.selectedSpecimen.coordinateUncertainty,
+            verbatimLatitude: this.props.selectedSpecimen.verbatimLatitude,
+            verbatimLongitude: this.props.selectedSpecimen.verbatimLongitude,
+            loanInfo: this.props.selectedSpecimen.loanInfo,
+            preparations: this.props.selectedSpecimen.preparations,
             freezer: this.props.selectedSpecimen.freezer,
             rack : this.props.selectedSpecimen.rack,
             box: this.props.selectedSpecimen.box,
-            size: this.props.selectedSpecimen.size,
-            note: this.props.selectedSpecimen.note,
+            tubeSize: this.props.selectedSpecimen.tubeSize,
+            collectors: this.props.selectedSpecimen.collectors,
         }
     }
 
@@ -88,7 +96,7 @@ class UpdateDocument extends React.Component {
     }
 
     render() {
-        console.log(this.state)
+        // console.log(this.state)
         if (!this.props.currentQuery.startsWith('SELECT *')) {
             return (
                 <Modal 
@@ -115,34 +123,43 @@ class UpdateDocument extends React.Component {
         }
         else {
             const {
-                mgcl_num,
-                lep_num,
+                catalogNumber,
+                recordNumber,
                 order_,
-                superfamily ,
-                family ,
+                superfamily,
+                family,
                 subfamily,
                 tribe,
-                section,
-                genus ,
-                species ,
-                subspecies,
+                genus,
+                subgenus,
+                specificEpithet,
+                identificationQualifier,
+                recordedBy,
+                identifiedBy,
+                dateIdentified,
                 sex,
+                lifeStage,
+                habitat,
+                occurrenceRemarks,
                 country,
-                province,
-                locality ,
-                latitude,
-                longitude,
-                elevation,
-                mv_lamp,
-                days,
-                month,
-                year,
-                collectors,
+                stateProvince,
+                county,
+                municipality,
+                locality,
+                verbatimElevation,
+                decimalLatitude,
+                decimalLongitude,
+                geodeticDatum,
+                coordinateUncertainty,
+                verbatimLatitude,
+                verbatimLongitude,
+                loanInfo,
+                preparations,
                 freezer,
                 rack,
                 box,
-                size,
-                note
+                tubeSize,
+                collectors,
             } = this.state
 
             return(
@@ -180,33 +197,35 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
                                             </Table.Header>
 
+
+
                                             <Table.Body>
                                                 <Table.Row>
-                                                    <Table.Cell>Record #</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.lep_num}</Table.Cell>
+                                                    <Table.Cell>catalogNumber</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.catalogNumber}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='lep_num'
-                                                            value={lep_num}
+                                                            name='catalogNumber'
+                                                            value={catalogNumber}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Catolog #</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.mgcl_num}</Table.Cell>
+                                                    <Table.Cell>recordNumber</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.recordNumber}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='mgcl_num'
-                                                            value={mgcl_num}
+                                                            name='recordNumber'
+                                                            value={recordNumber}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Order</Table.Cell>
+                                                    <Table.Cell>order_</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.order_}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -218,7 +237,7 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Superfamily</Table.Cell>
+                                                    <Table.Cell>superfamily</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.superfamily}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -230,7 +249,7 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Family</Table.Cell>
+                                                    <Table.Cell>family</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.family}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -242,7 +261,7 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Subfamily</Table.Cell>
+                                                    <Table.Cell>subfamily</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.subfamily}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -254,7 +273,7 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Tribe</Table.Cell>
+                                                    <Table.Cell>tribe</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.tribe}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -266,19 +285,7 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Section</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.section}</Table.Cell>
-                                                    <Table.Cell>
-                                                        <Input 
-                                                            name='section'
-                                                            value={section}
-                                                            onChange={this.onChange}
-                                                        />
-                                                    </Table.Cell>
-                                                </Table.Row>
-
-                                                <Table.Row>
-                                                    <Table.Cell>Genus</Table.Cell>
+                                                    <Table.Cell>genus</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.genus}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -290,31 +297,79 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Species</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.species}</Table.Cell>
+                                                    <Table.Cell>subgenus</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.section}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='species'
-                                                            value={species}
+                                                            name='subgenus'
+                                                            value={subgenus}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Subspecies</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.subspecies}</Table.Cell>
+                                                    <Table.Cell>specificEpithet</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.specificEpithet}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='subspecies'
-                                                            value={subspecies}
+                                                            name='specificEpithet'
+                                                            value={specificEpithet}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Sex</Table.Cell>
+                                                    <Table.Cell>identificationQualifier</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.identificationQualifier}</Table.Cell>
+                                                    <Table.Cell>
+                                                        <Input 
+                                                            name='identificationQualifier'
+                                                            value={identificationQualifier}
+                                                            onChange={this.onChange}
+                                                        />
+                                                    </Table.Cell>
+                                                </Table.Row>
+
+                                                <Table.Row>
+                                                    <Table.Cell>recordedBy</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.recordedBy}</Table.Cell>
+                                                    <Table.Cell>
+                                                        <Input 
+                                                            name='recordedBy'
+                                                            value={recordedBy}
+                                                            onChange={this.onChange}
+                                                        />
+                                                    </Table.Cell>
+                                                </Table.Row>
+
+                                                <Table.Row>
+                                                    <Table.Cell>identifiedBy</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.identifiedBy}</Table.Cell>
+                                                    <Table.Cell>
+                                                        <Input 
+                                                            name='identifiedBy'
+                                                            value={identifiedBy}
+                                                            onChange={this.onChange}
+                                                        />
+                                                    </Table.Cell>
+                                                </Table.Row>
+
+                                                <Table.Row>
+                                                    <Table.Cell>dateIdentified</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.dateIdentified}</Table.Cell>
+                                                    <Table.Cell>
+                                                        <Input 
+                                                            name='dateIdentified'
+                                                            value={dateIdentified}
+                                                            onChange={this.onChange}
+                                                        />
+                                                    </Table.Cell>
+                                                </Table.Row>
+
+                                                <Table.Row>
+                                                    <Table.Cell>sex</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.sex}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -326,7 +381,43 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Country</Table.Cell>
+                                                    <Table.Cell>lifeStage</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.lifeStage}</Table.Cell>
+                                                    <Table.Cell>
+                                                        <Input 
+                                                            name='lifeStage'
+                                                            value={lifeStage}
+                                                            onChange={this.onChange}
+                                                        />
+                                                    </Table.Cell>
+                                                </Table.Row>
+
+                                                <Table.Row>
+                                                    <Table.Cell>habitat</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.habitat}</Table.Cell>
+                                                    <Table.Cell>
+                                                        <Input 
+                                                            name='habitat'
+                                                            value={habitat}
+                                                            onChange={this.onChange}
+                                                        />
+                                                    </Table.Cell>
+                                                </Table.Row>
+
+                                                <Table.Row>
+                                                    <Table.Cell>occurrenceRemarks</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.occurrenceRemarks}</Table.Cell>
+                                                    <Table.Cell>
+                                                        <TextArea 
+                                                            name='occurrenceRemarks'
+                                                            value={occurrenceRemarks}
+                                                            onChange={this.onChange}
+                                                        />
+                                                    </Table.Cell>
+                                                </Table.Row>
+
+                                                <Table.Row>
+                                                    <Table.Cell>country</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.country}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -338,19 +429,43 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Province</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.province}</Table.Cell>
+                                                    <Table.Cell>stateProvince</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.stateProvince}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='province'
-                                                            value={province}
+                                                            name='stateProvince'
+                                                            value={stateProvince}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Locality</Table.Cell>
+                                                    <Table.Cell>county</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.county}</Table.Cell>
+                                                    <Table.Cell>
+                                                        <Input 
+                                                            name='county'
+                                                            value={county}
+                                                            onChange={this.onChange}
+                                                        />
+                                                    </Table.Cell>
+                                                </Table.Row>
+
+                                                <Table.Row>
+                                                    <Table.Cell>municipality</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.municipality}</Table.Cell>
+                                                    <Table.Cell>
+                                                        <Input 
+                                                            name='municipality'
+                                                            value={municipality}
+                                                            onChange={this.onChange}
+                                                        />
+                                                    </Table.Cell>
+                                                </Table.Row>
+
+                                                <Table.Row>
+                                                    <Table.Cell>locality</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.locality}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -362,103 +477,115 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Latitude</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.latitude}</Table.Cell>
+                                                    <Table.Cell>verbatimElevation</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.verbatimElevation}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='latitude'
-                                                            value={latitude}
+                                                            name='verbatimElevation'
+                                                            value={verbatimElevation}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Longitude</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.longitude}</Table.Cell>
+                                                    <Table.Cell>decimalLatitude</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.decimalLatitude}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='longitude'
-                                                            value={longitude}
+                                                            name='decimalLatitude'
+                                                            value={decimalLatitude}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Elevation</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.elevation}</Table.Cell>
+                                                    <Table.Cell>decimalLongitude</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.decimalLongitude}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='elevation'
-                                                            value={elevation}
+                                                            name='decimalLongitude'
+                                                            value={decimalLongitude}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>MV Lamp</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.mv_lamp}</Table.Cell>
+                                                    <Table.Cell>geodeticDatum</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.geodeticDatum}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='mv_lamp'
-                                                            value={mv_lamp}
+                                                            name='geodeticDatum'
+                                                            value={geodeticDatum}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Day(s)</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.days}</Table.Cell>
+                                                    <Table.Cell>coordinateUncertainty</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.coordinateUncertainty}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='days'
-                                                            value={days}
+                                                            name='coordinateUncertainty'
+                                                            value={coordinateUncertainty}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Month</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.month}</Table.Cell>
+                                                    <Table.Cell>verbatimLatitude</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.verbatimLatitude}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='month'
-                                                            value={month}
+                                                            name='verbatimLatitude'
+                                                            value={verbatimLatitude}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Year</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.year}</Table.Cell>
+                                                    <Table.Cell>verbatimLongitude</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.verbatimLongitude}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='year'
-                                                            value={year}
+                                                            name='verbatimLongitude'
+                                                            value={verbatimLongitude}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Collector(s)</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.collectors}</Table.Cell>
+                                                    <Table.Cell>loanInfo</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.loanInfo}</Table.Cell>
                                                     <Table.Cell>
-                                                        <Input 
-                                                            name='collectors'
-                                                            value={collectors}
+                                                        <TextArea 
+                                                            name='loanInfo'
+                                                            value={loanInfo}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Freezer</Table.Cell>
+                                                    <Table.Cell>preparations</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.preparations}</Table.Cell>
+                                                    <Table.Cell>
+                                                        <Input 
+                                                            name='preparations'
+                                                            value={preparations}
+                                                            onChange={this.onChange}
+                                                        />
+                                                    </Table.Cell>
+                                                </Table.Row>
+
+                                                <Table.Row>
+                                                    <Table.Cell>freezer</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.freezer}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -470,7 +597,7 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Rack</Table.Cell>
+                                                    <Table.Cell>rack</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.rack}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -482,7 +609,7 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Box</Table.Cell>
+                                                    <Table.Cell>box</Table.Cell>
                                                     <Table.Cell>{this.props.selectedSpecimen.box}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
@@ -494,24 +621,24 @@ class UpdateDocument extends React.Component {
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Size</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.size}</Table.Cell>
+                                                    <Table.Cell>tubeSize</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.tubeSize}</Table.Cell>
                                                     <Table.Cell>
                                                         <Input 
-                                                            name='size'
-                                                            value={size}
+                                                            name='tubeSize'
+                                                            value={tubeSize}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>
                                                 </Table.Row>
 
                                                 <Table.Row>
-                                                    <Table.Cell>Notes</Table.Cell>
-                                                    <Table.Cell>{this.props.selectedSpecimen.note}</Table.Cell>
+                                                    <Table.Cell>collectors</Table.Cell>
+                                                    <Table.Cell>{this.props.selectedSpecimen.collectors}</Table.Cell>
                                                     <Table.Cell>
                                                         <TextArea 
-                                                            name='note'
-                                                            value={note}
+                                                            name='collectors'
+                                                            value={collectors}
                                                             onChange={this.onChange}
                                                         />
                                                     </Table.Cell>

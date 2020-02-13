@@ -19,6 +19,7 @@ class InsertDocument extends React.Component {
 
 
     closeModal = () => {
+        this.props.updateInsertErrorMessage(null)
         
     }
 
@@ -38,7 +39,7 @@ class InsertDocument extends React.Component {
 
 
     render() {
-        console.log(this.props.errorMessages)
+        // console.log(this.props.errorMessages)
 
             return (
                 <div className='content'>

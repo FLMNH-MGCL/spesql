@@ -178,19 +178,16 @@ export default class CollectionList extends React.Component {
             direction: direction === 'ascending' ? 'descending' : 'ascending',
         })
     }
-    
 
-
-    render() {
-        // console.log(this.state)
+    renderList = () => {
         let collectionList = this.props.data
         try {
             collectionList = collectionList
             .filter(specimen => {
                 switch(this.props.filterCategory) {
                     case 'Lep #':
-                        if (specimen.lep_num) {
-                            return specimen.lep_num.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                        if (specimen.recordNumber) {
+                            return specimen.recordNumber.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
                         }
                         else return false
 
@@ -225,8 +222,8 @@ export default class CollectionList extends React.Component {
                         else return false
 
                     case 'Collection Date':
-                        if(specimen.date_collected) {
-                            return specimen.date_collected.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                        if(specimen.dateIdentified) {
+                            return specimen.dateIdentified.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
                         }
                         else return false
 
@@ -280,9 +277,20 @@ export default class CollectionList extends React.Component {
             collectionList = []
         }
 
+        return collectionList
+    }
+    
+
+
+    render() {
+        // console.log(this.state)
+
+        let collectionList = this.renderList()
+
+
 
         let specimenHeaders = this.getHeaderCells(this.props.query_headers)
-        console.log(specimenHeaders)
+        // console.log(specimenHeaders)
 
         return (
             <React.Fragment>
