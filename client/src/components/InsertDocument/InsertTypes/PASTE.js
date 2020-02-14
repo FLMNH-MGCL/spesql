@@ -128,7 +128,7 @@ export default class PASTE extends React.Component {
 
         return (
             <React.Fragment>
-                <Grid padded>
+                <Grid padded='vertically'>
                     <Grid.Row>
                         <Grid.Column width={16}>
                             <Message>
@@ -143,7 +143,6 @@ export default class PASTE extends React.Component {
                                 <Form.Group>
                                     <TextArea
                                         id='form-text-area'
-                                        control={TextArea}
                                         name='text_area'
                                         value={text_area}
                                         onChange={this.handleChange}

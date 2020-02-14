@@ -95,6 +95,7 @@ export default class UPDATE extends React.Component {
     }
 
     handleSetItemChange = (e, {name, value, id}) => {
+        id = parseInt(id)
         const newSetItem = {
             ...this.state.sets[id],
             [name]: value
@@ -137,6 +138,7 @@ export default class UPDATE extends React.Component {
     }
 
     handleConditionalItemChange = (e, {name, value, id}) => {
+        id = parseInt(id)
         const newConditional = {
             ...this.state.conditionals[id],
             [name]: value
@@ -169,7 +171,7 @@ export default class UPDATE extends React.Component {
                     index={index}
                     value={this.state.sets[index].field}
                     onChange={this.handleSetItemChange}
-                    id={index}
+                    id={String(index)}
                     disabled={!this.state.basic_query}
                 />
                 <Form.Field
@@ -180,7 +182,7 @@ export default class UPDATE extends React.Component {
                     name='operator'
                     value={this.state.sets[index].operator}
                     onChange={this.handleSetItemChange}
-                    id={index}
+                    id={String(index)}
                     disabled={!this.state.basic_query}
                 />
                 <Form.Field
@@ -191,7 +193,7 @@ export default class UPDATE extends React.Component {
                     name='newValue'
                     value={this.state.sets[index].newValue}
                     onChange={this.handleSetItemChange}
-                    id={index}
+                    id={String(index)}
                     disabled={!this.state.basic_query}
                 />
             </Form.Group>
@@ -213,7 +215,7 @@ export default class UPDATE extends React.Component {
                     name='field'
                     value={this.state.conditionals[index].field}
                     onChange={this.handleConditionalItemChange}
-                    id={index}
+                    id={String(index)}
                     disabled={!this.state.basic_query}
                 />
                 <Form.Field
@@ -224,7 +226,7 @@ export default class UPDATE extends React.Component {
                     name='operator'
                     value={this.state.conditionals[index].operator}
                     onChange={this.handleConditionalItemChange}
-                    id={index}
+                    id={String(index)}
                     disabled={!this.state.basic_query}
                 />
                 <Form.Field
@@ -235,7 +237,7 @@ export default class UPDATE extends React.Component {
                     name='searchTerms'
                     value={this.state.conditionals[index].searchTerms}
                     onChange={this.handleConditionalItemChange}
-                    id={index}
+                    id={String(index)}
                     disabled={!this.state.basic_query}
                 />
             </Form.Group>

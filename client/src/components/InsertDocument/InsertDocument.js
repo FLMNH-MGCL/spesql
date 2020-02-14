@@ -46,7 +46,7 @@ class InsertDocument extends React.Component {
                     <Modal trigger={
                         <Button icon labelPosition='left'>
                             <Icon name='upload' />
-                            New Insert
+                            Insert
                     </Button>
                     } centered closeIcon onClose={this.closeModal} style={{maxHeight: '85vh'}}>
                         <Modal.Header>Insert Query Selector</Modal.Header>

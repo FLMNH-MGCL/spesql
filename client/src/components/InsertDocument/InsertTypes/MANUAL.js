@@ -194,7 +194,7 @@ export default class MANUAL extends React.Component {
                 <Grid padded>
                     <Grid.Row>
                         <Form padded onSubmit={this.handleSubmit}>
-                            <div className='scrolling' style={{paddingLeft: '1vw'}}>
+                            <div className='scrolling'>
                             <Form.Group widths='equal'>
                                 <Form.Field
                                     id='form-input-control-mgcl'

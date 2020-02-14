@@ -21,7 +21,16 @@ export default class Header extends Component {
     constructor(props) {
         super(props)
 
-        this.state = { activeItem: 'home', user: user, activeIndex: null}
+        let mobile = false
+        if (window.innerWidth < 1300) {
+            mobile = true
+        }
+
+        this.state = { 
+            activeItem: 'home', 
+            user: user, activeIndex: null,
+            mobileView: mobile
+        }
     }
 
     handleClick = (e, titleProps) => {
@@ -37,8 +46,21 @@ export default class Header extends Component {
         this.setState({ activeItem: name })
     }
 
+    checkMobile = () => {
+        // state isn't mobile view but change happened to make it
+        if (!this.state.mobileView && window.innerWidth < 1300) {
+            this.setState({mobileView: true})
+        }
+
+        // state is mobile view but change happened to make it NOT mobile view anymore
+        if (this.state.mobileView && window.innerWidth > 1300) {
+            this.setState({mobileView: false})
+        }
+    }
+
     componentDidMount() {
         setTimeout(() => { this.setState({user: user}) }, 1000)
+        window.addEventListener('resize', this.checkMobile);
     }
 
     renderFullToolMenu = () => {
@@ -211,7 +233,11 @@ export default class Header extends Component {
                                     />
                                 </div>
                                 <div style={{padding: '1rem'}}>
-                                    <InsertDocument isValidCSV={this.props.isValidCSV.bind(this)} />
+                                    <InsertDocument 
+                                        isValidCSV={this.props.isValidCSV.bind(this)} 
+                                        errorMessages={this.props.errorMessages} 
+                                        updateInsertErrorMessage={this.props.updateInsertErrorMessage}
+                                    />
                                 </div>
                                 <div style={{padding: '1rem'}}>
                                     <DownloadDB 
@@ -252,7 +278,7 @@ export default class Header extends Component {
 
         return (
             <div>
-                {this.renderFullToolMenu()}
+                {this.state.mobileView ? this.renderMobileToolMenu() : this.renderFullToolMenu()}
             </div>
         )
     }

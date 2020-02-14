@@ -7,7 +7,7 @@
 .scrolling {
     height: 30vh;
     overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-x: scroll;
     scrollbar-width: none;
 }::-webkit-scrollbar {
     width: 0px;
