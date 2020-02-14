@@ -6,6 +6,7 @@ import {
 } from '../QueryConstants/constants'
 import CountTerminal from '../QueryTerminals/CountTerminal'
 import QueryHelp from '../QueryHelp'
+import ErrorTerminal from '../QueryTerminals/ErrorTerminal'
 
 export default class COUNT extends React.Component {
     state = {
@@ -17,54 +18,111 @@ export default class COUNT extends React.Component {
         conditionalCount: 0,
         conditionals: [],
         waiting: true,
-        submitted: false
+        submitted: false, 
+        hasError: false
+    }
+
+    basicErrorCheck = () => {
+        let errors = []
+
+        if (this.state.fields.length < 1) {
+            errors.push('SYNTAX ERROR: Must select a field.')
+        }
+
+        if (this.state.fields.indexOf('*') > -1 && this.state.fields.length > 1) {
+            errors.push('SYNTAX ERROR: If ALL is selected, no other fields should be selected.')
+        }
+
+        if (this.state.db === '') {
+            errors.push('FORMAT ERROR: A database table must be selected.')
+        }
+
+        return errors
+
+    }
+
+    advancedChecks = () => {
+        let errors = []
+
+        if (!this.state.advanced_query.toLowerCase().startsWith('select count')) {
+            errors.push('SYNTAX ERROR: Invalid query. See help button for more information.')
+        }
+
+        return errors
     }
 
     handleSubmit = () => {
-        let command = String(this.state.query_action + '(')
+        let errors = this.basicErrorCheck()
 
-        for (let i = 0; i < this.state.fields.length; i++) {
-            command += this.state.fields[i]
-
-            if (i !== this.state.fields.length - 1) {
-                command += ' AND '
-            }
-            else {
-                command += ') '
-            }
+        if (errors.length !== 0) {
+            this.props.updateCountErrorMessage(errors)
+            this.setState({hasError: true})
         }
 
-        command += 'FROM ' + this.state.db
+        else {
+            let command = String('SELECT ' + this.state.query_action + '(')
 
-        if (this.state.conditionalCount > 0) {
-            command += ' WHERE '
+            for (let i = 0; i < this.state.fields.length; i++) {
+                command += this.state.fields[i]
 
-            let conditionalString = ''
-
-            this.state.conditionals.forEach((conditional, index) => {
-                conditionalString += conditional.field + ' '
-                conditionalString += conditional.operator + ' '
-                conditionalString += '\'' + conditional.searchTerms + '\''
-
-                if (index === this.state.conditionalCount - 1) {
-                    conditionalString += ';'
+                if (i !== this.state.fields.length - 1) {
+                    command += ' AND '
                 }
                 else {
-                    conditionalString += ' AND '
+                    command += ') '
                 }
-            })
+            }
 
-            command += conditionalString
+            command += 'FROM ' + this.state.db
+
+            if (this.state.conditionalCount > 0) {
+                command += ' WHERE '
+
+                let conditionalString = ''
+
+                this.state.conditionals.forEach((conditional, index) => {
+                    conditionalString += conditional.field + ' '
+                    conditionalString += conditional.operator + ' '
+                    conditionalString += '\'' + conditional.searchTerms + '\''
+
+                    if (index === this.state.conditionalCount - 1) {
+                        conditionalString += ';'
+                    }
+                    else {
+                        conditionalString += ' AND '
+                    }
+                })
+
+                command += conditionalString
+            }
+
+            else command += ';'
+
+            // this.setState({submitted: true})
+            this.props.runQuery(command)            
         }
 
-        else command += ';'
-
-        // this.setState({submitted: true})
-        this.props.runQuery(command)
     }
 
     handleAdvancedSubmit = () => {
-        this.setState({submitted: true})
+        // this.setState({submitted: true})
+        let errors = this.advancedChecks()
+
+        if (errors.length > 0) {
+            this.props.updateCountErrorMessage(errors)
+            this.setState({hasError: true})
+        }
+
+        else {
+            // this.setState({submitted: true})
+            this.props.runQuery(this.state.advanced_query)
+
+            setTimeout(() => {
+                if (this.props.errorMessages.countError) {
+                    this.setState({hasError: true})
+                }
+            }, 500)
+        }
     }
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -223,6 +281,18 @@ export default class COUNT extends React.Component {
             </Form>
         )
     }
+
+    renderErrorTerminal = () => (
+        <React.Fragment>
+            <ErrorTerminal errorLog={this.props.errorMessages.countError} />
+            <Button onClick={
+                    () => {
+                        this.props.updateCountErrorMessage(null)
+                        this.setState({hasError: false})
+                    }
+                } color='red' style={{float: 'right'}}>Clear</Button>
+        </React.Fragment>
+    )
     
 
     render() {
@@ -281,9 +351,15 @@ export default class COUNT extends React.Component {
                         </Form>
 
                         {this.state.basic_query ? this.renderBasicForm(query_action, fields, db, conditionalCount) : () => console.log('no form needed')}
-
-                        <CountTerminal waiting={this.state.waiting} submitted={this.state.submitted} countQueryCount={this.props.countQueryCount} />
-                        <Button color='red' style={{float: 'right'}} onClick={() => this.props.updateCountQueryCount(null)}>Clear</Button>
+                        {this.state.hasError
+                            ? this.renderErrorTerminal()
+                            : (
+                                <>
+                                <CountTerminal waiting={this.state.waiting} submitted={this.state.submitted} countQueryCount={this.props.countQueryCount} />
+                                <Button color='red' style={{float: 'right'}} onClick={() => this.props.updateCountQueryCount(null)}>Clear</Button>
+                                </>
+                            )
+                        }
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

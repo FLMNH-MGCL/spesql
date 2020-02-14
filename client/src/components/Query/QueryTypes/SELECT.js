@@ -6,6 +6,7 @@ import {
 } from '../QueryConstants/constants'
 import QueryHelp from '../QueryHelp'
 import ErrorTerminal from '../QueryTerminals/ErrorTerminal'
+import { checkAdvancedSelect } from '../../../functions/queryChecks'
 
 
 export default class SELECT extends React.Component {
@@ -20,7 +21,7 @@ export default class SELECT extends React.Component {
         fields_search: [],
         search_: '',
         operator: '',
-        showModal: false
+        loading: false
     }
 
     checkBasicQueryErrors = () => {
@@ -50,6 +51,8 @@ export default class SELECT extends React.Component {
 
     // DANGEROUS, EASY TO BREAK NEED MORE CHECKS
     handleSubmit = () => {
+
+
         let errors = this.checkBasicQueryErrors()
         if (errors.length > 0) {
             // errors found, update redux error for select query
@@ -104,10 +107,26 @@ export default class SELECT extends React.Component {
     }
 
     handleAdvancedSubmit = () => {
-        this.setState({showModal: false})
-        this.props.clearQuery()
-        this.props.runQuery(this.state.advanced_query)
-        this.closeModal()
+        this.setState({loading: true})
+        this.props.updateSelectErrorMessage(null)
+        let errors = checkAdvancedSelect(this.state.advanced_query)
+        console.log(errors)
+
+        if (errors.length > 0) {
+            this.props.updateSelectErrorMessage(errors)
+        }
+        else {
+            this.props.runQuery(this.state.advanced_query)
+        }
+
+        setTimeout(() => {
+            if (!this.props.loading && !this.props.errorMessages.selectError) {
+                this.props.closeModal()
+            }
+            else {
+                this.setState({loading: false})
+            }
+        }, 500)
     }
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -210,8 +229,6 @@ export default class SELECT extends React.Component {
     )
 
     render() {
-        console.log(this.props.errorMessages)
-        console.log(this.state)
         const {
             advanced_query,
             query_action,
@@ -315,7 +332,7 @@ export default class SELECT extends React.Component {
                                 />
                             </Form.Group>
                             {conditionals}
-                            <Form.Group className='float-right'>
+                            <Form.Group>
                                 <QueryHelp queryType='SELECT'/> 
                                 <Form.Field
                                     id='form-button-control-ta-submit'
@@ -325,6 +342,7 @@ export default class SELECT extends React.Component {
                                 />
                                 
                             </Form.Group>
+                            {this.state.loading ? 'Loading... This may take some time, please wait.' : null}
                         </Form>
 
                         {this.props.errorMessages.selectError ? this.renderErrorTerminal() : null}

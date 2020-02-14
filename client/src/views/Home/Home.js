@@ -78,7 +78,7 @@ class Home extends React.Component {
     async runQuery(query) {
         let queryType = ''
         
-        if (query.startsWith('COUNT')) {
+        if (query.toUpperCase().startsWith('SELECT COUNT')) {
             queryType = 'COUNT'
         }
         else {
@@ -92,27 +92,39 @@ class Home extends React.Component {
                 this.props.updateRefreshStatus(true)
 
                 let data = await runSelectQuery(query)
-                this.props.updateQueryData(data.specimen)
 
-                let headers = getQueryHeaders(data.specimen[0])
-                this.props.updateHeaders(headers)
-                this.props.updateQuery(query)
+                if (data.error) {
+                    let errorMessage = `SQL ERROR: Code: ${data.error.code}, Message: ${data.error.sqlMessage}`
+                    console.log(errorMessage)
+                    this.props.updateSelectErrorMessage([errorMessage])
+                    this.props.updateLoadingStatus(false)
+                    this.props.updateRefreshStatus(false)
+                }
+
+                else {
+                    this.props.updateQueryData(data.specimen)
+                    let headers = getQueryHeaders(data.specimen[0])
+                    this.props.updateHeaders(headers)
+                    this.props.updateQuery(query)
+
+                }
                 break
+
             case 'COUNT':
                 // let data = await runSelectQuery(query)
-                let fullQuery = 'SELECT ' + query
-
-                let countData = await runCountQuery(fullQuery)
+                let countData = await runCountQuery(query)
 
                 if (!countData.error) {
                     countData = countData.data[Object.keys(countData.data)[0]]
+                    this.props.updateCountQueryCount(Object.values(countData)[0]) // isolate the number
                     console.log(countData)
                 }
                 else {
-
+                    let error = [`SQL ERROR: Code: ${countData.error.code}, Message: ${countData.error.sqlMessage}`]
+                    this.props.updateCountErrorMessage(error)
                 }
 
-                this.props.updateCountQueryCount(Object.values(countData)[0]) // isolate the number
+                
                 break
             case 'UPDATE':
                 console.log(query)

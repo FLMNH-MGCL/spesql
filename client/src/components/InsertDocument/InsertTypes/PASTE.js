@@ -3,6 +3,7 @@ import { Button, Icon, Modal, Grid, Form, Input, Select, TextArea, Message, Menu
 import axios from 'axios'
 import ErrorTerminal from '../../Query/QueryTerminals/ErrorTerminal'
 import QueryHelp from '../../Query/QueryHelp'
+import { checkEntryControlFields } from '../../../functions/queryChecks'
 
 export default class PASTE extends React.Component {
     state = {
@@ -32,6 +33,18 @@ export default class PASTE extends React.Component {
         
         for (var i = 1; i < ret.data.length; i++) { 
             let specimen = ret.data[i]
+
+            // CHECK CONTROL FIELDS FOR VALIDITY BEFORE PROCEEDING
+            /**
+             * e.g.
+             *  let fieldErrors = checkEntryControlFields(field1, field2, field3, ....)
+             *  if (fieldErrors !== []) {
+             *      errors.push(fieldErrors)
+             *      this.props.updateInsertErrorMessage(errors)
+             *      this.setState({hasError: true, loading: false})
+             *      return
+             *  }
+             */
             const doc = {
                 catalogNumber: specimen[0],
                 recordNumber: specimen[1],
@@ -139,7 +152,7 @@ export default class PASTE extends React.Component {
                                     example template for the correct headers. 
                                 </p>
                             </Message>
-                            <Form padded onSubmit={this.handleCSVSubmit}>
+                            <Form padded='vertically' onSubmit={this.handleCSVSubmit}>
                                 <Form.Group>
                                     <TextArea
                                         id='form-text-area'

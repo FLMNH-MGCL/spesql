@@ -98,6 +98,14 @@ export function checkHeaders(headers) {
 
 }
 
+export function checkAdvancedSelect(query) {
+    let errors = []
+
+    // implement checks
+
+    return errors
+}
+
 
 
 /*
@@ -119,12 +127,25 @@ export function checkHeaders(headers) {
     treated as otherwise normal.
 */
 
-export function checkEntry(lineNumber, specimen) {
-    let ret = {
-        errs: [],
-    }
+export function checkManualEntry(specimen) {
+    // corrections: fields that just need a small change but are otherwise valid
+    let corrections = []
+
+    // errors: fields that are invalid and will result in a displayed error to the user
+    let errors = []
 
     // implement checks
 
+
+    let ret = {
+        corrections: corrections,
+        errors: errors
+    }
+
     return ret
+}
+
+
+export function checkEntryControlFields(/* fields to check */) {
+
 }

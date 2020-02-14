@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { Button, Grid, Form, Input, Select, Checkbox, Message, Header, Divider, Menu, Icon, TextArea } from 'semantic-ui-react'
-import { checkEntry } from '../../../functions/queryChecks'
+import { checkManualEntry } from '../../../functions/queryChecks'
 import ErrorTerminal from '../../Query/QueryTerminals/ErrorTerminal'
 import QueryHelp from '../../Query/QueryHelp'
 
@@ -60,7 +60,8 @@ export default class MANUAL extends React.Component {
         tubeSize: '',
         collectors: '',
         modifiedInfo: '',
-        hasError: false
+        hasError: false,
+        loading: false
     }
 
     resetState = () => {
@@ -104,18 +105,29 @@ export default class MANUAL extends React.Component {
             tubeSize: '',
             collectors: '',
             modifiedInfo: '',
-            hasError: false
+            hasError: false,
+            loading: false
         })
     }
 
     // FIXME: BROKEN
     handleSubmit = () => {
+        this.setState({loading: true})
         alert(JSON.stringify(this.state, null, 2))
-        let ret = checkEntry(0, this.state)
+        let ret = checkManualEntry(this.state)
 
-        if (ret.errs.lenth === 0) {
-            axios.post('/api/insert', this.state)
+        if (ret.errors === []) {
+            // correct the fields that need correcting
+
+            // send the request
+
+            // axios.post('/api/insert', this.state)
             this.resetState()
+        }
+
+        else {
+            this.props.updateInsertErrorMessage(ret.errors)
+            this.setState({hasError: true, loading: false})
         }
     }
 
@@ -191,9 +203,9 @@ export default class MANUAL extends React.Component {
                         paste option on the previous page.
                     </p>
                 </Message>
-                <Grid padded>
+                <Grid padded='vertically'>
                     <Grid.Row>
-                        <Form padded onSubmit={this.handleSubmit}>
+                        <Form padded='vertically' onSubmit={this.handleSubmit}>
                             <div className='scrolling'>
                             <Form.Group widths='equal'>
                                 <Form.Field

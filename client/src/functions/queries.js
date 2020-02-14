@@ -23,20 +23,19 @@ export async function runCountQuery(query) {
         return countData
     })
 
-    console.log(ret)
     return ret
 }
 
 export async function currentUser() {
     const response = await axios.get('/api/fetchCurrentUser/')
-    console.log(response)
+    // console.log(response)
     if (response.data.success === false) {
         console.log('err')
         return null
     }
     else {
         const currentUser = response.data.currentUser
-        console.log(currentUser)
+        // console.log(currentUser)
         return currentUser
     }
 }

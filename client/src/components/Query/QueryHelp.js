@@ -317,91 +317,26 @@ export default class QueryHelp extends React.Component {
                         </Button>
                         }
                     >
-                        <Modal.Header>UPDATE Query Help</Modal.Header>
+                        <Modal.Header>COUNT Query Help</Modal.Header>
                         <Modal.Content>
                             <Message>
                                 <Message.Header>Count Query:    Basic Structure</Message.Header>
-                                <Message.Content><br />UPDATE `table_name` SET `column_name` = `new_value' [WHERE condition];</Message.Content>
+                                <Message.Content><br />SELECT COUNT(expression) AS `new_name` FROM `table_name` WHERE [conditions];</Message.Content>
                             </Message>
                             <p>
-                                In simple terms, this line queries the database to: inside the table, update the 
-                                field entitled `column_name` to a new value of `new_value`. If you were to exclude
-                                the WHERE condition clause, something that is not allowed in this program for data-security
-                                purposes, then the update would act on ALL of the entries' field denoted by the provided 
-                                `column name`. For example: 
+                                Count queries are very similar to SELECT queries, with a slight twist. Instead of returning the selection, it returns the count of 
+                                how many rows are in that selection. For example: 
                             </p>
                             <Message>
                                 <Message.Content>
-                                    UPDATE `collection` SET `genus` = `fake` WHERE `genus` = `Catacola`;
+                                    SELECT COUNT (*) FROM `collection` WHERE `genus` = `Catacola`;
                                 </Message.Content>
                             </Message>
                             <p>
-                                While being a silly request, this query would tell the database to update all entries' `genus` field, in the table `collection,`
-                                with the value `fake,` given that the `genus` field currently contains the value `Catacola.` <br />
-                                To visualize this: 
+                                This query selects all fields from the table `collection` where the field `genus` has the value `Catacola` in it. Once the data is finalized,
+                                instead of returning the data itself the query will return the amount of rows it got. So if there were seven specimen in the database 
+                                table that were a part of the genus Catacola, then this query would simply return "7."
                             </p>
-
-                            <Grid width={16}>
-                                <Grid.Column width={7}>
-                                    <Table celled selectable>
-                                        <Table.Header>
-                                            <Table.Row textAlign='center'>
-                                                <Table.HeaderCell>collection</Table.HeaderCell>
-                                            </Table.Row>    
-                                        </Table.Header>
-                                        <Table.Header>
-                                            <Table.Row>
-                                                <Table.HeaderCell>id</Table.HeaderCell>
-                                                <Table.HeaderCell>...</Table.HeaderCell>
-                                                <Table.HeaderCell positive>genus</Table.HeaderCell>
-                                            </Table.Row>    
-                                        </Table.Header>
-                                        <Table.Body>
-                                            <Table.Row>
-                                                <Table.Cell>1</Table.Cell>
-                                                <Table.Cell>...</Table.Cell>
-                                                <Table.Cell negative>Catacola</Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row>
-                                                <Table.Cell>2</Table.Cell>
-                                                <Table.Cell>...</Table.Cell>
-                                                <Table.Cell>Papilio</Table.Cell>
-                                            </Table.Row>
-                                        </Table.Body>
-                                    </Table>
-                                </Grid.Column>
-                                <Grid.Column width={2} textAlign='center' verticalAlign='middle'>
-                                    <Icon name='arrow right' />
-                                </Grid.Column>
-                                <Grid.Column width={7}>
-                                    <Table celled selectable>
-                                        <Table.Header>
-                                            <Table.Row textAlign='center'>
-                                                <Table.HeaderCell>collection</Table.HeaderCell>
-                                            </Table.Row>    
-                                        </Table.Header>
-                                        <Table.Header>
-                                            <Table.Row>
-                                                <Table.HeaderCell>id</Table.HeaderCell>
-                                                <Table.HeaderCell>...</Table.HeaderCell>
-                                                <Table.HeaderCell>genus</Table.HeaderCell>
-                                            </Table.Row>    
-                                        </Table.Header>
-                                        <Table.Body>
-                                            <Table.Row>
-                                                <Table.Cell>1</Table.Cell>
-                                                <Table.Cell>...</Table.Cell>
-                                                <Table.Cell negative>fake</Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row>
-                                                <Table.Cell>2</Table.Cell>
-                                                <Table.Cell>...</Table.Cell>
-                                                <Table.Cell>Papilio</Table.Cell>
-                                            </Table.Row>
-                                        </Table.Body>
-                                    </Table>
-                                </Grid.Column>
-                            </Grid>
                         </Modal.Content>
                         <Modal.Actions>
                         <Button icon='check' content='Got it!' onClick={this.close} />

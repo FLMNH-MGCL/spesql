@@ -52,7 +52,14 @@ class QueryGrid extends React.Component {
                             updateSelectErrorMessage={this.props.updateSelectErrorMessage}
                         />
                         <Divider />
-                        <COUNT dbSelection={dbSelection} runQuery={this.props.runQuery} countQueryCount={this.props.countQueryCount} updateCountQueryCount={this.props.updateCountQueryCount}/>
+                        <COUNT 
+                            dbSelection={dbSelection} 
+                            runQuery={this.props.runQuery} 
+                            countQueryCount={this.props.countQueryCount} 
+                            updateCountQueryCount={this.props.updateCountQueryCount}
+                            errorMessages={this.props.errorMessages} 
+                            updateCountErrorMessage={this.props.updateCountErrorMessage}
+                        />
                         <Divider />
                         <UPDATE dbSelection={dbSelection} runQuery={this.props.runQuery} clearQuery={this.props.clearQuery} closeModal={this.closeModal} />
                         <Divider />
