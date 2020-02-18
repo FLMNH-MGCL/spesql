@@ -9,7 +9,7 @@ import Header from '../../components/Header/Header'
 import { Grid, Loader } from 'semantic-ui-react'
 import { getQueryHeaders } from '../../functions/helpers'
 import { checkHeaders } from '../../functions/queryChecks'
-import { runSelectQuery, runCountQuery, runUpdateQuery } from '../../functions/queries'
+import { runSelectQuery, runCountQuery, runUpdateQuery, runDeleteQuery } from '../../functions/queries'
 import { mapStateToProps, mapDispatchToProps } from '../../redux/mapFunctions'
 import { connect } from 'react-redux'
 
@@ -76,6 +76,7 @@ class Home extends React.Component {
     }
 
     async runQuery(query) {
+        console.log(query)
         let queryType = ''
         
         if (query.toUpperCase().startsWith('SELECT COUNT')) {
@@ -123,9 +124,22 @@ class Home extends React.Component {
                     let error = [`SQL ERROR: Code: ${countData.error.code}, Message: ${countData.error.sqlMessage}`]
                     this.props.updateCountErrorMessage(error)
                 }
-
-                
                 break
+
+            case 'DELETE':
+                let deleteData = await runDeleteQuery(query)
+
+                if (deleteData.data.success) {
+                    // console.log(this.props.current_query)
+                    this.runQuery(this.props.current_query)
+                    console.log('success')
+                }
+                else {
+                    console.log(deleteData.data)
+                }
+                break;
+
+
             case 'UPDATE':
                 console.log(query)
                 let updateData = await runUpdateQuery(query)

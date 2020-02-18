@@ -14,7 +14,7 @@ class SpecimenView extends React.Component {
         return (
             <>
                 <Card><Image src={require('./test.jpg')} wrapped /></Card>
-                <DeleteDocument target={selectedSpecimen.id} />
+                <DeleteDocument target={selectedSpecimen.id} runQuery={this.props.runQuery} />
                 <UpdateDocument selectedSpecimen={selectedSpecimen} currentQuery={this.props.currentQuery} runQuery={this.props.runQuery} user={this.props.user}/>
             </>
         )
@@ -167,7 +167,7 @@ class SpecimenView extends React.Component {
                     </Grid.Column>
                 </Grid>
                 <div style={{float: 'right', paddingTop: '2rem'}}>
-                    <DeleteDocument target={selectedSpecimen.id} />
+                    <DeleteDocument target={selectedSpecimen.id} runQuery={this.props.runQuery} />
                     <UpdateDocument selectedSpecimen={selectedSpecimen} currentQuery={this.props.currentQuery} runQuery={this.props.runQuery} user={this.props.user}/>
                 </div>
                 </>

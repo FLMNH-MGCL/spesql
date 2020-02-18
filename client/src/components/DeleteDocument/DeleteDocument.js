@@ -9,11 +9,13 @@ class DeleteDocument extends React.Component {
     show = () => this.setState({ open: true })
 
     handleConfirm= () => {
-        axios.post(`/api/delete/${this.props.target}`).then(res => {
-            const data = res.data
-            console.log(data)
-        })
+        // axios.post(`/api/delete/${this.props.target}`).then(res => {
+        //     const data = res.data
+        //     console.log(data)
+        // })
         // this.props.updateList()
+        let query = `DELETE FROM molecularLab WHERE id=${this.props.target};`
+        this.props.runQuery(query)
         this.setState({ open: false })
     }
 

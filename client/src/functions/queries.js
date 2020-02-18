@@ -40,6 +40,18 @@ export async function runUpdateQuery(query) {
     return ret
 }
 
+export async function runDeleteQuery(query) {
+    let data = {command: query}
+    
+    const ret = await axios.post(`/api/delete/`, data)
+    .then(response => {
+        const data = response
+        return data
+    })
+
+    return ret
+}
+
 
 export async function currentUser() {
     const response = await axios.get('/api/fetchCurrentUser/')
