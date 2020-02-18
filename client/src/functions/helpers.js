@@ -109,5 +109,14 @@ export function getQueryHeaders(specimen) {
     }
 }
 
+    /**
+     * this function will be responsible for creating some of the 'metadata' the table will have.
+     * 
+     * fields would include: recordEnteredBy, etc.
+     */
+    export function createAutoGenFields(/* requires things like current user, date, etc */) {
+        
+    }
+
 
 // export function headerToField

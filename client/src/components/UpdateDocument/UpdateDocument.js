@@ -31,6 +31,7 @@ class UpdateDocument extends React.Component {
             stateProvince: this.props.selectedSpecimen.stateProvince,
             county: this.props.selectedSpecimen.county,
             municipality: this.props.selectedSpecimen.municipality,
+            locality: this.props.selectedSpecimen.locality,
             verbatimElevation : this.props.selectedSpecimen.verbatimElevation,
             decimalLatitude: this.props.selectedSpecimen.decimalLatitude,
             decimalLongitude: this.props.selectedSpecimen.decimalLongitude,
@@ -67,9 +68,8 @@ class UpdateDocument extends React.Component {
         let changes = []
         for (var field of Object.keys(this.props.selectedSpecimen)) {
             console.log(field)
-            console.log(this.state[field])
-            console.log(this.props.selectedSpecimen[field])
-            if (field === 'id') continue
+            console.log(`${this.state[field]} vs ${this.props.selectedSpecimen[field]}`)
+            if (field === 'id' || field === 'modifiedInfo') continue
 
             if (this.state[field] === this.props.selectedSpecimen[field]) {
                 // console.log('same values')
@@ -81,13 +81,61 @@ class UpdateDocument extends React.Component {
                     oldValue: this.props.selectedSpecimen[field],
                     newValue: this.state[field]
                 }
-                changes.push(JSON.stringify(change))
+                changes.push(change)
             }
         }
 
         if (changes.length > 0) {
             console.log('Changes were detected')
             console.log(changes)
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+
+            // console.log(today)
+
+            let modification = {
+                [today]: {
+                    modifiedBy: this.props.user,
+                    fieldsChanged: changes
+                }
+            }
+
+            if (this.props.selectedSpecimen.modifiedInfo !== '') {
+                let allModifications = JSON.parse(this.props.selectedSpecimen.modifiedInfo)
+                allModifications.push(modification)
+                allModifications = JSON.stringify(allModifications)
+                console.log(allModifications)
+            }
+            else {
+                let modifiedEntry = [
+                    modification
+                ]
+
+                modifiedEntry = JSON.stringify(modifiedEntry)
+                console.log(modifiedEntry)
+
+                let updateCommand = `UPDATE molecularLab SET `
+
+                changes.forEach((change, index) => {
+                    if (index !== changes.length - 1) {
+                        updateCommand += `${change.field}='${change.newValue}', `
+                    }
+                    else {
+                        updateCommand += `${change.field}='${change.newValue}' `
+                    }
+                })
+
+                updateCommand += `WHERE id=${this.props.selectedSpecimen.id};`
+
+                console.log(updateCommand)
+
+                this.props.runQuery(updateCommand)
+            }
         }
 
         else {

@@ -1,6 +1,7 @@
 export function mapStateToProps(state) {
     return {
         authenticated: state.authenticated,
+        user: state.user,
         filteredText: state.filteredText,
         filterCategory: state.filterCategory,
         selectedSpecimen: state.selectedSpecimen,
@@ -34,6 +35,7 @@ export function mapDispatchToProps(dispatch) {
         updateUpdateErrorMessage: (updateError) => dispatch({type: 'UPDATE_UPDATE_ERROR_LOG', updateError: updateError}),
         updateLoadingStatus: (loadingStatus) => dispatch({type: 'UPDATE_LOADING_STATUS', loadingStatus: loadingStatus}),
         updateRefreshStatus: (refreshStatus) => dispatch({type: 'UPDATE_REFRESH_STATUS', refreshStatus: refreshStatus}),
+        login: (newUser) => dispatch({type: 'LOGIN', newUser: newUser}),
         logout: () => dispatch({type: 'LOGOUT'}),
     }
 }

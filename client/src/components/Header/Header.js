@@ -84,14 +84,14 @@ export default class Header extends Component {
                     <Menu.Item>
                         {/* <Input icon='search' placeholder='Search...' /> */}
                         <DBSearch 
-                            updateFilteredText={this.props.updateFilteredText.bind(this)} 
+                            updateFilteredText={this.props.updateFilteredText} 
                             disabled={this.props.data === undefined || this.props.data.length === 0 || this.props.filterCategory === ''}
                             queryLength={this.props.data === undefined ? 0 : this.props.data.length}
                         />
                     </Menu.Item>
                     <Menu.Item>
                         <SearchFilter 
-                            updateFilterCategory={this.props.updateFilterCategory.bind(this)} 
+                            updateFilterCategory={this.props.updateFilteredCategory} 
                             disabled={this.props.data === undefined || this.props.data.length === 0} 
                         />
                     </Menu.Item>
@@ -193,14 +193,14 @@ export default class Header extends Component {
                             <React.Fragment>
                                 <div style={{padding: '1rem'}}>
                                     <DBSearch 
-                                        updateFilteredText={this.props.updateFilteredText.bind(this)} 
+                                        updateFilteredText={this.props.updateFilteredText} 
                                         disabled={this.props.data === undefined || this.props.data.length === 0 || this.props.filterCategory === ''}
                                         queryLength={this.props.data === undefined ? 0 : this.props.data.length}
                                     />
                                 </div>
                                 <div style={{padding: '1rem'}}>
                                     <SearchFilter 
-                                        updateFilterCategory={this.props.updateFilterCategory.bind(this)} 
+                                        updateFilterCategory={this.props.updateFilteredCategory} 
                                         disabled={this.props.data === undefined || this.props.data.length === 0} 
                                     />
                                 </div>
@@ -275,6 +275,8 @@ export default class Header extends Component {
     }
 
     render() {
+
+        // console.log(this.props)
 
         return (
             <div>

@@ -9,7 +9,7 @@ import Header from '../../components/Header/Header'
 import { Grid, Loader } from 'semantic-ui-react'
 import { getQueryHeaders } from '../../functions/helpers'
 import { checkHeaders } from '../../functions/queryChecks'
-import { runSelectQuery, runCountQuery } from '../../functions/queries'
+import { runSelectQuery, runCountQuery, runUpdateQuery } from '../../functions/queries'
 import { mapStateToProps, mapDispatchToProps } from '../../redux/mapFunctions'
 import { connect } from 'react-redux'
 
@@ -128,6 +128,15 @@ class Home extends React.Component {
                 break
             case 'UPDATE':
                 console.log(query)
+                let updateData = await runUpdateQuery(query)
+
+                if (!updateData.success) {
+                    console.log(updateData.data)
+                }
+                else {
+                    console.log(updateData.data)
+                }
+
                 break
             default:
                 console.log('not yet')
@@ -155,24 +164,11 @@ class Home extends React.Component {
         return (
             <div>
                 <Header
+                    {...this.props}
                     current_view='home'
-                    filterCategory={this.props.filterCategory}
-                    updateFilteredText={this.props.updateFilteredText} 
-                    updateFilterCategory={this.props.updateFilteredCategory}
-                    data={this.props.data}
-                    displayed={this.props.displayed}
                     isValidCSV={this.isValidCSV.bind(this)}
                     runQuery={this.runQuery.bind(this)}
-                    clearQuery={this.props.clearQuery}
-                    countQueryCount={this.props.countQueryCount}
-                    updateCountQueryCount={this.props.updateCountQueryCount}
-                    errorMessages={this.props.errorMessages}
-                    updateInsertErrorMessage={this.props.updateInsertErrorMessage}
-                    updateSelectErrorMessage={this.props.updateSelectErrorMessage}
-                    updateCountErrorMessage={this.props.updateCountErrorMessage}
-                    updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
                     logout={this.logout.bind(this)}
-                    loading={this.props.loading}
                 />
                 <Grid columns='equal' padded stackable>
                     <Grid.Column width={11}>
@@ -183,7 +179,7 @@ class Home extends React.Component {
                         />
                     </Grid.Column>
                     <Grid.Column>
-                        <SpecimenView data={this.props.displayed} selectedSpecimen={this.props.selectedSpecimen} currentQuery={this.props.current_query} />
+                        <SpecimenView data={this.props.displayed} selectedSpecimen={this.props.selectedSpecimen} currentQuery={this.props.current_query} runQuery={this.runQuery.bind(this)} />
                     </Grid.Column>
                 </Grid>
             </div>

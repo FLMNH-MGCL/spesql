@@ -26,6 +26,21 @@ export async function runCountQuery(query) {
     return ret
 }
 
+export async function runUpdateQuery(query) {
+    let data = {command: query}
+
+    const ret = await axios.post('/api/update/', data)
+    .then(response => {
+        const data = response
+        return data
+    })
+
+    console.log(ret)
+
+    return ret
+}
+
+
 export async function currentUser() {
     const response = await axios.get('/api/fetchCurrentUser/')
     // console.log(response)

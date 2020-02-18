@@ -7,6 +7,7 @@ import {
 import QueryHelp from '../QueryHelp'
 import ErrorTerminal from '../QueryTerminals/ErrorTerminal'
 import { checkAdvancedSelect } from '../../../functions/queryChecks'
+import { createAutoGenFields } from '../../../functions/helpers'
 
 
 export default class SELECT extends React.Component {
@@ -49,6 +50,7 @@ export default class SELECT extends React.Component {
         return errors
     }
 
+
     // DANGEROUS, EASY TO BREAK NEED MORE CHECKS
     handleSubmit = () => {
 
@@ -60,7 +62,7 @@ export default class SELECT extends React.Component {
             return
         }
         else {
-            console.log('made it to else???')
+            // console.log('made it to else???')
             let command = String(this.state.query_action + ' ')
 
             for (let i = 0; i < this.state.fields.length; i++) {

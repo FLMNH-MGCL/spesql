@@ -15,7 +15,7 @@ class SpecimenView extends React.Component {
             <>
                 <Card><Image src={require('./test.jpg')} wrapped /></Card>
                 <DeleteDocument target={selectedSpecimen.id} />
-                <UpdateDocument selectedSpecimen={selectedSpecimen} currentQuery={this.props.currentQuery} />
+                <UpdateDocument selectedSpecimen={selectedSpecimen} currentQuery={this.props.currentQuery} runQuery={this.props.runQuery}/>
             </>
         )
 
