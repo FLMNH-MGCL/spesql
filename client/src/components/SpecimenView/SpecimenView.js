@@ -15,7 +15,7 @@ class SpecimenView extends React.Component {
             <>
                 <Card><Image src={require('./test.jpg')} wrapped /></Card>
                 <DeleteDocument target={selectedSpecimen.id} />
-                <UpdateDocument selectedSpecimen={selectedSpecimen} currentQuery={this.props.currentQuery} runQuery={this.props.runQuery}/>
+                <UpdateDocument selectedSpecimen={selectedSpecimen} currentQuery={this.props.currentQuery} runQuery={this.props.runQuery} user={this.props.user}/>
             </>
         )
 
@@ -49,6 +49,9 @@ class SpecimenView extends React.Component {
                 </List.Item>
                 <List.Item float='left'>
                     <List.Content><b>Genus:  </b> {selectedSpecimen.genus}</List.Content>
+                </List.Item>
+                <List.Item float='left'>
+                    <List.Content><b>Subgenus:  </b> {selectedSpecimen.subgenus}</List.Content>
                 </List.Item>
                 <List.Item float='left'>
                     <List.Content><b>Species:  </b> {selectedSpecimen.specificEpithet}</List.Content>
@@ -165,7 +168,7 @@ class SpecimenView extends React.Component {
                 </Grid>
                 <div style={{float: 'right', paddingTop: '2rem'}}>
                     <DeleteDocument target={selectedSpecimen.id} />
-                    <UpdateDocument selectedSpecimen={selectedSpecimen} currentQuery={this.props.currentQuery} />
+                    <UpdateDocument selectedSpecimen={selectedSpecimen} currentQuery={this.props.currentQuery} runQuery={this.props.runQuery} user={this.props.user}/>
                 </div>
                 </>
             )

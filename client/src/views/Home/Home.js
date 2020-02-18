@@ -179,7 +179,7 @@ class Home extends React.Component {
                         />
                     </Grid.Column>
                     <Grid.Column>
-                        <SpecimenView data={this.props.displayed} selectedSpecimen={this.props.selectedSpecimen} currentQuery={this.props.current_query} runQuery={this.runQuery.bind(this)} />
+                        <SpecimenView data={this.props.displayed} selectedSpecimen={this.props.selectedSpecimen} currentQuery={this.props.current_query} runQuery={this.runQuery.bind(this)} user={this.props.user} />
                     </Grid.Column>
                 </Grid>
             </div>

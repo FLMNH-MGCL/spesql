@@ -46,6 +46,7 @@ class UpdateDocument extends React.Component {
             box: this.props.selectedSpecimen.box,
             tubeSize: this.props.selectedSpecimen.tubeSize,
             collectors: this.props.selectedSpecimen.collectors,
+            reason: ''
         }
     }
 
@@ -101,41 +102,42 @@ class UpdateDocument extends React.Component {
             let modification = {
                 [today]: {
                     modifiedBy: this.props.user,
-                    fieldsChanged: changes
+                    fieldsChanged: changes,
+                    reasonForChanges: this.state.reason
                 }
             }
 
+            let allModifications = []
             if (this.props.selectedSpecimen.modifiedInfo !== '') {
-                let allModifications = JSON.parse(this.props.selectedSpecimen.modifiedInfo)
+                allModifications = JSON.parse(this.props.selectedSpecimen.modifiedInfo)
                 allModifications.push(modification)
-                allModifications = JSON.stringify(allModifications)
-                console.log(allModifications)
             }
             else {
-                let modifiedEntry = [
+                allModifications = [
                     modification
                 ]
-
-                modifiedEntry = JSON.stringify(modifiedEntry)
-                console.log(modifiedEntry)
-
-                let updateCommand = `UPDATE molecularLab SET `
-
-                changes.forEach((change, index) => {
-                    if (index !== changes.length - 1) {
-                        updateCommand += `${change.field}='${change.newValue}', `
-                    }
-                    else {
-                        updateCommand += `${change.field}='${change.newValue}' `
-                    }
-                })
-
-                updateCommand += `WHERE id=${this.props.selectedSpecimen.id};`
-
-                console.log(updateCommand)
-
-                this.props.runQuery(updateCommand)
             }
+
+            allModifications = JSON.stringify(allModifications)
+            console.log(allModifications)
+
+            let updateCommand = `UPDATE molecularLab SET `
+
+            changes.forEach((change, index) => {
+                if (index !== changes.length - 1) {
+                    updateCommand += `${change.field}='${change.newValue}', `
+                }
+                else {
+                    updateCommand += `${change.field}='${change.newValue}', `
+                    updateCommand += `modifiedInfo='${allModifications}'`
+                }
+            })
+
+            updateCommand += `WHERE id=${this.props.selectedSpecimen.id};`
+
+            console.log(updateCommand)
+
+            this.props.runQuery(updateCommand)
         }
 
         else {
@@ -144,7 +146,6 @@ class UpdateDocument extends React.Component {
     }
 
     render() {
-        // console.log(this.state)
         if (!this.props.currentQuery.startsWith('SELECT *')) {
             return (
                 <Modal 
@@ -208,6 +209,7 @@ class UpdateDocument extends React.Component {
                 box,
                 tubeSize,
                 collectors,
+                reason
             } = this.state
 
             return(
@@ -235,6 +237,20 @@ class UpdateDocument extends React.Component {
                                                 differ from what already is stored.
                                             </p>
                                         </Message>
+
+                                        <Input
+                                            fluid
+                                            label='Please enter the reason for this update'
+                                            placeholder='new data recieved, incorrect field update, etc'
+                                            name='reason'
+                                            value={reason}
+                                            onChange={this.onChange}
+                                            error= {
+                                                this.state.reason === ''
+                                                ? { content: 'You must provide a reason', pointing: 'below' }
+                                                : false
+                                            }
+                                        />
 
                                         <Table singleLine>
                                             <Table.Header>

@@ -70,6 +70,7 @@ export default function reducer(state = initialState, action) {
         case 'CLEAR_CURRENT_QUERY':
             newState = {
                 authenticated: state.authenticated,
+                user: state.user,
                 filteredText: state.filteredText,
                 filterCategory: state.filterCategory,
                 selectedSpecimen: undefined,
