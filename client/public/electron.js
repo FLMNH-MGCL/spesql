@@ -15,10 +15,17 @@ function createWindow() {
     //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
     mainWindow.webContents.openDevTools();
   }
-  mainWindow.on('closed', () => mainWindow = null);
+  mainWindow.webContents.on('closed', () => mainWindow = null);
+
+  mainWindow.webContents.on('new-window', function(event, url) {
+    event.preventDefault();
+    electron.shell.openExternal(url);
+  });
 }
 
 app.on('ready', createWindow);
+
+
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
