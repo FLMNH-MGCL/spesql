@@ -1,71 +1,74 @@
 import React from 'react'
 import { Table, Button, Loader, Icon } from 'semantic-ui-react'
-import _ from 'lodash'
-import './CollectionList.css'
+import QueryHelp from '../Query/QueryHelp'
+// import _ from 'lodash'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import './CollectionList.css'
+
 //import SpecimenCard from './SpecimenCard'
 
 function getCells(specimen, headers) {
     if (headers === [] || headers === undefined || specimen === undefined) {
         return []
     }
+    console.log(headers)
     let ret = headers.map((header, index) => {
-        switch (header) {
-            case 'MGCL #':
+        // console.log(header)
+        switch (header.toLowerCase()) {
+            case 'mgcl #':
                 return <Table.Cell key={index}>{specimen.catalogNumber}</Table.Cell>
-            case 'Lep #':
+            case 'lep #':
                 return <Table.Cell key={index}>{specimen.recordNumber}</Table.Cell>
-            case 'Order':
+            case 'order':
                 return <Table.Cell key={index}>{specimen.order_}</Table.Cell>
-            case 'Superfamily':
+            case 'superfamily':
                 return <Table.Cell key={index}>{specimen.superfamily}</Table.Cell>
-            case 'Family':
+            case 'family':
                 return <Table.Cell key={index}>{specimen.family}</Table.Cell>
-            case 'Subfamily':
+            case 'subfamily':
                 return <Table.Cell key={index}>{specimen.subfamily}</Table.Cell>
-            case 'Tribe':
+            case 'tribe':
                 return <Table.Cell key={index}>{specimen.tribe}</Table.Cell>
-            case 'Genus':
+            case 'genus':
                 return <Table.Cell key={index}>{specimen.genus}</Table.Cell>
-            case 'Species':
+            case 'species':
                 return <Table.Cell key={index}>{specimen.specificEpithet}</Table.Cell>
-            case 'Sex':
+            case 'sex':
                 return <Table.Cell key={index}>{specimen.sex}</Table.Cell>
-            case 'Country':
+            case 'country':
                 return <Table.Cell key={index}>{specimen.country}</Table.Cell>
-            case 'Province':
+            case 'province':
                 return <Table.Cell key={index}>{specimen.stateProvince}</Table.Cell>
-            case 'Locality':
+            case 'locality':
                 return <Table.Cell key={index}>{specimen.locality}</Table.Cell>
-            case 'Latitude':
+            case 'latitude':
                 return <Table.Cell key={index}>{specimen.latitude}</Table.Cell>
-            case 'Longitude':
+            case 'longitude':
                 return <Table.Cell>{specimen.longitude}</Table.Cell>
-            case 'Elevation':
+            case 'elevation':
                 return <Table.Cell key={index}>{specimen.elevation}</Table.Cell>
-            case 'Collector(s)':
+            case 'collector(s)':
                 return <Table.Cell key={index}>{specimen.collectors}</Table.Cell>
-            case 'Freezer':
+            case 'freezer':
                     return <Table.Cell key={index}>{specimen.freezer}</Table.Cell>
-            case 'Rack #':
+            case 'rack #':
                 return <Table.Cell key={index}>{specimen.rack}</Table.Cell>
-            case 'Box':
+            case 'box':
                 return <Table.Cell key={index}>{specimen.box}</Table.Cell>
-            case 'Size':
+            case 'size':
                 return <Table.Cell key={index}>{specimen.size}</Table.Cell>
-            case 'Note':
-                return <Table.Cell key={index}>{specimen.note}</Table.Cell>
-            default: 
+            default:
                 return null
         }
     })
 
+console.log(ret)
     return ret
 
-    
+
 }
 
-// ({data, filteredText, filterCategory, selectedUpdate, sortBy, clearQuery, current_query, query_headers}) 
+// ({data, filteredText, filterCategory, selectedUpdate, sortBy, clearQuery, current_query, query_headers})
 
 export default class CollectionList extends React.Component {
     constructor(props) {
@@ -134,7 +137,7 @@ export default class CollectionList extends React.Component {
                 </Table.HeaderCell>
             )
         })
-    
+
         return ret
     }
 
@@ -160,23 +163,123 @@ export default class CollectionList extends React.Component {
         }, 500);
     }
 
+    headerNameToFieldName = (clickedColumn) => {
+      switch (clickedColumn) {
+        case 'Lep #':
+          return 'recoredNumber'
+        case 'MGCL #':
+          return 'catalogNumber'
+        case 'Order':
+          return 'order_'
+        case 'Superfamily':
+          return 'superfamily'
+        case 'Family':
+          return 'family'
+        case 'Subfamily':
+          return 'subfamily'
+        case 'Tribe':
+          return 'tribe'
+        case 'Genus':
+          return 'genus'
+        case 'Subgenus':
+          return 'subgenus'
+        case 'Species':
+          return 'specificEpithet'
+        case 'Identification Qualifier':
+          return 'identificationQualifier'
+        case 'Recorded By':
+          return 'recordedBy'
+        case 'Date Identified':
+          return 'dateIdentified'
+        case 'Sex':
+          return 'sex'
+        case 'Life Stage':
+          return 'lifeStage'
+        case 'Habitat':
+          return 'habitat'
+        case 'Occurrence Remarks':
+          return 'occurrenceRemarks'
+        case 'Country':
+          return 'country'
+        case 'Province':
+          return 'stateProvince'
+        case 'County':
+          return 'county'
+        case 'Municipality':
+          return 'municipality'
+        case 'Locality':
+          return 'locality'
+        case 'Latitude':
+          return 'verbatimLatitude'
+        case 'Longitude':
+          return 'verbatimLongitude'
+        case 'Elevation':
+          return 'verbatimElevation'
+        case 'Freezer':
+          return 'freezer'
+        case 'Rack':
+          return 'rack'
+        case 'Box':
+          return 'box'
+        case 'Size':
+          return 'tubeSize'
+        default:
+          return clickedColumn
+
+      }
+    }
+
+    sortList = (clickedColumn, direction) => {
+
+      clickedColumn = this.headerNameToFieldName(clickedColumn)
+
+      let newData = this.props.data
+
+      if (direction === 'ascending') {
+        newData = newData.sort((a, b) => {
+            return (a[clickedColumn] > b[clickedColumn]) ? 1 : ((b[clickedColumn] > a[clickedColumn]) ? -1 : 0)
+        })
+      }
+      else {
+        newData = newData.reverse()
+      }
+
+
+      this.setState({
+        data: newData
+      })
+
+    }
+
     handleSort = (clickedColumn) => () => {
         const { column, direction } = this.state
 
         if (column !== clickedColumn) {
             this.setState({
                 column: clickedColumn,
-                data: _.sortBy(this.props.data, [clickedColumn]),
+                // data: _.sortBy(this.props.data, [clickedColumn]),
+                data: this.sortList(clickedColumn, 'ascending'),
                 direction: 'ascending',
             })
 
             return
         }
 
-        this.setState({
-            data: this.props.data.reverse(),
-            direction: direction === 'ascending' ? 'descending' : 'ascending',
-        })
+        else if (column === clickedColumn) {
+          if (direction === 'ascending') {
+            this.setState({
+                data: this.sortList(clickedColumn, 'descending'),
+                direction: 'descending'
+            })
+          }
+          else {
+            this.setState({
+              data: this.props.data,
+              direction: null,
+              column: null
+            })
+          }
+        }
     }
 
     renderList = () => {
@@ -203,7 +306,7 @@ export default class CollectionList extends React.Component {
                         }
                         else return false
 
-                    case'Genus': 
+                    case'Genus':
                         if(specimen.genus || specimen.genus === '') {
                             return specimen.genus.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
                         }
@@ -215,7 +318,7 @@ export default class CollectionList extends React.Component {
                         }
                         else return false
 
-                    case 'Country': 
+                    case 'Country':
                         if (specimen.country) {
                             return specimen.country.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
                         }
@@ -230,39 +333,10 @@ export default class CollectionList extends React.Component {
                     case '':
                         return true
 
-                    default: 
+                    default:
                         return false
                 }
-            })        
-            // .sort((specimen_a, specimen_b) => {
-            //     if (this.props.sortBy === 'Lep #') {
-            //         return (specimen_a.id > specimen_b.id) ? 1 : ((specimen_b.id > specimen_a.id) ? -1 : 0)
-            //     }
-            //     else if (this.props.sortBy === 'Superfamily') {
-            //         return (specimen_a.superfamily > specimen_b.superfamily) ? 1 : ((specimen_b.superfamily > specimen_a.superfamily) ? -1 : 0)
-            //     }
-            //     else if (this.props.sortBy === 'Family') {
-            //         return (specimen_a.family > specimen_b.family) ? 1 : ((specimen_b.family > specimen_a.family) ? -1 : 0)
-            //     }
-            //     else if (this.props.sortBy === 'Genus') {
-            //         return (specimen_a.genus > specimen_b.genus) ? 1 : ((specimen_b.genus > specimen_a.genus) ? -1 : 0)
-            //     }
-            //     else if (this.props.sortBy === 'Species') {
-            //         return (specimen_a.species > specimen_b.species) ? 1 : ((specimen_b.species > specimen_a.species) ? -1 : 0)
-            //     }
-            //     else if (this.props.sortBy === 'Country') {
-            //         return (specimen_a.country > specimen_b.country) ? 1 : ((specimen_b.country > specimen_a.country) ? -1 : 0)
-            //     }
-            //     else if (this.props.sortBy === 'Collection Date') {
-            //         return (specimen_a.date_collected > specimen_b.date_collected) ? 1 : ((specimen_b.date_collected > specimen_a.date_collected) ? -1 : 0)
-            //     }
-            //     else if (this.props.sortBy === 'Rack #') {
-            //         return (specimen_a.id > specimen_b.id) ? 1 : ((specimen_b.id > specimen_a.id) ? -1 : 0)
-            //     }
-            //     else {
-            //         return 0
-            //     }
-            // })
+            })
             .map((specimen, index) => {
                 let cells = getCells(specimen, this.props.query_headers)
 
@@ -279,7 +353,7 @@ export default class CollectionList extends React.Component {
 
         return collectionList
     }
-    
+
 
 
     render() {
@@ -294,62 +368,69 @@ export default class CollectionList extends React.Component {
 
         return (
             <React.Fragment>
-            <Table sortable celled selectable stackable>
+              <Table sortable celled selectable stackable>
                 <Table.Header>
-                    <Table.Row>
-                        {specimenHeaders}
-                    </Table.Row>
+                  <Table.Row>
+                    {specimenHeaders}
+                  </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    <div id="scrollableDiv" style={{ height: "75vh", overflow: "auto" }}>
+                  <div id="scrollableDiv" style={{ height: "75vh", overflow: "auto" }}>
                     <InfiniteScroll
-                        dataLength={this.state.display.length}
-                        next={this.fetchMoreData}
-                        hasMore={this.state.hasMore}
-                        scrollableTarget='scrollableDiv'
-                        loader={<Loader active style={{marginTop: '30vh'}} content='Loading' className='loader-style'/>}
+                      dataLength={this.state.display.length}
+                      next={this.fetchMoreData}
+                      hasMore={this.state.hasMore}
+                      scrollableTarget='scrollableDiv'
+                      loader={<Loader active style={{marginTop: '30vh'}} content='Loading' className='loader-style'/>}
                     >
-                        {this.state.display.map((row, index) => {
-                            return collectionList[index]
-                        })}
+                      {this.state.display.map((row, index) => {
+                        return collectionList[index]
+                      })}
                     </InfiniteScroll>
-                    </div>
+                  </div>
                 </Table.Body>
-            </Table>
-            <div className='query-info'>
-            <Button 
-                negative 
-                onClick={() => {
+                <Table.Footer>
+                  <Table.Row>
+                    <Table.HeaderCell colSpan="8">
+                      <div className='query-curr'><h4>Current Query:</h4><p>{this.props.current_query}</p></div>
+                    </Table.HeaderCell>
+                  </Table.Row>
+                </Table.Footer>
+              </Table>
+              <div className='query-info'>
+                <Button
+                  negative
+                  onClick={() => {
                     this.props.clearQuery()
                     this.setState({
                         hasMore: false,
-                        display: Array.from({length: 0})
+                      display: Array.from({length: 0})
                     })
-                }}
-                disabled={this.props.current_query === '' ? true : false}
-            >
-                Clear Query
-            </Button>
-            <Button
-                icon
-                onClick={() => {
+                  }}
+                  disabled={this.props.current_query === '' ? true : false}
+                >
+                  Clear Query
+                </Button>
+                <Button
+                  icon
+                  onClick={() => {
                     // console.log('refreshed!')
                     let command = this.props.current_query
                     this.props.clearQuery()
                     this.props.updateRefreshStatus(true)
                     this.props.updateLoadingStatus(true)
                     this.props.runQuery(command)
-                }}
-                disabled={this.props.current_query === '' ? true : false}
-            >
-                <Icon name='refresh'  />
-            </Button>
-                <div className='query-text'><h4>Current Query:</h4><p>{this.props.current_query}</p></div>
+                  }}
+                  disabled={this.props.current_query === '' ? true : false}
+                >
+                  <Icon name='refresh'  />
+                </Button>
                 <div className='query-text'><h4>Query Size:</h4><p>{this.props.data.length}</p></div>
                 <div className='query-text'><h4>Current Loaded:</h4><p>{this.props.data.length === 0 ? 0 : this.state.display.length}</p></div>
+                <div style={{float: 'right'}}><QueryHelp queryType='LIST_HELP' /></div>
             </div>
 
-            
+
             </React.Fragment>
         )
     }

@@ -64,7 +64,7 @@ class Home extends React.Component {
                 valid : valid,
                 data : data
             }
-        } 
+        }
         else {
             ret = {
                 valid : valid,
@@ -78,7 +78,7 @@ class Home extends React.Component {
     async runQuery(query) {
         console.log(query)
         let queryType = ''
-        
+
         if (query.toUpperCase().startsWith('SELECT COUNT')) {
             queryType = 'COUNT'
         }
@@ -144,8 +144,11 @@ class Home extends React.Component {
                 console.log(query)
                 let updateData = await runUpdateQuery(query)
 
+                // failed
                 if (!updateData.success) {
-                    console.log(updateData.data)
+                  console.log(updateData.data)
+                  let updateError = [`SQL ERROR: Code: ${updateData.data.code}, Message: ${updateData.data.sqlMessage}`]
+                  this.props.updateUpdateErrorMessage(updateError)
                 }
                 else {
                     console.log(updateData.data)
@@ -199,7 +202,7 @@ class Home extends React.Component {
             </div>
         )
     }
-    
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)
