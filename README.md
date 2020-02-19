@@ -1,4 +1,4 @@
-# SpeSQL (NAME NOT FINAL) #
+# SpeSQL #
 
 ### Development ###
 This project was developed using ReactJS, Redux and Node
