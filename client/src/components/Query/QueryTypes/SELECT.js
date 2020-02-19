@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { Button, Grid, Form, Input, Select, Checkbox, Message, Header, Divider } from 'semantic-ui-react'
-import { 
+import {
     selectQueryOption, headerSelection, setOperatorOptions, conditionalOperatorOptions, setCountOptions, conditionalCountOptions
 } from '../QueryConstants/constants'
 import QueryHelp from '../QueryHelp'
@@ -32,14 +32,23 @@ export default class SELECT extends React.Component {
             errors.push('Syntax Error: Invalid query type. This section is reserved for SELECT queries only.')
         }
         if (this.state.fields.length > 1 && this.state.fields.indexOf('*') > -1) {
-            errors.push('Formatting Error: If ALL is selected, no other fields should be selected.')
+            errors.push('Query Error: If ALL is selected, no other fields should be selected.')
         }
         if (this.state.fields.length === 0) {
-            errors.push('Syntax Error: A field must be selected.')
+            errors.push('Query Error: A field must be selected.')
         }
         if (this.state.db === '') {
-            errors.push('Syntax Error: A database table must be selected.')
+            errors.push('Query Error: A database table must be selected.')
         }
+        if (this.state.fields.indexOf('*') < 0) {
+          this.state.conditionals.forEach((condition, index) => {
+            if (this.state.fields.indexOf(condition.field) < 0) {
+              errors.push(`Query Error: Attempting have condition in field not queried for. Field ${condition.field} is missing from query.`)
+            }
+          })
+        }
+
+
         // if () {
         //     errors.push()
         // }
@@ -67,7 +76,7 @@ export default class SELECT extends React.Component {
 
             for (let i = 0; i < this.state.fields.length; i++) {
                 command += this.state.fields[i]
-    
+
                 if (i !== this.state.fields.length - 1) {
                     command += ','
                 }
@@ -75,19 +84,19 @@ export default class SELECT extends React.Component {
                     command += ' '
                 }
             }
-    
+
             command += 'FROM ' + this.state.db
-    
+
             if (this.state.conditionalCount > 0) {
                 command += ' WHERE '
-    
+
                 let conditionalString = ''
-    
+
                 this.state.conditionals.forEach((conditional, index) => {
                     conditionalString += conditional.field + ' '
                     conditionalString += conditional.operator + ' '
                     conditionalString += '\'' + conditional.searchTerms + '\''
-    
+
                     if (index === this.state.conditionalCount - 1) {
                         conditionalString += ';'
                     }
@@ -95,12 +104,12 @@ export default class SELECT extends React.Component {
                         conditionalString += ' AND '
                     }
                 })
-    
+
                 command += conditionalString
             }
-    
+
             else command += ';'
-    
+
             // console.log(command)
             this.props.closeModal()
             this.props.clearQuery()
@@ -249,13 +258,13 @@ export default class SELECT extends React.Component {
                         <Message>
                             <p>
                                 This section is for SELECT queries. SELECT queries are those that simply fetch information
-                                from the database. If you have terminal/CLI experience using MySQL commands, there is an 
+                                from the database. If you have terminal/CLI experience using MySQL commands, there is an
                                 advanced query option available if checked. Click the Help button for more detailed information
                             </p>
                         </Message>
                         <Form onSubmit={this.handleAdvancedSubmit}>
                             <Form.Group>
-                                <Form.Field 
+                                <Form.Field
                                     control={Checkbox}
                                     label='Advanced SELECT Query'
                                     name='basic_query'
@@ -263,7 +272,7 @@ export default class SELECT extends React.Component {
                                     onChange={this.handleAdvancedCheck}
                                     width={3}
                                 />
-                                <Form.Field 
+                                <Form.Field
                                     control={Input}
                                     name='advanced_query'
                                     value={advanced_query}
@@ -335,14 +344,14 @@ export default class SELECT extends React.Component {
                             </Form.Group>
                             {conditionals}
                             <Form.Group>
-                                <QueryHelp queryType='SELECT'/> 
+                                <QueryHelp queryType='SELECT'/>
                                 <Form.Field
                                     id='form-button-control-ta-submit'
                                     control={Button}
                                     content='Submit'
                                     disabled={!this.state.basic_query}
                                 />
-                                
+
                             </Form.Group>
                             {this.state.loading ? 'Loading... This may take some time, please wait.' : null}
                         </Form>

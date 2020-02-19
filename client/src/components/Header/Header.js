@@ -26,8 +26,8 @@ export default class Header extends Component {
             mobile = true
         }
 
-        this.state = { 
-            activeItem: 'home', 
+        this.state = {
+            activeItem: 'home',
             user: user, activeIndex: null,
             mobileView: mobile
         }
@@ -37,12 +37,12 @@ export default class Header extends Component {
         const { index } = titleProps
         const { activeIndex } = this.state
         const newIndex = activeIndex === index ? -1 : index
-    
+
         this.setState({ activeIndex: newIndex })
     }
 
 
-    handleItemClick = (e, { name }) => { 
+    handleItemClick = (e, { name }) => {
         this.setState({ activeItem: name })
     }
 
@@ -82,21 +82,7 @@ export default class Header extends Component {
                 <Menu.Menu position='right'>
                     <Menu.Item style={{width: '15rem'}}></Menu.Item>
                     <Menu.Item>
-                        {/* <Input icon='search' placeholder='Search...' /> */}
-                        <DBSearch 
-                            updateFilteredText={this.props.updateFilteredText} 
-                            disabled={this.props.data === undefined || this.props.data.length === 0 || this.props.filterCategory === ''}
-                            queryLength={this.props.data === undefined ? 0 : this.props.data.length}
-                        />
-                    </Menu.Item>
-                    <Menu.Item>
-                        <SearchFilter 
-                            updateFilterCategory={this.props.updateFilteredCategory} 
-                            disabled={this.props.data === undefined || this.props.data.length === 0} 
-                        />
-                    </Menu.Item>
-                    <Menu.Item>
-                        <QueryGrid 
+                        <QueryGrid
                             runQuery={this.props.runQuery.bind(this)}
                             clearQuery={this.props.clearQuery}
                             countQueryCount={this.props.countQueryCount}
@@ -111,14 +97,14 @@ export default class Header extends Component {
                         <SortCollection updateSortBy={this.props.updateSortBy.bind(this)} disabled={this.props.data === undefined || this.props.data.length === 0} />
                     </Menu.Item> */}
                     <Menu.Item>
-                        <InsertDocument 
-                            isValidCSV={this.props.isValidCSV.bind(this)} 
-                            errorMessages={this.props.errorMessages} 
+                        <InsertDocument
+                            isValidCSV={this.props.isValidCSV.bind(this)}
+                            errorMessages={this.props.errorMessages}
                             updateInsertErrorMessage={this.props.updateInsertErrorMessage}
                         />
                     </Menu.Item>
                     <Menu.Item>
-                        <DownloadDB 
+                        <DownloadDB
                             data={this.props.data}
                             displayed={this.props.displayed}
                             disabled={this.props.data === undefined || this.props.data.length === 0}
@@ -141,10 +127,10 @@ export default class Header extends Component {
                                     <Logout logout={this.props.logout.bind(this)} />
                                 </div>
                             </Dropdown.Menu>
-                        </Dropdown> 
+                        </Dropdown>
                     </Menu.Item>
                 </Menu.Menu>
-            </Menu>            
+            </Menu>
         )
     }
 
@@ -159,8 +145,8 @@ export default class Header extends Component {
                         index={0}
                         onClick={this.handleClick}
                     />
-                    <Accordion.Content 
-                        active={activeIndex === 0} 
+                    <Accordion.Content
+                        active={activeIndex === 0}
                         content={
                             <div>
                                 <Menu.Item as={ Link }
@@ -187,21 +173,21 @@ export default class Header extends Component {
                         index={1}
                         onClick={this.handleClick}
                     />
-                    <Accordion.Content 
-                        active={activeIndex === 1} 
+                    <Accordion.Content
+                        active={activeIndex === 1}
                         content={
                             <React.Fragment>
                                 <div style={{padding: '1rem'}}>
-                                    <DBSearch 
-                                        updateFilteredText={this.props.updateFilteredText} 
+                                    <DBSearch
+                                        updateFilteredText={this.props.updateFilteredText}
                                         disabled={this.props.data === undefined || this.props.data.length === 0 || this.props.filterCategory === ''}
                                         queryLength={this.props.data === undefined ? 0 : this.props.data.length}
                                     />
                                 </div>
                                 <div style={{padding: '1rem'}}>
-                                    <SearchFilter 
-                                        updateFilterCategory={this.props.updateFilteredCategory} 
-                                        disabled={this.props.data === undefined || this.props.data.length === 0} 
+                                    <SearchFilter
+                                        updateFilterCategory={this.props.updateFilteredCategory}
+                                        disabled={this.props.data === undefined || this.props.data.length === 0}
                                     />
                                 </div>
                             </React.Fragment>
@@ -216,12 +202,12 @@ export default class Header extends Component {
                         index={2}
                         onClick={this.handleClick}
                     />
-                    <Accordion.Content 
-                        active={activeIndex === 2} 
+                    <Accordion.Content
+                        active={activeIndex === 2}
                         content={
                             <Button.Group>
                                 <div style={{padding: '1rem'}}>
-                                    <QueryGrid 
+                                    <QueryGrid
                                         runQuery={this.props.runQuery.bind(this)}
                                         clearQuery={this.props.clearQuery}
                                         countQueryCount={this.props.countQueryCount}
@@ -233,14 +219,14 @@ export default class Header extends Component {
                                     />
                                 </div>
                                 <div style={{padding: '1rem'}}>
-                                    <InsertDocument 
-                                        isValidCSV={this.props.isValidCSV.bind(this)} 
-                                        errorMessages={this.props.errorMessages} 
+                                    <InsertDocument
+                                        isValidCSV={this.props.isValidCSV.bind(this)}
+                                        errorMessages={this.props.errorMessages}
                                         updateInsertErrorMessage={this.props.updateInsertErrorMessage}
                                     />
                                 </div>
                                 <div style={{padding: '1rem'}}>
-                                    <DownloadDB 
+                                    <DownloadDB
                                         data={this.props.data}
                                         displayed={this.props.displayed}
                                         disabled={this.props.data === undefined || this.props.data.length === 0}
@@ -268,7 +254,7 @@ export default class Header extends Component {
                                 <Logout logout={this.props.logout.bind(this)} />
                             </div>
                         </Dropdown.Menu>
-                    </Dropdown> 
+                    </Dropdown>
                 </Menu.Item>
             </Accordion>
         )

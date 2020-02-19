@@ -43,31 +43,38 @@ class QueryGrid extends React.Component {
 
                     <Modal.Header>Query Selector</Modal.Header>
                     <Modal.Content scrolling style={{minHeight: '80vh'}}>
-                        <SELECT 
-                            dbSelection={dbSelection} 
-                            runQuery={this.props.runQuery} 
-                            clearQuery={this.props.clearQuery} 
-                            closeModal={this.closeModal} 
-                            errorMessages={this.props.errorMessages} 
+                        <SELECT
+                            dbSelection={dbSelection}
+                            runQuery={this.props.runQuery}
+                            clearQuery={this.props.clearQuery}
+                            closeModal={this.closeModal}
+                            errorMessages={this.props.errorMessages}
                             updateSelectErrorMessage={this.props.updateSelectErrorMessage}
                         />
                         <Divider />
-                        <COUNT 
-                            dbSelection={dbSelection} 
-                            runQuery={this.props.runQuery} 
-                            countQueryCount={this.props.countQueryCount} 
+                        <COUNT
+                            dbSelection={dbSelection}
+                            runQuery={this.props.runQuery}
+                            countQueryCount={this.props.countQueryCount}
                             updateCountQueryCount={this.props.updateCountQueryCount}
-                            errorMessages={this.props.errorMessages} 
+                            errorMessages={this.props.errorMessages}
                             updateCountErrorMessage={this.props.updateCountErrorMessage}
                         />
                         <Divider />
-                        <UPDATE dbSelection={dbSelection} runQuery={this.props.runQuery} clearQuery={this.props.clearQuery} closeModal={this.closeModal} />
+                        <UPDATE
+                          dbSelection={dbSelection}
+                          runQuery={this.props.runQuery}
+                          clearQuery={this.props.clearQuery}
+                          closeModal={this.closeModal}
+                          errorMessages={this.props.errorMessages}
+                          updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
+                        />
                         <Divider />
                     </Modal.Content>
                 </Modal>
-            
+
         )
-        
+
     }
 }
 

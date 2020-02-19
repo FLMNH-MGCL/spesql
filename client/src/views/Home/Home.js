@@ -6,7 +6,7 @@ import './Home.css'
 import CollectionList from '../../components/CollectionList/CollectionList'
 import SpecimenView from '../../components/SpecimenView/SpecimenView'
 import Header from '../../components/Header/Header'
-import { Grid, Loader } from 'semantic-ui-react'
+import { Grid, Loader, Segment, Divider, Input } from 'semantic-ui-react'
 import { getQueryHeaders } from '../../functions/helpers'
 import { checkHeaders } from '../../functions/queryChecks'
 import { runSelectQuery, runCountQuery, runUpdateQuery, runDeleteQuery } from '../../functions/queries'
@@ -190,10 +190,12 @@ class Home extends React.Component {
                 <Grid columns='equal' padded stackable>
                     <Grid.Column width={11}>
                     <Loader content='Loading' active disabled={!this.props.loading} />
+                      <Segment>
                         <CollectionList
                             {...this.props}
                             runQuery={this.runQuery.bind(this)}
                         />
+                      </Segment>
                     </Grid.Column>
                     <Grid.Column>
                         <SpecimenView data={this.props.displayed} selectedSpecimen={this.props.selectedSpecimen} currentQuery={this.props.current_query} runQuery={this.runQuery.bind(this)} user={this.props.user} />

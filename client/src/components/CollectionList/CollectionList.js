@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Loader, Icon } from 'semantic-ui-react'
+import { Table, Button, Loader, Icon, Divider, Input } from 'semantic-ui-react'
 import QueryHelp from '../Query/QueryHelp'
 // import _ from 'lodash'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -11,7 +11,6 @@ function getCells(specimen, headers) {
     if (headers === [] || headers === undefined || specimen === undefined) {
         return []
     }
-    console.log(headers)
     let ret = headers.map((header, index) => {
         // console.log(header)
         switch (header.toLowerCase()) {
@@ -61,11 +60,7 @@ function getCells(specimen, headers) {
                 return null
         }
     })
-
-console.log(ret)
     return ret
-
-
 }
 
 // ({data, filteredText, filterCategory, selectedUpdate, sortBy, clearQuery, current_query, query_headers})
@@ -354,8 +349,6 @@ export default class CollectionList extends React.Component {
         return collectionList
     }
 
-
-
     render() {
         // console.log(this.state)
 
@@ -375,7 +368,7 @@ export default class CollectionList extends React.Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  <div id="scrollableDiv" style={{ height: "75vh", overflow: "auto" }}>
+                  <div id="scrollableDiv" style={{ height: "70vh", overflow: "auto" }}>
                     <InfiniteScroll
                       dataLength={this.state.display.length}
                       next={this.fetchMoreData}
@@ -398,6 +391,11 @@ export default class CollectionList extends React.Component {
                 </Table.Footer>
               </Table>
               <div className='query-info'>
+              <Input
+                label='Search'
+                placeholder='enter search terms'
+                icon='search'
+              />
                 <Button
                   negative
                   onClick={() => {
@@ -408,6 +406,7 @@ export default class CollectionList extends React.Component {
                     })
                   }}
                   disabled={this.props.current_query === '' ? true : false}
+                  style={{marginLeft: '1rem'}}
                 >
                   Clear Query
                 </Button>

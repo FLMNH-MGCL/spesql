@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { Button, Grid, Form, Input, Select, Checkbox, Message, Header } from 'semantic-ui-react'
+import ErrorTerminal from '../QueryTerminals/ErrorTerminal'
 import { updateQueryOption, headerSelection, setOperatorOptions, setCountOptions } from '../QueryConstants/constants'
 import QueryHelp from '../QueryHelp'
 
@@ -18,7 +19,7 @@ export default class UPDATE extends React.Component {
         conditionals: [{
             field: '', operator: '', searchTerms: ''
         }],
-        fields_search: [],
+        loading: false,
     }
 
     handleSubmit = () => {
@@ -55,7 +56,7 @@ export default class UPDATE extends React.Component {
         // console.log(command)
         this.props.closeModal()
         this.props.clearQuery()
-        this.props.runQuery(command) 
+        this.props.runQuery(command)
     }
 
     handleAdvancedSubmit = () => {
@@ -63,6 +64,28 @@ export default class UPDATE extends React.Component {
         // this.props.clearQuery()
         // this.props.runQuery(this.state.advanced_query)
         // this.props.closeModal()
+        this.setState({loading: true})
+        let errors = []
+        let preCheck = this.checkAdvancedPreSubmit()
+        if (preCheck !== undefined) {
+          // alert('its working')
+          errors.push(preCheck.content)
+          this.props.updateUpdateErrorMessage(errors)
+        }
+        else {
+          // alert('yup, its working')
+          this.props.runQuery(this.state.advanced_query)
+
+        }
+
+        setTimeout(() => {
+            if (!this.props.loading && !this.props.errorMessages.updateError) {
+                this.props.closeModal()
+            }
+            else {
+                this.setState({loading: false})
+            }
+        }, 500)
     }
 
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -248,26 +271,41 @@ export default class UPDATE extends React.Component {
 
     checkAdvancedPreSubmit = () => {
         // check if its prefixed correctly
-        if (!this.state.advanced_query.toUpperCase().startsWith('UPDATE') && this.state.advanced_query !== '' && !this.state.basic_query) {
+        if (!this.state.advanced_query.toUpperCase().startsWith('UPDATE') && !this.state.basic_query) {
             return {
                 content: 'This query must be an UPDATE query.',
             }
         }
 
+        // check punctuation
+        if (this.state.advanced_query.includes('\'') && !this.state.basic_query) {
+            return {
+                content: 'Remove any \', ` or ; punctuation marks, as these will be handled for you.'
+            }
+        }
+
         // check for conditionals present
-        else if (!this.state.advanced_query.toUpperCase().includes('WHERE') && this.state.advanced_query !== '' && !this.state.basic_query) {
+        if (!this.state.advanced_query.toUpperCase().includes('WHERE') && this.state.advanced_query !== '' && !this.state.basic_query) {
             return {
                 content: 'You must include conditionals, only root can exclude them.'
             }
         }
 
-        // check punctuation
-        if (this.state.advanced_query.includes('\'') || this.state.advanced_query.endsWith(';') && !this.state.basic_query) {
-            return {
-                content: 'Remove any \', ` or ; punctuation marks, as these will be handled for you.'
-            }
+        if (this.state.advanced_query.endsWith(';') && !this.state.basic_query) {
+          return {
+              content: 'Remove any \', ` or ; punctuation marks, as these will be handled for you.'
+          }
         }
+
+
     }
+
+    renderErrorTerminal = () => (
+        <React.Fragment>
+            <ErrorTerminal errorLog={this.props.errorMessages.updateError} />
+            <Button onClick={() => {this.props.updateUpdateErrorMessage(null); this.setState({loading: false})}} color='red' style={{float: 'right'}}>Clear</Button>
+        </React.Fragment>
+    )
 
     render() {
         const {
@@ -290,14 +328,14 @@ export default class UPDATE extends React.Component {
                         <Message>
                             <p>
                                 This section is for UPDATE queries. UPDATE queries are those that update values of entries
-                                within the database. If you have terminal/CLI experience using MySQL commands, there is an 
+                                within the database. If you have terminal/CLI experience using MySQL commands, there is an
                                 advanced query option available if checked. Please check your permissions with the Database Manager,
                                 as this query will fail if you are not authorized to make it. Click the Help button for more detailed information
                             </p>
                         </Message>
                         <Form onSubmit={this.handleAdvancedSubmit}>
                             <Form.Group>
-                                <Form.Field 
+                                <Form.Field
                                     control={Checkbox}
                                     label='Advanced UPDATE Query'
                                     name='basic_query'
@@ -305,7 +343,7 @@ export default class UPDATE extends React.Component {
                                     onChange={this.handleAdvancedCheck}
                                     width={3}
                                 />
-                                <Form.Field 
+                                <Form.Field
                                     control={Input}
                                     name='advanced_query'
                                     value={advanced_query}
@@ -375,7 +413,7 @@ export default class UPDATE extends React.Component {
                             </Form.Group>
                             {conditionals}
                             <Form.Group className='float-right'>
-                                <QueryHelp queryType='UPDATE'/> 
+                                <QueryHelp queryType='UPDATE'/>
                                 <Form.Field
                                     id='form-button-control-ta-submit'
                                     control={Button}
@@ -384,8 +422,11 @@ export default class UPDATE extends React.Component {
                                 />
                             </Form.Group>
                         </Form>
+
+                        {this.props.errorMessages.updateError ? this.renderErrorTerminal() : null}
+
                     </Grid.Column>
-                </Grid.Row>                    
+                </Grid.Row>
             </Grid>
         )
     }
