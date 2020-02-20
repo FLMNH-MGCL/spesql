@@ -1,5 +1,6 @@
 import React from 'react';
-import { Input, Popup } from 'semantic-ui-react'
+import { Input, Popup, Dropdown } from 'semantic-ui-react'
+import {headerSelection} from '../Query/QueryConstants/constants'
 
 class DBSearch extends React.Component {
 	handleChange = (e, { filteredText, value }) => {
@@ -26,7 +27,6 @@ class DBSearch extends React.Component {
 				disabled={popupMessage === ''}
 				trigger={
 						<Input
-							label='Search'
 							placeholder='enter search terms'
 							icon='search'
 							value={filteredText}

@@ -54,11 +54,51 @@ export const headerSelection = [
     // { key: '76', text: 'Lep', value: 'catalogNumber' },
     // { key: '77', text: 'Lep', value: 'catalogNumber' },
     // { key: '78', text: 'Lep', value: 'catalogNumber' },
+]
 
-
-
-
-
+export const filterOptions = [
+    {
+        key: 'Lep #',
+        text: 'Lep #',
+        value: 'Lep #',
+        label: { color: 'blue', empty: true, circular: true },
+    },
+    { key: '2', text: 'ALL', value: '*' },
+    { key: '43', text: 'Lep #', value: 'recordNumber' },
+    { key: '44', text: 'MGCL #', value: 'catalogNumber' },
+    { key: '14', text: 'Order', value: 'order_' },
+    { key: '13', text: 'Superfamily', value: 'superfamily' },
+    { key: '11', text: 'Family', value: 'family' },
+    { key: '12', text: 'Subfamily', value: 'subfamily' },
+    { key: '45', text: 'Tribe', value: 'tribe' },
+    { key: '3', text: 'Genus', value: 'genus' },
+    { key: '46', text: 'Subgenus', value: 'subgenus' },
+    { key: '10', text: 'Species', value: 'specificEpithet' },
+    { key: '47', text: 'Identification Qual.', value: 'identificationQualifier' },
+    { key: '48', text: 'Recorded By', value: 'recordedBy' },
+    { key: '49', text: 'Identified By', value: 'identifiedBy' },
+    { key: '50', text: 'Date Identified', value: 'dateIdentified' },
+    { key: '51', text: 'Sex', value: 'sex' },
+    { key: '52', text: 'Life Stage', value: 'lifeStage' },
+    { key: '53', text: 'Habitat', value: 'habitat' },
+    { key: '54', text: 'Occurrence Remarks', value: 'occurrenceRemarks' },
+    { key: '55', text: 'Country', value: 'country' },
+    { key: '56', text: 'Province', value: 'stateProvince' },
+    { key: '57', text: 'County', value: 'county' },
+    { key: '58', text: 'Municipality', value: 'municipality' },
+    { key: '59', text: 'Locality', value: 'locality' },
+    { key: '60', text: 'Elevation', value: 'verbatimElevation' },
+    { key: '61', text: 'Latitude', value: 'verbatimLatitude' },
+    { key: '62', text: 'Longitude', value: 'verbatimLongitude' },
+    { key: '63', text: 'Geodetic Datum', value: 'geodeticDatum' },
+    { key: '64', text: 'Coord. Uncertainty', value: 'coordinateUncertainty' },
+    { key: '65', text: 'Loan Info', value: 'loanInfo' },
+    { key: '66', text: 'Preparations', value: 'preparations' },
+    { key: '67', text: 'Freezer', value: 'freezer' },
+    { key: '68', text: 'Rack', value: 'rack' },
+    { key: '69', text: 'Box', value: 'box' },
+    { key: '70', text: 'TubSize', value: 'tubeSize' },
+    { key: '71', text: 'Collectors', value: 'collectors' },
 ]
 
 export const conditionalOperatorOptions = [

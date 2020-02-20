@@ -1,88 +1,103 @@
 import React from 'react'
-import { Dropdown, Popup } from 'semantic-ui-react'
-
-const tagOptions = [
-    {
-        key: 'Lep #',
-        text: 'Lep #',
-        value: 'Lep #',
-        label: { color: 'blue', empty: true, circular: true },
-    },
-    {
-        key: 'Superfamily',
-        text: 'Superfamily',
-        value: 'Superfamily',
-        label: { color: 'orange', empty: true, circular: true },
-    },
-    {
-        key: 'Family',
-        text: 'Family',
-        value: 'Family',
-        label: { color: 'yellow', empty: true, circular: true },
-    },
-    {
-        key: 'Genus',
-        text: 'Genus',
-        value: 'Genus',
-        label: { color: 'red', empty: true, circular: true },
-    },
-    {
-        key: 'Species',
-        text: 'Species',
-        value: 'Species',
-        label: { color: 'black', empty: true, circular: true },
-    },
-    {
-        key: 'Country',
-        text: 'Country',
-        value: 'Country',
-        label: { color: 'purple', empty: true, circular: true },
-    },
-    {
-        key: 'Collection Date',
-        text: 'Collection Date',
-        value: 'Collection Date',
-        label: { color: 'grey', empty: true, circular: true },
-    },
-    {
-        key: 'Rack #',
-        text: 'Rack #',
-        value: 'Rack #',
-        label: { color: 'violet', empty: true, circular: true },
-    }
-]
+import { Dropdown, Popup, Modal, Button, Checkbox, Form, Container, Segment } from 'semantic-ui-react'
+import {headerSelection} from '../Query/QueryConstants/constants'
 
 class SearchFilter extends React.Component {
-    state = {filterCategory: this.props.filterCategory}
+    state = {filterCategory: this.props.filterCategory, open: false}
+
+    show = () => {
+      this.setState({open: true})
+    }
+
+    close = () => {
+      this.setState({open: false})
+    }
 
     handleChange = (e, {value}) => {
         //this.setState({ filterCategory: value})
-        console.log(e.currentTarget.textContent)
-        this.props.updateFilterCategory(value)
+        // console.log(e.currentTarget.textContent)
+        if (value !== this.state.filterCategory) {
+          this.props.updateFilteredCategory(value)
+          this.setState({filterCategory: value})
+          this.close()
+        }
+        else return
+    }
+
+    renderChecks = () => {
+      let checkRow = []
+      console.log(headerSelection.length)
+      let checkGrid = headerSelection.map((header, index) => {
+        console.log(`${header.value} @ ${index}`)
+        console.log(checkRow)
+        if (index === headerSelection.length - 1 || (index + 1) % 3 === 0) {
+          checkRow.push((
+            <Form.Field>
+              <Checkbox
+                radio
+                label={header.value === '*' ? 'all' : header.value}
+                name='checkboxRadioGroup'
+                value={header.value}
+                checked={this.state.filterCategory === header.value}
+                onChange={this.handleChange}
+              />
+            </Form.Field>
+          ))
+
+          let tempRow = checkRow
+          checkRow = []
+          return (
+            <Form.Group widths='equal'>
+              {tempRow}
+            </Form.Group>
+          )
+        }
+        else {
+          checkRow.push((
+            <Form.Field>
+              <Checkbox
+                radio
+                label={header.value === '*' ? 'all' : header.value}
+                name='checkboxRadioGroup'
+                value={header.value}
+                checked={this.state.filterCategory === header.value}
+                onChange={this.handleChange}
+              />
+            </Form.Field>
+          ))
+        }
+      })
+
+      return checkGrid
     }
 
     render() {
+      // console.log(this.props.filterCategory)
         const { filterCategory } = this.state
-        return(
-            <Popup
-                content='Change source header for search'
-                trigger={
-                    <Dropdown
-                        text='Filter'
+        return (
+                  <Modal
+                    closeIcon
+                    open={this.state.open}
+                    onClose={() => this.close()}
+                    trigger={
+                      <Button
+                        label={this.props.filterCategory === '*' ? null : this.props.filterCategory}
                         icon='filter'
-                        floating
-                        labeled
-                        button
-                        className='icon'
-                        value={filterCategory}
-                        options={tagOptions}
-                        onChange={this.handleChange}
-                        disabled={this.props.disabled}
-                    >
-                    </Dropdown> 
-                }
-            />
-
+                        onClick={() => this.show()}
+                      />
+                    }
+                  >
+                    <Modal.Header>Filter Selection</Modal.Header>
+                    <Modal.Content>
+                    <Container text>
+                    <Segment>
+                      <Form style={{paddingTop: '1rem'}}>
+                        {this.renderChecks()}
+                      </Form>
+                      </Segment>
+                      </Container>
+                    </Modal.Content>
+                  </Modal>
         )
     }
 }

@@ -4,6 +4,7 @@ import QueryHelp from '../Query/QueryHelp'
 // import _ from 'lodash'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import DBSearch from '../Search/DBSearch'
+import SearchFilter from '../Search/SearchFilter'
 import './CollectionList.css'
 
 //import SpecimenCard from './SpecimenCard'
@@ -283,7 +284,12 @@ export default class CollectionList extends React.Component {
         try {
             collectionList = collectionList
             .filter(specimen => {
-              return JSON.stringify(specimen).toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+              if (this.props.filterCategory === '*') {
+                return JSON.stringify(specimen).toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+              }
+              else {
+                return specimen[this.props.filterCategory].toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+              }
             })
             .map((specimen, index) => {
                 let cells = getCells(specimen, this.props.query_headers)
@@ -344,6 +350,7 @@ export default class CollectionList extends React.Component {
                 </Table.Footer>
               </Table>
               <div className='query-info'>
+                <SearchFilter filterCategory={this.props.filterCategory} updateFilteredCategory={this.props.updateFilteredCategory} />
                 <DBSearch filteredText={this.props.filteredText} updateFilteredText={this.props.updateFilteredText} />
                 <Button
                   negative

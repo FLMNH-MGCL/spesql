@@ -35,12 +35,6 @@ require('./routes/shutdown.routes')(connection, app)
 
 app.listen(port, () => console.log(`Server now running on port ${port}!`));
 
-// const frontListener = express.init(3000, () => console.log('tracking client port')).on('close', () => {
-//     console.log('its closed wow')
-// }).on('end', () => {
-//     console.log('it ended wow')
-// })
-
 process.on('SIGTERM', () => {
     console.info('SIGTERM signal recieved...')
     console.log('Shutting down the server.')

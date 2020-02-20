@@ -650,11 +650,17 @@ export default class QueryHelp extends React.Component {
                               onClick={this.handleClick}
                             >
                               <Icon name='dropdown' />
-                              Common question 2
+                              I got an error returned from a query and now the app is unresponsive
                             </Accordion.Title>
                             <Accordion.Content active={activeIndex === 1}>
                               <p>
-                                Answer to question 2
+                                This depends on the type of error recieved, however there are some
+                                errors that are called 'fatal errors' that immediately terminate
+                                the server-side connection to the MySQL database. These are what I believe to
+                                be security implementations. For example, if you were to try and log in using invalid
+                                credentials, the connection to the server will be killed.
+                                I am currently working a way around this, however for now simply restart the application
+                                whenever this occurrs.
                               </p>
                             </Accordion.Content>
 
@@ -664,11 +670,70 @@ export default class QueryHelp extends React.Component {
                               onClick={this.handleClick}
                             >
                               <Icon name='dropdown' />
-                              Common question 3
+                              I didn't get an error returned from a query but now the app is unresponsive
                             </Accordion.Title>
                             <Accordion.Content active={activeIndex === 2}>
                               <p>
-                                Answer to question 3
+                                I'll go over the two most likely scenarios, however it is important
+                                to keep in mind that sometimes software will simply glitch and
+                                require a restart to resume functionality.
+                              </p>
+                              <p>
+                                Firstly, it is likely you queried an extensively large data set. If you were to
+                                query <i><b>SELECT * FROM table;</b></i> for example, on a
+                                table that contains over 100k specimen, the program will retrieve all
+                                100k to store in memory (even if it only loads X amount to
+                                the screen). The short explanation for this is to relieve some
+                                computation on the server side, and allow multiple users to interact with the
+                                server at the same time. Additionally, loading all data at once allows for
+                                extensive searching operations on the entire dataset, rather than only
+                                searching on what is currently loaded.
+                              </p>
+                              <p>
+                                Second, it is possible that you sent a large insert query. Insert queries can take a long time,
+                                especially when there are over 1000 rows of CSV data to insert. As such, I would recommend
+                                entered only in 500-1000 row increments. This way the program does not freeze up for too long,
+                                and you don't need to worry about the upload status.
+                              </p>
+                            </Accordion.Content>
+
+                            <Accordion.Title
+                              active={activeIndex === 3}
+                              index={3}
+                              onClick={this.handleClick}
+                            >
+                              <Icon name='dropdown' />
+                              I keep getting an Access denied error?
+                            </Accordion.Title>
+                            <Accordion.Content active={activeIndex === 3}>
+                              <p>
+                                Whenever a user is created in the database, they
+                                are created given a set of permissions. For example,
+                                if the maintainer so desired, they could restrict the
+                                user to 10 select queries a week, or 1 insert a week, etc.
+                                It is possible that you do not have the permissions for what you
+                                are trying to do with the program. If you are still unable to
+                                complete the action after a restart of the program, contact the
+                                database maintainer to check your permissions.
+                              </p>
+                            </Accordion.Content>
+
+                            <Accordion.Title
+                              active={activeIndex === 4}
+                              index={4}
+                              onClick={this.handleClick}
+                            >
+                              <Icon name='dropdown' />
+                              I keep getting an Error code ECONNREFUSED?
+                            </Accordion.Title>
+                            <Accordion.Content active={activeIndex === 4}>
+                              <p>
+                                The most likely scenario is your VPN isn't connected,
+                                so be sure to check that connnection. Another possibility could
+                                be that the connection object was improperly configured in the
+                                server.js file. Refer to the README file on Github and the
+                                connection infosheet you recieved upon requesting a database
+                                user account.
                               </p>
                             </Accordion.Content>
                           </Accordion>

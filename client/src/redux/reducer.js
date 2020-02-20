@@ -28,7 +28,7 @@ const initialState = {
     authenticated: authenticated,
     user: 'root',
     filteredText: '',
-    filterCategory: '',
+    filterCategory: '*',
     selectedSpecimen: undefined,
     data: [],
     displayed: [],
@@ -66,7 +66,7 @@ export default function reducer(state = initialState, action) {
             newState.current_query = action.current_query
             sessionStorage.setItem('current_query', action.current_query)
             return newState
-        
+
         case 'CLEAR_CURRENT_QUERY':
             newState = {
                 authenticated: state.authenticated,
@@ -148,7 +148,7 @@ export default function reducer(state = initialState, action) {
         case 'LOGOUT':
             newState.authenticated = false
             return newState
-        
+
         default:
             return newState
     }
