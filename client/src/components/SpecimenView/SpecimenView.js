@@ -151,7 +151,7 @@ class SpecimenView extends React.Component {
                     <Grid.Column>
                         {specimenImage}
                     </Grid.Column>
-                    <Grid.Column style={{maxHeight: '85vh', overflowY: 'scroll'}}>
+                    <Grid.Column style={{maxHeight: '86vh', overflowY: 'scroll'}}>
                         {list}
                     </Grid.Column>
                 </Grid>
@@ -195,9 +195,9 @@ class SpecimenView extends React.Component {
                     </div>
                 )
             }
-    
+
             else {
-                return (            
+                return (
                     <React.Fragment>
                         {this.renderView(selectedSpecimen)}
                     </React.Fragment>

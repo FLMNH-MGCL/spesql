@@ -3,6 +3,7 @@ import { Table, Button, Loader, Icon, Divider, Input } from 'semantic-ui-react'
 import QueryHelp from '../Query/QueryHelp'
 // import _ from 'lodash'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import DBSearch from '../Search/DBSearch'
 import './CollectionList.css'
 
 //import SpecimenCard from './SpecimenCard'
@@ -282,55 +283,7 @@ export default class CollectionList extends React.Component {
         try {
             collectionList = collectionList
             .filter(specimen => {
-                switch(this.props.filterCategory) {
-                    case 'Lep #':
-                        if (specimen.recordNumber) {
-                            return specimen.recordNumber.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                        }
-                        else return false
-
-                    case 'Superfamily':
-                        if (specimen.superfamily) {
-                            return specimen.superfamily.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                        }
-                        else return false
-
-                    case'Family':
-                        if (specimen.family) {
-                            return specimen.family.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                        }
-                        else return false
-
-                    case'Genus':
-                        if(specimen.genus || specimen.genus === '') {
-                            return specimen.genus.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                        }
-                        else return false
-
-                    case'Species':
-                        if (specimen.species || specimen.species === '') {
-                            return specimen.species.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                        }
-                        else return false
-
-                    case 'Country':
-                        if (specimen.country) {
-                            return specimen.country.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                        }
-                        else return false
-
-                    case 'Collection Date':
-                        if(specimen.dateIdentified) {
-                            return specimen.dateIdentified.toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
-                        }
-                        else return false
-
-                    case '':
-                        return true
-
-                    default:
-                        return false
-                }
+              return JSON.stringify(specimen).toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
             })
             .map((specimen, index) => {
                 let cells = getCells(specimen, this.props.query_headers)
@@ -374,7 +327,7 @@ export default class CollectionList extends React.Component {
                       next={this.fetchMoreData}
                       hasMore={this.state.hasMore}
                       scrollableTarget='scrollableDiv'
-                      loader={<Loader active style={{marginTop: '30vh'}} content='Loading' className='loader-style'/>}
+                      loader={<Loader active style={{marginTop: '22vh'}} content='Loading' className='loader-style'/>}
                     >
                       {this.state.display.map((row, index) => {
                         return collectionList[index]
@@ -391,11 +344,7 @@ export default class CollectionList extends React.Component {
                 </Table.Footer>
               </Table>
               <div className='query-info'>
-              <Input
-                label='Search'
-                placeholder='enter search terms'
-                icon='search'
-              />
+                <DBSearch filteredText={this.props.filteredText} updateFilteredText={this.props.updateFilteredText} />
                 <Button
                   negative
                   onClick={() => {
@@ -425,6 +374,7 @@ export default class CollectionList extends React.Component {
                   <Icon name='refresh'  />
                 </Button>
                 <div className='query-text'><h4>Query Size:</h4><p>{this.props.data.length}</p></div>
+                <div className='query-text'><h4>Filtered Size:</h4><p>{this.props.filteredText !== '' ? collectionList.length : this.props.data.length}</p></div>
                 <div className='query-text'><h4>Current Loaded:</h4><p>{this.props.data.length === 0 ? 0 : this.state.display.length}</p></div>
                 <div style={{float: 'right'}}><QueryHelp queryType='LIST_HELP' /></div>
             </div>

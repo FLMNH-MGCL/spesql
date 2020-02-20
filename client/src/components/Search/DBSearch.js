@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Popup } from 'semantic-ui-react'
+import { Input, Popup } from 'semantic-ui-react'
 
 class DBSearch extends React.Component {
 	handleChange = (e, { filteredText, value }) => {
@@ -15,33 +15,28 @@ class DBSearch extends React.Component {
 			if (this.props.queryLength === 0) {
 				popupMessage = 'Make a query to be able to search'
 			}
-			else {
-				popupMessage = 'Select a filter category to search through'
-			}
 		}
 		else {
 			popupMessage = ''
 		}
-		
+
 		return (
 			<Popup
 				content={popupMessage}
 				disabled={popupMessage === ''}
 				trigger={
-					<Form>
-						<Form.Input 
-							type="text"
-							icon='search' 
-							placeholder='Search...' 
+						<Input
+							label='Search'
+							placeholder='enter search terms'
+							icon='search'
 							value={filteredText}
 							onChange={this.handleChange}
 							disabled={this.props.disabled}
 						/>
-					</Form>
 				}
 			/>
 
-		);
+		)
 	}
 }
 export default DBSearch;

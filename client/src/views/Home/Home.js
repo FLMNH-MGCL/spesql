@@ -197,8 +197,16 @@ class Home extends React.Component {
                         />
                       </Segment>
                     </Grid.Column>
-                    <Grid.Column>
-                        <SpecimenView data={this.props.displayed} selectedSpecimen={this.props.selectedSpecimen} currentQuery={this.props.current_query} runQuery={this.runQuery.bind(this)} user={this.props.user} />
+                    <Grid.Column style={{marginTop: '1rem'}}>
+                      <Segment>
+                        <SpecimenView
+                          data={this.props.displayed}
+                          selectedSpecimen={this.props.selectedSpecimen}
+                          currentQuery={this.props.current_query}
+                          runQuery={this.runQuery.bind(this)}
+                          user={this.props.user}
+                        />
+                      </Segment>
                     </Grid.Column>
                 </Grid>
             </div>
