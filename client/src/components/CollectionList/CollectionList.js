@@ -285,7 +285,9 @@ export default class CollectionList extends React.Component {
             collectionList = collectionList
             .filter(specimen => {
               if (this.props.filterCategory === '*') {
-                return JSON.stringify(specimen).toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
+                let tempSpecimen = {...specimen}
+                tempSpecimen.modifiedInfo = ''
+                return JSON.stringify(tempSpecimen).toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
               }
               else {
                 return specimen[this.props.filterCategory].toLowerCase().indexOf(this.props.filteredText.toLowerCase()) >= 0
@@ -350,8 +352,8 @@ export default class CollectionList extends React.Component {
                 </Table.Footer>
               </Table>
               <div className='query-info'>
-                <SearchFilter filterCategory={this.props.filterCategory} updateFilteredCategory={this.props.updateFilteredCategory} />
-                <DBSearch filteredText={this.props.filteredText} updateFilteredText={this.props.updateFilteredText} />
+                <SearchFilter filterCategory={this.props.filterCategory} updateFilteredCategory={this.props.updateFilteredCategory} disabled={this.props.data.length === 0} />
+                <DBSearch filteredText={this.props.filteredText} updateFilteredText={this.props.updateFilteredText} disabled={this.props.data.length === 0} />
                 <Button
                   negative
                   onClick={() => {

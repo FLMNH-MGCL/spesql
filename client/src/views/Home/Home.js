@@ -144,8 +144,11 @@ class Home extends React.Component {
                 console.log(query)
                 let updateData = await runUpdateQuery(query)
 
+                console.log(updateData)
+
                 // failed
-                if (!updateData.success) {
+                if (!updateData.data.success) {
+                  console.log('failed')
                   console.log(updateData.data)
                   let updateError = [`SQL ERROR: Code: ${updateData.data.code}, Message: ${updateData.data.sqlMessage}`]
                   this.props.updateUpdateErrorMessage(updateError)

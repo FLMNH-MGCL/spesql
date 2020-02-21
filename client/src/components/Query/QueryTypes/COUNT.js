@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { Button, Grid, Form, Input, Select, Checkbox, Message, Header } from 'semantic-ui-react'
-import { 
+import {
     countQueryOption, headerSelection, setOperatorOptions, conditionalOperatorOptions, setCountOptions, conditionalCountOptions
 } from '../QueryConstants/constants'
 import CountTerminal from '../QueryTerminals/CountTerminal'
@@ -18,7 +18,7 @@ export default class COUNT extends React.Component {
         conditionalCount: 0,
         conditionals: [],
         waiting: true,
-        submitted: false, 
+        submitted: false,
         hasError: false
     }
 
@@ -26,26 +26,35 @@ export default class COUNT extends React.Component {
         let errors = []
 
         if (this.state.fields.length < 1) {
-            errors.push('SYNTAX ERROR: Must select a field.')
+            errors.push('Query Format Error: Must select a field.')
         }
 
         if (this.state.fields.indexOf('*') > -1 && this.state.fields.length > 1) {
-            errors.push('SYNTAX ERROR: If ALL is selected, no other fields should be selected.')
+            errors.push('Query Format Error: If ALL is selected, no other fields should be selected.')
         }
 
         if (this.state.db === '') {
-            errors.push('FORMAT ERROR: A database table must be selected.')
+            errors.push('Query Format Error: A database table must be selected.')
         }
 
         return errors
 
     }
 
+    checkFieldError = () => {
+      if (this.state.fields.length < 1) {
+        return {content: 'You must select a field.'}
+      }
+      else if (this.state.fields.length > 1 && this.state.fields.indexOf('*') > -1) {
+        return {content: 'If All is selected no other fields should be selected.'}
+      }
+    }
+
     advancedChecks = () => {
         let errors = []
 
         if (!this.state.advanced_query.toLowerCase().startsWith('select count')) {
-            errors.push('SYNTAX ERROR: Invalid query. See help button for more information.')
+            errors.push('Query Type Error: Invalid query. See help button for more information.')
         }
 
         return errors
@@ -99,7 +108,7 @@ export default class COUNT extends React.Component {
             else command += ';'
 
             // this.setState({submitted: true})
-            this.props.runQuery(command)            
+            this.props.runQuery(command)
         }
 
     }
@@ -182,6 +191,7 @@ export default class COUNT extends React.Component {
                     placeholder='FIELD'
                     search
                     name='field'
+                    error={this.state.conditionals[index].field === '' ? {content: 'You must select a UNIQUE conditional field.'} : false}
                     value={this.state.conditionals[index].field}
                     onChange={this.handleConditionalItemChange}
                     id={index}
@@ -193,6 +203,7 @@ export default class COUNT extends React.Component {
                     label='Operator'
                     placeholder='='
                     name='operator'
+                    error={this.state.conditionals[index].operator === '' ? {content: 'You must select an operator for the condition.'} : false}
                     value={this.state.conditionals[index].operator}
                     onChange={this.handleConditionalItemChange}
                     id={index}
@@ -204,6 +215,7 @@ export default class COUNT extends React.Component {
                     placeholder='Search Term(s)'
                     search
                     name='searchTerms'
+                    error={this.state.conditionals[index].searchTerms === '' ? {content: 'You must enter a value for the conditional.'} : false}
                     value={this.state.conditionals[index].searchTerms}
                     onChange={this.handleConditionalItemChange}
                     id={index}
@@ -227,6 +239,7 @@ export default class COUNT extends React.Component {
                         placeholder='COUNT'
                         search
                         name='query_action'
+                        error={this.state.query_action === '' ? {content: 'You must use a COUNT query here.'} : false}
                         value={query_action}
                         onChange={this.handleChange}
                         disabled={!this.state.basic_query}
@@ -240,6 +253,7 @@ export default class COUNT extends React.Component {
                         search
                         multiple
                         name='fields'
+                        error={this.checkFieldError()}
                         value={fields}
                         onChange={this.handleChange}
                         disabled={!this.state.basic_query}
@@ -247,10 +261,11 @@ export default class COUNT extends React.Component {
                     <Form.Field
                         control={Select}
                         options={this.props.dbSelection}
-                        label='Database'
-                        placeholder='Collection'
+                        label='Database Table'
+                        placeholder=''
                         search
                         name='db'
+                        error={this.state.db === '' ? {content: 'You must select a database table.'} : false}
                         value={db}
                         onChange={this.handleChange}
                         disabled={!this.state.basic_query}
@@ -269,14 +284,14 @@ export default class COUNT extends React.Component {
                 </Form.Group>
                 {conditionals}
                 <Form.Group className='float-right'>
-                    <QueryHelp queryType='COUNT'/> 
+                    <QueryHelp queryType='COUNT'/>
                     <Form.Field
                         id='form-button-control-ta-submit'
                         control={Button}
                         content='Submit'
                         disabled={!this.state.basic_query}
                     />
-                    
+
                 </Form.Group>
             </Form>
         )
@@ -293,7 +308,7 @@ export default class COUNT extends React.Component {
                 } color='red' style={{float: 'right'}}>Clear</Button>
         </React.Fragment>
     )
-    
+
 
     render() {
         const {
@@ -311,16 +326,16 @@ export default class COUNT extends React.Component {
                         <Header as='h2' dividing style={{paddingTop: '2rem'}}>COUNT Query: </Header>
                         <Message>
                             <p>
-                                This section is for COUNT queries. COUNT queries are very similar to SELECT queries, and actually involve a  
-                                SELECT query directly. This query will count the number of entries in the database table 
-                                based on the SELECT query provided. If you have terminal/CLI experience using MySQL commands, there is an 
+                                This section is for COUNT queries. COUNT queries are very similar to SELECT queries, and actually involve a
+                                SELECT query directly. This query will count the number of entries in the database table
+                                based on the SELECT query provided. If you have terminal/CLI experience using MySQL commands, there is an
                                 advanced query option available if checked. Click the Help button for more detailed information
                             </p>
                         </Message>
 
                         <Form onSubmit={this.handleAdvancedSubmit}>
                             <Form.Group>
-                                <Form.Field 
+                                <Form.Field
                                     control={Checkbox}
                                     label='Advanced COUNT Query'
                                     name='basic_query'
@@ -328,17 +343,14 @@ export default class COUNT extends React.Component {
                                     onChange={this.handleAdvancedCheck}
                                     width={3}
                                 />
-                                <Form.Field 
+                                <Form.Field
                                     control={Input}
                                     name='advanced_query'
                                     value={advanced_query}
                                     onChange={this.handleChange}
                                     disabled={this.state.basic_query}
                                     width={10}
-                                    // error={{
-                                    //     content: 'This query must be a SELECT command.',
-                                    //     active: false,
-                                    // }}
+                                    error={(!this.state.advanced_query.toLowerCase().startsWith('select count') && !this.state.basic_query) ? {content: 'You must use proper COUNT query syntax (see Help for more information).'} : false }
                                 />
                                 <Form.Field
                                 id='form-button-control-ta-submit-adv'

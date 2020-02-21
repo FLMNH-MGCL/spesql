@@ -5,6 +5,8 @@ import ErrorTerminal from '../QueryTerminals/ErrorTerminal'
 import { updateQueryOption, headerSelection, setOperatorOptions, setCountOptions } from '../QueryConstants/constants'
 import QueryHelp from '../QueryHelp'
 
+const setOptions = headerSelection.slice(1, headerSelection.length)
+
 export default class UPDATE extends React.Component {
     state = {
         advanced_query: '',
@@ -17,18 +19,28 @@ export default class UPDATE extends React.Component {
         }],
         conditionalCount: 1,
         conditionals: [{
-            field: '', operator: '', searchTerms: ''
+            field: '', operator: '=', searchTerms: ''
         }],
         loading: false,
     }
 
     handleSubmit = () => {
+      console.log('made it')
+        this.setState({loading: true})
+        let errors = this.checkBasicPreSubmit()
+
+        if (errors.length !== 0) {
+          this.props.updateUpdateErrorMessage(errors)
+          this.setState({loading: false})
+          return
+        }
+
         let command = String(this.state.query_action + ' ' + this.state.db + ' SET ')
 
         let setString = ''
         this.state.sets.forEach((set, index) => {
-            setString += set.field + ' '
-            setString += set.operator + ' '
+            setString += set.field
+            setString += set.operator
             setString += '\'' + set.newValue + '\''
 
             if (index !== this.state.conditionalCount - 1) {
@@ -53,10 +65,19 @@ export default class UPDATE extends React.Component {
 
         command += ';'
 
-        // console.log(command)
-        this.props.closeModal()
-        this.props.clearQuery()
+        console.log(command)
+        // this.props.closeModal()
+        // this.props.clearQuery()
         this.props.runQuery(command)
+
+        setTimeout(() => {
+            if (!this.props.loading && !this.props.errorMessages.updateError) {
+                this.props.closeModal()
+            }
+            else {
+                this.setState({loading: false})
+            }
+        }, 1000)
     }
 
     handleAdvancedSubmit = () => {
@@ -66,14 +87,11 @@ export default class UPDATE extends React.Component {
         // this.props.closeModal()
         this.setState({loading: true})
         let errors = []
-        let preCheck = this.checkAdvancedPreSubmit()
-        if (preCheck !== undefined) {
-          // alert('its working')
-          errors.push(preCheck.content)
+        errors = this.checkAdvancedPostSubmit()
+        if (errors.length > 0) {
           this.props.updateUpdateErrorMessage(errors)
         }
         else {
-          // alert('yup, its working')
           this.props.runQuery(this.state.advanced_query)
 
         }
@@ -186,10 +204,11 @@ export default class UPDATE extends React.Component {
                 <Form.Group widths='equal'>
                 <Form.Field
                     control={Select}
-                    options={headerSelection}
+                    options={setOptions}
                     label='SET (field)'
                     placeholder='FIELD'
                     search
+                    error={(this.state.sets[index].field === '' && this.state.basic_query) ? {content: 'You must select a UNIQUE field to alter.'} : false}
                     name='field'
                     index={index}
                     value={this.state.sets[index].field}
@@ -213,6 +232,7 @@ export default class UPDATE extends React.Component {
                     label='New Value'
                     placeholder='value'
                     search
+                    error={(this.state.sets[index].newValue === '' && this.state.basic_query) ? {content: 'You must enter a new value to update the original.'} : false}
                     name='newValue'
                     value={this.state.sets[index].newValue}
                     onChange={this.handleSetItemChange}
@@ -235,6 +255,7 @@ export default class UPDATE extends React.Component {
                     label='Field'
                     placeholder='FIELD'
                     search
+                    error={(this.state.conditionals[index].field === '' && this.state.basic_query) ? {content: 'You must select a UNIQUE conditional field.'} : false}
                     name='field'
                     value={this.state.conditionals[index].field}
                     onChange={this.handleConditionalItemChange}
@@ -254,10 +275,11 @@ export default class UPDATE extends React.Component {
                 />
                 <Form.Field
                     control={Input}
-                    label='Search'
-                    placeholder='Search Term(s)'
+                    label='Conditional Value'
+                    placeholder='value'
                     search
                     name='searchTerms'
+                    error={(this.state.conditionals[index].searchTerms === '' && this.state.basic_query) ? {content: 'You must enter a value for the conditional.'} : false}
                     value={this.state.conditionals[index].searchTerms}
                     onChange={this.handleConditionalItemChange}
                     id={String(index)}
@@ -267,6 +289,38 @@ export default class UPDATE extends React.Component {
             )
         })
         return conditionals
+    }
+
+    checkAdvancedPostSubmit = () => {
+      let errors = []
+      // check if its empty
+      if (this.state.advanced_query === '' && !this.state.basic_query) {
+          errors.push('Query Format Error: Empty submission.')
+      }
+
+        // check if its prefixed correctly
+        if (!this.state.advanced_query.toUpperCase().startsWith('UPDATE') && !this.state.basic_query) {
+
+          errors.push('Query Type Error: This query must be an UPDATE query.')
+
+        }
+
+        // check punctuation
+        if (this.state.advanced_query.includes('\'') && !this.state.basic_query) {
+            errors.push('Query Format Error: Remove any \', ` or ; punctuation marks, as these will be handled for you.')
+        }
+
+        // check for conditionals present
+        if (!this.state.advanced_query.toUpperCase().includes('WHERE') && this.state.advanced_query !== '' && !this.state.basic_query) {
+            errors.push('Query Format Error: You must include conditionals, only root can exclude them.')
+        }
+
+        if (this.state.advanced_query.endsWith(';') && !this.state.basic_query) {
+            errors.push('Query Format Error: Remove any \', ` or ; punctuation marks, as these will be handled for you.')
+        }
+
+        return errors
+
     }
 
     checkAdvancedPreSubmit = () => {
@@ -299,6 +353,110 @@ export default class UPDATE extends React.Component {
 
 
     }
+
+    checkBasicPreSubmit = () => {
+      let errors = []
+
+      if (this.state.query_action.toLowerCase() !== 'update') {
+        errors.push('Query Type Error: You must run an UPDATE query here.')
+      }
+      if (this.state.db === '') {
+        errors.push('Query Format Error: You must select a database table.')
+      }
+
+      this.state.sets.forEach((set, index) => {
+        if (set.field === '') {
+          errors.push(`Query Format Error: You must select a UNIQUE field to alter. (Found empty value in row ${index + 1} of Sets)`)
+        }
+        if (set.operator !== '=') {
+          errors.push(`Query Error: You must select an = operator for an update field. (Found ${set.operator}, expected =)`)
+        }
+        // implement check for specific field (i.e. controlled values)
+        if (set.newValue === '') {
+          errors.push(`Query Format Error: You must enter a new value.`)
+        }
+      })
+
+      this.state.conditionals.forEach((conditional, index) => {
+        if (conditional.field === '') {
+          errors.push(`Query Format Error: You must select a UNIQUE conditional field. (Found empty value in row ${index + 1} of Conditionals)`)
+        }
+        // if (conditional.operator !== '=') {
+        //   errors.push(`Query Error: You must select an = operator for an update field. (Found ${set.operator}, expected =)`)
+        // }
+        // implement check for specific field (i.e. controlled values)
+        if (conditional.searchTerms === '') {
+          errors.push(`Query Format Error: You must enter a new value.`)
+        }
+      })
+
+      return errors
+    }
+
+    renderBasicForm = (query_action, db, setCount, sets, conditionalCount, conditionals) => (
+      <Form onSubmit={this.handleSubmit}>
+          <Form.Group widths='equal'>
+              <Form.Field
+                  control={Select}
+                  options={updateQueryOption}
+                  label='QUERY'
+                  placeholder='UPDATE'
+                  search
+                  name='query_action'
+                  error={(this.state.query_action !== 'UPDATE' && this.state.basic_query) ? {content: 'You must run an UPDATE query here.'} : false}
+                  value={query_action}
+                  onChange={this.handleChange}
+                  disabled={!this.state.basic_query}
+                  required
+              />
+              <Form.Field
+                  control={Select}
+                  options={this.props.dbSelection}
+                  label='Database Table'
+                  placeholder=''
+                  search
+                  error={(this.state.db === '' && this.state.basic_query) ? {content: 'You must select a database table.'} : false}
+                  name='db'
+                  value={db}
+                  onChange={this.handleChange}
+                  disabled={!this.state.basic_query}
+              />
+          </Form.Group>
+          <Form.Group widths='equal'>
+              <Form.Field
+                  control={Select}
+                  label='SET count (how many changes)'
+                  options={setCountOptions}
+                  name='setCount'
+                  value={setCount}
+                  onChange={this.handleSetCountChange}
+                  disabled={!this.state.basic_query}
+              />
+          </Form.Group>
+          {sets}
+          <Form.Group widths='equal'>
+              <Form.Field
+                  control={Select}
+                  label='WHERE count (how many conditionals)'
+                  options={setCountOptions}
+                  name='conditionalCount'
+                  value={conditionalCount}
+                  onChange={this.handleConditionalCountChange}
+                  disabled={!this.state.basic_query}
+              />
+          </Form.Group>
+          {conditionals}
+          <Form.Group className='float-right'>
+              <QueryHelp queryType='UPDATE'/>
+              <Form.Field
+                  id='form-button-control-ta-submit'
+                  control={Button}
+                  content='Submit'
+                  disabled={!this.state.basic_query}
+              />
+          </Form.Group>
+      </Form>
+    )
 
     renderErrorTerminal = () => (
         <React.Fragment>
@@ -362,66 +520,7 @@ export default class UPDATE extends React.Component {
                             </Form.Group>
                         </Form>
 
-                        <Form onSubmit={this.handleSubmit}>
-                            <Form.Group widths='equal'>
-                                <Form.Field
-                                    control={Select}
-                                    options={updateQueryOption}
-                                    label='QUERY'
-                                    placeholder='UPDATE'
-                                    search
-                                    name='query_action'
-                                    value={query_action}
-                                    onChange={this.handleChange}
-                                    disabled={!this.state.basic_query}
-                                    required
-                                />
-                                <Form.Field
-                                    control={Select}
-                                    options={this.props.dbSelection}
-                                    label='Database'
-                                    placeholder='Collection'
-                                    search
-                                    name='db'
-                                    value={db}
-                                    onChange={this.handleChange}
-                                    disabled={!this.state.basic_query}
-                                />
-                            </Form.Group>
-                            <Form.Group widths='equal'>
-                                <Form.Field
-                                    control={Select}
-                                    label='SET count (how many changes)'
-                                    options={setCountOptions}
-                                    name='setCount'
-                                    value={setCount}
-                                    onChange={this.handleSetCountChange}
-                                    disabled={!this.state.basic_query}
-                                />
-                            </Form.Group>
-                            {sets}
-                            <Form.Group widths='equal'>
-                                <Form.Field
-                                    control={Select}
-                                    label='WHERE count (how many conditionals)'
-                                    options={setCountOptions}
-                                    name='conditionalCount'
-                                    value={conditionalCount}
-                                    onChange={this.handleConditionalCountChange}
-                                    disabled={!this.state.basic_query}
-                                />
-                            </Form.Group>
-                            {conditionals}
-                            <Form.Group className='float-right'>
-                                <QueryHelp queryType='UPDATE'/>
-                                <Form.Field
-                                    id='form-button-control-ta-submit'
-                                    control={Button}
-                                    content='Submit'
-                                    disabled={!this.state.basic_query}
-                                />
-                            </Form.Group>
-                        </Form>
+                        {this.state.basic_query ? this.renderBasicForm(query_action, db, setCount, sets, conditionalCount, conditionals) : null}
 
                         {this.props.errorMessages.updateError ? this.renderErrorTerminal() : null}
 

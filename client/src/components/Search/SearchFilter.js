@@ -26,10 +26,7 @@ class SearchFilter extends React.Component {
 
     renderChecks = () => {
       let checkRow = []
-      console.log(headerSelection.length)
       let checkGrid = headerSelection.map((header, index) => {
-        console.log(`${header.value} @ ${index}`)
-        console.log(checkRow)
         if (index === headerSelection.length - 1 || (index + 1) % 3 === 0) {
           checkRow.push((
             <Form.Field>
@@ -83,6 +80,7 @@ class SearchFilter extends React.Component {
                       <Button
                         label={this.props.filterCategory === '*' ? null : this.props.filterCategory}
                         icon='filter'
+                        disabled={this.props.disabled}
                         onClick={() => this.show()}
                       />
                     }

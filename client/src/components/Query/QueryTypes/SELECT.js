@@ -29,21 +29,21 @@ export default class SELECT extends React.Component {
         // return ['test 1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test 1', 'test2', 'test3', 'test4', 'test5', 'test6']
         let errors = []
         if (this.state.query_action.toUpperCase() !== 'SELECT') {
-            errors.push('Syntax Error: Invalid query type. This section is reserved for SELECT queries only.')
+            errors.push('Query Type Error: Invalid query type. This section is reserved for SELECT queries only.')
         }
         if (this.state.fields.length > 1 && this.state.fields.indexOf('*') > -1) {
-            errors.push('Query Error: If ALL is selected, no other fields should be selected.')
+            errors.push('Query Format Error: If ALL is selected, no other fields should be selected.')
         }
         if (this.state.fields.length === 0) {
-            errors.push('Query Error: A field must be selected.')
+            errors.push('Query Format Error: A field must be selected.')
         }
         if (this.state.db === '') {
-            errors.push('Query Error: A database table must be selected.')
+            errors.push('Query Format Error: A database table must be selected.')
         }
         if (this.state.fields.indexOf('*') < 0) {
           this.state.conditionals.forEach((condition, index) => {
             if (this.state.fields.indexOf(condition.field) < 0) {
-              errors.push(`Query Error: Attempting have condition in field not queried for. Field ${condition.field} is missing from query.`)
+              errors.push(`Query Format Error: Attempting have condition in field not queried for. Field ${condition.field} is missing from query.`)
             }
           })
         }
@@ -57,6 +57,15 @@ export default class SELECT extends React.Component {
         // }
 
         return errors
+    }
+
+    checkFieldError = () => {
+      if (this.state.fields.length < 1) {
+        return {content: 'You must select a field.'}
+      }
+      else if (this.state.fields.length > 1 && this.state.fields.indexOf('*') > -1) {
+        return {content: 'If All is selected no other fields should be selected.'}
+      }
     }
 
 
@@ -199,6 +208,7 @@ export default class SELECT extends React.Component {
                     placeholder='FIELD'
                     search
                     name='field'
+                    error={(this.state.conditionals[index].field === '' && this.state.basic_query) ? {content: 'You must select a conditional field.'} : false}
                     value={this.state.conditionals[index].field}
                     onChange={this.handleConditionalItemChange}
                     id={index}
@@ -210,6 +220,7 @@ export default class SELECT extends React.Component {
                     label='Operator'
                     placeholder='='
                     name='operator'
+                    error={(this.state.conditionals[index].operator === '' && this.state.basic_query) ? {content: 'You must select a conditional operator.'} : false}
                     value={this.state.conditionals[index].operator}
                     onChange={this.handleConditionalItemChange}
                     id={index}
@@ -221,6 +232,7 @@ export default class SELECT extends React.Component {
                     placeholder='Search Term(s)'
                     search
                     name='searchTerms'
+                    error={(this.state.conditionals[index].searchTerms === '' && this.state.basic_query) ? {content: 'You must enter a value for the conditional.'} : false}
                     value={this.state.conditionals[index].searchTerms}
                     onChange={this.handleConditionalItemChange}
                     id={index}
@@ -231,6 +243,73 @@ export default class SELECT extends React.Component {
         })
         return conditionals
     }
+
+    renderBasicForm = (query_action, fields, db, conditionalCount, conditionals) => (
+      <Form onSubmit={this.handleSubmit}>
+          <Form.Group widths='equal'>
+              <Form.Field
+                  control={Select}
+                  options={selectQueryOption}
+                  label='QUERY'
+                  placeholder='SELECT'
+                  search
+                  name='query_action'
+                  value={query_action}
+                  onChange={this.handleChange}
+                  disabled={!this.state.basic_query}
+                  required
+              />
+              <Form.Field
+                  control={Select}
+                  options={headerSelection}
+                  label='FIELD'
+                  placeholder='FIELD'
+                  search
+                  multiple
+                  name='fields'
+                  error={this.checkFieldError()}
+                  value={fields}
+                  onChange={this.handleChange}
+                  disabled={!this.state.basic_query}
+              />
+              <Form.Field
+                  control={Select}
+                  options={this.props.dbSelection}
+                  label='Database Table'
+                  placeholder=''
+                  search
+                  name='db'
+                  error={(this.state.db === '' && this.state.basic_query) ? {content: 'You must select a database table.'} : false}
+                  value={db}
+                  onChange={this.handleChange}
+                  disabled={!this.state.basic_query}
+              />
+          </Form.Group>
+          <Form.Group widths='equal'>
+              <Form.Field
+                  control={Select}
+                  label='WHERE count (how many conditionals)'
+                  options={conditionalCountOptions}
+                  name='conditionalCount'
+                  value={conditionalCount}
+                  onChange={this.handleConditionalCountChange}
+                  disabled={!this.state.basic_query}
+              />
+          </Form.Group>
+          {conditionals}
+          <Form.Group>
+              <QueryHelp queryType='SELECT'/>
+              <Form.Field
+                  id='form-button-control-ta-submit'
+                  control={Button}
+                  content='Submit'
+                  disabled={!this.state.basic_query}
+              />
+
+          </Form.Group>
+          {this.state.loading ? 'Loading... This may take some time, please wait.' : null}
+      </Form>
+    )
 
     renderErrorTerminal = () => (
         <React.Fragment>
@@ -293,68 +372,7 @@ export default class SELECT extends React.Component {
                             </Form.Group>
                         </Form>
 
-                        <Form onSubmit={this.handleSubmit}>
-                            <Form.Group widths='equal'>
-                                <Form.Field
-                                    control={Select}
-                                    options={selectQueryOption}
-                                    label='QUERY'
-                                    placeholder='SELECT'
-                                    search
-                                    name='query_action'
-                                    value={query_action}
-                                    onChange={this.handleChange}
-                                    disabled={!this.state.basic_query}
-                                    required
-                                />
-                                <Form.Field
-                                    control={Select}
-                                    options={headerSelection}
-                                    label='FIELD'
-                                    placeholder='FIELD'
-                                    search
-                                    multiple
-                                    name='fields'
-                                    value={fields}
-                                    onChange={this.handleChange}
-                                    disabled={!this.state.basic_query}
-                                />
-                                <Form.Field
-                                    control={Select}
-                                    options={this.props.dbSelection}
-                                    label='Database'
-                                    placeholder='Collection'
-                                    search
-                                    name='db'
-                                    value={db}
-                                    onChange={this.handleChange}
-                                    disabled={!this.state.basic_query}
-                                />
-                            </Form.Group>
-                            <Form.Group widths='equal'>
-                                <Form.Field
-                                    control={Select}
-                                    label='WHERE count (how many conditionals)'
-                                    options={conditionalCountOptions}
-                                    name='conditionalCount'
-                                    value={conditionalCount}
-                                    onChange={this.handleConditionalCountChange}
-                                    disabled={!this.state.basic_query}
-                                />
-                            </Form.Group>
-                            {conditionals}
-                            <Form.Group>
-                                <QueryHelp queryType='SELECT'/>
-                                <Form.Field
-                                    id='form-button-control-ta-submit'
-                                    control={Button}
-                                    content='Submit'
-                                    disabled={!this.state.basic_query}
-                                />
-
-                            </Form.Group>
-                            {this.state.loading ? 'Loading... This may take some time, please wait.' : null}
-                        </Form>
+                        {this.state.basic_query ? this.renderBasicForm(query_action, fields, db, conditionalCount, conditionals) : null}
 
                         {this.props.errorMessages.selectError ? this.renderErrorTerminal() : null}
 

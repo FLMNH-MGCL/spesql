@@ -198,15 +198,15 @@ export default class MANUAL extends React.Component {
                     <p>
                         Manually enter the transcription data of the speciment you are entering into the database. Be sure to
                         fill out all required fields (denoted with *). When all fields are completed, click the Confirm button
-                        at the bottom of the scroll-view. If any syntactic errors are present, a popup will appear with 
+                        at the bottom of the scroll-view. If any syntactic errors are present, a popup will appear with
                         information to help you correct it. If you have more than one specimen to enter, consider using the
                         paste option on the previous page.
                     </p>
                 </Message>
-                <Grid padded='vertically'>
+                <Grid padded='vertically' style={{justifyContent: 'center'}}>
                     <Grid.Row>
                         <Form padded='vertically' onSubmit={this.handleSubmit}>
-                            <div className='scrolling'>
+                            <div className='scrolling' style={{minHeight: '36vh'}}>
                             <Form.Group widths='equal'>
                                 <Form.Field
                                     id='form-input-control-mgcl'
@@ -247,7 +247,7 @@ export default class MANUAL extends React.Component {
                                     value={superfamily}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
-                                />                                    
+                                />
                             </Form.Group>
 
 
@@ -293,7 +293,7 @@ export default class MANUAL extends React.Component {
                                     value={genus}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
-                                />                                    
+                                />
                             </Form.Group>
 
 
@@ -380,7 +380,7 @@ export default class MANUAL extends React.Component {
                                     value={lifeStage}
                                     onChange={this.handleChange}
                                     disabled={this.state.paste_entry}
-                                />                              
+                                />
                             </Form.Group>
 
                             <Form.Group widths='sixteen'>
@@ -471,7 +471,7 @@ export default class MANUAL extends React.Component {
                                     name='decimalLatitude'
                                     value={decimalLatitude}
                                     onChange={this.handleChange}
-                                />                                    
+                                />
                             </Form.Group>
 
                             <Form.Group widths='equal'>
@@ -510,7 +510,7 @@ export default class MANUAL extends React.Component {
                                     name='verbatimLatitude'
                                     value={verbatimLatitude}
                                     onChange={this.handleChange}
-                                />                                    
+                                />
                             </Form.Group>
 
 
@@ -550,7 +550,7 @@ export default class MANUAL extends React.Component {
                                     name='freezer'
                                     value={verbatimLatitude}
                                     onChange={this.handleChange}
-                                />                                    
+                                />
                             </Form.Group>
 
 
@@ -581,9 +581,9 @@ export default class MANUAL extends React.Component {
                                     name='tubeSize'
                                     value={tubeSize}
                                     onChange={this.handleChange}
-                                />                             
-                            </Form.Group>            
-                            
+                                />
+                            </Form.Group>
+
 
                             <Form.Group widths='sixteen'>
                                 <Form.Field
@@ -595,9 +595,9 @@ export default class MANUAL extends React.Component {
                                         name='collectors'
                                         value={collectors}
                                         onChange={this.handleChange}
-                                />    
+                                />
                             </Form.Group>
-                            
+
                             <Form.Group style={{float: 'right'}}>
                                 <QueryHelp queryType='MANUAL_INSERT'/>
                                 <Button type="button" color='yellow' onClick={() => this.resetState()} style={{marginLeft: '.5rem'}}>Clear</Button>

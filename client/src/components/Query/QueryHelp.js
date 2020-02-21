@@ -687,7 +687,7 @@ export default class QueryHelp extends React.Component {
                                 computation on the server side, and allow multiple users to interact with the
                                 server at the same time. Additionally, loading all data at once allows for
                                 extensive searching operations on the entire dataset, rather than only
-                                searching on what is currently loaded.
+                                searching on what is currently loaded to the screen.
                               </p>
                               <p>
                                 Second, it is possible that you sent a large insert query. Insert queries can take a long time,
@@ -734,6 +734,22 @@ export default class QueryHelp extends React.Component {
                                 server.js file. Refer to the README file on Github and the
                                 connection infosheet you recieved upon requesting a database
                                 user account.
+                              </p>
+                            </Accordion.Content>
+
+                            <Accordion.Title
+                              active={activeIndex === 5}
+                              index={5}
+                              onClick={this.handleClick}
+                            >
+                              <Icon name='dropdown' />
+                              Why are some of the buttons / tools greyed and not clickable?
+                            </Accordion.Title>
+                            <Accordion.Content active={activeIndex === 5}>
+                              <p>
+                                This means that either you haven't made a SELECT query yet, or
+                                the select query returned nothing (i.e. there is no matching data
+                                to the query in the database table).
                               </p>
                             </Accordion.Content>
                           </Accordion>

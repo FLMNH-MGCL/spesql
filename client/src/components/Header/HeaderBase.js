@@ -48,7 +48,7 @@ export default class HeaderBase extends Component {
     renderFullMenu = () => {
       return (
           <div>
-              <Menu>
+              <Menu stackable borderless>
                   <Menu.Item as={ Link }
                       name='home'
                       active={'home' === this.props.current_view}
@@ -64,18 +64,6 @@ export default class HeaderBase extends Component {
                   />
 
                   <Menu.Menu position='right'>
-                      <Menu.Item style={{width: '15rem'}}></Menu.Item>
-                      <Menu.Item>
-                          {/* <Input icon='search' placeholder='Search...' /> */}
-                          <Form>
-                              <Form.Input
-                              type="text"
-                              icon='search'
-                              placeholder='Search...'
-                              disabled={true}
-                              />
-                          </Form>
-                      </Menu.Item>
                       <Menu.Item>
                           <Button icon labelPosition='left' disabled={true}>
                               <Icon name='archive' />
@@ -83,21 +71,9 @@ export default class HeaderBase extends Component {
                           </Button>
                       </Menu.Item>
                       <Menu.Item>
-                          <Dropdown
-                              text='Filter'
-                              icon='filter'
-                              floating
-                              labeled
-                              button
-                              className='icon'
-                              disabled={true}
-                          >
-                          </Dropdown>
-                      </Menu.Item>
-                      <Menu.Item>
                           <Button icon labelPosition='left' disabled={true}>
                               <Icon name='upload' />
-                              New Insert
+                              Insert
                           </Button>
                       </Menu.Item>
                       <Menu.Item>

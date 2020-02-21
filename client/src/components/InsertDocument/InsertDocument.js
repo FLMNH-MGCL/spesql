@@ -20,7 +20,7 @@ class InsertDocument extends React.Component {
 
     closeModal = () => {
         this.props.updateInsertErrorMessage(null)
-        
+
     }
 
 
@@ -51,32 +51,32 @@ class InsertDocument extends React.Component {
                     } centered closeIcon onClose={this.closeModal} style={{maxHeight: '85vh'}}>
                         <Modal.Header>Insert Query Selector</Modal.Header>
                         <Modal.Content scrolling style={{minHeight: '60vh'}}>
-                            {this.state.activePage === 'Paste Insert' 
-                                ? <PASTE {...this.props} /> 
+                            {this.state.activePage === 'Paste Insert'
+                                ? <PASTE {...this.props} />
                                 : <MANUAL {...this.props} />
                             }
                             <Menu pagination>
-                                <Menu.Item 
+                                <Menu.Item
                                     onClick={this.handlePageBack}
                                 >
                                     <Icon name='arrow left' />
                                 </Menu.Item>
-                                <Menu.Item 
+                                <Menu.Item
                                     name='Paste Insert'
                                     active={this.state.activePage === 'Paste Insert'}
                                     onClick={this.handlePaginationChange}
                                 />
-                                <Menu.Item 
+                                <Menu.Item
                                     name='Manual Insert'
                                     active={this.state.activePage === 'Manual Insert'}
                                     onClick={this.handlePaginationChange}
                                 />
-                                <Menu.Item 
+                                <Menu.Item
                                     onClick={this.handlePageForward}
                                 >
                                     <Icon name='arrow right' />
                                 </Menu.Item>
-                            </Menu> 
+                            </Menu>
                         </Modal.Content>
 
                     </Modal>
@@ -84,7 +84,7 @@ class InsertDocument extends React.Component {
             )
         }
 
-    
+
 }
 
 export default InsertDocument

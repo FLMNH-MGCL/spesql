@@ -33,26 +33,11 @@ require('./routes/sql-login.routes')(connection, app)
 require('./routes/get-user.routes')(connection, app)
 require('./routes/shutdown.routes')(connection, app)
 
-app.listen(port, () => console.log(`Server now running on port ${port}!`));
+var server = app.listen(port, () => console.log(`Server now running on port ${port}!`));
 
-process.on('SIGTERM', () => {
-    console.info('SIGTERM signal recieved...')
-    console.log('Shutting down the server.')
-
-    app.close(() => {
-        connection.end((error) => {
-            if (error) {
-                console.info('Error occurred while closing the MySQL Connection.')
-                console.log(error)
-                process.exit(1)
-            }
-            else {
-                console.log('MySQL connection sucessfully closed.')
-                process.exit(0)
-            }
-        })
-    })
-})
+// module.exports = function killserver() {
+//   server.close()
+// }
 
 
 // https://stackoverflow.com/questions/18087696/express-framework-app-post-and-app-get

@@ -1,4 +1,5 @@
 const electron = require('electron');
+const server = require('../../server/server')
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
@@ -15,7 +16,13 @@ function createWindow() {
     //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
     mainWindow.webContents.openDevTools();
   }
-  mainWindow.webContents.on('closed', () => mainWindow = null);
+  else {
+    mainWindow.setMenu(null);
+  }
+  mainWindow.webContents.on('closed', () => {
+     mainWindow = null
+     // server.killServer()
+  });
 
   mainWindow.webContents.on('new-window', function(event, url) {
     event.preventDefault();
