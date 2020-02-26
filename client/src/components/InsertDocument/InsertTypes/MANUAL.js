@@ -14,9 +14,9 @@ import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 import QueryHelp from "../../Query/QueryHelp";
 import {
   identificationQualifierControl,
-  samplingProtocolControl,
-  dispositionMolecularControl,
-  dispositionWingControl,
+  // samplingProtocolControl,
+  // dispositionMolecularControl,
+  // dispositionWingControl,
   preparationsControl,
   tubeSizeControl,
   lifeStageControl,

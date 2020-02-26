@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import {
   Button,
   Grid,
@@ -53,7 +52,7 @@ export default class UPDATE extends React.Component {
     let errors = this.checkBasicPreSubmit();
 
     if (errors.length !== 0) {
-      this.props.notifiy({
+      this.props.notify({
         type: "error",
         message: "Uh oh, some errors detected. Please check UPDATE error log"
       });
@@ -117,7 +116,7 @@ export default class UPDATE extends React.Component {
     let errors = [];
     errors = this.checkAdvancedPostSubmit();
     if (errors.length > 0) {
-      this.props.notifiy({
+      this.props.notify({
         type: "error",
         message: "Uh oh, some errors detected. Please check UPDATE error log"
       });

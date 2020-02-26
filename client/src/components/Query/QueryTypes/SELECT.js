@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+// import axios from "axios";
 import {
   Button,
   Grid,
@@ -8,21 +8,20 @@ import {
   Select,
   Checkbox,
   Message,
-  Header,
-  Divider
+  Header
 } from "semantic-ui-react";
 import {
   selectQueryOption,
   headerSelection,
-  setOperatorOptions,
+  // setOperatorOptions,
   conditionalOperatorOptions,
-  setCountOptions,
+  // setCountOptions,
   conditionalCountOptions
 } from "../QueryConstants/constants";
 import QueryHelp from "../QueryHelp";
 import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
 // import { checkAdvancedSelect } from "../../../functions/queryChecks";
-import { createAutoGenFields } from "../../../functions/helpers";
+// import { createAutoGenFields } from "../../../functions/helpers";
 
 export default class SELECT extends React.Component {
   state = {
@@ -110,7 +109,7 @@ export default class SELECT extends React.Component {
     let errors = this.checkBasicQueryErrors();
     if (errors.length > 0) {
       // errors found, update redux error for select query
-      this.props.notifiy({
+      this.props.notify({
         type: "error",
         message: "Uh oh, some errors detected. Please check SELECT error log"
       });
@@ -165,7 +164,7 @@ export default class SELECT extends React.Component {
     let errors = this.checkAdvancedSelect(this.state.advanced_query);
 
     if (errors.length > 0) {
-      this.props.notifiy({
+      this.props.notify({
         type: "error",
         message: "Uh oh, some errors detected. Please check SELECT error log"
       });

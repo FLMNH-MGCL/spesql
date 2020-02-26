@@ -1,19 +1,7 @@
 import React from "react";
-import {
-  Button,
-  Icon,
-  Modal,
-  Grid,
-  Form,
-  Input,
-  Select,
-  TextArea,
-  Message,
-  Menu
-} from "semantic-ui-react";
-import axios from "axios";
-import { checkEntry } from "../../functions/queryChecks";
-import ErrorTerminal from "../Query/QueryTerminals/ErrorTerminal";
+import { Button, Icon, Modal, Menu } from "semantic-ui-react";
+// import { checkEntry } from "../../functions/queryChecks";
+// import ErrorTerminal from "../Query/QueryTerminals/ErrorTerminal";
 import "./InsertDocument.css";
 import PASTE from "./InsertTypes/PASTE";
 import MANUAL from "./InsertTypes/MANUAL";

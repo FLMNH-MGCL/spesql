@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { Button, Icon, Modal, Divider } from "semantic-ui-react";
 import { SELECT, UPDATE, COUNT } from "./QueryTypes";
-import QueryHelp from "./QueryHelp";
 import "./QueryGrid.css";
 
 let dbSelection = [];
@@ -54,7 +53,7 @@ class QueryGrid extends React.Component {
             closeModal={this.closeModal}
             errorMessages={this.props.errorMessages}
             updateSelectErrorMessage={this.props.updateSelectErrorMessage}
-            notifiy={this.props.notifiy}
+            notify={this.props.notify}
           />
           <Divider />
           <COUNT
@@ -64,7 +63,7 @@ class QueryGrid extends React.Component {
             updateCountQueryCount={this.props.updateCountQueryCount}
             errorMessages={this.props.errorMessages}
             updateCountErrorMessage={this.props.updateCountErrorMessage}
-            notifiy={this.props.notifiy}
+            notify={this.props.notify}
           />
           <Divider />
           <UPDATE
@@ -74,7 +73,7 @@ class QueryGrid extends React.Component {
             closeModal={this.closeModal}
             errorMessages={this.props.errorMessages}
             updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
-            notifiy={this.props.notifiy}
+            notify={this.props.notify}
           />
           <Divider />
         </Modal.Content>

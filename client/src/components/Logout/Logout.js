@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, Button, Confirm } from "semantic-ui-react";
+import { Button, Confirm } from "semantic-ui-react";
 
 class Logout extends React.Component {
   state = { open: false };

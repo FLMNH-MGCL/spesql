@@ -1,12 +1,9 @@
 import React from "react";
-import axios from "axios";
 import Papa from "papaparse";
-import { Redirect } from "react-router-dom";
-import "./Home.css";
 import CollectionList from "../../components/CollectionList/CollectionList";
 import SpecimenView from "../../components/SpecimenView/SpecimenView";
 import Header from "../../components/Header/Header";
-import { Grid, Loader, Segment, Divider, Input } from "semantic-ui-react";
+import { Grid, Loader, Segment } from "semantic-ui-react";
 import { getQueryHeaders } from "../../functions/helpers";
 import { checkHeaders } from "../../functions/queryChecks";
 import {
@@ -22,11 +19,12 @@ import {
   NotificationContainer,
   NotificationManager
 } from "react-notifications";
+import "./Home.css";
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   logout() {
     sessionStorage.removeItem("authenticated");
@@ -237,7 +235,7 @@ class Home extends React.Component {
           isValidCSV={this.isValidCSV.bind(this)}
           runQuery={this.runQuery.bind(this)}
           logout={this.logout.bind(this)}
-          notifiy={this.createNotification}
+          notify={this.createNotification}
         />
         <Grid columns="equal" padded stackable>
           <Grid.Column width={11}>
@@ -246,7 +244,7 @@ class Home extends React.Component {
               <CollectionList
                 {...this.props}
                 runQuery={this.runQuery.bind(this)}
-                notifiy={this.createNotification}
+                notify={this.createNotification}
               />
             </Segment>
           </Grid.Column>
@@ -258,7 +256,7 @@ class Home extends React.Component {
                 currentQuery={this.props.current_query}
                 runQuery={this.runQuery.bind(this)}
                 user={this.props.user}
-                notifiy={this.createNotification}
+                notify={this.createNotification}
               />
             </Segment>
           </Grid.Column>

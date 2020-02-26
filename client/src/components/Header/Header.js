@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Menu, Dropdown, Accordion, Button } from "semantic-ui-react";
 import SearchFilter from "../Search/SearchFilter";
 import DBSearch from "../Search/DBSearch";
-import SortCollection from "../CollectionList/SortCollection";
+// import SortCollection from "../CollectionList/SortCollection";
 import InsertDocument from "../InsertDocument/InsertDocument";
 import { Link } from "react-router-dom";
 import DownloadDB from "../DownloadDB/DownloadDB";
@@ -96,7 +96,7 @@ export default class Header extends Component {
               updateSelectErrorMessage={this.props.updateSelectErrorMessage}
               updateCountErrorMessage={this.props.updateCountErrorMessage}
               updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
-              notifiy={this.props.notifiy}
+              notify={this.props.notify}
             />
           </Menu.Item>
           {/* <Menu.Item>
@@ -107,7 +107,7 @@ export default class Header extends Component {
               isValidCSV={this.props.isValidCSV.bind(this)}
               errorMessages={this.props.errorMessages}
               updateInsertErrorMessage={this.props.updateInsertErrorMessage}
-              notifiy={this.props.notifiy}
+              notify={this.props.notify}
             />
           </Menu.Item>
           <Menu.Item>
@@ -242,7 +242,7 @@ export default class Header extends Component {
                     updateUpdateErrorMessage={
                       this.props.updateUpdateErrorMessage
                     }
-                    notifiy={this.props.notifiy}
+                    notify={this.props.notify}
                   />
                 </div>
                 <div style={{ padding: "1rem" }}>
@@ -252,7 +252,7 @@ export default class Header extends Component {
                     updateInsertErrorMessage={
                       this.props.updateInsertErrorMessage
                     }
-                    notifiy={this.props.notifiy}
+                    notify={this.props.notify}
                   />
                 </div>
                 <div style={{ padding: "1rem" }}>

@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import {
   Button,
   Grid,
@@ -13,9 +12,9 @@ import {
 import {
   countQueryOption,
   headerSelection,
-  setOperatorOptions,
+  // setOperatorOptions,
   conditionalOperatorOptions,
-  setCountOptions,
+  // setCountOptions,
   conditionalCountOptions
 } from "../QueryConstants/constants";
 import CountTerminal from "../QueryTerminals/CountTerminal";
@@ -89,7 +88,7 @@ export default class COUNT extends React.Component {
     let errors = this.basicErrorCheck();
 
     if (errors.length !== 0) {
-      this.props.notifiy({
+      this.props.notify({
         type: "error",
         message: "Uh oh, some errors detected. Please check COUNT error log"
       });
@@ -140,7 +139,7 @@ export default class COUNT extends React.Component {
     let errors = this.advancedChecks();
 
     if (errors.length > 0) {
-      this.props.notifiy({
+      this.props.notify({
         type: "error",
         message: "Uh oh, some errors detected. Please check COUNT error log"
       });

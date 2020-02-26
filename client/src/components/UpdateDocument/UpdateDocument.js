@@ -8,8 +8,7 @@ import {
   Input,
   TextArea
 } from "semantic-ui-react";
-import SemanticDatepicker from "react-semantic-ui-datepickers";
-import axios from "axios";
+// import SemanticDatepicker from "react-semantic-ui-datepickers";
 import QueryHelp from "../Query/QueryHelp";
 
 class UpdateDocument extends React.Component {
@@ -165,6 +164,10 @@ class UpdateDocument extends React.Component {
 
       this.props.runQuery(updateCommand);
     } else {
+      this.props.notify({
+        type: "warning",
+        message: "No changes were detected"
+      });
       console.log("There were no changes made overall");
     }
   };

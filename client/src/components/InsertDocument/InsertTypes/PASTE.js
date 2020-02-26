@@ -1,21 +1,8 @@
 import React from "react";
-import {
-  Button,
-  Icon,
-  Modal,
-  Grid,
-  Form,
-  Input,
-  Select,
-  TextArea,
-  Message,
-  Menu,
-  Loader
-} from "semantic-ui-react";
-import axios from "axios";
+import { Button, Grid, Form, TextArea, Message } from "semantic-ui-react";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 import QueryHelp from "../../Query/QueryHelp";
-import { checkEntryControlFields } from "../../../functions/queryChecks";
+// import { checkEntryControlFields } from "../../../functions/queryChecks";
 import { runInsertQuery } from "../../../functions/queries";
 
 async function asyncForEach(array, callback) {
@@ -32,7 +19,7 @@ export default class PASTE extends React.Component {
   };
 
   async runQuery(insertions) {
-    this.props.notifiy({
+    this.props.notify({
       type: "warning",
       message:
         "Analyzing entries and sending to server, please be patient and leave this window open until completed."
@@ -51,7 +38,7 @@ export default class PASTE extends React.Component {
 
         if (index === insertData.length - 1) {
           if (errors.length > 0) {
-            this.props.notifiy({
+            this.props.notify({
               type: "error",
               message:
                 "Uh oh, some errors detected. Please check INSERT error log"
@@ -59,7 +46,7 @@ export default class PASTE extends React.Component {
             this.props.updateInsertErrorMessage(errors);
             this.setState({ hasError: true });
           } else {
-            this.props.notifiy({
+            this.props.notify({
               type: "success",
               message: "Entries successfully submitted without errors"
             });
@@ -78,7 +65,7 @@ export default class PASTE extends React.Component {
     const ret = this.props.isValidCSV(this.state.text_area);
 
     if (!ret.valid) {
-      this.props.notifiy({
+      this.props.notify({
         type: "error",
         message: "Uh oh, some errors detected. Please check INSERT error log"
       });
@@ -205,6 +192,14 @@ export default class PASTE extends React.Component {
     }
 
     const { text_area } = this.state;
+
+    if ((this.state.text_area.match(/\n/g) || []).length >= 500) {
+      this.props.notify({
+        type: "warning",
+        message:
+          "Large insertion detected. Please limit to 1000 entries maximum and be patient when submitted."
+      });
+    }
 
     return (
       <React.Fragment>
