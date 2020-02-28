@@ -66,6 +66,14 @@ export default class UPDATE extends React.Component {
     );
 
     let setString = "";
+    // let changes = []
+    //
+    // var today = new Date();
+    // var dd = String(today.getDate()).padStart(2, "0");
+    // var mm = String(today.getMonth() + 1).padStart(2, "0");
+    // var yyyy = today.getFullYear();
+    // today = yyyy + "-" + mm + "-" + dd;
+
     this.state.sets.forEach((set, index) => {
       setString += set.field;
       setString += set.operator;

@@ -9,7 +9,7 @@ import {
   TextArea
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
-import { checkManualEntry } from "../../../functions/queryChecks";
+import { checkManualEntry, checkRandomCaps } from "../../../functions/queryChecks";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 import QueryHelp from "../../Query/QueryHelp";
 import {
@@ -37,56 +37,29 @@ const familyOptions = [
   { key: "10", text: "Tineidae", value: "Tineidae" }
 ];
 
-export default class MANUAL extends React.Component {
-  state = {
-    activePage: "Manual Insert",
-    catalogNumber: "",
-    recordNumber: "",
-    order_: "",
-    superfamily: "",
-    family: "",
-    subfamily: "",
-    tribe: "",
-    genus: "",
-    subgenus: "",
-    specificEpithet: "",
-    identificationQualifier: "",
-    recordedBy: "",
-    identifiedBy: "",
-    dateIdentified: "",
-    sex: "",
-    lifeStage: "",
-    habitat: "",
-    occurrenceRemarks: "",
-    country: "",
-    stateProvince: "",
-    county: "",
-    municipality: "",
-    locality: "",
-    verbatimElevation: "",
-    decimalLatitude: "",
-    decimalLongitude: "",
-    geodeticDatum: "",
-    coordinateUncertainty: "",
-    verbatimLatitude: "",
-    verbatimLongitude: "",
-    loanInfo: "",
-    preparations: "",
-    freezer: "",
-    rack: "",
-    box: "",
-    tubeSize: "",
-    collectors: "",
-    modifiedInfo: "",
-    hasError: false,
-    loading: false
-  };
+  var countryList;
 
-  resetState = () => {
-    this.setState({
+  async function getCountries() {
+    // list of countries in JSON link
+    countryList = await fetch('https://pkgstore.datahub.io/core/country-list/data_json/data/8c458f2d15d9f2119654b29ede6e45b8/data_json.json')
+    .then(response => response.json())
+    countryList = countryList.map(country => {
+      return {key: country.Code, text: country.Name, value: country.Name}
+    })
+    // console.log(countryList)
+  }
+
+export default class MANUAL extends React.Component {
+  constructor(props) {
+    super(props)
+
+    getCountries()
+
+    this.state = {
       activePage: "Manual Insert",
       catalogNumber: "",
       recordNumber: "",
+      otherRecordNumber: "",
       order_: "",
       superfamily: "",
       family: "",
@@ -95,6 +68,7 @@ export default class MANUAL extends React.Component {
       genus: "",
       subgenus: "",
       specificEpithet: "",
+      infraspecificEpithet: "",
       identificationQualifier: "",
       recordedBy: "",
       identifiedBy: "",
@@ -103,6 +77,8 @@ export default class MANUAL extends React.Component {
       lifeStage: "",
       habitat: "",
       occurrenceRemarks: "",
+      molecularOccurrenceRemarks: "",
+      samplingProtocol: "",
       country: "",
       stateProvince: "",
       county: "",
@@ -115,12 +91,78 @@ export default class MANUAL extends React.Component {
       coordinateUncertainty: "",
       verbatimLatitude: "",
       verbatimLongitude: "",
+      georeferencedBy: "",
+      disposition: "",
       loanInfo: "",
       preparations: "",
       freezer: "",
       rack: "",
       box: "",
       tubeSize: "",
+      associatedSequences: "",
+      associatedReferences: "",
+      withholdData: "",
+      reared: "",
+      fieldNotes: "",
+      collectors: "",
+      modifiedInfo: "",
+      hasError: false,
+      loading: false,
+      countryList: []
+    };
+  }
+
+
+  resetState = () => {
+    this.setState({
+      activePage: "Manual Insert",
+      catalogNumber: "",
+      recordNumber: "",
+      otherRecordNumber: "",
+      order_: "",
+      superfamily: "",
+      family: "",
+      subfamily: "",
+      tribe: "",
+      genus: "",
+      subgenus: "",
+      specificEpithet: "",
+      infraspecificEpithet: "",
+      identificationQualifier: "",
+      recordedBy: "",
+      identifiedBy: "",
+      dateIdentified: "",
+      sex: "",
+      lifeStage: "",
+      habitat: "",
+      occurrenceRemarks: "",
+      molecularOccurrenceRemarks: "",
+      samplingProtocol: "",
+      country: "",
+      stateProvince: "",
+      county: "",
+      municipality: "",
+      locality: "",
+      verbatimElevation: "",
+      decimalLatitude: "",
+      decimalLongitude: "",
+      geodeticDatum: "",
+      coordinateUncertainty: "",
+      verbatimLatitude: "",
+      verbatimLongitude: "",
+      georeferencedBy: "",
+      disposition: "",
+      loanInfo: "",
+      preparations: "",
+      freezer: "",
+      rack: "",
+      box: "",
+      tubeSize: "",
+      associatedSequences: "",
+      associatedReferences: "",
+      withholdData: "",
+      reared: "",
+      fieldNotes: "",
       collectors: "",
       modifiedInfo: "",
       hasError: false,
@@ -128,10 +170,59 @@ export default class MANUAL extends React.Component {
     });
   };
 
+  checkBasicPostSubmit = () => {
+    let errors = [];
+
+    // MGCL CHECKS
+    if (
+      this.state.catalogNumber !== "" &&
+      !this.state.catalogNumber.includes("MGCL_")
+    ) {
+      errors.push(
+        "catalogNumber must start with 'MGCL_', followed by 6-8 digits."
+      );
+    }
+
+    if (
+      this.state.catalogNumber !== "" &&
+      this.state.catalogNumber.split("_").length !== 2
+    ) {
+      errors.push(
+        "catalogNumber must start with 'MGCL_', followed by 6-8 digits."
+      );
+    }
+
+    if (
+      this.state.catalogNumber !== "" &&
+      (this.state.catalogNumber.split("_")[1].length < 6 ||
+        this.state.catalogNumber.split("_")[1].length > 8)
+    ) {
+      errors.push("MGCL_ must be followed by 6-8 digits only.");
+    }
+
+    if (
+      this.state.catalogNumber !== "" &&
+      !this.isNumeric(this.state.catalogNumber.split("_")[1])
+    ) {
+      errors.push(
+        "Digit error: found non-numeric values in catalogNumber after MGCL_"
+      );
+    }
+
+    if (
+      this.state.recordNumber !== "" &&
+      !this.state.recordNumber.startsWith("LEP-")
+    ) {
+      errors.push("recordNumber must start with LEP-, followed by 5-8 digits.");
+    }
+
+    return errors;
+  };
+
   // FIXME: BROKEN
   handleSubmit = () => {
     this.setState({ loading: true });
-    alert(JSON.stringify(this.state, null, 2));
+    // alert(JSON.stringify(this.state, null, 2));
     let ret = checkManualEntry(this.state);
 
     if (ret.errors === []) {
@@ -176,32 +267,48 @@ export default class MANUAL extends React.Component {
       case "catalogNumber":
         if (value === "") {
           return false;
-        } else if (value.indexOf("MGCL_") < 0) {
+        }
+
+        else if (value.indexOf("MGCL_") < 0) {
           return {
             content: `${field} must start with 'MGCL_', followed by 6-8 digits.`
           };
-        } else if (value.split("_")[1].length < 6) {
+        }
+
+        else if (value.split("_")[1].length < 6 || value.split('_')[1].length > 8) {
           return { content: `MGCL_ must be followed by 6-8 digits.` };
-        } else if (!this.isNumeric(value.split("_")[1])) {
+        }
+
+        else if (!this.isNumeric(value.split("_")[1])) {
           let inValidDigs = value.split("_")[1];
           return { content: `Expected digits, found ${inValidDigs}.` };
-        } else {
+        }
+
+        else {
           return false;
         }
 
       case "recordNumber":
         if (value === "") {
           return false;
-        } else if (value.indexOf("LEP-") < 0) {
+        }
+
+        else if (value.indexOf("LEP-") < 0) {
           return {
             content: `${field} must start with 'LEP-', followed by 5-8 digits.`
           };
-        } else if (value.split("_")[1].length < 5) {
+        }
+
+        else if (value.split("-")[1].length < 5 || value.split("-"[1].length > 8)) {
           return { content: `LEP- must be followed by 5-8 digits.` };
-        } else if (!this.isNumeric(value.split("_")[1])) {
-          let inValidDigs = value.split("_")[1];
+        }
+
+        else if (!this.isNumeric(value.split("-")[1])) {
+          let inValidDigs = value.split("-")[1];
           return { content: `Expected digits, found ${inValidDigs}.` };
-        } else {
+        }
+
+        else {
           return false;
         }
 
@@ -212,20 +319,45 @@ export default class MANUAL extends React.Component {
       case "tribe":
       case "genus":
       case "subgenus":
+        let correctValue = checkRandomCaps(value)
         if (value === "") {
           return false;
-        } else if (value[0] !== value[0].toUpperCase()) {
+        }
+
+        else if (value[0] !== value[0].toUpperCase()) {
           return { content: "Capitalize the first letter." };
-        } else {
+        }
+
+        else if (correctValue !== value) {
+          let arr = value.split(' ')
+          if (arr.length > 1) {
+            for (let i = 1; i < arr.length; i++) {
+              if (arr[i][0].toUpperCase() !== arr[i][0])
+                return { content: "Be sure to capitalize the first letter in each word." };
+            }
+
+            return { content: "Random capitalization detected."}
+          }
+          else {
+            return { content: "Random capitalization detected."}
+          }
+          // return { content: "Random capitalization detected."}
+        }
+
+        else {
           return false;
         }
 
       case "specificEpithet":
         if (value === "") {
           return false;
-        } else if (value[0] !== value[0].toLowerCase()) {
+        }
+
+        else if (value[0] !== value[0].toLowerCase()) {
           return { content: "First letter should be lowercase." };
-        } else {
+        }
+
+        else {
           return false;
         }
 
@@ -253,7 +385,7 @@ export default class MANUAL extends React.Component {
       case "identifiedBy":
       case "dateIdentified":
         let date = this.parseDate(new Date(value));
-        console.log(date);
+        //console.log(date);
         if (value === "") {
           return false;
         } else {
@@ -289,6 +421,15 @@ export default class MANUAL extends React.Component {
       </Button>
     </React.Fragment>
   );
+
+  componentDidMount() {
+    setTimeout(() => {
+      // console.log(countryList)
+      if (countryList.length > 0 && this.state.countryList.length === 0) {
+        this.setState({countryList: countryList})
+      }
+    }, 1500)
+  }
 
   render() {
     if (!this.state.hasError && this.props.errorMessages.insertError !== null) {
@@ -570,6 +711,7 @@ export default class MANUAL extends React.Component {
                     control={TextArea}
                     label="occurrenceRemarks"
                     placeholder="Remarks about occurrence"
+                    name="occurrenceRemarks"
                     value={occurrenceRemarks}
                     error={this.checkBasicPreSubmit(
                       "occurrenceRemarks",
@@ -592,7 +734,9 @@ export default class MANUAL extends React.Component {
                   />
                   <Form.Field
                     id="form-input-control-country"
-                    control={Input}
+                    control={Select}
+                    search
+                    options={this.state.countryList}
                     label="country"
                     placeholder="Country"
                     name="country"

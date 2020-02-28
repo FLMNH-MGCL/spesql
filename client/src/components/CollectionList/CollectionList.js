@@ -249,6 +249,28 @@ export default class CollectionList extends React.Component {
 
     let newData = this.props.data;
 
+    if (clickedColumn === "recordNumber" || clickedColumn === "catalogNumber") {
+      if (direction === "ascending") {
+        newData = newData.sort((a, b) => {
+          let numA =
+            a[clickedColumn].indexOf("-") > -1
+              ? parseInt(a[clickedColumn].split("-")[1])
+              : 0;
+          let numB =
+            b[clickedColumn].indexOf("-") > -1
+              ? parseInt(b[clickedColumn].split("-")[1])
+              : 0;
+
+          return numA > numB ? 1 : numB > numA ? -1 : 0;
+        });
+      } else {
+        newData = newData.reverse();
+      }
+
+      this.setState({ data: newData });
+      return;
+    }
+
     if (direction === "ascending") {
       newData = newData.sort((a, b) => {
         return a[clickedColumn] > b[clickedColumn]

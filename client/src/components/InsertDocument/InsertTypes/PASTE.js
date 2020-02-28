@@ -26,6 +26,7 @@ export default class PASTE extends React.Component {
     });
     let errors = [];
     let insertData = await runInsertQuery(insertions);
+    console.log(insertData);
     setTimeout(() => {
       asyncForEach(insertData, async (insertion, index) => {
         console.log(index);
@@ -55,7 +56,7 @@ export default class PASTE extends React.Component {
           this.setState({ loading: false });
         }
       });
-    }, 300 * insertions.length);
+    }, 500 * insertions.length);
   }
 
   handleCSVSubmit = () => {

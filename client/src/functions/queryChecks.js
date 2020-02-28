@@ -159,3 +159,56 @@ export function checkManualEntry(specimen) {
 }
 
 export function checkEntryControlFields(/* fields to check */) {}
+
+function setCharAt(str, index, char) {
+  if (index > str.length - 1) return str
+
+  return str.substr(0, index) + char + str.substr(index + 1)
+}
+
+export function checkFirstCapitalized(field) {
+  if (field === "" || field === undefined) {
+    return field;
+  }
+
+  else {
+    let newField = field
+    if (newField[0] !== newField[0].toUpperCase()) {
+      newField = setCharAt(newField, 0, newField[0].toUpperCase())
+    }
+
+    return newField
+  }
+}
+
+export function checkRandomCaps(field) {
+  if (field === '') {
+    return ''
+  }
+
+  let correctField = ''
+  let words = field.split(' ')
+
+  console.log(words)
+
+  for (let j = 0; j < words.length; j++) {
+    let newWord = checkFirstCapitalized(words[j])
+
+    for (let i = 0; i < newWord.length; i++) {
+      if (i > 0) {
+        if (newWord[i] !== newWord[i].toLowerCase())
+          newWord = setCharAt(newWord, i, newWord[i].toLowerCase())
+      }
+    }
+
+    words[j] = newWord
+  }
+
+  correctField = words.map(word => {
+    return word
+  }).join(' ')
+
+  return correctField
+
+
+}
