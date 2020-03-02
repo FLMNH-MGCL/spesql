@@ -73,7 +73,9 @@ export async function currentUser() {
   if (response.data.success === false) {
     console.log("err");
     return null;
-  } else {
+  } 
+  
+  else {
     const currentUser = response.data.currentUser;
     // console.log(currentUser)
     return currentUser;

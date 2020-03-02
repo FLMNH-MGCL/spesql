@@ -16,6 +16,7 @@ export const UPDATE_UPDATE_ERROR_LOG = "UPDATE_UPDATE_ERROR_LOG";
 
 export const UPDATE_LOADING_STATUS = "UPDATE_LOADING_STATUS";
 export const UPDATE_REFRESH_STATUS = "UPDATE_REFRESH_STATUS";
+export const CHANGE_USER = "CHANGE_USER";
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 
@@ -24,7 +25,7 @@ let authenticated =
 
 const initialState = {
   authenticated: authenticated,
-  user: "root",
+  user: "guest",
   filteredText: "",
   filterCategory: "*",
   selectedSpecimen: undefined,
@@ -138,6 +139,10 @@ export default function reducer(state = initialState, action) {
     case "UPDATE_REFRESH_STATUS":
       newState.refreshing = action.refreshStatus;
       return newState;
+
+    case "CHANGE_USER":
+      newState.user = action.newUser;
+      return newState
 
     case "LOGIN":
       newState.user = action.newUser;

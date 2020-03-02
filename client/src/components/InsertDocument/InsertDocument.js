@@ -25,7 +25,9 @@ class InsertDocument extends React.Component {
   handlePageBack = e => {
     if (this.state.activePage === "Paste Insert") {
       return;
-    } else if (this.state.activePage === "Manual Insert") {
+    } 
+    
+    else if (this.state.activePage === "Manual Insert") {
       this.setState({ activePage: "Paste Insert" });
     }
   };
@@ -33,7 +35,9 @@ class InsertDocument extends React.Component {
   handlePageForward = e => {
     if (this.state.activePage === "Paste Insert") {
       this.setState({ activePage: "Manual Insert" });
-    } else if (this.state.activePage === "Manual Insert") {
+    } 
+    
+    else if (this.state.activePage === "Manual Insert") {
       return;
     }
   };

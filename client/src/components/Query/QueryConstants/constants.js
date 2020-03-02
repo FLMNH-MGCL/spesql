@@ -180,7 +180,9 @@ export const samplingProtocolControl = [
   { key: "87", text: "Trap", value: "Trap" }
 ];
 
-export const dispositionMolecularControl = [
+// convert to one
+// molecular, genetic, 
+export const dispositionControl = [
   reset,
   { key: "88", text: "Present", value: "Present" },
   { key: "89", text: "Missing", value: "Missing" },
@@ -188,12 +190,13 @@ export const dispositionMolecularControl = [
   { key: "91", text: "On Loan", value: "On Loan" }
 ];
 
-export const dispositionWingControl = [
-  reset,
-  dispositionMolecularControl[0],
-  dispositionMolecularControl[1],
-  dispositionMolecularControl[3]
-];
+// wing, pinned
+// export const dispositionWingControl = [
+//   reset,
+//   dispositionMolecularControl[0],
+//   dispositionMolecularControl[1],
+//   dispositionMolecularControl[3]
+// ];
 
 export const preparationsControl = [
   reset,
@@ -221,16 +224,16 @@ export const tubeSizeControl = [
 export const lifeStageControl = [
   reset,
   { key: "101", text: "egg", value: "egg" },
-  { key: "101", text: "larva", value: "larva" },
-  { key: "101", text: "pupa", value: "pupa" },
-  { key: "101", text: "adult", value: "adult" }
+  { key: "102", text: "larva", value: "larva" },
+  { key: "103", text: "pupa", value: "pupa" },
+  { key: "104", text: "adult", value: "adult" }
 ];
 
 export const sexControl = [
   reset,
-  { key: "101", text: "male", value: "male" },
-  { key: "101", text: "female", value: "female" },
-  { key: "101", text: "gynandromorph", value: "gynandromorph" }
+  { key: "105", text: "male", value: "male" },
+  { key: "106", text: "female", value: "female" },
+  { key: "107", text: "gynandromorph", value: "gynandromorph" }
 ];
 
 // catalogNumber control will be a manual check on submit

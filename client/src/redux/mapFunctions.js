@@ -35,6 +35,7 @@ export function mapDispatchToProps(dispatch) {
         updateUpdateErrorMessage: (updateError) => dispatch({type: 'UPDATE_UPDATE_ERROR_LOG', updateError: updateError}),
         updateLoadingStatus: (loadingStatus) => dispatch({type: 'UPDATE_LOADING_STATUS', loadingStatus: loadingStatus}),
         updateRefreshStatus: (refreshStatus) => dispatch({type: 'UPDATE_REFRESH_STATUS', refreshStatus: refreshStatus}),
+        changeUser: (newUser) => dispatch({type: 'CHANGE_USER', newUser: newUser}),
         login: (newUser) => dispatch({type: 'LOGIN', newUser: newUser}),
         logout: () => dispatch({type: 'LOGOUT'}),
     }

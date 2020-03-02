@@ -166,22 +166,32 @@ function setCharAt(str, index, char) {
   return str.substr(0, index) + char + str.substr(index + 1)
 }
 
-export function checkFirstCapitalized(field) {
+export function checkFirstCapitalized(field, upperFirst) {
   if (field === "" || field === undefined) {
     return field;
   }
 
   else {
     let newField = field
-    if (newField[0] !== newField[0].toUpperCase()) {
-      newField = setCharAt(newField, 0, newField[0].toUpperCase())
+    if (upperFirst) {
+      if (newField[0] !== newField[0].toUpperCase()) {
+        newField = setCharAt(newField, 0, newField[0].toUpperCase())
+      }
+
+      return newField
+    }
+    else {
+      if (newField[0] !== newField[0].toLowerCase()) {
+        newField = setCharAt(newField, 0, newField[0].toLowerCase())
+      }
+
+      return newField
     }
 
-    return newField
   }
 }
 
-export function checkRandomCaps(field) {
+export function checkRandomCaps(field, upperFirst) {
   if (field === '') {
     return ''
   }
@@ -189,10 +199,8 @@ export function checkRandomCaps(field) {
   let correctField = ''
   let words = field.split(' ')
 
-  console.log(words)
-
   for (let j = 0; j < words.length; j++) {
-    let newWord = checkFirstCapitalized(words[j])
+    let newWord = checkFirstCapitalized(words[j], upperFirst)
 
     for (let i = 0; i < newWord.length; i++) {
       if (i > 0) {
