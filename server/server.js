@@ -1,20 +1,24 @@
 const express = require("./config/express.js");
 const mysql = require("mysql");
-// Use env port or default
+const config = require('./config/config.js')
+
 const port = process.env.PORT || 5000;
+const mysqlCredentials = config.mysqlCredentials
 
 let connection = mysql.createConnection({
-  host: "",
-  port: "",
-  user: "",
-  password: "",
-  database: ""
+  host: mysqlCredentials.host,
+  port: mysqlCredentials.port,
+  user: mysqlCredentials.user,
+  password: mysqlCredentials.password,
+  database: mysqlCredentials.database
 });
 
 connection.connect(err => {
   if (err) {
     console.log(err);
-  } else {
+  } 
+  
+  else {
     console.log("Connected to MySQL Server");
   }
 });

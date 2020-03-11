@@ -9,7 +9,7 @@ import {
   TextArea
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
-import { checkManualEntry, checkRandomCaps } from "../../../functions/queryChecks";
+import { checkManualEntry, checkRandomCaps, checkField, checkSpecimen, parseDate } from "../../../functions/queryChecks";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 import QueryHelp from "../../Query/QueryHelp";
 import {
@@ -181,51 +181,426 @@ export default class MANUAL extends React.Component {
     });
   };
 
+  includesPunctuation = field => {
+    if (
+      field.includes("'") ||
+      field.includes(".") ||
+      field.includes('"') ||
+      field.includes(",")
+    ) {
+      return true
+    }
+
+    else return false
+  }
+
+  /*
+  *   most of these checks will do the following: 
+  *   
+  *   1). check if input
+  *   2). check for specific field related errors
+  *   3). check for capitalization errors
+  *   4). if field with control values, checks against control
+  */
+  // MOVE TO OTHER FILE FOR REUSE WHEN COMPLETED
   checkBasicPostSubmit = () => {
     let errors = [];
 
-    // MGCL CHECKS
-    if (
-      this.state.catalogNumber !== "" &&
-      !this.state.catalogNumber.includes("MGCL_")
-    ) {
-      errors.push(
-        "catalogNumber must start with 'MGCL_', followed by 6-8 digits."
-      );
+    // catalogNumber checks
+    if (this.state.catalogNumber !== "") {
+      const catalogNumber = this.state.catalogNumber
+      if (!catalogNumber.startsWith('MGCL_')) {
+        errors.push(
+          "catalogNumber must start with 'MGCL_', followed by 6-8 digits."
+        );
+      }
+
+      if (this.includesPunctuation(catalogNumber)) {
+        errors.push(
+          "Formatting error (@ catalogNumber): remove punctuation (except '_')."
+        )
+      }
+
+      if (catalogNumber.split('_').length !== 2) {
+        errors.push(
+          "catalogNumber must start with 'MGCL_', followed by 6-8 digits."
+        );
+      }
+      else {
+        let nums = catalogNumber.split("_")[1]
+        if (nums.length < 6 || nums.length > 8) {
+          errors.push("MGCL_ must be followed by 6-8 digits only.");
+        }
+
+        if (!this.isNumeric(nums)) {
+          errors.push("Digit error: found non-numeric values in catalogNumber after MGCL_")
+        }
+      }
     }
 
-    if (
-      this.state.catalogNumber !== "" &&
-      this.state.catalogNumber.split("_").length !== 2
-    ) {
-      errors.push(
-        "catalogNumber must start with 'MGCL_', followed by 6-8 digits."
-      );
+
+    // recordNumber checks
+    if (this.state.recordNumber !== "") {
+      const recordNumber = this.state.recordNumber
+      if (!recordNumber.startsWith("LEP-")) {
+        errors.push("recordNumber must start with LEP-, followed by 5-8 digits.");
+      }
+
+      if (this.includesPunctuation(recordNumber)) {
+        errors.push(
+          "Formatting error (@ recordNumber): Remove punctuation (except '-')."
+        )
+      }
+
+      if (recordNumber.split('-').length !== 2) {
+        errors.push("LEP- must be followed by 5-8 digits.")
+      }
+
+      else {
+        let nums = recordNumber.split('-')[1]
+        if (nums.length < 5 || nums.length > 8) {
+          errors.push(`LEP- must be followed by 5-8 digits only. Detected ${nums.length} characters`)
+        }
+
+        if (!this.isNumeric(nums)) {
+          errors.push("Digit error: found non-numeric values in recordNumber after LEP-")
+        }
+      }
     }
 
-    if (
-      this.state.catalogNumber !== "" &&
-      (this.state.catalogNumber.split("_")[1].length < 6 ||
-        this.state.catalogNumber.split("_")[1].length > 8)
-    ) {
-      errors.push("MGCL_ must be followed by 6-8 digits only.");
+    
+    // order_ checks
+    if (this.state.order_ !== "") {
+      const order_ = this.state.order_
+      // check capitalization
+      let correctValue = checkRandomCaps(order_, true)
+      if (correctValue !== order_) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${order_}`)
+      }
     }
 
-    if (
-      this.state.catalogNumber !== "" &&
-      !this.isNumeric(this.state.catalogNumber.split("_")[1])
-    ) {
-      errors.push(
-        "Digit error: found non-numeric values in catalogNumber after MGCL_"
-      );
+    // superfamily checks
+    if (this.state.superfamily !== "") {
+      const superfamily = this.state.superfamily
+      // check capitalization
+      let correctValue = checkRandomCaps(superfamily, true)
+      if (correctValue !== superfamily) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${superfamily}`)
+      }
+
+      if (this.includesPunctuation(superfamily)) {
+        errors.push(
+          "Formatting error (@ superfamily): Remove punctuation"
+        )
+      }
     }
 
-    if (
-      this.state.recordNumber !== "" &&
-      !this.state.recordNumber.startsWith("LEP-")
-    ) {
-      errors.push("recordNumber must start with LEP-, followed by 5-8 digits.");
+    // family checks
+    if (this.state.family !== "") {
+      const family = this.state.family
+      // check capitalization
+      let correctValue = checkRandomCaps(family, true)
+      if (correctValue !== family) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${family}`)
+      }
+
+      if (this.includesPunctuation(family)) {
+        errors.push(
+          "Formatting error (@ family): Remove punctuation."
+        )
+      }
     }
+
+    // subfamily checks
+    if (this.state.subfamily !== "") {
+      const subfamily = this.state.subfamily
+      // check capitalization
+      let correctValue = checkRandomCaps(subfamily, true)
+      if (correctValue !== subfamily) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${subfamily}`)
+      }
+    }
+
+    // tribe checks
+    if (this.state.tribe !== "") {
+      const tribe = this.state.tribe
+      // check capitalization
+      let correctValue = checkRandomCaps(tribe, true)
+      if (correctValue !== tribe) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${tribe}`)
+      }
+    }
+
+    // genus checks
+    if (this.state.genus !== "") {
+      const genus = this.state.genus
+      // check capitalization
+      let correctValue = checkRandomCaps(genus, true)
+      if (correctValue !== genus) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${genus}`)
+      }
+    }
+
+    // subgenus checks
+    if (this.state.subgenus !== "") {
+      const subgenus = this.state.subgenus
+      // check capitalization
+      let correctValue = checkRandomCaps(subgenus, true)
+      if (correctValue !== subgenus) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${subgenus}`)
+      }
+    }
+
+    // specificEpithet checks
+    if (this.state.specificEpithet !== "") {
+      const specificEpithet = this.state.specificEpithet
+      // check capitalization
+      let correctValue = checkRandomCaps(specificEpithet, false)
+      if (correctValue !== specificEpithet) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${specificEpithet}`)
+      }
+    }
+
+    
+    // infraspecificEpithet checks
+    if (this.state.infraspecificEpithet !== "") {
+      const infraspecificEpithet = this.state.infraspecificEpithet
+
+      // check capitalization
+      let correctValue = checkRandomCaps(infraspecificEpithet, false)
+      if (correctValue !== infraspecificEpithet) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${infraspecificEpithet}`)
+      }
+    }
+
+
+    // identificationQualifier checks
+    if (this.state.identificationQualifier !== "") {
+      const identificationQualifier = this.state.identificationQualifier
+
+      if (this.includesPunctuation(identificationQualifier)) {
+        errors.push("Formatting error: remove punctuation in identificationQualifier.")
+      }
+    }
+
+    // recordedBy checks
+    if (this.state.recordedBy !== "") {
+      const recordedBy = this.state.recordedBy
+
+      let correctValue = checkRandomCaps(recordedBy, true)
+      if (correctValue !== recordedBy) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${recordedBy}`)
+      }
+    }
+
+
+    // identifiedBy checks
+    if (this.state.identifiedBy !== "") {
+      const identifiedBy = this.state.identifiedBy
+
+      let correctValue = checkRandomCaps(identifiedBy, true)
+      if (correctValue !== identifiedBy) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${identifiedBy}`)
+      }
+    }
+
+
+    // dateIdentified checks
+    if (this.state.dateIdentified !== "") {
+      const readableDate = this.parseDate(this.state.dateIdentified)
+
+      // implement errors
+    }
+
+
+    // sex checks 
+    if (this.state.sex !== "") {
+      const sex = this.state.sex
+
+      if (!this.controlHasString(sexControl, sex)) {
+        errors.push(`Control error: ${sex} is not one of the accepted inputs for sex.`)
+      }
+    }
+
+
+    // preparations checks
+    if (this.state.preparations !== "") {
+      const preparations = this.state.preparations
+
+      if (!this.controlHasString(preparationsControl, preparations)) {
+        errors.push(`Control error: ${preparations} is not one of the accepted inputs for preparations.`)
+      }
+
+      let correctValue = checkRandomCaps(preparations, true)
+      if (correctValue !== preparations) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${preparations}`)
+      }
+    }
+    
+
+    // lifeStage checks
+    if (this.state.lifeStage !== "") {
+      const lifeStage = this.state.lifeStage
+
+      if (!this.controlHasString(lifeStageControl, lifeStage)) {
+        errors.push(`Control error: ${lifeStage} is not one of the accepted inputs for lifeStage.`)
+      }
+    }
+
+
+    // occurrenceRemarks checks
+
+
+    // molecularOccurrenceRemarks checks
+
+
+    // samplingProtocol checks
+    if (this.state.samplingProtocol !== "") {
+      const samplingProtocol = this.state.samplingProtocol
+
+      if (!this.controlHasString(samplingProtocolControl, samplingProtocol)) {
+        errors.push(`Control error: ${samplingProtocol} is not one of the accepted inputs for samplingProtocol.`)
+      }
+    }
+
+
+    // habitat checks
+
+
+    // country checks
+    if (this.state.country !== "") {
+      const country = this.state.country
+
+      if (!this.controlHasString(countryList, country)) {
+        errors.push(`Control error: ${country} is not one of the accepted inputs for country.`)
+      }
+    }
+
+
+    // stateProvince checks ## ADD ME ##
+
+
+    // county checks
+    if (this.state.county !== "") {
+      const county = this.state.county
+      let correctValue = checkRandomCaps(county, true)
+
+      if (correctValue !== county) {
+        errors.push(`Formatting error: expected ${correctValue}, recieved ${county}`)
+      }
+    }
+
+
+    // municipality checks ## ADD ME ##
+
+
+    // locality checks ## ADD ME ##
+
+
+    // verbatimElevation checks  ## ADD ME ##
+
+
+    // decimalLatitude checks
+    if (this.state.decimalLatitude !== "") {
+      if (!this.isNumeric(this.state.decimalLatitude)) {
+        errors.push('Number error: detected non-numeric values.')
+      }
+
+      else {
+        const parsedLatitude = parseFloat(this.state.decimalLatitude)
+        if (parsedLatitude !== NaN) {
+          if (parsedLatitude < -41.0983423 || parsedLatitude > 41.0983423) {
+            errors.push(`decimalLatitude out of range: valid values between +- 41.0983423.`)
+          }
+        }
+        else {
+          errors.push(`Number error: could not parse number (are there non-numeric values?).`)
+        }
+      }
+
+    }
+
+
+    // decimalLongitude checks
+
+
+    // geodeticDatum checks
+
+
+    // coordinateUncertainty checks
+
+
+    // verbatimLatitude checks
+
+
+    // verbatimLongitude checks
+
+
+    // georeferencedBy checks
+
+
+    // disposition checks 
+    if (this.state.disposition !== "") {
+      const disposition = this.state.disposition
+
+      if (!this.controlHasString(dispositionControl, disposition)) {
+        errors.push(`Control error: ${disposition} is not one of the accepted inputs for disposition.`)
+      }
+    }
+
+
+    // loanInfo checks
+
+
+    // freezer checks
+
+
+    // rack checks
+
+
+    // box checks
+
+
+    // tubeSize checks
+    if (this.state.tubeSize !== "") {
+      const tubeSize = this.state.tubeSize
+
+      if (!this.controlHasString(tubeSizeControl, tubeSize)) {
+        errors.push(`Control error: ${tubeSize} is not one of the accepted inputs for tubeSize.`)
+      }
+    }
+
+
+    // associatedSequences checks
+
+
+    // associatedReferences checks
+
+
+    // witholdData checks
+    if (this.state.withholdData !== "") {
+      const withholdData = this.state.withholdData
+
+      if (!this.controlHasString(yesOrNo, withholdData)) {
+        errors.push(`Control error: ${withholdData} is not one of the accepted inputs for withholdData`)
+      }
+    }
+
+
+    // reared checks
+    if (this.state.reared !== "") {
+      const reared = this.state.reared
+
+      if (!this.controlHasString(yesOrNo, reared)) {
+        errors.push(`Control error: ${reared} is not one of the accepted inputs for reared.`)
+      }
+    }
+
+
+    // fieldNotes checks
+
+
+    // collectors checks
 
 
 
@@ -235,64 +610,69 @@ export default class MANUAL extends React.Component {
   // FIXME: BROKEN
   handleSubmit = () => {
     this.setState({ loading: true });
-    // alert(JSON.stringify(this.state, null, 2));
-    let ret = checkManualEntry(this.state);
 
-    if (ret.errors.length === 0) {
+    //let errors = this.checkBasicPostSubmit()
+
+    const specimen = {
+      catalogNumber: this.state.catalogNumber,
+      recordNumber: this.state.recordNumber,
+      otherRecordNumber: this.state.otherRecordNumber,
+      order_: this.state.order_,
+      superfamily: this.state.superfamily,
+      family: this.state.family,
+      subfamily: this.state.subfamily,
+      tribe: this.state.tribe,
+      genus: this.state.genus,
+      subgenus: this.state.subgenus,
+      specificEpithet: this.state.specificEpithet,
+      infraspecificEpithet: this.state.infraspecificEpithet,
+      identificationQualifier: this.state.identificationQualifier,
+      recordedBy: this.state.recordedBy,
+      identifiedBy: this.state.identifiedBy,
+      dateIdentified: parseDate(this.state.dateIdentified),
+      sex: this.state.sex,
+      lifeStage: this.state.lifeStage,
+      habitat: this.state.habitat,
+      occurrenceRemarks: this.state.occurrenceRemarks,
+      molecularOccurrenceRemarks: this.state.molecularOccurrenceRemarks,
+      samplingProtocol: this.state.samplingProtocol,
+      country: this.state.country,
+      stateProvince: this.state.stateProvince,
+      county: this.state.county,
+      municipality: this.state.municipality,
+      locality: this.state.locality,
+      verbatimElevation: this.state.verbatimElevation,
+      decimalLatitude: this.state.decimalLatitude,
+      decimalLongitude: this.state.decimalLongitude,
+      geodeticDatum: this.state.geodeticDatum,
+      coordinateUncertainty: this.state.coordinateUncertainty,
+      verbatimLatitude: this.state.verbatimLatitude,
+      verbatimLongitude: this.state.verbatimLongitude,
+      georeferencedBy: this.state.georeferencedBy,
+      disposition: this.state.disposition,
+      loanInfo: this.state.loanInfo,
+      preparations: this.state.preparations,
+      freezer: this.state.freezer,
+      rack: this.state.rack,
+      box: this.state.box,
+      tubeSize: this.state.tubeSize,
+      associatedSequences: this.state.associatedSequences,
+      associatedReferences: this.state.associatedReferences,
+      withholdData: this.state.withholdData,
+      reared: this.state.reared,
+      fieldNotes: this.state.fieldNotes,
+      collectors: this.state.collectors,
+    }
+
+    let errors = checkSpecimen(specimen)
+
+    // console.log(errors)
+
+    if (errors.length === 0) {
 
       // once all errors / prechecks completed
-      const specimen = {
-        catalogNumber: this.state.catalogNumber,
-        recordNumber: this.state.recordNumber,
-        otherRecordNumber: this.state.otherRecordNumber,
-        order_: this.state.order_,
-        superfamily: this.state.superfamily,
-        family: this.state.family,
-        subfamily: this.state.subfamily,
-        tribe: this.state.tribe,
-        genus: this.state.genus,
-        subgenus: this.state.subgenus,
-        specificEpithet: this.state.specificEpithet,
-        infraspecificEpithet: this.state.infraspecificEpithet,
-        identificationQualifier: this.state.identificationQualifier,
-        recordedBy: this.state.recordedBy,
-        identifiedBy: this.state.identifiedBy,
-        dateIdentified: this.parseDate(this.state.dateIdentified),
-        sex: this.state.sex,
-        lifeStage: this.state.lifeStage,
-        habitat: this.state.habitat,
-        occurrenceRemarks: this.state.occurrenceRemarks,
-        molecularOccurrenceRemarks: this.state.molecularOccurrenceRemarks,
-        samplingProtocol: this.state.samplingProtocol,
-        country: this.state.country,
-        stateProvince: this.state.stateProvince,
-        county: this.state.county,
-        municipality: this.state.municipality,
-        locality: this.state.locality,
-        verbatimElevation: this.state.verbatimElevation,
-        decimalLatitude: this.state.decimalLatitude,
-        decimalLongitude: this.state.decimalLongitude,
-        geodeticDatum: this.state.geodeticDatum,
-        coordinateUncertainty: this.state.coordinateUncertainty,
-        verbatimLatitude: this.state.verbatimLatitude,
-        verbatimLongitude: this.state.verbatimLongitude,
-        georeferencedBy: this.state.georeferencedBy,
-        disposition: this.state.disposition,
-        loanInfo: this.state.loanInfo,
-        preparations: this.state.preparations,
-        freezer: this.state.freezer,
-        rack: this.state.rack,
-        box: this.state.box,
-        tubeSize: this.state.tubeSize,
-        associatedSequences: this.state.associatedSequences,
-        associatedReferences: this.state.associatedReferences,
-        withholdData: this.state.withholdData,
-        reared: this.state.reared,
-        fieldNotes: this.state.fieldNotes,
-        collectors: this.state.collectors,
-      }
 
-      alert(JSON.stringify(specimen, null, 2))
+      //alert(JSON.stringify(specimen, null, 2))
 
       // send the request
 
@@ -301,7 +681,7 @@ export default class MANUAL extends React.Component {
     } 
     
     else {
-      this.props.updateInsertErrorMessage(ret.errors);
+      this.props.updateInsertErrorMessage(errors);
       this.setState({ hasError: true, loading: false });
     }
   };
@@ -370,211 +750,17 @@ export default class MANUAL extends React.Component {
 
   }
 
-  isNumeric = n => {
-    return !isNaN(parseFloat(n)) && isFinite(n);
-  };
-
-  parseDate = date => {
-    var dd = String(date.getDate()).padStart(2, "0");
-    var mm = String(date.getMonth() + 1).padStart(2, "0");
-    var yyyy = date.getFullYear();
-
-    return yyyy + "-" + mm + "-" + dd;
-  };
-
-  controlHasString = (control, value) => {
-    let options = control.map(option => {
-      return option.value;
-    });
-
-    if (options.includes(value)) {
-      return true;
-    } else return false;
-  };
-
   checkBasicPreSubmit = (field, value) => {
-    switch (field) {
-      case "catalogNumber":
-        if (value === "") {
-          return false;
-        }
+    let errors = checkField(field, value)
 
-        else if (value.indexOf("MGCL_") < 0) {
-          return {
-            content: `${field} must start with 'MGCL_', followed by 6-8 digits.`
-          };
-        }
+    if (errors.length > 0) {
+      let displayError = errors[0].indexOf(': ') > -1
+      ? errors[0].split(': ')[1]
+      : errors[0]
 
-        else if (value.split("_")[1].length < 6 || value.split('_')[1].length > 8) {
-          return { content: `MGCL_ must be followed by 6-8 digits.` };
-        }
-
-        else if (!this.isNumeric(value.split("_")[1])) {
-          let inValidDigs = value.split("_")[1];
-          return { content: `Expected digits, found ${inValidDigs}.` };
-        }
-
-        else {
-          return false;
-        }
-
-      case "recordNumber":
-        if (value === "") {
-          return false;
-        }
-
-        else if (value.indexOf("LEP-") < 0) {
-          return {
-            content: `${field} must start with 'LEP-', followed by 5-8 digits.`
-          };
-        }
-
-        else if (value.split("-")[1].length < 5 || value.split("-"[1].length > 8)) {
-          return { content: `LEP- must be followed by 5-8 digits.` };
-        }
-
-        else if (!this.isNumeric(value.split("-")[1])) {
-          let inValidDigs = value.split("-")[1];
-          return { content: `Expected digits, found ${inValidDigs}.` };
-        }
-
-        else {
-          return false;
-        }
-
-      case "order_":
-      case "superfamily":
-      case "family":
-      case "subfamily":
-      case "tribe":
-      case "genus":
-      case "subgenus":
-        let correctValue = checkRandomCaps(value, true)
-        if (value === "") {
-          return false;
-        }
-
-        else if (value[0] !== value[0].toUpperCase()) {
-          return { content: "Capitalize the first letter." };
-        }
-
-        else if (correctValue !== value) {
-          let arr = value.split(' ')
-          if (arr.length > 1) {
-            for (let i = 1; i < arr.length; i++) {
-              if (arr[i][0].toUpperCase() !== arr[i][0])
-                return { content: "Be sure to capitalize the first letter in each word." };
-            }
-
-            return { content: "Random capitalization detected."}
-          }
-          else {
-            return { content: "Random capitalization detected."}
-          }
-          // return { content: "Random capitalization detected."}
-        }
-
-        else {
-          return false;
-        }
-
-      case "specificEpithet":
-        let correctSpec = checkRandomCaps(value, false)
-        // console.log(correctSpec)
-        if (value === "") {
-          return false;
-        }
-
-        else if (value[0] !== value[0].toLowerCase()) {
-          return { content: "First letter should be lowercase." };
-        }
-
-        else if (correctSpec !== value) {
-          let specArr = value.split(' ')
-          if (specArr.length > 1) {
-            for (let i = 1; i < specArr.length; i++) {
-              if (specArr[i][0].toLowerCase() !== specArr[i][0])
-                return { content: "Be sure the first letter in each word is lowercase." };
-            }
-
-            return { content: "Random capitalization detected."}
-          }
-
-          else {
-            return {content: 'Random capitalization detected.'}
-          }
-        }
-
-        else {
-          return false;
-        }
-
-      case "identificationQualifier":
-        if (value === "") {
-          return false;
-        } 
-        
-        else if (value[0] !== value[0].toLowerCase()) {
-          return { content: "First letter should be lowercase." };
-        } 
-        
-        else if (
-          value.includes("'") ||
-          value.includes(".") ||
-          value.includes('"') ||
-          value.includes(",")
-        ) {
-          return { content: "Remove punctuation." };
-        } 
-        
-        else if (
-          !this.controlHasString(identificationQualifierControl, value)
-        ) {
-          return { content: `${value} is not one of the accepted inputs.` };
-        } 
-        
-        else {
-          return false;
-        }
-
-      case "recordedBy":
-      case "identifiedBy":
-      case "dateIdentified":
-        let date = this.parseDate(new Date(value));
-        //console.log(date);
-        if (value === "") {
-          return false;
-        } 
-        
-        else {
-          return false;
-        }
-
-      case "sex":
-        if (value === "") {
-          return false;
-        } 
-        
-        else if (!this.controlHasString(sexControl, value)) {
-          return { content: `${value} is not one of the accepted inputs.` };
-        } 
-        
-        else {
-          return false;
-        }
-
-      case "preparations":
-        if (value === 'Genetic Resources') {
-          return {content: 'Warning: See Specify GRR for disposition.'} 
-        }
-
-        else {
-          return false
-        }
-      
-      default:
-        return false;
+      return {content: displayError}
     }
+    else return false
   };
 
   renderErrorTerminal = () => (

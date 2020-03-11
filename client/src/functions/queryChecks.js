@@ -1,3 +1,15 @@
+import {
+  identificationQualifierControl,
+  samplingProtocolControl,
+  dispositionControl,
+  preparationsControl,
+  tubeSizeControl,
+  lifeStageControl,
+  sexControl,
+  setCountOptions
+} from "../components/Query/QueryConstants/constants";
+
+
 const correctHeaders = [
   "catalogNumber",
   "recordNumber",
@@ -217,6 +229,230 @@ export function checkRandomCaps(field, upperFirst) {
   }).join(' ')
 
   return correctField
+}
 
+const isNumeric = n => {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
 
+export function parseDate(date) {
+  if (date === "") {
+    return date
+  }
+
+  var dd = String(date.getDate()).padStart(2, "0");
+  var mm = String(date.getMonth() + 1).padStart(2, "0");
+  var yyyy = date.getFullYear();
+
+  return yyyy + "-" + mm + "-" + dd;
+};
+
+const controlHasString = (control, value) => {
+  let options = control.map(option => {
+    return option.value;
+  });
+
+  if (options.includes(value)) {
+    return true;
+  } else return false;
+};
+
+const includesPunctuation = field => {
+  if (
+    field.includes("'") ||
+    field.includes(".") ||
+    field.includes('"') ||
+    field.includes(",")
+  ) {
+    return true
+  }
+
+  else return false
+}
+
+const capsChecks = (fieldName, fieldValue, upperFirst) => {
+  let errors = []
+  let capsSingle = upperFirst
+  ? "First letter should be capitalized."
+  : "First letter should be lowercase."
+
+  let capsMultiple = upperFirst
+  ? "Be sure to capitalize the first letter in each word."
+  : "Be sure the first letter in each word is lowercase."
+
+  let correctValue = checkRandomCaps(fieldValue, upperFirst)
+  if (fieldValue === "") {
+    return errors;
+  }
+
+  if (fieldValue[0] !== fieldValue[0].toUpperCase()) {
+    errors.push(`Format error (@ ${fieldName}): ${capsSingle}`)
+  }
+
+  if (correctValue !== fieldValue) {
+    let arr = fieldValue.split(' ')
+    if (arr.length > 1) {
+      for (let i = 1; i < arr.length; i++) {
+        if (upperFirst) {
+          if (arr[i][0].toUpperCase() !== arr[i][0])
+          errors.push(`Format error (@ ${fieldName}): ${capsMultiple}`)
+          break
+        }
+        else {
+          if (arr[i][0].toLowerCase() !== arr[i][0])
+          errors.push(`Format error (@ ${fieldName}): ${capsMultiple}`)
+          break
+        }
+
+      }
+
+      errors.push(`Format error (@ ${fieldName}): Random capitalization detected.`)
+    }
+    else {
+      errors.push(`Format error (@ ${fieldName}): Random capitalization detected.`)
+    }
+  }
+
+  return errors
+}
+
+export function checkField(fieldName, fieldValue) {
+  let errors = []
+  switch (fieldName) {
+    case "catalogNumber":
+      if (fieldValue === "") {
+        return errors;
+      }
+
+      if (fieldValue.indexOf("MGCL_") < 0) {
+          errors.push(`Format error (@ ${fieldName}): ${fieldName} must start with 'MGCL_', followed by 6-8 digits.`)
+          //return errors
+      }
+
+      if (fieldValue.indexOf("_") > -1) {
+        if (fieldValue.split("_")[1].length < 6 || fieldValue.split('_')[1].length > 8) {
+          errors.push(`Format error (@ ${fieldName}): MGCL_ must be followed by 6-8 digits.`)
+        }
+  
+        if (!isNumeric(fieldValue.split("_")[1])) {
+          let inValidDigs = fieldValue.split("_")[1];
+          errors.push(`Format error (@ ${fieldName}): Expected digits, found ${inValidDigs}.`)
+        }
+      }
+
+      if (includesPunctuation(fieldValue)) {
+        errors.push(`Format error (@ ${fieldName}): Remove punctuation from catalogNumber.`)
+      }
+
+      return errors
+
+    case "recordNumber":
+      if (fieldValue === "") {
+        return errors;
+      }
+
+      if (fieldValue.indexOf("LEP-") < 0) {
+        errors.push(`Format error (@ ${fieldName}): ${fieldName} must start with 'LEP-', followed by 5-8 digits.`)
+      }
+
+      if (fieldValue.indexOf('-') > -1) {
+        if (fieldValue.split("-")[1].length < 5 || fieldValue.split("-")[1].length > 8) {
+          errors.push(`Format error (@ ${fieldName}): LEP- must be followed by 5-8 digits.`)
+        }
+  
+        if (!isNumeric(fieldValue.split("-")[1])) {
+          let inValidDigs = fieldValue.split("-")[1];
+          errors.push(`Format error (@ ${fieldName}): Expected digits, found ${inValidDigs}.`)
+        }
+      }
+
+      if (includesPunctuation(fieldValue)) {
+        errors.push(`Format error (@ ${fieldName}): Remove punctuation from recordNumber.`)
+      }
+
+      return errors
+
+    case "order_":
+    case "superfamily":
+    case "family":
+    case "subfamily":
+    case "tribe":
+    case "genus":
+    case "subgenus":
+      errors = errors.concat(capsChecks(fieldName, fieldValue, true))
+      return errors
+
+    case "specificEpithet":
+      errors = errors.concat(capsChecks(fieldName, fieldValue, false))
+      return errors
+
+    case "identificationQualifier":
+      if (fieldValue === "") {
+        return errors;
+      } 
+      
+      if (fieldValue[0] !== fieldValue[0].toLowerCase()) {
+        errors.push("First letter should be lowercase.")
+      } 
+      
+      if (
+        fieldValue.includes("'") ||
+        fieldValue.includes(".") ||
+        fieldValue.includes('"') ||
+        fieldValue.includes(",")
+      ) {
+        errors.push("Remove punctuation.")
+      } 
+      
+      if (
+        !this.controlHasString(identificationQualifierControl, fieldValue)
+      ) {
+        errors.push(`${fieldValue} is not one of the accepted inputs.`)
+      } 
+      
+      return errors
+
+    case "recordedBy":
+    case "identifiedBy":
+    case "dateIdentified":
+      let date = parseDate(new Date(fieldValue));
+      //console.log(date);
+      if (fieldValue === "") {
+        return errors
+      } 
+      
+      return errors
+
+    case "sex":
+      if (fieldValue === "") {
+        return errors;
+      } 
+      
+      if (!this.controlHasString(sexControl, fieldValue)) {
+        errors.push(`${fieldValue} is not one of the accepted inputs.`)
+      } 
+      
+      return errors
+
+    case "preparations":
+      // if (fieldValue === 'Genetic Resources') {
+      //   return {content: 'Warning: See Specify GRR for disposition.'} 
+      // }
+      return errors
+    
+    default:
+      return errors;
+  }
+}
+
+export function checkSpecimen(specimen) {
+  // check EVERY field using checkfield
+  let errors = []
+  for (let field of Object.keys(specimen)) {
+    let fieldErrors = checkField(field, specimen[field])
+    if (fieldErrors.length > 0) {
+      errors = errors.concat(fieldErrors)
+    }
+  }
+  return errors
 }
