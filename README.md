@@ -22,19 +22,21 @@ git clone https://github.com/FLMNH-MGCL/Database-App.git
 cd Database-App
 npm install
 npm run-script install-all
-npm run-script dev
+npm run-script electron
 ```
-Before running `npm run-script dev`, ensure you enter the MySQL database default information in the server.js file, found in `Database-App/server/server.js`. In this file, you will see:
+Before running `npm run-script electron`, ensure you enter your database access credentials in the config.js file. This file is excluded, however you can rename the config.example.js file to config.js and enter the appropriate information. The config template can be found at `Database-App/server/config/config.example.js`. Change the name to `config.js`, and ender the information. It should wind up look something like this:
 ```
-let connection = mysql.createConnection({
-    host: '',
-    port: '',
-    user: '',
-    password: '',
-    database: ''
-})
+module.exports = {
+    mysqlCredentials: {
+        host: 'host.domain',
+        port: '####',
+        user: 'username',
+        password: 'password',
+        database: 'database_name'
+    }
+}
 ```
-Enter the host, port, default user/password combination, and the database name to connect to the database. If you do not have these credentials, please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly for eligibility. If you are an employee and need additional assistance and/or lost these credentials, please refer to the <a href=''>instructional videos</a> (TBA) or contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly, as well.
+Enter the host, port, default user/password combination, and the database name to connect to the database. If you do not have these credentials or lost these credentials, please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly for eligibility. If you are an employee and need additional assistance, please refer to the <a href=''>instructional videos</a> (TBA) or contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly, as well.
 
 ### Citation ###
 <b>Pending its first release,</b> this software will be paired with a DOI number. On first release, the DOI number generated will be here for citation purposes.
