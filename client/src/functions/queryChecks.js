@@ -6,7 +6,10 @@ import {
   tubeSizeControl,
   lifeStageControl,
   sexControl,
-  setCountOptions
+  setCountOptions,
+  countryControl,
+  geodeticDatumControl,
+  yesOrNo
 } from "../components/Query/QueryConstants/constants";
 
 
@@ -247,6 +250,43 @@ export function parseDate(date) {
   return yyyy + "-" + mm + "-" + dd;
 };
 
+export const parseMeasurement = measurement => {
+  // comes in like 30 meters
+  // empty would look like " "
+
+  if (measurement === " ") {
+    return measurement
+  }
+
+  else {
+    if (measurement.toLowerCase().endsWith(" meters") || measurement.toLowerCase().endsWith(" meter")) {
+      alert('true')
+      return parseFloat(measurement.split(" ")[0])
+    }
+
+    else if (measurement.toLowerCase().endsWith(" feet")) {
+      let feetToMeters = parseFloat(measurement.split(" ")[0])
+      feetToMeters = feetToMeters * 0.3048
+      return feetToMeters
+    }
+
+    else if (measurement.toLowerCase().endsWith(" miles") || measurement.toLowerCase().endsWith(" mile")) {
+      let milesToMeters = parseFloat(measurement.split(" ")[0])
+      milesToMeters = milesToMeters * 1609.34
+      return milesToMeters
+    }
+
+    else if (isNumeric(measurement)) {
+      // missing unit
+      return "INVALID ENTRY: No unit specified."
+    }
+
+    else {
+      return "INVALID ENTRY: Unknown entry type."
+    }
+  }
+}
+
 const controlHasString = (control, value) => {
   let options = control.map(option => {
     return option.value;
@@ -273,43 +313,62 @@ const includesPunctuation = field => {
 const capsChecks = (fieldName, fieldValue, upperFirst) => {
   let errors = []
   let capsSingle = upperFirst
-  ? "First letter should be capitalized."
-  : "First letter should be lowercase."
+    ? "First letter should be capitalized."
+    : "First letter should be lowercase."
 
   let capsMultiple = upperFirst
-  ? "Be sure to capitalize the first letter in each word."
-  : "Be sure the first letter in each word is lowercase."
+    ? "Be sure to capitalize the first letter in each word."
+    : "Be sure the first letter in each word is lowercase."
 
   let correctValue = checkRandomCaps(fieldValue, upperFirst)
   if (fieldValue === "") {
     return errors;
   }
 
-  if (fieldValue[0] !== fieldValue[0].toUpperCase()) {
-    errors.push(`Format error (@ ${fieldName}): ${capsSingle}`)
+  if (upperFirst) {
+    if (fieldValue[0] !== fieldValue[0].toUpperCase()) {
+      errors.push(`Format error (@ ${fieldName}): ${capsSingle}`)
+    }
+  }
+  else {
+    if (fieldValue[0] !== fieldValue[0].toLowerCase()) {
+      errors.push(`Format error (@ ${fieldName}): ${capsSingle}`)
+    }
   }
 
+
   if (correctValue !== fieldValue) {
+    let randomError = true
     let arr = fieldValue.split(' ')
     if (arr.length > 1) {
       for (let i = 1; i < arr.length; i++) {
-        if (upperFirst) {
-          if (arr[i][0].toUpperCase() !== arr[i][0])
-          errors.push(`Format error (@ ${fieldName}): ${capsMultiple}`)
-          break
-        }
-        else {
-          if (arr[i][0].toLowerCase() !== arr[i][0])
-          errors.push(`Format error (@ ${fieldName}): ${capsMultiple}`)
-          break
-        }
+        arr[i].split('').forEach((letter, index) => {
+          if (index === 0 && upperFirst && letter.toUpperCase() !== arr[i][0]) {
+            errors.push(`Format error (@ ${fieldName}): ${capsMultiple}`)
+          }
 
+          else if (index === 0 && !upperFirst && letter.toLowerCase() !== arr[i][0]) {
+            errors.push(`Format error (@ ${fieldName}): ${capsMultiple}`)
+          }
+          else if (index !== 0) {
+            console.log(`${letter.toLowerCase()} vs ${letter}`)
+            if (letter.toLowerCase() !== arr[i][index]) {
+              errors.push(`Format error (@ ${fieldName}): Random capitalization detected.`)
+            }
+          }
+        })
       }
-
-      errors.push(`Format error (@ ${fieldName}): Random capitalization detected.`)
     }
+
     else {
-      errors.push(`Format error (@ ${fieldName}): Random capitalization detected.`)
+      // only check for random here
+      fieldValue.split('').forEach((letter, index) => {
+        if (index !== 0) {
+          if (letter.toLowerCase() !== letter) {
+            errors.push(`Format error (@ ${fieldName}): Random capitalization detected.`)
+          }
+        }
+      })
     }
   }
 
@@ -383,6 +442,7 @@ export function checkField(fieldName, fieldValue) {
       return errors
 
     case "specificEpithet":
+    case "infraspecificEpithet":
       errors = errors.concat(capsChecks(fieldName, fieldValue, false))
       return errors
 
@@ -391,29 +451,26 @@ export function checkField(fieldName, fieldValue) {
         return errors;
       } 
       
-      if (fieldValue[0] !== fieldValue[0].toLowerCase()) {
-        errors.push("First letter should be lowercase.")
-      } 
+      errors = errors.concat(capsChecks(fieldName, fieldValue, false))
+
+      if (includesPunctuation(fieldValue)) {
+        errors.push(`Format error (@ ${fieldName}): Remove punctuation from ${fieldName}.`)
+      }
       
-      if (
-        fieldValue.includes("'") ||
-        fieldValue.includes(".") ||
-        fieldValue.includes('"') ||
-        fieldValue.includes(",")
-      ) {
-        errors.push("Remove punctuation.")
-      } 
-      
-      if (
-        !this.controlHasString(identificationQualifierControl, fieldValue)
-      ) {
-        errors.push(`${fieldValue} is not one of the accepted inputs.`)
+      if (!this.controlHasString(identificationQualifierControl, fieldValue)) {
+        errors.push(`Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`)
       } 
       
       return errors
 
     case "recordedBy":
+      // handle later
+      return errors
+
     case "identifiedBy":
+      // handle later
+      return errors
+
     case "dateIdentified":
       let date = parseDate(new Date(fieldValue));
       //console.log(date);
@@ -428,8 +485,8 @@ export function checkField(fieldName, fieldValue) {
         return errors;
       } 
       
-      if (!this.controlHasString(sexControl, fieldValue)) {
-        errors.push(`${fieldValue} is not one of the accepted inputs.`)
+      if (!controlHasString(sexControl, fieldValue)) {
+        errors.push(`Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`)
       } 
       
       return errors
@@ -438,8 +495,187 @@ export function checkField(fieldName, fieldValue) {
       // if (fieldValue === 'Genetic Resources') {
       //   return {content: 'Warning: See Specify GRR for disposition.'} 
       // }
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!controlHasString(preparationsControl, fieldValue)) {
+        errors.push(`Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`)
+      }
+
       return errors
     
+    case "lifeStage":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!controlHasString(lifeStageControl, fieldValue)) {
+        errors.push(`Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`)
+      }
+
+      return errors
+
+    case "samplingProtocol":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!controlHasString(samplingProtocolControl, fieldValue)) {
+        errors.push(`Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`)
+      }
+
+      return errors
+
+    case "country":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!controlHasString(countryControl, fieldValue)) {
+        errors.push(`Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`)
+      }
+
+      return errors
+
+    case "stateProvince":
+    case "county":
+    case "municipality":
+    case "locality":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      errors = errors.concat(capsChecks(fieldName, fieldValue, true))
+      return errors
+
+    case "verbatimElevation":
+      if (fieldValue === " ") {
+        return errors
+      }
+
+      // alert(typeof(fieldValue))
+
+      if (typeof(fieldValue) === "string") {
+        if (fieldValue.indexOf("INVALID") > -1) {
+          let invalidError = fieldValue.split(": ")[1]
+          switch (invalidError) {
+            case "No unit specified.":
+              errors.push(`Format error (@ ${fieldName}): must specify unit.`)
+            default:
+              errors.push(`Format error (@ ${fieldName}): invalid format.`)
+          }
+          // errors.push(``)
+        } 
+      }
+
+      else {
+
+      }
+
+      // ADD CONVERSIONS LATER
+      return errors
+    
+    case "decimalLatitude":
+    case "decimalLongitude":
+      const parsed = parseFloat(fieldValue)
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!isNumeric(fieldValue)) {
+        errors.push(`Number error (@ ${fieldName}): detected non-numeric values.`)
+      }
+
+      if (parsed !== NaN) {
+        if (parsed < -41.0983423 || parsed > 41.0983423) {
+          errors.push(`Number error (@ ${fieldName}): ${fieldValue} out of range (+- 41.0983423).`)
+        }
+      }
+      else {
+        errors.push(`Number error (@ ${fieldName}): detected non-numeric values.`)
+      }
+
+      return errors
+
+    case "geodeticDatum":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!controlHasString(geodeticDatumControl, fieldValue)) {
+        errors.push(`Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`)
+      }
+
+      return errors
+
+    case "coordinateUncertainty":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!isNumeric(fieldValue)) {
+        errors.push(`Number error (@ ${fieldName}): detected non-numeric values.`)
+      }
+
+      return errors
+
+    // verbatimLat
+    // verbatimLong
+
+    case "georeferencedBy":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      // check name for caps
+
+      return errors
+
+    case "disposition":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!controlHasString(dispositionControl, fieldValue)) {
+        errors.push(`Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`)
+      }
+
+      return errors
+
+    // loanInfo
+
+    // freezer
+
+    // rack
+
+    // box
+
+    case "tubeSize":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!controlHasString(tubeSizeControl, fieldValue)) {
+        errors.push(`Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`)
+      }
+
+      return errors
+
+    case "withholdData":
+    case "reared":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!controlHasString(yesOrNo, fieldValue)) {
+        errors.push(`Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`)
+      }
+
+      return errors
+
+    // collectors
+
     default:
       return errors;
   }

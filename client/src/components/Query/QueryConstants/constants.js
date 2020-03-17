@@ -1,3 +1,23 @@
+var countryList = [{key: "-1", text: 'Select One', value: ''}];
+
+async function getCountries() {
+  // list of countries in JSON link
+  let fetchedList = await fetch('https://pkgstore.datahub.io/core/country-list/data_json/data/8c458f2d15d9f2119654b29ede6e45b8/data_json.json')
+  .then(response => response.json())
+  fetchedList.map(country => {
+    countryList.push({key: country.Code, text: country.Name, value: country.Name})
+  })
+  // console.log(countryList)
+}
+
+getCountries()
+
+export const yesOrNo = [
+  {key: "yes", text: "Yes", value: "Y"},
+  {key: "no", text: "No", value: "N"},
+]
+
+
 const reset = { key: "-1", text: "Select One", value: "" };
 
 export const selectQueryOption = [
@@ -156,6 +176,20 @@ export const conditionalCountOptions = [
   { key: "40", text: "18", value: 18 }
 ];
 
+export const familyControl = [
+  { key: "Collematacae", text: "Collematacae", value: "Collematacae" },
+  { key: "Depressariidae", text: "Depressariidae", value: "Depressariidae" },
+  { key: "Erebidae", text: "Erebidae", value: "Erebidae" },
+  { key: "Geometridae", text: "Geometridae", value: "Geometridae" },
+  { key: "Momphidae", text: "Momphidae", value: "Momphidae" },
+  { key: "Nymphalidae", text: "Nymphalidae", value: "Nymphalidae" },
+  { key: "Papilionidae", text: "Papilionidae", value: "Papilionidae" },
+  { key: "Plutellidae", text: "Plutellidae", value: "Plutellidae" },
+  { key: "Psychidae", text: "Psychidae", value: "Psychidae" },
+  { key: "Saturniidae", text: "Saturniidae", value: "Saturniidae" },
+  { key: "Tineidae", text: "Tineidae", value: "Tineidae" }
+];
+
 export const identificationQualifierControl = [
   reset,
   { key: "72", text: "aff", value: "aff" },
@@ -235,6 +269,25 @@ export const sexControl = [
   { key: "106", text: "female", value: "female" },
   { key: "107", text: "gynandromorph", value: "gynandromorph" }
 ];
+
+export const countryControl = countryList
+
+export const geodeticDatumControl = [
+  {key: "EPSG:4326", text: "EPSG:4326", value: "EPSG:4326"},
+  {key: "WGS84", text: "WGS84", value: "WGS84"},
+  {key: "NAD27", text: "NAD27", value: "NAD27"},
+  {key: "Campo Inchauspe", text: "Campo Inchauspe", value: "Campo Inchauspe"},
+  {key: "European 1950", text: "European 1950", value: "European 1950"},
+  {key: "Clarke 1866", text: "Clarke 1866", value: "Clarke 1866"},
+  {key: "Unknown", text: "Unknown", value: "Unknown"},
+]
+
+export const units = [
+  {key: "meters", text: "Meters", value: "meters"},
+  {key: "feet", text: "Feet", value: "feet"},
+  {key: "miles", text: "Miles", value: "miles"},
+]
+
 
 // catalogNumber control will be a manual check on submit
 

@@ -9,10 +9,11 @@ import {
   TextArea
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
-import { checkManualEntry, checkRandomCaps, checkField, checkSpecimen, parseDate } from "../../../functions/queryChecks";
+import { checkManualEntry, checkRandomCaps, checkField, checkSpecimen, parseDate, parseMeasurement } from "../../../functions/queryChecks";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 import QueryHelp from "../../Query/QueryHelp";
 import {
+  familyControl,
   identificationQualifierControl,
   samplingProtocolControl,
   dispositionControl,
@@ -20,45 +21,17 @@ import {
   tubeSizeControl,
   lifeStageControl,
   sexControl,
-  setCountOptions
+  setCountOptions,
+  countryControl,
+  yesOrNo,
+  units
 } from "../../Query/QueryConstants/constants";
-
-const yesOrNo = [
-  {key: "yes", text: "Yes", value: "Y"},
-  {key: "no", text: "No", value: "N"},
-]
-
-const familyOptions = [
-  { key: "0", text: "Collematacae", value: "Collematacae" },
-  { key: "1", text: "Depressariidae", value: "Depressariidae" },
-  { key: "2", text: "Erebidae", value: "Erebidae" },
-  { key: "3", text: "Geometridae", value: "Geometridae" },
-  { key: "4", text: "Momphidae", value: "Momphidae" },
-  { key: "5", text: "Nymphalidae", value: "Nymphalidae" },
-  { key: "6", text: "Papilionidae", value: "Papilionidae" },
-  { key: "7", text: "Plutellidae", value: "Plutellidae" },
-  { key: "8", text: "Psychidae", value: "Psychidae" },
-  { key: "9", text: "Saturniidae", value: "Saturniidae" },
-  { key: "10", text: "Tineidae", value: "Tineidae" }
-];
-
-  var countryList = [{key: "-1", text: 'Select One', value: ''}];
-
-  async function getCountries() {
-    // list of countries in JSON link
-    let fetchedList = await fetch('https://pkgstore.datahub.io/core/country-list/data_json/data/8c458f2d15d9f2119654b29ede6e45b8/data_json.json')
-    .then(response => response.json())
-    fetchedList.map(country => {
-      countryList.push({key: country.Code, text: country.Name, value: country.Name})
-    })
-    // console.log(countryList)
-  }
 
 export default class MANUAL extends React.Component {
   constructor(props) {
     super(props)
 
-    getCountries()
+    // getCountries()
 
     this.state = {
       activePage: "Manual Insert",
@@ -90,6 +63,7 @@ export default class MANUAL extends React.Component {
       municipality: "",
       locality: "",
       verbatimElevation: "",
+      elevationUnit: "",
       decimalLatitude: "",
       decimalLongitude: "",
       geodeticDatum: "",
@@ -115,7 +89,7 @@ export default class MANUAL extends React.Component {
       modifiedInfo: "",
       hasError: false,
       loading: false,
-      countryList: [],
+      // countryList: [],
       numCollectors: 1,
     };
   }
@@ -152,6 +126,7 @@ export default class MANUAL extends React.Component {
       municipality: "",
       locality: "",
       verbatimElevation: "",
+      elevationUnit: "",
       decimalLatitude: "",
       decimalLongitude: "",
       geodeticDatum: "",
@@ -193,419 +168,6 @@ export default class MANUAL extends React.Component {
 
     else return false
   }
-
-  /*
-  *   most of these checks will do the following: 
-  *   
-  *   1). check if input
-  *   2). check for specific field related errors
-  *   3). check for capitalization errors
-  *   4). if field with control values, checks against control
-  */
-  // MOVE TO OTHER FILE FOR REUSE WHEN COMPLETED
-  checkBasicPostSubmit = () => {
-    let errors = [];
-
-    // catalogNumber checks
-    if (this.state.catalogNumber !== "") {
-      const catalogNumber = this.state.catalogNumber
-      if (!catalogNumber.startsWith('MGCL_')) {
-        errors.push(
-          "catalogNumber must start with 'MGCL_', followed by 6-8 digits."
-        );
-      }
-
-      if (this.includesPunctuation(catalogNumber)) {
-        errors.push(
-          "Formatting error (@ catalogNumber): remove punctuation (except '_')."
-        )
-      }
-
-      if (catalogNumber.split('_').length !== 2) {
-        errors.push(
-          "catalogNumber must start with 'MGCL_', followed by 6-8 digits."
-        );
-      }
-      else {
-        let nums = catalogNumber.split("_")[1]
-        if (nums.length < 6 || nums.length > 8) {
-          errors.push("MGCL_ must be followed by 6-8 digits only.");
-        }
-
-        if (!this.isNumeric(nums)) {
-          errors.push("Digit error: found non-numeric values in catalogNumber after MGCL_")
-        }
-      }
-    }
-
-
-    // recordNumber checks
-    if (this.state.recordNumber !== "") {
-      const recordNumber = this.state.recordNumber
-      if (!recordNumber.startsWith("LEP-")) {
-        errors.push("recordNumber must start with LEP-, followed by 5-8 digits.");
-      }
-
-      if (this.includesPunctuation(recordNumber)) {
-        errors.push(
-          "Formatting error (@ recordNumber): Remove punctuation (except '-')."
-        )
-      }
-
-      if (recordNumber.split('-').length !== 2) {
-        errors.push("LEP- must be followed by 5-8 digits.")
-      }
-
-      else {
-        let nums = recordNumber.split('-')[1]
-        if (nums.length < 5 || nums.length > 8) {
-          errors.push(`LEP- must be followed by 5-8 digits only. Detected ${nums.length} characters`)
-        }
-
-        if (!this.isNumeric(nums)) {
-          errors.push("Digit error: found non-numeric values in recordNumber after LEP-")
-        }
-      }
-    }
-
-    
-    // order_ checks
-    if (this.state.order_ !== "") {
-      const order_ = this.state.order_
-      // check capitalization
-      let correctValue = checkRandomCaps(order_, true)
-      if (correctValue !== order_) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${order_}`)
-      }
-    }
-
-    // superfamily checks
-    if (this.state.superfamily !== "") {
-      const superfamily = this.state.superfamily
-      // check capitalization
-      let correctValue = checkRandomCaps(superfamily, true)
-      if (correctValue !== superfamily) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${superfamily}`)
-      }
-
-      if (this.includesPunctuation(superfamily)) {
-        errors.push(
-          "Formatting error (@ superfamily): Remove punctuation"
-        )
-      }
-    }
-
-    // family checks
-    if (this.state.family !== "") {
-      const family = this.state.family
-      // check capitalization
-      let correctValue = checkRandomCaps(family, true)
-      if (correctValue !== family) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${family}`)
-      }
-
-      if (this.includesPunctuation(family)) {
-        errors.push(
-          "Formatting error (@ family): Remove punctuation."
-        )
-      }
-    }
-
-    // subfamily checks
-    if (this.state.subfamily !== "") {
-      const subfamily = this.state.subfamily
-      // check capitalization
-      let correctValue = checkRandomCaps(subfamily, true)
-      if (correctValue !== subfamily) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${subfamily}`)
-      }
-    }
-
-    // tribe checks
-    if (this.state.tribe !== "") {
-      const tribe = this.state.tribe
-      // check capitalization
-      let correctValue = checkRandomCaps(tribe, true)
-      if (correctValue !== tribe) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${tribe}`)
-      }
-    }
-
-    // genus checks
-    if (this.state.genus !== "") {
-      const genus = this.state.genus
-      // check capitalization
-      let correctValue = checkRandomCaps(genus, true)
-      if (correctValue !== genus) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${genus}`)
-      }
-    }
-
-    // subgenus checks
-    if (this.state.subgenus !== "") {
-      const subgenus = this.state.subgenus
-      // check capitalization
-      let correctValue = checkRandomCaps(subgenus, true)
-      if (correctValue !== subgenus) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${subgenus}`)
-      }
-    }
-
-    // specificEpithet checks
-    if (this.state.specificEpithet !== "") {
-      const specificEpithet = this.state.specificEpithet
-      // check capitalization
-      let correctValue = checkRandomCaps(specificEpithet, false)
-      if (correctValue !== specificEpithet) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${specificEpithet}`)
-      }
-    }
-
-    
-    // infraspecificEpithet checks
-    if (this.state.infraspecificEpithet !== "") {
-      const infraspecificEpithet = this.state.infraspecificEpithet
-
-      // check capitalization
-      let correctValue = checkRandomCaps(infraspecificEpithet, false)
-      if (correctValue !== infraspecificEpithet) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${infraspecificEpithet}`)
-      }
-    }
-
-
-    // identificationQualifier checks
-    if (this.state.identificationQualifier !== "") {
-      const identificationQualifier = this.state.identificationQualifier
-
-      if (this.includesPunctuation(identificationQualifier)) {
-        errors.push("Formatting error: remove punctuation in identificationQualifier.")
-      }
-    }
-
-    // recordedBy checks
-    if (this.state.recordedBy !== "") {
-      const recordedBy = this.state.recordedBy
-
-      let correctValue = checkRandomCaps(recordedBy, true)
-      if (correctValue !== recordedBy) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${recordedBy}`)
-      }
-    }
-
-
-    // identifiedBy checks
-    if (this.state.identifiedBy !== "") {
-      const identifiedBy = this.state.identifiedBy
-
-      let correctValue = checkRandomCaps(identifiedBy, true)
-      if (correctValue !== identifiedBy) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${identifiedBy}`)
-      }
-    }
-
-
-    // dateIdentified checks
-    if (this.state.dateIdentified !== "") {
-      const readableDate = this.parseDate(this.state.dateIdentified)
-
-      // implement errors
-    }
-
-
-    // sex checks 
-    if (this.state.sex !== "") {
-      const sex = this.state.sex
-
-      if (!this.controlHasString(sexControl, sex)) {
-        errors.push(`Control error: ${sex} is not one of the accepted inputs for sex.`)
-      }
-    }
-
-
-    // preparations checks
-    if (this.state.preparations !== "") {
-      const preparations = this.state.preparations
-
-      if (!this.controlHasString(preparationsControl, preparations)) {
-        errors.push(`Control error: ${preparations} is not one of the accepted inputs for preparations.`)
-      }
-
-      let correctValue = checkRandomCaps(preparations, true)
-      if (correctValue !== preparations) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${preparations}`)
-      }
-    }
-    
-
-    // lifeStage checks
-    if (this.state.lifeStage !== "") {
-      const lifeStage = this.state.lifeStage
-
-      if (!this.controlHasString(lifeStageControl, lifeStage)) {
-        errors.push(`Control error: ${lifeStage} is not one of the accepted inputs for lifeStage.`)
-      }
-    }
-
-
-    // occurrenceRemarks checks
-
-
-    // molecularOccurrenceRemarks checks
-
-
-    // samplingProtocol checks
-    if (this.state.samplingProtocol !== "") {
-      const samplingProtocol = this.state.samplingProtocol
-
-      if (!this.controlHasString(samplingProtocolControl, samplingProtocol)) {
-        errors.push(`Control error: ${samplingProtocol} is not one of the accepted inputs for samplingProtocol.`)
-      }
-    }
-
-
-    // habitat checks
-
-
-    // country checks
-    if (this.state.country !== "") {
-      const country = this.state.country
-
-      if (!this.controlHasString(countryList, country)) {
-        errors.push(`Control error: ${country} is not one of the accepted inputs for country.`)
-      }
-    }
-
-
-    // stateProvince checks ## ADD ME ##
-
-
-    // county checks
-    if (this.state.county !== "") {
-      const county = this.state.county
-      let correctValue = checkRandomCaps(county, true)
-
-      if (correctValue !== county) {
-        errors.push(`Formatting error: expected ${correctValue}, recieved ${county}`)
-      }
-    }
-
-
-    // municipality checks ## ADD ME ##
-
-
-    // locality checks ## ADD ME ##
-
-
-    // verbatimElevation checks  ## ADD ME ##
-
-
-    // decimalLatitude checks
-    if (this.state.decimalLatitude !== "") {
-      if (!this.isNumeric(this.state.decimalLatitude)) {
-        errors.push('Number error: detected non-numeric values.')
-      }
-
-      else {
-        const parsedLatitude = parseFloat(this.state.decimalLatitude)
-        if (parsedLatitude !== NaN) {
-          if (parsedLatitude < -41.0983423 || parsedLatitude > 41.0983423) {
-            errors.push(`decimalLatitude out of range: valid values between +- 41.0983423.`)
-          }
-        }
-        else {
-          errors.push(`Number error: could not parse number (are there non-numeric values?).`)
-        }
-      }
-
-    }
-
-
-    // decimalLongitude checks
-
-
-    // geodeticDatum checks
-
-
-    // coordinateUncertainty checks
-
-
-    // verbatimLatitude checks
-
-
-    // verbatimLongitude checks
-
-
-    // georeferencedBy checks
-
-
-    // disposition checks 
-    if (this.state.disposition !== "") {
-      const disposition = this.state.disposition
-
-      if (!this.controlHasString(dispositionControl, disposition)) {
-        errors.push(`Control error: ${disposition} is not one of the accepted inputs for disposition.`)
-      }
-    }
-
-
-    // loanInfo checks
-
-
-    // freezer checks
-
-
-    // rack checks
-
-
-    // box checks
-
-
-    // tubeSize checks
-    if (this.state.tubeSize !== "") {
-      const tubeSize = this.state.tubeSize
-
-      if (!this.controlHasString(tubeSizeControl, tubeSize)) {
-        errors.push(`Control error: ${tubeSize} is not one of the accepted inputs for tubeSize.`)
-      }
-    }
-
-
-    // associatedSequences checks
-
-
-    // associatedReferences checks
-
-
-    // witholdData checks
-    if (this.state.withholdData !== "") {
-      const withholdData = this.state.withholdData
-
-      if (!this.controlHasString(yesOrNo, withholdData)) {
-        errors.push(`Control error: ${withholdData} is not one of the accepted inputs for withholdData`)
-      }
-    }
-
-
-    // reared checks
-    if (this.state.reared !== "") {
-      const reared = this.state.reared
-
-      if (!this.controlHasString(yesOrNo, reared)) {
-        errors.push(`Control error: ${reared} is not one of the accepted inputs for reared.`)
-      }
-    }
-
-
-    // fieldNotes checks
-
-
-    // collectors checks
-
-
-
-    return errors;
-  };
 
   // FIXME: BROKEN
   handleSubmit = () => {
@@ -760,7 +322,9 @@ export default class MANUAL extends React.Component {
 
       return {content: displayError}
     }
-    else return false
+    else {
+      return false
+    }
   };
 
   renderErrorTerminal = () => (
@@ -809,15 +373,6 @@ export default class MANUAL extends React.Component {
     return collectorForm
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      // console.log(countryList)
-      if (countryList.length > 0 && this.state.countryList.length === 0) {
-        this.setState({countryList: countryList})
-      }
-    }, 1500)
-  }
-
   render() {
     if (!this.state.hasError && this.props.errorMessages.insertError !== null) {
       this.setState({ hasError: true });
@@ -852,6 +407,7 @@ export default class MANUAL extends React.Component {
       municipality,
       locality,
       verbatimElevation,
+      elevationUnit,
       decimalLatitude,
       decimalLongitude,
       geodeticDatum,
@@ -880,9 +436,9 @@ export default class MANUAL extends React.Component {
         <Message>
           <Message.Header>Usage:</Message.Header>
           <p>
-            Manually enter the transcription data of the speciment you are
-            entering into the database. Be sure to fill out all required fields
-            (denoted with *). When all fields are completed, click the Confirm
+            Manually enter the transcription data of the specimen you are
+            entering into the database. Be sure to fill out all required fields.
+            When all fields are completed, click the Confirm
             button at the bottom of the scroll-view. If any syntactic errors are
             present, a popup will appear with information to help you correct
             it. If you have more than one specimen to enter, consider using the
@@ -935,7 +491,9 @@ export default class MANUAL extends React.Component {
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
                   />
+                </Form.Group>
 
+                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-order"
                     control={Input}
@@ -947,9 +505,6 @@ export default class MANUAL extends React.Component {
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
                   />
-                </Form.Group>
-
-                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-superfamily"
                     control={Input}
@@ -963,7 +518,7 @@ export default class MANUAL extends React.Component {
                   />
                   <Form.Field
                     control={Select}
-                    options={familyOptions}
+                    options={familyControl}
                     label="family"
                     placeholder="Select One"
                     search
@@ -974,6 +529,9 @@ export default class MANUAL extends React.Component {
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
                   />
+                </Form.Group>
+
+                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-subfamily"
                     control={Input}
@@ -996,10 +554,6 @@ export default class MANUAL extends React.Component {
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
                   />
-
-                </Form.Group>
-
-                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-genus"
                     control={Input}
@@ -1011,6 +565,9 @@ export default class MANUAL extends React.Component {
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
                   />
+                </Form.Group>
+
+                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-subgenus"
                     control={Input}
@@ -1054,6 +611,64 @@ export default class MANUAL extends React.Component {
 
                 <Form.Group widths="equal">
                   <Form.Field
+                    id="form-input-control-recordedBy-first"
+                    control={Input}
+                    width="eight"
+                    label="recordedBy (First)"
+                    placeholder="First Name"
+                    name="recordedBy"
+                    value={recordedBy}
+                    error={this.checkBasicPreSubmit("recordedBy", recordedBy)}
+                    onChange={this.handleChange}
+                    disabled={this.state.paste_entry}
+                  />
+                  <Form.Field
+                    id="form-input-control-recordedBy-last"
+                    control={Input}
+                    width="eight"
+                    label="recordedBy (Last)"
+                    placeholder="Last Name"
+                    name="recordedBy"
+                    value={recordedBy}
+                    error={this.checkBasicPreSubmit("recordedBy", recordedBy)}
+                    onChange={this.handleChange}
+                    disabled={this.state.paste_entry}
+                  />
+                </Form.Group>
+
+                <Form.Group widths="equal">
+                  <Form.Field
+                    id="form-input-control-identifiedBy"
+                    control={Input}
+                    label="identifiedBy (First)"
+                    placeholder="First Name"
+                    name="identifiedBy"
+                    value={identifiedBy}
+                    error={this.checkBasicPreSubmit(
+                      "identifiedBy",
+                      identifiedBy
+                    )}
+                    onChange={this.handleChange}
+                    disabled={this.state.paste_entry}
+                  />
+                  <Form.Field
+                    id="form-input-control-identifiedBy"
+                    control={Input}
+                    label="identifiedBy (Last)"
+                    placeholder="Last Name"
+                    name="identifiedBy"
+                    value={identifiedBy}
+                    error={this.checkBasicPreSubmit(
+                      "identifiedBy",
+                      identifiedBy
+                    )}
+                    onChange={this.handleChange}
+                    disabled={this.state.paste_entry}
+                  />
+                </Form.Group>
+
+                <Form.Group widths="equal">
+                  <Form.Field
                     id="form-input-control-identificationQualifier"
                     control={Select}
                     options={identificationQualifierControl}
@@ -1069,27 +684,13 @@ export default class MANUAL extends React.Component {
                     disabled={this.state.paste_entry}
                   />
                   <Form.Field
-                    id="form-input-control-recordedBy"
-                    control={Input}
-                    label="recordedBy"
-                    placeholder="Last Name, First Initial"
-                    name="recordedBy"
-                    value={recordedBy}
-                    error={this.checkBasicPreSubmit("recordedBy", recordedBy)}
-                    onChange={this.handleChange}
-                    disabled={this.state.paste_entry}
-                  />
-                  <Form.Field
-                    id="form-input-control-identifiedBy"
-                    control={Input}
-                    label="identifiedBy"
-                    placeholder="Last Name, First Initial"
-                    name="identifiedBy"
-                    value={identifiedBy}
-                    error={this.checkBasicPreSubmit(
-                      "identifiedBy",
-                      identifiedBy
-                    )}
+                    control={Select}
+                    options={sexControl}
+                    label="sex"
+                    placeholder="Select One"
+                    name="sex"
+                    value={sex}
+                    error={this.checkBasicPreSubmit("sex", sex)}
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
                   />
@@ -1111,17 +712,6 @@ export default class MANUAL extends React.Component {
 
                 <Form.Group widths="equal">
                   <Form.Field
-                    control={Select}
-                    options={sexControl}
-                    label="sex"
-                    placeholder="Select One"
-                    name="sex"
-                    value={sex}
-                    error={this.checkBasicPreSubmit("sex", sex)}
-                    onChange={this.handleChange}
-                    disabled={this.state.paste_entry}
-                  />
-                  <Form.Field
                     id="form-input-control-lifeStage"
                     control={Select}
                     options={lifeStageControl}
@@ -1132,6 +722,29 @@ export default class MANUAL extends React.Component {
                     error={this.checkBasicPreSubmit("lifeStage", lifeStage)}
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
+                  />
+                  <Form.Field
+                    id="form-input-control-protocol"
+                    control={Select}
+                    label="samplingProtocol"
+                    placeholder="Select One"
+                    search
+                    className="warningField"
+                    options={samplingProtocolControl}
+                    name="samplingProtocol"
+                    value={samplingProtocol}
+                    error={this.checkBasicPreSubmit("samplingProtocol", samplingProtocol)}
+                    onChange={this.handleChange}
+                  />
+                  <Form.Field
+                    id="form-input-control-habitat"
+                    control={Input}
+                    label="habitat"
+                    placeholder="Habitat"
+                    name="habitat"
+                    value={habitat}
+                    error={this.checkBasicPreSubmit("habitat", habitat)}
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
@@ -1170,34 +783,12 @@ export default class MANUAL extends React.Component {
                 </Form.Group>
 
                 <Form.Group widths="equal">
-                  <Form.Field
-                    id="form-input-control-protocol"
-                    control={Select}
-                    label="samplingProtocol"
-                    placeholder="Select One"
-                    search
-                    className="warningField"
-                    options={samplingProtocolControl}
-                    name="samplingProtocol"
-                    value={samplingProtocol}
-                    error={this.checkBasicPreSubmit("samplingProtocol", samplingProtocol)}
-                    onChange={this.handleChange}
-                  />
-                  <Form.Field
-                    id="form-input-control-habitat"
-                    control={Input}
-                    label="habitat"
-                    placeholder="Habitat"
-                    name="habitat"
-                    value={habitat}
-                    error={this.checkBasicPreSubmit("habitat", habitat)}
-                    onChange={this.handleChange}
-                  />
+
                   <Form.Field
                     id="form-input-control-country"
                     control={Select}
                     search
-                    options={this.state.countryList}
+                    options={countryControl}
                     label="country"
                     placeholder="Select One"
                     name="country"
@@ -1218,9 +809,6 @@ export default class MANUAL extends React.Component {
                     )}
                     onChange={this.handleChange}
                   />
-                </Form.Group>
-
-                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-county"
                     control={Input}
@@ -1231,6 +819,10 @@ export default class MANUAL extends React.Component {
                     error={this.checkBasicPreSubmit("county", county)}
                     onChange={this.handleChange}
                   />
+                </Form.Group>
+
+                <Form.Group widths="equal">
+
                   <Form.Field
                     id="form-input-control-municipality"
                     control={Input}
@@ -1263,7 +855,7 @@ export default class MANUAL extends React.Component {
                     value={verbatimElevation}
                     error={this.checkBasicPreSubmit(
                       "verbatimElevation",
-                      verbatimElevation
+                      parseMeasurement(verbatimElevation + " " + elevationUnit)
                     )}
                     onChange={this.handleChange}
                   />
@@ -1309,6 +901,10 @@ export default class MANUAL extends React.Component {
                     )}
                     onChange={this.handleChange}
                   />
+
+                </Form.Group>
+
+                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-coordinateUncertainty"
                     control={Input}
@@ -1322,9 +918,6 @@ export default class MANUAL extends React.Component {
                     )}
                     onChange={this.handleChange}
                   />
-                </Form.Group>
-
-                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-verbatimLatitude"
                     control={Input}
@@ -1351,6 +944,9 @@ export default class MANUAL extends React.Component {
                     )}
                     onChange={this.handleChange}
                   />
+                </Form.Group>
+
+                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-georeferencedBy"
                     control={Input}
@@ -1372,9 +968,6 @@ export default class MANUAL extends React.Component {
                     error={this.checkBasicPreSubmit("disposition", disposition)}
                     onChange={this.handleChange}
                   />
-                </Form.Group>
-
-                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-loanInfo"
                     control={Input}
@@ -1385,6 +978,9 @@ export default class MANUAL extends React.Component {
                     error={this.checkBasicPreSubmit("loanInfo", loanInfo)}
                     onChange={this.handleChange}
                   />
+                </Form.Group>
+
+                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-preparations"
                     control={Select}
@@ -1422,7 +1018,6 @@ export default class MANUAL extends React.Component {
                 </Form.Group>
 
                 <Form.Group widths="equal">
-
                   <Form.Field
                     id="form-input-control-box"
                     control={Input}
@@ -1454,6 +1049,9 @@ export default class MANUAL extends React.Component {
                     error={this.checkBasicPreSubmit("associatedSequences", associatedSequences)}
                     onChange={this.handleChange}
                   />
+                </Form.Group>
+
+                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-associatedReferences"
                     control={Input}
@@ -1464,9 +1062,6 @@ export default class MANUAL extends React.Component {
                     error={this.checkBasicPreSubmit("associatedReferences", associatedReferences)}
                     onChange={this.handleChange}
                   />
-                </Form.Group>
-
-                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-withholdData"
                     control={Select}
@@ -1516,19 +1111,6 @@ export default class MANUAL extends React.Component {
                 />
 
                 {this.renderCollectorForm()}
-
-                  {/* <Form.Field
-                    id="form-input-control-collectors"
-                    width="sixteen"
-                    control={TextArea}
-                    label="collectors"
-                    placeholder="List Collectors here: Last, First initial;Last, First intial;etc..."
-                    name="collectors"
-                    value={collectors}
-                    error={this.checkBasicPreSubmit("collectors", collectors)}
-                    onChange={this.handleChange}
-                  /> */}
-                
 
                 <Form.Group style={{ float: "right" }}>
                   <QueryHelp queryType="MANUAL_INSERT" />
