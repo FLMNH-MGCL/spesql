@@ -260,7 +260,6 @@ export const parseMeasurement = measurement => {
 
   else {
     if (measurement.toLowerCase().endsWith(" meters") || measurement.toLowerCase().endsWith(" meter")) {
-      alert('true')
       return parseFloat(measurement.split(" ")[0])
     }
 
@@ -464,11 +463,28 @@ export function checkField(fieldName, fieldValue) {
       return errors
 
     case "recordedBy":
-      // handle later
-      return errors
-
     case "identifiedBy":
-      // handle later
+      if (fieldValue === "" || fieldValue === ",") {
+        return errors
+      }
+
+      let parsedName = fieldValue.split(',')
+      
+      if (parsedName.length !== 2) {
+        errors.push(`Format error (@ ${fieldName}): Invalid formatting.`)
+      }
+      else if (parsedName[0] !== "" && parsedName[1] !== ""){
+        // check last name
+        if (parsedName[0][0] !== parsedName[0][0].toUpperCase()) {
+          errors.push(`Format error (@ ${fieldName}): Capitalize last name.`)
+        }
+        if (parsedName[1][0] !== parsedName[1][0].toUpperCase()) {
+          errors.push(`Format error (@ ${fieldName}): Capitalize first name.`)
+        }
+      }
+      else {
+        errors.push(`Format error (@ ${fieldName}): Must provide both names.`)
+      }
       return errors
 
     case "dateIdentified":
@@ -614,6 +630,8 @@ export function checkField(fieldName, fieldValue) {
         return errors
       }
 
+      // ADD CONVERSION
+
       if (!isNumeric(fieldValue)) {
         errors.push(`Number error (@ ${fieldName}): detected non-numeric values.`)
       }
@@ -621,6 +639,7 @@ export function checkField(fieldName, fieldValue) {
       return errors
 
     // verbatimLat
+
     // verbatimLong
 
     case "georeferencedBy":
@@ -646,10 +665,71 @@ export function checkField(fieldName, fieldValue) {
     // loanInfo
 
     // freezer
+    case "freezer":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!fieldValue.startsWith("Kawahara")) {
+        errors.push(`Format error (@ ${fieldName}): Must start with Kawahara`)
+      }
+
+      else {
+        let words = fieldValue.split(" ")
+        if (words.length > 1) {
+          errors.push(`Format error (@${fieldName}): Remove spaces/punctuation.`)
+        }
+
+        let digs = fieldValue.replace("Kawahara", "")
+        if (digs === "") {
+          errors.push(`Format error (@ ${fieldName}): Missing freezer number.`)
+        }
+        else {
+          // let digs = parts[1]
+          if (!isNumeric(digs)) {
+            errors.push(`Number error (@ ${fieldName}): Detected non-numeric values.`)
+          }
+          if (digs.length > 2) {
+            errors.push(`Format error (@ ${fieldName}): Number must only be 2 digits.`)
+          }
+        }
+      }
+
+      return errors
 
     // rack
+    case "rack":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (fieldValue.length > 3) {
+        errors.push(`Format error (@ ${fieldName}): Must be 1-3 characters long.`)
+      }
+
+      if (includesPunctuation(fieldValue)) {
+        errors.push(`Format error (@ ${fieldName}): Remove punctuation.`)
+      }
+
+      return errors
 
     // box
+    case "box":
+      if (fieldValue === "") {
+        return errors
+      }
+
+      if (!isNumeric(fieldValue)) {
+        errors.push(`Number error (@ ${fieldName}): Detected non-numeric values.`)
+      }
+      else {
+        let value = parseFloat(fieldValue)
+        if (value < 1  || value > 20) {
+          errors.push(`Number error (@ ${fieldName}): Must be from 1-20 only.`)
+        }
+      }
+
+      return errors
 
     case "tubeSize":
       if (fieldValue === "") {

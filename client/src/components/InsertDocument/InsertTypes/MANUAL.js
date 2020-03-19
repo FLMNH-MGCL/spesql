@@ -49,7 +49,11 @@ export default class MANUAL extends React.Component {
       infraspecificEpithet: "",
       identificationQualifier: "",
       recordedBy: "",
+      recordedByFirst: "",
+      recordedByLast: "",
       identifiedBy: "",
+      identifiedByLast: "",
+      identifiedByFirst: "",
       dateIdentified: "",
       sex: "",
       lifeStage: "",
@@ -112,7 +116,11 @@ export default class MANUAL extends React.Component {
       infraspecificEpithet: "",
       identificationQualifier: "",
       recordedBy: "",
+      recordedByFirst: "",
+      recordedByLast: "",
       identifiedBy: "",
+      identifiedByLast: "",
+      identifiedByFirst: "",
       dateIdentified: "",
       sex: "",
       lifeStage: "",
@@ -189,8 +197,8 @@ export default class MANUAL extends React.Component {
       specificEpithet: this.state.specificEpithet,
       infraspecificEpithet: this.state.infraspecificEpithet,
       identificationQualifier: this.state.identificationQualifier,
-      recordedBy: this.state.recordedBy,
-      identifiedBy: this.state.identifiedBy,
+      recordedBy: `${this.state.recordedByLast}, ${this.state.recordedByFirst}`,
+      identifiedBy: `${this.state.identifiedByLast}, ${this.state.identifiedByFirst}`,
       dateIdentified: parseDate(this.state.dateIdentified),
       sex: this.state.sex,
       lifeStage: this.state.lifeStage,
@@ -393,7 +401,11 @@ export default class MANUAL extends React.Component {
       infraspecificEpithet,
       identificationQualifier,
       recordedBy,
+      recordedByFirst,
+      recordedByLast,
       identifiedBy,
+      identifiedByFirst,
+      identifiedByLast,
       dateIdentified,
       sex,
       lifeStage,
@@ -616,9 +628,9 @@ export default class MANUAL extends React.Component {
                     width="eight"
                     label="recordedBy (First)"
                     placeholder="First Name"
-                    name="recordedBy"
-                    value={recordedBy}
-                    error={this.checkBasicPreSubmit("recordedBy", recordedBy)}
+                    name="recordedByFirst"
+                    value={recordedByFirst}
+                    error={this.checkBasicPreSubmit("recordedBy", `${recordedByLast},${recordedByFirst}`)}
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
                   />
@@ -628,9 +640,9 @@ export default class MANUAL extends React.Component {
                     width="eight"
                     label="recordedBy (Last)"
                     placeholder="Last Name"
-                    name="recordedBy"
-                    value={recordedBy}
-                    error={this.checkBasicPreSubmit("recordedBy", recordedBy)}
+                    name="recordedByLast"
+                    value={recordedByLast}
+                    error={this.checkBasicPreSubmit("recordedBy", `${recordedByLast},${recordedByFirst}`)}
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
                   />
@@ -642,11 +654,11 @@ export default class MANUAL extends React.Component {
                     control={Input}
                     label="identifiedBy (First)"
                     placeholder="First Name"
-                    name="identifiedBy"
-                    value={identifiedBy}
+                    name="identifiedByFirst"
+                    value={identifiedByFirst}
                     error={this.checkBasicPreSubmit(
                       "identifiedBy",
-                      identifiedBy
+                      `${identifiedByLast},${identifiedByFirst}`
                     )}
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
@@ -656,11 +668,11 @@ export default class MANUAL extends React.Component {
                     control={Input}
                     label="identifiedBy (Last)"
                     placeholder="Last Name"
-                    name="identifiedBy"
-                    value={identifiedBy}
+                    name="identifiedByLast"
+                    value={identifiedByLast}
                     error={this.checkBasicPreSubmit(
                       "identifiedBy",
-                      identifiedBy
+                      `${identifiedByLast},${identifiedByFirst}`
                     )}
                     onChange={this.handleChange}
                     disabled={this.state.paste_entry}
@@ -846,10 +858,13 @@ export default class MANUAL extends React.Component {
                     error={this.checkBasicPreSubmit("locality", locality)}
                     onChange={this.handleChange}
                   />
+                </Form.Group>
+
+                <Form.Group widths="equal">
                   <Form.Field
                     id="form-input-control-verbatimElevation"
                     control={Input}
-                    label="verbatimElevation"
+                    label="verbatimElevation (value)"
                     placeholder="Verbatim Elevation"
                     name="verbatimElevation"
                     value={verbatimElevation}
@@ -857,6 +872,16 @@ export default class MANUAL extends React.Component {
                       "verbatimElevation",
                       parseMeasurement(verbatimElevation + " " + elevationUnit)
                     )}
+                    onChange={this.handleChange}
+                  />
+                  <Form.Field
+                    id="form-input-control-verbatimElevation-units"
+                    control={Select}
+                    label="verbatimElevation (unit)"
+                    options={units}
+                    placeholder="Select One"
+                    name="elevationUnit"
+                    value={elevationUnit}
                     onChange={this.handleChange}
                   />
                 </Form.Group>
