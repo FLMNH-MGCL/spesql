@@ -67,6 +67,11 @@ export async function runInsertQuery(insertions) {
   return insertionsData;
 }
 
+export async function runSingleInsert(specimen) {
+  const insertData = await axios.post("api/insert", specimen);
+  return insertData;
+}
+
 export async function currentUser() {
   const response = await axios.get("/api/fetchCurrentUser/");
   // console.log(response)
