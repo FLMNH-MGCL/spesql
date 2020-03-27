@@ -106,9 +106,7 @@ class Home extends React.Component {
           this.props.updateSelectErrorMessage([errorMessage]);
           this.props.updateLoadingStatus(false);
           this.props.updateRefreshStatus(false);
-        } 
-        
-        else {
+        } else {
           this.createNotification({
             type: "success",
             message: "SELECT query loaded"
@@ -132,9 +130,7 @@ class Home extends React.Component {
           countData = countData.data[Object.keys(countData.data)[0]];
           this.props.updateCountQueryCount(Object.values(countData)[0]); // isolate the number
           console.log(countData);
-        } 
-        
-        else {
+        } else {
           let error = [
             `SQL ERROR: Code: ${countData.error.code}, Message: ${countData.error.sqlMessage}`
           ];
@@ -157,9 +153,7 @@ class Home extends React.Component {
           });
           this.runQuery(this.props.current_query);
           console.log("success");
-        } 
-        
-        else {
+        } else {
           console.log(deleteData.data);
           this.createNotification({
             type: "error",
@@ -186,9 +180,7 @@ class Home extends React.Component {
             message: "Uh oh, please check error log"
           });
           this.props.updateUpdateErrorMessage(updateError);
-        } 
-        
-        else {
+        } else {
           console.log(updateData.data);
           this.createNotification({
             type: "success",
@@ -219,14 +211,6 @@ class Home extends React.Component {
   };
 
   render() {
-    // console.log(this.props.errorMessages)
-
-    // if (!this.props.authenticated) {
-    //     return (
-    //         <Redirect to='/Login' />
-    //     )
-    // }
-
     if (
       this.props.current_query === "" &&
       sessionStorage.getItem("current_query") &&
@@ -275,7 +259,4 @@ class Home extends React.Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

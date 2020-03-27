@@ -1,50 +1,54 @@
-const electron = require('electron');
-const server = require('../../server/server')
+const electron = require("electron");
+//const server = require('../../server/server')
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
-const path = require('path');
-const isDev = require('electron-is-dev');
+const path = require("path");
+const isDev = require("electron-is-dev");
 
 let mainWindow;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({width: 1600 , height: 900, icon: __dirname + '/flmnhLogo.png'});
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
+  mainWindow = new BrowserWindow({
+    width: 1600,
+    height: 900,
+    icon: __dirname + "/flmnhLogo.png"
+  });
+  mainWindow.loadURL(
+    isDev
+      ? "http://localhost:3000"
+      : `file://${path.join(__dirname, "../build/index.html")}`
+  );
   if (isDev) {
     // Open the DevTools.
     //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
     mainWindow.webContents.openDevTools();
-  }
-  else {
+  } else {
     mainWindow.setMenu(null);
   }
-  mainWindow.webContents.on('closed', () => {
-     mainWindow = null
-     // server.killServer()
+  mainWindow.webContents.on("closed", () => {
+    mainWindow = null;
+    // server.killServer()
   });
 
-  mainWindow.webContents.on('new-window', function(event, url) {
+  mainWindow.webContents.on("new-window", function(event, url) {
     event.preventDefault();
     electron.shell.openExternal(url);
   });
 }
 
-app.on('ready', createWindow);
+app.on("ready", createWindow);
 
-
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
-app.on('activate', () => {
+app.on("activate", () => {
   if (mainWindow === null) {
     createWindow();
   }
 });
-
 
 // https://stackoverflow.com/questions/43003870/how-do-i-shut-down-my-express-server-gracefully-when-its-process-is-killed

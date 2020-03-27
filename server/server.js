@@ -1,9 +1,9 @@
 const express = require("./config/express.js");
 const mysql = require("mysql");
-const config = require('./config/config.js')
+const config = require("./config/config.js");
 
 const port = process.env.PORT || 5000;
-const mysqlCredentials = config.mysqlCredentials
+const mysqlCredentials = config.mysqlCredentials;
 
 let connection = mysql.createConnection({
   host: mysqlCredentials.host,
@@ -16,9 +16,7 @@ let connection = mysql.createConnection({
 connection.connect(err => {
   if (err) {
     console.log(err);
-  } 
-  
-  else {
+  } else {
     console.log("Connected to MySQL Server");
   }
 });
@@ -30,7 +28,8 @@ require("./routes/update.routes")(connection, app);
 require("./routes/select-count.routes")(connection, app);
 require("./routes/insert.routes")(connection, app);
 require("./routes/delete.routes")(connection, app);
-require("./routes/sql-login.routes")(connection, app);
+require("./routes/login.routes")(connection, app);
+require("./routes/create-user.routes")(connection, app);
 require("./routes/get-user.routes")(connection, app);
 require("./routes/shutdown.routes")(connection, app);
 

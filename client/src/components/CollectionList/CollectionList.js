@@ -374,7 +374,7 @@ export default class CollectionList extends React.Component {
           <Table.Body>
             <div
               id="scrollableDiv"
-              style={{ height: "70vh", overflow: "auto" }}
+              style={{ height: "65vh", overflow: "auto" }}
             >
               <InfiniteScroll
                 dataLength={this.state.display.length}

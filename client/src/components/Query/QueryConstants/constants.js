@@ -1,22 +1,26 @@
-var countryList = [{key: "-1", text: 'Select One', value: ''}];
+var countryList = [{ key: "-1", text: "Select One", value: "" }];
 
 async function getCountries() {
   // list of countries in JSON link
-  let fetchedList = await fetch('https://pkgstore.datahub.io/core/country-list/data_json/data/8c458f2d15d9f2119654b29ede6e45b8/data_json.json')
-  .then(response => response.json())
+  let fetchedList = await fetch(
+    "https://pkgstore.datahub.io/core/country-list/data_json/data/8c458f2d15d9f2119654b29ede6e45b8/data_json.json"
+  ).then(response => response.json());
   fetchedList.map(country => {
-    countryList.push({key: country.Code, text: country.Name, value: country.Name})
-  })
+    countryList.push({
+      key: country.Code,
+      text: country.Name,
+      value: country.Name
+    });
+  });
   // console.log(countryList)
 }
 
-getCountries()
+getCountries();
 
 export const yesOrNo = [
-  {key: "yes", text: "Yes", value: "Y"},
-  {key: "no", text: "No", value: "N"},
-]
-
+  { key: "yes", text: "Yes", value: "Y" },
+  { key: "no", text: "No", value: "N" }
+];
 
 const reset = { key: "-1", text: "Select One", value: "" };
 
@@ -215,7 +219,7 @@ export const samplingProtocolControl = [
 ];
 
 // convert to one
-// molecular, genetic, 
+// molecular, genetic,
 export const dispositionControl = [
   reset,
   { key: "88", text: "Present", value: "Present" },
@@ -270,24 +274,23 @@ export const sexControl = [
   { key: "107", text: "gynandromorph", value: "gynandromorph" }
 ];
 
-export const countryControl = countryList
+export const countryControl = countryList;
 
 export const geodeticDatumControl = [
-  {key: "EPSG:4326", text: "EPSG:4326", value: "EPSG:4326"},
-  {key: "WGS84", text: "WGS84", value: "WGS84"},
-  {key: "NAD27", text: "NAD27", value: "NAD27"},
-  {key: "Campo Inchauspe", text: "Campo Inchauspe", value: "Campo Inchauspe"},
-  {key: "European 1950", text: "European 1950", value: "European 1950"},
-  {key: "Clarke 1866", text: "Clarke 1866", value: "Clarke 1866"},
-  {key: "Unknown", text: "Unknown", value: "Unknown"},
-]
+  { key: "EPSG:4326", text: "EPSG:4326", value: "EPSG:4326" },
+  { key: "WGS84", text: "WGS84", value: "WGS84" },
+  { key: "NAD27", text: "NAD27", value: "NAD27" },
+  { key: "Campo Inchauspe", text: "Campo Inchauspe", value: "Campo Inchauspe" },
+  { key: "European 1950", text: "European 1950", value: "European 1950" },
+  { key: "Clarke 1866", text: "Clarke 1866", value: "Clarke 1866" },
+  { key: "Unknown", text: "Unknown", value: "Unknown" }
+];
 
 export const units = [
-  {key: "meters", text: "Meters", value: "meters"},
-  {key: "feet", text: "Feet", value: "feet"},
-  {key: "miles", text: "Miles", value: "miles"},
-]
-
+  { key: "meters", text: "Meters", value: "meters" },
+  { key: "feet", text: "Feet", value: "feet" },
+  { key: "miles", text: "Miles", value: "miles" }
+];
 
 // catalogNumber control will be a manual check on submit
 
