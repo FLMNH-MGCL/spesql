@@ -10,12 +10,12 @@ import QueryGrid from "../Query/QueryGrid";
 import Logout from "../Logout/Logout";
 import { currentUser } from "../../functions/queries";
 
-let user = null;
-currentUser().then(result => {
-  if (result !== null) {
-    user = result.split("@")[0];
-  }
-});
+// let user = null;
+// currentUser().then(result => {
+//   if (result !== null) {
+//     user = result.split("@")[0];
+//   }
+// });
 
 export default class Header extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ export default class Header extends Component {
 
     this.state = {
       activeItem: "home",
-      user: user,
+      user: this.props.userData ? this.props.userData.username : null,
       activeIndex: null,
       mobileView: mobile
     };
@@ -60,9 +60,9 @@ export default class Header extends Component {
 
   componentDidMount() {
     // window listener for the mobile friendly toolbar
-    setTimeout(() => {
-      this.setState({ user: user });
-    }, 1000);
+    // setTimeout(() => {
+    //   this.setState({ user: user });
+    // }, 1000);
     window.addEventListener("resize", this.checkMobile);
   }
 

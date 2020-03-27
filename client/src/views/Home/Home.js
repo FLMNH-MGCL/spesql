@@ -20,6 +20,7 @@ import {
   NotificationManager
 } from "react-notifications";
 import "./Home.css";
+import { Redirect } from "react-router-dom";
 
 class Home extends React.Component {
   // constructor(props) {
@@ -27,9 +28,8 @@ class Home extends React.Component {
   // }
 
   logout() {
-    sessionStorage.removeItem("authenticated");
-    sessionStorage.removeItem("current_query");
-    this.props.logout();
+    this.props.setUserData(null);
+    this.props.setAuth(false);
   }
 
   isValidCSV(csv) {
@@ -211,6 +211,11 @@ class Home extends React.Component {
   };
 
   render() {
+    console.log(this.props.authenticated);
+    if (!this.props.authenticated) {
+      return <Redirect to="/Login" />;
+    }
+
     if (
       this.props.current_query === "" &&
       sessionStorage.getItem("current_query") &&

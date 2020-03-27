@@ -71,10 +71,7 @@ function Login(props) {
         } else {
           const { message, userData, authed } = response.data;
           console.log(message);
-          createNotification({
-            type: "success",
-            message: "Authentication sucessful!"
-          });
+
           props.setUserData(userData);
           props.setAuth(authed);
         }
@@ -97,9 +94,8 @@ function Login(props) {
     }
   };
 
-  if (props.authenticated || props.userData) {
-    console.log("made it");
-    // return <Redirect to="/Home" />;
+  if (props.authenticated) {
+    return <Redirect to="/Home" />;
   }
 
   return (
