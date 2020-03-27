@@ -12,26 +12,35 @@ module.exports = function(connection, app) {
         if (err) {
           // do sm
           console.log(err);
+          res.status(401);
+          res.json(err);
         } else {
           // compare
-          console.log(data);
-          const { password } = data[0];
-          console.log(password);
-          bcrypt.compare(plainPassword, password).then(result => {
-            if (err) {
-              console.log(err);
-            } else {
+          if (data.length < 1) {
+            res.status(401);
+            res.json({ err: "Auth failed" });
+          } else {
+            console.log(data);
+            const { username, password } = data[0];
+            //console.log(password);
+            bcrypt.compare(plainPassword, password).then(result => {
               if (result === true) {
-                console.log("AUTH SUCESS");
+                const userData = {
+                  username: username
+                };
                 res.status(200);
-                res.json({ data: "Authorization sucessful.", authed: result });
+                res.json({
+                  message: "Authorization sucessful.",
+                  userData: userData,
+                  authed: result
+                });
               } else {
                 console.log("AUTH FAILED");
                 res.status(401);
                 res.json({ err: "Authorization failed.", authed: result });
               }
-            }
-          });
+            });
+          }
         }
       }
     );

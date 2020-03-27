@@ -17,15 +17,15 @@ export const UPDATE_UPDATE_ERROR_LOG = "UPDATE_UPDATE_ERROR_LOG";
 export const UPDATE_LOADING_STATUS = "UPDATE_LOADING_STATUS";
 export const UPDATE_REFRESH_STATUS = "UPDATE_REFRESH_STATUS";
 export const CHANGE_USER = "CHANGE_USER";
+export const SET_USER_DATA = "SET_USER_DATA";
+export const SET_AUTH = "SET_AUTH";
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 
-let authenticated =
-  sessionStorage.getItem("authenticated") === "true" ? true : false;
-
 const initialState = {
-  authenticated: authenticated,
+  authenticated: false,
   user: "guest",
+  userData: undefined,
   filteredText: "",
   filterCategory: "*",
   selectedSpecimen: undefined,
@@ -70,6 +70,7 @@ export default function reducer(state = initialState, action) {
       newState = {
         authenticated: state.authenticated,
         user: state.user,
+        userData: state.userData,
         filteredText: state.filteredText,
         filterCategory: state.filterCategory,
         selectedSpecimen: undefined,
@@ -142,7 +143,15 @@ export default function reducer(state = initialState, action) {
 
     case "CHANGE_USER":
       newState.user = action.newUser;
-      return newState
+      return newState;
+
+    case "SET_USER_DATA":
+      newState.userData = action.userData;
+      return newState;
+
+    case "SET_AUTH":
+      newState.authenticated = action.authed;
+      return newState;
 
     case "LOGIN":
       newState.user = action.newUser;
