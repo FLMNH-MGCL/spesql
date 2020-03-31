@@ -67,6 +67,7 @@ export default class Header extends Component {
   }
 
   renderFullToolMenu = () => {
+    console.log(this.props.userData.privilege_level);
     return (
       <Menu stackable borderless>
         <Menu.Item
@@ -125,7 +126,15 @@ export default class Header extends Component {
                 <Dropdown.Item
                   text={`User: ${this.state.user}`}
                 ></Dropdown.Item>
-                <Dropdown.Item text="Admin Portal (SOON)"></Dropdown.Item>
+                {this.props.userData.privilege_level === "admin" ? (
+                  <Dropdown.Item
+                    onClick={() => (window.location.href = "/Admin")}
+                    text="Admin Portal"
+                  ></Dropdown.Item>
+                ) : (
+                  console.log("user")
+                )}
+
                 {/* <Dropdown.Item icon='user delete' text='Logout'></Dropdown.Item> */}
                 <div
                   style={{

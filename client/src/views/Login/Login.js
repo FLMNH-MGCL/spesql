@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Grid, Input, Button, Message } from "semantic-ui-react";
+import { Form, Grid, Input, Button, Message, Segment } from "semantic-ui-react";
 import { Redirect } from "react-router-dom";
 import "./Login.css";
 import axios from "axios";
@@ -102,7 +102,7 @@ function Login(props) {
     <div>
       <div className="form-pad">
         <Grid centered padded>
-          <Grid.Column textAlign="centered" width={5}>
+          <Grid.Column textAlign="left" width={5}>
             <Form onSubmit={onSubmit}>
               <Form.Group>
                 <Form.Field
@@ -131,7 +131,17 @@ function Login(props) {
                 <Form.Field control={Button} content="Submit" />
               </Form.Group>
             </Form>
-            <Message error hidden={!errorMessage}>
+
+            <div style={{ textAlign: "center" }}>
+              Don't have an account? You can{" "}
+              <a href="mailto:kawahara@flmnh.ufl.edu">request</a> one here.
+            </div>
+
+            <Message
+              error
+              hidden={!errorMessage}
+              style={{ textAlign: "center" }}
+            >
               <Message.Header>Login error</Message.Header>
               <p>{errorMessage}</p>
             </Message>

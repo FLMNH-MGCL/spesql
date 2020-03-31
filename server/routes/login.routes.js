@@ -21,12 +21,13 @@ module.exports = function(connection, app) {
             res.json({ err: "Auth failed" });
           } else {
             console.log(data);
-            const { username, password } = data[0];
+            const { username, password, privilege_level } = data[0];
             //console.log(password);
             bcrypt.compare(plainPassword, password).then(result => {
               if (result === true) {
                 const userData = {
-                  username: username
+                  username: username,
+                  privilege_level: privilege_level
                 };
                 res.status(200);
                 res.json({

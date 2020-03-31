@@ -6,13 +6,14 @@ module.exports = function(connection, app) {
   app.post("/api/create-user/", function(req, res) {
     const username = req.body.user;
     const password = req.body.password;
+    const role = req.body.privilege_level;
     // console.log(req.body);
     //console.log(`${username}:${password}`);
 
     bcrypt.hash(password, saltRounds).then(hash => {
       console.log(hash);
       connection.query(
-        `INSERT INTO users(username, password) VALUES ("${username}", "${hash}");`,
+        `INSERT INTO users(username, password, privilege_level) VALUES ("${username}", "${hash}", "${role}");`,
         (err, data) => {
           if (err) {
             // do sm
