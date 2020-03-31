@@ -10,6 +10,7 @@ import {
 } from "semantic-ui-react";
 import axios from "axios";
 import { capsChecks } from "../../../functions/queryChecks";
+import ConfirmAuth from "./ConfirmAuth";
 
 const ACCESS_LEVELS = [
   { key: "Guest", text: "Guest", value: "guest" },
@@ -219,9 +220,10 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
               <Button color="linkedin">See Help</Button>
             </Form.Field>
             <Form.Field>
-              <Button color="green" onClick={handleSubmit}>
+              {/* <Button color="green" onClick={handleSubmit}>
                 Submit
-              </Button>
+              </Button> */}
+              <ConfirmAuth handleSubmit={handleSubmit} checkAuth={checkAuth} />
             </Form.Field>
           </Form.Group>
         </Form>

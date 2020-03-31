@@ -42,7 +42,24 @@ function AdminPortal(props) {
   const [users, setUsers] = useState();
   const [error, setError] = useState();
 
-  async function checkAuth(user, password) {}
+  async function checkAuth(user, password, callback) {
+    console.log(`${user} vs ${password}`);
+    const authData = await axios.post("/api/login/", {
+      user: user,
+      password: password
+    });
+
+    console.log(authData);
+
+    if (authData.data.err || authData.data.authed === false) {
+      // credentials did not match
+      createNotification({ type: "error", message: authData.data.err });
+    } else {
+      // allow whatever command to proceed
+      createNotification({ type: "success", message: authData.data.message });
+      callback();
+    }
+  }
 
   async function getUsers() {
     const res = await axios.get("/api/admin/fetch-users/");
@@ -147,10 +164,12 @@ function AdminPortal(props) {
                   <AddUserModal
                     users={users}
                     createNotification={createNotification}
+                    checkAuth={checkAuth}
                   />
                   <EditUserModal
                     users={users}
                     createNotification={createNotification}
+                    checkAuth={checkAuth}
                   />
                   <Button
                     size="small"

@@ -17,8 +17,8 @@ module.exports = function(connection, app) {
         } else {
           // compare
           if (data.length < 1) {
-            res.status(401);
-            res.json({ err: "Auth failed" });
+            // res.status(401);
+            res.json({ err: "Auth failed", authed: false });
           } else {
             console.log(data);
             const { username, password, privilege_level } = data[0];
@@ -37,7 +37,7 @@ module.exports = function(connection, app) {
                 });
               } else {
                 console.log("AUTH FAILED");
-                res.status(401);
+                // res.status(401);
                 res.json({ err: "Authorization failed.", authed: result });
               }
             });
