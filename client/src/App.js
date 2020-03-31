@@ -11,12 +11,12 @@ import { createStore } from "redux";
 import AdminPortal from "./views/Admin/AdminPortal";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
-import storage from "redux-persist/lib/storage";
+import storageSession from "redux-persist/lib/storage/session";
 
 //const store = createStore(reducer);
 const persistConfig = {
   key: "root",
-  storage
+  storage: storageSession
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

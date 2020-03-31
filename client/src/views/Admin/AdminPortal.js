@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { mapStateToProps, mapDispatchToProps } from "../../redux/mapFunctions";
 
-function AdminPortal({ props }) {
+function AdminPortal(props) {
   console.log(props);
   return (
     <div style={{ textAlign: "center", paddingTop: "3rem" }}>
