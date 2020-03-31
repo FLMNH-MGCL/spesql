@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 module.exports = function(connection, app) {
-  app.post("/api/create-user/", function(req, res) {
+  app.post("/api/admin/create-user/", function(req, res) {
+    const name = req.body.name;
     const username = req.body.user;
     const password = req.body.password;
     const role = req.body.privilege_level;
@@ -13,13 +14,13 @@ module.exports = function(connection, app) {
     bcrypt.hash(password, saltRounds).then(hash => {
       console.log(hash);
       connection.query(
-        `INSERT INTO users(username, password, privilege_level) VALUES ("${username}", "${hash}", "${role}");`,
+        `INSERT INTO users(name, username, password, privilege_level) VALUES ("${name}", "${username}", "${hash}", "${role}");`,
         (err, data) => {
           if (err) {
             // do sm
             console.log(err);
             res.status(400);
-            res.json(err);
+            res.json({ err: err });
           } else {
             console.log("sucessfully created user");
             res.status(201);

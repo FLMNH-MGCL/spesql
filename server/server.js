@@ -30,8 +30,10 @@ require("./routes/insert.routes")(connection, app);
 require("./routes/delete.routes")(connection, app);
 require("./routes/login.routes")(connection, app);
 require("./routes/create-user.routes")(connection, app);
+require("./routes/fetch-users.routes")(connection, app);
+require("./routes/generate-pass.routes")(app);
 require("./routes/get-user.routes")(connection, app);
-require("./routes/shutdown.routes")(connection, app);
+// require("./routes/shutdown.routes")(connection, app);
 
 var server = app.listen(port, () =>
   console.log(`Server now running on port ${port}!`)
