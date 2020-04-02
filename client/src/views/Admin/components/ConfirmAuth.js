@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Button, Modal, Icon, Form, Input, Container } from "semantic-ui-react";
+import { Button, Modal, Form, Input, Container, Icon } from "semantic-ui-react";
 
-export default function({ checkAuth, handleSubmit }) {
+export default function({ checkAuth, handleSubmit, buttonStyle }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
@@ -15,9 +15,27 @@ export default function({ checkAuth, handleSubmit }) {
     <>
       <Modal
         trigger={
-          <Button color="green" onClick={() => setShow(true)}>
-            Submit
-          </Button>
+          buttonStyle ? (
+            <Button
+              icon={buttonStyle.icon ? true : false}
+              labelPosition="left"
+              color={buttonStyle.color}
+              onClick={() => setShow(true)}
+            >
+              {buttonStyle.icon ? buttonStyle.icon : null}
+              {buttonStyle.text}
+            </Button>
+          ) : (
+            <Button
+              icon
+              labelPosition="left"
+              color="green"
+              onClick={() => setShow(true)}
+            >
+              <Icon name="check" />
+              Submit
+            </Button>
+          )
         }
         open={show}
         onClose={() => setShow(false)}

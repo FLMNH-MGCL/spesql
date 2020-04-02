@@ -217,7 +217,10 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
           </Form.Group>
           <Form.Group>
             <Form.Field>
-              <Button color="linkedin">See Help</Button>
+              <Button icon labelPosition="left" color="linkedin">
+                <Icon name="question circle outline" />
+                See Help
+              </Button>
             </Form.Field>
             <Form.Field>
               {/* <Button color="green" onClick={handleSubmit}>

@@ -37,8 +37,9 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon type="button">
-                See Help <Icon name="question" />
+              <Button primary icon labelPosition="left" type="button">
+                <Icon name="question" />
+                See Help
               </Button>
             }
           >
@@ -268,8 +269,9 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon type="button">
-                See Help <Icon name="question" />
+              <Button primary icon labelPosition="left" type="button">
+                <Icon name="question" />
+                See Help
               </Button>
             }
           >
@@ -384,8 +386,9 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon type="button">
-                See Help <Icon name="question" />
+              <Button primary icon labelPosition="left" type="button">
+                <Icon name="question" />
+                See Help
               </Button>
             }
           >
@@ -431,8 +434,9 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon type="button">
-                See Help <Icon name="question" />
+              <Button primary icon labelPosition="left" type="button">
+                <Icon name="question" />
+                See Help
               </Button>
             }
           >
@@ -528,8 +532,9 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon type="button">
-                See Help <Icon name="question" />
+              <Button primary icon labelPosition="left" type="button">
+                <Icon name="question" />
+                See Help
               </Button>
             }
           >
@@ -713,8 +718,9 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon type="button">
-                See Help <Icon name="question" />
+              <Button primary icon labelPosition="left" type="button">
+                <Icon name="question" />
+                See Help
               </Button>
             }
           >
@@ -902,8 +908,9 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon type="button">
-                See Help <Icon name="question" />
+              <Button primary icon labelPosition="left" type="button">
+                <Icon name="question" />
+                See Help
               </Button>
             }
           >

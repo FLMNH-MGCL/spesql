@@ -59,31 +59,58 @@ function Login(props) {
     }
   };
 
-  const attemptLogin = () => {
-    let authData = axios
-      .post("/api/login/", {
-        user: username,
-        password: password
-      })
-      .then(response => {
-        if (response.err) {
-          console.log(response.err);
-        } else {
-          const { message, userData, authed } = response.data;
-          console.log(message);
+  const attemptLogin = async () => {
+    // let authData = axios
+    //   .post("/api/login/", {
+    //     user: username,
+    //     password: password
+    //   })
+    //   .then(response => {
+    //     if (response.err) {
+    //       console.log(response.err);
+    //     } else {
+    //       const { message, userData, authed } = response.data;
+    //       console.log(message);
 
-          props.setUserData(userData);
-          props.setAuth(authed);
-        }
-      })
-      .catch(error => {
-        console.log("login failed...");
-        console.log(error);
-        createNotification({
-          type: "error",
-          message: "Authentication failed."
-        });
+    //       props.setUserData(userData);
+    //       props.setAuth(authed);
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.log("login failed...");
+    //     console.log(error);
+    //     createNotification({
+    //       type: "error",
+    //       message: "Authentication failed."
+    //     });
+    //   });
+
+    let authData = await axios.post("/api/login/", {
+      user: username,
+      password: password
+    });
+
+    console.log(authData);
+
+    if (authData.data.err) {
+      createNotification({
+        type: "error",
+        message: "Authentication failed."
       });
+    } else {
+      createNotification({
+        type: "success",
+        message: "Authentication successful."
+      });
+
+      setTimeout(() => {
+        const { message, userData, authed } = authData.data;
+        console.log(message);
+
+        props.setUserData(userData);
+        props.setAuth(authed);
+      }, 200);
+    }
   };
 
   const onSubmit = () => {
