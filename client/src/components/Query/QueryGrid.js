@@ -3,9 +3,10 @@ import axios from "axios";
 import { Button, Icon, Modal, Divider } from "semantic-ui-react";
 import { SELECT, UPDATE, COUNT } from "./QueryTypes";
 import "./QueryGrid.css";
+import UPDATE_BATCH from "./QueryTypes/UPDATE_BATCH";
 
 let dbSelection = [];
-axios.post("/api/list-tables/").then(response => {
+axios.post("/api/list-tables/").then((response) => {
   if (response.data.error) {
   } else {
     dbSelection = response.data.tables.map((table, index) => {
@@ -16,12 +17,12 @@ axios.post("/api/list-tables/").then(response => {
 
 class QueryGrid extends React.Component {
   state = {
-    showModal: false
+    showModal: false,
   };
 
   closeModal = () => {
     this.setState({
-      showModal: false
+      showModal: false,
     });
   };
 
@@ -33,6 +34,7 @@ class QueryGrid extends React.Component {
             icon
             labelPosition="left"
             onClick={() => this.setState({ showModal: true })}
+            size="small"
           >
             <Icon name="archive" />
             Query
@@ -76,6 +78,7 @@ class QueryGrid extends React.Component {
             notify={this.props.notify}
           />
           <Divider />
+          <UPDATE_BATCH />
         </Modal.Content>
       </Modal>
     );

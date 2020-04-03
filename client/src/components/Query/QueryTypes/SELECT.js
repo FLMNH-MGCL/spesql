@@ -8,7 +8,7 @@ import {
   Select,
   Checkbox,
   Message,
-  Header
+  Header,
 } from "semantic-ui-react";
 import {
   selectQueryOption,
@@ -16,7 +16,7 @@ import {
   // setOperatorOptions,
   conditionalOperatorOptions,
   // setCountOptions,
-  conditionalCountOptions
+  conditionalCountOptions,
 } from "../QueryConstants/constants";
 import QueryHelp from "../QueryHelp";
 import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
@@ -35,7 +35,7 @@ export default class SELECT extends React.Component {
     fields_search: [],
     search_: "",
     operator: "",
-    loading: false
+    loading: false,
   };
 
   checkBasicQueryErrors = () => {
@@ -85,7 +85,7 @@ export default class SELECT extends React.Component {
       this.state.fields.indexOf("*") > -1
     ) {
       return {
-        content: "If All is selected no other fields should be selected."
+        content: "If All is selected no other fields should be selected.",
       };
     }
   };
@@ -111,7 +111,7 @@ export default class SELECT extends React.Component {
       // errors found, update redux error for select query
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check SELECT error log"
+        message: "Uh oh, some errors detected. Please check SELECT error log",
       });
       this.props.updateSelectErrorMessage(errors);
       return;
@@ -166,7 +166,7 @@ export default class SELECT extends React.Component {
     if (errors.length > 0) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check SELECT error log"
+        message: "Uh oh, some errors detected. Please check SELECT error log",
       });
       this.props.updateSelectErrorMessage(errors);
     } else {
@@ -200,7 +200,7 @@ export default class SELECT extends React.Component {
           return {
             field: "",
             operator: "=",
-            searchTerms: ""
+            searchTerms: "",
           };
         })
       );
@@ -208,13 +208,13 @@ export default class SELECT extends React.Component {
 
       this.setState({
         [name]: value,
-        conditionals: newConditionals
+        conditionals: newConditionals,
       });
     } else if (prevCount > value) {
       let newConditionals = [...this.state.conditionals].slice(0, value);
       this.setState({
         [name]: value,
-        conditionals: newConditionals
+        conditionals: newConditionals,
       });
     }
     // if previous is bigger, slice to match new count
@@ -223,15 +223,15 @@ export default class SELECT extends React.Component {
   handleConditionalItemChange = (e, { name, value, id }) => {
     const newConditional = {
       ...this.state.conditionals[id],
-      [name]: value
+      [name]: value,
     };
 
     this.setState({
       conditionals: [
         ...this.state.conditionals.slice(0, id),
         Object.assign({}, this.state.conditionals[id], newConditional),
-        ...this.state.conditionals.slice(id + 1)
-      ]
+        ...this.state.conditionals.slice(id + 1),
+      ],
     });
   };
 
@@ -363,8 +363,10 @@ export default class SELECT extends React.Component {
         />
       </Form.Group>
       {conditionals}
-      <Form.Group>
-        <QueryHelp queryType="SELECT" />
+      <Form.Group className="float-right">
+        <Form.Field>
+          <QueryHelp queryType="SELECT" />
+        </Form.Field>
         <Form.Field
           id="form-button-control-ta-submit"
           control={Button}
@@ -397,7 +399,7 @@ export default class SELECT extends React.Component {
       query_action,
       fields,
       db,
-      conditionalCount
+      conditionalCount,
     } = this.state;
 
     const conditionals = this.renderConditions();
@@ -439,7 +441,7 @@ export default class SELECT extends React.Component {
                     this.state.basic_query === false &&
                     !advanced_query.toUpperCase().startsWith("SELECT")
                       ? {
-                          content: "This query must be a SELECT command."
+                          content: "This query must be a SELECT command.",
                         }
                       : false
                   }

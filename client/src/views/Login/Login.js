@@ -8,34 +8,9 @@ import { connect } from "react-redux";
 import "react-notifications/lib/notifications.css";
 import {
   NotificationContainer,
-  NotificationManager
+  NotificationManager,
 } from "react-notifications";
 // import HeaderBase from '../../components/Header/HeaderBase'
-
-// async function attemptLogin(username, password) {
-//   let loggedIn = axios
-//     .post("/api/login/", { user: username, password: password })
-//     .then(response => {
-//       console.log(response);
-//       const data = response.data;
-//       return data.logged_in;
-//     });
-
-//   return loggedIn;
-// }
-
-// async function onSubmit() {
-//   let loggedIn = await attemptLogin(this.state.username, this.state.password);
-//   console.log(loggedIn);
-
-//   if (loggedIn) {
-//     sessionStorage.setItem("authenticated", true);
-//     this.onSuccess();
-//   } else {
-//     sessionStorage.setItem("authenticated", false);
-//     this.onFail();
-//   }
-// }
 
 function Login(props) {
   const [username, setUsername] = useState("");
@@ -44,7 +19,7 @@ function Login(props) {
   //const [userData, setUserData] = useState();
   // const [sucess, setSucess] = useState(false)
 
-  const createNotification = content => {
+  const createNotification = (content) => {
     switch (content.type) {
       case "success":
         NotificationManager.success(`${content.message}`, "Success!");
@@ -87,7 +62,7 @@ function Login(props) {
 
     let authData = await axios.post("/api/login/", {
       user: username,
-      password: password
+      password: password,
     });
 
     console.log(authData);
@@ -95,12 +70,12 @@ function Login(props) {
     if (authData.data.err) {
       createNotification({
         type: "error",
-        message: "Authentication failed."
+        message: "Authentication failed.",
       });
     } else {
       createNotification({
         type: "success",
-        message: "Authentication successful."
+        message: "Authentication successful.",
       });
 
       setTimeout(() => {

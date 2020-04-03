@@ -7,14 +7,14 @@ import {
   Select,
   Checkbox,
   Message,
-  Header
+  Header,
 } from "semantic-ui-react";
 import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
 import {
   updateQueryOption,
   headerSelection,
   setOperatorOptions,
-  setCountOptions
+  setCountOptions,
 } from "../QueryConstants/constants";
 import QueryHelp from "../QueryHelp";
 
@@ -31,19 +31,19 @@ export default class UPDATE extends React.Component {
       {
         field: "",
         operator: "=",
-        newValue: ""
-      }
+        newValue: "",
+      },
     ],
     conditionalCount: 1,
     conditionals: [
       {
         field: "",
         operator: "=",
-        searchTerms: ""
-      }
+        searchTerms: "",
+      },
     ],
     loading: false,
-    reason: ""
+    reason: "",
   };
 
   handleSubmit = () => {
@@ -54,7 +54,7 @@ export default class UPDATE extends React.Component {
     if (errors.length !== 0) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check UPDATE error log"
+        message: "Uh oh, some errors detected. Please check UPDATE error log",
       });
       this.props.updateUpdateErrorMessage(errors);
       this.setState({ loading: false });
@@ -67,7 +67,7 @@ export default class UPDATE extends React.Component {
 
     let setString = "";
     // let changes = []
-    
+
     // var today = new Date();
     // var dd = String(today.getDate()).padStart(2, "0");
     // var mm = String(today.getMonth() + 1).padStart(2, "0");
@@ -107,9 +107,7 @@ export default class UPDATE extends React.Component {
     setTimeout(() => {
       if (!this.props.loading && !this.props.errorMessages.updateError) {
         this.props.closeModal();
-      } 
-      
-      else {
+      } else {
         this.setState({ loading: false });
       }
     }, 1000);
@@ -126,21 +124,17 @@ export default class UPDATE extends React.Component {
     if (errors.length > 0) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check UPDATE error log"
+        message: "Uh oh, some errors detected. Please check UPDATE error log",
       });
       this.props.updateUpdateErrorMessage(errors);
-    } 
-    
-    else {
+    } else {
       this.props.runQuery(this.state.advanced_query);
     }
 
     setTimeout(() => {
       if (!this.props.loading && !this.props.errorMessages.updateError) {
         this.props.closeModal();
-      } 
-      
-      else {
+      } else {
         this.setState({ loading: false });
       }
     }, 500);
@@ -158,7 +152,7 @@ export default class UPDATE extends React.Component {
           return {
             field: "",
             operator: "=",
-            newValue: ""
+            newValue: "",
           };
         })
       );
@@ -166,15 +160,13 @@ export default class UPDATE extends React.Component {
 
       this.setState({
         [name]: value,
-        sets: newSets
+        sets: newSets,
       });
-    } 
-    
-    else if (prevCount > value) {
+    } else if (prevCount > value) {
       let newSets = [...this.state.sets].slice(0, value);
       this.setState({
         [name]: value,
-        sets: newSets
+        sets: newSets,
       });
     }
     // if previous is bigger, slice to match new count
@@ -184,15 +176,15 @@ export default class UPDATE extends React.Component {
     id = parseInt(id);
     const newSetItem = {
       ...this.state.sets[id],
-      [name]: value
+      [name]: value,
     };
 
     this.setState({
       sets: [
         ...this.state.sets.slice(0, id),
         Object.assign({}, this.state.sets[id], newSetItem),
-        ...this.state.sets.slice(id + 1)
-      ]
+        ...this.state.sets.slice(id + 1),
+      ],
     });
   };
 
@@ -206,7 +198,7 @@ export default class UPDATE extends React.Component {
           return {
             field: "",
             operator: "=",
-            searchTerms: ""
+            searchTerms: "",
           };
         })
       );
@@ -214,15 +206,13 @@ export default class UPDATE extends React.Component {
 
       this.setState({
         [name]: value,
-        conditionals: newConditionals
+        conditionals: newConditionals,
       });
-    } 
-    
-    else if (prevCount > value) {
+    } else if (prevCount > value) {
       let newConditionals = [...this.state.conditionals].slice(0, value);
       this.setState({
         [name]: value,
-        conditionals: newConditionals
+        conditionals: newConditionals,
       });
     }
     // if previous is bigger, slice to match new count
@@ -232,15 +222,15 @@ export default class UPDATE extends React.Component {
     id = parseInt(id);
     const newConditional = {
       ...this.state.conditionals[id],
-      [name]: value
+      [name]: value,
     };
 
     this.setState({
       conditionals: [
         ...this.state.conditionals.slice(0, id),
         Object.assign({}, this.state.conditionals[id], newConditional),
-        ...this.state.conditionals.slice(id + 1)
-      ]
+        ...this.state.conditionals.slice(id + 1),
+      ],
     });
   };
 
@@ -248,76 +238,90 @@ export default class UPDATE extends React.Component {
     this.setState({ basic_query: !this.state.basic_query });
 
   checkSetContent = (index, setField) => {
-    let set = this.state.sets[index]
-    switch(setField) {
-      case "field": 
-        if (set.field === '') {
-          return {content: 'You must select a UNIQUE field to alter.'}
+    let set = this.state.sets[index];
+    switch (setField) {
+      case "field":
+        if (set.field === "") {
+          return { content: "You must select a UNIQUE field to alter." };
         }
         if (
-          set.field.startsWith('\'') || set.field.endsWith('\'') ||
-          set.field.startsWith('"') || set.field.startsWith('"')
+          set.field.startsWith("'") ||
+          set.field.endsWith("'") ||
+          set.field.startsWith('"') ||
+          set.field.startsWith('"')
         ) {
-          return {content: 'Remove starting/trailing punctuation.'}
+          return { content: "Remove starting/trailing punctuation." };
         }
 
-        break
+        break;
 
       case "operator":
-        if (set.operator === '') {
-          return {content: 'You must select an operator.'}
+        if (set.operator === "") {
+          return { content: "You must select an operator." };
         }
-        break
+        break;
 
-      case "newValue": 
-        if (set.newValue === '') {
-          return {content: 'You must enter a new value to update the original.'}
+      case "newValue":
+        if (set.newValue === "") {
+          return {
+            content: "You must enter a new value to update the original.",
+          };
         }
         if (
-          set.newValue.startsWith('\'') || set.newValue.endsWith('\'') ||
-          set.newValue.startsWith('"') || set.newValue.endsWith('"')
+          set.newValue.startsWith("'") ||
+          set.newValue.endsWith("'") ||
+          set.newValue.startsWith('"') ||
+          set.newValue.endsWith('"')
         ) {
-          return {content: 'Remove starting/trailing punctuation/quotations.'}
+          return {
+            content: "Remove starting/trailing punctuation/quotations.",
+          };
         }
-        break
+        break;
     }
-  }
+  };
 
   checkConditionalContent = (index, conditionalField) => {
-    let condtional = this.state.conditionals[index]
-    switch(conditionalField) {
-      case "field": 
-        if (condtional.field === '') {
-          return {content: 'You must select a UNIQUE conditional field.'}
+    let condtional = this.state.conditionals[index];
+    switch (conditionalField) {
+      case "field":
+        if (condtional.field === "") {
+          return { content: "You must select a UNIQUE conditional field." };
         }
         if (
-          condtional.field.startsWith('\'') || condtional.field.endsWith('\'') ||
-          condtional.field.startsWith('"') || condtional.field.startsWith('"')
+          condtional.field.startsWith("'") ||
+          condtional.field.endsWith("'") ||
+          condtional.field.startsWith('"') ||
+          condtional.field.startsWith('"')
         ) {
-          return {content: 'Remove starting/trailing punctuation.'}
+          return { content: "Remove starting/trailing punctuation." };
         }
 
-        break
+        break;
 
       case "operator":
-        if (condtional.operator === '') {
-          return {content: 'You must select an operator.'}
+        if (condtional.operator === "") {
+          return { content: "You must select an operator." };
         }
-        break
+        break;
 
-      case "searchTerms": 
-        if (condtional.searchTerms === '') {
-          return {content: 'You must enter a value for the conditional.'}
+      case "searchTerms":
+        if (condtional.searchTerms === "") {
+          return { content: "You must enter a value for the conditional." };
         }
         if (
-          condtional.searchTerms.startsWith('\'') || condtional.searchTerms.endsWith('\'') ||
-          condtional.searchTerms.startsWith('"') || condtional.searchTerms.endsWith('"')
+          condtional.searchTerms.startsWith("'") ||
+          condtional.searchTerms.endsWith("'") ||
+          condtional.searchTerms.startsWith('"') ||
+          condtional.searchTerms.endsWith('"')
         ) {
-          return {content: 'Remove starting/trailing punctuation/quotations.'}
+          return {
+            content: "Remove starting/trailing punctuation/quotations.",
+          };
         }
-        break
+        break;
     }
-  }
+  };
 
   renderSets = () => {
     // each set value should be an array position in the state's set array of objs
@@ -331,7 +335,7 @@ export default class UPDATE extends React.Component {
             label="SET (field)"
             placeholder="FIELD"
             search
-            error={this.checkSetContent(index, 'field')}
+            error={this.checkSetContent(index, "field")}
             name="field"
             index={index}
             value={this.state.sets[index].field}
@@ -346,7 +350,7 @@ export default class UPDATE extends React.Component {
             placeholder="="
             name="operator"
             value={this.state.sets[index].operator}
-            error={this.checkSetContent(index, 'operator')}
+            error={this.checkSetContent(index, "operator")}
             onChange={this.handleSetItemChange}
             id={String(index)}
             disabled={!this.state.basic_query}
@@ -356,7 +360,7 @@ export default class UPDATE extends React.Component {
             label="New Value"
             placeholder="value"
             search
-            error={this.checkSetContent(index, 'newValue')}
+            error={this.checkSetContent(index, "newValue")}
             name="newValue"
             value={this.state.sets[index].newValue}
             onChange={this.handleSetItemChange}
@@ -381,7 +385,7 @@ export default class UPDATE extends React.Component {
               label="Field"
               placeholder="FIELD"
               search
-              error={this.checkConditionalContent(index, 'field')}
+              error={this.checkConditionalContent(index, "field")}
               name="field"
               value={this.state.conditionals[index].field}
               onChange={this.handleConditionalItemChange}
@@ -394,7 +398,7 @@ export default class UPDATE extends React.Component {
               label="Operator"
               placeholder="="
               name="operator"
-              error={this.checkConditionalContent(index, 'operator')}
+              error={this.checkConditionalContent(index, "operator")}
               value={this.state.conditionals[index].operator}
               onChange={this.handleConditionalItemChange}
               id={String(index)}
@@ -406,7 +410,7 @@ export default class UPDATE extends React.Component {
               placeholder="value"
               search
               name="searchTerms"
-              error={this.checkConditionalContent(index, 'searchTerms')}
+              error={this.checkConditionalContent(index, "searchTerms")}
               value={this.state.conditionals[index].searchTerms}
               onChange={this.handleConditionalItemChange}
               id={String(index)}
@@ -468,7 +472,7 @@ export default class UPDATE extends React.Component {
       !this.state.basic_query
     ) {
       return {
-        content: "This query must be an UPDATE query."
+        content: "This query must be an UPDATE query.",
       };
     }
 
@@ -476,7 +480,7 @@ export default class UPDATE extends React.Component {
     if (this.state.advanced_query.includes("'") && !this.state.basic_query) {
       return {
         content:
-          "Remove any ', ` or ; punctuation marks, as these will be handled for you."
+          "Remove any ', ` or ; punctuation marks, as these will be handled for you.",
       };
     }
 
@@ -487,14 +491,14 @@ export default class UPDATE extends React.Component {
       !this.state.basic_query
     ) {
       return {
-        content: "You must include conditionals, only root can exclude them."
+        content: "You must include conditionals, only root can exclude them.",
       };
     }
 
     if (this.state.advanced_query.endsWith(";") && !this.state.basic_query) {
       return {
         content:
-          "Remove any ', ` or ; punctuation marks, as these will be handled for you."
+          "Remove any ', ` or ; punctuation marks, as these will be handled for you.",
       };
     }
   };
@@ -512,8 +516,9 @@ export default class UPDATE extends React.Component {
     this.state.sets.forEach((set, index) => {
       if (set.field === "") {
         errors.push(
-          `Query Format Error: You must select a UNIQUE field to alter. (Found empty value in row ${index +
-            1} of Sets)`
+          `Query Format Error: You must select a UNIQUE field to alter. (Found empty value in row ${
+            index + 1
+          } of Sets)`
         );
       }
       if (set.operator !== "=") {
@@ -530,8 +535,9 @@ export default class UPDATE extends React.Component {
     this.state.conditionals.forEach((conditional, index) => {
       if (conditional.field === "") {
         errors.push(
-          `Query Format Error: You must select a UNIQUE conditional field. (Found empty value in row ${index +
-            1} of Conditionals)`
+          `Query Format Error: You must select a UNIQUE conditional field. (Found empty value in row ${
+            index + 1
+          } of Conditionals)`
         );
       }
       // if (conditional.operator !== '=') {
@@ -615,7 +621,9 @@ export default class UPDATE extends React.Component {
       </Form.Group>
       {conditionals}
       <Form.Group className="float-right">
-        <QueryHelp queryType="UPDATE" />
+        <Form.Field>
+          <QueryHelp queryType="UPDATE" />
+        </Form.Field>
         <Form.Field
           id="form-button-control-ta-submit"
           control={Button}
@@ -649,7 +657,7 @@ export default class UPDATE extends React.Component {
       db,
       setCount,
       conditionalCount,
-      reason
+      reason,
     } = this.state;
 
     console.log(this.state);
@@ -687,7 +695,7 @@ export default class UPDATE extends React.Component {
                     this.state.reason === ""
                       ? {
                           content: "You must provide a reason",
-                          pointing: "above"
+                          pointing: "above",
                         }
                       : false
                   }

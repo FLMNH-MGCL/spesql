@@ -79,7 +79,7 @@ export default class CollectionList extends React.Component {
       display: Array.from({ length: 0 }),
       prevFetchAmount: 0,
       hasMore: false,
-      direction: null
+      direction: null,
     };
   }
 
@@ -94,7 +94,7 @@ export default class CollectionList extends React.Component {
       this.setState({
         display: newDisplay,
         hasMore: hasMore,
-        prevFetchAmount: fetchAmount
+        prevFetchAmount: fetchAmount,
       });
     } else if (
       this.props.data.length === 0 &&
@@ -102,7 +102,7 @@ export default class CollectionList extends React.Component {
     ) {
       this.setState({
         display: Array.from({ length: 0 }),
-        prevFetchAmount: 0
+        prevFetchAmount: 0,
       });
     }
 
@@ -174,12 +174,12 @@ export default class CollectionList extends React.Component {
       });
       this.props.updateDisplayData(newDisplay);
       this.setState({
-        display: newDisplay
+        display: newDisplay,
       });
     }, 500);
   };
 
-  headerNameToFieldName = clickedColumn => {
+  headerNameToFieldName = (clickedColumn) => {
     switch (clickedColumn) {
       case "Lep #":
         return "recoredNumber";
@@ -284,11 +284,11 @@ export default class CollectionList extends React.Component {
     }
 
     this.setState({
-      data: newData
+      data: newData,
     });
   };
 
-  handleSort = clickedColumn => () => {
+  handleSort = (clickedColumn) => () => {
     const { column, direction } = this.state;
 
     if (column !== clickedColumn) {
@@ -296,7 +296,7 @@ export default class CollectionList extends React.Component {
         column: clickedColumn,
         // data: _.sortBy(this.props.data, [clickedColumn]),
         data: this.sortList(clickedColumn, "ascending"),
-        direction: "ascending"
+        direction: "ascending",
       });
 
       return;
@@ -304,13 +304,13 @@ export default class CollectionList extends React.Component {
       if (direction === "ascending") {
         this.setState({
           data: this.sortList(clickedColumn, "descending"),
-          direction: "descending"
+          direction: "descending",
         });
       } else {
         this.setState({
           data: this.props.data,
           direction: null,
-          column: null
+          column: null,
         });
       }
     }
@@ -320,7 +320,7 @@ export default class CollectionList extends React.Component {
     let collectionList = this.props.data;
     try {
       collectionList = collectionList
-        .filter(specimen => {
+        .filter((specimen) => {
           if (this.props.filterCategory === "*") {
             let tempSpecimen = { ...specimen };
             tempSpecimen.modifiedInfo = "";
@@ -424,11 +424,11 @@ export default class CollectionList extends React.Component {
               this.props.clearQuery();
               this.setState({
                 hasMore: false,
-                display: Array.from({ length: 0 })
+                display: Array.from({ length: 0 }),
               });
             }}
             disabled={this.props.current_query === "" ? true : false}
-            style={{ marginLeft: "1rem" }}
+            style={{ marginLeft: ".2rem" }}
           >
             Clear Query
           </Button>

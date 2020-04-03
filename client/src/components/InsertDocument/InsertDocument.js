@@ -13,7 +13,7 @@ import MANUAL from "./InsertTypes/MANUAL";
 class InsertDocument extends React.Component {
   state = {
     activePage: "Paste Insert",
-    text_area: ""
+    text_area: "",
   };
 
   closeModal = () => {
@@ -22,22 +22,18 @@ class InsertDocument extends React.Component {
 
   handlePaginationChange = (e, { name }) => this.setState({ activePage: name });
 
-  handlePageBack = e => {
+  handlePageBack = (e) => {
     if (this.state.activePage === "Paste Insert") {
       return;
-    } 
-    
-    else if (this.state.activePage === "Manual Insert") {
+    } else if (this.state.activePage === "Manual Insert") {
       this.setState({ activePage: "Paste Insert" });
     }
   };
 
-  handlePageForward = e => {
+  handlePageForward = (e) => {
     if (this.state.activePage === "Paste Insert") {
       this.setState({ activePage: "Manual Insert" });
-    } 
-    
-    else if (this.state.activePage === "Manual Insert") {
+    } else if (this.state.activePage === "Manual Insert") {
       return;
     }
   };
@@ -46,10 +42,14 @@ class InsertDocument extends React.Component {
     // console.log(this.props.errorMessages)
 
     return (
-      <div className="content">
+      <div>
         <Modal
           trigger={
-            <Button icon labelPosition="left">
+            <Button
+              icon
+              labelPosition="left"
+              size={this.props.small ? "mini" : "small"}
+            >
               <Icon name="upload" />
               Insert
             </Button>

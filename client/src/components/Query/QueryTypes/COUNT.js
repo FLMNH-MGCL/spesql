@@ -7,7 +7,7 @@ import {
   Select,
   Checkbox,
   Message,
-  Header
+  Header,
 } from "semantic-ui-react";
 import {
   countQueryOption,
@@ -15,7 +15,7 @@ import {
   // setOperatorOptions,
   conditionalOperatorOptions,
   // setCountOptions,
-  conditionalCountOptions
+  conditionalCountOptions,
 } from "../QueryConstants/constants";
 import CountTerminal from "../QueryTerminals/CountTerminal";
 import QueryHelp from "../QueryHelp";
@@ -32,7 +32,7 @@ export default class COUNT extends React.Component {
     conditionals: [],
     waiting: true,
     submitted: false,
-    hasError: false
+    hasError: false,
   };
 
   basicErrorCheck = () => {
@@ -63,7 +63,7 @@ export default class COUNT extends React.Component {
       this.state.fields.indexOf("*") > -1
     ) {
       return {
-        content: "If All is selected no other fields should be selected."
+        content: "If All is selected no other fields should be selected.",
       };
     }
   };
@@ -90,7 +90,7 @@ export default class COUNT extends React.Component {
     if (errors.length !== 0) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check COUNT error log"
+        message: "Uh oh, some errors detected. Please check COUNT error log",
       });
       this.props.updateCountErrorMessage(errors);
       this.setState({ hasError: true });
@@ -141,7 +141,7 @@ export default class COUNT extends React.Component {
     if (errors.length > 0) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check COUNT error log"
+        message: "Uh oh, some errors detected. Please check COUNT error log",
       });
       this.props.updateCountErrorMessage(errors);
       this.setState({ hasError: true });
@@ -172,7 +172,7 @@ export default class COUNT extends React.Component {
           return {
             field: "",
             operator: "=",
-            searchTerms: ""
+            searchTerms: "",
           };
         })
       );
@@ -180,13 +180,13 @@ export default class COUNT extends React.Component {
 
       this.setState({
         [name]: value,
-        conditionals: newConditionals
+        conditionals: newConditionals,
       });
     } else if (prevCount > value) {
       let newConditionals = [...this.state.conditionals].slice(0, value);
       this.setState({
         [name]: value,
-        conditionals: newConditionals
+        conditionals: newConditionals,
       });
     }
     // if previous is bigger, slice to match new count
@@ -195,15 +195,15 @@ export default class COUNT extends React.Component {
   handleConditionalItemChange = (e, { name, value, id }) => {
     const newConditional = {
       ...this.state.conditionals[id],
-      [name]: value
+      [name]: value,
     };
 
     this.setState({
       conditionals: [
         ...this.state.conditionals.slice(0, id),
         Object.assign({}, this.state.conditionals[id], newConditional),
-        ...this.state.conditionals.slice(id + 1)
-      ]
+        ...this.state.conditionals.slice(id + 1),
+      ],
     });
   };
 
@@ -239,7 +239,7 @@ export default class COUNT extends React.Component {
               error={
                 this.state.conditionals[index].operator === ""
                   ? {
-                      content: "You must select an operator for the condition."
+                      content: "You must select an operator for the condition.",
                     }
                   : false
               }
@@ -336,7 +336,9 @@ export default class COUNT extends React.Component {
         </Form.Group>
         {conditionals}
         <Form.Group className="float-right">
-          <QueryHelp queryType="COUNT" />
+          <Form.Field>
+            <QueryHelp queryType="COUNT" />
+          </Form.Field>
           <Form.Field
             id="form-button-control-ta-submit"
             control={Button}
@@ -370,7 +372,7 @@ export default class COUNT extends React.Component {
       query_action,
       fields,
       db,
-      conditionalCount
+      conditionalCount,
     } = this.state;
 
     return (
@@ -415,7 +417,7 @@ export default class COUNT extends React.Component {
                       .startsWith("select count") && !this.state.basic_query
                       ? {
                           content:
-                            "You must use proper COUNT query syntax (see Help for more information)."
+                            "You must use proper COUNT query syntax (see Help for more information).",
                         }
                       : false
                   }

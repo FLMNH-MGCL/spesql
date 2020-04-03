@@ -6,7 +6,7 @@ import {
   Message,
   Grid,
   Table,
-  Accordion
+  Accordion,
 } from "semantic-ui-react";
 
 export default class QueryHelp extends React.Component {
@@ -37,9 +37,12 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon labelPosition="left" type="button">
+              <Button
+                style={{ backgroundColor: "#6A67CE", color: "#fff" }}
+                icon
+                type="button"
+              >
                 <Icon name="question" />
-                See Help
               </Button>
             }
           >
@@ -269,9 +272,12 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon labelPosition="left" type="button">
+              <Button
+                style={{ backgroundColor: "#6A67CE", color: "#fff" }}
+                icon
+                type="button"
+              >
                 <Icon name="question" />
-                See Help
               </Button>
             }
           >
@@ -386,9 +392,12 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon labelPosition="left" type="button">
+              <Button
+                style={{ backgroundColor: "#6A67CE", color: "#fff" }}
+                icon
+                type="button"
+              >
                 <Icon name="question" />
-                See Help
               </Button>
             }
           >
@@ -434,9 +443,12 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon labelPosition="left" type="button">
+              <Button
+                style={{ backgroundColor: "#6A67CE", color: "#fff" }}
+                icon
+                type="button"
+              >
                 <Icon name="question" />
-                See Help
               </Button>
             }
           >
@@ -532,9 +544,12 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon labelPosition="left" type="button">
+              <Button
+                style={{ backgroundColor: "#6A67CE", color: "#fff" }}
+                icon
+                type="button"
+              >
                 <Icon name="question" />
-                See Help
               </Button>
             }
           >
@@ -718,9 +733,12 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon labelPosition="left" type="button">
+              <Button
+                style={{ backgroundColor: "#6A67CE", color: "#fff" }}
+                icon
+                type="button"
+              >
                 <Icon name="question" />
-                See Help
               </Button>
             }
           >
@@ -908,9 +926,12 @@ export default class QueryHelp extends React.Component {
             onClose={this.close}
             size="small"
             trigger={
-              <Button primary icon labelPosition="left" type="button">
+              <Button
+                style={{ backgroundColor: "#6A67CE", color: "#fff" }}
+                icon
+                type="button"
+              >
                 <Icon name="question" />
-                See Help
               </Button>
             }
           >
