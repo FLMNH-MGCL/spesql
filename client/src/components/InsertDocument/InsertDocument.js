@@ -60,21 +60,8 @@ class InsertDocument extends React.Component {
           onClose={this.closeModal}
           style={{ maxHeight: "85vh" }}
         >
-          <Modal.Header>Insert Query Selector</Modal.Header>
-          <Modal.Content
-            scrolling
-            style={
-              this.state.activePage === "Paste Insert"
-                ? { minHeight: "60vh" }
-                : { minHeight: "80vh" }
-            }
-          >
-            {this.state.activePage === "Paste Insert" ? (
-              <PASTE {...this.props} />
-            ) : (
-              <MANUAL {...this.props} />
-            )}
-            <Menu pagination>
+          <Modal.Header>
+            <Menu pagination size="tiny" style={{ marginRight: "1rem" }}>
               <Menu.Item onClick={this.handlePageBack}>
                 <Icon name="arrow left" />
               </Menu.Item>
@@ -92,6 +79,21 @@ class InsertDocument extends React.Component {
                 <Icon name="arrow right" />
               </Menu.Item>
             </Menu>
+            Insert Query Selector
+          </Modal.Header>
+          <Modal.Content
+            scrolling
+            style={
+              this.state.activePage === "Paste Insert"
+                ? { minHeight: "60vh" }
+                : { minHeight: "80vh" }
+            }
+          >
+            {this.state.activePage === "Paste Insert" ? (
+              <PASTE {...this.props} />
+            ) : (
+              <MANUAL {...this.props} />
+            )}
           </Modal.Content>
         </Modal>
       </div>
