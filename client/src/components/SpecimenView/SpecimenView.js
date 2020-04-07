@@ -5,7 +5,7 @@ import DeleteDocument from "../DeleteDocument/DeleteDocument";
 import UpdateDocument from "../UpdateDocument/UpdateDocument";
 
 class SpecimenView extends React.Component {
-  renderImage = selectedSpecimen => {
+  renderImage = (selectedSpecimen) => {
     // attempt fetch of image from somewhere
     // imageUrl = ...
 
@@ -18,6 +18,7 @@ class SpecimenView extends React.Component {
         <DeleteDocument
           target={selectedSpecimen.id}
           runQuery={this.props.runQuery}
+          disabled={this.props.disabled}
         />
         <UpdateDocument
           selectedSpecimen={selectedSpecimen}
@@ -25,6 +26,7 @@ class SpecimenView extends React.Component {
           runQuery={this.props.runQuery}
           user={this.props.user}
           notify={this.props.notify}
+          disabled={this.props.disabled}
         />
       </>
     );
@@ -33,7 +35,7 @@ class SpecimenView extends React.Component {
     // return undefined;
   };
 
-  renderList = selectedSpecimen => {
+  renderList = (selectedSpecimen) => {
     return (
       <List divided verticalAlign="middle" relaxed>
         <List.Item float="left">
@@ -273,7 +275,7 @@ class SpecimenView extends React.Component {
     );
   };
 
-  renderView = selectedSpecimen => {
+  renderView = (selectedSpecimen) => {
     let list = this.renderList(selectedSpecimen);
     let specimenImage = this.renderImage(selectedSpecimen);
 

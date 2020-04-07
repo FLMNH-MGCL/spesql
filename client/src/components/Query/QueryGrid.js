@@ -76,9 +76,10 @@ class QueryGrid extends React.Component {
             errorMessages={this.props.errorMessages}
             updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
             notify={this.props.notify}
+            disabled={this.props.disabled}
           />
           <Divider />
-          <UPDATE_BATCH />
+          <UPDATE_BATCH disabled={this.props.disabled} />
         </Modal.Content>
       </Modal>
     );

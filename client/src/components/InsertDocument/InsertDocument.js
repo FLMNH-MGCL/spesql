@@ -49,6 +49,7 @@ class InsertDocument extends React.Component {
               icon
               labelPosition="left"
               size={this.props.small ? "mini" : "small"}
+              disabled={this.props.disabled}
             >
               <Icon name="upload" />
               Insert

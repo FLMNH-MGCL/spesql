@@ -20,6 +20,10 @@ import QueryHelp from "../QueryHelp";
 
 export default class UPDATE_BATCH extends React.Component {
   render() {
+    if (this.props.disabled) {
+      return <div></div>;
+    }
+
     return (
       <Grid padded>
         <Grid.Row>

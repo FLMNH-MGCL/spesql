@@ -21,9 +21,18 @@ class DeleteDocument extends React.Component {
   handleCancel = () => this.setState({ open: false });
 
   render() {
+    if (this.props.disabled) {
+      return <div></div>;
+    }
+
     return (
       <React.Fragment>
-        <Button negative onClick={this.show}>
+        <Button
+          negative
+          disabled={this.props.disabled}
+          onClick={this.show}
+          style={{ marginBottom: ".25rem" }}
+        >
           DELETE
         </Button>
         <Confirm

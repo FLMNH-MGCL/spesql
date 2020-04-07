@@ -6,7 +6,7 @@ import {
   Grid,
   Table,
   Input,
-  TextArea
+  TextArea,
 } from "semantic-ui-react";
 // import SemanticDatepicker from "react-semantic-ui-datepickers";
 import QueryHelp from "../Query/QueryHelp";
@@ -67,7 +67,7 @@ class UpdateDocument extends React.Component {
       reared: this.props.selectedSpecimen.reared,
       fieldNotes: this.props.selectedSpecimen.fieldNotes,
       collectors: this.props.selectedSpecimen.collectors,
-      reason: ""
+      reason: "",
     };
   }
 
@@ -85,7 +85,7 @@ class UpdateDocument extends React.Component {
   //     this.setState({ open: false })
   // }
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     let changes = [];
     for (var field of Object.keys(this.props.selectedSpecimen)) {
       console.log(field);
@@ -109,7 +109,7 @@ class UpdateDocument extends React.Component {
         let change = {
           field: field,
           oldValue: this.props.selectedSpecimen[field],
-          newValue: this.state[field]
+          newValue: this.state[field],
         };
         changes.push(change);
       }
@@ -132,8 +132,8 @@ class UpdateDocument extends React.Component {
         [today]: {
           modifiedBy: this.props.user,
           fieldsChanged: changes,
-          reasonForChanges: this.state.reason
-        }
+          reasonForChanges: this.state.reason,
+        },
       };
 
       let allModifications = [];
@@ -166,18 +166,26 @@ class UpdateDocument extends React.Component {
     } else {
       this.props.notify({
         type: "warning",
-        message: "No changes were detected"
+        message: "No changes were detected",
       });
       console.log("There were no changes made overall");
     }
   };
 
   render() {
+    if (this.props.disabled) {
+      return <div></div>;
+    }
+
     if (!this.props.currentQuery.startsWith("SELECT *")) {
       return (
         <Modal
           trigger={
-            <Button color="yellow" onClick={this.show}>
+            <Button
+              color="yellow"
+              disabled={this.props.disabled}
+              onClick={this.show}
+            >
               UPDATE
             </Button>
           }
@@ -250,14 +258,18 @@ class UpdateDocument extends React.Component {
         reared,
         fieldNotes,
         collectors,
-        reason
+        reason,
       } = this.state;
 
       return (
         <React.Fragment>
           <Modal
             trigger={
-              <Button color="yellow" onClick={this.show}>
+              <Button
+                color="yellow"
+                disabled={this.props.disabled}
+                onClick={this.show}
+              >
                 UPDATE
               </Button>
             }
@@ -300,7 +312,7 @@ class UpdateDocument extends React.Component {
                         this.state.reason === ""
                           ? {
                               content: "You must provide a reason",
-                              pointing: "below"
+                              pointing: "below",
                             }
                           : false
                       }

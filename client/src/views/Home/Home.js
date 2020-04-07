@@ -10,14 +10,14 @@ import {
   runSelectQuery,
   runCountQuery,
   runUpdateQuery,
-  runDeleteQuery
+  runDeleteQuery,
 } from "../../functions/queries";
 import { mapStateToProps, mapDispatchToProps } from "../../redux/mapFunctions";
 import { connect } from "react-redux";
 import "react-notifications/lib/notifications.css";
 import {
   NotificationContainer,
-  NotificationManager
+  NotificationManager,
 } from "react-notifications";
 import "./Home.css";
 import { Redirect } from "react-router-dom";
@@ -66,12 +66,12 @@ class Home extends React.Component {
     if (valid) {
       ret = {
         valid: valid,
-        data: data
+        data: data,
       };
     } else {
       ret = {
         valid: valid,
-        data: errors
+        data: errors,
       };
     }
 
@@ -99,7 +99,7 @@ class Home extends React.Component {
         if (data.error) {
           this.createNotification({
             type: "error",
-            message: "Uh oh, please check error log."
+            message: "Uh oh, please check error log.",
           });
           let errorMessage = `SQL ERROR: Code: ${data.error.code}, Message: ${data.error.sqlMessage}`;
           console.log(errorMessage);
@@ -109,7 +109,7 @@ class Home extends React.Component {
         } else {
           this.createNotification({
             type: "success",
-            message: "SELECT query loaded"
+            message: "SELECT query loaded",
           });
           this.props.updateQueryData(data.specimen);
           let headers = getQueryHeaders(data.specimen[0]);
@@ -125,19 +125,19 @@ class Home extends React.Component {
         if (!countData.error) {
           this.createNotification({
             type: "success",
-            message: "COUNT query loaded"
+            message: "COUNT query loaded",
           });
           countData = countData.data[Object.keys(countData.data)[0]];
           this.props.updateCountQueryCount(Object.values(countData)[0]); // isolate the number
           console.log(countData);
         } else {
           let error = [
-            `SQL ERROR: Code: ${countData.error.code}, Message: ${countData.error.sqlMessage}`
+            `SQL ERROR: Code: ${countData.error.code}, Message: ${countData.error.sqlMessage}`,
           ];
           this.props.updateCountErrorMessage(error);
           this.createNotification({
             type: "error",
-            message: "Uh oh, please check error log"
+            message: "Uh oh, please check error log",
           });
         }
         break;
@@ -149,7 +149,7 @@ class Home extends React.Component {
           // console.log(this.props.current_query)
           this.createNotification({
             type: "success",
-            message: "Successfully deleted entry"
+            message: "Successfully deleted entry",
           });
           this.runQuery(this.props.current_query);
           console.log("success");
@@ -157,7 +157,7 @@ class Home extends React.Component {
           console.log(deleteData.data);
           this.createNotification({
             type: "error",
-            message: "Uh oh, please check error log"
+            message: "Uh oh, please check error log",
           });
         }
         break;
@@ -173,18 +173,18 @@ class Home extends React.Component {
           console.log("failed");
           console.log(updateData.data);
           let updateError = [
-            `SQL ERROR: Code: ${updateData.data.code}, Message: ${updateData.data.sqlMessage}`
+            `SQL ERROR: Code: ${updateData.data.code}, Message: ${updateData.data.sqlMessage}`,
           ];
           this.createNotification({
             type: "error",
-            message: "Uh oh, please check error log"
+            message: "Uh oh, please check error log",
           });
           this.props.updateUpdateErrorMessage(updateError);
         } else {
           console.log(updateData.data);
           this.createNotification({
             type: "success",
-            message: "Successfully updated entry"
+            message: "Successfully updated entry",
           });
         }
 
@@ -195,7 +195,7 @@ class Home extends React.Component {
     }
   }
 
-  createNotification = content => {
+  createNotification = (content) => {
     switch (content.type) {
       case "success":
         NotificationManager.success(`${content.message}`, "Success!");
@@ -233,6 +233,10 @@ class Home extends React.Component {
           runQuery={this.runQuery.bind(this)}
           logout={this.logout.bind(this)}
           notify={this.createNotification}
+          disabled={
+            this.props.userData.privilege_level !== "admin" &&
+            this.props.userData.privilege_level !== "manager"
+          }
         />
         <Grid columns="equal" padded stackable>
           <Grid.Column width={11}>
@@ -254,6 +258,10 @@ class Home extends React.Component {
                 runQuery={this.runQuery.bind(this)}
                 user={this.props.user}
                 notify={this.createNotification}
+                disabled={
+                  this.props.userData.privilege_level !== "admin" &&
+                  this.props.userData.privilege_level !== "manager"
+                }
               />
             </Segment>
           </Grid.Column>

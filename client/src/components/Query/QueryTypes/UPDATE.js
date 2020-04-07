@@ -664,6 +664,10 @@ export default class UPDATE extends React.Component {
     let sets = this.renderSets();
     let conditionals = this.renderConditions();
 
+    if (this.props.disabled) {
+      return <div></div>;
+    }
+
     return (
       <Grid padded>
         <Grid.Row>

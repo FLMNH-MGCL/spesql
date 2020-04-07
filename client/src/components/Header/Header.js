@@ -92,17 +92,21 @@ export default class Header extends Component {
               updateCountErrorMessage={this.props.updateCountErrorMessage}
               updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
               notify={this.props.notify}
+              disabled={this.props.disabled}
             />
           </Menu.Item>
-          <Menu.Item>
-            <InsertDocument
-              isValidCSV={this.props.isValidCSV.bind(this)}
-              errorMessages={this.props.errorMessages}
-              updateInsertErrorMessage={this.props.updateInsertErrorMessage}
-              notify={this.props.notify}
-              small={this.state.mobileView}
-            />
-          </Menu.Item>
+          {this.props.disabled ? null : (
+            <Menu.Item>
+              <InsertDocument
+                isValidCSV={this.props.isValidCSV.bind(this)}
+                errorMessages={this.props.errorMessages}
+                updateInsertErrorMessage={this.props.updateInsertErrorMessage}
+                notify={this.props.notify}
+                small={this.state.mobileView}
+                disabled={this.props.disabled}
+              />
+            </Menu.Item>
+          )}
           <Menu.Item>
             <DownloadDB
               data={this.props.data}
