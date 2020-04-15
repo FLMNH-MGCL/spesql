@@ -19,6 +19,7 @@ class SpecimenView extends React.Component {
           target={selectedSpecimen.id}
           runQuery={this.props.runQuery}
           disabled={this.props.disabled}
+          userData={this.props.userData}
         />
         <UpdateDocument
           selectedSpecimen={selectedSpecimen}
@@ -27,6 +28,9 @@ class SpecimenView extends React.Component {
           user={this.props.user}
           notify={this.props.notify}
           disabled={this.props.disabled}
+          userData={this.props.userData}
+          errorMessages={this.props.errorMessages}
+          updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
         />
       </>
     );
@@ -298,15 +302,22 @@ class SpecimenView extends React.Component {
           <Grid columns="equal" padded>
             <Grid.Column style={{ maxHeight: "80vh", overflowY: "scroll" }}>
               <div style={{ display: "block" }}>
-                <DeleteDocument
-                  target={selectedSpecimen.id}
-                  runQuery={this.props.runQuery}
-                />
                 <UpdateDocument
                   selectedSpecimen={selectedSpecimen}
                   currentQuery={this.props.currentQuery}
                   runQuery={this.props.runQuery}
                   user={this.props.user}
+                  disabled={this.props.disabled}
+                  userData={this.props.userData}
+                  errorMessages={this.props.errorMessages}
+                  updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
+                  notify={this.props.notify}
+                />
+                <DeleteDocument
+                  target={selectedSpecimen.id}
+                  runQuery={this.props.runQuery}
+                  disabled={this.props.disabled}
+                  userData={this.props.userData}
                 />
               </div>
               {list}
@@ -336,11 +347,7 @@ class SpecimenView extends React.Component {
           </div>
         );
       } else {
-        return (
-          <div style={{ maxHeight: "84vh" }}>
-            {this.renderView(selectedSpecimen)}
-          </div>
-        );
+        return <div>{this.renderView(selectedSpecimen)}</div>;
       }
     }
   }

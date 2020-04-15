@@ -10,13 +10,15 @@ import {
 } from "semantic-ui-react";
 // import SemanticDatepicker from "react-semantic-ui-datepickers";
 import QueryHelp from "../Query/QueryHelp";
+import { checkSpecimen, checkField } from "../../functions/queryChecks";
+import ErrorTerminal from "../Query/QueryTerminals/ErrorTerminal";
 
 class UpdateDocument extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       open: false,
+      loading: false,
       catalogNumber: props.selectedSpecimen.catalogNumber,
       otherCatalogNumber: props.selectedSpecimen.otherCatalogNumber,
       recordNumber: props.selectedSpecimen.recordNumber,
@@ -85,13 +87,30 @@ class UpdateDocument extends React.Component {
   //     this.setState({ open: false })
   // }
 
+  renderErrorTerminal = () => (
+    <React.Fragment>
+      <ErrorTerminal errorLog={this.props.errorMessages.updateError} />
+      <Button
+        onClick={() => {
+          this.props.updateUpdateErrorMessage(null);
+          this.setState({ loading: false });
+        }}
+        color="red"
+        style={{ float: "right" }}
+      >
+        Clear
+      </Button>
+    </React.Fragment>
+  );
+
   onSubmit = (e) => {
     let changes = [];
+    let errors = [];
     for (var field of Object.keys(this.props.selectedSpecimen)) {
-      console.log(field);
-      console.log(
-        `${this.state[field]} vs ${this.props.selectedSpecimen[field]}`
-      );
+      // console.log(field);
+      // console.log(
+      //   `${this.state[field]} vs ${this.props.selectedSpecimen[field]}`
+      // );
 
       // skip fields not modified or entered by any user
       if (
@@ -112,12 +131,31 @@ class UpdateDocument extends React.Component {
           newValue: this.state[field],
         };
         changes.push(change);
+        errors = errors.concat(checkField(field, this.state[field]));
       }
+    }
+
+    this.setState({ loading: true });
+
+    if (errors.length !== 0) {
+      // update error log
+      this.props.updateUpdateErrorMessage(errors);
+      // send notification
+      this.props.notify({
+        type: "error",
+        message: "Errors detected. Please check error log.",
+      });
+
+      this.setState({ loading: false });
+
+      return;
     }
 
     if (changes.length > 0) {
       console.log("Changes were detected");
       console.log(changes);
+
+      console.log(errors);
 
       var today = new Date();
       var dd = String(today.getDate()).padStart(2, "0");
@@ -130,7 +168,7 @@ class UpdateDocument extends React.Component {
 
       let modification = {
         [today]: {
-          modifiedBy: this.props.user,
+          modifiedBy: this.props.userData.name,
           fieldsChanged: changes,
           reasonForChanges: this.state.reason,
         },
@@ -163,12 +201,13 @@ class UpdateDocument extends React.Component {
       // console.log(updateCommand)
 
       this.props.runQuery(updateCommand);
+      this.setState({ loading: false });
     } else {
       this.props.notify({
         type: "warning",
         message: "No changes were detected",
       });
-      console.log("There were no changes made overall");
+      this.setState({ loading: false });
     }
   };
 
@@ -1016,6 +1055,9 @@ class UpdateDocument extends React.Component {
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
+              {this.props.errorMessages.updateError
+                ? this.renderErrorTerminal()
+                : null}
             </Modal.Content>
           </Modal>
         </React.Fragment>

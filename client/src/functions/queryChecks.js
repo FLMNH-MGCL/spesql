@@ -459,11 +459,14 @@ export function checkField(fieldName, fieldValue) {
     case "tribe":
     case "genus":
     case "subgenus":
+      if (fieldValue === "" || !fieldValue) return errors;
+
       errors = errors.concat(capsChecks(fieldName, fieldValue, true));
       return errors;
 
     case "specificEpithet":
     case "infraspecificEpithet":
+      if (fieldValue === "" || !fieldValue) return errors;
       errors = errors.concat(capsChecks(fieldName, fieldValue, false));
       return errors;
 

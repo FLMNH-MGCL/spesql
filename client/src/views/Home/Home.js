@@ -256,12 +256,14 @@ class Home extends React.Component {
                 selectedSpecimen={this.props.selectedSpecimen}
                 currentQuery={this.props.current_query}
                 runQuery={this.runQuery.bind(this)}
-                user={this.props.user}
+                userData={this.props.userData}
                 notify={this.createNotification}
                 disabled={
                   this.props.userData.privilege_level !== "admin" &&
                   this.props.userData.privilege_level !== "manager"
                 }
+                errorMessages={this.props.errorMessages}
+                updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
               />
             </Segment>
           </Grid.Column>
