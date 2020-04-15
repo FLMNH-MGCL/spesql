@@ -211,7 +211,7 @@ class Home extends React.Component {
   };
 
   render() {
-    console.log(this.props.authenticated);
+    // console.log(this.props.authenticated);
     if (!this.props.authenticated) {
       return <Redirect to="/Login" />;
     }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input, Container, Icon } from "semantic-ui-react";
 
-export default function({ checkAuth, handleSubmit, buttonStyle }) {
+export default function ({ checkAuth, handleSubmit, buttonStyle }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);

@@ -20,6 +20,7 @@ import {
 } from "../QueryConstants/constants";
 import QueryHelp from "../QueryHelp";
 import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
+import axios from "axios";
 // import { checkAdvancedSelect } from "../../../functions/queryChecks";
 // import { createAutoGenFields } from "../../../functions/helpers";
 
@@ -36,7 +37,31 @@ export default class SELECT extends React.Component {
     search_: "",
     operator: "",
     loading: false,
+    loadingOptions: true,
+    dbSelection: [],
   };
+
+  async initTableOptions(query_type) {
+    let dbSelection = [];
+    const { userData } = this.props;
+    await axios
+      .post("/api/list-tables/", {
+        privilege_level: userData.privilege_level,
+        query_type: query_type,
+      })
+      .then((response) => {
+        if (response.data.error) {
+          this.setState({ loadingOptions: false });
+        } else {
+          dbSelection = response.data.tables.map((table, index) => {
+            return { key: index + 1 * 1002, text: table, value: table };
+          });
+
+          // console.log(dbSelection);
+          this.setState({ dbSelection: dbSelection, loadingOptions: false });
+        }
+      });
+  }
 
   checkBasicQueryErrors = () => {
     // return ['test 1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test 1', 'test2', 'test3', 'test4', 'test5', 'test6']
@@ -336,7 +361,7 @@ export default class SELECT extends React.Component {
         />
         <Form.Field
           control={Select}
-          options={this.props.dbSelection}
+          options={this.state.dbSelection}
           label="Database Table"
           placeholder=""
           search
@@ -400,9 +425,15 @@ export default class SELECT extends React.Component {
       fields,
       db,
       conditionalCount,
+      loadingOptions,
+      dbSelection,
     } = this.state;
 
     const conditionals = this.renderConditions();
+
+    if (dbSelection.length === 0 && loadingOptions) {
+      this.initTableOptions("select");
+    }
 
     return (
       <Grid padded>

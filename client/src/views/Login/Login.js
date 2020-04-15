@@ -84,7 +84,7 @@ function Login(props) {
 
         props.setUserData(userData);
         props.setAuth(authed);
-      }, 200);
+      }, 1000);
     }
   };
 

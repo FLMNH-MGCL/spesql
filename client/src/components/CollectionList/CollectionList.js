@@ -19,7 +19,9 @@ function getCells(specimen, headers) {
       case "mgcl #":
         return <Table.Cell key={index}>{specimen.catalogNumber}</Table.Cell>;
       case "lep #":
-        return <Table.Cell key={index}>{specimen.recordNumber}</Table.Cell>;
+        return (
+          <Table.Cell key={index}>{specimen.otherCatalogNumber}</Table.Cell>
+        );
       case "order":
         return <Table.Cell key={index}>{specimen.order_}</Table.Cell>;
       case "superfamily":
@@ -363,7 +365,7 @@ export default class CollectionList extends React.Component {
     let collectionList = this.renderList();
 
     let specimenHeaders = this.getHeaderCells(this.props.query_headers);
-    // console.log(specimenHeaders)
+    // console.log(specimenHeaders);
 
     return (
       <React.Fragment>

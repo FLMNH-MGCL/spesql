@@ -40,17 +40,17 @@ class SpecimenView extends React.Component {
       <List divided verticalAlign="middle" relaxed>
         <List.Item float="left">
           <List.Content>
-            <b>LEP #: </b> {selectedSpecimen.recordNumber}
-          </List.Content>
-        </List.Item>
-        <List.Item float="left">
-          <List.Content>
-            <b>Other Record Number: </b> {selectedSpecimen.otherRecordNumber}
+            <b>LEP #: </b> {selectedSpecimen.otherCatalogNumber}
           </List.Content>
         </List.Item>
         <List.Item float="left">
           <List.Content>
             <b>MGCL #: </b> {selectedSpecimen.catalogNumber}
+          </List.Content>
+        </List.Item>
+        <List.Item float="left">
+          <List.Content>
+            <b>Record Number: </b> {selectedSpecimen.recordNumber}
           </List.Content>
         </List.Item>
         <List.Item float="left">
@@ -222,7 +222,13 @@ class SpecimenView extends React.Component {
         </List.Item>
         <List.Item float="left">
           <List.Content>
-            <b>Loan Info: </b> {selectedSpecimen.loanInfo}
+            <b>Loan Info: </b>
+            {selectedSpecimen.isLoaned
+              ? selectedSpecimen.loaneeName
+                ? `Loaned to ${selectedSpecimen.loaneeName} @ ` +
+                  `${selectedSpecimen.loanInstitution}`
+                : `Loaned to ${selectedSpecimen.loanInstitution}`
+              : "Not on loan"}
           </List.Content>
         </List.Item>
         <List.Item float="left">
@@ -277,15 +283,13 @@ class SpecimenView extends React.Component {
 
   renderView = (selectedSpecimen) => {
     let list = this.renderList(selectedSpecimen);
-    let specimenImage = this.renderImage(selectedSpecimen);
+    let specimenImage = undefined; //this.renderImage(selectedSpecimen);
 
     if (specimenImage !== undefined) {
       return (
         <Grid columns="equal" padded>
           <Grid.Column>{specimenImage}</Grid.Column>
-          <Grid.Column style={{ maxHeight: "86vh", overflowY: "scroll" }}>
-            {list}
-          </Grid.Column>
+          <Grid.Column style={{ overflowY: "scroll" }}>{list}</Grid.Column>
         </Grid>
       );
     } else {
@@ -293,21 +297,21 @@ class SpecimenView extends React.Component {
         <>
           <Grid columns="equal" padded>
             <Grid.Column style={{ maxHeight: "80vh", overflowY: "scroll" }}>
+              <div style={{ display: "block" }}>
+                <DeleteDocument
+                  target={selectedSpecimen.id}
+                  runQuery={this.props.runQuery}
+                />
+                <UpdateDocument
+                  selectedSpecimen={selectedSpecimen}
+                  currentQuery={this.props.currentQuery}
+                  runQuery={this.props.runQuery}
+                  user={this.props.user}
+                />
+              </div>
               {list}
             </Grid.Column>
           </Grid>
-          <div style={{ float: "right", paddingTop: "2rem" }}>
-            <DeleteDocument
-              target={selectedSpecimen.id}
-              runQuery={this.props.runQuery}
-            />
-            <UpdateDocument
-              selectedSpecimen={selectedSpecimen}
-              currentQuery={this.props.currentQuery}
-              runQuery={this.props.runQuery}
-              user={this.props.user}
-            />
-          </div>
         </>
       );
     }
@@ -333,7 +337,9 @@ class SpecimenView extends React.Component {
         );
       } else {
         return (
-          <React.Fragment>{this.renderView(selectedSpecimen)}</React.Fragment>
+          <div style={{ maxHeight: "84vh" }}>
+            {this.renderView(selectedSpecimen)}
+          </div>
         );
       }
     }

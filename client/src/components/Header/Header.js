@@ -93,6 +93,7 @@ export default class Header extends Component {
               updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
               notify={this.props.notify}
               disabled={this.props.disabled}
+              userData={this.props.userData}
             />
           </Menu.Item>
           {this.props.disabled ? null : (

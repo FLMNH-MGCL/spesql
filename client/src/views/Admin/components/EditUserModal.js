@@ -8,7 +8,7 @@ import {
   Input,
   Checkbox,
   Divider,
-  Popup
+  Popup,
 } from "semantic-ui-react";
 import ConfirmAuth from "./ConfirmAuth";
 import axios from "axios";
@@ -16,13 +16,13 @@ import axios from "axios";
 const ACCESS_LEVELS = [
   { key: "Guest", text: "Guest", value: "guest" },
   { key: "Manager", text: "Manager", value: "manager" },
-  { key: "Admin", text: "Admin", value: "admin" }
+  { key: "Admin", text: "Admin", value: "admin" },
 ];
 
 export default function EditUserModal({
   users,
   checkAuth,
-  createNotification
+  createNotification,
 }) {
   const [selected, select] = useState();
   const [firstName, setFirstName] = useState("");
@@ -33,11 +33,11 @@ export default function EditUserModal({
   const [understood, setUnderstood] = useState(false);
 
   const userSelection = users
-    ? users.map(user => {
+    ? users.map((user) => {
         return {
           key: user.name,
           text: `${user.name} : ${user.username}`,
-          value: user.username
+          value: user,
         };
       })
     : null;
@@ -50,10 +50,9 @@ export default function EditUserModal({
     }
   };
 
-  const initSelected = () => {
+  const initForm = (user) => {
     // get user by username
-    const user = getUser();
-    console.log(user);
+    //const user = getUser()
     const firstName = user.name.split(" ")[0];
     const lastName = user.name.split(" ")[1];
     setFirstName(firstName);
@@ -73,22 +72,65 @@ export default function EditUserModal({
   }
 
   const getChanges = () => {
+    if (!selected) return [];
+
     let changes = [];
+    const user = selected;
+    let newUser = user;
+
+    // manually check each field, for each on thats diff append to changes
+    let fullName = firstName + " " + lastName;
+    if (user.name !== fullName) {
+      newUser.name = fullName;
+    }
+
+    if (user.username !== username) {
+      newUser.username = username;
+    }
+
+    if (user.accessLevel !== accessLevel) {
+      newUser.privilege_level = accessLevel;
+    }
+
+    if (password && password !== "") {
+      newUser.password = password;
+    }
+
+    return { id: user.id, newUser: newUser };
   };
 
   // TODO: axios request, check if sucess
-  const deleteUser = () => {
-    // error check
+  const deleteUser = async () => {
     // axios to delete
-    // notify success or failure
+    const res = await axios
+      .post("/api/admin/delete-user/", {
+        username: username,
+      })
+      .catch((err) => {
+        console.log(err);
+        createNotification({
+          type: "error",
+          message:
+            "404 error code returned. Likely cause is user requested for delete does not exist.",
+        });
+      });
+
+    if (res) {
+      createNotification({
+        type: "success",
+        message: `Sucessfully deleted user ${username}`,
+      });
+    }
   };
 
-  const errorChecks = () => {};
+  const errorChecks = (field) => {
+    return false;
+  };
 
   // TODO: axios request, check if sucess
-  const handleSubmit = async e => {
+  const updateUser = async (e) => {
     // get user and get changes
-    const user = getUser();
+    // const user = selected;
     const changes = getChanges();
 
     let hasError = false;
@@ -98,8 +140,8 @@ export default function EditUserModal({
       errorChecks("lastName") ||
       errorChecks("username") ||
       errorChecks("password") ||
-      errorChecks("accessLevel") ||
-      !understood
+      errorChecks("accessLevel")
+      // || !understood
     ) {
       hasError = true;
     }
@@ -107,14 +149,15 @@ export default function EditUserModal({
     if (hasError) {
       createNotification({
         type: "error",
-        message: "You must fix errors in form."
+        message: "You must fix errors in form.",
       });
       return;
     }
 
-    console.log("cant do this yet :)");
+    // console.log("cant do this yet :)");
 
     // update user
+    const res = await axios.post("/api/admin/update-user", changes);
     // notify
   };
 
@@ -183,7 +226,7 @@ export default function EditUserModal({
           style={{
             justifyContent: "center",
             paddingTop: "1rem",
-            paddingBottom: "1rem"
+            paddingBottom: "1rem",
           }}
         >
           <Form.Field>
@@ -195,13 +238,13 @@ export default function EditUserModal({
                 //   Delete User
                 // </Button>
                 <ConfirmAuth
-                  handleSubmit={handleSubmit}
+                  handleSubmit={deleteUser}
                   checkAuth={checkAuth}
                   buttonStyle={{
                     color: "red",
                     icon: <Icon name="user delete" />,
                     labelPosition: "left",
-                    text: "Delete User"
+                    text: "Delete User",
                   }}
                 />
               }
@@ -220,16 +263,17 @@ export default function EditUserModal({
             {/* <Button color="green" onClick={handleSubmit}>
                 Submit
               </Button> */}
-            <ConfirmAuth handleSubmit={handleSubmit} checkAuth={checkAuth} />
+            <ConfirmAuth handleSubmit={updateUser} checkAuth={checkAuth} />
           </Form.Field>
         </Form.Group>
       </>
     );
   };
 
-  if (selected && !username && !firstName && !lastName && !accessLevel) {
-    initSelected();
-  }
+  // console.log(selected);
+  // console.log(selected);
+
+  // console.log(username);
 
   return (
     <Modal
@@ -254,7 +298,10 @@ export default function EditUserModal({
             label="Select an existing user"
             options={userSelection}
             value={selected}
-            onChange={(e, { value }) => select(value)}
+            onChange={(e, { value }) => {
+              select(value);
+              initForm(value);
+            }}
           />
           {selected ? renderEditForm() : null}
         </Form>

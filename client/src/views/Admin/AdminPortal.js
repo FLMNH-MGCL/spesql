@@ -11,7 +11,7 @@ import {
   Loader,
   Dimmer,
   Segment,
-  Header
+  Header,
 } from "semantic-ui-react";
 import axios from "axios";
 import AddUserModal from "./components/AddUserModal";
@@ -19,11 +19,11 @@ import EditUserModal from "./components/EditUserModal";
 import "react-notifications/lib/notifications.css";
 import {
   NotificationContainer,
-  NotificationManager
+  NotificationManager,
 } from "react-notifications";
 import "./styles.css";
 
-const createNotification = content => {
+const createNotification = (content) => {
   switch (content.type) {
     case "success":
       NotificationManager.success(`${content.message}`, "Success!");
@@ -40,13 +40,14 @@ const createNotification = content => {
 
 function AdminPortal(props) {
   const [users, setUsers] = useState();
+  const [tables, setTables] = useState();
   const [error, setError] = useState();
 
   async function checkAuth(user, password, callback) {
-    console.log(`${user} vs ${password}`);
+    // console.log(`${user} vs ${password}`);
     const authData = await axios.post("/api/login/", {
       user: user,
-      password: password
+      password: password,
     });
 
     console.log(authData);
@@ -72,16 +73,30 @@ function AdminPortal(props) {
     }
   }
 
+  async function getTables() {
+    const res = await axios.get("/api/admin/list-tables/");
+
+    if (res.status !== 200 || res.err) {
+      setError(res.err);
+    } else {
+      setTables(res.data.tables);
+    }
+  }
+
   useEffect(() => {
     if (!users) {
       getUsers();
     }
+
+    if (!tables) {
+      getTables();
+    }
   });
 
-  const renderTable = () => {
+  function renderUserTable() {
     if (!users) return; // safety check
     // console.log(users);
-    const userTable = users.map(user => {
+    const userTable = users.map((user) => {
       return (
         <Table.Row>
           <Table.Cell>{user.name}</Table.Cell>
@@ -93,7 +108,24 @@ function AdminPortal(props) {
     });
 
     return userTable;
-  };
+  }
+
+  function renderTables() {
+    if (!tables) return;
+
+    const sqlTables = tables.map((table) => {
+      return (
+        <Table.Row>
+          <Table.Cell>{table.tbl_name}</Table.Cell>
+          <Table.Cell>{table.minimum_access_update}</Table.Cell>
+          <Table.Cell>{table.minimum_access_select}</Table.Cell>
+          <Table.Cell>{table.minimum_access_delete}</Table.Cell>
+        </Table.Row>
+      );
+    });
+
+    return sqlTables;
+  }
 
   const userSelection = () => {};
 
@@ -112,7 +144,7 @@ function AdminPortal(props) {
         style={{
           position: "absolute",
           left: "2rem",
-          top: "2rem"
+          top: "2rem",
         }}
       >
         <Icon
@@ -128,6 +160,8 @@ function AdminPortal(props) {
       <Container style={{ marginTop: "2rem" }}>
         <Header textAlign="center">Hello, {props.userData.username}!</Header>
         <div style={{ textAlign: "center" }}>Welcome to the Admin Portal</div>
+
+        {/* TABLE OF USERS */}
         <Segment>
           <Header textAlign="center">Authorized Users</Header>
           <Table compact celled selectable>
@@ -142,7 +176,7 @@ function AdminPortal(props) {
 
             <Table.Body>
               {users ? (
-                renderTable()
+                renderUserTable()
               ) : (
                 <div
                   style={{
@@ -150,7 +184,7 @@ function AdminPortal(props) {
                     minHeight: "5rem",
                     justifyContent: "center",
                     alignItems: "center",
-                    textAlign: "center"
+                    textAlign: "center",
                   }}
                 >
                   <Loader active inline />
@@ -184,6 +218,21 @@ function AdminPortal(props) {
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Footer>
+          </Table>
+        </Segment>
+
+        {/* TABLE OF SQL TABLES */}
+        <Segment style={{ marginTop: "1.5rem" }}>
+          <Header textAlign="center">SQL Tables</Header>
+          <Table compact celled selectable>
+            <Table.Header>
+              <Table.HeaderCell>Table Name</Table.HeaderCell>
+              <Table.HeaderCell>Minimum Insert Access</Table.HeaderCell>
+              <Table.HeaderCell>Minimum Select Access</Table.HeaderCell>
+              <Table.HeaderCell>Minimum Update Access</Table.HeaderCell>
+            </Table.Header>
+            <Table.Body>{renderTables()}</Table.Body>
+            <Table.Footer fullWidth></Table.Footer>
           </Table>
         </Segment>
       </Container>

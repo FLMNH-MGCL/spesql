@@ -9,13 +9,13 @@ import {
   setCountOptions,
   countryControl,
   geodeticDatumControl,
-  yesOrNo
+  yesOrNo,
 } from "../components/Query/QueryConstants/constants";
 
 const correctHeaders = [
   "catalogNumber",
+  "otherCatalogNumber",
   "recordNumber",
-  "otherRecordNumber",
   "order_",
   "superfamily",
   "family",
@@ -29,6 +29,10 @@ const correctHeaders = [
   "recordedBy",
   "identifiedBy",
   "dateIdentified",
+  "verbatimDate",
+  "collectedYear",
+  "collectedMonth",
+  "collectedDay",
   "sex",
   "lifeStage",
   "habitat",
@@ -40,7 +44,7 @@ const correctHeaders = [
   "county",
   "municipality",
   "locality",
-  "verbatimElevation",
+  "elevationInMeters",
   "decimalLatitude",
   "decimalLongitude",
   "geodeticDatum",
@@ -49,7 +53,11 @@ const correctHeaders = [
   "verbatimLongitude",
   "georeferencedBy",
   "disposition",
-  "loanInfo",
+  "isLoaned",
+  "loanInstitution",
+  "loaneeName",
+  "loanDate",
+  "loanReturnDate",
   "preparations",
   "freezer",
   "rack",
@@ -60,7 +68,7 @@ const correctHeaders = [
   "withholdData",
   "reared",
   "fieldNotes",
-  "collectors"
+  "collectors",
 ];
 
 export function checkHeaders(headers) {
@@ -166,7 +174,7 @@ export function checkManualEntry(specimen) {
 
   let ret = {
     corrections: corrections,
-    errors: errors
+    errors: errors,
   };
 
   return ret;
@@ -223,7 +231,7 @@ export function checkRandomCaps(field, upperFirst) {
   }
 
   correctField = words
-    .map(word => {
+    .map((word) => {
       return word;
     })
     .join(" ");
@@ -231,7 +239,7 @@ export function checkRandomCaps(field, upperFirst) {
   return correctField;
 }
 
-const isNumeric = n => {
+const isNumeric = (n) => {
   return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
@@ -247,7 +255,7 @@ export function parseDate(date) {
   return yyyy + "-" + mm + "-" + dd;
 }
 
-export const parseMeasurement = measurement => {
+export const parseMeasurement = (measurement) => {
   // comes in like 30 meters
   // empty would look like " "
 
@@ -280,7 +288,7 @@ export const parseMeasurement = measurement => {
 };
 
 const controlHasString = (control, value) => {
-  let options = control.map(option => {
+  let options = control.map((option) => {
     return option.value;
   });
 
@@ -289,7 +297,7 @@ const controlHasString = (control, value) => {
   } else return false;
 };
 
-const includesPunctuation = field => {
+const includesPunctuation = (field) => {
   if (
     field.includes("'") ||
     field.includes(".") ||
@@ -407,7 +415,7 @@ export function checkField(fieldName, fieldValue) {
 
       return errors;
 
-    case "recordNumber":
+    case "otherCatalogNumber":
       if (fieldValue === "") {
         return errors;
       }
@@ -591,7 +599,7 @@ export function checkField(fieldName, fieldValue) {
       errors = errors.concat(capsChecks(fieldName, fieldValue, true));
       return errors;
 
-    case "verbatimElevation":
+    case "elevationInMeters":
       if (fieldValue === " ") {
         return errors;
       }
@@ -660,7 +668,7 @@ export function checkField(fieldName, fieldValue) {
         return errors;
       }
 
-      // ADD CONVERSION
+      // TODO: ADD CONVERSION
 
       if (!isNumeric(fieldValue)) {
         errors.push(

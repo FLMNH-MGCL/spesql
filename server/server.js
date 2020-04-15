@@ -10,10 +10,10 @@ let connection = mysql.createConnection({
   port: mysqlCredentials.port,
   user: mysqlCredentials.user,
   password: mysqlCredentials.password,
-  database: mysqlCredentials.database
+  database: mysqlCredentials.database,
 });
 
-connection.connect(err => {
+connection.connect((err) => {
   if (err) {
     console.log(err);
   } else {
@@ -29,10 +29,15 @@ require("./routes/select-count.routes")(connection, app);
 require("./routes/insert.routes")(connection, app);
 require("./routes/delete.routes")(connection, app);
 require("./routes/login.routes")(connection, app);
-require("./routes/create-user.routes")(connection, app);
 require("./routes/fetch-users.routes")(connection, app);
 require("./routes/generate-pass.routes")(app);
 require("./routes/get-user.routes")(connection, app);
+
+// ADMIN ROUTES
+require("./routes/create-user.routes")(connection, app);
+require("./routes/update-user.routes")(connection, app);
+require("./routes/delete-user.routes")(connection, app);
+require("./routes/list-tables-admin.routes")(connection, app);
 // require("./routes/shutdown.routes")(connection, app);
 
 var server = app.listen(port, () =>

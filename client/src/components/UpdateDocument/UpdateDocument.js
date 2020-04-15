@@ -18,8 +18,8 @@ class UpdateDocument extends React.Component {
     this.state = {
       open: false,
       catalogNumber: props.selectedSpecimen.catalogNumber,
+      otherCatalogNumber: props.selectedSpecimen.otherCatalogNumber,
       recordNumber: props.selectedSpecimen.recordNumber,
-      otherRecordNumber: props.selectedSpecimen.otherRecordNumber,
       order_: props.selectedSpecimen.order_,
       superfamily: this.props.selectedSpecimen.superfamily,
       family: this.props.selectedSpecimen.family,
@@ -46,7 +46,7 @@ class UpdateDocument extends React.Component {
       county: this.props.selectedSpecimen.county,
       municipality: this.props.selectedSpecimen.municipality,
       locality: this.props.selectedSpecimen.locality,
-      verbatimElevation: this.props.selectedSpecimen.verbatimElevation,
+      elevationInMeters: this.props.selectedSpecimen.elevationInMeters,
       decimalLatitude: this.props.selectedSpecimen.decimalLatitude,
       decimalLongitude: this.props.selectedSpecimen.decimalLongitude,
       geodeticDatum: this.props.selectedSpecimen.geodeticDatum,
@@ -212,7 +212,7 @@ class UpdateDocument extends React.Component {
       const {
         catalogNumber,
         recordNumber,
-        otherRecordNumber,
+        otherCatalogNumber,
         order_,
         superfamily,
         family,
@@ -237,7 +237,7 @@ class UpdateDocument extends React.Component {
         county,
         municipality,
         locality,
-        verbatimElevation,
+        elevationInMeters,
         decimalLatitude,
         decimalLongitude,
         geodeticDatum,
@@ -343,6 +343,20 @@ class UpdateDocument extends React.Component {
                         </Table.Row>
 
                         <Table.Row>
+                          <Table.Cell>otherCatalogNumber</Table.Cell>
+                          <Table.Cell>
+                            {this.props.selectedSpecimen.otherCatalogNumber}
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Input
+                              name="otherCatalogNumber"
+                              value={otherCatalogNumber}
+                              onChange={this.onChange}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
                           <Table.Cell>recordNumber</Table.Cell>
                           <Table.Cell>
                             {this.props.selectedSpecimen.recordNumber}
@@ -351,20 +365,6 @@ class UpdateDocument extends React.Component {
                             <Input
                               name="recordNumber"
                               value={recordNumber}
-                              onChange={this.onChange}
-                            />
-                          </Table.Cell>
-                        </Table.Row>
-
-                        <Table.Row>
-                          <Table.Cell>otherRecordNumber</Table.Cell>
-                          <Table.Cell>
-                            {this.props.selectedSpecimen.otherRecordNumber}
-                          </Table.Cell>
-                          <Table.Cell>
-                            <Input
-                              name="otherRecordNumber"
-                              value={otherRecordNumber}
                               onChange={this.onChange}
                             />
                           </Table.Cell>
@@ -713,14 +713,14 @@ class UpdateDocument extends React.Component {
                         </Table.Row>
 
                         <Table.Row>
-                          <Table.Cell>verbatimElevation</Table.Cell>
+                          <Table.Cell>elevationInMeters</Table.Cell>
                           <Table.Cell>
-                            {this.props.selectedSpecimen.verbatimElevation}
+                            {this.props.selectedSpecimen.elevationInMeters}
                           </Table.Cell>
                           <Table.Cell>
                             <Input
-                              name="verbatimElevation"
-                              value={verbatimElevation}
+                              name="elevationInMeters"
+                              value={elevationInMeters}
                               onChange={this.onChange}
                             />
                           </Table.Cell>

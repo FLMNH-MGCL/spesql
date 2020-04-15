@@ -12,7 +12,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1600,
     height: 900,
-    icon: __dirname + "/flmnhLogo.png"
+    icon: __dirname + "/flmnhLogo.png",
   });
   mainWindow.loadURL(
     isDev
@@ -22,7 +22,7 @@ function createWindow() {
   if (isDev) {
     // Open the DevTools.
     //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
   } else {
     mainWindow.setMenu(null);
   }
@@ -31,11 +31,13 @@ function createWindow() {
     // server.killServer()
   });
 
-  mainWindow.webContents.on("new-window", function(event, url) {
+  mainWindow.webContents.on("new-window", function (event, url) {
     event.preventDefault();
     electron.shell.openExternal(url);
   });
 }
+
+app.allowRendererProcessReuse = false;
 
 app.on("ready", createWindow);
 

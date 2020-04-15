@@ -20,6 +20,7 @@ import {
 import CountTerminal from "../QueryTerminals/CountTerminal";
 import QueryHelp from "../QueryHelp";
 import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
+import axios from "axios";
 
 export default class COUNT extends React.Component {
   state = {
@@ -33,7 +34,31 @@ export default class COUNT extends React.Component {
     waiting: true,
     submitted: false,
     hasError: false,
+    dbSelection: [],
+    loading: true,
   };
+
+  async initTableOptions(query_type) {
+    let dbSelection = [];
+    const { userData } = this.props;
+    await axios
+      .post("/api/list-tables/", {
+        privilege_level: userData.privilege_level,
+        query_type: query_type,
+      })
+      .then((response) => {
+        if (response.data.error) {
+          this.setState({ loading: false });
+        } else {
+          dbSelection = response.data.tables.map((table, index) => {
+            return { key: index + 1 * 1002, text: table, value: table };
+          });
+
+          // console.log(dbSelection);
+          this.setState({ dbSelection: dbSelection, loading: false });
+        }
+      });
+  }
 
   basicErrorCheck = () => {
     let errors = [];
@@ -308,7 +333,7 @@ export default class COUNT extends React.Component {
           />
           <Form.Field
             control={Select}
-            options={this.props.dbSelection}
+            options={this.state.dbSelection}
             label="Database Table"
             placeholder=""
             search
@@ -373,7 +398,13 @@ export default class COUNT extends React.Component {
       fields,
       db,
       conditionalCount,
+      dbSelection,
+      loading,
     } = this.state;
+
+    if (dbSelection.length === 0 && loading) {
+      this.initTableOptions("select");
+    }
 
     return (
       <Grid padded style={{ paddingBottom: "2rem" }}>

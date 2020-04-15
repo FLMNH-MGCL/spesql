@@ -1,13 +1,9 @@
 const mysql = require("mysql");
 
 module.exports = function (connection, app) {
-  app.post("/api/list-tables/", function (req, res) {
+  app.get("/api/admin/list-tables/", function (req, res) {
     //console.log(connection)
-    let { privilege_level, query_type } = req.body;
-    let command =
-      privilege_level === "admin"
-        ? "SELECT * FROM interactables;"
-        : `SELECT * FROM interactables WHERE minimum_access_${query_type}="${privilege_level}";`;
+    let command = "SELECT * FROM interactables;";
     //console.log(command)
     connection.query(command, (err, data) => {
       if (err) {
@@ -16,8 +12,18 @@ module.exports = function (connection, app) {
       } else {
         console.log(data);
         const tables = data.map((table) => {
-          const { tbl_name } = table;
-          return tbl_name;
+          const {
+            tbl_name,
+            minimum_access_select,
+            minimum_access_update,
+            minimum_access_delete,
+          } = table;
+          return {
+            tbl_name,
+            minimum_access_select,
+            minimum_access_update,
+            minimum_access_delete,
+          };
         });
         res.json({ tables: tables });
       }

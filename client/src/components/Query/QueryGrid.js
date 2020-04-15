@@ -5,16 +5,6 @@ import { SELECT, UPDATE, COUNT } from "./QueryTypes";
 import "./QueryGrid.css";
 import UPDATE_BATCH from "./QueryTypes/UPDATE_BATCH";
 
-let dbSelection = [];
-axios.post("/api/list-tables/").then((response) => {
-  if (response.data.error) {
-  } else {
-    dbSelection = response.data.tables.map((table, index) => {
-      return { key: index + 1 * 1002, text: table, value: table };
-    });
-  }
-});
-
 class QueryGrid extends React.Component {
   state = {
     showModal: false,
@@ -27,6 +17,11 @@ class QueryGrid extends React.Component {
   };
 
   render() {
+    // const { dbSelection, loading } = this.state;
+    // if (dbSelection.length === 0 && loading) {
+    //   this.initTableOptions();
+    // }
+    const { userData } = this.props;
     return (
       <Modal
         trigger={
@@ -49,27 +44,29 @@ class QueryGrid extends React.Component {
         <Modal.Header>Query Selector</Modal.Header>
         <Modal.Content scrolling style={{ minHeight: "80vh" }}>
           <SELECT
-            dbSelection={dbSelection}
+            // dbSelection={dbSelection}
             runQuery={this.props.runQuery}
             clearQuery={this.props.clearQuery}
             closeModal={this.closeModal}
             errorMessages={this.props.errorMessages}
             updateSelectErrorMessage={this.props.updateSelectErrorMessage}
             notify={this.props.notify}
+            userData={userData}
           />
           <Divider />
           <COUNT
-            dbSelection={dbSelection}
+            // dbSelection={dbSelection}
             runQuery={this.props.runQuery}
             countQueryCount={this.props.countQueryCount}
             updateCountQueryCount={this.props.updateCountQueryCount}
             errorMessages={this.props.errorMessages}
             updateCountErrorMessage={this.props.updateCountErrorMessage}
             notify={this.props.notify}
+            userData={userData}
           />
           <Divider />
           <UPDATE
-            dbSelection={dbSelection}
+            // dbSelection={dbSelection}
             runQuery={this.props.runQuery}
             clearQuery={this.props.clearQuery}
             closeModal={this.closeModal}
@@ -77,6 +74,7 @@ class QueryGrid extends React.Component {
             updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
             notify={this.props.notify}
             disabled={this.props.disabled}
+            userData={userData}
           />
           <Divider />
           <UPDATE_BATCH disabled={this.props.disabled} />
