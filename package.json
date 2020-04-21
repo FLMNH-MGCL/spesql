@@ -5,15 +5,14 @@
   "main": "client/public/electron.js",
   "scripts": {
     "test": "mocha server/tests",
-    "install-all": "concurrently \"npm install\" \"cd client && npm install\"",
-    "client": "cd client && npm start",
-    "server": "nodemon server/server.js",
-    "dev": "concurrently \"nodemon server/server.js\" \"cd client && npm run start\"",
-    "electron-dev": "concurrently \"nodemon server/server.js\" \"cd client && cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron": "concurrently \"cd client && cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
-    "build": "cd client && npm build",
-    "start": "node server/server.js",
-    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "install-all": "concurrently \"yarn\" \"cd client && yarn\"",
+    "client": "cd client && yarn start",
+    "server": "node server/server.js",
+    "dev": "concurrently \"nodemon server/server.js\" \"cd client && yarn start\"",
+    "dev:server": "nodemon server/server.js",
+    "dev:electron": "concurrently \"nodemon server/server.js\" \"cd client && cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "build": "cd client && yarn build",
+    "heroku-postbuild": "cd client && yarn && yarn --only=dev --no-shrinkwrap && yarn build"
   },
   "repository": {
     "type": "git",
