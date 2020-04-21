@@ -120,7 +120,27 @@ class SpecimenView extends React.Component {
         </List.Item>
         <List.Item float="left">
           <List.Content>
-            <b>Date: </b> {selectedSpecimen.dateIdentified}
+            <b>Date Identified: </b> {selectedSpecimen.dateIdentified}
+          </List.Content>
+        </List.Item>
+        <List.Item float="left">
+          <List.Content>
+            <b>Verbatim Date: </b> {selectedSpecimen.verbatimDate}
+          </List.Content>
+        </List.Item>
+        <List.Item float="left">
+          <List.Content>
+            <b>Collected Year: </b> {selectedSpecimen.collectedYear}
+          </List.Content>
+        </List.Item>
+        <List.Item float="left">
+          <List.Content>
+            <b>Collected Month: </b> {selectedSpecimen.collectedMonth}
+          </List.Content>
+        </List.Item>
+        <List.Item float="left">
+          <List.Content>
+            <b>Collected Day: </b> {selectedSpecimen.collectedDay}
           </List.Content>
         </List.Item>
         <List.Item float="left">

@@ -7,13 +7,13 @@ import {
   Select,
   Message,
   TextArea,
-  Checkbox,
-  Dropdown,
+  // Checkbox,
+  // Dropdown,
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
 import {
-  checkManualEntry,
-  checkRandomCaps,
+  // checkManualEntry,
+  // checkRandomCaps,
   checkField,
   checkSpecimen,
   parseDate,
@@ -40,8 +40,6 @@ import {
 export default class MANUAL extends React.Component {
   constructor(props) {
     super(props);
-
-    // getCountries()
 
     this.state = {
       activePage: "Manual Insert",

@@ -7,10 +7,24 @@ import {
   Table,
   Input,
   TextArea,
+  Select,
 } from "semantic-ui-react";
-// import SemanticDatepicker from "react-semantic-ui-datepickers";
+import SemanticDatepicker from "react-semantic-ui-datepickers";
 import QueryHelp from "../Query/QueryHelp";
 import { checkSpecimen, checkField } from "../../functions/queryChecks";
+import {
+  familyControl,
+  identificationQualifierControl,
+  samplingProtocolControl,
+  dispositionControl,
+  preparationsControl,
+  tubeSizeControl,
+  lifeStageControl,
+  sexControl,
+  countryControl,
+  yesOrNo,
+  units,
+} from "../Query/QueryConstants/constants";
 import ErrorTerminal from "../Query/QueryTerminals/ErrorTerminal";
 
 class UpdateDocument extends React.Component {
@@ -36,6 +50,10 @@ class UpdateDocument extends React.Component {
       recordedBy: this.props.selectedSpecimen.recordedBy,
       identifiedBy: this.props.selectedSpecimen.identifiedBy,
       dateIdentified: this.props.selectedSpecimen.dateIdentified,
+      verbatimDate: this.props.selectedSpecimen.verbatimDate,
+      collectedYear: this.props.selectedSpecimen.collectedYear,
+      collectedMonth: this.props.selectedSpecimen.collectedMonth,
+      collectedDay: this.props.selectedSpecimen.collectedDay,
       sex: this.props.selectedSpecimen.sex,
       lifeStage: this.props.selectedSpecimen.lifeStage,
       habitat: this.props.selectedSpecimen.habitat,
@@ -57,7 +75,11 @@ class UpdateDocument extends React.Component {
       verbatimLongitude: this.props.selectedSpecimen.verbatimLongitude,
       georeferencedBy: this.props.selectedSpecimen.georeferencedBy,
       disposition: this.props.selectedSpecimen.disposition,
-      loanInfo: this.props.selectedSpecimen.loanInfo,
+      isLoaned: this.props.selectedSpecimen.isLoaned,
+      loanInstitution: this.props.selectedSpecimen.loanInstitution,
+      loaneeName: this.props.selectedSpecimen.loaneeName,
+      loanDate: this.props.selectedSpecimen.loanDate,
+      loanReturnDate: this.props.selectedSpecimen.loanReturnDate,
       preparations: this.props.selectedSpecimen.preparations,
       freezer: this.props.selectedSpecimen.freezer,
       rack: this.props.selectedSpecimen.rack,
@@ -78,15 +100,6 @@ class UpdateDocument extends React.Component {
 
   onChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  // handleConfirm= () => {
-  //     axios.post(`/api/delete/${this.props.target}`).then(res => {
-  //         const data = res.data
-  //         console.log(data)
-  //     })
-  //     this.props.updateList()
-  //     this.setState({ open: false })
-  // }
-
   renderErrorTerminal = () => (
     <React.Fragment>
       <ErrorTerminal errorLog={this.props.errorMessages.updateError} />
@@ -104,6 +117,14 @@ class UpdateDocument extends React.Component {
   );
 
   onSubmit = (e) => {
+    if (this.state.reason === "") {
+      this.props.notify({
+        type: "error",
+        message: "Please enter a reason for updating.",
+      });
+      return;
+    }
+
     let changes = [];
     let errors = [];
     for (var field of Object.keys(this.props.selectedSpecimen)) {
@@ -123,8 +144,13 @@ class UpdateDocument extends React.Component {
 
       if (this.state[field] === this.props.selectedSpecimen[field]) {
         // console.log('same values')
+      } else if (!this.state[field] && this.props.selectedSpecimen[field]) {
+        // property in state doesn't exist in selected specimen
+        // this means I need to update the DB to reflect the program
+        // this if should never hit after production, but for now it will just
+        // log the occurrence
+        console.log(`DB / Software conflict: check the ${field} field`);
       } else {
-        // console.log('diff values')
         let change = {
           field: field,
           oldValue: this.props.selectedSpecimen[field],
@@ -265,6 +291,10 @@ class UpdateDocument extends React.Component {
         recordedBy,
         identifiedBy,
         dateIdentified,
+        verbatimDate,
+        collectedYear,
+        collectedMonth,
+        collectedDay,
         sex,
         lifeStage,
         habitat,
@@ -285,7 +315,11 @@ class UpdateDocument extends React.Component {
         verbatimLongitude,
         georeferencedBy,
         disposition,
-        loanInfo,
+        isLoaned,
+        loanInstitution,
+        loaneeName,
+        loanDate,
+        loanReturnDate,
         preparations,
         freezer,
         rack,
@@ -544,8 +578,9 @@ class UpdateDocument extends React.Component {
                             }
                           </Table.Cell>
                           <Table.Cell>
-                            <Input
+                            <Select
                               name="identificationQualifier"
+                              options={identificationQualifierControl}
                               value={identificationQualifier}
                               onChange={this.onChange}
                             />
@@ -586,9 +621,69 @@ class UpdateDocument extends React.Component {
                             {this.props.selectedSpecimen.dateIdentified}
                           </Table.Cell>
                           <Table.Cell>
-                            <Input
+                            <Select
+                              as={SemanticDatepicker}
                               name="dateIdentified"
                               value={dateIdentified}
+                              onChange={this.onChange}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
+                          <Table.Cell>verbatimDate</Table.Cell>
+                          <Table.Cell>
+                            {this.props.selectedSpecimen.verbatimDate}
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Input
+                              name="verbatimDate"
+                              value={verbatimDate}
+                              onChange={this.onChange}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
+                          <Table.Cell>collectedYear</Table.Cell>
+                          <Table.Cell>
+                            {this.props.selectedSpecimen.collectedYear}
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Input
+                              name="collectedYear"
+                              placeholder="YYYY"
+                              value={collectedYear}
+                              onChange={this.onChange}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
+                          <Table.Cell>collectedMonth</Table.Cell>
+                          <Table.Cell>
+                            {this.props.selectedSpecimen.collectedMonth}
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Input
+                              name="collectedMonth"
+                              placeholder="MM"
+                              value={collectedMonth}
+                              onChange={this.onChange}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
+                          <Table.Cell>collectedDay</Table.Cell>
+                          <Table.Cell>
+                            {this.props.selectedSpecimen.collectedDay}
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Input
+                              name="collectedDay"
+                              placeholder="DD"
+                              value={collectedDay}
                               onChange={this.onChange}
                             />
                           </Table.Cell>
@@ -600,8 +695,10 @@ class UpdateDocument extends React.Component {
                             {this.props.selectedSpecimen.sex}
                           </Table.Cell>
                           <Table.Cell>
-                            <Input
+                            <Select
                               name="sex"
+                              placeholder="Select One"
+                              options={sexControl}
                               value={sex}
                               onChange={this.onChange}
                             />
@@ -614,8 +711,10 @@ class UpdateDocument extends React.Component {
                             {this.props.selectedSpecimen.lifeStage}
                           </Table.Cell>
                           <Table.Cell>
-                            <Input
+                            <Select
                               name="lifeStage"
+                              placeholder="Select One"
+                              options={lifeStageControl}
                               value={lifeStage}
                               onChange={this.onChange}
                             />
@@ -673,8 +772,10 @@ class UpdateDocument extends React.Component {
                             {this.props.selectedSpecimen.samplingProtocol}
                           </Table.Cell>
                           <Table.Cell>
-                            <Input
+                            <Select
                               name="samplingProtocol"
+                              placeholder="Select One"
+                              options={samplingProtocolControl}
                               value={samplingProtocol}
                               onChange={this.onChange}
                             />
@@ -687,8 +788,10 @@ class UpdateDocument extends React.Component {
                             {this.props.selectedSpecimen.country}
                           </Table.Cell>
                           <Table.Cell>
-                            <Input
+                            <Select
                               name="country"
+                              placeholder="Select One"
+                              options={countryControl}
                               value={country}
                               onChange={this.onChange}
                             />
@@ -869,8 +972,10 @@ class UpdateDocument extends React.Component {
                             {this.props.selectedSpecimen.disposition}
                           </Table.Cell>
                           <Table.Cell>
-                            <Input
+                            <Select
                               name="disposition"
+                              placeholder="Select One"
+                              options={dispositionControl}
                               value={disposition}
                               onChange={this.onChange}
                             />
@@ -878,18 +983,86 @@ class UpdateDocument extends React.Component {
                         </Table.Row>
 
                         <Table.Row>
-                          <Table.Cell>loanInfo</Table.Cell>
+                          <Table.Cell>isLoaned</Table.Cell>
                           <Table.Cell>
-                            {this.props.selectedSpecimen.loanInfo}
+                            {this.props.selectedSpecimen.isLoaned}
                           </Table.Cell>
                           <Table.Cell>
-                            <TextArea
-                              name="loanInfo"
-                              value={loanInfo}
+                            <Select
+                              name="isLoaned"
+                              placeholder="Select One"
+                              options={yesOrNo}
+                              value={isLoaned}
                               onChange={this.onChange}
                             />
                           </Table.Cell>
                         </Table.Row>
+
+                        {/* render loan form if is loaned */}
+                        {this.state.isLoaned === "Y" ? (
+                          <>
+                            <Table.Row>
+                              <Table.Cell>loanInstitution</Table.Cell>
+                              <Table.Cell>
+                                {this.props.selectedSpecimen.loanInstitution}
+                              </Table.Cell>
+                              <Table.Cell>
+                                <Input
+                                  name="loanInstitution"
+                                  value={loanInstitution}
+                                  onChange={this.onChange}
+                                />
+                              </Table.Cell>
+                            </Table.Row>
+
+                            <Table.Row>
+                              <Table.Cell>loaneeName</Table.Cell>
+                              <Table.Cell>
+                                {this.props.selectedSpecimen.loaneeName}
+                              </Table.Cell>
+                              <Table.Cell>
+                                <Input
+                                  name="loaneeName"
+                                  placeholder="Last,First"
+                                  value={loaneeName}
+                                  onChange={this.onChange}
+                                />
+                              </Table.Cell>
+                            </Table.Row>
+
+                            <Table.Row>
+                              <Table.Cell>loanDate</Table.Cell>
+                              <Table.Cell>
+                                {this.props.selectedSpecimen.loanDate}
+                              </Table.Cell>
+                              <Table.Cell>
+                                <Select
+                                  as={SemanticDatepicker}
+                                  name="loanDate"
+                                  value={loanDate}
+                                  onChange={this.onChange}
+                                />
+                              </Table.Cell>
+                            </Table.Row>
+
+                            <Table.Row>
+                              <Table.Cell>loanReturnDate</Table.Cell>
+                              <Table.Cell>
+                                {this.props.selectedSpecimen.loanReturnDate}
+                              </Table.Cell>
+                              <Table.Cell>
+                                <Select
+                                  as={SemanticDatepicker}
+                                  name="loanReturnDate"
+                                  value={loanReturnDate}
+                                  onChange={this.onChange}
+                                />
+                              </Table.Cell>
+                            </Table.Row>
+                          </>
+                        ) : (
+                          ""
+                        )}
 
                         <Table.Row>
                           <Table.Cell>preparations</Table.Cell>
@@ -897,8 +1070,10 @@ class UpdateDocument extends React.Component {
                             {this.props.selectedSpecimen.preparations}
                           </Table.Cell>
                           <Table.Cell>
-                            <Input
+                            <Select
                               name="preparations"
+                              placeholder="Select One"
+                              options={preparationsControl}
                               value={preparations}
                               onChange={this.onChange}
                             />
@@ -953,8 +1128,10 @@ class UpdateDocument extends React.Component {
                             {this.props.selectedSpecimen.tubeSize}
                           </Table.Cell>
                           <Table.Cell>
-                            <Input
+                            <Select
                               name="tubeSize"
+                              placeholder="Select One"
+                              options={tubeSizeControl}
                               value={tubeSize}
                               onChange={this.onChange}
                             />
@@ -1009,8 +1186,10 @@ class UpdateDocument extends React.Component {
                             {this.props.selectedSpecimen.reared}
                           </Table.Cell>
                           <Table.Cell>
-                            <Input
+                            <Select
                               name="reared"
+                              placeholder="Select One"
+                              options={yesOrNo}
                               value={reared}
                               onChange={this.onChange}
                             />
@@ -1039,6 +1218,7 @@ class UpdateDocument extends React.Component {
                           <Table.Cell>
                             <TextArea
                               name="collectors"
+                              placeholder="Last1,First1 Last2,First2"
                               value={collectors}
                               onChange={this.onChange}
                             />

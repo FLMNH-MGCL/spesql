@@ -226,13 +226,60 @@ function AdminPortal(props) {
           <Header textAlign="center">SQL Tables</Header>
           <Table compact celled selectable>
             <Table.Header>
-              <Table.HeaderCell>Table Name</Table.HeaderCell>
-              <Table.HeaderCell>Minimum Insert Access</Table.HeaderCell>
-              <Table.HeaderCell>Minimum Select Access</Table.HeaderCell>
-              <Table.HeaderCell>Minimum Update Access</Table.HeaderCell>
+              <Table.Row>
+                <Table.HeaderCell>Table Name</Table.HeaderCell>
+                <Table.HeaderCell>Minimum Insert Access</Table.HeaderCell>
+                <Table.HeaderCell>Minimum Select Access</Table.HeaderCell>
+                <Table.HeaderCell>Minimum Update Access</Table.HeaderCell>
+              </Table.Row>
             </Table.Header>
             <Table.Body>{renderTables()}</Table.Body>
-            <Table.Footer fullWidth></Table.Footer>
+            <Table.Footer fullWidth>
+              <Table.Row>
+                <Table.HeaderCell colSpan="4">
+                  {/* <AddUserModal
+                    users={users}
+                    createNotification={createNotification}
+                    checkAuth={checkAuth}
+                  />
+                  <EditUserModal
+                    users={users}
+                    createNotification={createNotification}
+                    checkAuth={checkAuth}
+                  /> */}
+                  <Button
+                    icon
+                    color="green"
+                    labelPosition="left"
+                    floated="right"
+                    size="small"
+                  >
+                    <Icon name="add" />
+                    Create Table
+                  </Button>
+                  <Button
+                    icon
+                    color="yellow"
+                    labelPosition="left"
+                    floated="right"
+                    size="small"
+                  >
+                    <Icon name="edit outline" />
+                    Edit Table
+                  </Button>
+                  <Button
+                    size="small"
+                    icon
+                    onClick={() => {
+                      setTables(null); // fake loading
+                      getTables();
+                    }}
+                  >
+                    <Icon name="refresh" />
+                  </Button>
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Footer>
           </Table>
         </Segment>
       </Container>
