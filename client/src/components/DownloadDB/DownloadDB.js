@@ -30,7 +30,6 @@ class DownloadDB extends React.Component {
               Download
             </Button>
           }
-          closeIcon
         >
           <Modal.Header>Download Options</Modal.Header>
           <Modal.Content>

@@ -36,7 +36,6 @@ class QueryGrid extends React.Component {
           </Button>
         }
         centered
-        closeIcon
         open={this.state.showModal}
         onClose={this.closeModal}
         style={{ maxHeight: "85vh" }}

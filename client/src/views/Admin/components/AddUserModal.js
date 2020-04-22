@@ -6,7 +6,7 @@ import {
   Form,
   Input,
   Select,
-  Checkbox
+  Checkbox,
 } from "semantic-ui-react";
 import axios from "axios";
 import { capsChecks } from "../../../functions/queryChecks";
@@ -15,7 +15,7 @@ import ConfirmAuth from "./ConfirmAuth";
 const ACCESS_LEVELS = [
   { key: "Guest", text: "Guest", value: "guest" },
   { key: "Manager", text: "Manager", value: "manager" },
-  { key: "Admin", text: "Admin", value: "admin" }
+  { key: "Admin", text: "Admin", value: "admin" },
 ];
 
 export default function AddUserModal({ users, checkAuth, createNotification }) {
@@ -46,7 +46,7 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
     }
   }
 
-  const errorChecks = field => {
+  const errorChecks = (field) => {
     switch (field) {
       case "firstName":
         if (firstName === "") {
@@ -92,7 +92,7 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
 
   const finalCheck = () => {};
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     let hasError = false;
 
     if (
@@ -109,7 +109,7 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
     if (hasError) {
       createNotification({
         type: "error",
-        message: "You must fix errors in form."
+        message: "You must fix errors in form.",
       });
       return;
     }
@@ -118,14 +118,16 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
       name: firstName.concat(` ${lastName}`),
       user: username,
       password: password,
-      privilege_level: accessLevel
+      privilege_level: accessLevel,
     };
 
     if (JSON.stringify(users).includes(username)) {
       createNotification({
         type: "error",
-        message: "Entered Username already exists"
+        message: "Entered Username already exists",
       });
+
+      return;
     }
 
     console.log(JSON.stringify(user));
@@ -154,7 +156,7 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
         </Button>
       }
       onClose={resetState}
-      closeIcon
+      size="small"
     >
       <Modal.Header>Add a User</Modal.Header>
       <Modal.Content>
@@ -215,7 +217,7 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
               error={!understood}
             />
           </Form.Group>
-          <Form.Group>
+          {/* <Form.Group>
             <Form.Field>
               <Button icon labelPosition="left" color="linkedin">
                 <Icon name="question circle outline" />
@@ -223,14 +225,18 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
               </Button>
             </Form.Field>
             <Form.Field>
-              {/* <Button color="green" onClick={handleSubmit}>
-                Submit
-              </Button> */}
               <ConfirmAuth handleSubmit={handleSubmit} checkAuth={checkAuth} />
             </Form.Field>
-          </Form.Group>
+          </Form.Group> */}
         </Form>
       </Modal.Content>
+      <Modal.Actions>
+        <Button icon labelPosition="left" color="linkedin">
+          <Icon name="question circle outline" />
+          See Help
+        </Button>
+        <ConfirmAuth handleSubmit={handleSubmit} checkAuth={checkAuth} />
+      </Modal.Actions>
     </Modal>
   );
 }

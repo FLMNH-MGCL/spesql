@@ -743,7 +743,7 @@ export default class QueryHelp extends React.Component {
             }
           >
             <Modal.Header>Specimen Table Help</Modal.Header>
-            <Modal.Content scrolling style={{ minHeight: "70vh" }}>
+            <Modal.Content>
               <h3 style={{ display: "block" }}>Common Questions:</h3>
               <Accordion styled>
                 <Accordion.Title

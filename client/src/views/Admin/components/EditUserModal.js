@@ -42,6 +42,16 @@ export default function EditUserModal({
       })
     : null;
 
+  function resetState() {
+    select(undefined);
+    setFirstName("");
+    setLastName("");
+    setUsername("");
+    setPassword("");
+    setAccessLevel("");
+    setUnderstood(false);
+  }
+
   const getUser = () => {
     for (let i = 0; i < users.length; i++) {
       if (users[i].username === selected) {
@@ -217,7 +227,7 @@ export default function EditUserModal({
             label="I understand that, once created, this password may not be retrieved. Admins may reset and change it only."
             value={understood}
             onChange={() => setUnderstood(!understood)}
-            // error={!understood}
+            error={!understood}
           />
         </Form.Group>
 
@@ -251,21 +261,6 @@ export default function EditUserModal({
             />
           </Form.Field>
         </Form.Group>
-
-        <Form.Group>
-          <Form.Field>
-            <Button icon labelPosition="left" color="linkedin">
-              <Icon name="question circle outline" />
-              See Help
-            </Button>
-          </Form.Field>
-          <Form.Field>
-            {/* <Button color="green" onClick={handleSubmit}>
-                Submit
-              </Button> */}
-            <ConfirmAuth handleSubmit={updateUser} checkAuth={checkAuth} />
-          </Form.Field>
-        </Form.Group>
       </>
     );
   };
@@ -288,7 +283,8 @@ export default function EditUserModal({
           <Icon name="edit" /> Edit User
         </Button>
       }
-      closeIcon
+      size="small"
+      onClose={resetState}
     >
       <Modal.Header>Edit an Existing User</Modal.Header>
       <Modal.Content>
@@ -306,6 +302,13 @@ export default function EditUserModal({
           {selected ? renderEditForm() : null}
         </Form>
       </Modal.Content>
+      <Modal.Actions>
+        <Button icon labelPosition="left" color="linkedin">
+          <Icon name="question circle outline" />
+          See Help
+        </Button>
+        <ConfirmAuth handleSubmit={updateUser} checkAuth={checkAuth} />
+      </Modal.Actions>
     </Modal>
   );
 }

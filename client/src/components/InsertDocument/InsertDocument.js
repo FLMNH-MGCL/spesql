@@ -56,9 +56,7 @@ class InsertDocument extends React.Component {
             </Button>
           }
           centered
-          closeIcon
           onClose={this.closeModal}
-          style={{ maxHeight: "85vh" }}
         >
           <Modal.Header>
             <Menu pagination size="tiny" style={{ marginRight: "1rem" }}>
@@ -81,14 +79,7 @@ class InsertDocument extends React.Component {
             </Menu>
             Insert Query Selector
           </Modal.Header>
-          <Modal.Content
-            scrolling
-            style={
-              this.state.activePage === "Paste Insert"
-                ? { minHeight: "60vh" }
-                : { minHeight: "80vh" }
-            }
-          >
+          <Modal.Content>
             {this.state.activePage === "Paste Insert" ? (
               <PASTE {...this.props} />
             ) : (

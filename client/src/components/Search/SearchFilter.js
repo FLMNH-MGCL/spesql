@@ -5,7 +5,7 @@ import {
   Checkbox,
   Form,
   Container,
-  Segment
+  Segment,
 } from "semantic-ui-react";
 import { headerSelection } from "../Query/QueryConstants/constants";
 
@@ -74,7 +74,6 @@ class SearchFilter extends React.Component {
     // const { filterCategory } = this.state;
     return (
       <Modal
-        closeIcon
         open={this.state.open}
         onClose={() => this.close()}
         trigger={

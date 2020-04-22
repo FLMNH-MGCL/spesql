@@ -37,6 +37,7 @@ export default function ({ checkAuth, handleSubmit, buttonStyle }) {
             </Button>
           )
         }
+        size="small"
         open={show}
         onClose={() => setShow(false)}
       >

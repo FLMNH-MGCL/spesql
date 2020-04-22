@@ -410,64 +410,68 @@ export default class CollectionList extends React.Component {
           </Table.Footer>
         </Table>
         <div className="query-info">
-          <SearchFilter
-            filterCategory={this.props.filterCategory}
-            updateFilteredCategory={this.props.updateFilteredCategory}
-            disabled={this.props.data.length === 0}
-          />
-          <DBSearch
-            filteredText={this.props.filteredText}
-            updateFilteredText={this.props.updateFilteredText}
-            disabled={this.props.data.length === 0}
-          />
-          <Button
-            negative
-            onClick={() => {
-              this.props.clearQuery();
-              this.setState({
-                hasMore: false,
-                display: Array.from({ length: 0 }),
-              });
-            }}
-            disabled={this.props.current_query === "" ? true : false}
-            style={{ marginLeft: ".2rem" }}
-          >
-            Clear Query
-          </Button>
-          <Button
-            icon
-            onClick={() => {
-              // console.log('refreshed!')
-              let command = this.props.current_query;
-              this.props.clearQuery();
-              this.props.updateRefreshStatus(true);
-              this.props.updateLoadingStatus(true);
-              this.props.runQuery(command);
-            }}
-            disabled={this.props.current_query === "" ? true : false}
-          >
-            <Icon name="refresh" />
-          </Button>
-          <div className="query-text">
-            <h4>Query Size:</h4>
-            <p>{this.props.data.length}</p>
+          <div className="info-actions">
+            <SearchFilter
+              filterCategory={this.props.filterCategory}
+              updateFilteredCategory={this.props.updateFilteredCategory}
+              disabled={this.props.data.length === 0}
+            />
+            <DBSearch
+              filteredText={this.props.filteredText}
+              updateFilteredText={this.props.updateFilteredText}
+              disabled={this.props.data.length === 0}
+            />
+            <Button
+              negative
+              onClick={() => {
+                this.props.clearQuery();
+                this.setState({
+                  hasMore: false,
+                  display: Array.from({ length: 0 }),
+                });
+              }}
+              disabled={this.props.current_query === "" ? true : false}
+              style={{ marginLeft: ".2rem" }}
+            >
+              Clear Query
+            </Button>
+            <Button
+              icon
+              onClick={() => {
+                // console.log('refreshed!')
+                let command = this.props.current_query;
+                this.props.clearQuery();
+                this.props.updateRefreshStatus(true);
+                this.props.updateLoadingStatus(true);
+                this.props.runQuery(command);
+              }}
+              disabled={this.props.current_query === "" ? true : false}
+            >
+              <Icon name="refresh" />
+            </Button>
           </div>
-          <div className="query-text">
-            <h4>Filtered Size:</h4>
-            <p>
-              {this.props.filteredText !== ""
-                ? collectionList.length
-                : this.props.data.length}
-            </p>
-          </div>
-          <div className="query-text">
-            <h4>Current Loaded:</h4>
-            <p>
-              {this.props.data.length === 0 ? 0 : this.state.display.length}
-            </p>
-          </div>
-          <div style={{ float: "right" }}>
-            <QueryHelp queryType="LIST_HELP" />
+          <div className="query-infosheet">
+            <div className="query-text">
+              <h4>Query Size:</h4>
+              <p>{this.props.data.length}</p>
+            </div>
+            <div className="query-text">
+              <h4>Filtered Size:</h4>
+              <p>
+                {this.props.filteredText !== ""
+                  ? collectionList.length
+                  : this.props.data.length}
+              </p>
+            </div>
+            <div className="query-text">
+              <h4>Current Loaded:</h4>
+              <p>
+                {this.props.data.length === 0 ? 0 : this.state.display.length}
+              </p>
+            </div>
+            <div style={{ paddingLeft: ".75rem" }}>
+              <QueryHelp queryType="LIST_HELP" />
+            </div>
           </div>
         </div>
       </React.Fragment>

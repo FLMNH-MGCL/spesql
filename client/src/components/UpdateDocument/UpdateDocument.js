@@ -257,7 +257,6 @@ class UpdateDocument extends React.Component {
           centered
           open={this.state.open}
           onClose={this.close}
-          closeIcon
           size="small"
         >
           <Modal.Header>Invalid usage!</Modal.Header>
@@ -349,7 +348,6 @@ class UpdateDocument extends React.Component {
             centered
             open={this.state.open}
             onClose={this.close}
-            closeIcon
             style={{ maxHeight: "85vh" }}
           >
             <Modal.Header>UPDATE Single Specimen</Modal.Header>

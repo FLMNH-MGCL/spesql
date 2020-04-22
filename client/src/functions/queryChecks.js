@@ -27,6 +27,7 @@ const correctHeaders = [
   "infraspecificEpithet",
   "identificationQualifier",
   "recordedBy",
+  "otherCollectors",
   "identifiedBy",
   "dateIdentified",
   "verbatimDate",
@@ -68,7 +69,6 @@ const correctHeaders = [
   "withholdData",
   "reared",
   "fieldNotes",
-  "collectors",
 ];
 
 export function checkHeaders(headers) {
@@ -491,6 +491,31 @@ export function checkField(fieldName, fieldValue) {
 
       return errors;
 
+    case "otherCollectors":
+      if (fieldValue === "") return errors;
+
+      const parsedNames = fieldValue.split(" ");
+
+      // more than one person
+      if (parsedNames.length > 1) {
+        // check each name
+        parsedNames.forEach((name) => {
+          if (name.split(",").length < 2) {
+            // invalid format
+          } else {
+            const firstName = name.split(",")[1];
+            const lastName = name.split(",")[0];
+
+            // add check for names
+          }
+        });
+      } else {
+        // check fieldValue for correct name
+        // TODO:
+      }
+
+      return errors;
+
     case "recordedBy":
     case "identifiedBy":
       if (fieldValue === "" || fieldValue === ",") {
@@ -522,6 +547,75 @@ export function checkField(fieldName, fieldValue) {
     //   }
 
     //   return errors
+
+    // TODO: add error check
+    case "dateIdentified":
+      return errors;
+
+    // TODO: add error check
+    case "verbatimDate":
+      return errors;
+
+    case "collectedYear":
+      if (fieldValue == "") return errors;
+
+      if (!isNumeric(fieldValue)) {
+        errors.push(
+          `Format error (@ ${fieldName}): Non-numeric values detected.`
+        );
+      }
+
+      if (fieldValue.length !== 4) {
+        errors.push(`Format error (@ ${fieldName}): Year should be YYYY.`);
+      }
+
+      return errors;
+
+    case "collectedMonth":
+      if (fieldValue === "") {
+        return errors;
+      }
+
+      if (!isNumeric(fieldValue)) {
+        errors.push(
+          `Format error (@ ${fieldName}): Non-numeric values detected.`
+        );
+      }
+
+      if (fieldValue.length !== 2) {
+        errors.push(`Format error (@ ${fieldName}): Month should be MM.`);
+      }
+
+      if (parseInt(fieldValue, 10) < 0 || parseInt(fieldValue, 10) > 12) {
+        errors.push(
+          `Format error (@ ${fieldName}): ${fieldValue} is an invalid month.`
+        );
+      }
+
+      return errors;
+
+    case "collectedDay":
+      if (fieldValue === "") {
+        return errors;
+      }
+
+      if (!isNumeric(fieldValue)) {
+        errors.push(
+          `Format error (@ ${fieldName}): Non-numeric values detected.`
+        );
+      }
+
+      if (fieldValue.length !== 2) {
+        errors.push(`Format error (@ ${fieldName}): Month should be MM.`);
+      }
+
+      if (parseInt(fieldValue, 10) < 0 || parseInt(fieldValue, 10) > 31) {
+        errors.push(
+          `Format error (@ ${fieldName}): ${fieldValue} is an invalid day.`
+        );
+      }
+
+      return errors;
 
     case "sex":
       if (fieldValue === "") {
@@ -708,6 +802,25 @@ export function checkField(fieldName, fieldValue) {
       return errors;
 
     // loanInfo
+    // TODO: add all loan related checks
+    case "isLoaned":
+      if (fieldValue === "") {
+        return errors;
+      }
+
+      if (!controlHasString(yesOrNo, fieldValue)) {
+        errors.push(
+          `Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`
+        );
+      }
+
+      return errors;
+
+    case "loanInstitution":
+    case "loaneeName":
+    case "loanDate":
+    case "loanReturnDate":
+      return errors;
 
     // freezer
     case "freezer":
