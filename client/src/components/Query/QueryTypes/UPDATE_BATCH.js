@@ -16,7 +16,6 @@ import {
   setOperatorOptions,
   setCountOptions,
 } from "../QueryConstants/constants";
-import QueryHelp from "../QueryHelp";
 
 export default class UPDATE_BATCH extends React.Component {
   render() {

@@ -14,6 +14,7 @@ export default function AddTableModal({
   checkAuth,
   createNotification,
 }) {
+  const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [minSel, setMinSel] = useState("guest");
   const [minIns, setMinIns] = useState("manager");
@@ -22,7 +23,14 @@ export default function AddTableModal({
 
   const tableNames = tables ? tables.map((table) => table.tbl_name) : [];
 
-  function resetState() {}
+  function resetState() {
+    setOpen(false);
+    setName("");
+    setMinSel("guest");
+    setMinIns("manager");
+    setMinUp("manager");
+    setHasError(false);
+  }
 
   async function handleSubmit() {
     if (hasError) {
@@ -85,6 +93,10 @@ export default function AddTableModal({
       return { content: "Must enter unique table name" };
     }
 
+    if (name.length < 4) {
+      return { content: "Name must be at least 4 characters long." };
+    }
+
     if (hasError) setHasError(false);
   }
 
@@ -97,11 +109,13 @@ export default function AddTableModal({
           labelPosition="left"
           color="green"
           size="small"
+          onClick={() => setOpen(true)}
         >
-          <Icon name="table" /> Create Table
+          <Icon name="table" /> Create
         </Button>
       }
       onClose={resetState}
+      open={open}
       size="small"
     >
       <Modal.Header>Create a New Table</Modal.Header>
@@ -142,10 +156,10 @@ export default function AddTableModal({
         </Form>
       </Modal.Content>
       <Modal.Actions>
-        <Button icon labelPosition="left" color="linkedin">
-          <Icon name="question circle outline" />
-          See Help
+        <Button icon basic color="linkedin" floated="left">
+          <Icon name="question" />
         </Button>
+        <Button onClick={() => setOpen(false)}>Cancel</Button>
         <ConfirmAuth handleSubmit={handleSubmit} checkAuth={checkAuth} />
       </Modal.Actions>
     </Modal>

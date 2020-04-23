@@ -21,7 +21,7 @@ import {
 } from "../../../functions/queryChecks";
 import { runSingleInsert } from "../../../functions/queries";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
-import QueryHelp from "../../Query/QueryHelp";
+
 import {
   familyControl,
   identificationQualifierControl,
@@ -36,6 +36,7 @@ import {
   yesOrNo,
   units,
 } from "../../Query/QueryConstants/constants";
+import CreateHelpModal from "../../Help/CreateHelpModal";
 
 export default class MANUAL extends React.Component {
   constructor(props) {
@@ -1256,7 +1257,7 @@ export default class MANUAL extends React.Component {
                 {this.renderCollectorForm()}
 
                 <Form.Group style={{ float: "right" }}>
-                  <QueryHelp queryType="MANUAL_INSERT" />
+                  <CreateHelpModal queryType="MANUAL_INSERT" />
                   <Button
                     type="button"
                     color="yellow"

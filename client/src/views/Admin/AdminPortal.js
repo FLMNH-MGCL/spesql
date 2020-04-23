@@ -46,12 +46,30 @@ function AdminPortal(props) {
 
   async function checkAuth(user, password, callback) {
     // console.log(`${user} vs ${password}`);
+
+    if (props.userData.username !== user) {
+      // attempting auth with diff account
+      createNotification({
+        type: "error",
+        message:
+          "Attempting authentication with different account than logged in account.",
+      });
+      return;
+    } else if (props.userData.privilege_level !== "admin") {
+      // this should NEVER happen, however this is a sanity check
+      createNotification({ type: "error", message: "Access denied!" });
+
+      // forcibly log out
+      props.logout();
+      return;
+    }
+
     const authData = await axios.post("/api/login/", {
       user: user,
       password: password,
     });
 
-    console.log(authData);
+    // console.log(authData);
 
     if (authData.data.err || authData.data.authed === false) {
       // credentials did not match
@@ -271,7 +289,7 @@ function AdminPortal(props) {
                     size="small"
                   >
                     <Icon name="edit outline" />
-                    Edit Table
+                    Edit
                   </Button>
                   <Button
                     size="small"

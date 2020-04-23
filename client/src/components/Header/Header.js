@@ -4,9 +4,10 @@ import SearchFilter from "../Search/SearchFilter";
 import DBSearch from "../Search/DBSearch";
 // import SortCollection from "../CollectionList/SortCollection";
 import InsertDocument from "../InsertDocument/InsertDocument";
+import InsertMenu from "../InsertDocument/InsertMenu";
 import { Link } from "react-router-dom";
 import DownloadDB from "../DownloadDB/DownloadDB";
-import QueryGrid from "../Query/QueryGrid";
+import QueryMenu from "../Query/QueryMenu";
 import Logout from "../Logout/Logout";
 import { currentUser } from "../../functions/queries";
 
@@ -82,7 +83,7 @@ export default class Header extends Component {
             <Menu.Item style={{ width: "15rem" }}></Menu.Item>
           )}
           <Menu.Item>
-            <QueryGrid
+            <QueryMenu
               runQuery={this.props.runQuery.bind(this)}
               clearQuery={this.props.clearQuery}
               countQueryCount={this.props.countQueryCount}
@@ -98,7 +99,15 @@ export default class Header extends Component {
           </Menu.Item>
           {this.props.disabled ? null : (
             <Menu.Item>
-              <InsertDocument
+              {/* <InsertDocument
+                isValidCSV={this.props.isValidCSV.bind(this)}
+                errorMessages={this.props.errorMessages}
+                updateInsertErrorMessage={this.props.updateInsertErrorMessage}
+                notify={this.props.notify}
+                small={this.state.mobileView}
+                disabled={this.props.disabled}
+              /> */}
+              <InsertMenu
                 isValidCSV={this.props.isValidCSV.bind(this)}
                 errorMessages={this.props.errorMessages}
                 updateInsertErrorMessage={this.props.updateInsertErrorMessage}

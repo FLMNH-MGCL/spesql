@@ -10,7 +10,7 @@ import {
   Select,
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
-import QueryHelp from "../Query/QueryHelp";
+import CreateHelpModal from "../Help/CreateHelpModal";
 import { checkSpecimen, checkField } from "../../functions/queryChecks";
 import {
   familyControl,
@@ -1225,7 +1225,7 @@ class UpdateDocument extends React.Component {
                       </Table.Body>
                     </Table>
                     <div style={{ float: "right" }}>
-                      <QueryHelp queryType="UPDATE_SINGLE" />
+                      <CreateHelpModal queryType="UPDATE_SINGLE" />
                       <Button onClick={this.onSubmit} color="red">
                         UPDATE
                       </Button>

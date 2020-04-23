@@ -27,17 +27,14 @@ export default function ({ checkAuth, handleSubmit, buttonStyle }) {
             </Button>
           ) : (
             <Button
-              icon
-              labelPosition="left"
-              color="green"
+              style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
               onClick={() => setShow(true)}
             >
-              <Icon name="check" />
               Submit
             </Button>
           )
         }
-        size="small"
+        size="mini"
         open={show}
         onClose={() => setShow(false)}
       >
@@ -45,31 +42,31 @@ export default function ({ checkAuth, handleSubmit, buttonStyle }) {
         <Modal.Content>
           <Container>
             <Form>
-              <Form.Group widths="equal">
-                <Form.Field
-                  control={Input}
-                  label="username"
-                  value={username}
-                  onChange={(e, { value }) => setUsername(value)}
-                />
-                <Form.Field
-                  control={Input}
-                  label="password"
-                  type="password"
-                  value={password}
-                  onChange={(e, { value }) => setPassword(value)}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Field>
-                  <Button onClick={authCallback} color="green">
-                    Confirm
-                  </Button>
-                </Form.Field>
-              </Form.Group>
+              <Form.Field
+                control={Input}
+                label="Username"
+                value={username}
+                onChange={(e, { value }) => setUsername(value)}
+              />
+              <Form.Field
+                control={Input}
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e, { value }) => setPassword(value)}
+              />
             </Form>
           </Container>
         </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setShow(false)}>Cancel</Button>
+          <Button
+            onClick={authCallback}
+            style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
+          >
+            Confirm
+          </Button>
+        </Modal.Actions>
       </Modal>
     </>
   );

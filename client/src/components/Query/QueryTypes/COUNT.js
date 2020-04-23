@@ -8,6 +8,7 @@ import {
   Checkbox,
   Message,
   Header,
+  Modal,
 } from "semantic-ui-react";
 import {
   countQueryOption,
@@ -18,7 +19,8 @@ import {
   conditionalCountOptions,
 } from "../QueryConstants/constants";
 import CountTerminal from "../QueryTerminals/CountTerminal";
-import QueryHelp from "../QueryHelp";
+
+import CreateHelpModal from "../../Help/CreateHelpModal";
 import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
 import axios from "axios";
 
@@ -360,23 +362,12 @@ export default class COUNT extends React.Component {
           />
         </Form.Group>
         {conditionals}
-        <Form.Group className="float-right">
-          <Form.Field>
-            <QueryHelp queryType="COUNT" />
-          </Form.Field>
-          <Form.Field
-            id="form-button-control-ta-submit"
-            control={Button}
-            content="Submit"
-            disabled={!this.state.basic_query}
-          />
-        </Form.Group>
       </Form>
     );
   };
 
   renderErrorTerminal = () => (
-    <React.Fragment>
+    <div style={{ marginBottom: "3rem" }}>
       <ErrorTerminal errorLog={this.props.errorMessages.countError} />
       <Button
         onClick={() => {
@@ -388,7 +379,7 @@ export default class COUNT extends React.Component {
       >
         Clear
       </Button>
-    </React.Fragment>
+    </div>
   );
 
   render() {
@@ -407,86 +398,94 @@ export default class COUNT extends React.Component {
     }
 
     return (
-      <Grid padded style={{ paddingBottom: "2rem" }}>
-        <Grid.Row>
-          <Grid.Column width={16}>
-            <Header as="h2" dividing style={{ paddingTop: "2rem" }}>
-              COUNT Query:{" "}
-            </Header>
-            <Message>
-              <p>
-                This section is for COUNT queries. COUNT queries are very
-                similar to SELECT queries, and actually involve a SELECT query
-                directly. This query will count the number of entries in the
-                database table based on the SELECT query provided. If you have
-                terminal/CLI experience using MySQL commands, there is an
-                advanced query option available if checked. Click the Help
-                button for more detailed information
-              </p>
-            </Message>
+      <>
+        <Modal.Header>Count Query</Modal.Header>
+        <Modal.Content>
+          <Message>
+            <p>
+              This section is for COUNT queries. COUNT queries are very similar
+              to SELECT queries, and actually involve a SELECT query directly.
+              This query will count the number of entries in the database table
+              based on the SELECT query provided. If you have terminal/CLI
+              experience using MySQL commands, there is an advanced query option
+              available if checked. Click the Help button for more detailed
+              information
+            </p>
+          </Message>
 
-            <Form onSubmit={this.handleAdvancedSubmit}>
-              <Form.Group>
-                <Form.Field
-                  control={Checkbox}
-                  label="Advanced COUNT Query"
-                  name="basic_query"
-                  value=""
-                  onChange={this.handleAdvancedCheck}
-                  width={3}
-                />
-                <Form.Field
-                  control={Input}
-                  name="advanced_query"
-                  value={advanced_query}
-                  onChange={this.handleChange}
-                  disabled={this.state.basic_query}
-                  width={10}
-                  error={
-                    !this.state.advanced_query
-                      .toLowerCase()
-                      .startsWith("select count") && !this.state.basic_query
-                      ? {
-                          content:
-                            "You must use proper COUNT query syntax (see Help for more information).",
-                        }
-                      : false
-                  }
-                />
-                <Form.Field
-                  id="form-button-control-ta-submit-adv"
-                  control={Button}
-                  content="Submit"
-                  disabled={this.state.basic_query}
-                  width={3}
-                />
-              </Form.Group>
-            </Form>
+          <Form onSubmit={this.handleAdvancedSubmit}>
+            <Form.Group>
+              <Form.Field
+                control={Checkbox}
+                label="Advanced COUNT Query"
+                name="basic_query"
+                value=""
+                onChange={this.handleAdvancedCheck}
+                width={3}
+              />
+              <Form.Field
+                control={Input}
+                name="advanced_query"
+                value={advanced_query}
+                onChange={this.handleChange}
+                disabled={this.state.basic_query}
+                width={10}
+                error={
+                  !this.state.advanced_query
+                    .toLowerCase()
+                    .startsWith("select count") && !this.state.basic_query
+                    ? {
+                        content:
+                          "You must use proper COUNT query syntax (see Help for more information).",
+                      }
+                    : false
+                }
+              />
+              <Form.Field
+                id="form-button-control-ta-submit-adv"
+                control={Button}
+                content="Submit"
+                disabled={this.state.basic_query}
+                width={3}
+              />
+            </Form.Group>
+          </Form>
 
-            {this.state.basic_query
-              ? this.renderBasicForm(query_action, fields, db, conditionalCount)
-              : () => console.log("no form needed")}
-            {this.state.hasError ? (
-              this.renderErrorTerminal()
-            ) : (
-              <>
-                <CountTerminal
-                  waiting={this.state.waiting}
-                  submitted={this.state.submitted}
-                  countQueryCount={this.props.countQueryCount}
-                />
-                <Button
-                  color="red"
-                  style={{ float: "right" }}
-                  onClick={() => this.props.updateCountQueryCount(null)}
-                >
-                  Clear
-                </Button>
-              </>
-            )}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+          {this.state.basic_query
+            ? this.renderBasicForm(query_action, fields, db, conditionalCount)
+            : () => console.log("no form needed")}
+          {this.state.hasError ? (
+            this.renderErrorTerminal()
+          ) : (
+            <div style={{ marginBottom: "3rem" }}>
+              <CountTerminal
+                waiting={this.state.waiting}
+                submitted={this.state.submitted}
+                countQueryCount={this.props.countQueryCount}
+              />
+              <Button
+                color="red"
+                style={{ float: "right" }}
+                onClick={() => this.props.updateCountQueryCount(null)}
+              >
+                Clear
+              </Button>
+            </div>
+          )}
+        </Modal.Content>
+
+        <Modal.Actions>
+          <CreateHelpModal queryType="COUNT" />
+          <Button onClick={() => this.props.closeModal()}>Cancel</Button>
+          <Button
+            style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
+            onClick={this.handleSubmit}
+            disabled={!this.state.basic_query}
+          >
+            Submit
+          </Button>
+        </Modal.Actions>
+      </>
     );
   }
 }

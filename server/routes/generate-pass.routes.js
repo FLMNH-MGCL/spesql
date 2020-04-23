@@ -1,14 +1,13 @@
-const fetch = require("node-fetch");
 const https = require("https");
 
-module.exports = function(app) {
+module.exports = function (app) {
   app.get("/api/admin/generate-password/", (req, res) => {
     https
       .get(
         "https://www.passwordrandom.com/query?command=password&format=json&count=2",
-        resp => {
+        (resp) => {
           let resData = "";
-          resp.on("data", data => {
+          resp.on("data", (data) => {
             resData += data;
           });
 
@@ -18,7 +17,7 @@ module.exports = function(app) {
           });
         }
       )
-      .on("error", err => {
+      .on("error", (err) => {
         console.log(err);
       });
     // .then(res => {

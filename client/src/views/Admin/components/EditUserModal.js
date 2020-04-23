@@ -24,6 +24,7 @@ export default function EditUserModal({
   checkAuth,
   createNotification,
 }) {
+  const [open, setOpen] = useState(false);
   const [selected, select] = useState();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -279,12 +280,14 @@ export default function EditUserModal({
           labelPosition="left"
           color="yellow"
           size="small"
+          onClick={() => setOpen(true)}
         >
-          <Icon name="edit" /> Edit User
+          <Icon name="edit" /> Edit
         </Button>
       }
       size="small"
       onClose={resetState}
+      open={open}
     >
       <Modal.Header>Edit an Existing User</Modal.Header>
       <Modal.Content>
@@ -303,10 +306,10 @@ export default function EditUserModal({
         </Form>
       </Modal.Content>
       <Modal.Actions>
-        <Button icon labelPosition="left" color="linkedin">
-          <Icon name="question circle outline" />
-          See Help
+        <Button icon basic color="linkedin" floated="left">
+          <Icon name="question" />
         </Button>
+        <Button onClick={() => setOpen(false)}>Cancel</Button>
         <ConfirmAuth handleSubmit={updateUser} checkAuth={checkAuth} />
       </Modal.Actions>
     </Modal>

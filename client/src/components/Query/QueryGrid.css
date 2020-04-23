@@ -1,9 +1,13 @@
 .float-right {
-    justify-content: right;
+  justify-content: right;
 }
 
 .help-button {
-    display: inline-block;
-    margin-left: .6vw;
-    padding-top: 10px;
+  display: inline-block;
+  margin-left: 0.6vw;
+  padding-top: 10px;
+}
+
+.hideIcon > i.icon {
+  display: none;
 }

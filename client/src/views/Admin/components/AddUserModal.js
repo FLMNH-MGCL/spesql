@@ -20,14 +20,17 @@ const ACCESS_LEVELS = [
 
 export default function AddUserModal({ users, checkAuth, createNotification }) {
   // const [selected, select] = useState();
+  const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [accessLevel, setAccessLevel] = useState("guest");
   const [understood, setUnderstood] = useState(false);
+  const [isFetching, setFetching] = useState(false);
 
   const resetState = () => {
+    setOpen(false);
     setFirstName("");
     setLastName("");
     setUsername("");
@@ -37,13 +40,17 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
   };
 
   async function generateSecurePass() {
+    setFetching(true);
     const res = await axios.get("/api/admin/generate-password/");
 
     if (res.status === 200 || !res.err) {
       const _password = res.data.char[0].concat(res.data.char[1]);
       //console.log(_password);
+      setFetching(false);
       setPassword(_password);
     }
+
+    setFetching(false);
   }
 
   const errorChecks = (field) => {
@@ -151,11 +158,13 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
           labelPosition="left"
           color="green"
           size="small"
+          onClick={() => setOpen(true)}
         >
-          <Icon name="add user" /> Add User
+          <Icon name="add user" /> Create
         </Button>
       }
       onClose={resetState}
+      open={open}
       size="small"
     >
       <Modal.Header>Add a User</Modal.Header>
@@ -203,7 +212,11 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
               error={errorChecks("password")}
             />
             <Form.Field width={5}>
-              <Button color="yellow" onClick={() => generateSecurePass()}>
+              <Button
+                color="yellow"
+                loading={isFetching}
+                onClick={() => generateSecurePass()}
+              >
                 Generate Strong Password
               </Button>
             </Form.Field>
@@ -217,24 +230,13 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
               error={!understood}
             />
           </Form.Group>
-          {/* <Form.Group>
-            <Form.Field>
-              <Button icon labelPosition="left" color="linkedin">
-                <Icon name="question circle outline" />
-                See Help
-              </Button>
-            </Form.Field>
-            <Form.Field>
-              <ConfirmAuth handleSubmit={handleSubmit} checkAuth={checkAuth} />
-            </Form.Field>
-          </Form.Group> */}
         </Form>
       </Modal.Content>
       <Modal.Actions>
-        <Button icon labelPosition="left" color="linkedin">
-          <Icon name="question circle outline" />
-          See Help
+        <Button icon basic color="linkedin" floated="left">
+          <Icon name="question" />
         </Button>
+        <Button onClick={() => setOpen(false)}>Cancel</Button>
         <ConfirmAuth handleSubmit={handleSubmit} checkAuth={checkAuth} />
       </Modal.Actions>
     </Modal>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Button, Loader, Icon } from "semantic-ui-react";
-import QueryHelp from "../Query/QueryHelp";
+import CreateHelpModal from "../Help/CreateHelpModal";
 // import _ from 'lodash'
 import InfiniteScroll from "react-infinite-scroll-component";
 import DBSearch from "../Search/DBSearch";
@@ -470,7 +470,7 @@ export default class CollectionList extends React.Component {
               </p>
             </div>
             <div style={{ paddingLeft: ".75rem" }}>
-              <QueryHelp queryType="LIST_HELP" />
+              <CreateHelpModal queryType="LIST_HELP" />
             </div>
           </div>
         </div>

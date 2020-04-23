@@ -9,6 +9,7 @@ import {
   Checkbox,
   Message,
   Header,
+  Modal,
 } from "semantic-ui-react";
 import {
   selectQueryOption,
@@ -18,7 +19,8 @@ import {
   // setCountOptions,
   conditionalCountOptions,
 } from "../QueryConstants/constants";
-import QueryHelp from "../QueryHelp";
+
+import CreateHelpModal from "../../Help/CreateHelpModal";
 import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
 import axios from "axios";
 // import { checkAdvancedSelect } from "../../../functions/queryChecks";
@@ -388,17 +390,7 @@ export default class SELECT extends React.Component {
         />
       </Form.Group>
       {conditionals}
-      <Form.Group className="float-right">
-        <Form.Field>
-          <QueryHelp queryType="SELECT" />
-        </Form.Field>
-        <Form.Field
-          id="form-button-control-ta-submit"
-          control={Button}
-          content="Submit"
-          disabled={!this.state.basic_query}
-        />
-      </Form.Group>
+
       {this.state.loading
         ? "Loading... This may take some time, please wait."
         : null}
@@ -406,16 +398,16 @@ export default class SELECT extends React.Component {
   );
 
   renderErrorTerminal = () => (
-    <React.Fragment>
+    <div style={{ marginBottom: "3rem" }}>
       <ErrorTerminal errorLog={this.props.errorMessages.selectError} />
       <Button
         onClick={() => this.props.updateSelectErrorMessage(null)}
         color="red"
-        style={{ float: "right" }}
+        floated="right"
       >
         Clear
       </Button>
-    </React.Fragment>
+    </div>
   );
 
   render() {
@@ -436,73 +428,80 @@ export default class SELECT extends React.Component {
     }
 
     return (
-      <Grid padded>
-        <Grid.Row>
-          <Grid.Column width={16}>
-            <Header as="h2" dividing>
-              SELECT Query:{" "}
-            </Header>
-            <Message>
-              <p>
-                This section is for SELECT queries. SELECT queries are those
-                that simply fetch information from the database. If you have
-                terminal/CLI experience using MySQL commands, there is an
-                advanced query option available if checked. Click the Help
-                button for more detailed information
-              </p>
-            </Message>
-            <Form onSubmit={this.handleAdvancedSubmit}>
-              <Form.Group>
-                <Form.Field
-                  control={Checkbox}
-                  label="Advanced SELECT Query"
-                  name="basic_query"
-                  value=""
-                  onChange={this.handleAdvancedCheck}
-                  width={3}
-                />
-                <Form.Field
-                  control={Input}
-                  name="advanced_query"
-                  value={advanced_query}
-                  onChange={this.handleChange}
-                  disabled={this.state.basic_query}
-                  width={10}
-                  error={
-                    this.state.basic_query === false &&
-                    !advanced_query.toUpperCase().startsWith("SELECT")
-                      ? {
-                          content: "This query must be a SELECT command.",
-                        }
-                      : false
-                  }
-                />
-                <Form.Field
-                  id="form-button-control-ta-submit-adv"
-                  control={Button}
-                  content="Submit"
-                  disabled={this.state.basic_query}
-                  width={3}
-                />
-              </Form.Group>
-            </Form>
+      <>
+        <Modal.Header>Select Query</Modal.Header>
 
-            {this.state.basic_query
-              ? this.renderBasicForm(
-                  query_action,
-                  fields,
-                  db,
-                  conditionalCount,
-                  conditionals
-                )
-              : null}
+        <Modal.Content>
+          <Message>
+            <p>
+              Select queries are those that simply fetch information from the
+              database. If you have terminal/CLI experience using MySQL
+              commands, there is an advanced query option available if checked.
+              Click the Help button for more detailed information
+            </p>
+          </Message>
+          <Form onSubmit={this.handleAdvancedSubmit}>
+            <Form.Group>
+              <Form.Field
+                control={Checkbox}
+                label="Advanced"
+                name="basic_query"
+                value=""
+                onChange={this.handleAdvancedCheck}
+                width={3}
+              />
+              <Form.Field
+                control={Input}
+                name="advanced_query"
+                value={advanced_query}
+                onChange={this.handleChange}
+                disabled={this.state.basic_query}
+                width={10}
+                error={
+                  this.state.basic_query === false &&
+                  !advanced_query.toUpperCase().startsWith("SELECT")
+                    ? {
+                        content: "This query must be a SELECT command.",
+                      }
+                    : false
+                }
+              />
+              <Form.Field
+                id="form-button-control-ta-submit-adv"
+                control={Button}
+                content="Submit"
+                disabled={this.state.basic_query}
+                width={3}
+              />
+            </Form.Group>
+          </Form>
 
-            {this.props.errorMessages.selectError
-              ? this.renderErrorTerminal()
-              : null}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+          {this.state.basic_query
+            ? this.renderBasicForm(
+                query_action,
+                fields,
+                db,
+                conditionalCount,
+                conditionals
+              )
+            : null}
+
+          {this.props.errorMessages.selectError
+            ? this.renderErrorTerminal()
+            : null}
+        </Modal.Content>
+        <Modal.Actions>
+          <CreateHelpModal queryType="SELECT" />
+          <Button onClick={() => this.props.closeModal()}>Cancel</Button>
+          <Button
+            style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
+            onClick={this.handleSubmit}
+            disabled={!this.state.basic_query}
+          >
+            Submit
+          </Button>
+        </Modal.Actions>
+      </>
     );
   }
 }

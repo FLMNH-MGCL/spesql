@@ -1,13 +1,12 @@
 import React from "react";
 import {
   Button,
-  Grid,
   Form,
   Input,
   Select,
   Checkbox,
   Message,
-  Header,
+  Modal,
 } from "semantic-ui-react";
 import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
 import {
@@ -16,7 +15,7 @@ import {
   setOperatorOptions,
   setCountOptions,
 } from "../QueryConstants/constants";
-import QueryHelp from "../QueryHelp";
+import CreateHelpModal from "../../Help/CreateHelpModal";
 import axios from "axios";
 
 const setOptions = headerSelection.slice(1, headerSelection.length);
@@ -227,7 +226,6 @@ export default class UPDATE extends React.Component {
           };
         })
       );
-      console.log(newConditionals);
 
       this.setState({
         [name]: value,
@@ -645,17 +643,6 @@ export default class UPDATE extends React.Component {
         />
       </Form.Group>
       {conditionals}
-      <Form.Group className="float-right">
-        <Form.Field>
-          <QueryHelp queryType="UPDATE" />
-        </Form.Field>
-        <Form.Field
-          id="form-button-control-ta-submit"
-          control={Button}
-          content="Submit"
-          disabled={!this.state.basic_query}
-        />
-      </Form.Group>
     </Form>
   );
 
@@ -700,93 +687,100 @@ export default class UPDATE extends React.Component {
     }
 
     return (
-      <Grid padded>
-        <Grid.Row>
-          <Grid.Column width={16}>
-            <Header as="h2" dividing style={{ paddingTop: "2rem" }}>
-              UPDATE Query:{" "}
-            </Header>
-            <Message>
-              <p>
-                This section is for UPDATE queries. UPDATE queries are those
-                that update values of entries within the database. If you have
-                terminal/CLI experience using MySQL commands, there is an
-                advanced query option available if checked. Please check your
-                permissions with the Database Manager, as this query will fail
-                if you are not authorized to make it. Click the Help button for
-                more detailed information
-              </p>
-            </Message>
-            <Form onSubmit={this.handleAdvancedSubmit}>
-              <Form.Group>
-                <Form.Field
-                  control={Input}
-                  label="Please enter the reason for this update"
-                  placeholder="new data recieved, incorrect field update, etc"
-                  name="reason"
-                  value={reason}
-                  onChange={this.handleChange}
-                  error={
-                    this.state.reason === ""
-                      ? {
-                          content: "You must provide a reason",
-                          pointing: "above",
-                        }
-                      : false
-                  }
-                  width={16}
-                />
-              </Form.Group>
+      <>
+        <Modal.Header>Update Query</Modal.Header>
+        <Modal.Content>
+          <Message>
+            <p>
+              This section is for UPDATE queries. UPDATE queries are those that
+              update values of entries within the database. If you have
+              terminal/CLI experience using MySQL commands, there is an advanced
+              query option available if checked. Please check your permissions
+              with the Database Manager, as this query will fail if you are not
+              authorized to make it. Click the Help button for more detailed
+              information
+            </p>
+          </Message>
+          <Form onSubmit={this.handleAdvancedSubmit}>
+            <Form.Group>
+              <Form.Field
+                control={Input}
+                label="Please enter the reason for this update"
+                placeholder="new data recieved, incorrect field update, etc"
+                name="reason"
+                value={reason}
+                onChange={this.handleChange}
+                error={
+                  this.state.reason === ""
+                    ? {
+                        content: "You must provide a reason",
+                        pointing: "above",
+                      }
+                    : false
+                }
+                width={16}
+              />
+            </Form.Group>
 
-              <Form.Group>
-                <Form.Field
-                  control={Checkbox}
-                  label="Advanced UPDATE Query"
-                  name="basic_query"
-                  value=""
-                  onChange={this.handleAdvancedCheck}
-                  width={3}
-                />
-                <Form.Field
-                  control={Input}
-                  name="advanced_query"
-                  value={advanced_query}
-                  onChange={this.handleChange}
-                  disabled={this.state.basic_query}
-                  width={10}
-                  error={
-                    this.checkAdvancedPreSubmit() !== {}
-                      ? this.checkAdvancedPreSubmit()
-                      : false
-                  }
-                />
-                <Form.Field
-                  id="form-button-control-ta-submit-adv"
-                  control={Button}
-                  content="Submit"
-                  disabled={this.state.basic_query}
-                  width={3}
-                />
-              </Form.Group>
-            </Form>
+            <Form.Group>
+              <Form.Field
+                control={Checkbox}
+                label="Advanced UPDATE Query"
+                name="basic_query"
+                value=""
+                onChange={this.handleAdvancedCheck}
+                width={3}
+              />
+              <Form.Field
+                control={Input}
+                name="advanced_query"
+                value={advanced_query}
+                onChange={this.handleChange}
+                disabled={this.state.basic_query}
+                width={10}
+                error={
+                  this.checkAdvancedPreSubmit() !== {}
+                    ? this.checkAdvancedPreSubmit()
+                    : false
+                }
+              />
+              <Form.Field
+                id="form-button-control-ta-submit-adv"
+                control={Button}
+                content="Submit"
+                disabled={this.state.basic_query}
+                width={3}
+              />
+            </Form.Group>
+          </Form>
 
-            {this.state.basic_query
-              ? this.renderBasicForm(
-                  query_action,
-                  db,
-                  setCount,
-                  sets,
-                  conditionalCount,
-                  conditionals
-                )
-              : null}
+          {this.state.basic_query
+            ? this.renderBasicForm(
+                query_action,
+                db,
+                setCount,
+                sets,
+                conditionalCount,
+                conditionals
+              )
+            : null}
 
-            {this.props.errorMessages.updateError
-              ? this.renderErrorTerminal()
-              : null}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+          {this.props.errorMessages.updateError
+            ? this.renderErrorTerminal()
+            : null}
+        </Modal.Content>
+        <Modal.Actions>
+          <CreateHelpModal queryType="UPDATE" />
+          <Button onClick={() => this.props.closeModal()}>Cancel</Button>
+          <Button
+            style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
+            onClick={this.handleSubmit}
+            disabled={!this.state.basic_query}
+          >
+            Submit
+          </Button>
+        </Modal.Actions>
+      </>
     );
   }
 }

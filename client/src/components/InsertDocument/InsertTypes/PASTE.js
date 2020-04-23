@@ -1,7 +1,14 @@
 import React from "react";
-import { Button, Grid, Form, TextArea, Message } from "semantic-ui-react";
+import {
+  Button,
+  Grid,
+  Form,
+  TextArea,
+  Message,
+  Modal,
+} from "semantic-ui-react";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
-import QueryHelp from "../../Query/QueryHelp";
+import CreateHelpModal from "../../Help/CreateHelpModal";
 import { checkSpecimen } from "../../../functions/queryChecks";
 import { runInsertQuery } from "../../../functions/queries";
 
@@ -59,7 +66,7 @@ export default class PASTE extends React.Component {
     }, 500 * insertions.length);
   }
 
-  handleCSVSubmit = () => {
+  handleSubmit = () => {
     // check valid data
     // if data is valid, loop through and axios.post each item
     this.setState({ loading: true });
@@ -177,7 +184,7 @@ export default class PASTE extends React.Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   renderErrorTerminal = () => (
-    <React.Fragment>
+    <div style={{ marginBottom: "3rem" }}>
       <ErrorTerminal errorLog={this.props.errorMessages.insertError} />
       <Button
         onClick={() => {
@@ -189,7 +196,7 @@ export default class PASTE extends React.Component {
       >
         Clear
       </Button>
-    </React.Fragment>
+    </div>
   );
 
   render() {
@@ -208,56 +215,55 @@ export default class PASTE extends React.Component {
     }
 
     return (
-      <React.Fragment>
-        <Grid padded="vertically">
-          <Grid.Row>
-            <Grid.Column width={16}>
-              <Message>
-                <Message.Header>Usage:</Message.Header>
-                <p>
-                  Copy & paste CSV data into this text area. Be sure to include
-                  the proper headers.{" "}
-                  <a href="../../assets/CORRECT_HEADERS_TEMPLATE.csv" download>
-                    Click here
-                  </a>{" "}
-                  to download an example template for the correct headers.
-                </p>
-              </Message>
-              <Form padded="vertically" onSubmit={this.handleCSVSubmit}>
-                <Form.Group>
-                  <TextArea
-                    id="form-text-area"
-                    name="text_area"
-                    value={text_area}
-                    onChange={this.handleChange}
-                    style={{ minHeight: "30vh" }}
-                  />
-                </Form.Group>
-                {this.state.loading
-                  ? "Loading... This may take some time, please wait."
-                  : null}
-                <Form.Group style={{ float: "right" }}>
-                  <QueryHelp queryType="PASTE_INSERT" />
-                  <Button
-                    type="button"
-                    color="yellow"
-                    onClick={() => this.setState({ text_area: "" })}
-                    style={{ marginLeft: ".5rem" }}
-                  >
-                    Clear
-                  </Button>
-                  <Form.Field
-                    id="form-button-control-ta-submit"
-                    control={Button}
-                    content="Confirm"
-                  />
-                </Form.Group>
-              </Form>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-        {this.state.hasError ? this.renderErrorTerminal() : null}
-      </React.Fragment>
+      <>
+        <Modal.Header>Paste Insert Query</Modal.Header>
+        <Modal.Content>
+          <Message>
+            <Message.Header>Usage:</Message.Header>
+            <p>
+              Copy & paste CSV data into this text area. Be sure to include the
+              proper headers.{" "}
+              <a href="../../assets/CORRECT_HEADERS_TEMPLATE.csv" download>
+                Click here
+              </a>{" "}
+              to download an example template for the correct headers.
+            </p>
+          </Message>
+          <Form padded="vertically" onSubmit={this.handleCSVSubmit}>
+            <Form.Group>
+              <TextArea
+                id="form-text-area"
+                name="text_area"
+                value={text_area}
+                onChange={this.handleChange}
+                style={{ minHeight: "30vh" }}
+              />
+            </Form.Group>
+            {this.state.loading
+              ? "Loading... This may take some time, please wait."
+              : null}
+          </Form>
+          {this.state.hasError ? this.renderErrorTerminal() : null}
+        </Modal.Content>
+        <Modal.Actions>
+          <CreateHelpModal queryType="PASTE_INSERT" />
+          <Button onClick={() => this.props.closeModal()}>Cancel</Button>
+          <Button
+            type="button"
+            color="yellow"
+            onClick={() => this.setState({ text_area: "" })}
+          >
+            Clear
+          </Button>
+          <Button
+            style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
+            onClick={this.handleSubmit}
+            loading={this.state.loading}
+          >
+            Submit
+          </Button>
+        </Modal.Actions>
+      </>
     );
   }
 }
