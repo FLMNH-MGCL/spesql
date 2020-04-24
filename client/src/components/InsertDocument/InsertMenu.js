@@ -8,56 +8,56 @@ export default function InsertMenu(props) {
   const [showPaste, togglePaste] = useState(false);
   const [showManual, toggleManual] = useState(false);
 
-  return (
-    <Dropdown
-      className="hideIcon"
-      open={open}
-      trigger={
-        <Button icon labelPosition="right" onClick={() => toggle(!open)}>
-          Insert <Icon name="angle down" />
-        </Button>
-      }
-      closeOnChange
-      floating
-    >
-      <Dropdown.Menu onMouseLeave={() => setTimeout(() => toggle(false), 100)}>
-        <Dropdown.Header icon="upload" content="Select insert method" />
+  function renderSelectedModal() {
+    if (showPaste) {
+      return (
         <CreatePasteModal
-          trigger={
-            <Dropdown.Item
-              icon="paste"
-              text="Paste"
-              onClick={() => {
-                toggle(!open);
-                togglePaste(true);
-              }}
-            />
-          }
+          closeModal={() => togglePaste(false)}
+          props={props}
           open={showPaste}
-          closeModal={() => {
-            togglePaste(false);
-          }}
-          props={props}
         />
-
+      );
+    } else if (showManual) {
+      return (
         <CreateManualModal
-          trigger={
-            <Dropdown.Item
-              icon="wordpress forms"
-              text="Manual"
-              onClick={() => {
-                toggle(!open);
-                toggleManual(true);
-              }}
-            />
-          }
-          open={showManual}
-          closeModal={() => {
-            toggleManual(false);
-          }}
+          closeModal={() => toggleManual(false)}
           props={props}
+          open={showManual}
         />
-      </Dropdown.Menu>
-    </Dropdown>
+      );
+    }
+  }
+
+  return (
+    <>
+      <Dropdown
+        className="hideIcon"
+        // open={open}
+        trigger={
+          <Button icon labelPosition="right">
+            Insert <Icon name="angle down" />
+          </Button>
+        }
+        closeOnChange
+        floating
+      >
+        <Dropdown.Menu
+          onMouseLeave={() => setTimeout(() => toggle(false), 100)}
+        >
+          <Dropdown.Header icon="upload" content="Select insert method" />
+          <Dropdown.Item
+            icon="paste"
+            text="Paste"
+            onClick={() => togglePaste(true)}
+          />
+          <Dropdown.Item
+            icon="wordpress forms"
+            text="Manual"
+            onClick={() => toggleManual(true)}
+          />
+        </Dropdown.Menu>
+      </Dropdown>
+      {renderSelectedModal()}
+    </>
   );
 }

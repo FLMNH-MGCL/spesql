@@ -692,13 +692,11 @@ export default class UPDATE extends React.Component {
         <Modal.Content>
           <Message>
             <p>
-              This section is for UPDATE queries. UPDATE queries are those that
+              This section is for update queries. Update queries are those that
               update values of entries within the database. If you have
               terminal/CLI experience using MySQL commands, there is an advanced
-              query option available if checked. Please check your permissions
-              with the Database Manager, as this query will fail if you are not
-              authorized to make it. Click the Help button for more detailed
-              information
+              query option available if checked. Click the ? button for more
+              detailed information
             </p>
           </Message>
           <Form onSubmit={this.handleAdvancedSubmit}>
@@ -725,7 +723,7 @@ export default class UPDATE extends React.Component {
             <Form.Group>
               <Form.Field
                 control={Checkbox}
-                label="Advanced UPDATE Query"
+                label="Advanced"
                 name="basic_query"
                 value=""
                 onChange={this.handleAdvancedCheck}

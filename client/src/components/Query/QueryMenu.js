@@ -8,87 +8,77 @@ import UPDATE_BATCH from "./QueryTypes/UPDATE_BATCH";
 import CreateUpdateModal from "./CreateUpdateModal";
 
 export default function QueryMenu(props) {
-  // const { dbSelection, loading } = this.state;
-  // if (dbSelection.length === 0 && loading) {
-  //   this.initTableOptions();
-  // }
-  const [open, toggle] = useState(false);
   const [showSelect, toggleSelect] = useState(false);
   const [showCount, toggleCount] = useState(false);
   const [showUpdate, toggleUpdate] = useState(false);
 
-  console.log(open);
+  function renderSelectedModal() {
+    if (showSelect) {
+      return (
+        <CreateSelectModal
+          closeModal={() => toggleSelect(false)}
+          props={props}
+          open={showSelect}
+        />
+      );
+    } else if (showCount) {
+      return (
+        <CreateCountModal
+          closeModal={() => toggleCount(false)}
+          props={props}
+          open={showCount}
+        />
+      );
+    } else if (showUpdate) {
+      return (
+        <CreateUpdateModal
+          closeModal={() => toggleUpdate(false)}
+          props={props}
+          open={showUpdate}
+        />
+      );
+    }
+  }
 
   return (
     <Dropdown
       className="hideIcon"
-      open={open}
       trigger={
-        <Button icon labelPosition="right" onClick={() => toggle(!open)}>
+        <Button icon labelPosition="right">
           Query <Icon name="angle down" />
         </Button>
       }
       closeOnChange
       floating
     >
-      <Dropdown.Menu onMouseLeave={() => setTimeout(() => toggle(false), 100)}>
+      <Dropdown.Menu>
         <Dropdown.Header icon="archive" content="Select a query type" />
         <Dropdown.Divider />
-        <CreateSelectModal
-          trigger={
-            <Dropdown.Item
-              icon="cloud download"
-              text="Select"
-              onClick={() => {
-                toggle(!open);
-                toggleSelect(true);
-              }}
-            />
-          }
-          open={showSelect}
-          closeModal={() => {
-            toggleSelect(false);
+        <Dropdown.Item
+          icon="cloud download"
+          text="Select"
+          onClick={() => {
+            toggleSelect(true);
           }}
-          props={props}
         />
-        <CreateCountModal
-          trigger={
-            <Dropdown.Item
-              icon="info"
-              text="Count"
-              onClick={() => {
-                toggle(!open);
-                toggleCount(true);
-              }}
-            />
-          }
-          open={showCount}
-          closeModal={() => {
-            toggleCount(false);
+        <Dropdown.Item
+          icon="info"
+          text="Count"
+          onClick={() => {
+            toggleCount(true);
           }}
-          props={props}
         />
-        {props.disabled ? (
-          ""
-        ) : (
-          <CreateUpdateModal
-            trigger={
-              <Dropdown.Item
-                icon="cloud upload"
-                text="Update"
-                onClick={() => {
-                  toggle(!open);
-                  toggleUpdate(true);
-                }}
-              />
-            }
-            open={showUpdate}
-            closeModal={() => {
-              toggleUpdate(false);
+
+        {!props.disabled && (
+          <Dropdown.Item
+            icon="cloud upload"
+            text="Update"
+            onClick={() => {
+              toggleUpdate(true);
             }}
-            props={props}
           />
         )}
+        {renderSelectedModal()}
       </Dropdown.Menu>
     </Dropdown>
   );

@@ -82,6 +82,7 @@ export default class Header extends Component {
           {this.state.mobileView ? null : (
             <Menu.Item style={{ width: "15rem" }}></Menu.Item>
           )}
+
           <Menu.Item>
             <QueryMenu
               runQuery={this.props.runQuery.bind(this)}

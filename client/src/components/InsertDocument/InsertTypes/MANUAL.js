@@ -478,6 +478,8 @@ export default class MANUAL extends React.Component {
       this.setState({ hasError: true });
     }
 
+    console.log(this.state);
+
     const {
       catalogNumber,
       recordNumber,
@@ -572,7 +574,7 @@ export default class MANUAL extends React.Component {
                   id="form-input-control-other-num"
                   control={Input}
                   label="otherCatalogNumber"
-                  placeholder="LEP-#####"
+                  placeholder="LEP#####"
                   name="otherCatalogNumber"
                   value={otherCatalogNumber}
                   error={this.checkBasicPreSubmit(

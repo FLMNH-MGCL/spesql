@@ -3,21 +3,9 @@ import { Modal } from "semantic-ui-react";
 import { UPDATE } from "./QueryTypes";
 import OutsideClickHandler from "../utils/OutsideClickHandler";
 
-export default function CreateUpdateModal({
-  trigger,
-  open,
-  props,
-  closeModal,
-}) {
-  console.log(props.disabled);
+export default function CreateUpdateModal({ open, props, closeModal }) {
   return (
-    <Modal
-      trigger={trigger}
-      open={open}
-      size="small"
-      as={OutsideClickHandler}
-      onOutsideClick={() => closeModal()}
-    >
+    <Modal open={open} size="small" onClose={closeModal}>
       <UPDATE
         // dbSelection={dbSelection}
         runQuery={props.runQuery}

@@ -403,12 +403,12 @@ export default class COUNT extends React.Component {
         <Modal.Content>
           <Message>
             <p>
-              This section is for COUNT queries. COUNT queries are very similar
-              to SELECT queries, and actually involve a SELECT query directly.
+              This section is for count queries. Count queries are very similar
+              to select queries, and actually involve a SELECT query directly.
               This query will count the number of entries in the database table
-              based on the SELECT query provided. If you have terminal/CLI
+              based on the select query provided. If you have terminal/CLI
               experience using MySQL commands, there is an advanced query option
-              available if checked. Click the Help button for more detailed
+              available if checked. Click the ? button for more detailed
               information
             </p>
           </Message>
@@ -417,7 +417,7 @@ export default class COUNT extends React.Component {
             <Form.Group>
               <Form.Field
                 control={Checkbox}
-                label="Advanced COUNT Query"
+                label="Advanced"
                 name="basic_query"
                 value=""
                 onChange={this.handleAdvancedCheck}

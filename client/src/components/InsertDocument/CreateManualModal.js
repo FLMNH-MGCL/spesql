@@ -3,15 +3,9 @@ import { Modal } from "semantic-ui-react";
 import MANUAL from "./InsertTypes/MANUAL";
 import OutsideClickHandler from "../utils/OutsideClickHandler";
 
-export default function CreatePasteModal({ trigger, open, props, closeModal }) {
+export default function CreatePasteModal({ props, open, closeModal }) {
   return (
-    <Modal
-      trigger={trigger}
-      open={open}
-      size="small"
-      as={OutsideClickHandler}
-      onOutsideClick={() => closeModal()}
-    >
+    <Modal open={open} size="small" onClose={closeModal}>
       <MANUAL {...props} closeModal={closeModal} />
     </Modal>
   );

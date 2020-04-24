@@ -437,7 +437,7 @@ export default class SELECT extends React.Component {
               Select queries are those that simply fetch information from the
               database. If you have terminal/CLI experience using MySQL
               commands, there is an advanced query option available if checked.
-              Click the Help button for more detailed information
+              Click the ? button for more detailed information
             </p>
           </Message>
           <Form onSubmit={this.handleAdvancedSubmit}>

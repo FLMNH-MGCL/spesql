@@ -215,7 +215,12 @@ export function checkRandomCaps(field, upperFirst) {
   }
 
   let correctField = "";
-  let words = field.split(" ");
+  let words = [];
+  if (field.indexOf(" ") < 0 && field.indexOf("-") > -1) {
+    words = field.split("-");
+  } else {
+    words = field.split(" ");
+  }
 
   for (let j = 0; j < words.length; j++) {
     let newWord = checkFirstCapitalized(words[j], upperFirst);
@@ -335,7 +340,12 @@ export const capsChecks = (fieldName, fieldValue, upperFirst) => {
 
   if (correctValue !== fieldValue) {
     let randomError = true;
-    let arr = fieldValue.split(" ");
+    let arr = [];
+    if (fieldValue.indexOf(" ") < 0 && fieldValue.indexOf("-") > -1) {
+      arr = fieldValue.split("-");
+    } else {
+      arr = fieldValue.split(" ");
+    }
     if (arr.length > 1) {
       for (let i = 1; i < arr.length; i++) {
         arr[i].split("").forEach((letter, index) => {
@@ -420,23 +430,35 @@ export function checkField(fieldName, fieldValue) {
         return errors;
       }
 
-      if (fieldValue.indexOf("LEP-") < 0) {
+      if (fieldValue.indexOf("LEP") < 0) {
         errors.push(
-          `Format error (@ ${fieldName}): ${fieldName} must start with 'LEP-', followed by 5-8 digits.`
+          `Format error (@ ${fieldName}): ${fieldName} must start with 'LEP', followed by 5-8 digits.`
         );
       }
 
-      if (fieldValue.indexOf("-") > -1) {
+      if (
+        fieldValue.indexOf("LEP") > -1 &&
+        fieldValue.split("LEP").length < 2
+      ) {
+        errors.push(
+          `Format error (@ ${fieldName}): LEP must be followed by 5-8 digits.`
+        );
+      }
+
+      if (
+        fieldValue.indexOf("LEP") > -1 &&
+        fieldValue.split("LEP").length === 2
+      ) {
         if (
-          fieldValue.split("-")[1].length < 5 ||
-          fieldValue.split("-")[1].length > 8
+          fieldValue.split("LEP")[1].length < 5 ||
+          fieldValue.split("LEP")[1].length > 8
         ) {
           errors.push(
-            `Format error (@ ${fieldName}): LEP- must be followed by 5-8 digits.`
+            `Format error (@ ${fieldName}): LEP must be followed by 5-8 digits.`
           );
         }
 
-        if (!isNumeric(fieldValue.split("-")[1])) {
+        if (!isNumeric(fieldValue.split("LEP")[1])) {
           let inValidDigs = fieldValue.split("-")[1];
           errors.push(
             `Format error (@ ${fieldName}): Expected digits, found ${inValidDigs}.`
@@ -693,7 +715,13 @@ export function checkField(fieldName, fieldValue) {
         return errors;
       }
 
-      errors = errors.concat(capsChecks(fieldName, fieldValue, true));
+      if (fieldValue[0].toUpperCase() !== fieldValue[0]) {
+        errors.push(
+          `Format error (@ ${fieldName}): Capitalize the first letter.`
+        );
+      }
+
+      // errors = errors.concat(capsChecks(fieldName, fieldValue, true));
       return errors;
 
     case "elevationInMeters":
