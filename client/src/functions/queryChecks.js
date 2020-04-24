@@ -749,7 +749,7 @@ export function checkField(fieldName, fieldValue) {
       return errors;
 
     case "decimalLatitude":
-      const parsed = parseFloat(fieldValue);
+      const parsedLat = parseFloat(fieldValue);
       if (fieldValue === "") {
         return errors;
       }
@@ -760,8 +760,8 @@ export function checkField(fieldName, fieldValue) {
         );
       }
 
-      if (parsed !== NaN) {
-        if (parsed < -90 || parsed > 90) {
+      if (parsedLat !== NaN) {
+        if (parsedLat < -90 || parsedLat > 90) {
           errors.push(
             `Number error (@ ${fieldName}): ${fieldValue} out of range (+- 90).`
           );

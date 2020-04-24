@@ -1,9 +1,11 @@
+// TODO: refactor to consider a chunk of specimen, and what the majority of them have
 export function getQueryHeaders(specimen) {
   if (specimen === undefined) {
     return [];
   }
   // test for ideal headers first
   let ret = [
+    "MGCL #",
     "Lep #",
     "Superfamily",
     "Family",
@@ -13,8 +15,8 @@ export function getQueryHeaders(specimen) {
     "Freezer",
   ];
   if (
-    specimen.id &&
-    specimen.recordNumber &&
+    specimen.catalogNumber &&
+    specimen.otherCatalogNumber &&
     specimen.superfamily &&
     specimen.family &&
     specimen.genus &&
