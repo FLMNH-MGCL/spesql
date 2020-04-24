@@ -5,8 +5,8 @@
   "main": "client/public/electron.js",
   "scripts": {
     "install-all": "concurrently \"yarn\" \"cd client && yarn\"",
-    "start:browser": "concurrently 'node server/server.js' 'cd client && yarn start'",
-    "start:electron": "concurrently 'node server/server.js' 'cd client && cross-env BROWSER=none yarn start' 'wait-on http://localhost:3000 && electron .'",
+    "start:browser": "concurrently \"node server/server.js\" \"cd client && yarn start\"",
+    "start:electron": "concurrently \"node server/server.js\" cd client\" && \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "start:client": "cd client && yarn start",
     "start:server": "node server/server.js",
     "dev": "concurrently \"nodemon server/server.js\" \"cd client && yarn start\"",
@@ -40,6 +40,7 @@
     "react-csv": "^1.1.2",
     "react-infinite-scroll-component": "^5.0.4",
     "react-notifications": "^1.5.0",
+    "react-outside-click-handler": "^1.3.0",
     "react-redux": "^7.2.0",
     "react-scroll": "^1.7.16",
     "react-semantic-ui-datepickers": "^2.4.0",

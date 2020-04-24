@@ -127,22 +127,26 @@ export default class Header extends Component {
             />
           </Menu.Item>
           <Menu.Item>
-            <Dropdown icon="user" floating button className="icon">
+            <Dropdown
+              // text={<p style={{ fontWeight: "500" }}>{this.state.user}</p>}
+              text={<h5>{this.state.user}</h5>}
+              floating
+              className="hideIcon"
+            >
               <Dropdown.Menu>
-                <Dropdown.Item
-                  text={`User: ${this.state.user}`}
-                ></Dropdown.Item>
-                {this.props.userData.privilege_level === "admin" ? (
+                <Dropdown.Header icon="user" content="User menu" />
+                {this.props.userData.privilege_level === "admin" && (
                   <Dropdown.Item
                     onClick={() => (window.location.href = "/Admin")}
                     text="Admin Portal"
                   ></Dropdown.Item>
-                ) : (
-                  console.log("user")
                 )}
 
-                {/* <Dropdown.Item icon='user delete' text='Logout'></Dropdown.Item> */}
-                <div
+                <Dropdown.Divider />
+
+                <Logout logout={this.props.logout.bind(this)} />
+
+                {/* <div
                   style={{
                     textAlign: "center",
                     paddingTop: "2px",
@@ -150,8 +154,7 @@ export default class Header extends Component {
                     paddingLeft: "3px",
                   }}
                 >
-                  <Logout logout={this.props.logout.bind(this)} />
-                </div>
+                </div> */}
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Item>

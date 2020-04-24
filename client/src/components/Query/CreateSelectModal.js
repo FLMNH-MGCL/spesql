@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal } from "semantic-ui-react";
 import { SELECT } from "./QueryTypes";
+import OutsideClickHandler from "../utils/OutsideClickHandler";
 
 export default function CreateSelectModal({
   trigger,
@@ -9,7 +10,13 @@ export default function CreateSelectModal({
   closeModal,
 }) {
   return (
-    <Modal trigger={trigger} open={open} size="small">
+    <Modal
+      trigger={trigger}
+      open={open}
+      size="small"
+      as={OutsideClickHandler}
+      onOutsideClick={() => closeModal()}
+    >
       <SELECT
         // dbSelection={dbSelection}
         runQuery={props.runQuery}

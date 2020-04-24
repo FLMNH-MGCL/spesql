@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Confirm } from "semantic-ui-react";
+import { Button, Confirm, Dropdown } from "semantic-ui-react";
 
 class Logout extends React.Component {
   state = { open: false };
@@ -15,10 +15,8 @@ class Logout extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
-        <Button negative size="small" basic onClick={this.show}>
-          Logout
-        </Button>
+      <Dropdown.Item onClick={this.show}>
+        Logout
         <Confirm
           open={this.state.open}
           header="Are you sure?"
@@ -27,7 +25,7 @@ class Logout extends React.Component {
           onConfirm={this.handleConfirm}
           size="small"
         />
-      </React.Fragment>
+      </Dropdown.Item>
     );
   }
 }
