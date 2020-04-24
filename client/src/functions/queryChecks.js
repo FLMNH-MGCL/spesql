@@ -749,6 +749,31 @@ export function checkField(fieldName, fieldValue) {
       return errors;
 
     case "decimalLatitude":
+      const parsed = parseFloat(fieldValue);
+      if (fieldValue === "") {
+        return errors;
+      }
+
+      if (!isNumeric(fieldValue)) {
+        errors.push(
+          `Number error (@ ${fieldName}): detected non-numeric values.`
+        );
+      }
+
+      if (parsed !== NaN) {
+        if (parsed < -90 || parsed > 90) {
+          errors.push(
+            `Number error (@ ${fieldName}): ${fieldValue} out of range (+- 90).`
+          );
+        }
+      } else {
+        errors.push(
+          `Number error (@ ${fieldName}): detected non-numeric values.`
+        );
+      }
+
+      return errors;
+
     case "decimalLongitude":
       const parsed = parseFloat(fieldValue);
       if (fieldValue === "") {
@@ -762,9 +787,9 @@ export function checkField(fieldName, fieldValue) {
       }
 
       if (parsed !== NaN) {
-        if (parsed < -41.0983423 || parsed > 41.0983423) {
+        if (parsed < -180 || parsed > 180) {
           errors.push(
-            `Number error (@ ${fieldName}): ${fieldValue} out of range (+- 41.0983423).`
+            `Number error (@ ${fieldName}): ${fieldValue} out of range (+- 180).`
           );
         }
       } else {
