@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button, Loader, Icon } from "semantic-ui-react";
 import CreateHelpModal from "../Help/CreateHelpModal";
 import _ from "lodash";
@@ -68,7 +68,7 @@ function getCells(specimen, headers) {
 }
 
 // ({data, filteredText, filterCategory, selectedUpdate, sortBy, clearQuery, current_query, query_headers})
-
+// TODO: this entire component is very ugly... perhaps a refactor??
 export default class CollectionList extends React.Component {
   constructor(props) {
     super(props);
@@ -85,6 +85,7 @@ export default class CollectionList extends React.Component {
     };
   }
 
+  // TODO: this is really ugly
   componentDidUpdate() {
     if (this.state.data.length === 0 && this.props.data.length !== 0) {
       this.setState({ data: this.props.data });
@@ -458,5 +459,9 @@ export default class CollectionList extends React.Component {
   }
 }
 
-// SCROLLABLE https://codesandbox.io/s/p2pr9zjrvj
-// https://react.semantic-ui.com/collections/table/#variations-sortable
+// TODO: refactor in the future to functional comp?
+// function Collection(props) {
+//   const [display, setDisplay] = useState([]);
+
+//   useEffect(() => {}, [props.data]);
+// }

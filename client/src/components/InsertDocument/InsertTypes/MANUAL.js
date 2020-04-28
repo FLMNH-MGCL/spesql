@@ -19,6 +19,7 @@ import {
   checkSpecimen,
   parseDate,
   parseMeasurement,
+  parseRawMonth,
 } from "../../../functions/queryChecks";
 import { runSingleInsert } from "../../../functions/queries";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
@@ -65,6 +66,11 @@ export default class MANUAL extends React.Component {
       identifiedByLast: "",
       identifiedByFirst: "",
       dateIdentified: "",
+      dateIdentified: "",
+      verbatimDate: "",
+      collectedYear: "",
+      collectedMonth: "",
+      collectedDay: "",
       sex: "",
       lifeStage: "",
       habitat: "",
@@ -136,6 +142,10 @@ export default class MANUAL extends React.Component {
       identifiedByLast: "",
       identifiedByFirst: "",
       dateIdentified: "",
+      verbatimDate: "",
+      collectedYear: "",
+      collectedMonth: "",
+      collectedDay: "",
       sex: "",
       lifeStage: "",
       habitat: "",
@@ -236,6 +246,10 @@ export default class MANUAL extends React.Component {
       recordedBy: `${this.state.recordedByLast}, ${this.state.recordedByFirst}`,
       identifiedBy: `${this.state.identifiedByLast}, ${this.state.identifiedByFirst}`,
       dateIdentified: parseDate(this.state.dateIdentified),
+      verbatimDate: this.state.verbatimDate,
+      collectedYear: this.state.collectedYear,
+      collectedMonth: parseRawMonth(this.state.collectedMonth),
+      collectedDay: this.state.collectedDay,
       sex: this.state.sex,
       lifeStage: this.state.lifeStage,
       habitat: this.state.habitat,
@@ -272,28 +286,32 @@ export default class MANUAL extends React.Component {
 
     let errors = checkSpecimen(specimen);
 
-    // console.log(errors)
+    console.log(errors);
 
-    if (errors.length === 0) {
-      const insertData = await runSingleInsert(specimen);
-      console.log(insertData);
+    alert(JSON.stringify(specimen, null, 2));
+    this.setState({ loading: false });
 
-      if (!insertData.data.success) {
-        let error = [
-          `SQL ERROR: Code: ${insertData.data.data.code}, Message: ${insertData.data.data.sqlMessage}`,
-        ];
-        this.props.notify({
-          type: "error",
-          message: "Uh oh, an error detected. Please check INSERT error log",
-        });
-        this.props.updateInsertErrorMessage(error);
-        this.setState({ hasError: true, loading: false });
-      } else {
-      }
-    } else {
-      this.props.updateInsertErrorMessage(errors);
-      this.setState({ hasError: true, loading: false });
-    }
+    // if (errors.length === 0) {
+    //   // TODO: uncomment when ready
+    //   const insertData = await runSingleInsert(specimen);
+    //   console.log(insertData);
+
+    //   if (!insertData.data.success) {
+    //     let error = [
+    //       `SQL ERROR: Code: ${insertData.data.data.code}, Message: ${insertData.data.data.sqlMessage}`,
+    //     ];
+    //     this.props.notify({
+    //       type: "error",
+    //       message: "Uh oh, an error detected. Please check INSERT error log",
+    //     });
+    //     this.props.updateInsertErrorMessage(error);
+    //     this.setState({ hasError: true, loading: false });
+    //   } else {
+    //   }
+    // } else {
+    //   this.props.updateInsertErrorMessage(errors);
+    //   this.setState({ hasError: true, loading: false });
+    // }
   };
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
@@ -501,6 +519,10 @@ export default class MANUAL extends React.Component {
       identifiedByFirst,
       identifiedByLast,
       dateIdentified,
+      verbatimDate,
+      collectedYear,
+      collectedMonth,
+      collectedDay,
       sex,
       lifeStage,
       habitat,
@@ -544,13 +566,13 @@ export default class MANUAL extends React.Component {
           <Message>
             <Message.Header>Usage:</Message.Header>
             <p>
-              Manually enter the transcription data of the specimen you are
-              entering into the database. Be sure to fill out all required
-              fields. When all fields are completed, click the Confirm button at
-              the bottom of the scroll-view. If any syntactic errors are
-              present, a popup will appear with information to help you correct
-              it. If you have more than one specimen to enter, consider using
-              the paste option on the previous page.
+              NOTE: NOT READY FOR USE...Manually enter the transcription data of
+              the specimen you are entering into the database. Be sure to fill
+              out all required fields. When all fields are completed, click the
+              Confirm button at the bottom of the scroll-view. If any syntactic
+              errors are present, a popup will appear with information to help
+              you correct it. If you have more than one specimen to enter,
+              consider using the paste option on the previous page.
             </p>
           </Message>
           <Form padded="vertically" onSubmit={this.handleSubmit}>
@@ -774,6 +796,45 @@ export default class MANUAL extends React.Component {
                   error={this.checkBasicPreSubmit(
                     "identifiedBy",
                     `${identifiedByLast},${identifiedByFirst}`
+                  )}
+                  onChange={this.handleChange}
+                  disabled={this.state.paste_entry}
+                />
+              </Form.Group>
+
+              <Form.Group widths="equal">
+                <Form.Field
+                  control={Input}
+                  label="verbatimDate"
+                  placeholder="YYYY/MM/DD"
+                  name="verbatimDate"
+                  value={verbatimDate}
+                  error={this.checkBasicPreSubmit("verbatimDate", verbatimDate)}
+                  onChange={this.handleChange}
+                  disabled={this.state.paste_entry}
+                />
+                <Form.Field
+                  control={Input}
+                  label="collectedYear"
+                  placeholder="YYYY"
+                  name="collectedYear"
+                  value={collectedYear}
+                  error={this.checkBasicPreSubmit(
+                    "collectedYear",
+                    collectedYear
+                  )}
+                  onChange={this.handleChange}
+                  disabled={this.state.paste_entry}
+                />
+                <Form.Field
+                  control={Input}
+                  label="collectedMonth"
+                  placeholder="MM"
+                  name="collectedMonth"
+                  value={collectedMonth}
+                  error={this.checkBasicPreSubmit(
+                    "collectedMonth",
+                    collectedMonth
                   )}
                   onChange={this.handleChange}
                   disabled={this.state.paste_entry}
@@ -1238,7 +1299,7 @@ export default class MANUAL extends React.Component {
               <Form.Field
                 control={Select}
                 options={setCountOptions}
-                label="Number of Collectors:"
+                label="Number of Other Collectors:"
                 name="numCollectors"
                 value={numCollectors}
                 onChange={this.handleCollectorCountChange}
