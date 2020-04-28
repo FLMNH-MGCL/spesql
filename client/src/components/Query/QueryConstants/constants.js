@@ -4,12 +4,12 @@ async function getCountries() {
   // list of countries in JSON link
   let fetchedList = await fetch(
     "https://pkgstore.datahub.io/core/country-list/data_json/data/8c458f2d15d9f2119654b29ede6e45b8/data_json.json"
-  ).then(response => response.json());
-  fetchedList.map(country => {
+  ).then((response) => response.json());
+  fetchedList.map((country) => {
     countryList.push({
       key: country.Code,
       text: country.Name,
-      value: country.Name
+      value: country.Name,
     });
   });
   // console.log(countryList)
@@ -19,25 +19,26 @@ getCountries();
 
 export const yesOrNo = [
   { key: "yes", text: "Yes", value: "Y" },
-  { key: "no", text: "No", value: "N" }
+  { key: "no", text: "No", value: "N" },
 ];
 
 const reset = { key: "-1", text: "Select One", value: "" };
 
 export const selectQueryOption = [
-  { key: "0", text: "SELECT", value: "SELECT" }
+  { key: "0", text: "SELECT", value: "SELECT" },
 ];
 
 export const updateQueryOption = [
-  { key: "1", text: "UPDATE", value: "UPDATE" }
+  { key: "1", text: "UPDATE", value: "UPDATE" },
 ];
 
 export const countQueryOption = [{ key: "42", text: "COUNT", value: "COUNT" }];
 
 export const headerSelection = [
   { key: "2", text: "ALL", value: "*" },
-  { key: "43", text: "Lep #", value: "recordNumber" },
+  { key: "43", text: "Lep #", value: "otherCatalogNumber" },
   { key: "44", text: "MGCL #", value: "catalogNumber" },
+  { key: "recordNumberSel", text: "Record #", value: "recordNumber" },
   { key: "14", text: "Order", value: "order_" },
   { key: "13", text: "Superfamily", value: "superfamily" },
   { key: "11", text: "Family", value: "family" },
@@ -46,31 +47,50 @@ export const headerSelection = [
   { key: "3", text: "Genus", value: "genus" },
   { key: "46", text: "Subgenus", value: "subgenus" },
   { key: "10", text: "Species", value: "specificEpithet" },
+  {
+    key: "infraspecificEpithetSel",
+    text: "Subspecies",
+    value: "infraspecificEpithet",
+  },
   { key: "47", text: "Identification Qual.", value: "identificationQualifier" },
   { key: "48", text: "Recorded By", value: "recordedBy" },
+  { key: "otherCollSel", text: "Other Collectors", value: "otherCollectors" },
   { key: "49", text: "Identified By", value: "identifiedBy" },
   { key: "50", text: "Date Identified", value: "dateIdentified" },
+  { key: "date", text: "Date", value: "verbatimDate" },
+  { key: "year", text: "Year", value: "collectedYear" },
+  { key: "month", text: "Month", value: "collectedMonth" },
+  { key: "day", text: "Day", value: "collectedDay" },
   { key: "51", text: "Sex", value: "sex" },
   { key: "52", text: "Life Stage", value: "lifeStage" },
   { key: "53", text: "Habitat", value: "habitat" },
   { key: "54", text: "Occurrence Remarks", value: "occurrenceRemarks" },
+  {
+    key: "molocrem",
+    text: "Molecular Occurrence Remarks",
+    value: "molecularOccurrenceRemarks",
+  },
+  { key: "samprot", text: "Protocol", value: "samplingProtocol" },
   { key: "55", text: "Country", value: "country" },
   { key: "56", text: "Province", value: "stateProvince" },
   { key: "57", text: "County", value: "county" },
   { key: "58", text: "Municipality", value: "municipality" },
   { key: "59", text: "Locality", value: "locality" },
-  { key: "60", text: "Elevation", value: "verbatimElevation" },
+  { key: "60", text: "Elevation", value: "elevationInMeters" },
   { key: "61", text: "Latitude", value: "verbatimLatitude" },
+  { key: "declat", text: "Dec. Latitude", value: "decimalLatitude" },
   { key: "62", text: "Longitude", value: "verbatimLongitude" },
+  { key: "declong", text: "Dec. Longitude", value: "decimalLongitude" },
   { key: "63", text: "Geodetic Datum", value: "geodeticDatum" },
   { key: "64", text: "Coord. Uncertainty", value: "coordinateUncertainty" },
-  { key: "65", text: "Loan Info", value: "loanInfo" },
+  { key: "geoby", text: "Georeferenced", value: "georeferencedBy" },
+  { key: "65", text: "Loaned", value: "isLoaned" },
   { key: "66", text: "Preparations", value: "preparations" },
   { key: "67", text: "Freezer", value: "freezer" },
   { key: "68", text: "Rack", value: "rack" },
   { key: "69", text: "Box", value: "box" },
   { key: "70", text: "TubSize", value: "tubeSize" },
-  { key: "71", text: "Collectors", value: "collectors" }
+  { key: "71", text: "Notes", value: "fieldNotes" },
   // { key: '72', text: 'Lep', value: 'catalogNumber' },
   // { key: '73', text: 'Lep', value: 'catalogNumber' },
   // { key: '74', text: 'Lep', value: 'catalogNumber' },
@@ -85,11 +105,12 @@ export const filterOptions = [
     key: "Lep #",
     text: "Lep #",
     value: "Lep #",
-    label: { color: "blue", empty: true, circular: true }
+    label: { color: "blue", empty: true, circular: true },
   },
   { key: "2", text: "ALL", value: "*" },
-  { key: "43", text: "Lep #", value: "recordNumber" },
+  { key: "43", text: "Lep #", value: "otherCatalogNumber" },
   { key: "44", text: "MGCL #", value: "catalogNumber" },
+  { key: "recordNumberFilter", text: "Record #", value: "recordNumber" },
   { key: "14", text: "Order", value: "order_" },
   { key: "13", text: "Superfamily", value: "superfamily" },
   { key: "11", text: "Family", value: "family" },
@@ -98,6 +119,7 @@ export const filterOptions = [
   { key: "3", text: "Genus", value: "genus" },
   { key: "46", text: "Subgenus", value: "subgenus" },
   { key: "10", text: "Species", value: "specificEpithet" },
+  { key: "10", text: "Subspecies", value: "infraspecificEpithet" },
   { key: "47", text: "Identification Qual.", value: "identificationQualifier" },
   { key: "48", text: "Recorded By", value: "recordedBy" },
   { key: "49", text: "Identified By", value: "identifiedBy" },
@@ -111,7 +133,7 @@ export const filterOptions = [
   { key: "57", text: "County", value: "county" },
   { key: "58", text: "Municipality", value: "municipality" },
   { key: "59", text: "Locality", value: "locality" },
-  { key: "60", text: "Elevation", value: "verbatimElevation" },
+  { key: "60", text: "Elevation", value: "elevationInMeters" },
   { key: "61", text: "Latitude", value: "verbatimLatitude" },
   { key: "62", text: "Longitude", value: "verbatimLongitude" },
   { key: "63", text: "Geodetic Datum", value: "geodeticDatum" },
@@ -122,7 +144,7 @@ export const filterOptions = [
   { key: "68", text: "Rack", value: "rack" },
   { key: "69", text: "Box", value: "box" },
   { key: "70", text: "TubSize", value: "tubeSize" },
-  { key: "71", text: "Collectors", value: "collectors" }
+  { key: "71", text: "Collectors", value: "collectors" },
 ];
 
 export const conditionalOperatorOptions = [
@@ -132,7 +154,7 @@ export const conditionalOperatorOptions = [
   { key: "7", text: ">", value: ">" },
   { key: "8", text: "<=", value: "<=" },
   { key: "9", text: ">=", value: ">=" },
-  { key: "22", text: "REGEXP", value: "REGEXP" }
+  { key: "22", text: "REGEXP", value: "REGEXP" },
 ];
 
 export const setOperatorOptions = [{ key: "21", text: "=", value: "=" }];
@@ -155,7 +177,7 @@ export const setCountOptions = [
   { key: "17", text: "15", value: 15 },
   { key: "18", text: "16", value: 16 },
   { key: "19", text: "17", value: 17 },
-  { key: "20", text: "18", value: 18 }
+  { key: "20", text: "18", value: 18 },
 ];
 
 export const conditionalCountOptions = [
@@ -177,7 +199,7 @@ export const conditionalCountOptions = [
   { key: "37", text: "15", value: 15 },
   { key: "38", text: "16", value: 16 },
   { key: "39", text: "17", value: 17 },
-  { key: "40", text: "18", value: 18 }
+  { key: "40", text: "18", value: 18 },
 ];
 
 export const familyControl = [
@@ -191,7 +213,7 @@ export const familyControl = [
   { key: "Plutellidae", text: "Plutellidae", value: "Plutellidae" },
   { key: "Psychidae", text: "Psychidae", value: "Psychidae" },
   { key: "Saturniidae", text: "Saturniidae", value: "Saturniidae" },
-  { key: "Tineidae", text: "Tineidae", value: "Tineidae" }
+  { key: "Tineidae", text: "Tineidae", value: "Tineidae" },
 ];
 
 export const identificationQualifierControl = [
@@ -200,7 +222,7 @@ export const identificationQualifierControl = [
   { key: "73", text: "cf", value: "cf" },
   { key: "74", text: "near", value: "near" },
   { key: "75", text: "sensu stricto", value: "sensu stricto" },
-  { key: "76", text: "sensu lato", value: "sensu lato" }
+  { key: "76", text: "sensu lato", value: "sensu lato" },
 ];
 
 export const samplingProtocolControl = [
@@ -215,7 +237,7 @@ export const samplingProtocolControl = [
   { key: "84", text: "LightOther", value: "LightOther" },
   { key: "85", text: "Bait", value: "Bait" },
   { key: "86", text: "TrapMalaise", value: "TrapMalaise" },
-  { key: "87", text: "Trap", value: "Trap" }
+  { key: "87", text: "Trap", value: "Trap" },
 ];
 
 // convert to one
@@ -225,7 +247,7 @@ export const dispositionControl = [
   { key: "88", text: "Present", value: "Present" },
   { key: "89", text: "Missing", value: "Missing" },
   { key: "90", text: "Sample Used Up", value: "Sample Used Up" },
-  { key: "91", text: "On Loan", value: "On Loan" }
+  { key: "91", text: "On Loan", value: "On Loan" },
 ];
 
 // wing, pinned
@@ -242,7 +264,7 @@ export const preparationsControl = [
   { key: "93", text: "Molecular Collection", value: "Molecular Collection" },
   { key: "94", text: "Pinned Collection", value: "Pinned Collection" },
   { key: "95", text: "Larval Collection", value: "Larval Collection" },
-  { key: "96", text: "Genetic Resources", value: "Genetic Resources" }
+  { key: "96", text: "Genetic Resources", value: "Genetic Resources" },
 ];
 
 // Freezer control will be a manual check on submit
@@ -256,7 +278,7 @@ export const tubeSizeControl = [
   { key: "97", text: "papered", value: "papered" },
   { key: "98", text: "50falcon", value: "50falcon" },
   { key: "99", text: "15falcon", value: "15falcon" },
-  { key: "100", text: "microcentrifuge", value: "microcentrifuge" }
+  { key: "100", text: "microcentrifuge", value: "microcentrifuge" },
 ];
 
 export const lifeStageControl = [
@@ -264,14 +286,14 @@ export const lifeStageControl = [
   { key: "101", text: "egg", value: "egg" },
   { key: "102", text: "larva", value: "larva" },
   { key: "103", text: "pupa", value: "pupa" },
-  { key: "104", text: "adult", value: "adult" }
+  { key: "104", text: "adult", value: "adult" },
 ];
 
 export const sexControl = [
   reset,
   { key: "105", text: "male", value: "male" },
   { key: "106", text: "female", value: "female" },
-  { key: "107", text: "gynandromorph", value: "gynandromorph" }
+  { key: "107", text: "gynandromorph", value: "gynandromorph" },
 ];
 
 export const countryControl = countryList;
@@ -283,13 +305,13 @@ export const geodeticDatumControl = [
   { key: "Campo Inchauspe", text: "Campo Inchauspe", value: "Campo Inchauspe" },
   { key: "European 1950", text: "European 1950", value: "European 1950" },
   { key: "Clarke 1866", text: "Clarke 1866", value: "Clarke 1866" },
-  { key: "Unknown", text: "Unknown", value: "Unknown" }
+  { key: "Unknown", text: "Unknown", value: "Unknown" },
 ];
 
 export const units = [
   { key: "meters", text: "Meters", value: "meters" },
   { key: "feet", text: "Feet", value: "feet" },
-  { key: "miles", text: "Miles", value: "miles" }
+  { key: "miles", text: "Miles", value: "miles" },
 ];
 
 // catalogNumber control will be a manual check on submit

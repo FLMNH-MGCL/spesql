@@ -1,7 +1,7 @@
 import React from "react";
 import { Table, Button, Loader, Icon } from "semantic-ui-react";
 import CreateHelpModal from "../Help/CreateHelpModal";
-// import _ from 'lodash'
+import _ from "lodash";
 import InfiniteScroll from "react-infinite-scroll-component";
 import DBSearch from "../Search/DBSearch";
 import SearchFilter from "../Search/SearchFilter";
@@ -86,12 +86,15 @@ export default class CollectionList extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.data.length !== 0 && this.state.display.length === 0) {
+    if (this.state.data.length === 0 && this.props.data.length !== 0) {
+      this.setState({ data: this.props.data });
+    }
+    if (this.state.data.length !== 0 && this.state.display.length === 0) {
       let fetchAmount =
-        this.props.data.length <= 50 ? this.props.data.length : 50;
-      let hasMore = fetchAmount === this.props.data.length ? false : true;
+        this.state.data.length <= 50 ? this.state.data.length : 50;
+      let hasMore = fetchAmount === this.state.data.length ? false : true;
       // console.log(`has more ${hasMore}`)
-      const newDisplay = this.props.data.slice(0, fetchAmount);
+      const newDisplay = this.state.data.slice(0, fetchAmount);
       this.props.updateDisplayData(newDisplay);
       this.setState({
         display: newDisplay,
@@ -156,8 +159,8 @@ export default class CollectionList extends React.Component {
 
   fetchMoreData = () => {
     let fetchAmount =
-      this.props.data.length - this.state.display.length <= 50
-        ? this.props.data.length - this.state.display.length
+      this.state.data.length - this.state.display.length <= 50
+        ? this.state.data.length - this.state.display.length
         : 50;
 
     if (fetchAmount === 0) {
@@ -172,7 +175,7 @@ export default class CollectionList extends React.Component {
         Array.from({ length: fetchAmount })
       );
       newDisplay = newDisplay.map((item, index) => {
-        return this.props.data[index];
+        return this.state.data[index];
       });
       this.props.updateDisplayData(newDisplay);
       this.setState({
@@ -183,8 +186,8 @@ export default class CollectionList extends React.Component {
 
   headerNameToFieldName = (clickedColumn) => {
     switch (clickedColumn) {
-      case "Lep #":
-        return "recoredNumber";
+      case "LEP #":
+        return "otherCatalogNumber";
       case "MGCL #":
         return "catalogNumber";
       case "Order":
@@ -246,80 +249,47 @@ export default class CollectionList extends React.Component {
     }
   };
 
+  // FIXME
   sortList = (clickedColumn, direction) => {
-    clickedColumn = this.headerNameToFieldName(clickedColumn);
-
-    let newData = this.props.data;
-
-    if (clickedColumn === "recordNumber" || clickedColumn === "catalogNumber") {
-      if (direction === "ascending") {
-        newData = newData.sort((a, b) => {
-          let numA =
-            a[clickedColumn].indexOf("-") > -1
-              ? parseInt(a[clickedColumn].split("-")[1])
-              : 0;
-          let numB =
-            b[clickedColumn].indexOf("-") > -1
-              ? parseInt(b[clickedColumn].split("-")[1])
-              : 0;
-
-          return numA > numB ? 1 : numB > numA ? -1 : 0;
-        });
-      } else {
-        newData = newData.reverse();
-      }
-
-      this.setState({ data: newData });
-      return;
-    }
+    const field = this.headerNameToFieldName(clickedColumn);
 
     if (direction === "ascending") {
-      newData = newData.sort((a, b) => {
-        return a[clickedColumn] > b[clickedColumn]
-          ? 1
-          : b[clickedColumn] > a[clickedColumn]
-          ? -1
-          : 0;
+      // const newData = _.orderBy(this.state.data, [field], ["asc"]);
+      // console.log(newData);
+      this.setState({
+        data: _.orderBy(this.state.data, [field], ["asc"]),
+        direction: "ascending",
+        column: clickedColumn,
+      });
+    } else if (direction === "descending") {
+      this.setState({
+        data: _.orderBy(this.state.data, [field], ["desc"]),
+        direction: "descending",
+        column: clickedColumn,
       });
     } else {
-      newData = newData.reverse();
+      return this.props.data;
     }
-
-    this.setState({
-      data: newData,
-    });
   };
 
   handleSort = (clickedColumn) => () => {
-    const { column, direction } = this.state;
+    const { data, column, direction } = this.state;
 
-    if (column !== clickedColumn) {
+    if (direction === null) {
+      this.sortList(clickedColumn, "ascending");
+    } else if (direction === "ascending") {
+      this.sortList(clickedColumn, "descending");
+    } else {
       this.setState({
-        column: clickedColumn,
-        // data: _.sortBy(this.props.data, [clickedColumn]),
-        data: this.sortList(clickedColumn, "ascending"),
-        direction: "ascending",
+        data: this.props.data,
+        direction: null,
+        column: null,
       });
-
-      return;
-    } else if (column === clickedColumn) {
-      if (direction === "ascending") {
-        this.setState({
-          data: this.sortList(clickedColumn, "descending"),
-          direction: "descending",
-        });
-      } else {
-        this.setState({
-          data: this.props.data,
-          direction: null,
-          column: null,
-        });
-      }
     }
   };
 
   renderList = () => {
-    let collectionList = this.props.data;
+    let collectionList = this.state.data;
     try {
       collectionList = collectionList
         .filter((specimen) => {
@@ -426,6 +396,7 @@ export default class CollectionList extends React.Component {
               onClick={() => {
                 this.props.clearQuery();
                 this.setState({
+                  data: [],
                   hasMore: false,
                   display: Array.from({ length: 0 }),
                 });
@@ -439,8 +410,13 @@ export default class CollectionList extends React.Component {
               icon
               onClick={() => {
                 // console.log('refreshed!')
-                let command = this.props.current_query;
                 this.props.clearQuery();
+                this.setState({
+                  data: [],
+                  hasMore: false,
+                  display: Array.from({ length: 0 }),
+                });
+                let command = this.props.current_query;
                 this.props.updateRefreshStatus(true);
                 this.props.updateLoadingStatus(true);
                 this.props.runQuery(command);
