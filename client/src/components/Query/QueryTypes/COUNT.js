@@ -52,6 +52,7 @@ export default class COUNT extends React.Component {
         if (response.data.error) {
           this.setState({ loading: false });
         } else {
+          console.log(response);
           dbSelection = response.data.tables.map((table, index) => {
             return { key: index + 1 * 1002, text: table, value: table };
           });

@@ -89,6 +89,9 @@ export default class CollectionList extends React.Component {
     if (this.state.data.length === 0 && this.props.data.length !== 0) {
       this.setState({ data: this.props.data });
     }
+    if (this.props.data.length === 0 && this.state.data.length !== 0) {
+      this.setState({ data: [], hasMore: false });
+    }
     if (this.state.data.length !== 0 && this.state.display.length === 0) {
       let fetchAmount =
         this.state.data.length <= 50 ? this.state.data.length : 50;

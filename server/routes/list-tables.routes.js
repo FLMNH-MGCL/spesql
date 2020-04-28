@@ -4,10 +4,24 @@ module.exports = function (connection, app) {
   app.post("/api/list-tables/", function (req, res) {
     //console.log(connection)
     let { privilege_level, query_type } = req.body;
-    let command =
-      privilege_level === "admin"
-        ? "SELECT * FROM interactables;"
-        : `SELECT * FROM interactables WHERE minimum_access_${query_type}="${privilege_level}";`;
+
+    // manager select
+    // correct command select all from table where minaccsel = guest
+
+    console.log(privilege_level, query_type);
+    let command = "";
+    if (privilege_level === "admin") {
+      command = "SELECT * FROM interactables;";
+    } else {
+      if (query_type === "select") {
+        command = `SELECT * FROM interactables WHERE minimum_access_${query_type}="guest";`;
+      } else if (query_type === "update") {
+        command = `SELECT * FROM interactables WHERE minimum_access_${query_type}="manager"`;
+      } else if (query_type === "insert") {
+        command = `SELECT * FROM interactables WHERE minimum_access_${query_type}="manager"`;
+      }
+    }
+
     //console.log(command)
     connection.query(command, (err, data) => {
       if (err) {

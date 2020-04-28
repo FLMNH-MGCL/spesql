@@ -136,6 +136,18 @@ export function checkHeaders(headers) {
   return errors;
 }
 
+export function parseRawMonth(month) {
+  const parsedMonth = parseInt(month, 10);
+
+  if (parsedMonth < 0 || parsedMonth > 12) {
+    return "INVALID";
+  } else if (parsedMonth < 10) {
+    return `0${parsedMonth}`;
+  } else {
+    return `${parsedMonth}`;
+  }
+}
+
 export function checkAdvancedSelect(query) {
   let errors = [];
 
@@ -604,15 +616,17 @@ export function checkField(fieldName, fieldValue) {
         );
       }
 
-      if (fieldValue.length !== 2) {
-        errors.push(`Format error (@ ${fieldName}): Month should be MM.`);
-      }
+      const parsedMonth = parseRawMonth(fieldValue);
 
-      if (parseInt(fieldValue, 10) < 0 || parseInt(fieldValue, 10) > 12) {
+      if (parsedMonth === "INVALID") {
         errors.push(
           `Format error (@ ${fieldName}): ${fieldValue} is an invalid month.`
         );
       }
+
+      // if (fieldValue.length !== 2) {
+      //   errors.push(`Format error (@ ${fieldName}): Month should be MM.`);
+      // }
 
       return errors;
 
