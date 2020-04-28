@@ -15,14 +15,14 @@ to visit the <a href='https://github.com/FLMNH-MGCL/Database-App' target='_blank
 detail the errors, bugs or glitches that have occurred, and include the steps to reproduce the error.
 
 ### Local Usage ###
-Instructions for local use, please read entire section before attempting use. Use your terminal emulator of choice. Ensure you have <a href='https://nodejs.org/en/' target='_blank'>Node</a> installed.
+Instructions for local use, please read entire section before attempting use. Use your terminal emulator of choice. Ensure you have <a href='https://nodejs.org/en/' target='_blank'>Node</a> installed and Yarn.
 ```
 cd <path to target directory>
 git clone https://github.com/FLMNH-MGCL/Database-App.git
 cd Database-App
-npm install
-npm run-script install-all
-npm run-script electron
+yarn
+yarn install-all
+yarn start:electron OR yarn start:browser
 ```
 Before running `npm run-script electron`, ensure you enter your database access credentials in the config.js file. This file is excluded, however you can rename the config.example.js file to config.js and enter the appropriate information. The config template can be found at `Database-App/server/config/config.example.js`. Change the name to `config.js`, and ender the information. It should wind up look something like this:
 ```
