@@ -23,6 +23,7 @@ import {
 } from "react-notifications";
 import "./styles.css";
 import AddTableModal from "./components/AddTableModal";
+import EditTableModal from "./components/EditTableModal";
 
 const createNotification = (content) => {
   switch (content.type) {
@@ -281,7 +282,7 @@ function AdminPortal(props) {
                     checkAuth={checkAuth}
                     createNotification={createNotification}
                   />
-                  <Button
+                  {/* <Button
                     icon
                     color="yellow"
                     labelPosition="left"
@@ -290,7 +291,12 @@ function AdminPortal(props) {
                   >
                     <Icon name="edit outline" />
                     Edit
-                  </Button>
+                  </Button> */}
+                  <EditTableModal
+                    tables={tables}
+                    checkAuth={checkAuth}
+                    createNotification={createNotification}
+                  />
                   <Button
                     size="small"
                     icon

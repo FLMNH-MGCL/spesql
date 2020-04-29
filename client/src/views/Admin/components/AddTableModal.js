@@ -85,7 +85,7 @@ export default function AddTableModal({
 
   function checkName(tables) {
     if (!tables) return;
-    console.log(tables);
+    // console.log(tables);
     if (tables.indexOf(name) > -1) {
       if (!hasError) {
         setHasError(true);
