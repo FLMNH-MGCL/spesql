@@ -23,6 +23,7 @@ export default function EditUserModal({
   users,
   checkAuth,
   createNotification,
+  currentUser,
 }) {
   const [open, setOpen] = useState(false);
   const [selected, select] = useState();
@@ -34,13 +35,17 @@ export default function EditUserModal({
   const [understood, setUnderstood] = useState(false);
 
   const userSelection = users
-    ? users.map((user) => {
-        return {
-          key: user.name,
-          text: `${user.name} : ${user.username}`,
-          value: user,
-        };
-      })
+    ? users
+        .filter((user) => {
+          return user.username !== currentUser.username;
+        })
+        .map((user) => {
+          return {
+            key: user.name,
+            text: `${user.name} : ${user.username}`,
+            value: user,
+          };
+        })
     : null;
 
   function resetState() {

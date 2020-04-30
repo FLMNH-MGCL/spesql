@@ -224,6 +224,7 @@ function AdminPortal(props) {
                     users={users}
                     createNotification={createNotification}
                     checkAuth={checkAuth}
+                    currentUser={props.userData}
                   />
                   <Button
                     size="small"
@@ -257,41 +258,12 @@ function AdminPortal(props) {
             <Table.Footer fullWidth>
               <Table.Row>
                 <Table.HeaderCell colSpan="4">
-                  {/* <AddUserModal
-                    users={users}
-                    createNotification={createNotification}
-                    checkAuth={checkAuth}
-                  />
-                  <EditUserModal
-                    users={users}
-                    createNotification={createNotification}
-                    checkAuth={checkAuth}
-                  /> */}
-                  {/* <Button
-                    icon
-                    color="green"
-                    labelPosition="left"
-                    floated="right"
-                    size="small"
-                  >
-                    <Icon name="add" />
-                    Create Table
-                  </Button> */}
                   <AddTableModal
                     tables={tables}
                     checkAuth={checkAuth}
                     createNotification={createNotification}
                   />
-                  {/* <Button
-                    icon
-                    color="yellow"
-                    labelPosition="left"
-                    floated="right"
-                    size="small"
-                  >
-                    <Icon name="edit outline" />
-                    Edit
-                  </Button> */}
+
                   <EditTableModal
                     tables={tables}
                     checkAuth={checkAuth}
