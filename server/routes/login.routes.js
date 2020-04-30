@@ -1,8 +1,8 @@
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 
-module.exports = function(connection, app) {
-  app.post("/api/login/", function(req, res) {
+module.exports = function (connection, app) {
+  app.post("/api/login/", function (req, res) {
     const username = req.body.user;
     const plainPassword = req.body.password;
 
@@ -21,23 +21,23 @@ module.exports = function(connection, app) {
             res.json({
               err: "Auth failed",
               message: "Recieved no data",
-              authed: false
+              authed: false,
             });
           } else {
-            console.log(data);
+            // console.log(data);
             const { username, password, privilege_level } = data[0];
             //console.log(password);
-            bcrypt.compare(plainPassword, password).then(result => {
+            bcrypt.compare(plainPassword, password).then((result) => {
               if (result === true) {
                 const userData = {
                   username: username,
-                  privilege_level: privilege_level
+                  privilege_level: privilege_level,
                 };
                 res.status(200);
                 res.json({
                   message: "Authorization sucessful.",
                   userData: userData,
-                  authed: result
+                  authed: result,
                 });
               } else {
                 console.log("AUTH FAILED");

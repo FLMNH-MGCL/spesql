@@ -15,7 +15,7 @@ module.exports = function (connection, app) {
         res.status(404).json(err);
         // res.json({ status: 400, details: err });
       } else {
-        console.log(data);
+        // console.log(data);
         res.status(204);
         res.json(data);
       }

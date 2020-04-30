@@ -10,7 +10,7 @@ module.exports = function (connection, app) {
         console.log(err);
         res.json({ tables: [], error: err });
       } else {
-        console.log(data);
+        // console.log(data);
         const tables = data.map((table) => {
           const {
             tbl_name,
