@@ -349,10 +349,10 @@ class SpecimenView extends React.Component {
   };
 
   render() {
-    if (this.props.data === undefined) {
+    if (this.props.data === undefined || !this.props.currentQuery) {
       return (
-        <div>
-          <strong>Click a specimen for more info...</strong>
+        <div style={{ textAlign: "center" }}>
+          <strong>Make a query and select a specimen for more info!</strong>
         </div>
       );
     } else {
@@ -360,10 +360,18 @@ class SpecimenView extends React.Component {
       //     return specimen.id === this.props.selectedSpecimen.id
       // })
       const { selectedSpecimen } = this.props;
-      if (selectedSpecimen === undefined) {
+      if (selectedSpecimen === undefined && this.props.currentQuery) {
         return (
-          <div>
-            <strong>Click a specimen for more info...</strong>
+          <div style={{ textAlign: "center" }}>
+            <strong>
+              Uh oh, that query yielded no data. Try broadening the query!
+            </strong>
+          </div>
+        );
+      } else if (selectedSpecimen === undefined) {
+        return (
+          <div style={{ textAlign: "center" }}>
+            <strong>Click a specimen for more info!</strong>
           </div>
         );
       } else {

@@ -1,17 +1,19 @@
 .about-container {
-    max-height: 100vh;
+  max-height: 100vh;
 }
 
-.pad-top {
-    padding-top: 5vh;
+.pad-top-bottom {
+  padding-top: 5vh;
+  padding-bottom: 5vh;
 }
 
 .description-text {
-    padding-top: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .description-heading {
-    padding-top: 1rem;
+  margin-top: 2rem;
 }
 /* 
 .scrollable {
@@ -24,19 +26,19 @@
 } */
 
 ul.dashed {
-    list-style-type: none;
+  list-style-type: none;
 }
 ul.dashed > li:before {
-    content: "-";
+  content: "-";
 }
 ul.dashed > li span {
-    position: relative;
-    left: .5rem;
+  position: relative;
+  left: 0.5rem;
 }
 
 .about-text p {
-    font-size: 17x;
+  font-size: 17x;
 }
 .about-text b {
-    font-size: 17px;
+  font-size: 17px;
 }

@@ -13,7 +13,7 @@ export default class HeaderBase extends Component {
 
     this.state = {
       activeItem: "about",
-      mobileView: mobile
+      mobileView: mobile,
     };
   }
 
@@ -48,11 +48,10 @@ export default class HeaderBase extends Component {
   renderFullMenu = () => {
     return (
       <div>
-        <Menu stackable borderless>
+        <Menu stackable borderless style={{ padding: ".5rem" }}>
           <Menu.Item
             as={Link}
             name="home"
-            active={"home" === this.props.current_view}
             disabled={this.props.current_view === "login"}
             onClick={this.handleItemClick}
             to="/Home"
@@ -60,36 +59,10 @@ export default class HeaderBase extends Component {
           <Menu.Item
             as={Link}
             name="about"
-            active={"view" === this.props.current_view}
+            active
             onClick={this.handleItemClick}
             to="/About"
           />
-
-          <Menu.Menu position="right">
-            <Menu.Item>
-              <Button icon labelPosition="left" disabled={true}>
-                <Icon name="archive" />
-                Query
-              </Button>
-            </Menu.Item>
-            <Menu.Item>
-              <Button icon labelPosition="left" disabled={true}>
-                <Icon name="upload" />
-                Insert
-              </Button>
-            </Menu.Item>
-            <Menu.Item>
-              <Button icon labelPosition="left" disabled={true}>
-                <Icon name="download" />
-                Download
-              </Button>
-            </Menu.Item>
-            <Menu.Item>
-              <Button icon disabled={true}>
-                <Icon name="user" />
-              </Button>
-            </Menu.Item>
-          </Menu.Menu>
         </Menu>
       </div>
     );
@@ -113,14 +86,13 @@ export default class HeaderBase extends Component {
                 <Menu.Item
                   as={Link}
                   name="home"
-                  active={"home" === this.props.current_view}
                   onClick={this.handleItemClick}
                   to="/Home"
                 />
                 <Menu.Item
                   as={Link}
                   name="about"
-                  active={"view" === this.props.current_view}
+                  active
                   onClick={this.handleItemClick}
                   to="/About"
                 />

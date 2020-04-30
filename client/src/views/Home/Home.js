@@ -239,34 +239,46 @@ class Home extends React.Component {
           }
         />
         <Grid columns="equal" padded stackable>
-          <Grid.Column width={11}>
-            <Loader content="Loading" active disabled={!this.props.loading} />
-            <Segment>
-              <CollectionList
-                {...this.props}
-                runQuery={this.runQuery.bind(this)}
-                notify={this.createNotification}
-              />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column style={{ marginTop: "1rem" }}>
-            <Segment>
-              <SpecimenView
-                data={this.props.displayed}
-                selectedSpecimen={this.props.selectedSpecimen}
-                currentQuery={this.props.current_query}
-                runQuery={this.runQuery.bind(this)}
-                userData={this.props.userData}
-                notify={this.createNotification}
-                disabled={
-                  this.props.userData.privilege_level !== "admin" &&
-                  this.props.userData.privilege_level !== "manager"
-                }
-                errorMessages={this.props.errorMessages}
-                updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
-              />
-            </Segment>
-          </Grid.Column>
+          <Grid.Row centered stretched>
+            <Grid.Column
+              computer={11}
+              largeScreen={11}
+              tablet={16}
+              style={{ justifyContent: "center" }}
+            >
+              <Loader content="Loading" active disabled={!this.props.loading} />
+              <Segment>
+                <CollectionList
+                  {...this.props}
+                  runQuery={this.runQuery.bind(this)}
+                  notify={this.createNotification}
+                />
+              </Segment>
+            </Grid.Column>
+            <Grid.Column
+              computer={5}
+              largeScreen={5}
+              tablet={16}
+              style={{ marginTop: "1rem", justifyContent: "center" }}
+            >
+              <Segment>
+                <SpecimenView
+                  data={this.props.displayed}
+                  selectedSpecimen={this.props.selectedSpecimen}
+                  currentQuery={this.props.current_query}
+                  runQuery={this.runQuery.bind(this)}
+                  userData={this.props.userData}
+                  notify={this.createNotification}
+                  disabled={
+                    this.props.userData.privilege_level !== "admin" &&
+                    this.props.userData.privilege_level !== "manager"
+                  }
+                  errorMessages={this.props.errorMessages}
+                  updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
+                />
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
         <NotificationContainer />
       </div>
