@@ -1,7 +1,11 @@
-.form-pad {
-    padding-top: 20vh;
+.login-container {
+  display: flex;
+  background-color: #edf2f7;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .form-button {
-    justify-content: center;
+  justify-content: center;
 }

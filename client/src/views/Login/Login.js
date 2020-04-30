@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Form, Grid, Input, Button, Message, Segment } from "semantic-ui-react";
+import {
+  Form,
+  Grid,
+  Input,
+  Button,
+  Message,
+  Segment,
+  Header,
+  Image,
+} from "semantic-ui-react";
 import { Redirect } from "react-router-dom";
 import "./Login.css";
 import axios from "axios";
@@ -35,31 +44,6 @@ function Login(props) {
   };
 
   const attemptLogin = async () => {
-    // let authData = axios
-    //   .post("/api/login/", {
-    //     user: username,
-    //     password: password
-    //   })
-    //   .then(response => {
-    //     if (response.err) {
-    //       console.log(response.err);
-    //     } else {
-    //       const { message, userData, authed } = response.data;
-    //       console.log(message);
-
-    //       props.setUserData(userData);
-    //       props.setAuth(authed);
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.log("login failed...");
-    //     console.log(error);
-    //     createNotification({
-    //       type: "error",
-    //       message: "Authentication failed."
-    //     });
-    //   });
-
     let authData = await axios.post("/api/login/", {
       user: username,
       password: password,
@@ -102,53 +86,108 @@ function Login(props) {
 
   return (
     <div>
-      <div className="form-pad">
-        <Grid centered padded>
-          <Grid.Column textAlign="left" width={5}>
-            <Form onSubmit={onSubmit}>
-              <Form.Group>
-                <Form.Field
-                  control={Input}
-                  placeholder="Username"
-                  label="Username"
-                  name="username"
-                  value={username}
-                  onChange={(e, { value }) => setUsername(value)}
-                  width={16}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Field
-                  control={Input}
-                  type="password"
-                  placeholder="Password"
-                  label="Password"
-                  name="password"
-                  value={password}
-                  onChange={(e, { value }) => setPassword(value)}
-                  width={16}
-                />
-              </Form.Group>
-              <Form.Group className="form-button">
-                <Form.Field control={Button} content="Submit" />
-              </Form.Group>
-            </Form>
+      <div className="login-container">
+        <Segment
+          style={{
+            display: "grid",
+            minWidth: "30%",
+            justifyContent: "center",
+            padding: "2rem",
+          }}
+        >
+          <Header
+            textAlign="center"
+            style={{ paddingBottom: ".5rem", marginTop: "1rem" }}
+          >
+            Welcome to SpeSQL!
+          </Header>
+          <Image
+            src={require("../../assets/flmnhLogo.png")}
+            size="small"
+            style={{ margin: "0 auto", marginBottom: "1rem" }}
+            bordered
+          />
+          <p
+            style={{
+              width: "80%",
+              justifySelf: "center",
+              marginBottom: "2rem",
+              textAlign: "center",
+              marginBottom: "2rem",
+            }}
+          >
+            The database management application for the Florida Museum of
+            Natural History
+          </p>
+          <Form
+            onSubmit={onSubmit}
+            style={{ display: "grid", justifyContent: "center" }}
+          >
+            <Form.Group style={{ padding: ".5rem" }}>
+              <Form.Field
+                control={Input}
+                placeholder="Username"
+                label="Username"
+                name="username"
+                value={username}
+                onChange={(e, { value }) => setUsername(value)}
+              />
+            </Form.Group>
+            <Form.Group style={{ padding: ".5rem" }}>
+              <Form.Field
+                control={Input}
+                type="password"
+                placeholder="Password"
+                label="Password"
+                name="password"
+                value={password}
+                onChange={(e, { value }) => setPassword(value)}
+              />
+            </Form.Group>
 
-            <div style={{ textAlign: "center" }}>
-              Don't have an account? You can{" "}
-              <a href="mailto:kawahara@flmnh.ufl.edu">request</a> one here.
-            </div>
-
-            <Message
-              error
-              hidden={!errorMessage}
-              style={{ textAlign: "center" }}
+            <Form.Group
+              style={{
+                justifySelf: "center",
+                padding: ".5rem",
+                width: "100%",
+                justifyContent: "center",
+              }}
             >
-              <Message.Header>Login error</Message.Header>
-              <p>{errorMessage}</p>
-            </Message>
-          </Grid.Column>
-        </Grid>
+              {/* <Button fluid>Login</Button> */}
+              <Form.Field
+                style={{
+                  width: "100%",
+                }}
+              >
+                <Button
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#5c6ac4",
+                    color: "#fff",
+                  }}
+                >
+                  Login
+                </Button>
+              </Form.Field>
+            </Form.Group>
+          </Form>
+
+          <div
+            style={{
+              textAlign: "center",
+              padding: ".5rem",
+              marginBottom: "2rem",
+            }}
+          >
+            Don't have an account? You can{" "}
+            <a href="mailto:kawahara@flmnh.ufl.edu">request</a> one here.
+          </div>
+
+          <Message error hidden={!errorMessage} style={{ textAlign: "center" }}>
+            <Message.Header>Login error</Message.Header>
+            <p>{errorMessage}</p>
+          </Message>
+        </Segment>
       </div>
       <NotificationContainer />
     </div>
