@@ -1,4 +1,4 @@
-# SpeSQL
+# spesql
 
 ### Development
 
