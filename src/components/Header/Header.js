@@ -62,7 +62,11 @@ export default class Header extends Component {
 
   render() {
     return (
-      <Menu borderless size={this.state.mobileView ? "mini" : "small"}>
+      <Menu
+        borderless
+        size={this.state.mobileView ? "mini" : "small"}
+        style={{ margin: "1rem" }}
+      >
         <Menu.Item
           as={Link}
           name="home"
@@ -75,7 +79,7 @@ export default class Header extends Component {
           name="about"
           active={"view" === this.props.current_view}
           onClick={this.handleItemClick}
-          to="/About"
+          to="/about"
         />
 
         <Menu.Menu position="right">
@@ -138,7 +142,9 @@ export default class Header extends Component {
                 <Dropdown.Header icon="user" content="User menu" />
                 {this.props.userData.privilege_level === "admin" && (
                   <Dropdown.Item
-                    onClick={() => (window.location.href = "/Admin")}
+                    onClick={() => {
+                      window.location.hash = "/admin";
+                    }}
                     text="Admin Portal"
                   ></Dropdown.Item>
                 )}

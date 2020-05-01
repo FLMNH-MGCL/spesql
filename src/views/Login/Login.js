@@ -81,7 +81,7 @@ function Login(props) {
   };
 
   if (props.authenticated) {
-    return <Redirect to="/Home" />;
+    return <Redirect to="/home" />;
   }
 
   return (

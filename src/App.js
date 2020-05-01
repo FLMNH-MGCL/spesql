@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Home from "./views/Home/Home";
 import NotFound from "./views/NotFound";
@@ -16,7 +16,7 @@ import storageSession from "redux-persist/lib/storage/session";
 //const store = createStore(reducer);
 const persistConfig = {
   key: "root",
-  storage: storageSession
+  storage: storageSession,
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);
@@ -28,15 +28,14 @@ function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Switch>
-          {/* <Route exact path='/Login' render={props => <Login {...props} setAuthentication={setAuthentication} isLoggedIn={authenticated}/>} /> */}
-          {/* <ProtectedRoute exact path='/Home' isLoggedIn={authenticated} component={HomeWrapper}/> */}
-          <Route exact path="/Login" component={Login} />
           <Route exact path="/">
-            <Redirect to="/Login" />
+            <Redirect to="/login" />
           </Route>
-          <Route exact path="/Home" component={Home} />
-          <Route exact path="/About" component={About} />
-          <Route exact path="/Admin" component={AdminPortal} />
+          <Route path="/login" component={Login} />
+
+          <Route path="/home" component={Home} />
+          <Route path="/about" component={About} />
+          <Route path="/admin" component={AdminPortal} />
           <Route component={NotFound} />
         </Switch>
       </PersistGate>

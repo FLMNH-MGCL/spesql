@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 
 module.exports = function (connection, app) {
   app.post("/api/login/", function (req, res) {
+    // console.log(req);
     const username = req.body.user;
     const plainPassword = req.body.password;
 

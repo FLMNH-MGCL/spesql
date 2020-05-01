@@ -151,15 +151,6 @@ function AdminPortal(props) {
 
   return (
     <>
-      {/* <div style={{ textAlign: "center", paddingTop: "3rem" }}>
-        <h3>Wow, such empty.</h3>
-        <p style={{ display: "block" }}>
-          (Don't worry content is coming soon!)
-        </p>
-        <button onClick={() => (window.location.href = "/Home")}>
-          Click to go back!
-        </button>
-      </div> */}
       <div
         style={{
           position: "absolute",
@@ -172,7 +163,7 @@ function AdminPortal(props) {
           size="large"
           className="hoverable"
           onClick={() => {
-            window.location.href = "/Home";
+            window.location.hash = "/home";
           }}
         />
         Go Home
