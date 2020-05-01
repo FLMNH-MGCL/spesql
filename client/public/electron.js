@@ -6,6 +6,8 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const isDev = require("electron-is-dev");
 
+const server = isDev ? null : require("../../server/server");
+
 let mainWindow;
 
 function createWindow() {

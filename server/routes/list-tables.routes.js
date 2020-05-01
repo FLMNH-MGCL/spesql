@@ -8,7 +8,7 @@ module.exports = function (connection, app) {
     // manager select
     // correct command select all from table where minaccsel = guest
 
-    console.log(privilege_level, query_type);
+    // console.log(privilege_level, query_type);
     let command = "";
     if (privilege_level === "admin") {
       command = "SELECT * FROM interactables;";
