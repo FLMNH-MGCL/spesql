@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Dropdown, Button, Icon } from "semantic-ui-react";
 import CreatePasteModal from "./CreatePasteModal";
 import CreateManualModal from "./CreateManualModal";
+import "./InsertDocument.css";
 
 export default function InsertMenu(props) {
   const [open, toggle] = useState(false);
@@ -47,7 +48,7 @@ export default function InsertMenu(props) {
           <Dropdown.Header icon="upload" content="Select insert method" />
           <Dropdown.Item
             icon="paste"
-            text="Paste"
+            text="CSV"
             onClick={() => togglePaste(true)}
           />
           <Dropdown.Item

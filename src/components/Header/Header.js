@@ -3,7 +3,7 @@ import { Menu, Dropdown, Accordion, Button } from "semantic-ui-react";
 import SearchFilter from "../Search/SearchFilter";
 import DBSearch from "../Search/DBSearch";
 // import SortCollection from "../CollectionList/SortCollection";
-import InsertDocument from "../InsertDocument/InsertDocument";
+// import InsertDocument from "../InsertDocument/InsertDocument";
 import InsertMenu from "../InsertDocument/InsertMenu";
 import { Link } from "react-router-dom";
 import DownloadDB from "../DownloadDB/DownloadDB";

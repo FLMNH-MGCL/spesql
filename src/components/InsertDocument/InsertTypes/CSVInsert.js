@@ -6,11 +6,16 @@ import {
   TextArea,
   Message,
   Modal,
+  Divider,
+  Segment,
+  Header,
+  Icon,
 } from "semantic-ui-react";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import { checkSpecimen } from "../../../functions/queryChecks";
 import { runInsertQuery } from "../../../functions/queries";
+import CSVDrop from "./CSVDrop";
 
 async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
@@ -18,12 +23,16 @@ async function asyncForEach(array, callback) {
   }
 }
 
-export default class PASTE extends React.Component {
+export default class CSVInsert extends React.Component {
   state = {
     text_area: "",
     hasError: false,
     loading: false,
   };
+
+  setCSV(text) {
+    this.setState({ text_area: text });
+  }
 
   async runQuery(insertions) {
     this.props.notify({
@@ -216,7 +225,7 @@ export default class PASTE extends React.Component {
 
     return (
       <>
-        <Modal.Header>Paste Insert Query</Modal.Header>
+        <Modal.Header>CSV Insert Query</Modal.Header>
         <Modal.Content>
           <Message>
             <Message.Header>Usage:</Message.Header>
@@ -243,6 +252,11 @@ export default class PASTE extends React.Component {
               ? "Loading... This may take some time, please wait."
               : null}
           </Form>
+
+          <Divider horizontal>OR</Divider>
+
+          <CSVDrop setCSV={this.setCSV.bind(this)} />
+
           {this.state.hasError ? this.renderErrorTerminal() : null}
         </Modal.Content>
         <Modal.Actions>

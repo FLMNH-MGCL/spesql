@@ -40,7 +40,7 @@ import {
 } from "../../Query/QueryConstants/constants";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 
-export default class MANUAL extends React.Component {
+export default class FormInsert extends React.Component {
   constructor(props) {
     super(props);
 
