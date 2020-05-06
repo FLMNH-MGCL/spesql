@@ -3,7 +3,12 @@ import { Modal } from "semantic-ui-react";
 import { UPDATE } from "./QueryTypes";
 // import OutsideClickHandler from "../utils/OutsideClickHandler";
 
-export default function CreateUpdateModal({ open, props, closeModal }) {
+export default function CreateUpdateModal({
+  open,
+  props,
+  closeModal,
+  checkAuth,
+}) {
   return (
     <Modal open={open} size="small" onClose={closeModal}>
       <UPDATE
@@ -16,6 +21,7 @@ export default function CreateUpdateModal({ open, props, closeModal }) {
         notify={props.notify}
         disabled={props.disabled}
         userData={props.userData}
+        checkAuth={checkAuth}
       />
     </Modal>
   );

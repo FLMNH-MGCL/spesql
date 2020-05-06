@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal, Form, Input, Container } from "semantic-ui-react";
 
-export default function ({ checkAuth, handleSubmit, buttonStyle }) {
+export default function ({
+  checkAuth,
+  handleSubmit,
+  buttonStyle,
+  buttonLoading,
+}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
+
+  useEffect(() => {}, [buttonLoading]);
 
   const authCallback = () => {
     checkAuth(username, password, handleSubmit);
@@ -21,6 +28,7 @@ export default function ({ checkAuth, handleSubmit, buttonStyle }) {
               labelPosition="left"
               color={buttonStyle.color}
               onClick={() => setShow(true)}
+              loading={buttonLoading ? buttonLoading : false}
             >
               {buttonStyle.icon ? buttonStyle.icon : null}
               {buttonStyle.text}
@@ -29,6 +37,7 @@ export default function ({ checkAuth, handleSubmit, buttonStyle }) {
             <Button
               style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
               onClick={() => setShow(true)}
+              loading={buttonLoading ? buttonLoading : false}
             >
               Submit
             </Button>

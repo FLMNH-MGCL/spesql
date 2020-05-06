@@ -38,6 +38,7 @@ import {
   units,
 } from "../../Query/QueryConstants/constants";
 import CreateHelpModal from "../../Help/CreateHelpModal";
+import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
 
 export default class FormInsert extends React.Component {
   constructor(props) {
@@ -1313,13 +1314,17 @@ export default class FormInsert extends React.Component {
           >
             Clear Form
           </Button>
-          <Button
+          <ConfirmAuth
+            checkAuth={this.props.checkAuth}
+            handleSubmit={this.handleSubmit.bind(this)}
+          />
+          {/* <Button
             style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
             onClick={this.handleSubmit}
             loading={this.state.loading}
           >
             Submit
-          </Button>
+          </Button> */}
         </Modal.Actions>
       </React.Fragment>
     );

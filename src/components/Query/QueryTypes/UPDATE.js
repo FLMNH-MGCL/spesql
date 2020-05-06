@@ -17,6 +17,7 @@ import {
 } from "../QueryConstants/constants";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import axios from "axios";
+import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
 
 const setOptions = headerSelection.slice(1, headerSelection.length);
 
@@ -71,7 +72,7 @@ export default class UPDATE extends React.Component {
   }
 
   handleSubmit = () => {
-    console.log("made it");
+    // console.log("made it");
     this.setState({ loading: true });
     let errors = this.checkBasicPreSubmit();
 
@@ -655,7 +656,7 @@ export default class UPDATE extends React.Component {
   );
 
   renderErrorTerminal = () => (
-    <React.Fragment>
+    <div style={{ marginBottom: "3rem" }}>
       <ErrorTerminal errorLog={this.props.errorMessages.updateError} />
       <Button
         onClick={() => {
@@ -667,7 +668,7 @@ export default class UPDATE extends React.Component {
       >
         Clear
       </Button>
-    </React.Fragment>
+    </div>
   );
 
   render() {
@@ -778,13 +779,17 @@ export default class UPDATE extends React.Component {
         <Modal.Actions>
           <CreateHelpModal queryType="UPDATE" />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
-          <Button
+          <ConfirmAuth
+            checkAuth={this.props.checkAuth}
+            handleSubmit={this.handleSubmit}
+          />
+          {/* <Button
             style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
             onClick={this.handleSubmit}
             disabled={!this.state.basic_query}
           >
             Submit
-          </Button>
+          </Button> */}
         </Modal.Actions>
       </>
     );

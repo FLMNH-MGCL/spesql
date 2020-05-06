@@ -114,6 +114,7 @@ export default class Header extends Component {
                 notify={this.props.notify}
                 small={this.state.mobileView}
                 disabled={this.props.disabled}
+                userData={this.props.userData}
               />
             </Menu.Item>
           )}

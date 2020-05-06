@@ -4,11 +4,52 @@ import CreateSelectModal from "./CreateSelectModal";
 import CreateCountModal from "./CreateCountModal";
 import "./QueryGrid.css";
 import CreateUpdateModal from "./CreateUpdateModal";
+import axios from "axios";
 
 export default function QueryMenu(props) {
   const [showSelect, toggleSelect] = useState(false);
   const [showCount, toggleCount] = useState(false);
   const [showUpdate, toggleUpdate] = useState(false);
+
+  // console.log(`${user} vs ${password}`);
+
+  async function checkAuth(user, password, callback) {
+    if (props.userData.username !== user) {
+      // attempting auth with diff account
+      props.notify({
+        type: "error",
+        message:
+          "Attempting authentication with different account than logged in account.",
+      });
+      return;
+    } else if (
+      props.userData.privilege_level !== "admin" &&
+      props.userData.privilege_level !== "manager"
+    ) {
+      // this should NEVER happen, however this is a sanity check
+      props.notify({ type: "error", message: "Access denied!" });
+
+      // forcibly log out
+      props.logout();
+      return;
+    }
+
+    const authData = await axios.post("/api/login/", {
+      user: user,
+      password: password,
+    });
+
+    // console.log(authData);
+
+    if (authData.data.err || authData.data.authed === false) {
+      // credentials did not match
+      props.notify({ type: "error", message: authData.data.err });
+    } else {
+      // allow whatever command to proceed
+      props.notify({ type: "success", message: authData.data.message });
+      callback();
+    }
+  }
 
   function renderSelectedModal() {
     if (showSelect) {
@@ -33,6 +74,7 @@ export default function QueryMenu(props) {
           closeModal={() => toggleUpdate(false)}
           props={props}
           open={showUpdate}
+          checkAuth={checkAuth}
         />
       );
     }

@@ -12,6 +12,7 @@ import CreateHelpModal from "../../Help/CreateHelpModal";
 import { checkSpecimen } from "../../../functions/queryChecks";
 import { runInsertQuery } from "../../../functions/queries";
 import CSVDrop from "./CSVDrop";
+import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
 
 async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
@@ -189,7 +190,7 @@ export default class CSVInsert extends React.Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   renderErrorTerminal = () => (
-    <div style={{ marginBottom: "3rem" }}>
+    <div style={{ marginBottom: "3rem", marginTop: "1.5rem" }}>
       <ErrorTerminal errorLog={this.props.errorMessages.insertError} />
       <Button
         onClick={() => {
@@ -265,13 +266,18 @@ export default class CSVInsert extends React.Component {
           >
             Clear
           </Button>
-          <Button
+          <ConfirmAuth
+            checkAuth={this.props.checkAuth}
+            handleSubmit={this.handleSubmit.bind(this)}
+            buttonLoading={this.state.loading}
+          />
+          {/* <Button
             style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
             onClick={this.handleSubmit}
             loading={this.state.loading}
           >
             Submit
-          </Button>
+          </Button> */}
         </Modal.Actions>
       </>
     );
