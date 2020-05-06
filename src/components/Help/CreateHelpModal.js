@@ -7,10 +7,7 @@ import {
   Grid,
   Table,
   Accordion,
-  Header,
-  Image,
 } from "semantic-ui-react";
-import _ from "lodash";
 
 export default class CreateHelpModal extends React.Component {
   state = { open: false };

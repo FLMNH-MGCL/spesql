@@ -4,12 +4,10 @@ import { mapStateToProps, mapDispatchToProps } from "../../redux/mapFunctions";
 import { parseDate } from "../../functions/queryChecks";
 import {
   Button,
-  Checkbox,
   Icon,
   Table,
   Container,
   Loader,
-  Dimmer,
   Segment,
   Header,
 } from "semantic-ui-react";
@@ -111,7 +109,7 @@ function AdminPortal(props) {
     if (!tables) {
       getTables();
     }
-  });
+  }, [tables, users]);
 
   function renderUserTable() {
     if (!users) return; // safety check

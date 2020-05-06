@@ -11,9 +11,8 @@ import {
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
 import CreateHelpModal from "../Help/CreateHelpModal";
-import { checkSpecimen, checkField } from "../../functions/queryChecks";
+import { checkField } from "../../functions/queryChecks";
 import {
-  familyControl,
   identificationQualifierControl,
   samplingProtocolControl,
   dispositionControl,
@@ -23,7 +22,7 @@ import {
   sexControl,
   countryControl,
   yesOrNo,
-  units,
+  // units,
 } from "../Query/QueryConstants/constants";
 import ErrorTerminal from "../Query/QueryTerminals/ErrorTerminal";
 

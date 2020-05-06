@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal } from "semantic-ui-react";
 import { UPDATE } from "./QueryTypes";
-import OutsideClickHandler from "../utils/OutsideClickHandler";
+// import OutsideClickHandler from "../utils/OutsideClickHandler";
 
 export default function CreateUpdateModal({ open, props, closeModal }) {
   return (

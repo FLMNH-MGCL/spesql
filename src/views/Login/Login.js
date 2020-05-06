@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Form,
-  Grid,
   Input,
   Button,
   Message,
@@ -113,7 +112,6 @@ function Login(props) {
               justifySelf: "center",
               marginBottom: "2rem",
               textAlign: "center",
-              marginBottom: "2rem",
             }}
           >
             The database management application for the Florida Museum of

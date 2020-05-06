@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Button,
-  Grid,
   Form,
   Input,
   Select,
@@ -21,7 +20,7 @@ import {
   parseMeasurement,
   parseRawMonth,
 } from "../../../functions/queryChecks";
-import { runSingleInsert } from "../../../functions/queries";
+// import { runSingleInsert } from "../../../functions/queries";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 
 import {
@@ -65,7 +64,6 @@ export default class FormInsert extends React.Component {
       identifiedBy: "",
       identifiedByLast: "",
       identifiedByFirst: "",
-      dateIdentified: "",
       dateIdentified: "",
       verbatimDate: "",
       collectedYear: "",
@@ -512,17 +510,14 @@ export default class FormInsert extends React.Component {
       specificEpithet,
       infraspecificEpithet,
       identificationQualifier,
-      recordedBy,
       recordedByFirst,
       recordedByLast,
-      identifiedBy,
       identifiedByFirst,
       identifiedByLast,
       dateIdentified,
       verbatimDate,
       collectedYear,
       collectedMonth,
-      collectedDay,
       sex,
       lifeStage,
       habitat,
@@ -545,7 +540,6 @@ export default class FormInsert extends React.Component {
       georeferencedBy,
       disposition,
       isLoaned,
-      loanInfo,
       preparations,
       freezer,
       rack,
@@ -556,7 +550,6 @@ export default class FormInsert extends React.Component {
       withholdData,
       reared,
       fieldNotes,
-      collectors,
       numCollectors,
     } = this.state;
 

@@ -1,15 +1,10 @@
 import React, { Component } from "react";
-import { Menu, Dropdown, Accordion, Button } from "semantic-ui-react";
-import SearchFilter from "../Search/SearchFilter";
-import DBSearch from "../Search/DBSearch";
-// import SortCollection from "../CollectionList/SortCollection";
-// import InsertDocument from "../InsertDocument/InsertDocument";
+import { Menu, Dropdown } from "semantic-ui-react";
 import InsertMenu from "../InsertDocument/InsertMenu";
 import { Link } from "react-router-dom";
 import DownloadDB from "../DownloadDB/DownloadDB";
 import QueryMenu from "../Query/QueryMenu";
 import Logout from "../Logout/Logout";
-import { currentUser } from "../../functions/queries";
 
 export default class Header extends Component {
   constructor(props) {

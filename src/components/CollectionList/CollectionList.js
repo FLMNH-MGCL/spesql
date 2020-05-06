@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Table, Button, Loader, Icon } from "semantic-ui-react";
 import CreateHelpModal from "../Help/CreateHelpModal";
 import _ from "lodash";
@@ -277,7 +277,7 @@ export default class CollectionList extends React.Component {
   };
 
   handleSort = (clickedColumn) => () => {
-    const { data, column, direction } = this.state;
+    const { direction } = this.state;
 
     if (direction === null) {
       this.sortList(clickedColumn, "ascending");

@@ -94,10 +94,15 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
           return true;
         }
         break;
+
+      default:
+        return { content: `Unknown field ${field}.` };
     }
   };
 
-  const finalCheck = () => {};
+  // const finalCheck = () => {
+  //   console.log("todo");
+  // };
 
   const handleSubmit = async (e) => {
     let hasError = false;

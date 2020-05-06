@@ -5,7 +5,7 @@ import CreateManualModal from "./CreateManualModal";
 import "./InsertDocument.css";
 
 export default function InsertMenu(props) {
-  const [open, toggle] = useState(false);
+  // const [open, toggle] = useState(false);
   const [showPaste, togglePaste] = useState(false);
   const [showManual, toggleManual] = useState(false);
 
@@ -42,9 +42,7 @@ export default function InsertMenu(props) {
         closeOnChange
         floating
       >
-        <Dropdown.Menu
-          onMouseLeave={() => setTimeout(() => toggle(false), 100)}
-        >
+        <Dropdown.Menu>
           <Dropdown.Header icon="upload" content="Select insert method" />
           <Dropdown.Item
             icon="paste"

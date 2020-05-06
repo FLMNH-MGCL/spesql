@@ -1,15 +1,11 @@
 import React from "react";
 import {
   Button,
-  Grid,
   Form,
   TextArea,
   Message,
   Modal,
   Divider,
-  Segment,
-  Header,
-  Icon,
 } from "semantic-ui-react";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 import CreateHelpModal from "../../Help/CreateHelpModal";

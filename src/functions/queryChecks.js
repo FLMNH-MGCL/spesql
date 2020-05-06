@@ -6,7 +6,7 @@ import {
   tubeSizeControl,
   lifeStageControl,
   sexControl,
-  setCountOptions,
+  // setCountOptions,
   countryControl,
   geodeticDatumControl,
   yesOrNo,
@@ -351,7 +351,7 @@ export const capsChecks = (fieldName, fieldValue, upperFirst) => {
   }
 
   if (correctValue !== fieldValue) {
-    let randomError = true;
+    // let randomError = true;
     let arr = [];
     if (fieldValue.indexOf(" ") < 0 && fieldValue.indexOf("-") > -1) {
       arr = fieldValue.split("-");

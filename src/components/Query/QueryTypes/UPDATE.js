@@ -301,6 +301,9 @@ export default class UPDATE extends React.Component {
           };
         }
         break;
+
+      default:
+        return { content: `Error in set: Unknown field ${setField}` };
     }
   };
 
@@ -343,6 +346,11 @@ export default class UPDATE extends React.Component {
           };
         }
         break;
+
+      default:
+        return {
+          content: `Error in condition: Unknown field ${conditionalField}`,
+        };
     }
   };
 

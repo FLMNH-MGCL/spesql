@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { Button, Icon, Modal, Divider, Dropdown } from "semantic-ui-react";
-import { SELECT, UPDATE, COUNT } from "./QueryTypes";
+import { Button, Icon, Dropdown } from "semantic-ui-react";
 import CreateSelectModal from "./CreateSelectModal";
 import CreateCountModal from "./CreateCountModal";
 import "./QueryGrid.css";
-import UPDATE_BATCH from "./QueryTypes/UPDATE_BATCH";
 import CreateUpdateModal from "./CreateUpdateModal";
 
 export default function QueryMenu(props) {

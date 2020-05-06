@@ -90,7 +90,7 @@ export default function EditUserModal({
   const getChanges = () => {
     if (!selected) return [];
 
-    let changes = [];
+    // let changes = [];
     const user = selected;
     let newUser = user;
 
@@ -136,6 +136,11 @@ export default function EditUserModal({
         type: "success",
         message: `Sucessfully deleted user ${username}`,
       });
+    } else {
+      createNotification({
+        type: "error",
+        message: "Failed to delete user.",
+      });
     }
   };
 
@@ -147,7 +152,7 @@ export default function EditUserModal({
   const updateUser = async (e) => {
     // get user and get changes
     // const user = selected;
-    const changes = getChanges();
+    // const changes = getChanges();
 
     let hasError = false;
 
@@ -173,7 +178,7 @@ export default function EditUserModal({
     // console.log("cant do this yet :)");
 
     // update user
-    const res = await axios.post("/api/admin/update-user", changes);
+    // const res = await axios.post("/api/admin/update-user", changes);
     // notify
   };
 

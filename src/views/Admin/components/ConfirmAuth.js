@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, Input, Container, Icon } from "semantic-ui-react";
+import { Button, Modal, Form, Input, Container } from "semantic-ui-react";
 
 export default function ({ checkAuth, handleSubmit, buttonStyle }) {
   const [username, setUsername] = useState("");

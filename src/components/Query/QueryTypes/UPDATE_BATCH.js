@@ -1,21 +1,12 @@
 import React from "react";
-import {
-  Button,
-  Grid,
-  Form,
-  Input,
-  Select,
-  Checkbox,
-  Message,
-  Header,
-} from "semantic-ui-react";
-import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
-import {
-  updateQueryOption,
-  headerSelection,
-  setOperatorOptions,
-  setCountOptions,
-} from "../QueryConstants/constants";
+import { Grid, Message, Header } from "semantic-ui-react";
+// import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
+// import {
+//   updateQueryOption,
+//   headerSelection,
+//   setOperatorOptions,
+//   setCountOptions,
+// } from "../QueryConstants/constants";
 
 export default class UPDATE_BATCH extends React.Component {
   render() {

@@ -11,7 +11,7 @@ import {
   Popup,
 } from "semantic-ui-react";
 import ConfirmAuth from "./ConfirmAuth";
-import axios from "axios";
+// import axios from "axios";
 
 const ACCESS_LEVELS = [
   { key: "Guest", text: "Guest", value: "guest" },

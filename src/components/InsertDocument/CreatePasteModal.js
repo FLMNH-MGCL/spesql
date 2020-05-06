@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Modal, Divider } from "semantic-ui-react";
+import React from "react";
+import { Modal } from "semantic-ui-react";
 import CSVInsert from "./InsertTypes/CSVInsert";
 import "./../../assets/globals.css";
 

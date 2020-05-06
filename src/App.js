@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Home from "./views/Home/Home";
 import NotFound from "./views/NotFound";
 import Login from "./views/Login/Login";
 import About from "./views/About/About";
-// import ProtectedRoute from './components/Auth/ProtectedRoute'
 import reducer from "./redux/reducer";
 import { Provider } from "react-redux";
 import { createStore } from "redux";

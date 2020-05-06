@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal } from "semantic-ui-react";
 import FormInsert from "./InsertTypes/FormInsert";
-import OutsideClickHandler from "../utils/OutsideClickHandler";
 
 export default function CreatePasteModal({ props, open, closeModal }) {
   return (
