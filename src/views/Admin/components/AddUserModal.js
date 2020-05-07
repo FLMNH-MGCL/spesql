@@ -28,6 +28,7 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
   const [accessLevel, setAccessLevel] = useState("guest");
   const [understood, setUnderstood] = useState(false);
   const [isFetching, setFetching] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
   const resetState = () => {
     setOpen(false);
@@ -211,7 +212,15 @@ export default function AddUserModal({ users, checkAuth, createNotification }) {
           <Form.Group>
             <Form.Field
               width={11}
+              icon={
+                <Icon
+                  name={showPass ? "eye" : "eye slash"}
+                  link
+                  onClick={() => setShowPass(!showPass)}
+                />
+              }
               control={Input}
+              type={showPass ? "text" : "password"}
               value={password}
               onChange={(e, { value }) => setPassword(value)}
               error={errorChecks("password")}
