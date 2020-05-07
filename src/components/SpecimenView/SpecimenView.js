@@ -3,8 +3,47 @@ import { Card, Image, Grid, List } from "semantic-ui-react";
 import "./SpecimenView.css";
 import DeleteDocument from "../DeleteDocument/DeleteDocument";
 import UpdateDocument from "../UpdateDocument/UpdateDocument";
+import axios from "axios";
 
 class SpecimenView extends React.Component {
+  async checkAuth(user, password, callback) {
+    if (this.props.userData.username !== user) {
+      // attempting auth with diff account
+      this.props.notify({
+        type: "error",
+        message:
+          "Attempting authentication with different account than logged in account.",
+      });
+      return;
+    } else if (
+      this.props.userData.privilege_level !== "admin" &&
+      this.props.userData.privilege_level !== "manager"
+    ) {
+      // this should NEVER happen, however this is a sanity check
+      this.props.notify({ type: "error", message: "Access denied!" });
+
+      // forcibly log out
+      this.props.logout();
+      return;
+    }
+
+    const authData = await axios.post("/api/login/", {
+      user: user,
+      password: password,
+    });
+
+    // console.log(authData);
+
+    if (authData.data.err || authData.data.authed === false) {
+      // credentials did not match
+      this.props.notify({ type: "error", message: authData.data.err });
+    } else {
+      // allow whatever command to proceed
+      this.props.notify({ type: "success", message: authData.data.message });
+      callback();
+    }
+  }
+
   renderImage = (selectedSpecimen) => {
     // attempt fetch of image from somewhere
     // imageUrl = ...
@@ -20,6 +59,8 @@ class SpecimenView extends React.Component {
           runQuery={this.props.runQuery}
           disabled={this.props.disabled}
           userData={this.props.userData}
+          notify={this.props.notify}
+          checkAuth={this.checkAuth.bind(this)}
         />
         <UpdateDocument
           selectedSpecimen={selectedSpecimen}
@@ -31,6 +72,7 @@ class SpecimenView extends React.Component {
           userData={this.props.userData}
           errorMessages={this.props.errorMessages}
           updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
+          checkAuth={this.checkAuth.bind(this)}
         />
       </>
     );
@@ -321,7 +363,7 @@ class SpecimenView extends React.Component {
         <>
           <Grid columns="equal" padded>
             <Grid.Column style={{ maxHeight: "80vh", overflowY: "scroll" }}>
-              <div style={{ display: "block" }}>
+              <div style={{ display: "inline-block" }}>
                 <UpdateDocument
                   selectedSpecimen={selectedSpecimen}
                   currentQuery={this.props.currentQuery}
@@ -332,12 +374,17 @@ class SpecimenView extends React.Component {
                   errorMessages={this.props.errorMessages}
                   updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
                   notify={this.props.notify}
+                  checkAuth={this.checkAuth.bind(this)}
                 />
+              </div>
+              <div style={{ display: "inline-block" }}>
                 <DeleteDocument
                   target={selectedSpecimen.id}
                   runQuery={this.props.runQuery}
                   disabled={this.props.disabled}
                   userData={this.props.userData}
+                  notify={this.props.notify}
+                  checkAuth={this.checkAuth.bind(this)}
                 />
               </div>
               {list}

@@ -25,6 +25,7 @@ import {
   // units,
 } from "../Query/QueryConstants/constants";
 import ErrorTerminal from "../Query/QueryTerminals/ErrorTerminal";
+import ConfirmAuth from "../../views/Admin/components/ConfirmAuth";
 
 class UpdateDocument extends React.Component {
   constructor(props) {
@@ -1223,19 +1224,23 @@ class UpdateDocument extends React.Component {
                         </Table.Row>
                       </Table.Body>
                     </Table>
-                    <div style={{ float: "right" }}>
-                      <CreateHelpModal queryType="UPDATE_SINGLE" />
-                      <Button onClick={this.onSubmit} color="red">
-                        UPDATE
-                      </Button>
-                    </div>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
-              {this.props.errorMessages.updateError
-                ? this.renderErrorTerminal()
-                : null}
             </Modal.Content>
+            <Modal.Actions>
+              <CreateHelpModal queryType="UPDATE_SINGLE" />
+              <ConfirmAuth
+                checkAuth={this.props.checkAuth}
+                handleSubmit={this.onSubmit}
+              />
+              {/* <Button onClick={this.onSubmit} color="red">
+                  UPDATE
+                </Button> */}
+            </Modal.Actions>
+            {this.props.errorMessages.updateError
+              ? this.renderErrorTerminal()
+              : null}
           </Modal>
         </React.Fragment>
       );
