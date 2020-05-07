@@ -33,6 +33,7 @@ export default function EditUserModal({
   const [password, setPassword] = useState("");
   const [accessLevel, setAccessLevel] = useState("");
   const [understood, setUnderstood] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
   const userSelection = users
     ? users
@@ -55,6 +56,7 @@ export default function EditUserModal({
     setUsername("");
     setPassword("");
     setAccessLevel("");
+    setShowPass(false);
     setUnderstood(false);
   }
 
@@ -221,11 +223,20 @@ export default function EditUserModal({
         <Form.Group>
           <Form.Field
             width={11}
+            icon={
+              <Icon
+                name={showPass ? "eye" : "eye slash"}
+                link
+                onClick={() => setShowPass(!showPass)}
+              />
+            }
             control={Input}
+            type={showPass ? "text" : "password"}
             value={password}
             onChange={(e, { value }) => setPassword(value)}
             // error={errorChecks("password")}
           />
+          {/* <Icon name="eye" /> */}
           <Form.Field width={5}>
             <Button color="yellow" onClick={() => generateSecurePass()}>
               Generate Strong Password
