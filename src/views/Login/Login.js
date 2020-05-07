@@ -7,6 +7,7 @@ import {
   Segment,
   Header,
   Image,
+  Icon,
 } from "semantic-ui-react";
 import { Redirect } from "react-router-dom";
 import "./Login.css";
@@ -24,6 +25,7 @@ function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState();
+  const [showPass, setShowPass] = useState(false);
   //const [userData, setUserData] = useState();
   // const [sucess, setSucess] = useState(false)
 
@@ -124,6 +126,7 @@ function Login(props) {
             <Form.Group style={{ padding: ".5rem" }}>
               <Form.Field
                 control={Input}
+                icon="user"
                 placeholder="Username"
                 label="Username"
                 name="username"
@@ -134,7 +137,14 @@ function Login(props) {
             <Form.Group style={{ padding: ".5rem" }}>
               <Form.Field
                 control={Input}
-                type="password"
+                icon={
+                  <Icon
+                    name={showPass ? "eye" : "eye slash"}
+                    link
+                    onClick={() => setShowPass(!showPass)}
+                  />
+                }
+                type={showPass ? "text" : "password"}
                 placeholder="Password"
                 label="Password"
                 name="password"
