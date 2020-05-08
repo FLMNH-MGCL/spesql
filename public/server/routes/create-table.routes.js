@@ -29,8 +29,9 @@ module.exports = function (connection, app) {
     connection.query(command, (err, data) => {
       if (err) {
         console.log(err);
+        res.json({ error: "Error in creating table", sqlMessage: err });
       } else {
-        console.log("sucessfully created table");
+        console.log("Sucessfully created table");
         res.status(201);
         res.json({ data: "Sucessfully created table" });
       }

@@ -36,6 +36,10 @@ require("./routes/get-user.routes")(connection, app);
 // ADMIN ROUTES
 require("./routes/create-user.routes")(connection, app);
 require("./routes/update-user.routes")(connection, app);
+require("./routes/create-table.routes")(connection, app);
+require("./routes/delete-table.routes")(connection, app);
+require("./routes/register-table.routes")(connection, app);
+require("./routes/unregister-table.routes")(connection, app);
 require("./routes/delete-user.routes")(connection, app);
 require("./routes/list-tables-admin.routes")(connection, app);
 // require("./routes/shutdown.routes")(connection, app);

@@ -32,6 +32,28 @@ export default function AddTableModal({
     setHasError(false);
   }
 
+  async function registerTable(tableAttributes) {
+    // axios to register table to admin table of tables
+    const registerResponse = await axios.post("/api/admin/register-table/", {
+      tableAttributes: tableAttributes,
+    });
+
+    console.log(registerResponse);
+    if (registerResponse.data.data) {
+      createNotification({
+        type: "success",
+        message: registerResponse.data.data,
+      });
+      return true;
+    } else {
+      createNotification({
+        type: "error",
+        message: registerResponse.data.sqlMessage.sqlMessage,
+      });
+      return false;
+    }
+  }
+
   async function handleSubmit() {
     if (hasError) {
       createNotification({
@@ -45,7 +67,7 @@ export default function AddTableModal({
       tbl_name: name,
       minimum_access_update: minUp,
       minimum_access_insert: minIns,
-      minimum_accesss_select: minSel,
+      minimum_access_select: minSel,
     };
 
     // axios to create table
@@ -53,32 +75,28 @@ export default function AddTableModal({
       tableName: name,
     });
 
+    console.log(creationResponse);
+
     if (creationResponse.data.data) {
       createNotification({
         type: "success",
         message: creationResponse.data.data,
       });
+
+      const registered = await registerTable(tableAttributes);
+
+      if (!registered) {
+        // this should never happen
+        createNotification({
+          type: "warning",
+          message:
+            "Could not register table to interactables. Please contact Aaron for support",
+        });
+      }
     } else {
       createNotification({
         type: "error",
         message: creationResponse.data.err.sqlMessage,
-      });
-    }
-
-    // axios to register table to admin table of tables
-    const registerResponse = await axios.post("/api/admin/register-table/", {
-      tableAttributes,
-    });
-
-    if (registerResponse.data.data) {
-      createNotification({
-        type: "success",
-        message: registerResponse.data.data,
-      });
-    } else {
-      createNotification({
-        type: "error",
-        message: registerResponse.data.err.sqlMessage,
       });
     }
   }
