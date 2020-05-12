@@ -8,7 +8,7 @@ class DownloadDB extends React.Component {
       return (
         <Button
           icon
-          labelPosition="left"
+          labelPosition="right"
           disabled={this.props.disabled}
           size="small"
         >

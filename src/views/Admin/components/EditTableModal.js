@@ -11,7 +11,7 @@ import {
   Popup,
 } from "semantic-ui-react";
 import ConfirmAuth from "./ConfirmAuth";
-// import axios from "axios";
+import axios from "axios";
 
 const ACCESS_LEVELS = [
   { key: "Guest", text: "Guest", value: "guest" },
@@ -23,6 +23,7 @@ export default function EditTableModal({
   tables,
   checkAuth,
   createNotification,
+  refresh,
 }) {
   const [open, setOpen] = useState(false);
   const [selected, select] = useState();
@@ -44,7 +45,14 @@ export default function EditTableModal({
       })
     : [];
 
-  function resetState() {}
+  function resetState() {
+    select(undefined);
+    setName("");
+    setMinSel("");
+    setMinIns("");
+    setMinUp("");
+    setUnderstood(false);
+  }
 
   function initForm(table) {
     setName(table.tbl_name);
@@ -82,11 +90,60 @@ export default function EditTableModal({
     });
   }
 
+  // TODO: add sql messages to logs
   function handleDelete() {
-    createNotification({
-      type: "warning",
-      message: "I cant do this yet! (but soon!!)",
+    let deleted = false;
+    let unregistered = false;
+
+    // attempt deletion
+    const deleteData = axios.post("/api/admin/delete-table/", {
+      tbl_name: selected.tbl_name,
     });
+
+    if (deleteData.error) {
+      // uh oh
+      console.log(deleteData.error);
+      return;
+    } else {
+      deleted = true;
+    }
+
+    // attempt unregister
+    const unregisterData = axios.post("/api/admin/unregister-table/", {
+      tbl_name: selected.tbl_name,
+    });
+
+    if (unregisterData.error) {
+      // uh oh
+      console.log(unregisterData.error);
+      return;
+    } else {
+      unregistered = true;
+    }
+
+    if (deleted && unregistered) {
+      // everything is good
+      createNotification({
+        type: "success",
+        message:
+          "Deletion and unregistration successful! Table is now in the void.",
+      });
+      resetState();
+      refresh();
+    } else if (deleted && !unregistered) {
+      // could not unregister table, need to contact me to manually unregister
+      createNotification({
+        type: "warning",
+        message:
+          "Deletion succeeded, unregistration failed. Please check logs and contact Aaron for support.",
+      });
+    } else {
+      createNotification({
+        type: "error",
+        message:
+          "Deletion and unregistration of table failed. Please check logs.",
+      });
+    }
   }
 
   function renderEditForm() {

@@ -251,12 +251,14 @@ function AdminPortal(props) {
                     tables={tables}
                     checkAuth={checkAuth}
                     createNotification={createNotification}
+                    refresh={() => getTables()}
                   />
 
                   <EditTableModal
                     tables={tables}
                     checkAuth={checkAuth}
                     createNotification={createNotification}
+                    refresh={() => getTables()}
                   />
                   <Button
                     size="small"

@@ -570,7 +570,7 @@ export default class FormInsert extends React.Component {
             </p>
           </Message>
           <Form padded="vertically" onSubmit={this.handleSubmit}>
-            <div className="scrolling" style={{ minHeight: "55vh" }}>
+            <div style={{ minHeight: "55vh" }}>
               <Form.Group widths="equal">
                 <Form.Field
                   id="form-input-control-mgcl"

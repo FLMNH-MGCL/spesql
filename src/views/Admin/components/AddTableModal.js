@@ -13,6 +13,7 @@ export default function AddTableModal({
   tables,
   checkAuth,
   createNotification,
+  refresh,
 }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
@@ -40,10 +41,10 @@ export default function AddTableModal({
 
     console.log(registerResponse);
     if (registerResponse.data.data) {
-      createNotification({
-        type: "success",
-        message: registerResponse.data.data,
-      });
+      // createNotification({
+      //   type: "success",
+      //   message: registerResponse.data.data,
+      // });
       return true;
     } else {
       createNotification({
@@ -77,26 +78,29 @@ export default function AddTableModal({
 
     console.log(creationResponse);
 
-    if (creationResponse.data.data) {
-      createNotification({
-        type: "success",
-        message: creationResponse.data.data,
-      });
-
-      const registered = await registerTable(tableAttributes);
-
-      if (!registered) {
-        // this should never happen
-        createNotification({
-          type: "warning",
-          message:
-            "Could not register table to interactables. Please contact Aaron for support",
-        });
-      }
-    } else {
+    if (creationResponse.data.error) {
+      // short curcuit function
       createNotification({
         type: "error",
-        message: creationResponse.data.err.sqlMessage,
+        message: creationResponse.data.error.sqlMessage,
+      });
+
+      return;
+    }
+
+    const registeredResponse = await registerTable(tableAttributes);
+
+    if (!registeredResponse) {
+      // this should never happen
+      createNotification({
+        type: "warning",
+        message:
+          "Table successfully created, however could not register to interactables. Please contact Aaron for support and check the logs.",
+      });
+    } else {
+      createNotification({
+        type: "success",
+        message: "Successfully created and registered table!",
       });
     }
   }
