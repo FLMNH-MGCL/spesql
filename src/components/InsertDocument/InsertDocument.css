@@ -22,3 +22,7 @@
 .pad-top {
   padding-top: 1rem;
 }
+
+.date-picker-correction.field {
+  display: inline !important;
+}

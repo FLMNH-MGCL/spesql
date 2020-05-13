@@ -7,10 +7,16 @@ import {
   Message,
   TextArea,
   Modal,
+  Header,
+  Dropdown,
+  Icon,
+  Segment,
+  Checkbox,
   // Checkbox,
   // Dropdown,
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
+// import "react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css";
 import {
   // checkManualEntry,
   // checkRandomCaps,
@@ -22,6 +28,11 @@ import {
 } from "../../../functions/queryChecks";
 // import { runSingleInsert } from "../../../functions/queries";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
+// import DatePicker from "react-datepicker";
+
+// import "react-datepicker/dist/react-datepicker.css";
+
+import "../InsertDocument.css";
 
 import {
   familyControl,
@@ -36,6 +47,7 @@ import {
   countryControl,
   yesOrNo,
   units,
+  conditionalCountOptions,
 } from "../../Query/QueryConstants/constants";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
@@ -62,6 +74,7 @@ export default class FormInsert extends React.Component {
       recordedBy: "",
       recordedByFirst: "",
       recordedByLast: "",
+      otherCollectorsPresent: false,
       identifiedBy: "",
       identifiedByLast: "",
       identifiedByFirst: "",
@@ -74,6 +87,7 @@ export default class FormInsert extends React.Component {
       lifeStage: "",
       habitat: "",
       occurrenceRemarks: "",
+      isMolecular: false,
       molecularOccurrenceRemarks: "",
       samplingProtocol: "",
       country: "",
@@ -91,7 +105,7 @@ export default class FormInsert extends React.Component {
       verbatimLongitude: "",
       georeferencedBy: "",
       disposition: "",
-      isLoaned: "N",
+      isLoaned: false,
       loanInstitution: "",
       loaneeLast: "",
       loaneeFirst: "",
@@ -315,6 +329,10 @@ export default class FormInsert extends React.Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
+  handleChangeDate = (date, { name }) => {
+    this.setState({ [name]: date });
+  };
+
   handleCollectorChange = (e, { name, value, id }) => {
     id = parseInt(id);
     const newCollector = {
@@ -467,8 +485,7 @@ export default class FormInsert extends React.Component {
         />
       </Form.Group>
       <Form.Group widths="equal">
-        <Form.Field
-          control={SemanticDatepicker}
+        <SemanticDatepicker
           label="loanReturnDate"
           placeholder="YYYY-MM-DD"
           name="loanReturnDate"
@@ -479,8 +496,22 @@ export default class FormInsert extends React.Component {
           // )}
           onChange={this.handleChange}
         />
+        <SemanticDatepicker
+          label="loanStartDate"
+          placeholder="YYYY-MM-DD"
+          name="loanStartDate"
+          value={this.state.loanStartDate}
+          // error={this.checkBasicPreSubmit(
+          //     "expectedReturn",
+          //     expectedReturn
+          // )}
+          onChange={this.handleChange}
+        />
+      </Form.Group>
+      <Form.Group>
         <Form.Field
           control={TextArea}
+          width="16"
           label="loanRemarks"
           name="loanRemarks"
           value={this.state.loanRemarks}
@@ -523,6 +554,7 @@ export default class FormInsert extends React.Component {
       lifeStage,
       habitat,
       occurrenceRemarks,
+      isMolecular,
       molecularOccurrenceRemarks,
       samplingProtocol,
       country,
@@ -551,8 +583,403 @@ export default class FormInsert extends React.Component {
       withholdData,
       reared,
       fieldNotes,
+      otherCollectorsPresent,
       numCollectors,
     } = this.state;
+
+    return (
+      <>
+        <Modal.Header>Form Insertion</Modal.Header>
+        <Modal.Content>
+          <Message>
+            This form is for the manual entry of each field of a single specimen
+            to be inserted into the databse.
+          </Message>
+          <Form>
+            <Header size="small">Record / Identification</Header>
+            <Segment>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>catalogNumber</label>
+                  <Input placeholder="MGCL_######" />
+                </Form.Field>
+                <Form.Field>
+                  <label>recordNumber</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>otherCatalogNumber</label>
+                  <Input placeholder="LEP#####" />
+                </Form.Field>
+              </Form.Group>
+            </Segment>
+
+            <Header size="small">Specimen Information</Header>
+            <Segment>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>order_</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>superfamily</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>family</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>subfamily</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>tribe</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>genus</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>subgenus</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>specificEpithet</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>infraspecificEpithet</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>sex</label>
+                  <Select
+                    options={sexControl}
+                    value={sex}
+                    placeholder="Select One"
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <label>lifeStage</label>
+                  <Select
+                    options={lifeStageControl}
+                    value={lifeStage}
+                    placeholder="Select One"
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <label>habitat</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Field>
+                  <label>samplingProtocol</label>
+                  <Select options={samplingProtocolControl} />
+                </Form.Field>
+                <Form.Field>
+                  <label>reared</label>
+                  <Select options={yesOrNo} />
+                </Form.Field>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Field width="16">
+                  <label>occurrenceRemarks</label>
+                  <TextArea />
+                </Form.Field>
+              </Form.Group>
+
+              <Form.Group inline>
+                <label>Molecular specimen?</label>
+                <Form.Checkbox
+                  label="Yes"
+                  checked={isMolecular}
+                  onClick={() => this.setState({ isMolecular: true })}
+                />
+                <Form.Checkbox
+                  label="No"
+                  checked={!isMolecular}
+                  onClick={() => this.setState({ isMolecular: false })}
+                />
+              </Form.Group>
+
+              {isMolecular && (
+                <Form.Group>
+                  <Form.Field width="16">
+                    <label>molecularOccurrenceRemarks</label>
+                    <TextArea />
+                  </Form.Field>
+                </Form.Group>
+              )}
+            </Segment>
+
+            <Header size="small">Collection Information</Header>
+            <Segment>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>identificationQualifier</label>
+                  <Select options={identificationQualifierControl} />
+                </Form.Field>
+                <Form.Field>
+                  <label>recordedBy (last name)</label>
+                  <Input placeholder="Last" />
+                </Form.Field>
+                <Form.Field>
+                  <label>recordedBy (first name)</label>
+                  <Input placeholder="First" />
+                </Form.Field>
+              </Form.Group>
+
+              <Form.Group
+                inline
+                style={{ paddingTop: ".5rem", paddingBottom: ".5rem" }}
+              >
+                <label>Were there other collectors?</label>
+                <Form.Checkbox
+                  label="Yes"
+                  checked={otherCollectorsPresent}
+                  onClick={() =>
+                    this.setState({ otherCollectorsPresent: true })
+                  }
+                />
+                <Form.Checkbox
+                  label="No"
+                  checked={!otherCollectorsPresent}
+                  onClick={() =>
+                    this.setState({ otherCollectorsPresent: false })
+                  }
+                />
+
+                {otherCollectorsPresent && (
+                  <Form.Field inline style={{ marginLeft: "1rem" }}>
+                    <label>Number of additional collectors</label>
+                    <Select
+                      options={setCountOptions}
+                      value={numCollectors}
+                      name="numCollectors"
+                      onChange={this.handleCollectorCountChange}
+                    />
+                  </Form.Field>
+                )}
+              </Form.Group>
+
+              {otherCollectorsPresent && this.renderCollectorForm()}
+
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>identifiedBy (last name)</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>identifiedBy (first name)</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <SemanticDatepicker label="dateIdentified" />
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>verbatimDate</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>collectedYear</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>collectedMonth</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>collectedDay</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>preparations</label>
+                  <Select options={preparationsControl} />
+                </Form.Field>
+                <Form.Field>
+                  <label>freezer</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>rack</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>box</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>tubeSize</label>
+                  <Select options={tubeSizeControl} />
+                </Form.Field>
+              </Form.Group>
+
+              <Form.Group
+                inline
+                style={{ paddingTop: ".5rem", paddingBottom: ".5rem" }}
+              >
+                <label>Is this specimen on loan?</label>
+                <Form.Checkbox
+                  label="Yes"
+                  checked={isLoaned}
+                  onClick={() => this.setState({ isLoaned: true })}
+                />
+                <Form.Checkbox
+                  label="No"
+                  checked={!isLoaned}
+                  onClick={() => this.setState({ isLoaned: false })}
+                />
+              </Form.Group>
+
+              {isLoaned && this.renderLoanForm()}
+
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>disposition</label>
+                  <Select
+                    options={dispositionControl}
+                    placeholder="Select One"
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <label>Should this specimen data be witheld?</label>
+                  <Form.Checkbox
+                    label="Yes"
+                    checked={this.state.withholdData}
+                    onClick={() => this.setState({ withholdData: true })}
+                  />
+                  <Form.Checkbox
+                    label="No"
+                    checked={!this.state.withholdData}
+                    onClick={() => this.setState({ withholdData: false })}
+                  />
+                </Form.Field>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Field width="16">
+                  <label>fieldNotes</label>
+                  <TextArea placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Field width="16">
+                  <label>associatedSequences</label>
+                  <TextArea placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Field width="16">
+                  <label>associatedReferences</label>
+                  <TextArea placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+            </Segment>
+
+            <Header size="small">Locality Information</Header>
+            <Segment>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>country</label>
+                  <Select options={countryControl} />
+                </Form.Field>
+                <Form.Field>
+                  <label>stateProvince</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>county</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>municipality</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>locality</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>geodeticDatum</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>decimalLatitude</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>decimalLongitude</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>verbatimLatitude</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+                <Form.Field>
+                  <label>verbatimLongitude</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field>
+                  <label>elevation</label>
+                  <Input
+                    labelPosition="right"
+                    label={
+                      <Dropdown basic defaultValue="meters" options={units} />
+                    }
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <label>coordinateUncertainty</label>
+                  <Input
+                    labelPosition="right"
+                    label={
+                      <Dropdown basic defaultValue="meters" options={units} />
+                    }
+                  />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group>
+                <Form.Field>
+                  <label>georeferencedBy</label>
+                  <Input placeholder="ADDME" />
+                </Form.Field>
+              </Form.Group>
+            </Segment>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <CreateHelpModal />
+          <Button>Cancel</Button>
+          <Button>Submit</Button>
+        </Modal.Actions>
+      </>
+    );
 
     return (
       <React.Fragment>

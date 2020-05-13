@@ -222,7 +222,7 @@ export default class CSVInsert extends React.Component {
 
     return (
       <>
-        <Modal.Header>CSV Insert Query</Modal.Header>
+        <Modal.Header>CSV Insertion</Modal.Header>
         <Modal.Content>
           <Message>
             <Message.Header>Usage:</Message.Header>

@@ -13,62 +13,62 @@ import {
 } from "../components/Query/QueryConstants/constants";
 
 const correctHeaders = [
-  "catalogNumber",
-  "otherCatalogNumber",
-  "recordNumber",
-  "order_",
-  "superfamily",
-  "family",
-  "subfamily",
-  "tribe",
-  "genus",
-  "subgenus",
-  "specificEpithet",
-  "infraspecificEpithet",
-  "identificationQualifier",
-  "recordedBy",
-  "otherCollectors",
-  "identifiedBy",
-  "dateIdentified",
-  "verbatimDate",
-  "collectedYear",
-  "collectedMonth",
-  "collectedDay",
-  "sex",
-  "lifeStage",
-  "habitat",
-  "occurrenceRemarks",
-  "molecularOccurrenceRemarks",
-  "samplingProtocol",
-  "country",
-  "stateProvince",
-  "county",
-  "municipality",
-  "locality",
-  "elevationInMeters",
-  "decimalLatitude",
-  "decimalLongitude",
-  "geodeticDatum",
-  "coordinateUncertainty",
-  "verbatimLatitude",
-  "verbatimLongitude",
-  "georeferencedBy",
-  "disposition",
-  "isLoaned",
-  "loanInstitution",
-  "loaneeName",
-  "loanDate",
-  "loanReturnDate",
-  "preparations",
-  "freezer",
-  "rack",
-  "box",
-  "tubeSize",
-  "associatedSequences",
-  "associatedReferences",
-  "withholdData",
-  "reared",
-  "fieldNotes",
+  "catalogNumber", //
+  "otherCatalogNumber", //
+  "recordNumber", //
+  "order_", //
+  "superfamily", //
+  "family", //
+  "subfamily", //
+  "tribe", //
+  "genus", //
+  "subgenus", //
+  "specificEpithet", //
+  "infraspecificEpithet", //
+  "identificationQualifier", //
+  "recordedBy", //
+  "otherCollectors", //
+  "identifiedBy", //
+  "dateIdentified", //
+  "verbatimDate", //
+  "collectedYear", //
+  "collectedMonth", //
+  "collectedDay", //
+  "sex", //
+  "lifeStage", //
+  "habitat", //
+  "occurrenceRemarks", //
+  "molecularOccurrenceRemarks", //
+  "samplingProtocol", //
+  "country", //
+  "stateProvince", //
+  "county", //
+  "municipality", //
+  "locality", //
+  "elevationInMeters", //
+  "decimalLatitude", //
+  "decimalLongitude", //
+  "geodeticDatum", //
+  "coordinateUncertainty", //
+  "verbatimLatitude", //
+  "verbatimLongitude", //
+  "georeferencedBy", //
+  "disposition", //
+  "isLoaned", //
+  "loanInstitution", //
+  "loaneeName", //
+  "loanDate", //
+  "loanReturnDate", //
+  "preparations", //
+  "freezer", //
+  "rack", //
+  "box", //
+  "tubeSize", //
+  "associatedSequences", //
+  "associatedReferences", //
+  "withholdData", //
+  "reared", //
+  "fieldNotes", //
 ];
 
 export function checkHeaders(headers) {
