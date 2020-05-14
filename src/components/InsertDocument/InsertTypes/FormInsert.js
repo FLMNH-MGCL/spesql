@@ -12,6 +12,7 @@ import {
   Icon,
   Segment,
   Checkbox,
+  Progress,
   // Checkbox,
   // Dropdown,
 } from "semantic-ui-react";
@@ -57,7 +58,7 @@ export default class FormInsert extends React.Component {
     super(props);
 
     this.state = {
-      activePage: "Manual Insert",
+      page: 0,
       catalogNumber: "",
       recordNumber: "",
       otherCatalogNumber: "",
@@ -86,6 +87,7 @@ export default class FormInsert extends React.Component {
       sex: "",
       lifeStage: "",
       habitat: "",
+      hasRemarks: false,
       occurrenceRemarks: "",
       isMolecular: false,
       molecularOccurrenceRemarks: "",
@@ -162,6 +164,7 @@ export default class FormInsert extends React.Component {
       sex: "",
       lifeStage: "",
       habitat: "",
+      hasRemarks: false,
       occurrenceRemarks: "",
       molecularOccurrenceRemarks: "",
       samplingProtocol: "",
@@ -521,14 +524,44 @@ export default class FormInsert extends React.Component {
     </React.Fragment>
   );
 
-  render() {
-    if (!this.state.hasError && this.props.errorMessages.insertError !== null) {
-      this.setState({ hasError: true });
+  renderActions() {
+    const { page } = this.state;
+
+    if (page === 8) {
+      // render submit actions
+      return (
+        <>
+          <CreateHelpModal />
+          <Button>Cancel</Button>
+          <Button
+            disabled={page === 0}
+            onClick={() => this.paginate("backward")}
+          >
+            Go Back
+          </Button>
+          <Button>Submit</Button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <CreateHelpModal />
+          <Button>Cancel</Button>
+          <Button
+            disabled={page === 0}
+            onClick={() => this.paginate("backward")}
+          >
+            Go Back
+          </Button>
+          <Button onClick={() => this.paginate("forward")}>Continue</Button>
+        </>
+      );
     }
+  }
 
-    console.log(this.state);
-
+  renderPage() {
     const {
+      page,
       catalogNumber,
       recordNumber,
       otherCatalogNumber,
@@ -553,6 +586,7 @@ export default class FormInsert extends React.Component {
       sex,
       lifeStage,
       habitat,
+      hasRemarks,
       occurrenceRemarks,
       isMolecular,
       molecularOccurrenceRemarks,
@@ -587,117 +621,237 @@ export default class FormInsert extends React.Component {
       numCollectors,
     } = this.state;
 
-    return (
-      <>
-        <Modal.Header>Form Insertion</Modal.Header>
-        <Modal.Content>
-          <Message>
-            This form is for the manual entry of each field of a single specimen
-            to be inserted into the databse.
-          </Message>
-          <Form>
+    switch (page) {
+      case 0:
+        return (
+          <>
             <Header size="small">Record / Identification</Header>
             <Segment>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>catalogNumber</label>
-                  <Input placeholder="MGCL_######" />
-                </Form.Field>
-                <Form.Field>
-                  <label>recordNumber</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>otherCatalogNumber</label>
-                  <Input placeholder="LEP#####" />
-                </Form.Field>
+                <Form.Field
+                  control={Input}
+                  label="catalogNumber"
+                  placeholder="MGCL_######"
+                  name="catalogNumber"
+                  value={catalogNumber}
+                  error={this.checkBasicPreSubmit(
+                    "catalogNumber",
+                    catalogNumber
+                  )}
+                  onChange={this.handleChange}
+                />
+
+                <Form.Field
+                  control={Input}
+                  label="recordNumber"
+                  placeholder="ADDME"
+                  name="recordNumber"
+                  value={recordNumber}
+                  error={this.checkBasicPreSubmit("recordNumber", recordNumber)}
+                  onChange={this.handleChange}
+                />
+
+                <Form.Field
+                  control={Input}
+                  label="otherCatalogNumber"
+                  placeholder="LEP#####"
+                  name="otherCatalogNumber"
+                  value={otherCatalogNumber}
+                  error={this.checkBasicPreSubmit(
+                    "otherCatalogNumber",
+                    otherCatalogNumber
+                  )}
+                  onChange={this.handleChange}
+                />
               </Form.Group>
             </Segment>
-
+          </>
+        );
+      case 1:
+        return (
+          <>
             <Header size="small">Specimen Information</Header>
             <Segment>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>order_</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>superfamily</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>family</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
+                <Form.Field
+                  control={Input}
+                  label="order_"
+                  placeholder="ADDME"
+                  name="order_"
+                  value={order_}
+                  error={this.checkBasicPreSubmit("order_", order_)}
+                  onChange={this.handleChange}
+                />
+                <Form.Field
+                  control={Input}
+                  label="superfamily"
+                  placeholder="ADDME"
+                  name="superfamily"
+                  value={superfamily}
+                  error={this.checkBasicPreSubmit("superfamily", superfamily)}
+                  onChange={this.handleChange}
+                />
+                <Form.Field
+                  control={Input}
+                  label="family"
+                  placeholder="ADDME"
+                  name="family"
+                  value={family}
+                  error={this.checkBasicPreSubmit("family", family)}
+                  onChange={this.handleChange}
+                />
               </Form.Group>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>subfamily</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>tribe</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>genus</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
+                <Form.Field
+                  control={Input}
+                  label="subfamily"
+                  placeholder="ADDME"
+                  name="subfamily"
+                  value={subfamily}
+                  error={this.checkBasicPreSubmit("subfamily", subfamily)}
+                  onChange={this.handleChange}
+                />
+                <Form.Field
+                  control={Input}
+                  label="tribe"
+                  placeholder="ADDME"
+                  name="tribe"
+                  value={tribe}
+                  error={this.checkBasicPreSubmit("tribe", tribe)}
+                  onChange={this.handleChange}
+                />
+                <Form.Field
+                  control={Input}
+                  label="genus"
+                  placeholder="ADDME"
+                  name="genus"
+                  value={genus}
+                  error={this.checkBasicPreSubmit("genus", genus)}
+                  onChange={this.handleChange}
+                />
               </Form.Group>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>subgenus</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>specificEpithet</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>infraspecificEpithet</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
+                <Form.Field
+                  control={Input}
+                  label="subgenus"
+                  placeholder="ADDME"
+                  name="subgenus"
+                  value={subgenus}
+                  error={this.checkBasicPreSubmit("subgenus", subgenus)}
+                  onChange={this.handleChange}
+                />
+                <Form.Field
+                  control={Input}
+                  label="specificEpithet"
+                  placeholder="ADDME"
+                  name="specificEpithet"
+                  value={specificEpithet}
+                  error={this.checkBasicPreSubmit(
+                    "specificEpithet",
+                    specificEpithet
+                  )}
+                  onChange={this.handleChange}
+                />
+                <Form.Field
+                  control={Input}
+                  label="infraspecificEpithet"
+                  placeholder="ADDME"
+                  name="infraspecificEpithet"
+                  value={infraspecificEpithet}
+                  error={this.checkBasicPreSubmit(
+                    "infraspecificEpithet",
+                    infraspecificEpithet
+                  )}
+                  onChange={this.handleChange}
+                />
               </Form.Group>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>sex</label>
-                  <Select
-                    options={sexControl}
-                    value={sex}
-                    placeholder="Select One"
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <label>lifeStage</label>
-                  <Select
-                    options={lifeStageControl}
-                    value={lifeStage}
-                    placeholder="Select One"
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <label>habitat</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
+                <Form.Field
+                  control={Select}
+                  options={sexControl}
+                  label="sex"
+                  placeholder="Select One"
+                  name="sex"
+                  value={sex}
+                  error={this.checkBasicPreSubmit("sex", sex)}
+                  onChange={this.handleChange}
+                />
+                <Form.Field
+                  control={Select}
+                  options={lifeStageControl}
+                  label="lifeStage"
+                  placeholder="Select One"
+                  name="lifeStage"
+                  value={lifeStage}
+                  error={this.checkBasicPreSubmit("lifeStage", lifeStage)}
+                  onChange={this.handleChange}
+                />
+                <Form.Field
+                  control={Input}
+                  label="habitat"
+                  placeholder="ADDME"
+                  name="habitat"
+                  value={habitat}
+                  error={this.checkBasicPreSubmit("habitat", habitat)}
+                  onChange={this.handleChange}
+                />
               </Form.Group>
 
-              <Form.Group>
-                <Form.Field>
-                  <label>samplingProtocol</label>
-                  <Select options={samplingProtocolControl} />
-                </Form.Field>
-                <Form.Field>
-                  <label>reared</label>
-                  <Select options={yesOrNo} />
-                </Form.Field>
+              <Form.Group widths="equal">
+                <Form.Field
+                  control={Select}
+                  options={samplingProtocolControl}
+                  label="samplingProtocol"
+                  placeholder="Select One"
+                  name="samplingProtocol"
+                  value={samplingProtocol}
+                  error={this.checkBasicPreSubmit(
+                    "samplingProtocol",
+                    samplingProtocol
+                  )}
+                  onChange={this.handleChange}
+                />
+                <Form.Field
+                  control={Select}
+                  options={yesOrNo}
+                  label="reared"
+                  placeholder="Select One"
+                  name="reared"
+                  value={reared}
+                  error={this.checkBasicPreSubmit("reared", reared)}
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+            </Segment>
+          </>
+        );
+      case 2:
+        return (
+          <>
+            <Header size="small">Specimen Information</Header>
+            <Segment>
+              <Form.Group inline>
+                <label>Are there any occurrence remarks?</label>
+                <Form.Checkbox
+                  label="Yes"
+                  checked={hasRemarks}
+                  onClick={() => this.setState({ hasRemarks: true })}
+                />
+                <Form.Checkbox
+                  label="No"
+                  checked={!hasRemarks}
+                  onClick={() => this.setState({ hasRemarks: false })}
+                />
               </Form.Group>
 
-              <Form.Group>
-                <Form.Field width="16">
-                  <label>occurrenceRemarks</label>
-                  <TextArea />
-                </Form.Field>
-              </Form.Group>
+              {hasRemarks && (
+                <Form.Group>
+                  <Form.Field width="16">
+                    <label>occurrenceRemarks</label>
+                    <TextArea />
+                  </Form.Field>
+                </Form.Group>
+              )}
 
               <Form.Group inline>
                 <label>Molecular specimen?</label>
@@ -722,58 +876,52 @@ export default class FormInsert extends React.Component {
                 </Form.Group>
               )}
             </Segment>
-
+          </>
+        );
+      case 3:
+        return (
+          <>
             <Header size="small">Collection Information</Header>
             <Segment>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>identificationQualifier</label>
-                  <Select options={identificationQualifierControl} />
-                </Form.Field>
-                <Form.Field>
-                  <label>recordedBy (last name)</label>
-                  <Input placeholder="Last" />
-                </Form.Field>
-                <Form.Field>
-                  <label>recordedBy (first name)</label>
-                  <Input placeholder="First" />
-                </Form.Field>
-              </Form.Group>
-
-              <Form.Group
-                inline
-                style={{ paddingTop: ".5rem", paddingBottom: ".5rem" }}
-              >
-                <label>Were there other collectors?</label>
-                <Form.Checkbox
-                  label="Yes"
-                  checked={otherCollectorsPresent}
-                  onClick={() =>
-                    this.setState({ otherCollectorsPresent: true })
-                  }
+                <Form.Field
+                  control={Select}
+                  options={identificationQualifierControl}
+                  label="identificationQualifier"
+                  placeholder="Select One"
+                  name="identificationQualifier"
+                  value={identificationQualifier}
+                  error={this.checkBasicPreSubmit(
+                    "identificationQualifier",
+                    identificationQualifier
+                  )}
+                  onChange={this.handleChange}
                 />
-                <Form.Checkbox
-                  label="No"
-                  checked={!otherCollectorsPresent}
-                  onClick={() =>
-                    this.setState({ otherCollectorsPresent: false })
-                  }
+                <Form.Field
+                  control={Input}
+                  label="recordedBy (last name)"
+                  placeholder="ADDME"
+                  name="recordedByLast"
+                  value={recordedByLast}
+                  error={this.checkBasicPreSubmit(
+                    "recordedBy",
+                    `${recordedByLast},${recordedByFirst}`
+                  )}
+                  onChange={this.handleChange}
                 />
-
-                {otherCollectorsPresent && (
-                  <Form.Field inline style={{ marginLeft: "1rem" }}>
-                    <label>Number of additional collectors</label>
-                    <Select
-                      options={setCountOptions}
-                      value={numCollectors}
-                      name="numCollectors"
-                      onChange={this.handleCollectorCountChange}
-                    />
-                  </Form.Field>
-                )}
+                <Form.Field
+                  control={Input}
+                  label="recordedBy (first name)"
+                  placeholder="ADDME"
+                  name="recordedByFirst"
+                  value={recordedByFirst}
+                  error={this.checkBasicPreSubmit(
+                    "recordedBy",
+                    `${recordedByLast},${recordedByFirst}`
+                  )}
+                  onChange={this.handleChange}
+                />
               </Form.Group>
-
-              {otherCollectorsPresent && this.renderCollectorForm()}
 
               <Form.Group widths="equal">
                 <Form.Field>
@@ -830,25 +978,6 @@ export default class FormInsert extends React.Component {
                 </Form.Field>
               </Form.Group>
 
-              <Form.Group
-                inline
-                style={{ paddingTop: ".5rem", paddingBottom: ".5rem" }}
-              >
-                <label>Is this specimen on loan?</label>
-                <Form.Checkbox
-                  label="Yes"
-                  checked={isLoaned}
-                  onClick={() => this.setState({ isLoaned: true })}
-                />
-                <Form.Checkbox
-                  label="No"
-                  checked={!isLoaned}
-                  onClick={() => this.setState({ isLoaned: false })}
-                />
-              </Form.Group>
-
-              {isLoaned && this.renderLoanForm()}
-
               <Form.Group widths="equal">
                 <Form.Field>
                   <label>disposition</label>
@@ -871,7 +1000,14 @@ export default class FormInsert extends React.Component {
                   />
                 </Form.Field>
               </Form.Group>
-
+            </Segment>
+          </>
+        );
+      case 4:
+        return (
+          <>
+            <Header size="small">Collection Information</Header>
+            <Segment>
               <Form.Group>
                 <Form.Field width="16">
                   <label>fieldNotes</label>
@@ -893,7 +1029,79 @@ export default class FormInsert extends React.Component {
                 </Form.Field>
               </Form.Group>
             </Segment>
+          </>
+        );
+      case 5:
+        return (
+          <>
+            <Header size="small">Collection Information</Header>
+            <Segment>
+              <Form.Group
+                inline
+                style={{ paddingTop: ".5rem", paddingBottom: ".5rem" }}
+              >
+                <label>Were there other collectors?</label>
+                <Form.Checkbox
+                  label="Yes"
+                  checked={otherCollectorsPresent}
+                  onClick={() =>
+                    this.setState({ otherCollectorsPresent: true })
+                  }
+                />
+                <Form.Checkbox
+                  label="No"
+                  checked={!otherCollectorsPresent}
+                  onClick={() =>
+                    this.setState({ otherCollectorsPresent: false })
+                  }
+                />
 
+                {otherCollectorsPresent && (
+                  <Form.Field inline style={{ marginLeft: "1rem" }}>
+                    <label>Number of additional collectors</label>
+                    <Select
+                      options={setCountOptions}
+                      value={numCollectors}
+                      name="numCollectors"
+                      onChange={this.handleCollectorCountChange}
+                    />
+                  </Form.Field>
+                )}
+              </Form.Group>
+
+              {otherCollectorsPresent && this.renderCollectorForm()}
+            </Segment>
+          </>
+        );
+
+      case 6:
+        return (
+          <>
+            <Segment>
+              <Form.Group
+                inline
+                style={{ paddingTop: ".5rem", paddingBottom: ".5rem" }}
+              >
+                <label>Is this specimen on loan?</label>
+                <Form.Checkbox
+                  label="Yes"
+                  checked={isLoaned}
+                  onClick={() => this.setState({ isLoaned: true })}
+                />
+                <Form.Checkbox
+                  label="No"
+                  checked={!isLoaned}
+                  onClick={() => this.setState({ isLoaned: false })}
+                />
+              </Form.Group>
+
+              {isLoaned && this.renderLoanForm()}
+            </Segment>
+          </>
+        );
+      case 7:
+        return (
+          <>
             <Header size="small">Locality Information</Header>
             <Segment>
               <Form.Group widths="equal">
@@ -971,15 +1179,126 @@ export default class FormInsert extends React.Component {
                 </Form.Field>
               </Form.Group>
             </Segment>
-          </Form>
+          </>
+        );
+      case 8:
+        return <></>;
+      default:
+        return <div>How did this happen?? You broke it!! Congrats!!</div>;
+    }
+  }
+
+  paginate(direction) {
+    let potentialPage = this.state.page;
+    switch (direction) {
+      case "forward":
+        potentialPage += 1;
+        if (this.state.page === 8) {
+          // last page
+        } else {
+          this.setState({ page: potentialPage });
+        }
+        break;
+      case "backward":
+        potentialPage -= 1;
+        if (this.state.page === 0) {
+          // first page
+        } else {
+          this.setState({ page: potentialPage });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  render() {
+    if (!this.state.hasError && this.props.errorMessages.insertError !== null) {
+      this.setState({ hasError: true });
+    }
+
+    console.log(Number(Math.ceil(this.state.page / 8) * 100));
+
+    return (
+      <>
+        <Modal.Header>Form Insertion</Modal.Header>
+        <Modal.Content>
+          <Form>{this.renderPage()}</Form>
+          <div style={{ marginTop: "2rem" }}>
+            <Progress
+              percent={Number(Math.ceil((this.state.page / 8) * 100))}
+              progress
+              indicating
+            />
+          </div>
         </Modal.Content>
-        <Modal.Actions>
-          <CreateHelpModal />
-          <Button>Cancel</Button>
-          <Button>Submit</Button>
-        </Modal.Actions>
+        <Modal.Actions>{this.renderActions()}</Modal.Actions>
       </>
     );
+
+    const {
+      catalogNumber,
+      recordNumber,
+      otherCatalogNumber,
+      order_,
+      superfamily,
+      family,
+      subfamily,
+      tribe,
+      genus,
+      subgenus,
+      specificEpithet,
+      infraspecificEpithet,
+      identificationQualifier,
+      recordedByFirst,
+      recordedByLast,
+      identifiedByFirst,
+      identifiedByLast,
+      dateIdentified,
+      verbatimDate,
+      collectedYear,
+      collectedMonth,
+      sex,
+      lifeStage,
+      habitat,
+      occurrenceRemarks,
+      isMolecular,
+      molecularOccurrenceRemarks,
+      samplingProtocol,
+      country,
+      stateProvince,
+      county,
+      municipality,
+      locality,
+      elevationInMeters,
+      elevationUnit,
+      decimalLatitude,
+      decimalLongitude,
+      geodeticDatum,
+      coordinateUncertainty,
+      verbatimLatitude,
+      verbatimLongitude,
+      georeferencedBy,
+      disposition,
+      isLoaned,
+      preparations,
+      freezer,
+      rack,
+      box,
+      tubeSize,
+      associatedSequences,
+      associatedReferences,
+      withholdData,
+      reared,
+      fieldNotes,
+      otherCollectorsPresent,
+      numCollectors,
+    } = this.state;
+
+    //   <Message>
+    //   This form is for the manual entry of each field of a single specimen
+    //   to be inserted into the databse.
+    // </Message>
 
     return (
       <React.Fragment>
