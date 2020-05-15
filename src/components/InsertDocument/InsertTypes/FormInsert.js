@@ -49,6 +49,7 @@ import {
   yesOrNo,
   units,
   conditionalCountOptions,
+  geodeticDatumControl,
 } from "../../Query/QueryConstants/constants";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
@@ -120,10 +121,13 @@ export default class FormInsert extends React.Component {
       rack: "",
       box: "",
       tubeSize: "",
+      hasAssociatedSequences: false,
       associatedSequences: "",
+      hasAssociatedReferences: false,
       associatedReferences: "",
       withholdData: "",
       reared: "",
+      hasNotes: false,
       fieldNotes: "",
       collectors: [{ firstName: "", lastName: "" }],
       modifiedInfo: "",
@@ -193,10 +197,13 @@ export default class FormInsert extends React.Component {
       rack: "",
       box: "",
       tubeSize: "",
+      hasAssociatedSequences: false,
       associatedSequences: "",
+      hasAssociatedReferences: false,
       associatedReferences: "",
       withholdData: "",
       reared: "",
+      hasNotes: false,
       fieldNotes: "",
       collectors: [{ firstName: "", lastName: "" }],
       numCollectors: 1,
@@ -583,6 +590,7 @@ export default class FormInsert extends React.Component {
       verbatimDate,
       collectedYear,
       collectedMonth,
+      collectedDay,
       sex,
       lifeStage,
       habitat,
@@ -612,10 +620,13 @@ export default class FormInsert extends React.Component {
       rack,
       box,
       tubeSize,
+      hasAssociatedSequences,
       associatedSequences,
+      hasAssociatedReferences,
       associatedReferences,
       withholdData,
       reared,
+      hasNotes,
       fieldNotes,
       otherCollectorsPresent,
       numCollectors,
@@ -848,7 +859,12 @@ export default class FormInsert extends React.Component {
                 <Form.Group>
                   <Form.Field width="16">
                     <label>occurrenceRemarks</label>
-                    <TextArea />
+                    <TextArea
+                      placeholder="ADD EXAMPLE TO ME"
+                      name="occurrenceRemarks"
+                      value={occurrenceRemarks}
+                      onChange={this.handleChange}
+                    />
                   </Form.Field>
                 </Form.Group>
               )}
@@ -871,7 +887,12 @@ export default class FormInsert extends React.Component {
                 <Form.Group>
                   <Form.Field width="16">
                     <label>molecularOccurrenceRemarks</label>
-                    <TextArea />
+                    <TextArea
+                      placeholder="ADD EXAMPLE TO ME"
+                      name="molecularOccurrenceRemarks"
+                      value={molecularOccurrenceRemarks}
+                      onChange={this.handleChange}
+                    />
                   </Form.Field>
                 </Form.Group>
               )}
@@ -924,68 +945,139 @@ export default class FormInsert extends React.Component {
               </Form.Group>
 
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>identifiedBy (last name)</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>identifiedBy (first name)</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <SemanticDatepicker label="dateIdentified" />
+                <Form.Field
+                  control={Input}
+                  label="identifiedBy (last name)"
+                  placeholder="ADDME"
+                  name="identifiedByLast"
+                  value={identifiedByLast}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit(
+                    "identifiedBy",
+                    `${identifiedByLast},${identifiedByFirst}`
+                  )}
+                />
+
+                <Form.Field
+                  control={Input}
+                  label="identifiedBy (first name)"
+                  placeholder="ADDME"
+                  name="identifiedByFirst"
+                  value={identifiedByFirst}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit(
+                    "identifiedBy",
+                    `${identifiedByLast},${identifiedByFirst}`
+                  )}
+                />
+                <SemanticDatepicker
+                  label="dateIdentified"
+                  name="dateIdentified"
+                  value={dateIdentified}
+                  onChange={this.handleChange}
+                />
               </Form.Group>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>verbatimDate</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>collectedYear</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>collectedMonth</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
+                <Form.Field
+                  control={Input}
+                  label="verbatimDate"
+                  placeholder="ADDME"
+                  name="verbatimDate"
+                  value={verbatimDate}
+                  onChange={this.handleChange}
+                />
+
+                <Form.Field
+                  control={Input}
+                  label="collectedYear"
+                  placeholder="ADDME"
+                  name="collectedYear"
+                  value={collectedYear}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit(
+                    "collectedYear",
+                    collectedYear
+                  )}
+                />
+                <Form.Field
+                  control={Input}
+                  label="collectedMonth"
+                  placeholder="ADDME"
+                  name="collectedMonth"
+                  value={collectedMonth}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit(
+                    "collectedMonth",
+                    collectedMonth
+                  )}
+                />
               </Form.Group>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>collectedDay</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>preparations</label>
-                  <Select options={preparationsControl} />
-                </Form.Field>
-                <Form.Field>
-                  <label>freezer</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
+                <Form.Field
+                  control={Input}
+                  label="collectedDay"
+                  placeholder="ADDME"
+                  name="collectedDay"
+                  value={collectedDay}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit("collectedDay", collectedDay)}
+                />
+                <Form.Field
+                  control={Select}
+                  options={preparationsControl}
+                  label="preparations"
+                  name="preparations"
+                  value={preparations}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit("preparations", preparations)}
+                />
+                <Form.Field
+                  control={Input}
+                  label="freezer"
+                  placeholder="ADDME"
+                  name="freezer"
+                  value={freezer}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit("freezer", freezer)}
+                />
               </Form.Group>
 
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>rack</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>box</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>tubeSize</label>
-                  <Select options={tubeSizeControl} />
-                </Form.Field>
+                <Form.Field
+                  control={Input}
+                  placeholder="ADDME"
+                  label="rack"
+                  name="rack"
+                  value={rack}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit("rack", rack)}
+                />
+                <Form.Field
+                  control={Input}
+                  label="box"
+                  placeholder="ADDME"
+                  name="box"
+                  value={box}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit("box", box)}
+                />
+                <Form.Field
+                  control={Select}
+                  options={tubeSizeControl}
+                  label="tubeSize"
+                  placeholder="Select One"
+                  onChange={this.handleChange}
+                />
               </Form.Group>
 
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>disposition</label>
-                  <Select
-                    options={dispositionControl}
-                    placeholder="Select One"
-                  />
-                </Form.Field>
+                <Form.Field
+                  control={Select}
+                  options={dispositionControl}
+                  label="disposition"
+                  placeholder="Select One"
+                  onChange={this.handleChange}
+                />
                 <Form.Field>
                   <label>Should this specimen data be witheld?</label>
                   <Form.Checkbox
@@ -1008,26 +1100,97 @@ export default class FormInsert extends React.Component {
           <>
             <Header size="small">Collection Information</Header>
             <Segment>
-              <Form.Group>
-                <Form.Field width="16">
-                  <label>fieldNotes</label>
-                  <TextArea placeholder="ADDME" />
-                </Form.Field>
+              <Form.Group inline>
+                <label>Are there any field notes?</label>
+                <Form.Checkbox
+                  label="Yes"
+                  checked={hasNotes}
+                  onClick={() => this.setState({ hasNotes: true })}
+                />
+                <Form.Checkbox
+                  label="No"
+                  checked={!hasNotes}
+                  onClick={() => this.setState({ hasNotes: false })}
+                />
               </Form.Group>
 
-              <Form.Group>
-                <Form.Field width="16">
-                  <label>associatedSequences</label>
-                  <TextArea placeholder="ADDME" />
-                </Form.Field>
+              {hasNotes && (
+                <Form.Group>
+                  <Form.Field width="16">
+                    <label>fieldNotes</label>
+                    <TextArea
+                      placeholder="ADDME"
+                      name="fieldNotes"
+                      value={fieldNotes}
+                      onChange={this.handleChange}
+                    />
+                  </Form.Field>
+                </Form.Group>
+              )}
+
+              <Form.Group inline>
+                <label>Are there any associated sequences?</label>
+                <Form.Checkbox
+                  label="Yes"
+                  checked={hasAssociatedSequences}
+                  onClick={() =>
+                    this.setState({ hasAssociatedSequences: true })
+                  }
+                />
+                <Form.Checkbox
+                  label="No"
+                  checked={!hasAssociatedSequences}
+                  onClick={() =>
+                    this.setState({ hasAssociatedSequences: false })
+                  }
+                />
               </Form.Group>
 
-              <Form.Group>
-                <Form.Field width="16">
-                  <label>associatedReferences</label>
-                  <TextArea placeholder="ADDME" />
-                </Form.Field>
+              {hasAssociatedSequences && (
+                <Form.Group>
+                  <Form.Field width="16">
+                    <label>associatedSequences</label>
+                    <TextArea
+                      placeholder="ADDME"
+                      name="associatedSequences"
+                      value={associatedSequences}
+                      onChange={this.handleChange}
+                    />
+                  </Form.Field>
+                </Form.Group>
+              )}
+
+              <Form.Group inline>
+                <label>Are there any associated references?</label>
+                <Form.Checkbox
+                  label="Yes"
+                  checked={hasAssociatedReferences}
+                  onClick={() =>
+                    this.setState({ hasAssociatedReferences: true })
+                  }
+                />
+                <Form.Checkbox
+                  label="No"
+                  checked={!hasAssociatedReferences}
+                  onClick={() =>
+                    this.setState({ hasAssociatedReferences: false })
+                  }
+                />
               </Form.Group>
+
+              {hasAssociatedReferences && (
+                <Form.Group>
+                  <Form.Field width="16">
+                    <label>associatedReferences</label>
+                    <TextArea
+                      placeholder="ADDME"
+                      name="associatedReferences"
+                      value={associatedReferences}
+                      onChange={this.handleChange}
+                    />
+                  </Form.Field>
+                </Form.Group>
+              )}
             </Segment>
           </>
         );
@@ -1035,7 +1198,8 @@ export default class FormInsert extends React.Component {
         return (
           <>
             <Header size="small">Collection Information</Header>
-            <Segment>
+
+            <Segment style={{ maxHeight: "35rem", overflow: "scroll" }}>
               <Form.Group
                 inline
                 style={{ paddingTop: ".5rem", paddingBottom: ".5rem" }}
@@ -1077,6 +1241,7 @@ export default class FormInsert extends React.Component {
       case 6:
         return (
           <>
+            <Header size="small">Collection Information</Header>
             <Segment>
               <Form.Group
                 inline
@@ -1105,42 +1270,97 @@ export default class FormInsert extends React.Component {
             <Header size="small">Locality Information</Header>
             <Segment>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>country</label>
-                  <Select options={countryControl} />
-                </Form.Field>
-                <Form.Field>
-                  <label>stateProvince</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>county</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
+                <Form.Field
+                  control={Select}
+                  options={countryControl}
+                  label="country"
+                  placeholder="Select One"
+                  name="country"
+                  value={country}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit("country", country)}
+                />
+
+                <Form.Field
+                  control={Input}
+                  label="stateProvince"
+                  placeholder="ADDME"
+                  name="stateProvince"
+                  value={stateProvince}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit(
+                    "stateProvince",
+                    stateProvince
+                  )}
+                />
+                <Form.Field
+                  control={Input}
+                  label="county"
+                  placeholder="ADDME"
+                  name="county"
+                  value={county}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit("county", county)}
+                />
               </Form.Group>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>municipality</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>locality</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>geodeticDatum</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
+                <Form.Field
+                  control={Input}
+                  label="municipality"
+                  placeholder="ADDME"
+                  name="municipality"
+                  value={municipality}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit("municipality", municipality)}
+                />
+                <Form.Field
+                  control={Input}
+                  label="locality"
+                  placeholder="ADDME"
+                  name="locality"
+                  value={locality}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit("locality", locality)}
+                />
+                <Form.Field
+                  control={Select}
+                  options={geodeticDatumControl}
+                  label="geodeticDatum"
+                  placeholder="Select One"
+                  name="geodeticDatum"
+                  value={geodeticDatum}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit(
+                    "geodeticDatum",
+                    geodeticDatum
+                  )}
+                />
               </Form.Group>
               <Form.Group widths="equal">
-                <Form.Field>
-                  <label>decimalLatitude</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
-                <Form.Field>
-                  <label>decimalLongitude</label>
-                  <Input placeholder="ADDME" />
-                </Form.Field>
+                <Form.Field
+                  control={Input}
+                  label="decimalLatitude"
+                  placeholder="ADDME"
+                  name="decimalLatitude"
+                  value={decimalLatitude}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit(
+                    "decimalLatitude",
+                    decimalLatitude
+                  )}
+                />
+                <Form.Field
+                  control={Input}
+                  label="decimalLongitude"
+                  placeholder="ADDME"
+                  name="decimalLongitude"
+                  value={decimalLongitude}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit(
+                    "decimalLongitude",
+                    decimalLongitude
+                  )}
+                />
               </Form.Group>
               <Form.Group widths="equal">
                 <Form.Field>
@@ -1236,843 +1456,843 @@ export default class FormInsert extends React.Component {
       </>
     );
 
-    const {
-      catalogNumber,
-      recordNumber,
-      otherCatalogNumber,
-      order_,
-      superfamily,
-      family,
-      subfamily,
-      tribe,
-      genus,
-      subgenus,
-      specificEpithet,
-      infraspecificEpithet,
-      identificationQualifier,
-      recordedByFirst,
-      recordedByLast,
-      identifiedByFirst,
-      identifiedByLast,
-      dateIdentified,
-      verbatimDate,
-      collectedYear,
-      collectedMonth,
-      sex,
-      lifeStage,
-      habitat,
-      occurrenceRemarks,
-      isMolecular,
-      molecularOccurrenceRemarks,
-      samplingProtocol,
-      country,
-      stateProvince,
-      county,
-      municipality,
-      locality,
-      elevationInMeters,
-      elevationUnit,
-      decimalLatitude,
-      decimalLongitude,
-      geodeticDatum,
-      coordinateUncertainty,
-      verbatimLatitude,
-      verbatimLongitude,
-      georeferencedBy,
-      disposition,
-      isLoaned,
-      preparations,
-      freezer,
-      rack,
-      box,
-      tubeSize,
-      associatedSequences,
-      associatedReferences,
-      withholdData,
-      reared,
-      fieldNotes,
-      otherCollectorsPresent,
-      numCollectors,
-    } = this.state;
+    // const {
+    //   catalogNumber,
+    //   recordNumber,
+    //   otherCatalogNumber,
+    //   order_,
+    //   superfamily,
+    //   family,
+    //   subfamily,
+    //   tribe,
+    //   genus,
+    //   subgenus,
+    //   specificEpithet,
+    //   infraspecificEpithet,
+    //   identificationQualifier,
+    //   recordedByFirst,
+    //   recordedByLast,
+    //   identifiedByFirst,
+    //   identifiedByLast,
+    //   dateIdentified,
+    //   verbatimDate,
+    //   collectedYear,
+    //   collectedMonth,
+    //   sex,
+    //   lifeStage,
+    //   habitat,
+    //   occurrenceRemarks,
+    //   isMolecular,
+    //   molecularOccurrenceRemarks,
+    //   samplingProtocol,
+    //   country,
+    //   stateProvince,
+    //   county,
+    //   municipality,
+    //   locality,
+    //   elevationInMeters,
+    //   elevationUnit,
+    //   decimalLatitude,
+    //   decimalLongitude,
+    //   geodeticDatum,
+    //   coordinateUncertainty,
+    //   verbatimLatitude,
+    //   verbatimLongitude,
+    //   georeferencedBy,
+    //   disposition,
+    //   isLoaned,
+    //   preparations,
+    //   freezer,
+    //   rack,
+    //   box,
+    //   tubeSize,
+    //   associatedSequences,
+    //   associatedReferences,
+    //   withholdData,
+    //   reared,
+    //   fieldNotes,
+    //   otherCollectorsPresent,
+    //   numCollectors,
+    // } = this.state;
 
-    //   <Message>
-    //   This form is for the manual entry of each field of a single specimen
-    //   to be inserted into the databse.
-    // </Message>
+    // //   <Message>
+    // //   This form is for the manual entry of each field of a single specimen
+    // //   to be inserted into the databse.
+    // // </Message>
 
-    return (
-      <React.Fragment>
-        <Modal.Content>
-          <Message>
-            <Message.Header>Usage:</Message.Header>
-            <p>
-              NOTE: NOT READY FOR USE...Manually enter the transcription data of
-              the specimen you are entering into the database. Be sure to fill
-              out all required fields. When all fields are completed, click the
-              Confirm button at the bottom of the scroll-view. If any syntactic
-              errors are present, a popup will appear with information to help
-              you correct it. If you have more than one specimen to enter,
-              consider using the paste option on the previous page.
-            </p>
-          </Message>
-          <Form padded="vertically" onSubmit={this.handleSubmit}>
-            <div style={{ minHeight: "55vh" }}>
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-mgcl"
-                  control={Input}
-                  label="catalogNumber"
-                  placeholder="MGCL_#######"
-                  name="catalogNumber"
-                  value={catalogNumber}
-                  error={this.checkBasicPreSubmit(
-                    "catalogNumber",
-                    catalogNumber
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  id="form-input-control-other-num"
-                  control={Input}
-                  label="otherCatalogNumber"
-                  placeholder="LEP#####"
-                  name="otherCatalogNumber"
-                  value={otherCatalogNumber}
-                  error={this.checkBasicPreSubmit(
-                    "otherCatalogNumber",
-                    otherCatalogNumber
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  id="form-input-control-lep-num"
-                  control={Input}
-                  label="recordNumber"
-                  placeholder=""
-                  name="recordNumber"
-                  value={recordNumber}
-                  error={this.checkBasicPreSubmit("recordNumber", recordNumber)}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-              </Form.Group>
+    // return (
+    //   <React.Fragment>
+    //     <Modal.Content>
+    //       <Message>
+    //         <Message.Header>Usage:</Message.Header>
+    //         <p>
+    //           NOTE: NOT READY FOR USE...Manually enter the transcription data of
+    //           the specimen you are entering into the database. Be sure to fill
+    //           out all required fields. When all fields are completed, click the
+    //           Confirm button at the bottom of the scroll-view. If any syntactic
+    //           errors are present, a popup will appear with information to help
+    //           you correct it. If you have more than one specimen to enter,
+    //           consider using the paste option on the previous page.
+    //         </p>
+    //       </Message>
+    //       <Form padded="vertically" onSubmit={this.handleSubmit}>
+    //         <div style={{ minHeight: "55vh" }}>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-mgcl"
+    //               control={Input}
+    //               label="catalogNumber"
+    //               placeholder="MGCL_#######"
+    //               name="catalogNumber"
+    //               value={catalogNumber}
+    //               error={this.checkBasicPreSubmit(
+    //                 "catalogNumber",
+    //                 catalogNumber
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-other-num"
+    //               control={Input}
+    //               label="otherCatalogNumber"
+    //               placeholder="LEP#####"
+    //               name="otherCatalogNumber"
+    //               value={otherCatalogNumber}
+    //               error={this.checkBasicPreSubmit(
+    //                 "otherCatalogNumber",
+    //                 otherCatalogNumber
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-lep-num"
+    //               control={Input}
+    //               label="recordNumber"
+    //               placeholder=""
+    //               name="recordNumber"
+    //               value={recordNumber}
+    //               error={this.checkBasicPreSubmit("recordNumber", recordNumber)}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-order"
-                  control={Input}
-                  label="order_"
-                  placeholder="Order"
-                  name="order_"
-                  error={this.checkBasicPreSubmit("order_", order_)}
-                  value={order_}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  id="form-input-control-superfamily"
-                  control={Input}
-                  label="superfamily"
-                  placeholder="Superfamily"
-                  name="superfamily"
-                  value={superfamily}
-                  error={this.checkBasicPreSubmit("superfamily", superfamily)}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  control={Select}
-                  options={familyControl}
-                  label="family"
-                  placeholder="Select One"
-                  search
-                  searchInput={{
-                    id: "form-select-control-family",
-                  }}
-                  name="family"
-                  error={this.checkBasicPreSubmit("family", family)}
-                  value={family}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-order"
+    //               control={Input}
+    //               label="order_"
+    //               placeholder="Order"
+    //               name="order_"
+    //               error={this.checkBasicPreSubmit("order_", order_)}
+    //               value={order_}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-superfamily"
+    //               control={Input}
+    //               label="superfamily"
+    //               placeholder="Superfamily"
+    //               name="superfamily"
+    //               value={superfamily}
+    //               error={this.checkBasicPreSubmit("superfamily", superfamily)}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               control={Select}
+    //               options={familyControl}
+    //               label="family"
+    //               placeholder="Select One"
+    //               search
+    //               searchInput={{
+    //                 id: "form-select-control-family",
+    //               }}
+    //               name="family"
+    //               error={this.checkBasicPreSubmit("family", family)}
+    //               value={family}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-subfamily"
-                  control={Input}
-                  label="subfamily"
-                  placeholder="Subfamily"
-                  name="subfamily"
-                  value={subfamily}
-                  error={this.checkBasicPreSubmit("subfamily", subfamily)}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  id="form-input-control-tribe"
-                  control={Input}
-                  label="tribe"
-                  placeholder="Tribe"
-                  name="tribe"
-                  value={tribe}
-                  error={this.checkBasicPreSubmit("tribe", tribe)}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  id="form-input-control-genus"
-                  control={Input}
-                  label="genus"
-                  placeholder="Genus"
-                  name="genus"
-                  value={genus}
-                  error={this.checkBasicPreSubmit("genus", genus)}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-subfamily"
+    //               control={Input}
+    //               label="subfamily"
+    //               placeholder="Subfamily"
+    //               name="subfamily"
+    //               value={subfamily}
+    //               error={this.checkBasicPreSubmit("subfamily", subfamily)}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-tribe"
+    //               control={Input}
+    //               label="tribe"
+    //               placeholder="Tribe"
+    //               name="tribe"
+    //               value={tribe}
+    //               error={this.checkBasicPreSubmit("tribe", tribe)}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-genus"
+    //               control={Input}
+    //               label="genus"
+    //               placeholder="Genus"
+    //               name="genus"
+    //               value={genus}
+    //               error={this.checkBasicPreSubmit("genus", genus)}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-subgenus"
-                  control={Input}
-                  label="subgenus"
-                  placeholder="Subgenus"
-                  name="subgenus"
-                  value={subgenus}
-                  error={this.checkBasicPreSubmit("subgenus", subgenus)}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  id="form-input-control-species"
-                  control={Input}
-                  label="specificEpithet"
-                  placeholder="Species"
-                  name="specificEpithet"
-                  value={specificEpithet}
-                  error={this.checkBasicPreSubmit(
-                    "specificEpithet",
-                    specificEpithet
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  id="form-input-control-infra"
-                  control={Input}
-                  label="infraspecificEpithet"
-                  placeholder=""
-                  name="infraspecificEpithet"
-                  value={infraspecificEpithet}
-                  error={this.checkBasicPreSubmit(
-                    "infraspecificEpithet",
-                    infraspecificEpithet
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-subgenus"
+    //               control={Input}
+    //               label="subgenus"
+    //               placeholder="Subgenus"
+    //               name="subgenus"
+    //               value={subgenus}
+    //               error={this.checkBasicPreSubmit("subgenus", subgenus)}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-species"
+    //               control={Input}
+    //               label="specificEpithet"
+    //               placeholder="Species"
+    //               name="specificEpithet"
+    //               value={specificEpithet}
+    //               error={this.checkBasicPreSubmit(
+    //                 "specificEpithet",
+    //                 specificEpithet
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-infra"
+    //               control={Input}
+    //               label="infraspecificEpithet"
+    //               placeholder=""
+    //               name="infraspecificEpithet"
+    //               value={infraspecificEpithet}
+    //               error={this.checkBasicPreSubmit(
+    //                 "infraspecificEpithet",
+    //                 infraspecificEpithet
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-recordedBy-first"
-                  control={Input}
-                  width="eight"
-                  label="recordedBy (First)"
-                  placeholder="First Name"
-                  name="recordedByFirst"
-                  value={recordedByFirst}
-                  error={this.checkBasicPreSubmit(
-                    "recordedBy",
-                    `${recordedByLast},${recordedByFirst}`
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  id="form-input-control-recordedBy-last"
-                  control={Input}
-                  width="eight"
-                  label="recordedBy (Last)"
-                  placeholder="Last Name"
-                  name="recordedByLast"
-                  value={recordedByLast}
-                  error={this.checkBasicPreSubmit(
-                    "recordedBy",
-                    `${recordedByLast},${recordedByFirst}`
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-recordedBy-first"
+    //               control={Input}
+    //               width="eight"
+    //               label="recordedBy (First)"
+    //               placeholder="First Name"
+    //               name="recordedByFirst"
+    //               value={recordedByFirst}
+    //               error={this.checkBasicPreSubmit(
+    //                 "recordedBy",
+    //                 `${recordedByLast},${recordedByFirst}`
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-recordedBy-last"
+    //               control={Input}
+    //               width="eight"
+    //               label="recordedBy (Last)"
+    //               placeholder="Last Name"
+    //               name="recordedByLast"
+    //               value={recordedByLast}
+    //               error={this.checkBasicPreSubmit(
+    //                 "recordedBy",
+    //                 `${recordedByLast},${recordedByFirst}`
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-identifiedBy"
-                  control={Input}
-                  label="identifiedBy (First)"
-                  placeholder="First Name"
-                  name="identifiedByFirst"
-                  value={identifiedByFirst}
-                  error={this.checkBasicPreSubmit(
-                    "identifiedBy",
-                    `${identifiedByLast},${identifiedByFirst}`
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-identifiedBy"
+    //               control={Input}
+    //               label="identifiedBy (First)"
+    //               placeholder="First Name"
+    //               name="identifiedByFirst"
+    //               value={identifiedByFirst}
+    //               error={this.checkBasicPreSubmit(
+    //                 "identifiedBy",
+    //                 `${identifiedByLast},${identifiedByFirst}`
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
 
-                <Form.Field
-                  id="form-input-control-identifiedBy"
-                  control={Input}
-                  label="identifiedBy (Last)"
-                  placeholder="Last Name"
-                  name="identifiedByLast"
-                  value={identifiedByLast}
-                  error={this.checkBasicPreSubmit(
-                    "identifiedBy",
-                    `${identifiedByLast},${identifiedByFirst}`
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-              </Form.Group>
+    //             <Form.Field
+    //               id="form-input-control-identifiedBy"
+    //               control={Input}
+    //               label="identifiedBy (Last)"
+    //               placeholder="Last Name"
+    //               name="identifiedByLast"
+    //               value={identifiedByLast}
+    //               error={this.checkBasicPreSubmit(
+    //                 "identifiedBy",
+    //                 `${identifiedByLast},${identifiedByFirst}`
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  control={Input}
-                  label="verbatimDate"
-                  placeholder="YYYY/MM/DD"
-                  name="verbatimDate"
-                  value={verbatimDate}
-                  error={this.checkBasicPreSubmit("verbatimDate", verbatimDate)}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  control={Input}
-                  label="collectedYear"
-                  placeholder="YYYY"
-                  name="collectedYear"
-                  value={collectedYear}
-                  error={this.checkBasicPreSubmit(
-                    "collectedYear",
-                    collectedYear
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  control={Input}
-                  label="collectedMonth"
-                  placeholder="MM"
-                  name="collectedMonth"
-                  value={collectedMonth}
-                  error={this.checkBasicPreSubmit(
-                    "collectedMonth",
-                    collectedMonth
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               control={Input}
+    //               label="verbatimDate"
+    //               placeholder="YYYY/MM/DD"
+    //               name="verbatimDate"
+    //               value={verbatimDate}
+    //               error={this.checkBasicPreSubmit("verbatimDate", verbatimDate)}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               control={Input}
+    //               label="collectedYear"
+    //               placeholder="YYYY"
+    //               name="collectedYear"
+    //               value={collectedYear}
+    //               error={this.checkBasicPreSubmit(
+    //                 "collectedYear",
+    //                 collectedYear
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               control={Input}
+    //               label="collectedMonth"
+    //               placeholder="MM"
+    //               name="collectedMonth"
+    //               value={collectedMonth}
+    //               error={this.checkBasicPreSubmit(
+    //                 "collectedMonth",
+    //                 collectedMonth
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-identificationQualifier"
-                  control={Select}
-                  options={identificationQualifierControl}
-                  label="identificationQualifier"
-                  placeholder="Select One"
-                  name="identificationQualifier"
-                  value={identificationQualifier}
-                  error={this.checkBasicPreSubmit(
-                    "identificationQualifier",
-                    identificationQualifier
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  control={Select}
-                  options={sexControl}
-                  label="sex"
-                  placeholder="Select One"
-                  name="sex"
-                  value={sex}
-                  error={this.checkBasicPreSubmit("sex", sex)}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  id="form-input-control-dateIdentified"
-                  control={SemanticDatepicker}
-                  label="dateIdentified"
-                  placeholder="YYYY-MM-DD"
-                  name="dateIdentified"
-                  value={dateIdentified}
-                  error={this.checkBasicPreSubmit(
-                    "dateIdentified",
-                    dateIdentified
-                  )}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-identificationQualifier"
+    //               control={Select}
+    //               options={identificationQualifierControl}
+    //               label="identificationQualifier"
+    //               placeholder="Select One"
+    //               name="identificationQualifier"
+    //               value={identificationQualifier}
+    //               error={this.checkBasicPreSubmit(
+    //                 "identificationQualifier",
+    //                 identificationQualifier
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               control={Select}
+    //               options={sexControl}
+    //               label="sex"
+    //               placeholder="Select One"
+    //               name="sex"
+    //               value={sex}
+    //               error={this.checkBasicPreSubmit("sex", sex)}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-dateIdentified"
+    //               control={SemanticDatepicker}
+    //               label="dateIdentified"
+    //               placeholder="YYYY-MM-DD"
+    //               name="dateIdentified"
+    //               value={dateIdentified}
+    //               error={this.checkBasicPreSubmit(
+    //                 "dateIdentified",
+    //                 dateIdentified
+    //               )}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-lifeStage"
-                  control={Select}
-                  options={lifeStageControl}
-                  label="lifeStage"
-                  placeholder="Select One"
-                  name="lifeStage"
-                  value={lifeStage}
-                  error={this.checkBasicPreSubmit("lifeStage", lifeStage)}
-                  onChange={this.handleChange}
-                  disabled={this.state.paste_entry}
-                />
-                <Form.Field
-                  id="form-input-control-protocol"
-                  control={Select}
-                  label="samplingProtocol"
-                  placeholder="Select One"
-                  search
-                  className="warningField"
-                  options={samplingProtocolControl}
-                  name="samplingProtocol"
-                  value={samplingProtocol}
-                  error={this.checkBasicPreSubmit(
-                    "samplingProtocol",
-                    samplingProtocol
-                  )}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-habitat"
-                  control={Input}
-                  label="habitat"
-                  placeholder="Habitat"
-                  name="habitat"
-                  value={habitat}
-                  error={this.checkBasicPreSubmit("habitat", habitat)}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-lifeStage"
+    //               control={Select}
+    //               options={lifeStageControl}
+    //               label="lifeStage"
+    //               placeholder="Select One"
+    //               name="lifeStage"
+    //               value={lifeStage}
+    //               error={this.checkBasicPreSubmit("lifeStage", lifeStage)}
+    //               onChange={this.handleChange}
+    //               disabled={this.state.paste_entry}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-protocol"
+    //               control={Select}
+    //               label="samplingProtocol"
+    //               placeholder="Select One"
+    //               search
+    //               className="warningField"
+    //               options={samplingProtocolControl}
+    //               name="samplingProtocol"
+    //               value={samplingProtocol}
+    //               error={this.checkBasicPreSubmit(
+    //                 "samplingProtocol",
+    //                 samplingProtocol
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-habitat"
+    //               control={Input}
+    //               label="habitat"
+    //               placeholder="Habitat"
+    //               name="habitat"
+    //               value={habitat}
+    //               error={this.checkBasicPreSubmit("habitat", habitat)}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="sixteen">
-                <Form.Field
-                  id="form-input-control-occurrenceRemarks"
-                  width="sixteen"
-                  control={TextArea}
-                  label="occurrenceRemarks"
-                  placeholder="Remarks about occurrence"
-                  name="occurrenceRemarks"
-                  value={occurrenceRemarks}
-                  error={this.checkBasicPreSubmit(
-                    "occurrenceRemarks",
-                    occurrenceRemarks
-                  )}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="sixteen">
+    //             <Form.Field
+    //               id="form-input-control-occurrenceRemarks"
+    //               width="sixteen"
+    //               control={TextArea}
+    //               label="occurrenceRemarks"
+    //               placeholder="Remarks about occurrence"
+    //               name="occurrenceRemarks"
+    //               value={occurrenceRemarks}
+    //               error={this.checkBasicPreSubmit(
+    //                 "occurrenceRemarks",
+    //                 occurrenceRemarks
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="sixteen">
-                <Form.Field
-                  id="form-input-control-moccurrenceRemarks"
-                  width="sixteen"
-                  control={TextArea}
-                  label="molecularOccurrenceRemarks"
-                  placeholder="Remarks about molecular occurrence"
-                  name="molecularOccurrenceRemarks"
-                  value={molecularOccurrenceRemarks}
-                  error={this.checkBasicPreSubmit(
-                    "molecularOccurrenceRemarks",
-                    molecularOccurrenceRemarks
-                  )}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="sixteen">
+    //             <Form.Field
+    //               id="form-input-control-moccurrenceRemarks"
+    //               width="sixteen"
+    //               control={TextArea}
+    //               label="molecularOccurrenceRemarks"
+    //               placeholder="Remarks about molecular occurrence"
+    //               name="molecularOccurrenceRemarks"
+    //               value={molecularOccurrenceRemarks}
+    //               error={this.checkBasicPreSubmit(
+    //                 "molecularOccurrenceRemarks",
+    //                 molecularOccurrenceRemarks
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-country"
-                  control={Select}
-                  search
-                  options={countryControl}
-                  label="country"
-                  placeholder="Select One"
-                  name="country"
-                  value={country}
-                  error={this.checkBasicPreSubmit("country", country)}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-stateProvince"
-                  control={Input}
-                  label="stateProvince"
-                  placeholder="State or Province"
-                  name="stateProvince"
-                  value={stateProvince}
-                  error={this.checkBasicPreSubmit(
-                    "stateProvince",
-                    stateProvince
-                  )}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-county"
-                  control={Input}
-                  label="county"
-                  placeholder="County"
-                  name="county"
-                  value={county}
-                  error={this.checkBasicPreSubmit("county", county)}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-country"
+    //               control={Select}
+    //               search
+    //               options={countryControl}
+    //               label="country"
+    //               placeholder="Select One"
+    //               name="country"
+    //               value={country}
+    //               error={this.checkBasicPreSubmit("country", country)}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-stateProvince"
+    //               control={Input}
+    //               label="stateProvince"
+    //               placeholder="State or Province"
+    //               name="stateProvince"
+    //               value={stateProvince}
+    //               error={this.checkBasicPreSubmit(
+    //                 "stateProvince",
+    //                 stateProvince
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-county"
+    //               control={Input}
+    //               label="county"
+    //               placeholder="County"
+    //               name="county"
+    //               value={county}
+    //               error={this.checkBasicPreSubmit("county", county)}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-municipality"
-                  control={Input}
-                  label="municipality"
-                  placeholder="Municipality"
-                  name="municipality"
-                  value={municipality}
-                  error={this.checkBasicPreSubmit("municipality", municipality)}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-locality"
-                  control={Input}
-                  label="locality"
-                  placeholder="Locality"
-                  name="locality"
-                  value={locality}
-                  error={this.checkBasicPreSubmit("locality", locality)}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-municipality"
+    //               control={Input}
+    //               label="municipality"
+    //               placeholder="Municipality"
+    //               name="municipality"
+    //               value={municipality}
+    //               error={this.checkBasicPreSubmit("municipality", municipality)}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-locality"
+    //               control={Input}
+    //               label="locality"
+    //               placeholder="Locality"
+    //               name="locality"
+    //               value={locality}
+    //               error={this.checkBasicPreSubmit("locality", locality)}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-elevationInMeters"
-                  control={Input}
-                  label="elevationInMeters (value)"
-                  placeholder="Verbatim Elevation"
-                  name="elevationInMeters"
-                  value={elevationInMeters}
-                  error={this.checkBasicPreSubmit(
-                    "elevationInMeters",
-                    parseMeasurement(elevationInMeters + " " + elevationUnit)
-                  )}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-elevationInMeters-units"
-                  control={Select}
-                  label="elevationInMeters (unit)"
-                  options={units}
-                  placeholder="Select One"
-                  name="elevationUnit"
-                  value={elevationUnit}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-elevationInMeters"
+    //               control={Input}
+    //               label="elevationInMeters (value)"
+    //               placeholder="Verbatim Elevation"
+    //               name="elevationInMeters"
+    //               value={elevationInMeters}
+    //               error={this.checkBasicPreSubmit(
+    //                 "elevationInMeters",
+    //                 parseMeasurement(elevationInMeters + " " + elevationUnit)
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-elevationInMeters-units"
+    //               control={Select}
+    //               label="elevationInMeters (unit)"
+    //               options={units}
+    //               placeholder="Select One"
+    //               name="elevationUnit"
+    //               value={elevationUnit}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-decimalLatitude"
-                  control={Input}
-                  label="decimalLatitude"
-                  placeholder="Decimal Latitude"
-                  name="decimalLatitude"
-                  value={decimalLatitude}
-                  error={this.checkBasicPreSubmit(
-                    "decimalLatitude",
-                    decimalLatitude
-                  )}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-decimalLongitude"
-                  control={Input}
-                  label="decimalLongitude"
-                  placeholder="Decimal Longitude"
-                  name="decimalLongitude"
-                  value={decimalLongitude}
-                  error={this.checkBasicPreSubmit(
-                    "decimalLongitude",
-                    decimalLongitude
-                  )}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-geodeticDatum"
-                  control={Input}
-                  label="geodeticDatum"
-                  placeholder="Geodetic Datum"
-                  name="geodeticDatum"
-                  value={geodeticDatum}
-                  error={this.checkBasicPreSubmit(
-                    "geodeticDatum",
-                    geodeticDatum
-                  )}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-decimalLatitude"
+    //               control={Input}
+    //               label="decimalLatitude"
+    //               placeholder="Decimal Latitude"
+    //               name="decimalLatitude"
+    //               value={decimalLatitude}
+    //               error={this.checkBasicPreSubmit(
+    //                 "decimalLatitude",
+    //                 decimalLatitude
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-decimalLongitude"
+    //               control={Input}
+    //               label="decimalLongitude"
+    //               placeholder="Decimal Longitude"
+    //               name="decimalLongitude"
+    //               value={decimalLongitude}
+    //               error={this.checkBasicPreSubmit(
+    //                 "decimalLongitude",
+    //                 decimalLongitude
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-geodeticDatum"
+    //               control={Input}
+    //               label="geodeticDatum"
+    //               placeholder="Geodetic Datum"
+    //               name="geodeticDatum"
+    //               value={geodeticDatum}
+    //               error={this.checkBasicPreSubmit(
+    //                 "geodeticDatum",
+    //                 geodeticDatum
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-coordinateUncertainty"
-                  control={Input}
-                  label="coordinateUncertainty"
-                  placeholder="Coordinate Uncertainty"
-                  name="coordinateUncertainty"
-                  value={coordinateUncertainty}
-                  error={this.checkBasicPreSubmit(
-                    "coordinateUncertainty",
-                    coordinateUncertainty
-                  )}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-verbatimLatitude"
-                  control={Input}
-                  label="verbatimLatitude"
-                  placeholder="Verbatim Latitude"
-                  name="verbatimLatitude"
-                  value={verbatimLatitude}
-                  error={this.checkBasicPreSubmit(
-                    "verbatimLatitude",
-                    verbatimLatitude
-                  )}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-verbatimLongitude"
-                  control={Input}
-                  label="verbatimLongitude"
-                  placeholder="Verbatim Longitude"
-                  name="verbatimLongitude"
-                  value={verbatimLongitude}
-                  error={this.checkBasicPreSubmit(
-                    "verbatimLongitude",
-                    verbatimLongitude
-                  )}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-coordinateUncertainty"
+    //               control={Input}
+    //               label="coordinateUncertainty"
+    //               placeholder="Coordinate Uncertainty"
+    //               name="coordinateUncertainty"
+    //               value={coordinateUncertainty}
+    //               error={this.checkBasicPreSubmit(
+    //                 "coordinateUncertainty",
+    //                 coordinateUncertainty
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-verbatimLatitude"
+    //               control={Input}
+    //               label="verbatimLatitude"
+    //               placeholder="Verbatim Latitude"
+    //               name="verbatimLatitude"
+    //               value={verbatimLatitude}
+    //               error={this.checkBasicPreSubmit(
+    //                 "verbatimLatitude",
+    //                 verbatimLatitude
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-verbatimLongitude"
+    //               control={Input}
+    //               label="verbatimLongitude"
+    //               placeholder="Verbatim Longitude"
+    //               name="verbatimLongitude"
+    //               value={verbatimLongitude}
+    //               error={this.checkBasicPreSubmit(
+    //                 "verbatimLongitude",
+    //                 verbatimLongitude
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-georeferencedBy"
-                  control={Input}
-                  label="georeferencedBy"
-                  placeholder=""
-                  name="georeferencedBy"
-                  value={georeferencedBy}
-                  error={this.checkBasicPreSubmit(
-                    "georeferencedBy",
-                    georeferencedBy
-                  )}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-disposition"
-                  control={Select}
-                  label="disposition"
-                  options={dispositionControl}
-                  placeholder="Select One"
-                  name="disposition"
-                  value={disposition}
-                  error={this.checkBasicPreSubmit("disposition", disposition)}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-loanInfo"
-                  control={Select}
-                  options={yesOrNo}
-                  label="isLoaned"
-                  placeholder="Yes / No"
-                  name="isLoaned"
-                  value={isLoaned}
-                  // error={this.checkBasicPreSubmit(
-                  //     "loanInfo",
-                  //     loanInfo
-                  // )}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-georeferencedBy"
+    //               control={Input}
+    //               label="georeferencedBy"
+    //               placeholder=""
+    //               name="georeferencedBy"
+    //               value={georeferencedBy}
+    //               error={this.checkBasicPreSubmit(
+    //                 "georeferencedBy",
+    //                 georeferencedBy
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-disposition"
+    //               control={Select}
+    //               label="disposition"
+    //               options={dispositionControl}
+    //               placeholder="Select One"
+    //               name="disposition"
+    //               value={disposition}
+    //               error={this.checkBasicPreSubmit("disposition", disposition)}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-loanInfo"
+    //               control={Select}
+    //               options={yesOrNo}
+    //               label="isLoaned"
+    //               placeholder="Yes / No"
+    //               name="isLoaned"
+    //               value={isLoaned}
+    //               // error={this.checkBasicPreSubmit(
+    //               //     "loanInfo",
+    //               //     loanInfo
+    //               // )}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              {isLoaned === "Y" ? this.renderLoanForm() : null}
+    //           {isLoaned === "Y" ? this.renderLoanForm() : null}
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-preparations"
-                  control={Select}
-                  options={preparationsControl}
-                  label="preparations"
-                  placeholder="Select One"
-                  name="preparations"
-                  value={preparations}
-                  error={this.checkBasicPreSubmit("preparations", preparations)}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-freezer"
-                  control={Input}
-                  label="freezer"
-                  placeholder="Freezer"
-                  name="freezer"
-                  value={freezer}
-                  error={this.checkBasicPreSubmit("freezer", freezer)}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-rack"
-                  control={Input}
-                  label="rack"
-                  placeholder="rack"
-                  name="rack"
-                  value={rack}
-                  error={this.checkBasicPreSubmit("rack", rack)}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-preparations"
+    //               control={Select}
+    //               options={preparationsControl}
+    //               label="preparations"
+    //               placeholder="Select One"
+    //               name="preparations"
+    //               value={preparations}
+    //               error={this.checkBasicPreSubmit("preparations", preparations)}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-freezer"
+    //               control={Input}
+    //               label="freezer"
+    //               placeholder="Freezer"
+    //               name="freezer"
+    //               value={freezer}
+    //               error={this.checkBasicPreSubmit("freezer", freezer)}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-rack"
+    //               control={Input}
+    //               label="rack"
+    //               placeholder="rack"
+    //               name="rack"
+    //               value={rack}
+    //               error={this.checkBasicPreSubmit("rack", rack)}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-box"
-                  control={Input}
-                  label="box"
-                  placeholder="Box"
-                  name="box"
-                  value={box}
-                  error={this.checkBasicPreSubmit("box", box)}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-tubeSize"
-                  control={Select}
-                  options={tubeSizeControl}
-                  label="tubeSize"
-                  placeholder="Select One"
-                  name="tubeSize"
-                  value={tubeSize}
-                  error={this.checkBasicPreSubmit("tubeSize", tubeSize)}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-associatedSequences"
-                  control={Input}
-                  label="associatedSequences"
-                  placeholder=""
-                  name="associatedSequences"
-                  value={associatedSequences}
-                  error={this.checkBasicPreSubmit(
-                    "associatedSequences",
-                    associatedSequences
-                  )}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-box"
+    //               control={Input}
+    //               label="box"
+    //               placeholder="Box"
+    //               name="box"
+    //               value={box}
+    //               error={this.checkBasicPreSubmit("box", box)}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-tubeSize"
+    //               control={Select}
+    //               options={tubeSizeControl}
+    //               label="tubeSize"
+    //               placeholder="Select One"
+    //               name="tubeSize"
+    //               value={tubeSize}
+    //               error={this.checkBasicPreSubmit("tubeSize", tubeSize)}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-associatedSequences"
+    //               control={Input}
+    //               label="associatedSequences"
+    //               placeholder=""
+    //               name="associatedSequences"
+    //               value={associatedSequences}
+    //               error={this.checkBasicPreSubmit(
+    //                 "associatedSequences",
+    //                 associatedSequences
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="equal">
-                <Form.Field
-                  id="form-input-control-associatedReferences"
-                  control={Input}
-                  label="associatedReferences"
-                  placeholder=""
-                  name="associatedReferences"
-                  value={associatedReferences}
-                  error={this.checkBasicPreSubmit(
-                    "associatedReferences",
-                    associatedReferences
-                  )}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-withholdData"
-                  control={Select}
-                  options={yesOrNo}
-                  label="withholdData"
-                  placeholder="Y/N"
-                  name="withholdData"
-                  value={withholdData}
-                  error={this.checkBasicPreSubmit("withholdData", withholdData)}
-                  onChange={this.handleChange}
-                />
-                <Form.Field
-                  id="form-input-control-reared"
-                  control={Select}
-                  options={yesOrNo}
-                  label="reared"
-                  placeholder="Y/N"
-                  name="reared"
-                  value={reared}
-                  error={this.checkBasicPreSubmit("reared", reared)}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="equal">
+    //             <Form.Field
+    //               id="form-input-control-associatedReferences"
+    //               control={Input}
+    //               label="associatedReferences"
+    //               placeholder=""
+    //               name="associatedReferences"
+    //               value={associatedReferences}
+    //               error={this.checkBasicPreSubmit(
+    //                 "associatedReferences",
+    //                 associatedReferences
+    //               )}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-withholdData"
+    //               control={Select}
+    //               options={yesOrNo}
+    //               label="withholdData"
+    //               placeholder="Y/N"
+    //               name="withholdData"
+    //               value={withholdData}
+    //               error={this.checkBasicPreSubmit("withholdData", withholdData)}
+    //               onChange={this.handleChange}
+    //             />
+    //             <Form.Field
+    //               id="form-input-control-reared"
+    //               control={Select}
+    //               options={yesOrNo}
+    //               label="reared"
+    //               placeholder="Y/N"
+    //               name="reared"
+    //               value={reared}
+    //               error={this.checkBasicPreSubmit("reared", reared)}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Group widths="sixteen">
-                <Form.Field
-                  id="form-input-control-fieldNotes"
-                  width="sixteen"
-                  control={TextArea}
-                  label="fieldNotes"
-                  placeholder="fieldNotes"
-                  name="fieldNotes"
-                  value={fieldNotes}
-                  error={this.checkBasicPreSubmit("fieldNotes", fieldNotes)}
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
+    //           <Form.Group widths="sixteen">
+    //             <Form.Field
+    //               id="form-input-control-fieldNotes"
+    //               width="sixteen"
+    //               control={TextArea}
+    //               label="fieldNotes"
+    //               placeholder="fieldNotes"
+    //               name="fieldNotes"
+    //               value={fieldNotes}
+    //               error={this.checkBasicPreSubmit("fieldNotes", fieldNotes)}
+    //               onChange={this.handleChange}
+    //             />
+    //           </Form.Group>
 
-              <Form.Field
-                control={Select}
-                options={setCountOptions}
-                label="Number of Other Collectors:"
-                name="numCollectors"
-                value={numCollectors}
-                onChange={this.handleCollectorCountChange}
-              />
+    //           <Form.Field
+    //             control={Select}
+    //             options={setCountOptions}
+    //             label="Number of Other Collectors:"
+    //             name="numCollectors"
+    //             value={numCollectors}
+    //             onChange={this.handleCollectorCountChange}
+    //           />
 
-              {this.renderCollectorForm()}
-            </div>
-          </Form>
-          {this.state.hasError ? this.renderErrorTerminal() : null}
-        </Modal.Content>
-        <Modal.Actions>
-          <CreateHelpModal queryType="MANUAL_INSERT" />
-          <Button onClick={() => this.props.closeModal()}>Cancel</Button>
-          <Button
-            type="button"
-            color="yellow"
-            onClick={() => this.resetState()}
-          >
-            Clear Form
-          </Button>
-          <ConfirmAuth
-            checkAuth={this.props.checkAuth}
-            handleSubmit={this.handleSubmit.bind(this)}
-          />
-          {/* <Button
-            style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
-            onClick={this.handleSubmit}
-            loading={this.state.loading}
-          >
-            Submit
-          </Button> */}
-        </Modal.Actions>
-      </React.Fragment>
-    );
+    //           {this.renderCollectorForm()}
+    //         </div>
+    //       </Form>
+    //       {this.state.hasError ? this.renderErrorTerminal() : null}
+    //     </Modal.Content>
+    //     <Modal.Actions>
+    //       <CreateHelpModal queryType="MANUAL_INSERT" />
+    //       <Button onClick={() => this.props.closeModal()}>Cancel</Button>
+    //       <Button
+    //         type="button"
+    //         color="yellow"
+    //         onClick={() => this.resetState()}
+    //       >
+    //         Clear Form
+    //       </Button>
+    //       <ConfirmAuth
+    //         checkAuth={this.props.checkAuth}
+    //         handleSubmit={this.handleSubmit.bind(this)}
+    //       />
+    //       {/* <Button
+    //         style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
+    //         onClick={this.handleSubmit}
+    //         loading={this.state.loading}
+    //       >
+    //         Submit
+    //       </Button> */}
+    //     </Modal.Actions>
+    //   </React.Fragment>
+    // );
   }
 }

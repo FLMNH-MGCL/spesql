@@ -299,6 +299,7 @@ export const sexControl = [
 export const countryControl = countryList;
 
 export const geodeticDatumControl = [
+  reset,
   { key: "EPSG:4326", text: "EPSG:4326", value: "EPSG:4326" },
   { key: "WGS84", text: "WGS84", value: "WGS84" },
   { key: "NAD27", text: "NAD27", value: "NAD27" },

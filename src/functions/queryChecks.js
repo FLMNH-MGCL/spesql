@@ -517,7 +517,7 @@ export function checkField(fieldName, fieldValue) {
         );
       }
 
-      if (!this.controlHasString(identificationQualifierControl, fieldValue)) {
+      if (!controlHasString(identificationQualifierControl, fieldValue)) {
         errors.push(
           `Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`
         );
