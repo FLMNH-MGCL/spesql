@@ -407,7 +407,11 @@ class SpecimenView extends React.Component {
       //     return specimen.id === this.props.selectedSpecimen.id
       // })
       const { selectedSpecimen } = this.props;
-      if (selectedSpecimen === undefined && this.props.currentQuery) {
+      if (
+        selectedSpecimen === undefined &&
+        this.props.currentQuery &&
+        this.props.data.length === 0
+      ) {
         return (
           <div style={{ textAlign: "center" }}>
             <strong>
