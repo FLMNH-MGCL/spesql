@@ -276,30 +276,42 @@ export const parseMeasurement = (measurement) => {
   // comes in like 30 meters
   // empty would look like " "
 
-  if (measurement === " ") {
+  let numValue = NaN;
+
+  if (measurement === " " || measurement.split(" ")[0] === "") {
     return measurement;
   } else {
     if (
       measurement.toLowerCase().endsWith(" meters") ||
       measurement.toLowerCase().endsWith(" meter")
     ) {
-      return parseFloat(measurement.split(" ")[0]);
+      console.log(measurement);
+
+      console.log(parseFloat(measurement.split(" ")[0]));
+
+      numValue = parseFloat(measurement.split(" ")[0]);
     } else if (measurement.toLowerCase().endsWith(" feet")) {
       let feetToMeters = parseFloat(measurement.split(" ")[0]);
       feetToMeters = feetToMeters * 0.3048;
-      return feetToMeters;
+      numValue = feetToMeters;
     } else if (
       measurement.toLowerCase().endsWith(" miles") ||
       measurement.toLowerCase().endsWith(" mile")
     ) {
       let milesToMeters = parseFloat(measurement.split(" ")[0]);
       milesToMeters = milesToMeters * 1609.34;
-      return milesToMeters;
+      numValue = milesToMeters;
     } else if (isNumeric(measurement)) {
       // missing unit
       return "INVALID ENTRY: No unit specified.";
     } else {
       return "INVALID ENTRY: Unknown entry type.";
+    }
+
+    if (isNaN(numValue)) {
+      return "INVALID ENTRY: Entry resulted in NaN value.";
+    } else {
+      return numValue;
     }
   }
 };
@@ -751,8 +763,10 @@ export function checkField(fieldName, fieldValue) {
           switch (invalidError) {
             case "No unit specified.":
               errors.push(`Format error (@ ${fieldName}): must specify unit.`);
+              break;
             default:
               errors.push(`Format error (@ ${fieldName}): invalid format.`);
+              break;
           }
           // errors.push(``)
         }

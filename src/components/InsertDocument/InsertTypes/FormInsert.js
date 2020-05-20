@@ -13,6 +13,8 @@ import {
   Segment,
   Checkbox,
   Progress,
+  Container,
+  Popup,
   // Checkbox,
   // Dropdown,
 } from "semantic-ui-react";
@@ -53,6 +55,7 @@ import {
 } from "../../Query/QueryConstants/constants";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
+import { Checkmark } from "react-checkmark";
 
 export default class FormInsert extends React.Component {
   constructor(props) {
@@ -99,11 +102,12 @@ export default class FormInsert extends React.Component {
       municipality: "",
       locality: "",
       elevationInMeters: "",
-      elevationUnit: "",
+      elevationUnit: "meters",
       decimalLatitude: "",
       decimalLongitude: "",
       geodeticDatum: "",
       coordinateUncertainty: "",
+      coordinateUncertaintyUnit: "meters",
       verbatimLatitude: "",
       verbatimLongitude: "",
       georeferencedBy: "",
@@ -140,7 +144,7 @@ export default class FormInsert extends React.Component {
 
   resetState = () => {
     this.setState({
-      activePage: "Manual Insert",
+      page: 0,
       catalogNumber: "",
       recordNumber: "",
       otherCatalogNumber: "",
@@ -434,16 +438,40 @@ export default class FormInsert extends React.Component {
     </React.Fragment>
   );
 
+  getRandomOfficeCharacter() {
+    let characters = [
+      { first: "Dwight", last: "Schrute" },
+      { first: "Jim", last: "Halpert" },
+      { first: "Michael", last: "Scott" },
+      { first: "Pam", last: "Beesly" },
+      { first: "Creed", last: "Bratton" },
+      { first: "Kevin", last: "Malone" },
+      { first: "Angela", last: "Martin" },
+      { first: "Toby", last: "Flenderson" },
+      { first: "Stanley", last: "Hudson" },
+      { first: "Ryan", last: "Howard" },
+      { first: "Holly", last: "Flax" },
+      { first: "Kelly", last: "Kapoor" },
+      { first: "Robert", last: "California" },
+      { first: "Phyllis", last: "Vance" },
+      { first: "David", last: "Wallace" },
+    ];
+
+    return characters[Math.floor(Math.random() * characters.length)];
+  }
+
   renderCollectorForm = () => {
     let collectorForm = Array.from({
       length: this.state.numCollectors,
     }).map((collector, index) => {
+      const person = this.getRandomOfficeCharacter();
       return (
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
             label="First Name"
             name="firstName"
+            placeholder={person.first}
             error={this.checkCollectorErrors("firstName", index)}
             value={this.state.collectors[index].firstName}
             onChange={this.handleCollectorChange}
@@ -454,6 +482,7 @@ export default class FormInsert extends React.Component {
             control={Input}
             label="Last Name"
             name="lastName"
+            placeholder={person.last}
             error={this.checkCollectorErrors("lastName", index)}
             value={this.state.collectors[index].lastName}
             onChange={this.handleCollectorChange}
@@ -610,6 +639,7 @@ export default class FormInsert extends React.Component {
       decimalLongitude,
       geodeticDatum,
       coordinateUncertainty,
+      coordinateUncertaintyUnit,
       verbatimLatitude,
       verbatimLongitude,
       georeferencedBy,
@@ -687,7 +717,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="order_"
-                  placeholder="ADDME"
+                  placeholder="Lepidoptera"
                   name="order_"
                   value={order_}
                   error={this.checkBasicPreSubmit("order_", order_)}
@@ -696,7 +726,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="superfamily"
-                  placeholder="ADDME"
+                  placeholder="Bombycoidea"
                   name="superfamily"
                   value={superfamily}
                   error={this.checkBasicPreSubmit("superfamily", superfamily)}
@@ -705,7 +735,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="family"
-                  placeholder="ADDME"
+                  placeholder="Sphingidae"
                   name="family"
                   value={family}
                   error={this.checkBasicPreSubmit("family", family)}
@@ -716,7 +746,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="subfamily"
-                  placeholder="ADDME"
+                  placeholder="Sphinginae"
                   name="subfamily"
                   value={subfamily}
                   error={this.checkBasicPreSubmit("subfamily", subfamily)}
@@ -725,7 +755,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="tribe"
-                  placeholder="ADDME"
+                  placeholder="Acherontiini"
                   name="tribe"
                   value={tribe}
                   error={this.checkBasicPreSubmit("tribe", tribe)}
@@ -734,7 +764,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="genus"
-                  placeholder="ADDME"
+                  placeholder="Agrius"
                   name="genus"
                   value={genus}
                   error={this.checkBasicPreSubmit("genus", genus)}
@@ -745,7 +775,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="subgenus"
-                  placeholder="ADDME"
+                  placeholder="Subgenus"
                   name="subgenus"
                   value={subgenus}
                   error={this.checkBasicPreSubmit("subgenus", subgenus)}
@@ -754,7 +784,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="specificEpithet"
-                  placeholder="ADDME"
+                  placeholder="cingulata"
                   name="specificEpithet"
                   value={specificEpithet}
                   error={this.checkBasicPreSubmit(
@@ -766,7 +796,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="infraspecificEpithet"
-                  placeholder="ADDME"
+                  placeholder="Subspecies"
                   name="infraspecificEpithet"
                   value={infraspecificEpithet}
                   error={this.checkBasicPreSubmit(
@@ -800,7 +830,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="habitat"
-                  placeholder="ADDME"
+                  placeholder="Habitat"
                   name="habitat"
                   value={habitat}
                   error={this.checkBasicPreSubmit("habitat", habitat)}
@@ -921,7 +951,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="recordedBy (last name)"
-                  placeholder="ADDME"
+                  placeholder="Jinn"
                   name="recordedByLast"
                   value={recordedByLast}
                   error={this.checkBasicPreSubmit(
@@ -933,7 +963,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="recordedBy (first name)"
-                  placeholder="ADDME"
+                  placeholder="Qui-Gon"
                   name="recordedByFirst"
                   value={recordedByFirst}
                   error={this.checkBasicPreSubmit(
@@ -948,7 +978,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="identifiedBy (last name)"
-                  placeholder="ADDME"
+                  placeholder="Kenobi"
                   name="identifiedByLast"
                   value={identifiedByLast}
                   onChange={this.handleChange}
@@ -961,7 +991,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="identifiedBy (first name)"
-                  placeholder="ADDME"
+                  placeholder="Obi-Wan"
                   name="identifiedByFirst"
                   value={identifiedByFirst}
                   onChange={this.handleChange}
@@ -973,6 +1003,7 @@ export default class FormInsert extends React.Component {
                 <SemanticDatepicker
                   label="dateIdentified"
                   name="dateIdentified"
+                  placeholder="YYYY-MM-DD"
                   value={dateIdentified}
                   onChange={this.handleChange}
                 />
@@ -981,7 +1012,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="verbatimDate"
-                  placeholder="ADDME"
+                  placeholder="YYYY-MM-DD"
                   name="verbatimDate"
                   value={verbatimDate}
                   onChange={this.handleChange}
@@ -990,7 +1021,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="collectedYear"
-                  placeholder="ADDME"
+                  placeholder="YYYY"
                   name="collectedYear"
                   value={collectedYear}
                   onChange={this.handleChange}
@@ -1002,7 +1033,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="collectedMonth"
-                  placeholder="ADDME"
+                  placeholder="MM"
                   name="collectedMonth"
                   value={collectedMonth}
                   onChange={this.handleChange}
@@ -1016,7 +1047,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="collectedDay"
-                  placeholder="ADDME"
+                  placeholder="DD"
                   name="collectedDay"
                   value={collectedDay}
                   onChange={this.handleChange}
@@ -1025,6 +1056,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Select}
                   options={preparationsControl}
+                  placeholder="Select One"
                   label="preparations"
                   name="preparations"
                   value={preparations}
@@ -1034,7 +1066,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="freezer"
-                  placeholder="ADDME"
+                  placeholder="Kawahara##"
                   name="freezer"
                   value={freezer}
                   onChange={this.handleChange}
@@ -1045,7 +1077,7 @@ export default class FormInsert extends React.Component {
               <Form.Group widths="equal">
                 <Form.Field
                   control={Input}
-                  placeholder="ADDME"
+                  placeholder="Rack #"
                   label="rack"
                   name="rack"
                   value={rack}
@@ -1055,7 +1087,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="box"
-                  placeholder="ADDME"
+                  placeholder="1-20"
                   name="box"
                   value={box}
                   onChange={this.handleChange}
@@ -1119,7 +1151,7 @@ export default class FormInsert extends React.Component {
                   <Form.Field width="16">
                     <label>fieldNotes</label>
                     <TextArea
-                      placeholder="ADDME"
+                      placeholder="Any field notes that does not have its own header would go here."
                       name="fieldNotes"
                       value={fieldNotes}
                       onChange={this.handleChange}
@@ -1151,7 +1183,7 @@ export default class FormInsert extends React.Component {
                   <Form.Field width="16">
                     <label>associatedSequences</label>
                     <TextArea
-                      placeholder="ADDME"
+                      placeholder="http://www.ncbi.nlm.nih.gov/nuccore/U34853.1, http://www.ncbi.nlm.nih.gov/nuccore/GU328060"
                       name="associatedSequences"
                       value={associatedSequences}
                       onChange={this.handleChange}
@@ -1183,7 +1215,7 @@ export default class FormInsert extends React.Component {
                   <Form.Field width="16">
                     <label>associatedReferences</label>
                     <TextArea
-                      placeholder="ADDME"
+                      placeholder="[link], Author(s). Year. Academic Source Name."
                       name="associatedReferences"
                       value={associatedReferences}
                       onChange={this.handleChange}
@@ -1284,7 +1316,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="stateProvince"
-                  placeholder="ADDME"
+                  placeholder="Colorado"
                   name="stateProvince"
                   value={stateProvince}
                   onChange={this.handleChange}
@@ -1296,7 +1328,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="county"
-                  placeholder="ADDME"
+                  placeholder="Los Lagos"
                   name="county"
                   value={county}
                   onChange={this.handleChange}
@@ -1307,7 +1339,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="municipality"
-                  placeholder="ADDME"
+                  placeholder="Holzminden"
                   name="municipality"
                   value={municipality}
                   onChange={this.handleChange}
@@ -1316,7 +1348,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="locality"
-                  placeholder="ADDME"
+                  placeholder="Bariloche"
                   name="locality"
                   value={locality}
                   onChange={this.handleChange}
@@ -1340,7 +1372,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="decimalLatitude"
-                  placeholder="ADDME"
+                  placeholder="-41.0983423"
                   name="decimalLatitude"
                   value={decimalLatitude}
                   onChange={this.handleChange}
@@ -1352,7 +1384,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="decimalLongitude"
-                  placeholder="ADDME"
+                  placeholder="-121.1761111"
                   name="decimalLongitude"
                   value={decimalLongitude}
                   onChange={this.handleChange}
@@ -1365,29 +1397,51 @@ export default class FormInsert extends React.Component {
               <Form.Group widths="equal">
                 <Form.Field>
                   <label>verbatimLatitude</label>
-                  <Input placeholder="ADDME" />
+                  <Input placeholder="41 05 54.03S" />
                 </Form.Field>
                 <Form.Field>
                   <label>verbatimLongitude</label>
-                  <Input placeholder="ADDME" />
+                  <Input placeholder={`121d 10' 34" W`} />
                 </Form.Field>
               </Form.Group>
+
               <Form.Group widths="equal">
                 <Form.Field>
                   <label>elevation</label>
                   <Input
+                    name="elevationInMeters"
+                    placeholder="53.95"
+                    value={elevationInMeters}
+                    onChange={this.handleChange}
                     labelPosition="right"
                     label={
-                      <Dropdown basic defaultValue="meters" options={units} />
+                      <Dropdown
+                        basic
+                        value={elevationUnit}
+                        name="elevationUnit"
+                        options={units}
+                        onChange={this.handleChange}
+                      />
                     }
                   />
                 </Form.Field>
+
                 <Form.Field>
                   <label>coordinateUncertainty</label>
                   <Input
+                    name="coordinateUncertainty"
+                    placeholder="23"
+                    value={coordinateUncertainty}
+                    onChange={this.handleChange}
                     labelPosition="right"
                     label={
-                      <Dropdown basic defaultValue="meters" options={units} />
+                      <Dropdown
+                        basic
+                        value={coordinateUncertaintyUnit}
+                        name="coordinateUncertaintyUnit"
+                        options={units}
+                        onChange={this.handleChange}
+                      />
                     }
                   />
                 </Form.Field>
@@ -1395,16 +1449,40 @@ export default class FormInsert extends React.Component {
               <Form.Group>
                 <Form.Field>
                   <label>georeferencedBy</label>
-                  <Input placeholder="ADDME" />
+                  <Input
+                    placeholder="Anakin Skywalker"
+                    value={georeferencedBy}
+                    name="georeferencedBy"
+                    onChange={this.handleChange}
+                  />
                 </Form.Field>
               </Form.Group>
             </Segment>
           </>
         );
       case 8:
-        return <></>;
+        return (
+          <>
+            <Header size="medium" textAlign="center">
+              Form Completed!
+            </Header>
+            <Checkmark size="large" />
+            <Container text textAlign="center" style={{ marginTop: "1rem" }}>
+              <p>
+                Press submit to attempt the insert. Be sure to fix any errors
+                that are detected and displayed in the error log.
+              </p>
+            </Container>
+          </>
+        );
       default:
-        return <div>How did this happen?? You broke it!! Congrats!!</div>;
+        return (
+          <div>
+            How did this happen?? You broke it!! Congrats!! (please let aaron
+            know exactly what you did to produce this, so he can work on fixing
+            it)
+          </div>
+        );
     }
   }
 
