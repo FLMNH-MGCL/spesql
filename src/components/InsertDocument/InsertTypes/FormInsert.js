@@ -80,6 +80,8 @@ export default class FormInsert extends React.Component {
       recordedByFirst: "",
       recordedByLast: "",
       otherCollectorsPresent: false,
+      numCollectors: 1,
+      collectors: [{ firstName: "", lastName: "" }],
       identifiedBy: "",
       identifiedByLast: "",
       identifiedByFirst: "",
@@ -119,7 +121,6 @@ export default class FormInsert extends React.Component {
       loaneeName: "",
       loanReturnDate: "",
       loanRemarks: "",
-      loanInfo: "",
       preparations: "",
       freezer: "",
       rack: "",
@@ -129,16 +130,14 @@ export default class FormInsert extends React.Component {
       associatedSequences: "",
       hasAssociatedReferences: false,
       associatedReferences: "",
-      withholdData: "",
+      withholdData: false,
       reared: "",
       hasNotes: false,
       fieldNotes: "",
-      collectors: [{ firstName: "", lastName: "" }],
       modifiedInfo: "",
       hasError: false,
       loading: false,
       // countryList: [],
-      numCollectors: 1,
     };
   }
 
@@ -228,33 +227,91 @@ export default class FormInsert extends React.Component {
     } else return false;
   };
 
-  // FIXME: BROKEN
+  // converts state obj collectors to readable string of collectors
+  // conforms to darwin core of | separators
+  gatherCollectors = () => {
+    let otherCollectorsString = "";
+    this.state.collectors.forEach((collector, index) => {
+      if (index !== this.state.collectors.length - 1) {
+        // add the separator
+        otherCollectorsString += `${collector.lastName},${collector.firstName} | `;
+      } else {
+        // dont add separator
+        otherCollectorsString += `${collector.lastName},${collector.firstName}`;
+      }
+    });
+    return otherCollectorsString;
+  };
+
   handleSubmit = async () => {
     this.setState({ loading: true });
 
-    //let errors = this.checkBasicPostSubmit()
-    if (this.state.isLoaned) {
-      var today = new Date();
-      let dd = String(today.getDate()).padStart(2, "0");
-      let mm = String(today.getMonth() + 1).padStart(2, "0");
-      let yyyy = today.getFullYear();
+    // handle fields with strange edge cases !!!
+    const recordedBy =
+      this.state.recordedByFirst === "" && this.state.recordedByLast === ""
+        ? ""
+        : `${this.state.recordedByLast},${this.state.recordedByFirst}`;
 
-      today = yyyy + "-" + mm + "-" + dd;
+    const identifiedBy =
+      this.state.identifiedByFirst === "" && this.state.identifiedByLast === ""
+        ? ""
+        : `${this.state.identifiedByLast},${this.state.identifiedByFirst}`;
 
-      var loanInfo = {
-        [today]: {
-          institution: this.state.loanInstitution,
-          person: this.state.loaneeLast + ", " + this.state.loaneeFirst,
-          expectedReturn: parseDate(this.state.loanReturnDate),
-          remarks: this.state.loanRemarks,
-          isReturned: "No",
-        },
-      };
+    const otherCollectors = this.state.otherCollectorsPresent
+      ? this.gatherCollectors()
+      : "";
 
-      loanInfo = JSON.stringify([loanInfo]);
-      // alert(loanInfo);
-      // return;
-    }
+    // move to precheck!!
+    // const validDateIdentified = this.validateDate();
+    const dateIdentified =
+      this.state.dateIdentified === ""
+        ? ""
+        : parseDate(this.state.dateIdentified);
+
+    const occurrenceRemarks = this.state.hasRemarks
+      ? this.state.occurrenceRemarks
+      : "";
+
+    const molecularOccurrenceRemarks = this.state.isMolecular
+      ? this.state.molecularOccurrenceRemarks
+      : "";
+
+    const elevationInMeters = parseMeasurement(
+      `${this.state.elevationInMeters} ${this.state.elevationUnit}`
+    );
+
+    const coordinateUncertainty = parseMeasurement(
+      `${this.state.coordinateUncertainty} ${this.state.coordinateUncertaintyUnit}`
+    );
+
+    // loan information
+    const loanInstitution = this.state.isLoaned
+      ? this.state.loanInstitution
+      : "";
+
+    const loaneeName = this.state.isLoaned
+      ? this.state.loaneeFirst !== "" && this.state.loaneeLast !== ""
+        ? `${this.state.loaneeLast},${this.state.loaneeFirst}`
+        : ""
+      : "";
+
+    const loanReturnDate = this.state.isLoaned
+      ? this.state.loanReturnDate === ""
+        ? ""
+        : parseDate(this.state.loanReturnDate)
+      : "";
+
+    const loanRemarks = this.state.isLoaned ? this.state.loanRemarks : "";
+
+    const associatedSequences = this.state.hasAssociatedSequences
+      ? this.state.associatedSequences
+      : "";
+
+    const associatedReferences = this.state.hasAssociatedReferences
+      ? this.state.associatedReferences
+      : "";
+
+    const fieldNotes = this.state.hasNotes ? this.state.fieldNotes : "";
 
     const specimen = {
       catalogNumber: this.state.catalogNumber,
@@ -270,76 +327,181 @@ export default class FormInsert extends React.Component {
       specificEpithet: this.state.specificEpithet,
       infraspecificEpithet: this.state.infraspecificEpithet,
       identificationQualifier: this.state.identificationQualifier,
-      recordedBy: `${this.state.recordedByLast}, ${this.state.recordedByFirst}`,
-      identifiedBy: `${this.state.identifiedByLast}, ${this.state.identifiedByFirst}`,
-      dateIdentified: parseDate(this.state.dateIdentified),
+      recordedBy: recordedBy,
+      identifiedBy: identifiedBy,
+      dateIdentified: dateIdentified,
       verbatimDate: this.state.verbatimDate,
       collectedYear: this.state.collectedYear,
-      collectedMonth: parseRawMonth(this.state.collectedMonth),
+      collectedMonth: this.state.collectedMonth,
       collectedDay: this.state.collectedDay,
       sex: this.state.sex,
       lifeStage: this.state.lifeStage,
       habitat: this.state.habitat,
-      occurrenceRemarks: this.state.occurrenceRemarks,
-      molecularOccurrenceRemarks: this.state.molecularOccurrenceRemarks,
+      occurrenceRemarks: occurrenceRemarks,
+      molecularOccurrenceRemarks: molecularOccurrenceRemarks,
       samplingProtocol: this.state.samplingProtocol,
       country: this.state.country,
       stateProvince: this.state.stateProvince,
       county: this.state.county,
       municipality: this.state.municipality,
       locality: this.state.locality,
-      elevationInMeters: this.state.elevationInMeters,
+      elevationInMeters: elevationInMeters,
       decimalLatitude: this.state.decimalLatitude,
       decimalLongitude: this.state.decimalLongitude,
       geodeticDatum: this.state.geodeticDatum,
-      coordinateUncertainty: this.state.coordinateUncertainty,
+      coordinateUncertainty: coordinateUncertainty,
       verbatimLatitude: this.state.verbatimLatitude,
       verbatimLongitude: this.state.verbatimLongitude,
-      georeferencedBy: this.state.georeferencedBy,
+      georeferencedBy: this.state.georeferencedBy, //FIXME
       disposition: this.state.disposition,
-      loanInfo: loanInfo,
+      // isLoaned: false,
+      loanInstitution: loanInstitution,
+      loaneeName: loaneeName,
+      loanReturnDate: loanReturnDate,
+      loanRemarks: loanRemarks,
       preparations: this.state.preparations,
       freezer: this.state.freezer,
       rack: this.state.rack,
       box: this.state.box,
       tubeSize: this.state.tubeSize,
-      associatedSequences: this.state.associatedSequences,
-      associatedReferences: this.state.associatedReferences,
-      withholdData: this.state.withholdData,
+      associatedSequences: associatedSequences,
+      associatedReferences: associatedReferences,
+      withholdData: this.state.withholdData ? "Y" : "N",
       reared: this.state.reared,
-      fieldNotes: this.state.fieldNotes,
-      collectors: this.state.collectors,
+      fieldNotes: fieldNotes,
+      otherCollectors: otherCollectors,
+      modifiedInfo: "",
     };
 
-    let errors = checkSpecimen(specimen);
+    console.log(specimen);
+
+    const errors = checkSpecimen(specimen);
 
     console.log(errors);
 
-    alert(JSON.stringify(specimen, null, 2));
+    if (errors.length >= 1) {
+      this.props.notify({
+        type: "error",
+        message: "Uh oh, errors detected. Please check error log below",
+      });
+    } else {
+    }
+
     this.setState({ loading: false });
-
-    // if (errors.length === 0) {
-    //   // TODO: uncomment when ready
-    //   const insertData = await runSingleInsert(specimen);
-    //   console.log(insertData);
-
-    //   if (!insertData.data.success) {
-    //     let error = [
-    //       `SQL ERROR: Code: ${insertData.data.data.code}, Message: ${insertData.data.data.sqlMessage}`,
-    //     ];
-    //     this.props.notify({
-    //       type: "error",
-    //       message: "Uh oh, an error detected. Please check INSERT error log",
-    //     });
-    //     this.props.updateInsertErrorMessage(error);
-    //     this.setState({ hasError: true, loading: false });
-    //   } else {
-    //   }
-    // } else {
-    //   this.props.updateInsertErrorMessage(errors);
-    //   this.setState({ hasError: true, loading: false });
-    // }
   };
+
+  // FIXME: BROKEN
+  // handleSubmit = async () => {
+  //   this.setState({ loading: true });
+
+  //   //let errors = this.checkBasicPostSubmit()
+  //   if (this.state.isLoaned) {
+  //     var today = new Date();
+  //     let dd = String(today.getDate()).padStart(2, "0");
+  //     let mm = String(today.getMonth() + 1).padStart(2, "0");
+  //     let yyyy = today.getFullYear();
+
+  //     today = yyyy + "-" + mm + "-" + dd;
+
+  //     var loanInfo = {
+  //       [today]: {
+  //         institution: this.state.loanInstitution,
+  //         person: this.state.loaneeLast + ", " + this.state.loaneeFirst,
+  //         expectedReturn: parseDate(this.state.loanReturnDate),
+  //         remarks: this.state.loanRemarks,
+  //         isReturned: "No",
+  //       },
+  //     };
+
+  //     loanInfo = JSON.stringify([loanInfo]);
+  //     // alert(loanInfo);
+  //     // return;
+  //   }
+
+  //   const specimen = {
+  //     catalogNumber: this.state.catalogNumber,
+  //     recordNumber: this.state.recordNumber,
+  //     otherCatalogNumber: this.state.otherCatalogNumber,
+  //     order_: this.state.order_,
+  //     superfamily: this.state.superfamily,
+  //     family: this.state.family,
+  //     subfamily: this.state.subfamily,
+  //     tribe: this.state.tribe,
+  //     genus: this.state.genus,
+  //     subgenus: this.state.subgenus,
+  //     specificEpithet: this.state.specificEpithet,
+  //     infraspecificEpithet: this.state.infraspecificEpithet,
+  //     identificationQualifier: this.state.identificationQualifier,
+  //     recordedBy: `${this.state.recordedByLast}, ${this.state.recordedByFirst}`,
+  //     identifiedBy: `${this.state.identifiedByLast}, ${this.state.identifiedByFirst}`,
+  //     dateIdentified: parseDate(this.state.dateIdentified),
+  //     verbatimDate: this.state.verbatimDate,
+  //     collectedYear: this.state.collectedYear,
+  //     collectedMonth: parseRawMonth(this.state.collectedMonth),
+  //     collectedDay: this.state.collectedDay,
+  //     sex: this.state.sex,
+  //     lifeStage: this.state.lifeStage,
+  //     habitat: this.state.habitat,
+  //     occurrenceRemarks: this.state.occurrenceRemarks,
+  //     molecularOccurrenceRemarks: this.state.molecularOccurrenceRemarks,
+  //     samplingProtocol: this.state.samplingProtocol,
+  //     country: this.state.country,
+  //     stateProvince: this.state.stateProvince,
+  //     county: this.state.county,
+  //     municipality: this.state.municipality,
+  //     locality: this.state.locality,
+  //     elevationInMeters: this.state.elevationInMeters,
+  //     decimalLatitude: this.state.decimalLatitude,
+  //     decimalLongitude: this.state.decimalLongitude,
+  //     geodeticDatum: this.state.geodeticDatum,
+  //     coordinateUncertainty: this.state.coordinateUncertainty,
+  //     verbatimLatitude: this.state.verbatimLatitude,
+  //     verbatimLongitude: this.state.verbatimLongitude,
+  //     georeferencedBy: this.state.georeferencedBy,
+  //     disposition: this.state.disposition,
+  //     loanInfo: loanInfo,
+  //     preparations: this.state.preparations,
+  //     freezer: this.state.freezer,
+  //     rack: this.state.rack,
+  //     box: this.state.box,
+  //     tubeSize: this.state.tubeSize,
+  //     associatedSequences: this.state.associatedSequences,
+  //     associatedReferences: this.state.associatedReferences,
+  //     withholdData: this.state.withholdData,
+  //     reared: this.state.reared,
+  //     fieldNotes: this.state.fieldNotes,
+  //     collectors: this.state.collectors,
+  //   };
+
+  //   let errors = checkSpecimen(specimen);
+
+  //   console.log(errors);
+
+  //   alert(JSON.stringify(specimen, null, 2));
+  //   this.setState({ loading: false });
+
+  //   // if (errors.length === 0) {
+  //   //   // TODO: uncomment when ready
+  //   //   const insertData = await runSingleInsert(specimen);
+  //   //   console.log(insertData);
+
+  //   //   if (!insertData.data.success) {
+  //   //     let error = [
+  //   //       `SQL ERROR: Code: ${insertData.data.data.code}, Message: ${insertData.data.data.sqlMessage}`,
+  //   //     ];
+  //   //     this.props.notify({
+  //   //       type: "error",
+  //   //       message: "Uh oh, an error detected. Please check INSERT error log",
+  //   //     });
+  //   //     this.props.updateInsertErrorMessage(error);
+  //   //     this.setState({ hasError: true, loading: false });
+  //   //   } else {
+  //   //   }
+  //   // } else {
+  //   //   this.props.updateInsertErrorMessage(errors);
+  //   //   this.setState({ hasError: true, loading: false });
+  //   // }
+  // };
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
@@ -568,21 +730,24 @@ export default class FormInsert extends React.Component {
       return (
         <>
           <CreateHelpModal />
-          <Button>Cancel</Button>
+          <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button
             disabled={page === 0}
             onClick={() => this.paginate("backward")}
           >
             Go Back
           </Button>
-          <Button>Submit</Button>
+          <ConfirmAuth
+            checkAuth={this.props.checkAuth}
+            handleSubmit={this.handleSubmit}
+          />
         </>
       );
     } else {
       return (
         <>
           <CreateHelpModal />
-          <Button>Cancel</Button>
+          <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button
             disabled={page === 0}
             onClick={() => this.paginate("backward")}
@@ -1006,6 +1171,10 @@ export default class FormInsert extends React.Component {
                   placeholder="YYYY-MM-DD"
                   value={dateIdentified}
                   onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit(
+                    "dateIdentified",
+                    dateIdentified
+                  )}
                 />
               </Form.Group>
               <Form.Group widths="equal">
@@ -1098,6 +1267,8 @@ export default class FormInsert extends React.Component {
                   options={tubeSizeControl}
                   label="tubeSize"
                   placeholder="Select One"
+                  name="tubeSize"
+                  value={tubeSize}
                   onChange={this.handleChange}
                 />
               </Form.Group>
@@ -1108,18 +1279,20 @@ export default class FormInsert extends React.Component {
                   options={dispositionControl}
                   label="disposition"
                   placeholder="Select One"
+                  name="disposition"
+                  value={disposition}
                   onChange={this.handleChange}
                 />
                 <Form.Field>
                   <label>Should this specimen data be witheld?</label>
                   <Form.Checkbox
                     label="Yes"
-                    checked={this.state.withholdData}
+                    checked={withholdData}
                     onClick={() => this.setState({ withholdData: true })}
                   />
                   <Form.Checkbox
                     label="No"
-                    checked={!this.state.withholdData}
+                    checked={!withholdData}
                     onClick={() => this.setState({ withholdData: false })}
                   />
                 </Form.Field>
@@ -1397,11 +1570,21 @@ export default class FormInsert extends React.Component {
               <Form.Group widths="equal">
                 <Form.Field>
                   <label>verbatimLatitude</label>
-                  <Input placeholder="41 05 54.03S" />
+                  <Input
+                    placeholder="41 05 54.03S"
+                    name="verbatimLatitude"
+                    value={verbatimLatitude}
+                    onChange={this.handleChange}
+                  />
                 </Form.Field>
                 <Form.Field>
                   <label>verbatimLongitude</label>
-                  <Input placeholder={`121d 10' 34" W`} />
+                  <Input
+                    placeholder={`121d 10' 34" W`}
+                    name="verbatimLongitude"
+                    value={verbatimLongitude}
+                    onChange={this.handleChange}
+                  />
                 </Form.Field>
               </Form.Group>
 
@@ -1514,8 +1697,6 @@ export default class FormInsert extends React.Component {
     if (!this.state.hasError && this.props.errorMessages.insertError !== null) {
       this.setState({ hasError: true });
     }
-
-    console.log(Number(Math.ceil(this.state.page / 8) * 100));
 
     return (
       <>

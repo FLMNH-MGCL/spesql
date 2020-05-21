@@ -279,7 +279,7 @@ export const parseMeasurement = (measurement) => {
   let numValue = NaN;
 
   if (measurement === " " || measurement.split(" ")[0] === "") {
-    return measurement;
+    return "";
   } else {
     if (
       measurement.toLowerCase().endsWith(" meters") ||
@@ -335,6 +335,17 @@ const includesPunctuation = (field) => {
   ) {
     return true;
   } else return false;
+};
+
+const isFutureDate = (date) => {
+  let now = new Date();
+
+  // date is in the future (move this to prechecks)
+  if (date > now) {
+    return true;
+  }
+
+  return false;
 };
 
 export const capsChecks = (fieldName, fieldValue, upperFirst) => {
@@ -585,17 +596,17 @@ export function checkField(fieldName, fieldValue) {
       }
       return errors;
 
-    // case "dateIdentified":
-    //   let date = parseDate(new Date(fieldValue));
-    //   //console.log(date);
-    //   if (fieldValue === "") {
-    //     return errors
-    //   }
-
-    //   return errors
-
-    // TODO: add error check
     case "dateIdentified":
+      if (fieldValue === "") {
+        return errors;
+      }
+
+      if (isFutureDate(fieldValue)) {
+        errors.push(
+          `Date error (@ ${fieldName}): Cannot select date in future.`
+        );
+      }
+
       return errors;
 
     // TODO: add error check
@@ -613,6 +624,11 @@ export function checkField(fieldName, fieldValue) {
 
       if (fieldValue.length !== 4) {
         errors.push(`Format error (@ ${fieldName}): Year should be YYYY.`);
+      }
+
+      const currentYear = new Date().getFullYear();
+      if (parseInt(fieldValue, 10) > currentYear) {
+        errors.push(`Date error (@ ${fieldName}): Year is in future.`);
       }
 
       return errors;

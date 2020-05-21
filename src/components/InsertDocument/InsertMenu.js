@@ -69,7 +69,6 @@ export default function InsertMenu(props) {
       );
     }
   }
-
   return (
     <>
       <Dropdown
