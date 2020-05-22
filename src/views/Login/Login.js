@@ -53,10 +53,17 @@ function Login(props) {
     console.log(authData);
 
     if (authData.data.err) {
-      createNotification({
-        type: "error",
-        message: "Authentication failed.",
-      });
+      if (
+        authData.data.message &&
+        authData.data.message === "vpn likely cause"
+      ) {
+        window.location.hash = "/fourohfour";
+      } else {
+        createNotification({
+          type: "error",
+          message: "Authentication failed.",
+        });
+      }
     } else {
       createNotification({
         type: "success",

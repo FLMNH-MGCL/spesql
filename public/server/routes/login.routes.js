@@ -13,8 +13,7 @@ module.exports = function (connection, app) {
         if (err) {
           // do sm
           console.log(err);
-          res.status(401);
-          res.json(err);
+          res.json({ err: err, message: "vpn likely cause" });
         } else {
           // compare
           if (data.length < 1) {

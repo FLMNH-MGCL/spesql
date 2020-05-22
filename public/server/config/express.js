@@ -15,6 +15,7 @@ module.exports.init = () => {
   // body parsing middleware
   app.use(bodyParser.json());
 
+  //PROD UNCOMMENT
   // app.use(express.static(path.join(__dirname, "../../../build")));
 
   // console.log(__dirname);
