@@ -1,5 +1,5 @@
 import React from "react";
-import { Segment, Header, Grid, Image } from "semantic-ui-react";
+import { Segment, Grid } from "semantic-ui-react";
 import Background from "./errorcat.png";
 import "./NotFound.css";
 

@@ -9,10 +9,12 @@ export const UPDATE_FILTER_TEXT = "UPDATE_FILTER_TEXT";
 export const UPDATE_FILTER_CATEGORY = "UPDATE_FILTER_CATEGORY";
 export const UPDATE_SELECTED_SPECIMEN = "UPDATE_SELECTED_SPECIMEN";
 
-export const UPDATE_INSERT_ERROR_LOG = "UPDATE_INSERT_ERROR_LOG";
+export const UPDATE_CSV_INSERT_ERROR_LOG = "UPDATE_CSV_INSERT_ERROR_LOG";
+export const UPDATE_MANUAL_INSERT_ERROR_LOG = "UPDATE_MANUAL_INSERT_ERROR_LOG";
 export const UPDATE_SELECT_ERROR_LOG = "UPDATE_SELECT_ERROR_LOG";
 export const UPDATE_COUNT_ERROR_LOG = "UPDATE_COUNT_ERROR_LOG";
 export const UPDATE_UPDATE_ERROR_LOG = "UPDATE_UPDATE_ERROR_LOG";
+export const UPDATE_SINGLE_UPDATE_ERROR_LOG = "UPDATE_SINGLE_UPDATE_ERROR_LOG";
 
 export const UPDATE_LOADING_STATUS = "UPDATE_LOADING_STATUS";
 export const UPDATE_REFRESH_STATUS = "UPDATE_REFRESH_STATUS";
@@ -35,13 +37,15 @@ const initialState = {
   query_headers: [],
   countQuerycount: null,
   errorMessages: {
-    insertError: null,
+    manualInsert: null,
+    csvInsert: null,
     selectError: null,
     countError: null,
-    updateError: null
+    updateError: null,
+    singleUpdate: null,
   },
   loading: false,
-  refreshing: false
+  refreshing: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -80,13 +84,15 @@ export default function reducer(state = initialState, action) {
         query_headers: [],
         countQueryCount: null,
         errorMessages: {
-          insertError: null,
+          manualInsert: null,
+          csvInsert: null,
           selectError: null,
           countError: null,
-          updateError: null
+          updateError: null,
+          singleUpdate: null,
         },
         loading: false,
-        refreshing: false
+        refreshing: false,
       };
       sessionStorage.removeItem("current_query");
       return newState;
@@ -111,18 +117,17 @@ export default function reducer(state = initialState, action) {
       newState.selectedSpecimen = action.selectedSpecimen;
       return newState;
 
-    case "UPDATE_INSERT_ERROR_LOG":
-      newState.errorMessages.insertError = action.insertError;
+    case "UPDATE_MANUAL_INSERT_ERROR_LOG":
+      newState.errorMessages.manualInsert = action.manualInsert;
+      return newState;
+
+    case "UPDATE_CSV_INSERT_ERROR_LOG":
+      newState.errorMessages.csvInsert = action.csvInsert;
       return newState;
 
     case "UPDATE_SELECT_ERROR_LOG":
-      let newErrorMessages = {
-        insertError: state.errorMessages.insertError,
-        selectError: action.selectError,
-        countError: state.errorMessages.countError,
-        updateError: state.errorMessages.updateError
-      };
-      newState.errorMessages = newErrorMessages;
+      newState.errorMessages.selectError = action.selectError;
+
       return newState;
 
     case "UPDATE_COUNT_ERROR_LOG":
@@ -131,6 +136,10 @@ export default function reducer(state = initialState, action) {
 
     case "UPDATE_UPDATE_ERROR_LOG":
       newState.errorMessages.updateError = action.updateError;
+      return newState;
+
+    case "UPDATE_SINGLE_UPDATE_ERROR_LOG":
+      newState.errorMessages.singleUpdate = action.singleUpdate;
       return newState;
 
     case "UPDATE_LOADING_STATUS":

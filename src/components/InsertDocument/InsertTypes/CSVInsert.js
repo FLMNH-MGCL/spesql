@@ -13,6 +13,7 @@ import { checkSpecimen } from "../../../functions/queryChecks";
 import { runInsertQuery } from "../../../functions/queries";
 import CSVDrop from "./CSVDrop";
 import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
+import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
 
 async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
@@ -57,7 +58,7 @@ export default class CSVInsert extends React.Component {
               message:
                 "Uh oh, some errors detected. Please check INSERT error log",
             });
-            this.props.updateInsertErrorMessage(errors);
+            this.props.updateCSVInsertErrorMessage(errors);
             this.setState({ hasError: true });
           } else {
             this.props.notify({
@@ -83,7 +84,7 @@ export default class CSVInsert extends React.Component {
         type: "error",
         message: "Uh oh, some errors detected. Please check INSERT error log",
       });
-      this.props.updateInsertErrorMessage(ret.data);
+      this.props.updateCSVInsertErrorMessage(ret.data);
       this.setState({ hasError: true, loading: false });
       return;
     }
@@ -173,7 +174,7 @@ export default class CSVInsert extends React.Component {
       });
 
       //   console.log(errors);
-      this.props.updateInsertErrorMessage(errors);
+      this.props.updateCSVInsertErrorMessage(errors);
     }
 
     if (insertions.length > 0) {
@@ -189,21 +190,21 @@ export default class CSVInsert extends React.Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  renderErrorTerminal = () => (
-    <div style={{ marginBottom: "3rem", marginTop: "1.5rem" }}>
-      <ErrorTerminal errorLog={this.props.errorMessages.insertError} />
-      <Button
-        onClick={() => {
-          this.props.updateInsertErrorMessage(null);
-          this.setState({ hasError: false });
-        }}
-        color="red"
-        style={{ float: "right" }}
-      >
-        Clear
-      </Button>
-    </div>
-  );
+  // renderErrorTerminal = () => (
+  //   <div style={{ marginBottom: "3rem", marginTop: "1.5rem" }}>
+  //     <ErrorTerminal errorLog={this.props.errorMessages.insertError} />
+  //     <Button
+  //       onClick={() => {
+  //         this.props.updateCSVInsertErrorMessage(null);
+  //         this.setState({ hasError: false });
+  //       }}
+  //       color="red"
+  //       style={{ float: "right" }}
+  //     >
+  //       Clear
+  //     </Button>
+  //   </div>
+  // );
 
   render() {
     if (!this.state.hasError && this.props.errorMessages.insertError !== null) {
@@ -254,10 +255,15 @@ export default class CSVInsert extends React.Component {
 
           <CSVDrop setCSV={this.setCSV.bind(this)} />
 
-          {this.state.hasError ? this.renderErrorTerminal() : null}
+          {/* {this.state.hasError ? this.renderErrorTerminal() : null} */}
         </Modal.Content>
         <Modal.Actions>
           <CreateHelpModal queryType="PASTE_INSERT" />
+          <CreateErrorLogModal
+            type="CSV Insert"
+            errors={this.props.errorMessages.csvInsert}
+            clearErrors={() => this.props.updateCSVInsertErrorMessage(null)}
+          />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button
             type="button"

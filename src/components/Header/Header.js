@@ -110,7 +110,12 @@ export default class Header extends Component {
               <InsertMenu
                 isValidCSV={this.props.isValidCSV.bind(this)}
                 errorMessages={this.props.errorMessages}
-                updateInsertErrorMessage={this.props.updateInsertErrorMessage}
+                updateManualInsertErrorMessage={
+                  this.props.updateManualInsertErrorMessage
+                }
+                updateCSVInsertErrorMessage={
+                  this.props.updateCSVInsertErrorMessage
+                }
                 notify={this.props.notify}
                 small={this.state.mobileView}
                 disabled={this.props.disabled}

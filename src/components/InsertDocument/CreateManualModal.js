@@ -7,10 +7,16 @@ export default function CreatePasteModal({
   open,
   closeModal,
   checkAuth,
+  tableOptions,
 }) {
   return (
     <Modal open={open} size="small">
-      <FormInsert {...props} closeModal={closeModal} checkAuth={checkAuth} />
+      <FormInsert
+        {...props}
+        closeModal={closeModal}
+        checkAuth={checkAuth}
+        tableOptions={tableOptions}
+      />
     </Modal>
   );
 }

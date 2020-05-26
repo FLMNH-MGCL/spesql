@@ -4,19 +4,13 @@ import {
   Form,
   Input,
   Select,
-  Message,
   TextArea,
   Modal,
   Header,
   Dropdown,
-  Icon,
   Segment,
-  Checkbox,
   Progress,
   Container,
-  Popup,
-  // Checkbox,
-  // Dropdown,
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
 // import "react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css";
@@ -29,7 +23,7 @@ import {
   parseMeasurement,
   parseRawMonth,
 } from "../../../functions/queryChecks";
-// import { runSingleInsert } from "../../../functions/queries";
+import { runSingleInsert } from "../../../functions/queries";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 // import DatePicker from "react-datepicker";
 
@@ -56,13 +50,16 @@ import {
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
 import { Checkmark } from "react-checkmark";
+import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
 
 export default class FormInsert extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
 
     this.state = {
       page: 0,
+      databaseTable: "",
       catalogNumber: "",
       recordNumber: "",
       otherCatalogNumber: "",
@@ -301,6 +298,12 @@ export default class FormInsert extends React.Component {
         : parseDate(this.state.loanReturnDate)
       : "";
 
+    const loanStartDate = this.state.isLoaned
+      ? this.state.loanStartDate === ""
+        ? ""
+        : parseDate(this.state.loanStartDate)
+      : "";
+
     const loanRemarks = this.state.isLoaned ? this.state.loanRemarks : "";
 
     const associatedSequences = this.state.hasAssociatedSequences
@@ -354,9 +357,10 @@ export default class FormInsert extends React.Component {
       verbatimLongitude: this.state.verbatimLongitude,
       georeferencedBy: this.state.georeferencedBy, //FIXME
       disposition: this.state.disposition,
-      // isLoaned: false,
+      isLoaned: this.state.isLoaned ? "Y" : "N",
       loanInstitution: loanInstitution,
       loaneeName: loaneeName,
+      loanStartDate: loanStartDate, // FIXME
       loanReturnDate: loanReturnDate,
       loanRemarks: loanRemarks,
       preparations: this.state.preparations,
@@ -384,7 +388,12 @@ export default class FormInsert extends React.Component {
         type: "error",
         message: "Uh oh, errors detected. Please check error log below",
       });
+      this.props.updateManualInsertErrorMessage(errors);
     } else {
+      const insertData = await runSingleInsert(
+        specimen,
+        this.state.databaseTable
+      );
     }
 
     this.setState({ loading: false });
@@ -730,6 +739,11 @@ export default class FormInsert extends React.Component {
       return (
         <>
           <CreateHelpModal />
+          <CreateErrorLogModal
+            type="Manual Insert"
+            errors={this.props.errorMessages.manualInsert}
+            clearErrors={() => this.props.updateManualInsertErrorMessage(null)}
+          />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button
             disabled={page === 0}
@@ -744,9 +758,15 @@ export default class FormInsert extends React.Component {
         </>
       );
     } else {
+      console.log(this.props);
       return (
         <>
           <CreateHelpModal />
+          <CreateErrorLogModal
+            type="Manual Insert"
+            errors={this.props.errorMessages.manualInsert}
+            clearErrors={() => this.props.updateManualInsertErrorMessage(null)}
+          />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button
             disabled={page === 0}
@@ -763,6 +783,7 @@ export default class FormInsert extends React.Component {
   renderPage() {
     const {
       page,
+      databaseTable,
       catalogNumber,
       recordNumber,
       otherCatalogNumber,
@@ -831,6 +852,24 @@ export default class FormInsert extends React.Component {
       case 0:
         return (
           <>
+            <Header size="small">Database Information</Header>
+            <Segment>
+              <Form.Group inline>
+                <Form.Field
+                  control={Select}
+                  options={this.props.tableOptions}
+                  label="Which table is this entry going?"
+                  placeholder="Select One"
+                  name="databaseTable"
+                  value={databaseTable}
+                  onChange={this.handleChange}
+                  error={this.checkBasicPreSubmit(
+                    "databaseTable",
+                    databaseTable
+                  )}
+                />
+              </Form.Group>
+            </Segment>
             <Header size="small">Record / Identification</Header>
             <Segment>
               <Form.Group widths="equal">

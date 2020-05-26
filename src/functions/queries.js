@@ -4,7 +4,7 @@ export async function runSelectQuery(query) {
   //sessionStorage.setItem('current_query', query)
 
   let data = { command: query };
-  const ret = await axios.post("/api/fetch/", data).then(response => {
+  const ret = await axios.post("/api/fetch/", data).then((response) => {
     const data = response.data;
     return data;
   });
@@ -15,7 +15,7 @@ export async function runSelectQuery(query) {
 export async function runCountQuery(query) {
   let data = { command: query };
 
-  const ret = await axios.post("/api/select-count/", data).then(response => {
+  const ret = await axios.post("/api/select-count/", data).then((response) => {
     const countData = response.data;
     return countData;
   });
@@ -26,7 +26,7 @@ export async function runCountQuery(query) {
 export async function runUpdateQuery(query) {
   let data = { command: query };
 
-  const ret = await axios.post("/api/update/", data).then(response => {
+  const ret = await axios.post("/api/update/", data).then((response) => {
     const data = response;
     return data;
   });
@@ -39,7 +39,7 @@ export async function runUpdateQuery(query) {
 export async function runDeleteQuery(query) {
   let data = { command: query };
 
-  const ret = await axios.post(`/api/delete/`, data).then(response => {
+  const ret = await axios.post(`/api/delete/`, data).then((response) => {
     const data = response;
     return data;
   });
@@ -53,13 +53,15 @@ async function asyncForEach(array, callback) {
   }
 }
 
-export async function runInsertQuery(insertions) {
+export async function runInsertQuery(insertions, table) {
   let insertionsData = [];
-  asyncForEach(insertions, async specimen => {
-    const ret = await axios.post("/api/insert", specimen).then(response => {
-      const data = response;
-      return data;
-    });
+  asyncForEach(insertions, async (specimen) => {
+    const ret = await axios
+      .post("/api/insert", { specimen: specimen, table: table })
+      .then((response) => {
+        const data = response;
+        return data;
+      });
 
     insertionsData.push(ret);
   });
@@ -67,8 +69,11 @@ export async function runInsertQuery(insertions) {
   return insertionsData;
 }
 
-export async function runSingleInsert(specimen) {
-  const insertData = await axios.post("api/insert", specimen);
+export async function runSingleInsert(specimen, table) {
+  const insertData = await axios.post("api/insert", {
+    specimen: specimen,
+    table: table,
+  });
   return insertData;
 }
 
@@ -78,9 +83,7 @@ export async function currentUser() {
   if (response.data.success === false) {
     console.log("err");
     return null;
-  } 
-  
-  else {
+  } else {
     const currentUser = response.data.currentUser;
     // console.log(currentUser)
     return currentUser;

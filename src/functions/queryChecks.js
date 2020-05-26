@@ -422,6 +422,11 @@ export const capsChecks = (fieldName, fieldValue, upperFirst) => {
 export function checkField(fieldName, fieldValue) {
   let errors = [];
   switch (fieldName) {
+    case "databaseTable":
+      if (fieldValue === "") {
+        errors.push(`Query error (@ ${fieldName}): Must select a table.`);
+      }
+      return errors;
     case "catalogNumber":
       if (fieldValue === "") {
         return errors;

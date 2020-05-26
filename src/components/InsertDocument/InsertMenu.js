@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dropdown, Button, Icon } from "semantic-ui-react";
 import CreatePasteModal from "./CreatePasteModal";
 import CreateManualModal from "./CreateManualModal";
@@ -9,6 +9,36 @@ export default function InsertMenu(props) {
   // const [open, toggle] = useState(false);
   const [showPaste, togglePaste] = useState(false);
   const [showManual, toggleManual] = useState(false);
+  const [tableOptions, setTableOptions] = useState();
+
+  useEffect(() => {
+    if (!tableOptions) {
+      async function initTableOptions(queryType) {
+        let dbSelection = [];
+        const { userData } = props;
+        await axios
+          .post("/api/list-tables/", {
+            privilege_level: userData.privilege_level,
+            query_type: queryType,
+          })
+          .then((response) => {
+            if (response.data.error) {
+              setTableOptions([]);
+              // notify with error in getting tables
+            } else {
+              dbSelection = response.data.tables.map((table, index) => {
+                return { key: index + 1 * 1002, text: table, value: table };
+              });
+
+              // console.log(dbSelection);
+              // this.setState({ dbSelection: dbSelection, loadingOptions: false });
+              setTableOptions(dbSelection);
+            }
+          });
+      }
+      initTableOptions("insert");
+    }
+  });
 
   async function checkAuth(user, password, callback) {
     if (props.userData.username !== user) {
@@ -56,6 +86,7 @@ export default function InsertMenu(props) {
           props={props}
           open={showPaste}
           checkAuth={checkAuth}
+          tableOptions={tableOptions}
         />
       );
     } else if (showManual) {
@@ -65,10 +96,12 @@ export default function InsertMenu(props) {
           props={props}
           open={showManual}
           checkAuth={checkAuth}
+          tableOptions={tableOptions}
         />
       );
     }
   }
+
   return (
     <>
       <Dropdown
