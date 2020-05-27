@@ -118,28 +118,71 @@ export default function reducer(state = initialState, action) {
       return newState;
 
     case "UPDATE_MANUAL_INSERT_ERROR_LOG":
-      newState.errorMessages.manualInsert = action.manualInsert;
+      newState.errorMessages = {
+        manualInsert: action.manualInsert,
+        csvInsert: state.csvInsert,
+        selectError: state.selectError,
+        countError: state.countError,
+        updateError: state.updateError,
+        singleUpdate: state.singleUpdate,
+      };
       return newState;
 
     case "UPDATE_CSV_INSERT_ERROR_LOG":
-      newState.errorMessages.csvInsert = action.csvInsert;
+      newState.errorMessages = {
+        manualInsert: state.manualInsert,
+        csvInsert: action.csvInsert,
+        selectError: state.selectError,
+        countError: state.countError,
+        updateError: state.updateError,
+        singleUpdate: state.singleUpdate,
+      };
       return newState;
 
     case "UPDATE_SELECT_ERROR_LOG":
-      newState.errorMessages.selectError = action.selectError;
+      newState.errorMessages = {
+        manualInsert: state.manualInsert,
+        csvInsert: state.csvInsert,
+        selectError: action.selectError,
+        countError: state.countError,
+        updateError: state.updateError,
+        singleUpdate: state.singleUpdate,
+      };
 
       return newState;
 
     case "UPDATE_COUNT_ERROR_LOG":
-      newState.errorMessages.countError = action.countError;
+      newState.errorMessages = {
+        manualInsert: state.manualInsert,
+        csvInsert: state.csvInsert,
+        selectError: state.selectError,
+        countError: action.countError,
+        updateError: state.updateError,
+        singleUpdate: state.singleUpdate,
+      };
       return newState;
 
     case "UPDATE_UPDATE_ERROR_LOG":
-      newState.errorMessages.updateError = action.updateError;
+      newState.errorMessages = {
+        manualInsert: state.manualInsert,
+        csvInsert: state.csvInsert,
+        selectError: state.selectError,
+        countError: state.countError,
+        updateError: action.updateError,
+        singleUpdate: state.singleUpdate,
+      };
+
       return newState;
 
     case "UPDATE_SINGLE_UPDATE_ERROR_LOG":
-      newState.errorMessages.singleUpdate = action.singleUpdate;
+      newState.errorMessages = {
+        manualInsert: state.manualInsert,
+        csvInsert: state.csvInsert,
+        selectError: state.selectError,
+        countError: state.countError,
+        updateError: state.updateError,
+        singleUpdate: action.singleUpdate,
+      };
       return newState;
 
     case "UPDATE_LOADING_STATUS":

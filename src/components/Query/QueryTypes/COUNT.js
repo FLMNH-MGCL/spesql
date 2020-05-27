@@ -19,8 +19,9 @@ import {
 import CountTerminal from "../QueryTerminals/CountTerminal";
 
 import CreateHelpModal from "../../Help/CreateHelpModal";
-import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
+// import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
 import axios from "axios";
+import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
 
 export default class COUNT extends React.Component {
   state = {
@@ -365,21 +366,21 @@ export default class COUNT extends React.Component {
     );
   };
 
-  renderErrorTerminal = () => (
-    <div style={{ marginBottom: "3rem" }}>
-      <ErrorTerminal errorLog={this.props.errorMessages.countError} />
-      <Button
-        onClick={() => {
-          this.props.updateCountErrorMessage(null);
-          this.setState({ hasError: false });
-        }}
-        color="red"
-        style={{ float: "right" }}
-      >
-        Clear
-      </Button>
-    </div>
-  );
+  // renderErrorTerminal = () => (
+  //   <div style={{ marginBottom: "3rem" }}>
+  //     <ErrorTerminal errorLog={this.props.errorMessages.countError} />
+  //     <Button
+  //       onClick={() => {
+  //         this.props.updateCountErrorMessage(null);
+  //         this.setState({ hasError: false });
+  //       }}
+  //       color="red"
+  //       style={{ float: "right" }}
+  //     >
+  //       Clear
+  //     </Button>
+  //   </div>
+  // );
 
   render() {
     const {
@@ -453,28 +454,30 @@ export default class COUNT extends React.Component {
           {this.state.basic_query
             ? this.renderBasicForm(query_action, fields, db, conditionalCount)
             : () => console.log("no form needed")}
-          {this.state.hasError ? (
-            this.renderErrorTerminal()
-          ) : (
-            <div style={{ marginBottom: "3rem" }}>
-              <CountTerminal
-                waiting={this.state.waiting}
-                submitted={this.state.submitted}
-                countQueryCount={this.props.countQueryCount}
-              />
-              <Button
-                color="red"
-                style={{ float: "right" }}
-                onClick={() => this.props.updateCountQueryCount(null)}
-              >
-                Clear
-              </Button>
-            </div>
-          )}
+
+          <div style={{ marginBottom: "3rem" }}>
+            <CountTerminal
+              waiting={this.state.waiting}
+              submitted={this.state.submitted}
+              countQueryCount={this.props.countQueryCount}
+            />
+            <Button
+              color="red"
+              style={{ float: "right" }}
+              onClick={() => this.props.updateCountQueryCount(null)}
+            >
+              Clear
+            </Button>
+          </div>
         </Modal.Content>
 
         <Modal.Actions>
           <CreateHelpModal queryType="COUNT" />
+          <CreateErrorLogModal
+            type="Count"
+            errors={this.props.errorMessages.countError}
+            updateError={this.props.updateCountErrorMessage}
+          />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button
             style={{ backgroundColor: "#5c6ac4", color: "#fff" }}

@@ -6,6 +6,7 @@ import {
   Message,
   Modal,
   Divider,
+  Header,
 } from "semantic-ui-react";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 import CreateHelpModal from "../../Help/CreateHelpModal";
@@ -224,18 +225,16 @@ export default class CSVInsert extends React.Component {
     return (
       <>
         <Modal.Header>CSV Insertion</Modal.Header>
+
         <Modal.Content>
-          <Message>
-            <Message.Header>Usage:</Message.Header>
-            <p>
-              Copy & paste CSV data into this text area. Be sure to include the
-              proper headers.{" "}
-              <a href="../../assets/CORRECT_HEADERS_TEMPLATE.csv" download>
-                Click here
-              </a>{" "}
-              to download an example template for the correct headers.
-            </p>
-          </Message>
+          <Header size="small">Paste CSV Data here</Header>
+          <p>
+            Be sure to include the headers, and if you need to view the template
+            for CSV files, donwload it from{" "}
+            <a href="../../assets/CORRECT_HEADERS_TEMPLATE.csv" download>
+              here
+            </a>{" "}
+          </p>
           <Form padded="vertically" onSubmit={this.handleCSVSubmit}>
             <Form.Group>
               <TextArea
@@ -243,7 +242,7 @@ export default class CSVInsert extends React.Component {
                 name="text_area"
                 value={text_area}
                 onChange={this.handleChange}
-                style={{ minHeight: "30vh" }}
+                style={{ minHeight: "20vh" }}
               />
             </Form.Group>
             {this.state.loading
@@ -262,7 +261,7 @@ export default class CSVInsert extends React.Component {
           <CreateErrorLogModal
             type="CSV Insert"
             errors={this.props.errorMessages.csvInsert}
-            clearErrors={() => this.props.updateCSVInsertErrorMessage(null)}
+            updateError={this.props.updateCSVInsertErrorMessage}
           />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button

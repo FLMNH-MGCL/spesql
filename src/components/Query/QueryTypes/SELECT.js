@@ -19,8 +19,9 @@ import {
 } from "../QueryConstants/constants";
 
 import CreateHelpModal from "../../Help/CreateHelpModal";
-import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
+// import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
 import axios from "axios";
+import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
 // import { checkAdvancedSelect } from "../../../functions/queryChecks";
 // import { createAutoGenFields } from "../../../functions/helpers";
 
@@ -395,18 +396,18 @@ export default class SELECT extends React.Component {
     </Form>
   );
 
-  renderErrorTerminal = () => (
-    <div style={{ marginBottom: "3rem" }}>
-      <ErrorTerminal errorLog={this.props.errorMessages.selectError} />
-      <Button
-        onClick={() => this.props.updateSelectErrorMessage(null)}
-        color="red"
-        floated="right"
-      >
-        Clear
-      </Button>
-    </div>
-  );
+  // renderErrorTerminal = () => (
+  //   <div style={{ marginBottom: "3rem" }}>
+  //     <ErrorTerminal errorLog={this.props.errorMessages.selectError} />
+  //     <Button
+  //       onClick={() => this.props.updateSelectErrorMessage(null)}
+  //       color="red"
+  //       floated="right"
+  //     >
+  //       Clear
+  //     </Button>
+  //   </div>
+  // );
 
   render() {
     const {
@@ -483,13 +484,18 @@ export default class SELECT extends React.Component {
                 conditionals
               )
             : null}
-
+          {/* 
           {this.props.errorMessages.selectError
             ? this.renderErrorTerminal()
-            : null}
+            : null} */}
         </Modal.Content>
         <Modal.Actions>
           <CreateHelpModal queryType="SELECT" />
+          <CreateErrorLogModal
+            type="Select"
+            errors={this.props.errorMessages.selectError}
+            updateError={this.props.updateSelectErrorMessage}
+          />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button
             style={{ backgroundColor: "#5c6ac4", color: "#fff" }}

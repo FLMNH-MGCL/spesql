@@ -8,7 +8,7 @@ import {
   Message,
   Modal,
 } from "semantic-ui-react";
-import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
+
 import {
   updateQueryOption,
   headerSelection,
@@ -18,6 +18,7 @@ import {
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import axios from "axios";
 import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
+import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
 
 const setOptions = headerSelection.slice(1, headerSelection.length);
 
@@ -655,21 +656,21 @@ export default class UPDATE extends React.Component {
     </Form>
   );
 
-  renderErrorTerminal = () => (
-    <div style={{ marginBottom: "3rem" }}>
-      <ErrorTerminal errorLog={this.props.errorMessages.updateError} />
-      <Button
-        onClick={() => {
-          this.props.updateUpdateErrorMessage(null);
-          this.setState({ loading: false });
-        }}
-        color="red"
-        style={{ float: "right" }}
-      >
-        Clear
-      </Button>
-    </div>
-  );
+  // renderErrorTerminal = () => (
+  //   <div style={{ marginBottom: "3rem" }}>
+  //     <ErrorTerminal errorLog={this.props.errorMessages.updateError} />
+  //     <Button
+  //       onClick={() => {
+  //         this.props.updateUpdateErrorMessage(null);
+  //         this.setState({ loading: false });
+  //       }}
+  //       color="red"
+  //       style={{ float: "right" }}
+  //     >
+  //       Clear
+  //     </Button>
+  //   </div>
+  // );
 
   render() {
     const {
@@ -772,12 +773,17 @@ export default class UPDATE extends React.Component {
               )
             : null}
 
-          {this.props.errorMessages.updateError
+          {/* {this.props.errorMessages.updateError
             ? this.renderErrorTerminal()
-            : null}
+            : null} */}
         </Modal.Content>
         <Modal.Actions>
           <CreateHelpModal queryType="UPDATE" />
+          <CreateErrorLogModal
+            type="Update"
+            errors={this.props.errorMessages.updateError}
+            updateError={this.props.updateUpdateErrorMessage}
+          />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <ConfirmAuth
             checkAuth={this.props.checkAuth}

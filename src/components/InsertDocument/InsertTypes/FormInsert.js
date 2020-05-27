@@ -742,7 +742,7 @@ export default class FormInsert extends React.Component {
           <CreateErrorLogModal
             type="Manual Insert"
             errors={this.props.errorMessages.manualInsert}
-            clearErrors={() => this.props.updateManualInsertErrorMessage(null)}
+            updateError={this.props.updateManualInsertErrorMessage}
           />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button
@@ -765,7 +765,7 @@ export default class FormInsert extends React.Component {
           <CreateErrorLogModal
             type="Manual Insert"
             errors={this.props.errorMessages.manualInsert}
-            clearErrors={() => this.props.updateManualInsertErrorMessage(null)}
+            updateError={this.props.updateManualInsertErrorMessage}
           />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button

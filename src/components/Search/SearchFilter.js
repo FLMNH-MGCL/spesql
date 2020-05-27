@@ -32,7 +32,7 @@ class SearchFilter extends React.Component {
 
   renderChecks = () => {
     let checkRow = [];
-    let checkGrid = headerSelection.forEach((header, index) => {
+    let checkGrid = headerSelection.map((header, index) => {
       if (index === headerSelection.length - 1 || (index + 1) % 3 === 0) {
         checkRow.push(
           <Form.Field>
@@ -66,6 +66,8 @@ class SearchFilter extends React.Component {
       }
     });
 
+    // console.log(checkGrid);
+
     return checkGrid;
   };
 
@@ -96,7 +98,11 @@ class SearchFilter extends React.Component {
               <Form style={{ paddingTop: "1rem" }}>{this.renderChecks()}</Form>
             </Segment>
           </Container>
+           
         </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => this.setState({ open: false })}>Close</Button>
+        </Modal.Actions>
       </Modal>
     );
   }

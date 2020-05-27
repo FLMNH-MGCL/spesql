@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Icon, Modal, Button, Segment } from "semantic-ui-react";
 import useBoolean from "../../utils/useBoolean";
 
@@ -46,9 +46,12 @@ const ErrorTerminal = ({ errorLog }) => {
   );
 };
 
-export default function CreateErrorLogModal({ type, errors, clearErrors }) {
+export default function CreateErrorLogModal({ type, errors, updateError }) {
   const [open, { on, off }] = useBoolean(false);
-  const [hasError, setHasError] = useState(errors ? true : false);
+  // const [hasError, setHasError] = useState(errors ? true : false);
+
+  // useEffect(() => {}, [errors]);
+
   return (
     <Modal
       open={open}
@@ -73,13 +76,7 @@ export default function CreateErrorLogModal({ type, errors, clearErrors }) {
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={off}>Close</Button>
-        <Button
-          color="yellow"
-          onClick={() => {
-            clearErrors();
-            // need to update the error messages!! in parent
-          }}
-        >
+        <Button color="yellow" onClick={() => updateError(null)}>
           Clear Error
         </Button>
       </Modal.Actions>
