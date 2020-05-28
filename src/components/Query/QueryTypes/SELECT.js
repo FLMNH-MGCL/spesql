@@ -1,13 +1,13 @@
 import React from "react";
-// import axios from "axios";
+
 import {
   Button,
   Form,
   Input,
   Select,
   Checkbox,
-  Message,
   Modal,
+  Header,
 } from "semantic-ui-react";
 import {
   selectQueryOption,
@@ -19,11 +19,8 @@ import {
 } from "../QueryConstants/constants";
 
 import CreateHelpModal from "../../Help/CreateHelpModal";
-// import ErrorTerminal from "../QueryTerminals/ErrorTerminal";
 import axios from "axios";
 import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
-// import { checkAdvancedSelect } from "../../../functions/queryChecks";
-// import { createAutoGenFields } from "../../../functions/helpers";
 
 export default class SELECT extends React.Component {
   state = {
@@ -333,81 +330,72 @@ export default class SELECT extends React.Component {
     conditionalCount,
     conditionals
   ) => (
-    <Form onSubmit={this.handleSubmit}>
-      <Form.Group widths="equal">
-        <Form.Field
-          control={Select}
-          options={selectQueryOption}
-          label="QUERY"
-          placeholder="SELECT"
-          search
-          name="query_action"
-          value={query_action}
-          onChange={this.handleChange}
-          disabled={!this.state.basic_query}
-          required
-        />
-        <Form.Field
-          control={Select}
-          options={headerSelection}
-          label="FIELD"
-          placeholder="FIELD"
-          search
-          multiple
-          name="fields"
-          error={this.checkFieldError()}
-          value={fields}
-          onChange={this.handleChange}
-          disabled={!this.state.basic_query}
-        />
-        <Form.Field
-          control={Select}
-          options={this.state.dbSelection}
-          label="Database Table"
-          placeholder=""
-          search
-          name="db"
-          error={
-            this.state.db === "" && this.state.basic_query
-              ? { content: "You must select a database table." }
-              : false
-          }
-          value={db}
-          onChange={this.handleChange}
-          disabled={!this.state.basic_query}
-        />
-      </Form.Group>
-      <Form.Group widths="equal">
-        <Form.Field
-          control={Select}
-          label="WHERE count (how many conditionals)"
-          options={conditionalCountOptions}
-          name="conditionalCount"
-          value={conditionalCount}
-          onChange={this.handleConditionalCountChange}
-          disabled={!this.state.basic_query}
-        />
-      </Form.Group>
-      {conditionals}
+    <>
+      <Header size="small">Basic Select Query</Header>
 
-      {this.state.loading
-        ? "Loading... This may take some time, please wait."
-        : null}
-    </Form>
+      <Form onSubmit={this.handleSubmit}>
+        <Form.Group widths="equal">
+          <Form.Field
+            control={Select}
+            options={selectQueryOption}
+            label="QUERY"
+            placeholder="SELECT"
+            search
+            name="query_action"
+            value={query_action}
+            onChange={this.handleChange}
+            disabled={!this.state.basic_query}
+            required
+          />
+          <Form.Field
+            control={Select}
+            options={headerSelection}
+            label="FIELD"
+            placeholder="FIELD"
+            search
+            multiple
+            name="fields"
+            error={this.checkFieldError()}
+            value={fields}
+            onChange={this.handleChange}
+            disabled={!this.state.basic_query}
+          />
+          <Form.Field
+            control={Select}
+            options={this.state.dbSelection}
+            label="Database Table"
+            placeholder=""
+            search
+            name="db"
+            error={
+              this.state.db === "" && this.state.basic_query
+                ? { content: "You must select a database table." }
+                : false
+            }
+            value={db}
+            onChange={this.handleChange}
+            disabled={!this.state.basic_query}
+          />
+        </Form.Group>
+        <Form.Group widths="equal">
+          <Form.Field
+            control={Select}
+            label="WHERE count (how many conditionals)"
+            options={conditionalCountOptions}
+            name="conditionalCount"
+            value={conditionalCount}
+            onChange={this.handleConditionalCountChange}
+            disabled={!this.state.basic_query}
+          />
+        </Form.Group>
+        {conditionals}
+
+        {this.state.loading
+          ? "Loading... This may take some time, please wait."
+          : null}
+      </Form>
+    </>
   );
-
-  // renderErrorTerminal = () => (
-  //   <div style={{ marginBottom: "3rem" }}>
-  //     <ErrorTerminal errorLog={this.props.errorMessages.selectError} />
-  //     <Button
-  //       onClick={() => this.props.updateSelectErrorMessage(null)}
-  //       color="red"
-  //       floated="right"
-  //     >
-  //       Clear
-  //     </Button>
-  //   </div>
-  // );
 
   render() {
     const {
@@ -431,21 +419,23 @@ export default class SELECT extends React.Component {
         <Modal.Header>Select Query</Modal.Header>
 
         <Modal.Content>
-          <Message>
+          {/* TODO: MOVE TO HELP */}
+          {/* <Message>
             <p>
               Select queries are those that simply fetch information from the
               database. If you have terminal/CLI experience using MySQL
               commands, there is an advanced query option available if checked.
               Click the ? button for more detailed information
             </p>
-          </Message>
+          </Message> */}
+          <Header size="small">Advanced Select Query</Header>
           <Form onSubmit={this.handleAdvancedSubmit}>
             <Form.Group>
               <Form.Field
                 control={Checkbox}
                 label="Advanced"
                 name="basic_query"
-                value=""
+                value={this.state.basic_query}
                 onChange={this.handleAdvancedCheck}
                 width={3}
               />
@@ -455,7 +445,7 @@ export default class SELECT extends React.Component {
                 value={advanced_query}
                 onChange={this.handleChange}
                 disabled={this.state.basic_query}
-                width={10}
+                width={13}
                 error={
                   this.state.basic_query === false &&
                   !advanced_query.toUpperCase().startsWith("SELECT")
@@ -464,13 +454,6 @@ export default class SELECT extends React.Component {
                       }
                     : false
                 }
-              />
-              <Form.Field
-                id="form-button-control-ta-submit-adv"
-                control={Button}
-                content="Submit"
-                disabled={this.state.basic_query}
-                width={3}
               />
             </Form.Group>
           </Form>
@@ -484,10 +467,6 @@ export default class SELECT extends React.Component {
                 conditionals
               )
             : null}
-          {/* 
-          {this.props.errorMessages.selectError
-            ? this.renderErrorTerminal()
-            : null} */}
         </Modal.Content>
         <Modal.Actions>
           <CreateHelpModal queryType="SELECT" />
@@ -498,9 +477,13 @@ export default class SELECT extends React.Component {
           />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button
+            loading={this.state.loading}
             style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
-            onClick={this.handleSubmit}
-            disabled={!this.state.basic_query}
+            onClick={
+              this.state.basic_query
+                ? this.handleSubmit
+                : this.handleAdvancedSubmit
+            }
           >
             Submit
           </Button>
