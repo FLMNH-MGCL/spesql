@@ -22,7 +22,7 @@ class DeleteDocument extends React.Component {
     }
   };
 
-  handleCancel = () => this.setState({ open: false });
+  handleCancel = () => this.setState({ open: false, understood: false });
 
   render() {
     if (this.props.disabled) {
@@ -34,6 +34,7 @@ class DeleteDocument extends React.Component {
         <Modal
           open={this.state.open}
           size="mini"
+          onClose={() => this.setState({ understood: false })}
           trigger={
             <Button
               negative

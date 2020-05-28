@@ -71,7 +71,9 @@ class SpecimenView extends React.Component {
           disabled={this.props.disabled}
           userData={this.props.userData}
           errorMessages={this.props.errorMessages}
-          updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
+          updateSingleUpdateErrorMessage={
+            this.props.updateSingleUpdateErrorMessage
+          }
           checkAuth={this.checkAuth.bind(this)}
         />
       </>

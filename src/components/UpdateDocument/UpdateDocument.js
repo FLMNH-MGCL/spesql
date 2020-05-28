@@ -8,6 +8,8 @@ import {
   Input,
   TextArea,
   Select,
+  Header,
+  Form,
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
 import CreateHelpModal from "../Help/CreateHelpModal";
@@ -24,8 +26,9 @@ import {
   yesOrNo,
   // units,
 } from "../Query/QueryConstants/constants";
-import ErrorTerminal from "../Query/QueryTerminals/ErrorTerminal";
+// import ErrorTerminal from "../Query/QueryTerminals/ErrorTerminal";
 import ConfirmAuth from "../../views/Admin/components/ConfirmAuth";
+import CreateErrorLogModal from "../Error/CreateErrorLogModal";
 
 class UpdateDocument extends React.Component {
   constructor(props) {
@@ -100,21 +103,21 @@ class UpdateDocument extends React.Component {
 
   onChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  renderErrorTerminal = () => (
-    <React.Fragment>
-      <ErrorTerminal errorLog={this.props.errorMessages.updateError} />
-      <Button
-        onClick={() => {
-          this.props.updateUpdateErrorMessage(null);
-          this.setState({ loading: false });
-        }}
-        color="red"
-        style={{ float: "right" }}
-      >
-        Clear
-      </Button>
-    </React.Fragment>
-  );
+  // renderErrorTerminal = () => (
+  //   <React.Fragment>
+  //     <ErrorTerminal errorLog={this.props.errorMessages.updateError} />
+  //     <Button
+  //       onClick={() => {
+  //         this.props.updateUpdateErrorMessage(null);
+  //         this.setState({ loading: false });
+  //       }}
+  //       color="red"
+  //       style={{ float: "right" }}
+  //     >
+  //       Clear
+  //     </Button>
+  //   </React.Fragment>
+  // );
 
   onSubmit = (e) => {
     if (this.state.reason === "") {
@@ -346,12 +349,12 @@ class UpdateDocument extends React.Component {
               </Button>
             }
             centered
+            scrolling
             open={this.state.open}
             onClose={this.close}
-            style={{ maxHeight: "85vh" }}
           >
             <Modal.Header>UPDATE Single Specimen</Modal.Header>
-            <Modal.Content scrolling style={{ minHeight: "80vh" }}>
+            <Modal.Content>
               <Grid padded>
                 <Grid.Row>
                   <Grid.Column width={16}>
@@ -372,22 +375,27 @@ class UpdateDocument extends React.Component {
                       </p>
                     </Message>
 
-                    <Input
-                      fluid
-                      label="Please enter the reason for this update"
-                      placeholder="new data recieved, incorrect field update, etc"
-                      name="reason"
-                      value={reason}
-                      onChange={this.onChange}
-                      error={
-                        this.state.reason === ""
-                          ? {
-                              content: "You must provide a reason",
-                              pointing: "below",
-                            }
-                          : false
-                      }
-                    />
+                    <Header size="small">
+                      Please enter the reason for this update
+                    </Header>
+                    <Form>
+                      <Form.Field
+                        control={Input}
+                        fluid
+                        placeholder="new data recieved, incorrect field update, etc"
+                        name="reason"
+                        value={reason}
+                        onChange={this.onChange}
+                        error={
+                          this.state.reason === ""
+                            ? {
+                                content: "You must provide a reason",
+                                pointing: "below",
+                              }
+                            : false
+                        }
+                      />
+                    </Form>
 
                     <Table singleLine>
                       <Table.Header>
@@ -1215,8 +1223,9 @@ class UpdateDocument extends React.Component {
                           </Table.Cell>
                           <Table.Cell>
                             <TextArea
+                              fluid
                               name="collectors"
-                              placeholder="Last1,First1 Last2,First2"
+                              placeholder="Last1,First1 | Last2,First2"
                               value={collectors}
                               onChange={this.onChange}
                             />
@@ -1230,6 +1239,11 @@ class UpdateDocument extends React.Component {
             </Modal.Content>
             <Modal.Actions>
               <CreateHelpModal queryType="UPDATE_SINGLE" />
+              <CreateErrorLogModal
+                type="Single Update"
+                errors={this.props.errorMessages.singleUpdate}
+                updateError={this.props.updateSingleUpdateErrorMessage}
+              />
               <ConfirmAuth
                 checkAuth={this.props.checkAuth}
                 handleSubmit={this.onSubmit}
@@ -1238,9 +1252,9 @@ class UpdateDocument extends React.Component {
                   UPDATE
                 </Button> */}
             </Modal.Actions>
-            {this.props.errorMessages.updateError
+            {/* {this.props.errorMessages.updateError
               ? this.renderErrorTerminal()
-              : null}
+              : null} */}
           </Modal>
         </React.Fragment>
       );
