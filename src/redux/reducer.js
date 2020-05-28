@@ -35,7 +35,7 @@ const initialState = {
   displayed: [],
   current_query: "",
   query_headers: [],
-  countQuerycount: null,
+  countQuerycount: undefined,
   errorMessages: {
     manualInsert: null,
     csvInsert: null,

@@ -10,7 +10,7 @@ export default function CreateUpdateModal({
   checkAuth,
 }) {
   return (
-    <Modal open={open} size="small" onClose={closeModal}>
+    <Modal centered open={open} size="small" onClose={closeModal}>
       <UPDATE
         // dbSelection={dbSelection}
         runQuery={props.runQuery}

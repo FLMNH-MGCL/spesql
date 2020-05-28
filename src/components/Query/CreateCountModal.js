@@ -4,7 +4,7 @@ import { COUNT } from "./QueryTypes";
 
 export default function CreateCountModal({ open, props, closeModal }) {
   return (
-    <Modal open={open} size="small" onClose={closeModal}>
+    <Modal centered open={open} size="small" onClose={closeModal}>
       <COUNT
         // dbSelection={dbSelection}
         runQuery={props.runQuery}

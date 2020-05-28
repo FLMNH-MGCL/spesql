@@ -7,6 +7,8 @@ import {
   Checkbox,
   Message,
   Modal,
+  Header,
+  Statistic,
 } from "semantic-ui-react";
 import {
   countQueryOption,
@@ -112,6 +114,7 @@ export default class COUNT extends React.Component {
   };
 
   handleSubmit = () => {
+    this.setState({ loading: true });
     let errors = this.basicErrorCheck();
 
     if (errors.length !== 0) {
@@ -159,6 +162,7 @@ export default class COUNT extends React.Component {
       // this.setState({submitted: true})
       this.props.runQuery(command);
     }
+    this.setState({ loading: false });
   };
 
   handleAdvancedSubmit = () => {
@@ -301,68 +305,72 @@ export default class COUNT extends React.Component {
   renderBasicForm = (query_action, fields, db, conditionalCount) => {
     let conditionals = this.renderConditions();
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Group widths="equal">
-          <Form.Field
-            control={Select}
-            options={countQueryOption}
-            label="QUERY"
-            placeholder="COUNT"
-            search
-            name="query_action"
-            error={
-              this.state.query_action === ""
-                ? { content: "You must use a COUNT query here." }
-                : false
-            }
-            value={query_action}
-            onChange={this.handleChange}
-            disabled={!this.state.basic_query}
-            required
-          />
-          <Form.Field
-            control={Select}
-            options={headerSelection}
-            label="FIELD"
-            placeholder="FIELD"
-            search
-            multiple
-            name="fields"
-            error={this.checkFieldError()}
-            value={fields}
-            onChange={this.handleChange}
-            disabled={!this.state.basic_query}
-          />
-          <Form.Field
-            control={Select}
-            options={this.state.dbSelection}
-            label="Database Table"
-            placeholder=""
-            search
-            name="db"
-            error={
-              this.state.db === ""
-                ? { content: "You must select a database table." }
-                : false
-            }
-            value={db}
-            onChange={this.handleChange}
-            disabled={!this.state.basic_query}
-          />
-        </Form.Group>
-        <Form.Group widths="equal">
-          <Form.Field
-            control={Select}
-            label="WHERE count (how many conditionals)"
-            options={conditionalCountOptions}
-            name="conditionalCount"
-            value={conditionalCount}
-            onChange={this.handleConditionalCountChange}
-            disabled={!this.state.basic_query}
-          />
-        </Form.Group>
-        {conditionals}
-      </Form>
+      <>
+        <Header size="small">Basic Count Query Form</Header>
+
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Group widths="equal">
+            <Form.Field
+              control={Select}
+              options={countQueryOption}
+              label="QUERY"
+              placeholder="COUNT"
+              search
+              name="query_action"
+              error={
+                this.state.query_action === ""
+                  ? { content: "You must use a COUNT query here." }
+                  : false
+              }
+              value={query_action}
+              onChange={this.handleChange}
+              disabled={!this.state.basic_query}
+              required
+            />
+            <Form.Field
+              control={Select}
+              options={headerSelection}
+              label="FIELD"
+              placeholder="FIELD"
+              search
+              multiple
+              name="fields"
+              error={this.checkFieldError()}
+              value={fields}
+              onChange={this.handleChange}
+              disabled={!this.state.basic_query}
+            />
+            <Form.Field
+              control={Select}
+              options={this.state.dbSelection}
+              label="Database Table"
+              placeholder=""
+              search
+              name="db"
+              error={
+                this.state.db === ""
+                  ? { content: "You must select a database table." }
+                  : false
+              }
+              value={db}
+              onChange={this.handleChange}
+              disabled={!this.state.basic_query}
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field
+              control={Select}
+              label="WHERE count (how many conditionals)"
+              options={conditionalCountOptions}
+              name="conditionalCount"
+              value={conditionalCount}
+              onChange={this.handleConditionalCountChange}
+              disabled={!this.state.basic_query}
+            />
+          </Form.Group>
+          {conditionals}
+        </Form>
+      </>
     );
   };
 
@@ -401,7 +409,8 @@ export default class COUNT extends React.Component {
       <>
         <Modal.Header>Count Query</Modal.Header>
         <Modal.Content>
-          <Message>
+          {/* TODO: Move to help menu */}
+          {/* <Message>
             <p>
               This section is for count queries. Count queries are very similar
               to select queries, and actually involve a SELECT query directly.
@@ -411,7 +420,9 @@ export default class COUNT extends React.Component {
               available if checked. Click the ? button for more detailed
               information
             </p>
-          </Message>
+          </Message> */}
+
+          <Header size="small">Advanced Count Query</Header>
 
           <Form onSubmit={this.handleAdvancedSubmit}>
             <Form.Group>
@@ -453,9 +464,18 @@ export default class COUNT extends React.Component {
 
           {this.state.basic_query
             ? this.renderBasicForm(query_action, fields, db, conditionalCount)
-            : () => console.log("no form needed")}
+            : null}
 
-          <div style={{ marginBottom: "3rem" }}>
+          {this.props.countQueryCount !== undefined && (
+            <div style={{ textAlign: "center" }}>
+              <Statistic>
+                <Statistic.Value>{this.props.countQueryCount}</Statistic.Value>
+                <Statistic.Label>Count</Statistic.Label>
+              </Statistic>
+            </div>
+          )}
+
+          {/* <div style={{ marginBottom: "3rem" }}>
             <CountTerminal
               waiting={this.state.waiting}
               submitted={this.state.submitted}
@@ -468,7 +488,7 @@ export default class COUNT extends React.Component {
             >
               Clear
             </Button>
-          </div>
+          </div> */}
         </Modal.Content>
 
         <Modal.Actions>
@@ -480,7 +500,15 @@ export default class COUNT extends React.Component {
           />
           <Button onClick={() => this.props.closeModal()}>Cancel</Button>
           <Button
+            color="yellow"
+            disabled={this.props.countQueryCount === undefined}
+            onClick={() => this.props.updateCountQueryCount(undefined)}
+          >
+            Clear
+          </Button>
+          <Button
             style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
+            loading={this.state.loading}
             onClick={this.handleSubmit}
             disabled={!this.state.basic_query}
           >
