@@ -54,7 +54,7 @@ class SpecimenView extends React.Component {
         <Card>
           <Image src={require("./test.jpg")} wrapped />
         </Card>
-        <DeleteDocument
+        {/* <DeleteDocument
           target={selectedSpecimen.id}
           runQuery={this.props.runQuery}
           disabled={this.props.disabled}
@@ -75,7 +75,7 @@ class SpecimenView extends React.Component {
             this.props.updateSingleUpdateErrorMessage
           }
           checkAuth={this.checkAuth.bind(this)}
-        />
+        /> */}
       </>
     );
 
@@ -365,7 +365,7 @@ class SpecimenView extends React.Component {
         <>
           <Grid columns="equal" padded>
             <Grid.Column style={{ maxHeight: "80vh", overflowY: "scroll" }}>
-              <div style={{ display: "inline-block" }}>
+              {/* <div style={{ display: "inline-block" }}>
                 <UpdateDocument
                   selectedSpecimen={selectedSpecimen}
                   currentQuery={this.props.currentQuery}
@@ -388,7 +388,7 @@ class SpecimenView extends React.Component {
                   notify={this.props.notify}
                   checkAuth={this.checkAuth.bind(this)}
                 />
-              </div>
+              </div> */}
               {list}
             </Grid.Column>
           </Grid>

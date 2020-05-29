@@ -1,81 +1,85 @@
-import React from "react";
-import { Button, Modal, Checkbox, Form } from "semantic-ui-react";
-import "./DeleteDocument.css";
+import React, { useState } from "react";
+import { Modal, Icon, Form, Checkbox, Button } from "semantic-ui-react";
+import useBoolean from "../../utils/useBoolean";
 import ConfirmAuth from "../../views/Admin/components/ConfirmAuth";
 
-class DeleteDocument extends React.Component {
-  state = { open: false, understood: false };
+export default function DeleteDocument({
+  selectedSpecimen,
+  specimen,
+  disabled,
+  props,
+}) {
+  const [open, { toggle }] = useBoolean();
+  const [understood, setUnderstanding] = useState(false);
 
-  show = () => this.setState({ open: true });
+  if (disabled || !selectedSpecimen) {
+    return <div></div>;
+  }
 
-  handleConfirm = () => {
-    if (!this.state.understood) {
-      this.props.notify({
+  function handleConfirm() {
+    if (!understood) {
+      props.notify({
         type: "error",
         message:
           "You must acknowledge the disclaimer before submitting delete query",
       });
     } else {
       let query = `DELETE FROM molecularLab WHERE id=${this.props.target};`;
-      this.props.runQuery(query);
-      this.setState({ open: false });
+      props.runQuery(query);
+      toggle();
     }
-  };
-
-  handleCancel = () => this.setState({ open: false, understood: false });
-
-  render() {
-    if (this.props.disabled) {
-      return <div></div>;
-    }
-
-    return (
-      <div>
-        <Modal
-          open={this.state.open}
-          size="mini"
-          onClose={() => this.setState({ understood: false })}
-          trigger={
-            <Button
-              negative
-              disabled={this.props.disabled}
-              onClick={this.show}
-              style={{ marginBottom: ".25rem" }}
-            >
-              DELETE
-            </Button>
-          }
-        >
-          <Modal.Header>Are you sure?</Modal.Header>
-          <Modal.Content>
-            <p>Target (Specimen ID): {this.props.target}</p>
-            <Form>
-              <Form.Field
-                control={Checkbox}
-                label="I understand this cannot be undone"
-                error={
-                  !this.state.understood
-                    ? { content: "You must acknowledge the disclaimer" }
-                    : false
-                }
-                value={this.state.understood}
-                onChange={() =>
-                  this.setState({ understood: !this.state.understood })
-                }
-              />
-            </Form>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button onClick={this.handleCancel}>Cancel</Button>
-            <ConfirmAuth
-              checkAuth={this.props.checkAuth}
-              handleSubmit={this.handleConfirm}
-            />
-          </Modal.Actions>
-        </Modal>
-      </div>
-    );
   }
-}
 
-export default DeleteDocument;
+  function handleCancel() {
+    toggle();
+    setUnderstanding(false);
+  }
+
+  return (
+    <Modal
+      size="mini"
+      open={open}
+      trigger={
+        <Icon
+          className={
+            selectedSpecimen.id === specimen.id
+              ? "expand-on-hover active"
+              : "expand-on-hover hidden"
+          }
+          name="trash alternate"
+          onClick={toggle}
+          style={
+            selectedSpecimen.id === specimen.id
+              ? { float: "right", marginLeft: ".25rem" }
+              : { display: "none" }
+          }
+        />
+      }
+    >
+      <Modal.Header>Are you sure?</Modal.Header>
+      <Modal.Content>
+        <p>Target (Specimen ID): {selectedSpecimen.id}</p>
+        <Form>
+          <Form.Field
+            control={Checkbox}
+            label="I understand this cannot be undone"
+            error={
+              !understood
+                ? { content: "You must acknowledge the disclaimer" }
+                : false
+            }
+            value={understood}
+            onChange={() => setUnderstanding(!understood)}
+          />
+        </Form>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button onClick={handleCancel}>Cancel</Button>
+        {/* <ConfirmAuth
+          checkAuth={this.props.checkAuth}
+          handleSubmit={this.handleConfirm}
+        /> */}
+      </Modal.Actions>
+    </Modal>
+  );
+}

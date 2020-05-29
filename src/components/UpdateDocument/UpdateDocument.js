@@ -9,7 +9,9 @@ import {
   TextArea,
   Select,
   Header,
+  Icon,
   Form,
+  Popup,
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
 import CreateHelpModal from "../Help/CreateHelpModal";
@@ -247,33 +249,24 @@ class UpdateDocument extends React.Component {
 
     if (!this.props.currentQuery.startsWith("SELECT *")) {
       return (
-        <Modal
+        <Popup
+          on="click"
+          basic
+          offset="-1000x, 10px"
+          position="bottom left"
+          content="You must make a 'select all' query to access single update"
           trigger={
-            <Button
-              color="yellow"
-              disabled={this.props.disabled}
-              onClick={this.show}
-            >
-              UPDATE
-            </Button>
+            <Icon
+              className="expand-on-hover"
+              name="edit"
+              style={
+                // this.props.selectedSpecimen.id === specimen.id
+                { float: "right" }
+                // : { display: "none" }
+              }
+            />
           }
-          centered
-          open={this.state.open}
-          onClose={this.close}
-          size="small"
-        >
-          <Modal.Header>Invalid usage!</Modal.Header>
-          <Modal.Content>
-            <p>
-              Updating a single specimen requires a current loaded SELECT query
-              that contains all existing headers. This means you must have made
-              a SELECT ALL (SELECT *) query. This is so data isn't changed
-              because it is thought to be empty, when it may just be missing
-              because of a narrow query. See the Query Selector Menu for more
-              help (the Query button on the header menu).
-            </p>
-          </Modal.Content>
-        </Modal>
+        />
       );
     } else {
       const {
@@ -340,13 +333,16 @@ class UpdateDocument extends React.Component {
         <React.Fragment>
           <Modal
             trigger={
-              <Button
-                color="yellow"
-                disabled={this.props.disabled}
-                onClick={this.show}
-              >
-                UPDATE
-              </Button>
+              <Icon
+                className="expand-on-hover"
+                name="edit"
+                onClick={() => this.setState({ open: true })}
+                style={
+                  // this.props.selectedSpecimen.id === specimen.id
+                  { float: "right" }
+                  // : { display: "none" }
+                }
+              />
             }
             centered
             scrolling

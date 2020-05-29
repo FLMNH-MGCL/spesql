@@ -148,7 +148,11 @@ export default class SELECT extends React.Component {
         if (i !== this.state.fields.length - 1) {
           command += ",";
         } else {
-          command += " ";
+          if (this.state.fields.indexOf("*") < 0) {
+            command += ",id ";
+          } else {
+            command += " ";
+          }
         }
       }
 

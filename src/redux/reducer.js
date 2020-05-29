@@ -82,7 +82,7 @@ export default function reducer(state = initialState, action) {
         displayed: [],
         current_query: "",
         query_headers: [],
-        countQueryCount: null,
+        countQueryCount: undefined,
         errorMessages: {
           manualInsert: null,
           csvInsert: null,

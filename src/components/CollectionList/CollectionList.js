@@ -1,71 +1,15 @@
 import React from "react";
-import { Table, Button, Loader, Icon } from "semantic-ui-react";
+import { Table, Button, Loader, Icon, Label } from "semantic-ui-react";
 import CreateHelpModal from "../Help/CreateHelpModal";
 import _ from "lodash";
 import InfiniteScroll from "react-infinite-scroll-component";
 import DBSearch from "../Search/DBSearch";
 import SearchFilter from "../Search/SearchFilter";
 import "./CollectionList.css";
+import DeleteDocument from "../DeleteDocument/DeleteDocument";
+import UpdateDocument from "../UpdateDocument/UpdateDocument";
 
 //import SpecimenCard from './SpecimenCard'
-
-function getCells(specimen, headers) {
-  if (headers === [] || headers === undefined || specimen === undefined) {
-    return [];
-  }
-  let ret = headers.map((header, index) => {
-    // console.log(header)
-    switch (header.toLowerCase()) {
-      case "mgcl #":
-        return <Table.Cell key={index}>{specimen.catalogNumber}</Table.Cell>;
-      case "lep #":
-        return (
-          <Table.Cell key={index}>{specimen.otherCatalogNumber}</Table.Cell>
-        );
-      case "order":
-        return <Table.Cell key={index}>{specimen.order_}</Table.Cell>;
-      case "superfamily":
-        return <Table.Cell key={index}>{specimen.superfamily}</Table.Cell>;
-      case "family":
-        return <Table.Cell key={index}>{specimen.family}</Table.Cell>;
-      case "subfamily":
-        return <Table.Cell key={index}>{specimen.subfamily}</Table.Cell>;
-      case "tribe":
-        return <Table.Cell key={index}>{specimen.tribe}</Table.Cell>;
-      case "genus":
-        return <Table.Cell key={index}>{specimen.genus}</Table.Cell>;
-      case "species":
-        return <Table.Cell key={index}>{specimen.specificEpithet}</Table.Cell>;
-      case "sex":
-        return <Table.Cell key={index}>{specimen.sex}</Table.Cell>;
-      case "country":
-        return <Table.Cell key={index}>{specimen.country}</Table.Cell>;
-      case "province":
-        return <Table.Cell key={index}>{specimen.stateProvince}</Table.Cell>;
-      case "locality":
-        return <Table.Cell key={index}>{specimen.locality}</Table.Cell>;
-      case "latitude":
-        return <Table.Cell key={index}>{specimen.latitude}</Table.Cell>;
-      case "longitude":
-        return <Table.Cell>{specimen.longitude}</Table.Cell>;
-      case "elevation":
-        return <Table.Cell key={index}>{specimen.elevation}</Table.Cell>;
-      case "collector(s)":
-        return <Table.Cell key={index}>{specimen.collectors}</Table.Cell>;
-      case "freezer":
-        return <Table.Cell key={index}>{specimen.freezer}</Table.Cell>;
-      case "rack #":
-        return <Table.Cell key={index}>{specimen.rack}</Table.Cell>;
-      case "box":
-        return <Table.Cell key={index}>{specimen.box}</Table.Cell>;
-      case "size":
-        return <Table.Cell key={index}>{specimen.size}</Table.Cell>;
-      default:
-        return null;
-    }
-  });
-  return ret;
-}
 
 // ({data, filteredText, filterCategory, selectedUpdate, sortBy, clearQuery, current_query, query_headers})
 // TODO: this entire component is very ugly... perhaps a refactor??
@@ -140,6 +84,127 @@ export default class CollectionList extends React.Component {
       // console.log('fourth')
       this.props.updateLoadingStatus(true);
     }
+  }
+
+  getCells(specimen, headers) {
+    if (headers === [] || headers === undefined || specimen === undefined) {
+      return [];
+    }
+
+    console.log(this.props);
+
+    const selectedActions = this.props.selectedSpecimen &&
+      this.props.selectedSpecimen.id === specimen.id && (
+        <>
+          <DeleteDocument
+            selectedSpecimen={this.props.selectedSpecimen}
+            specimen={specimen}
+          />
+          {/* <Icon
+            className="expand-on-hover"
+            name="edit"
+            style={{ float: "right" }}
+          /> */}
+          <UpdateDocument
+            currentQuery={this.props.current_query}
+            runQuery={this.props.runQuery}
+            user={this.props.user}
+            disabled={this.props.disabled}
+            userData={this.props.userData}
+            errorMessages={this.props.errorMessages}
+            updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
+            notify={this.props.notify}
+            selectedSpecimen={this.props.selectedSpecimen}
+          />
+        </>
+      );
+
+    let ret = headers.map((header, index) => {
+      let currentCell = undefined;
+
+      switch (header.toLowerCase()) {
+        case "mgcl #":
+          currentCell = specimen.catalogNumber;
+          break;
+        case "lep #":
+          currentCell = specimen.otherCatalogNumber;
+          break;
+        case "order":
+          currentCell = specimen._order;
+          break;
+        case "superfamily":
+          currentCell = specimen.superfamily;
+          break;
+        case "family":
+          currentCell = specimen.family;
+          break;
+        case "subfamily":
+          currentCell = specimen.subfamily;
+          break;
+        case "tribe":
+          currentCell = specimen.tribe;
+          break;
+        case "genus":
+          currentCell = "Testing";
+          // currentCell = specimen.genus
+          break;
+
+        case "species":
+          currentCell = specimen.specificEpithet;
+          break;
+        case "sex":
+          currentCell = specimen.sex;
+          break;
+        case "country":
+          currentCell = specimen.country;
+          break;
+        case "province":
+          currentCell = specimen.stateProvince;
+          break;
+        case "locality":
+          currentCell = specimen.locality;
+          break;
+        case "latitude":
+          currentCell = specimen.latitude;
+          break;
+        case "longitude":
+          currentCell = specimen.longitude;
+          break;
+        case "elevation":
+          currentCell = specimen.elevation;
+          break;
+        case "collector(s)":
+          currentCell = specimen.collectors;
+          break;
+        case "freezer":
+          currentCell = specimen.freezer;
+          break;
+        case "rack #":
+          currentCell = specimen.rack;
+          break;
+        case "box":
+          currentCell = specimen.box;
+          break;
+        case "size":
+          currentCell = specimen.size;
+          break;
+        default:
+          return null;
+      }
+
+      if (index === headers.length - 1) {
+        // append actions to cell
+        return (
+          <Table.Cell key={index}>
+            {currentCell}
+            {selectedActions}
+          </Table.Cell>
+        );
+      } else {
+        return <Table.Cell key={index}>{currentCell}</Table.Cell>;
+      }
+    });
+    return ret;
   }
 
   getHeaderCells(headers) {
@@ -314,11 +379,15 @@ export default class CollectionList extends React.Component {
           }
         })
         .map((specimen, index) => {
-          let cells = getCells(specimen, this.props.query_headers);
+          let cells = this.getCells(specimen, this.props.query_headers);
 
           return (
             <Table.Row
               key={index}
+              active={
+                this.props.selectedSpecimen &&
+                this.props.selectedSpecimen.id === specimen.id
+              }
               onClick={() => this.props.updateSelectedSpecimen(specimen)}
             >
               {cells}
