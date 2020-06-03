@@ -12,6 +12,7 @@ import {
   Icon,
   Form,
   Popup,
+  Menu,
 } from "semantic-ui-react";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
 import CreateHelpModal from "../Help/CreateHelpModal";
@@ -26,6 +27,7 @@ import {
   sexControl,
   countryControl,
   yesOrNo,
+  headerSelection,
   // units,
 } from "../Query/QueryConstants/constants";
 // import ErrorTerminal from "../Query/QueryTerminals/ErrorTerminal";
@@ -38,6 +40,11 @@ class UpdateDocument extends React.Component {
     this.state = {
       open: false,
       loading: false,
+      selectedFields: ["*"],
+      tablePages: undefined,
+      tablePage: 0,
+      numPages: 0,
+      page: 0,
       catalogNumber: props.selectedSpecimen.catalogNumber,
       otherCatalogNumber: props.selectedSpecimen.otherCatalogNumber,
       recordNumber: props.selectedSpecimen.recordNumber,
@@ -101,25 +108,77 @@ class UpdateDocument extends React.Component {
   }
 
   show = () => this.setState({ open: true });
-  close = () => this.setState({ open: false });
+  close = () =>
+    this.setState({
+      open: false,
+      loading: false,
+      selectedFields: ["*"],
+      tablePages: undefined,
+      tablePage: 0,
+      numPages: 0,
+      page: 0,
+      catalogNumber: this.props.selectedSpecimen.catalogNumber,
+      otherCatalogNumber: this.props.selectedSpecimen.otherCatalogNumber,
+      recordNumber: this.props.selectedSpecimen.recordNumber,
+      order_: this.props.selectedSpecimen.order_,
+      superfamily: this.props.selectedSpecimen.superfamily,
+      family: this.props.selectedSpecimen.family,
+      subfamily: this.props.selectedSpecimen.subfamily,
+      tribe: this.props.selectedSpecimen.tribe,
+      genus: this.props.selectedSpecimen.genus,
+      subgenus: this.props.selectedSpecimen.subgenus,
+      specificEpithet: this.props.selectedSpecimen.specificEpithet,
+      infraspecificEpithet: this.props.selectedSpecimen.infraspecificEpithet,
+      identificationQualifier: this.props.selectedSpecimen
+        .identificationQualifier,
+      recordedBy: this.props.selectedSpecimen.recordedBy,
+      identifiedBy: this.props.selectedSpecimen.identifiedBy,
+      dateIdentified: this.props.selectedSpecimen.dateIdentified,
+      verbatimDate: this.props.selectedSpecimen.verbatimDate,
+      collectedYear: this.props.selectedSpecimen.collectedYear,
+      collectedMonth: this.props.selectedSpecimen.collectedMonth,
+      collectedDay: this.props.selectedSpecimen.collectedDay,
+      sex: this.props.selectedSpecimen.sex,
+      lifeStage: this.props.selectedSpecimen.lifeStage,
+      habitat: this.props.selectedSpecimen.habitat,
+      occurrenceRemarks: this.props.selectedSpecimen.occurrenceRemarks,
+      molecularOccurrenceRemarks: this.props.selectedSpecimen
+        .molecularOccurrenceRemarks,
+      samplingProtocol: this.props.selectedSpecimen.samplingProtocol,
+      country: this.props.selectedSpecimen.country,
+      stateProvince: this.props.selectedSpecimen.stateProvince,
+      county: this.props.selectedSpecimen.county,
+      municipality: this.props.selectedSpecimen.municipality,
+      locality: this.props.selectedSpecimen.locality,
+      elevationInMeters: this.props.selectedSpecimen.elevationInMeters,
+      decimalLatitude: this.props.selectedSpecimen.decimalLatitude,
+      decimalLongitude: this.props.selectedSpecimen.decimalLongitude,
+      geodeticDatum: this.props.selectedSpecimen.geodeticDatum,
+      coordinateUncertainty: this.props.selectedSpecimen.coordinateUncertainty,
+      verbatimLatitude: this.props.selectedSpecimen.verbatimLatitude,
+      verbatimLongitude: this.props.selectedSpecimen.verbatimLongitude,
+      georeferencedBy: this.props.selectedSpecimen.georeferencedBy,
+      disposition: this.props.selectedSpecimen.disposition,
+      isLoaned: this.props.selectedSpecimen.isLoaned,
+      loanInstitution: this.props.selectedSpecimen.loanInstitution,
+      loaneeName: this.props.selectedSpecimen.loaneeName,
+      loanDate: this.props.selectedSpecimen.loanDate,
+      loanReturnDate: this.props.selectedSpecimen.loanReturnDate,
+      preparations: this.props.selectedSpecimen.preparations,
+      freezer: this.props.selectedSpecimen.freezer,
+      rack: this.props.selectedSpecimen.rack,
+      box: this.props.selectedSpecimen.box,
+      tubeSize: this.props.selectedSpecimen.tubeSize,
+      associatedSequences: this.props.selectedSpecimen.associatedSequences,
+      associatedReferences: this.props.selectedSpecimen.associatedReferences,
+      withholdData: this.props.selectedSpecimen.withholdData,
+      reared: this.props.selectedSpecimen.reared,
+      fieldNotes: this.props.selectedSpecimen.fieldNotes,
+      collectors: this.props.selectedSpecimen.collectors,
+      reason: "",
+    });
 
   onChange = (e, { name, value }) => this.setState({ [name]: value });
-
-  // renderErrorTerminal = () => (
-  //   <React.Fragment>
-  //     <ErrorTerminal errorLog={this.props.errorMessages.updateError} />
-  //     <Button
-  //       onClick={() => {
-  //         this.props.updateUpdateErrorMessage(null);
-  //         this.setState({ loading: false });
-  //       }}
-  //       color="red"
-  //       style={{ float: "right" }}
-  //     >
-  //       Clear
-  //     </Button>
-  //   </React.Fragment>
-  // );
 
   onSubmit = (e) => {
     if (this.state.reason === "") {
@@ -242,6 +301,130 @@ class UpdateDocument extends React.Component {
     }
   };
 
+  checkPage() {
+    // will check for errors on current page
+    // will not allow for pagination if errors present
+  }
+
+  paginateForward() {
+    if (this.state.tablePage === this.state.tablePages.size - 1) {
+      return;
+    } else {
+      this.setState({ tablePage: this.state.tablePage + 1 });
+    }
+  }
+
+  paginateBackward() {
+    if (this.state.tablePage === 0) {
+      return;
+    } else {
+      this.setState({ tablePage: this.state.tablePage - 1 });
+    }
+  }
+
+  generateTablePages() {
+    let { selectedFields } = this.state;
+
+    if (selectedFields.indexOf("*") > -1) {
+      selectedFields = headerSelection
+        .filter((field, index) => index !== 0)
+        .map((header) => {
+          return header.value;
+        });
+    }
+
+    // we only want about 5 fields per page
+    let tablePages = new Map();
+    if (selectedFields.length <= 5) {
+      tablePages.set(0, selectedFields);
+    } else {
+      let currentPage = [];
+      let currentPageNum = 0;
+      selectedFields.forEach((field, index) => {
+        if (index !== 0 && index % 5 === 0) {
+          tablePages.set(currentPageNum++, currentPage);
+          currentPage = [];
+          currentPage.push(field);
+        } else {
+          currentPage.push(field);
+        }
+      });
+
+      if (currentPage.length !== 0) {
+        tablePages.set(currentPageNum++, currentPage);
+        currentPage = [];
+      }
+    }
+
+    this.setState({ tablePages: tablePages });
+  }
+
+  renderChevron() {
+    let chevrons = [];
+
+    for (let i = 0; i < this.state.tablePages.size; i++) {
+      chevrons.push(
+        <Menu.Item
+          active={this.state.tablePage === i}
+          as="a"
+          onClick={() => this.setState({ tablePage: i })}
+        >
+          {i + 1}
+        </Menu.Item>
+      );
+    }
+
+    return chevrons;
+  }
+
+  renderTable() {
+    return (
+      <Table celled>
+        {/* for field in tablePage (record int:string[]) */}
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>fieldName</Table.HeaderCell>
+            <Table.HeaderCell>currentValue</Table.HeaderCell>
+            <Table.HeaderCell>proposedChange</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {this.state.tablePages.get(this.state.tablePage).map((field) => {
+            return (
+              <>
+                <Table.Row>
+                  <Table.Cell>{field}</Table.Cell>
+                  <Table.Cell>{this.state[field]}</Table.Cell>
+                  <Table.Cell>
+                    <Form>
+                      <Form.Field control={Input} />
+                    </Form>
+                  </Table.Cell>
+                </Table.Row>
+              </>
+            );
+          })}
+        </Table.Body>
+
+        <Table.Footer>
+          <Table.Row>
+            <Table.HeaderCell colSpan="3">
+              <Menu floated="right" pagination>
+                <Menu.Item as="a" icon onClick={() => this.paginateBackward()}>
+                  <Icon name="chevron left" />
+                </Menu.Item>
+                {this.renderChevron()}
+                <Menu.Item as="a" icon onClick={() => this.paginateForward()}>
+                  <Icon name="chevron right" />
+                </Menu.Item>
+              </Menu>
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Footer>
+      </Table>
+    );
+  }
+
   render() {
     if (this.props.disabled) {
       return <div></div>;
@@ -270,6 +453,7 @@ class UpdateDocument extends React.Component {
       );
     } else {
       const {
+        selectedFields,
         catalogNumber,
         recordNumber,
         otherCatalogNumber,
@@ -328,6 +512,83 @@ class UpdateDocument extends React.Component {
         collectors,
         reason,
       } = this.state;
+
+      // console.log(selectedFields);
+
+      return (
+        <Modal
+          trigger={
+            <Icon
+              className="expand-on-hover"
+              name="edit"
+              onClick={() => this.setState({ open: true })}
+              style={
+                // this.props.selectedSpecimen.id === specimen.id
+                { float: "right" }
+                // : { display: "none" }
+              }
+            />
+          }
+          centered
+          scrolling
+          open={this.state.open}
+          onClose={this.close}
+        >
+          <Modal.Header>Single Specimen Update</Modal.Header>
+          {this.state.page === 0 ? (
+            <Modal.Content>
+              <Form style={{ padding: "3rem" }}>
+                <Form.Field
+                  control={Select}
+                  options={headerSelection}
+                  search
+                  multiple
+                  name="selectedFields"
+                  value={selectedFields}
+                  onChange={this.onChange}
+                />
+              </Form>
+            </Modal.Content>
+          ) : (
+            <Modal.Content>{this.renderTable()}</Modal.Content>
+          )}
+
+          {this.state.page === 0 ? (
+            <Modal.Actions>
+              <CreateHelpModal queryType="UPDATE_SINGLE" />
+              <CreateErrorLogModal
+                type="Single Update"
+                errors={this.props.errorMessages.singleUpdate}
+                updateError={this.props.updateSingleUpdateErrorMessage}
+              />
+              <Button onClick={this.close}>Cancel</Button>
+              <Button
+                onClick={() => {
+                  // generate array of forms or sm, then change page
+                  this.generateTablePages();
+                  this.setState({ page: 1 });
+                }}
+              >
+                Continue
+              </Button>
+            </Modal.Actions>
+          ) : (
+            <Modal.Actions>
+              <CreateHelpModal queryType="UPDATE_SINGLE" />
+              <CreateErrorLogModal
+                type="Single Update"
+                errors={this.props.errorMessages.singleUpdate}
+                updateError={this.props.updateSingleUpdateErrorMessage}
+              />
+              <Button onClick={() => this.setState({ page: 0 })}>Back</Button>
+              <ConfirmAuth
+                checkAuth={this.props.checkAuth}
+                handleSubmit={this.onSubmit}
+              />
+            </Modal.Actions>
+          )}
+        </Modal>
+      );
 
       return (
         <React.Fragment>
@@ -1000,7 +1261,6 @@ class UpdateDocument extends React.Component {
                           </Table.Cell>
                         </Table.Row>
 
-                        {/* render loan form if is loaned */}
                         {this.state.isLoaned === "Y" ? (
                           <>
                             <Table.Row>
@@ -1233,6 +1493,7 @@ class UpdateDocument extends React.Component {
                 </Grid.Row>
               </Grid>
             </Modal.Content>
+
             <Modal.Actions>
               <CreateHelpModal queryType="UPDATE_SINGLE" />
               <CreateErrorLogModal

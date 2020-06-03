@@ -91,8 +91,6 @@ export default class CollectionList extends React.Component {
       return [];
     }
 
-    console.log(this.props);
-
     const selectedActions = this.props.selectedSpecimen &&
       this.props.selectedSpecimen.id === specimen.id && (
         <>
@@ -145,8 +143,7 @@ export default class CollectionList extends React.Component {
           currentCell = specimen.tribe;
           break;
         case "genus":
-          currentCell = "Testing";
-          // currentCell = specimen.genus
+          currentCell = specimen.genus;
           break;
 
         case "species":
