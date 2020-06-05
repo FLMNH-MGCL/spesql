@@ -537,8 +537,12 @@ class UpdateDocument extends React.Component {
           <Modal.Header>Single Specimen Update</Modal.Header>
           {this.state.page === 0 ? (
             <Modal.Content>
-              <Form style={{ padding: "3rem" }}>
+              <Form style={{ display: "2rem" }}>
+                <Header size="small">
+                  Please select the fields you want to update
+                </Header>
                 <Form.Field
+                  width="8"
                   control={Select}
                   options={headerSelection}
                   search
@@ -547,6 +551,11 @@ class UpdateDocument extends React.Component {
                   value={selectedFields}
                   onChange={this.onChange}
                 />
+                <Header size="small">
+                  Please enter the reason for this update
+                </Header>
+
+                <Form.Field control={TextArea} />
               </Form>
             </Modal.Content>
           ) : (

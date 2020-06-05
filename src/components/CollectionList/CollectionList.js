@@ -97,6 +97,9 @@ export default class CollectionList extends React.Component {
           <DeleteDocument
             selectedSpecimen={this.props.selectedSpecimen}
             specimen={specimen}
+            userData={this.props.userData}
+            notify={this.props.notify}
+            props={this.props}
           />
           {/* <Icon
             className="expand-on-hover"

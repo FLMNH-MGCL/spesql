@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { Modal, Icon, Form, Checkbox, Button } from "semantic-ui-react";
 import useBoolean from "../../utils/useBoolean";
 import ConfirmAuth from "../../views/Admin/components/ConfirmAuth";
+import axios from "axios";
 
 export default function DeleteDocument({
   selectedSpecimen,
   specimen,
   disabled,
+  userData,
+  notify,
   props,
 }) {
   const [open, { toggle }] = useBoolean();
@@ -14,6 +17,44 @@ export default function DeleteDocument({
 
   if (disabled || !selectedSpecimen) {
     return <div></div>;
+  }
+
+  async function checkAuth(user, password, callback) {
+    if (userData.username !== user) {
+      // attempting auth with diff account
+      notify({
+        type: "error",
+        message:
+          "Attempting authentication with different account than logged in account.",
+      });
+      return;
+    } else if (
+      userData.privilege_level !== "admin" &&
+      userData.privilege_level !== "manager"
+    ) {
+      // this should NEVER happen, however this is a sanity check
+      notify({ type: "error", message: "Access denied!" });
+
+      // forcibly log out
+      props.logout();
+      return;
+    }
+
+    const authData = await axios.post("/api/login/", {
+      user: user,
+      password: password,
+    });
+
+    // console.log(authData);
+
+    if (authData.data.err || authData.data.authed === false) {
+      // credentials did not match
+      props.notify({ type: "error", message: authData.data.err });
+    } else {
+      // allow whatever command to proceed
+      props.notify({ type: "success", message: authData.data.message });
+      callback();
+    }
   }
 
   function handleConfirm() {
@@ -75,10 +116,7 @@ export default function DeleteDocument({
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={handleCancel}>Cancel</Button>
-        {/* <ConfirmAuth
-          checkAuth={this.props.checkAuth}
-          handleSubmit={this.handleConfirm}
-        /> */}
+        <ConfirmAuth checkAuth={checkAuth} handleSubmit={handleConfirm} />
       </Modal.Actions>
     </Modal>
   );
