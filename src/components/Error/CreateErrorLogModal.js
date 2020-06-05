@@ -46,7 +46,12 @@ const ErrorTerminal = ({ errorLog }) => {
   );
 };
 
-export default function CreateErrorLogModal({ type, errors, updateError }) {
+export default function CreateErrorLogModal({
+  type,
+  errors,
+  updateError,
+  inline,
+}) {
   const [open, { on, off }] = useBoolean(false);
   // const [hasError, setHasError] = useState(errors ? true : false);
 
@@ -61,7 +66,7 @@ export default function CreateErrorLogModal({ type, errors, updateError }) {
         <Button
           icon
           basic
-          floated="left"
+          floated={inline ? "" : "left"}
           color={!errors ? "" : "red"}
           onClick={on}
           disabled={!errors}

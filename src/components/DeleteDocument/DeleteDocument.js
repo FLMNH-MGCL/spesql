@@ -65,7 +65,7 @@ export default function DeleteDocument({
           "You must acknowledge the disclaimer before submitting delete query",
       });
     } else {
-      let query = `DELETE FROM molecularLab WHERE id=${this.props.target};`;
+      let query = `DELETE FROM molecularLab WHERE id=${selectedSpecimen.id};`;
       props.runQuery(query);
       toggle();
     }

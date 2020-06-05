@@ -301,6 +301,18 @@ class UpdateDocument extends React.Component {
     }
   };
 
+  basicErrorCheck(field, fieldValue) {
+    if (!fieldValue) {
+      fieldValue = "";
+    }
+
+    const errors = checkField(field, fieldValue);
+    if (errors.length > 0) {
+      const error = errors[0].split(":")[1];
+      return { content: error };
+    }
+  }
+
   checkPage() {
     // will check for errors on current page
     // will not allow for pagination if errors present
@@ -377,6 +389,7 @@ class UpdateDocument extends React.Component {
     return chevrons;
   }
 
+  // ONE FIELD CHECIK
   renderTable() {
     return (
       <Table celled>
@@ -394,10 +407,16 @@ class UpdateDocument extends React.Component {
               <>
                 <Table.Row>
                   <Table.Cell>{field}</Table.Cell>
-                  <Table.Cell>{this.state[field]}</Table.Cell>
+                  <Table.Cell>{this.props.selectedSpecimen[field]}</Table.Cell>
                   <Table.Cell>
                     <Form>
-                      <Form.Field control={Input} />
+                      <Form.Field
+                        control={Input}
+                        name={field}
+                        value={this.state[field]}
+                        onChange={this.onChange}
+                        error={this.basicErrorCheck(field, this.state[field])}
+                      />
                     </Form>
                   </Table.Cell>
                 </Table.Row>
@@ -510,7 +529,7 @@ class UpdateDocument extends React.Component {
         reared,
         fieldNotes,
         collectors,
-        reason,
+        updateReason,
       } = this.state;
 
       // console.log(selectedFields);
@@ -555,7 +574,13 @@ class UpdateDocument extends React.Component {
                   Please enter the reason for this update
                 </Header>
 
-                <Form.Field control={TextArea} />
+                <Form.Field
+                  control={TextArea}
+                  name="updateReason"
+                  value={this.state.updateReason}
+                  onChange={this.onChange}
+                  error={this.basicErrorCheck("updateReason", updateReason)}
+                />
               </Form>
             </Modal.Content>
           ) : (
@@ -644,7 +669,7 @@ class UpdateDocument extends React.Component {
                     <Header size="small">
                       Please enter the reason for this update
                     </Header>
-                    <Form>
+                    {/* <Form>
                       <Form.Field
                         control={Input}
                         fluid
@@ -661,7 +686,7 @@ class UpdateDocument extends React.Component {
                             : false
                         }
                       />
-                    </Form>
+                    </Form> */}
 
                     <Table singleLine>
                       <Table.Header>

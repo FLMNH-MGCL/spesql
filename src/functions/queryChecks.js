@@ -1026,6 +1026,19 @@ export function checkField(fieldName, fieldValue) {
 
     // collectors
 
+    // NON-HEADER ERROR CHECKS !!!!
+
+    case "updateReason":
+      if (fieldValue === "") {
+        errors.push(`Query error (@ ${fieldValue}): You must provide a reason`);
+      }
+
+      if (fieldValue.length < 5) {
+        errors.push(`Query error (@ ${fieldValue}): Reason is too short`);
+      }
+
+      return errors;
+
     default:
       return errors;
   }

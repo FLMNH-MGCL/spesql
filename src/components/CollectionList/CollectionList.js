@@ -8,6 +8,7 @@ import SearchFilter from "../Search/SearchFilter";
 import "./CollectionList.css";
 import DeleteDocument from "../DeleteDocument/DeleteDocument";
 import UpdateDocument from "../UpdateDocument/UpdateDocument";
+import CreateErrorLogModal from "../Error/CreateErrorLogModal";
 
 //import SpecimenCard from './SpecimenCard'
 
@@ -498,6 +499,11 @@ export default class CollectionList extends React.Component {
             >
               <Icon name="refresh" />
             </Button>
+            <CreateErrorLogModal
+              type="Global Errors"
+              errors={undefined}
+              inline
+            />
           </div>
           <div className="query-infosheet">
             <div className="query-text">
