@@ -771,6 +771,19 @@ export function checkField(fieldName, fieldValue) {
       // errors = errors.concat(capsChecks(fieldName, fieldValue, true));
       return errors;
 
+    case "elevationInMetersUPDATE":
+      if (fieldValue === "") {
+        return errors;
+      }
+
+      if (!isNumeric(fieldValue)) {
+        errors.push(
+          `Format error (@${fieldName}): Elevation must only contain digits`
+        );
+      }
+
+      return errors;
+
     case "elevationInMeters":
       if (fieldValue === " ") {
         return errors;

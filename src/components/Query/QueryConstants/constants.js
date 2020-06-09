@@ -85,19 +85,20 @@ export const headerSelection = [
   { key: "64", text: "Coord. Uncertainty", value: "coordinateUncertainty" },
   { key: "geoby", text: "Georeferenced", value: "georeferencedBy" },
   { key: "65", text: "Loaned", value: "isLoaned" },
+  {
+    key: "loanInstitution",
+    text: "Loan Institution",
+    value: "loanInstitution",
+  },
+  { key: "loaneeName", text: "Loanee Name", value: "loaneeName" },
+  { key: "loanDate", text: "Loan Date", value: "loanDate" },
+  { key: "loanReturnDate", text: "Loan Return Date", value: "loanReturnDate" },
   { key: "66", text: "Preparations", value: "preparations" },
   { key: "67", text: "Freezer", value: "freezer" },
   { key: "68", text: "Rack", value: "rack" },
   { key: "69", text: "Box", value: "box" },
   { key: "70", text: "TubSize", value: "tubeSize" },
   { key: "71", text: "Notes", value: "fieldNotes" },
-  // { key: '72', text: 'Lep', value: 'catalogNumber' },
-  // { key: '73', text: 'Lep', value: 'catalogNumber' },
-  // { key: '74', text: 'Lep', value: 'catalogNumber' },
-  // { key: '75', text: 'Lep', value: 'catalogNumber' },
-  // { key: '76', text: 'Lep', value: 'catalogNumber' },
-  // { key: '77', text: 'Lep', value: 'catalogNumber' },
-  // { key: '78', text: 'Lep', value: 'catalogNumber' },
 ];
 
 export const filterOptions = [

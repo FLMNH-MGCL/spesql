@@ -28,11 +28,13 @@ import {
   countryControl,
   yesOrNo,
   headerSelection,
+  geodeticDatumControl,
   // units,
 } from "../Query/QueryConstants/constants";
 // import ErrorTerminal from "../Query/QueryTerminals/ErrorTerminal";
 import ConfirmAuth from "../../views/Admin/components/ConfirmAuth";
 import CreateErrorLogModal from "../Error/CreateErrorLogModal";
+import axios from "axios";
 
 class UpdateDocument extends React.Component {
   constructor(props) {
@@ -175,13 +177,43 @@ class UpdateDocument extends React.Component {
       reared: this.props.selectedSpecimen.reared,
       fieldNotes: this.props.selectedSpecimen.fieldNotes,
       collectors: this.props.selectedSpecimen.collectors,
-      reason: "",
+      updateReason: "",
     });
 
   onChange = (e, { name, value }) => this.setState({ [name]: value });
 
+  async checkAuth(user, password, callback) {
+    // console.log(`${user} vs ${password}`);
+
+    if (this.props.userData.username !== user) {
+      // attempting auth with diff account
+      this.props.notify({
+        type: "error",
+        message:
+          "Attempting authentication with different account than logged in account.",
+      });
+      return;
+    }
+
+    const authData = await axios.post("/api/login/", {
+      user: user,
+      password: password,
+    });
+
+    // console.log(authData);
+
+    if (authData.data.err || authData.data.authed === false) {
+      // credentials did not match
+      this.props.notify({ type: "error", message: authData.data.err });
+    } else {
+      // allow whatever command to proceed
+      this.props.notify({ type: "success", message: authData.data.message });
+      callback();
+    }
+  }
+
   onSubmit = (e) => {
-    if (this.state.reason === "") {
+    if (this.state.updateReason === "") {
       this.props.notify({
         type: "error",
         message: "Please enter a reason for updating.",
@@ -191,30 +223,16 @@ class UpdateDocument extends React.Component {
 
     let changes = [];
     let errors = [];
-    for (var field of Object.keys(this.props.selectedSpecimen)) {
-      // console.log(field);
-      // console.log(
-      //   `${this.state[field]} vs ${this.props.selectedSpecimen[field]}`
-      // );
 
-      // skip fields not modified or entered by any user
-      if (
-        field === "id" ||
-        field === "modifiedInfo" ||
-        field === "recordEnteredBy" ||
-        field === "dateEntered"
-      )
-        continue;
-
-      if (this.state[field] === this.props.selectedSpecimen[field]) {
-        // console.log('same values')
-      } else if (!this.state[field] && this.props.selectedSpecimen[field]) {
-        // property in state doesn't exist in selected specimen
-        // this means I need to update the DB to reflect the program
-        // this if should never hit after production, but for now it will just
-        // log the occurrence
-        console.log(`DB / Software conflict: check the ${field} field`);
-      } else {
+    this.state.selectedFields.forEach((field) => {
+      // if (this.state[field] && !this.props.selectedSpecimen[field]) {
+      //   // property in state doesn't exist in selected specimen
+      //   // this means I need to update the DB to reflect the program
+      //   // this if should never hit after production, but for now it will just
+      //   // log the occurrence
+      //   console.log(`DB / Software conflict: check the ${field} field`);
+      // } else if (this.state[field] !== this.props.selectedSpecimen[field]) {
+      if (this.state[field] !== this.props.selectedSpecimen[field]) {
         let change = {
           field: field,
           oldValue: this.props.selectedSpecimen[field],
@@ -223,13 +241,49 @@ class UpdateDocument extends React.Component {
         changes.push(change);
         errors = errors.concat(checkField(field, this.state[field]));
       }
-    }
+    });
+
+    // for (var field of Object.keys(this.props.selectedSpecimen)) {
+    //   // console.log(field);
+    //   // console.log(
+    //   //   `${this.state[field]} vs ${this.props.selectedSpecimen[field]}`
+    //   // );
+
+    //   // skip fields not modified or entered by any user
+    //   if (
+    //     field === "id" ||
+    //     field === "modifiedInfo" ||
+    //     field === "recordEnteredBy" ||
+    //     field === "dateEntered"
+    //   )
+    //     continue;
+
+    //   if (this.state[field] === this.props.selectedSpecimen[field]) {
+    //     // console.log('same values')
+    //   } else if (!this.state[field] && this.props.selectedSpecimen[field]) {
+    //     // property in state doesn't exist in selected specimen
+    //     // this means I need to update the DB to reflect the program
+    //     // this if should never hit after production, but for now it will just
+    //     // log the occurrence
+    //     console.log(`DB / Software conflict: check the ${field} field`);
+    //   } else {
+    //     let change = {
+    //       field: field,
+    //       oldValue: this.props.selectedSpecimen[field],
+    //       newValue: this.state[field],
+    //     };
+    //     changes.push(change);
+    //     errors = errors.concat(checkField(field, this.state[field]));
+    //   }
+    // }
 
     this.setState({ loading: true });
 
+    console.log(errors);
+
     if (errors.length !== 0) {
       // update error log
-      this.props.updateUpdateErrorMessage(errors);
+      this.props.updateSingleUpdateErrorMessage(errors);
       // send notification
       this.props.notify({
         type: "error",
@@ -272,6 +326,7 @@ class UpdateDocument extends React.Component {
         allModifications = [modification];
       }
 
+      console.log(allModifications);
       allModifications = JSON.stringify(allModifications);
       // console.log(allModifications)
 
@@ -290,7 +345,7 @@ class UpdateDocument extends React.Component {
 
       // console.log(updateCommand)
 
-      this.props.runQuery(updateCommand);
+      // this.props.runQuery(updateCommand);
       this.setState({ loading: false });
     } else {
       this.props.notify({
@@ -317,6 +372,8 @@ class UpdateDocument extends React.Component {
     // will check for errors on current page
     // will not allow for pagination if errors present
   }
+
+  canContinue() {}
 
   paginateForward() {
     if (this.state.tablePage === this.state.tablePages.size - 1) {
@@ -389,6 +446,122 @@ class UpdateDocument extends React.Component {
     return chevrons;
   }
 
+  getFieldForm(fieldName) {
+    switch (fieldName) {
+      case "dateIdentified":
+      case "loanDate":
+      case "loanReturnDate":
+        return (
+          <SemanticDatepicker
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+      case "country":
+        return (
+          <Form.Field
+            control={Select}
+            options={countryControl}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+      case "sex":
+        return (
+          <Form.Field
+            control={Select}
+            options={sexControl}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+      case "lifeStage":
+        return (
+          <Form.Field
+            control={Select}
+            options={lifeStageControl}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+      case "samplingProtocol":
+        return (
+          <Form.Field
+            control={Select}
+            options={samplingProtocolControl}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+      case "isLoaned":
+        return (
+          <Form.Field
+            control={Select}
+            options={yesOrNo}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+      case "loanInstitution":
+      case "loaneeName":
+        return (
+          <Form.Field
+            control={Input}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+      case "elevationInMeters":
+        return (
+          <Form.Field
+            control={Input}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(
+              "elevationInMetersUPDATE",
+              this.state[fieldName]
+            )}
+          />
+        );
+      case "geodeticDatum":
+        return (
+          <Form.Field
+            control={Select}
+            options={geodeticDatumControl}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+      default:
+        return (
+          <Form.Field
+            control={Input}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+    }
+  }
+
   // ONE FIELD CHECIK
   renderTable() {
     return (
@@ -410,13 +583,14 @@ class UpdateDocument extends React.Component {
                   <Table.Cell>{this.props.selectedSpecimen[field]}</Table.Cell>
                   <Table.Cell>
                     <Form>
-                      <Form.Field
+                      {this.getFieldForm(field)}
+                      {/* <Form.Field
                         control={Input}
                         name={field}
                         value={this.state[field]}
                         onChange={this.onChange}
                         error={this.basicErrorCheck(field, this.state[field])}
-                      />
+                      /> */}
                     </Form>
                   </Table.Cell>
                 </Table.Row>
@@ -599,8 +773,15 @@ class UpdateDocument extends React.Component {
               <Button
                 onClick={() => {
                   // generate array of forms or sm, then change page
-                  this.generateTablePages();
-                  this.setState({ page: 1 });
+                  if (this.state.updateReason !== "") {
+                    this.generateTablePages();
+                    this.setState({ page: 1 });
+                  } else {
+                    this.props.notify({
+                      type: "error",
+                      message: "You must enter a reason before continuing",
+                    });
+                  }
                 }}
               >
                 Continue
@@ -616,7 +797,7 @@ class UpdateDocument extends React.Component {
               />
               <Button onClick={() => this.setState({ page: 0 })}>Back</Button>
               <ConfirmAuth
-                checkAuth={this.props.checkAuth}
+                checkAuth={this.checkAuth.bind(this)}
                 handleSubmit={this.onSubmit}
               />
             </Modal.Actions>
