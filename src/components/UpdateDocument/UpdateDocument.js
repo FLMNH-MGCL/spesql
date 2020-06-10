@@ -104,7 +104,7 @@ class UpdateDocument extends React.Component {
       withholdData: this.props.selectedSpecimen.withholdData,
       reared: this.props.selectedSpecimen.reared,
       fieldNotes: this.props.selectedSpecimen.fieldNotes,
-      collectors: this.props.selectedSpecimen.collectors,
+      otherCollectors: this.props.selectedSpecimen.otherCollectors,
       reason: "",
     };
   }
@@ -224,7 +224,14 @@ class UpdateDocument extends React.Component {
     let changes = [];
     let errors = [];
 
-    this.state.selectedFields.forEach((field) => {
+    const fields =
+      this.state.selectedFields.indexOf("*") > -1
+        ? headerSelection.map((header) => header.value)
+        : this.state.selectedFields;
+
+    // console.log(fields);
+
+    fields.forEach((field) => {
       // if (this.state[field] && !this.props.selectedSpecimen[field]) {
       //   // property in state doesn't exist in selected specimen
       //   // this means I need to update the DB to reflect the program
@@ -232,6 +239,11 @@ class UpdateDocument extends React.Component {
       //   // log the occurrence
       //   console.log(`DB / Software conflict: check the ${field} field`);
       // } else if (this.state[field] !== this.props.selectedSpecimen[field]) {
+
+      // console.log(
+      //   `${field}: ${this.state[field]} vs ${this.props.selectedSpecimen[field]}`
+      // );
+
       if (this.state[field] !== this.props.selectedSpecimen[field]) {
         let change = {
           field: field,
@@ -242,40 +254,6 @@ class UpdateDocument extends React.Component {
         errors = errors.concat(checkField(field, this.state[field]));
       }
     });
-
-    // for (var field of Object.keys(this.props.selectedSpecimen)) {
-    //   // console.log(field);
-    //   // console.log(
-    //   //   `${this.state[field]} vs ${this.props.selectedSpecimen[field]}`
-    //   // );
-
-    //   // skip fields not modified or entered by any user
-    //   if (
-    //     field === "id" ||
-    //     field === "modifiedInfo" ||
-    //     field === "recordEnteredBy" ||
-    //     field === "dateEntered"
-    //   )
-    //     continue;
-
-    //   if (this.state[field] === this.props.selectedSpecimen[field]) {
-    //     // console.log('same values')
-    //   } else if (!this.state[field] && this.props.selectedSpecimen[field]) {
-    //     // property in state doesn't exist in selected specimen
-    //     // this means I need to update the DB to reflect the program
-    //     // this if should never hit after production, but for now it will just
-    //     // log the occurrence
-    //     console.log(`DB / Software conflict: check the ${field} field`);
-    //   } else {
-    //     let change = {
-    //       field: field,
-    //       oldValue: this.props.selectedSpecimen[field],
-    //       newValue: this.state[field],
-    //     };
-    //     changes.push(change);
-    //     errors = errors.concat(checkField(field, this.state[field]));
-    //   }
-    // }
 
     this.setState({ loading: true });
 
@@ -297,7 +275,7 @@ class UpdateDocument extends React.Component {
 
     if (changes.length > 0) {
       console.log("Changes were detected");
-      console.log(changes);
+      // console.log(changes);
 
       console.log(errors);
 
@@ -312,9 +290,9 @@ class UpdateDocument extends React.Component {
 
       let modification = {
         [today]: {
-          modifiedBy: this.props.userData.name,
+          modifiedBy: this.props.userData.username,
           fieldsChanged: changes,
-          reasonForChanges: this.state.reason,
+          reasonForChanges: this.state.updateReason,
         },
       };
 
@@ -583,7 +561,7 @@ class UpdateDocument extends React.Component {
                   <Table.Cell>{this.props.selectedSpecimen[field]}</Table.Cell>
                   <Table.Cell>
                     <Form>
-                      {this.getFieldForm(field)}
+                      <Form.Group>{this.getFieldForm(field)}</Form.Group>
                       {/* <Form.Field
                         control={Input}
                         name={field}
@@ -730,31 +708,35 @@ class UpdateDocument extends React.Component {
           <Modal.Header>Single Specimen Update</Modal.Header>
           {this.state.page === 0 ? (
             <Modal.Content>
-              <Form style={{ display: "2rem" }}>
+              <Form style={{ width: "90%", margin: "auto" }}>
                 <Header size="small">
                   Please select the fields you want to update
                 </Header>
-                <Form.Field
-                  width="8"
-                  control={Select}
-                  options={headerSelection}
-                  search
-                  multiple
-                  name="selectedFields"
-                  value={selectedFields}
-                  onChange={this.onChange}
-                />
+                <Form.Group>
+                  <Form.Field
+                    width="8"
+                    control={Select}
+                    options={headerSelection}
+                    search
+                    multiple
+                    name="selectedFields"
+                    value={selectedFields}
+                    onChange={this.onChange}
+                  />
+                </Form.Group>
                 <Header size="small">
                   Please enter the reason for this update
                 </Header>
-
-                <Form.Field
-                  control={TextArea}
-                  name="updateReason"
-                  value={this.state.updateReason}
-                  onChange={this.onChange}
-                  error={this.basicErrorCheck("updateReason", updateReason)}
-                />
+                <Form.Group widths="sixteen">
+                  <Form.Field
+                    width="eight"
+                    control={TextArea}
+                    name="updateReason"
+                    value={this.state.updateReason}
+                    onChange={this.onChange}
+                    error={this.basicErrorCheck("updateReason", updateReason)}
+                  />
+                </Form.Group>
               </Form>
             </Modal.Content>
           ) : (
