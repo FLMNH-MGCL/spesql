@@ -331,6 +331,7 @@ const includesPunctuation = (field) => {
     field.includes("'") ||
     field.includes(".") ||
     field.includes('"') ||
+    field.includes("-") ||
     field.includes(",")
   ) {
     return true;
@@ -499,7 +500,8 @@ export function checkField(fieldName, fieldValue) {
         }
 
         if (!isNumeric(fieldValue.split("LEP")[1])) {
-          let inValidDigs = fieldValue.split("-")[1];
+          // let inValidDigs = fieldValue.split("-")[1];
+          let inValidDigs = fieldValue.split("LEP")[1];
           errors.push(
             `Format error (@ ${fieldName}): Expected digits, found ${inValidDigs}.`
           );

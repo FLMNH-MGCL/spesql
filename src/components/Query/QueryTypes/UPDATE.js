@@ -7,6 +7,10 @@ import {
   Checkbox,
   Message,
   Modal,
+  Header,
+  TextArea,
+  ModalActions,
+  Segment,
 } from "semantic-ui-react";
 
 import {
@@ -48,7 +52,39 @@ export default class UPDATE extends React.Component {
     reason: "",
     loadingOptions: true,
     dbSelection: [],
+    activePage: 0,
   };
+
+  overrideOnChange(e, { name, value }) {
+    // const key = e.key;
+    // e.nativeEvent();
+    console.log(e.target.value);
+
+    // if (key === "Backspace") {
+    // } else if (key === "Delete") {
+    // } else {
+    //   this.setState({ [name]: this.state[name] + key });
+    // }
+
+    this.setState({ [name]: value });
+  }
+
+  // FIXME
+  paginateForward() {
+    if (this.state.activePage === 3) {
+      return;
+    } else {
+      this.setState({ activePage: this.state.activePage + 1 });
+    }
+  }
+
+  paginateBackward() {
+    if (this.state.activePage === 0) {
+      return;
+    } else {
+      this.setState({ activePage: this.state.activePage - 1 });
+    }
+  }
 
   async initTableOptions(query_type) {
     let dbSelection = [];
@@ -597,53 +633,6 @@ export default class UPDATE extends React.Component {
       <Form.Group widths="equal">
         <Form.Field
           control={Select}
-          options={updateQueryOption}
-          label="QUERY"
-          placeholder="UPDATE"
-          search
-          name="query_action"
-          error={
-            this.state.query_action !== "UPDATE" && this.state.basic_query
-              ? { content: "You must run an UPDATE query here." }
-              : false
-          }
-          value={query_action}
-          onChange={this.handleChange}
-          disabled={!this.state.basic_query}
-          required
-        />
-        <Form.Field
-          control={Select}
-          options={this.state.dbSelection}
-          label="Database Table"
-          placeholder=""
-          search
-          error={
-            this.state.db === "" && this.state.basic_query
-              ? { content: "You must select a database table." }
-              : false
-          }
-          name="db"
-          value={db}
-          onChange={this.handleChange}
-          disabled={!this.state.basic_query}
-        />
-      </Form.Group>
-      <Form.Group widths="equal">
-        <Form.Field
-          control={Select}
-          label="SET count (how many changes)"
-          options={setCountOptions}
-          name="setCount"
-          value={setCount}
-          onChange={this.handleSetCountChange}
-          disabled={!this.state.basic_query}
-        />
-      </Form.Group>
-      {sets}
-      <Form.Group widths="equal">
-        <Form.Field
-          control={Select}
           label="WHERE count (how many conditionals)"
           options={setCountOptions}
           name="conditionalCount"
@@ -656,21 +645,148 @@ export default class UPDATE extends React.Component {
     </Form>
   );
 
-  // renderErrorTerminal = () => (
-  //   <div style={{ marginBottom: "3rem" }}>
-  //     <ErrorTerminal errorLog={this.props.errorMessages.updateError} />
-  //     <Button
-  //       onClick={() => {
-  //         this.props.updateUpdateErrorMessage(null);
-  //         this.setState({ loading: false });
-  //       }}
-  //       color="red"
-  //       style={{ float: "right" }}
-  //     >
-  //       Clear
-  //     </Button>
-  //   </div>
-  // );
+  renderPage() {
+    const { activePage } = this.state;
+
+    const {
+      advanced_query,
+      query_action,
+      db,
+      setCount,
+      conditionalCount,
+      reason,
+      loadingOptions,
+      dbSelection,
+    } = this.state;
+
+    let sets = this.renderSets();
+    let conditionals = this.renderConditions();
+
+    switch (activePage) {
+      case 0:
+        return (
+          <Modal.Content>
+            <Form>
+              <Form.Group>
+                <Form.Field
+                  width="sixteen"
+                  label={
+                    <Header size="small">
+                      You must enter a reason for this update
+                    </Header>
+                  }
+                  control={TextArea}
+                  name="reason"
+                  value={reason}
+                  // onChange={this.handleChange}
+                  // onKeyDown={this.overrideOnChange}
+                  onChange={this.overrideOnChange.bind(this)}
+                  error={
+                    this.state.reason === ""
+                      ? {
+                          content: "You must provide a reason",
+                          pointing: "above",
+                        }
+                      : false
+                  }
+                />
+              </Form.Group>
+              <Form.Group widths="equal">
+                <Form.Field
+                  control={Select}
+                  options={updateQueryOption}
+                  label="QUERY"
+                  placeholder="UPDATE"
+                  search
+                  name="query_action"
+                  error={
+                    this.state.query_action !== "UPDATE" &&
+                    this.state.basic_query
+                      ? { content: "You must run an UPDATE query here." }
+                      : false
+                  }
+                  value={query_action}
+                  onChange={this.handleChange}
+                  disabled={!this.state.basic_query}
+                  required
+                />
+                <Form.Field
+                  control={Select}
+                  options={this.state.dbSelection}
+                  label="Database Table"
+                  placeholder=""
+                  search
+                  error={
+                    this.state.db === "" && this.state.basic_query
+                      ? { content: "You must select a database table." }
+                      : false
+                  }
+                  name="db"
+                  value={db}
+                  onChange={this.handleChange}
+                  disabled={!this.state.basic_query}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Content>
+        );
+
+      case 1:
+        return (
+          <>
+            <Form.Group widths="equal">
+              <Form.Field
+                control={Select}
+                label="SET count (how many changes)"
+                options={setCountOptions}
+                name="setCount"
+                value={setCount}
+                onChange={this.handleSetCountChange}
+                // disabled={!this.state.basic_query}
+              />
+            </Form.Group>
+            {/* {sets} */}
+            <Form.Group>
+              <Form.Field control={Input} />
+            </Form.Group>
+          </>
+        );
+
+      case 2:
+        return <div></div>;
+
+      case 3:
+        return <div></div>;
+
+      default:
+        return <div></div>;
+    }
+  }
+
+  renderActions() {
+    return (
+      <ModalActions>
+        <CreateHelpModal queryType="UPDATE" />
+        <CreateErrorLogModal
+          type="Update"
+          errors={this.props.errorMessages.updateError}
+          updateError={this.props.updateUpdateErrorMessage}
+        />
+        <Button onClick={() => this.props.closeModal()}>Cancel</Button>
+        {this.state.activePage !== 0 && (
+          <Button onClick={this.paginateBackward.bind(this)}>Back</Button>
+        )}
+        {this.state.activePage === 3 ? (
+          <ConfirmAuth
+            checkAuth={this.props.checkAuth}
+            handleSubmit={this.handleSubmit}
+          />
+        ) : (
+          <Button onClick={this.paginateForward.bind(this)}>Continue</Button>
+        )}
+      </ModalActions>
+    );
+  }
 
   render() {
     const {
@@ -695,6 +811,24 @@ export default class UPDATE extends React.Component {
     if (this.props.disabled) {
       return <div></div>;
     }
+
+    return (
+      <>
+        <Modal.Header>Update Query</Modal.Header>
+
+        {this.renderPage()}
+        {/* {this.renderBasicForm(
+              query_action,
+              db,
+              setCount,
+              sets,
+              conditionalCount,
+              conditionals
+            )} */}
+
+        {this.renderActions()}
+      </>
+    );
 
     return (
       <>

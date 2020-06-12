@@ -709,12 +709,14 @@ class UpdateDocument extends React.Component {
           {this.state.page === 0 ? (
             <Modal.Content>
               <Form style={{ width: "90%", margin: "auto" }}>
-                <Header size="small">
-                  Please select the fields you want to update
-                </Header>
                 <Form.Group>
                   <Form.Field
                     width="8"
+                    label={
+                      <Header size="small">
+                        Please select the fields you want to update
+                      </Header>
+                    }
                     control={Select}
                     options={headerSelection}
                     search
@@ -724,12 +726,15 @@ class UpdateDocument extends React.Component {
                     onChange={this.onChange}
                   />
                 </Form.Group>
-                <Header size="small">
-                  Please enter the reason for this update
-                </Header>
+
                 <Form.Group widths="sixteen">
                   <Form.Field
                     width="eight"
+                    label={
+                      <Header size="small">
+                        Please enter the reason for this update
+                      </Header>
+                    }
                     control={TextArea}
                     name="updateReason"
                     value={this.state.updateReason}

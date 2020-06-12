@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import { Button, Icon, Dropdown } from "semantic-ui-react";
+import {
+  Modal,
+  Button,
+  Form,
+  TextArea,
+  Dropdown,
+  Icon,
+} from "semantic-ui-react";
+import "./QueryGrid.css";
 import CreateSelectModal from "./CreateSelectModal";
 import CreateCountModal from "./CreateCountModal";
-import "./QueryGrid.css";
 import CreateUpdateModal from "./CreateUpdateModal";
 import axios from "axios";
-import useBoolean from "../../utils/useBoolean";
-import OutsideClickHandler from "react-outside-click-handler";
 
 export default function QueryMenu(props) {
   const [showSelect, toggleSelect] = useState(false);
   const [showCount, toggleCount] = useState(false);
   const [showUpdate, toggleUpdate] = useState(false);
-  const [open, { off, toggle }] = useBoolean(false);
-
-  // console.log(`${user} vs ${password}`);
 
   async function checkAuth(user, password, callback) {
     if (props.userData.username !== user) {
@@ -84,12 +86,11 @@ export default function QueryMenu(props) {
   }
 
   return (
-    <OutsideClickHandler onOutsideClick={off}>
+    <>
       <Dropdown
         className="hideIcon"
-        open={open}
         trigger={
-          <Button icon labelPosition="right" onClick={toggle}>
+          <Button icon labelPosition="right">
             Query <Icon name="angle down" />
           </Button>
         }
@@ -97,13 +98,11 @@ export default function QueryMenu(props) {
         floating
       >
         <Dropdown.Menu>
-          <Dropdown.Header icon="archive" content="Select a query type" />
-          <Dropdown.Divider />
+          <Dropdown.Header icon="upload" content="Select query type" />
           <Dropdown.Item
             icon="cloud download"
             text="Select"
             onClick={() => {
-              toggle();
               toggleSelect(true);
             }}
           />
@@ -111,24 +110,20 @@ export default function QueryMenu(props) {
             icon="info"
             text="Count"
             onClick={() => {
-              toggle();
               toggleCount(true);
             }}
           />
 
-          {!props.disabled && (
-            <Dropdown.Item
-              icon="cloud upload"
-              text="Update"
-              onClick={() => {
-                toggle();
-                toggleUpdate(true);
-              }}
-            />
-          )}
-          {renderSelectedModal()}
+          <Dropdown.Item
+            icon="cloud upload"
+            text="Update"
+            onClick={() => {
+              toggleUpdate(true);
+            }}
+          />
         </Dropdown.Menu>
       </Dropdown>
-    </OutsideClickHandler>
+      {renderSelectedModal()}
+    </>
   );
 }
