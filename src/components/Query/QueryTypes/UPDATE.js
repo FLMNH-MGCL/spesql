@@ -11,8 +11,9 @@ import {
   TextArea,
   ModalActions,
   Segment,
+  Container,
 } from "semantic-ui-react";
-
+import { Checkmark } from "react-checkmark";
 import {
   updateQueryOption,
   headerSelection,
@@ -55,26 +56,66 @@ export default class UPDATE extends React.Component {
     activePage: 0,
   };
 
-  overrideOnChange(e, { name, value }) {
-    // const key = e.key;
-    // e.nativeEvent();
-    console.log(e.target.value);
+  canContinue() {
+    // return true;
+    const { activePage } = this.state;
 
-    // if (key === "Backspace") {
-    // } else if (key === "Delete") {
-    // } else {
-    //   this.setState({ [name]: this.state[name] + key });
-    // }
+    let hasError = true;
 
-    this.setState({ [name]: value });
+    if (activePage === 0) {
+      // fieldsToCheck = ["reason", "query_action", "db"];
+
+      if (this.state.reason === "") {
+        hasError = true;
+      } else if (this.state.query_action !== "UPDATE") {
+        hasError = true;
+      } else if (this.state.db === "") {
+        hasError = true;
+      } else {
+        hasError = false;
+      }
+    } else if (activePage === 1) {
+      // check sets
+      this.state.sets.forEach((set, index) => {
+        const fieldError = this.checkSetContent(index, "field");
+        const operatorError = this.checkSetContent(index, "operator");
+        const valueError = this.checkSetContent(index, "newValue");
+
+        if (fieldError || operatorError || valueError) {
+          hasError = true;
+        } else {
+          hasError = false;
+        }
+      });
+    } else if (activePage === 2) {
+      // check conditionals
+      this.state.conditionals.forEach((cond, index) => {
+        const fieldError = this.checkConditionalContent(index, "field");
+        const operatorError = this.checkConditionalContent(index, "operator");
+        const valueError = this.checkConditionalContent(index, "searchTerms");
+
+        if (fieldError || operatorError || valueError) {
+          hasError = true;
+        } else {
+          hasError = false;
+        }
+      });
+    }
+
+    return !hasError;
   }
 
   // FIXME
   paginateForward() {
     if (this.state.activePage === 3) {
       return;
-    } else {
+    } else if (this.canContinue()) {
       this.setState({ activePage: this.state.activePage + 1 });
+    } else {
+      this.props.notify({
+        type: "error",
+        message: "Please fix errors on this page before continuing",
+      });
     }
   }
 
@@ -621,30 +662,6 @@ export default class UPDATE extends React.Component {
     return errors;
   };
 
-  renderBasicForm = (
-    query_action,
-    db,
-    setCount,
-    sets,
-    conditionalCount,
-    conditionals
-  ) => (
-    <Form onSubmit={this.handleSubmit}>
-      <Form.Group widths="equal">
-        <Form.Field
-          control={Select}
-          label="WHERE count (how many conditionals)"
-          options={setCountOptions}
-          name="conditionalCount"
-          value={conditionalCount}
-          onChange={this.handleConditionalCountChange}
-          disabled={!this.state.basic_query}
-        />
-      </Form.Group>
-      {conditionals}
-    </Form>
-  );
-
   renderPage() {
     const { activePage } = this.state;
 
@@ -665,70 +682,65 @@ export default class UPDATE extends React.Component {
     switch (activePage) {
       case 0:
         return (
-          <Modal.Content>
-            <Form>
-              <Form.Group>
-                <Form.Field
-                  width="sixteen"
-                  label={
-                    <Header size="small">
-                      You must enter a reason for this update
-                    </Header>
-                  }
-                  control={TextArea}
-                  name="reason"
-                  value={reason}
-                  // onChange={this.handleChange}
-                  // onKeyDown={this.overrideOnChange}
-                  onChange={this.overrideOnChange.bind(this)}
-                  error={
-                    this.state.reason === ""
-                      ? {
-                          content: "You must provide a reason",
-                          pointing: "above",
-                        }
-                      : false
-                  }
-                />
-              </Form.Group>
-              <Form.Group widths="equal">
-                <Form.Field
-                  control={Select}
-                  options={updateQueryOption}
-                  label="QUERY"
-                  placeholder="UPDATE"
-                  search
-                  name="query_action"
-                  error={
-                    this.state.query_action !== "UPDATE" &&
-                    this.state.basic_query
-                      ? { content: "You must run an UPDATE query here." }
-                      : false
-                  }
-                  value={query_action}
-                  onChange={this.handleChange}
-                  disabled={!this.state.basic_query}
-                  required
-                />
-                <Form.Field
-                  control={Select}
-                  options={this.state.dbSelection}
-                  label="Database Table"
-                  placeholder=""
-                  search
-                  error={
-                    this.state.db === "" && this.state.basic_query
-                      ? { content: "You must select a database table." }
-                      : false
-                  }
-                  name="db"
-                  value={db}
-                  onChange={this.handleChange}
-                  disabled={!this.state.basic_query}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Content>
+          <>
+            <Form.Group>
+              <Form.Field
+                width="sixteen"
+                label={
+                  <Header size="small">
+                    You must enter a reason for this update
+                  </Header>
+                }
+                control={TextArea}
+                name="reason"
+                value={reason}
+                onChange={this.handleChange}
+                error={
+                  this.state.reason === ""
+                    ? {
+                        content: "You must provide a reason",
+                        pointing: "above",
+                      }
+                    : false
+                }
+              />
+            </Form.Group>
+            <Form.Group widths="equal">
+              <Form.Field
+                control={Select}
+                options={updateQueryOption}
+                label="QUERY"
+                placeholder="UPDATE"
+                search
+                name="query_action"
+                error={
+                  this.state.query_action !== "UPDATE" && this.state.basic_query
+                    ? { content: "You must run an UPDATE query here." }
+                    : false
+                }
+                value={query_action}
+                onChange={this.handleChange}
+                disabled={!this.state.basic_query}
+                required
+              />
+              <Form.Field
+                control={Select}
+                options={this.state.dbSelection}
+                label="Database Table"
+                placeholder=""
+                search
+                error={
+                  this.state.db === "" && this.state.basic_query
+                    ? { content: "You must select a database table." }
+                    : false
+                }
+                name="db"
+                value={db}
+                onChange={this.handleChange}
+                disabled={!this.state.basic_query}
+              />
+            </Form.Group>
+          </>
         );
 
       case 1:
@@ -737,7 +749,7 @@ export default class UPDATE extends React.Component {
             <Form.Group widths="equal">
               <Form.Field
                 control={Select}
-                label="SET count (how many changes)"
+                label="How many fields are being updated (a SQL 'set' clause)"
                 options={setCountOptions}
                 name="setCount"
                 value={setCount}
@@ -745,21 +757,56 @@ export default class UPDATE extends React.Component {
                 // disabled={!this.state.basic_query}
               />
             </Form.Group>
-            {/* {sets} */}
-            <Form.Group>
-              <Form.Field control={Input} />
-            </Form.Group>
+            <Segment style={{ maxHeight: "30vh", overflowY: "scroll" }}>
+              {sets}
+            </Segment>
           </>
         );
 
       case 2:
-        return <div></div>;
+        return (
+          <>
+            <Form.Group widths="equal">
+              <Form.Field
+                control={Select}
+                label="How many conditions are there (a SQL 'where' clause)"
+                options={setCountOptions}
+                name="conditionalCount"
+                value={conditionalCount}
+                onChange={this.handleConditionalCountChange}
+                disabled={!this.state.basic_query}
+              />
+            </Form.Group>
+            <Segment style={{ maxHeight: "30vh", overflowY: "scroll" }}>
+              {conditionals}
+            </Segment>
+          </>
+        );
 
       case 3:
-        return <div></div>;
+        return (
+          <>
+            <Header size="medium" textAlign="center">
+              Form Completed!
+            </Header>
+            <Checkmark size="large" />
+            <Container text textAlign="center" style={{ marginTop: "1rem" }}>
+              <p>
+                Press submit to attempt the update. Be sure to fix any errors
+                that are detected and displayed in the error log.
+              </p>
+            </Container>
+          </>
+        );
 
       default:
-        return <div></div>;
+        return (
+          <div>
+            Woah! You broke it!! How'd you get here?? That's pretty cool, make
+            sure to let Aaron know exactly what you did so he can try and find
+            the bug!
+          </div>
+        );
     }
   }
 
@@ -815,8 +862,9 @@ export default class UPDATE extends React.Component {
     return (
       <>
         <Modal.Header>Update Query</Modal.Header>
-
-        {this.renderPage()}
+        <Modal.Content>
+          <Form>{this.renderPage()}</Form>
+        </Modal.Content>
         {/* {this.renderBasicForm(
               query_action,
               db,
