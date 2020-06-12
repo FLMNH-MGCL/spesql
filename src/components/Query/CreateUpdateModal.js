@@ -1,8 +1,6 @@
 import React from "react";
 import { Modal } from "semantic-ui-react";
 import { UPDATE } from "./QueryTypes";
-import UPDATETEST from "./QueryTypes/TEST";
-// import OutsideClickHandler from "../utils/OutsideClickHandler";
 
 export default function CreateUpdateModal({
   open,
@@ -24,7 +22,6 @@ export default function CreateUpdateModal({
         userData={props.userData}
         checkAuth={checkAuth}
       />
-      {/* <UPDATETEST /> */}
     </Modal>
   );
 }
