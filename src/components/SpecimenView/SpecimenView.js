@@ -1,8 +1,6 @@
 import React from "react";
 import { Card, Image, Grid, List } from "semantic-ui-react";
 import "./SpecimenView.css";
-import DeleteDocument from "../DeleteDocument/DeleteDocument";
-import UpdateDocument from "../UpdateDocument/UpdateDocument";
 import axios from "axios";
 
 class SpecimenView extends React.Component {
@@ -54,28 +52,6 @@ class SpecimenView extends React.Component {
         <Card>
           <Image src={require("./test.jpg")} wrapped />
         </Card>
-        {/* <DeleteDocument
-          target={selectedSpecimen.id}
-          runQuery={this.props.runQuery}
-          disabled={this.props.disabled}
-          userData={this.props.userData}
-          notify={this.props.notify}
-          checkAuth={this.checkAuth.bind(this)}
-        />
-        <UpdateDocument
-          selectedSpecimen={selectedSpecimen}
-          currentQuery={this.props.currentQuery}
-          runQuery={this.props.runQuery}
-          user={this.props.user}
-          notify={this.props.notify}
-          disabled={this.props.disabled}
-          userData={this.props.userData}
-          errorMessages={this.props.errorMessages}
-          updateSingleUpdateErrorMessage={
-            this.props.updateSingleUpdateErrorMessage
-          }
-          checkAuth={this.checkAuth.bind(this)}
-        /> */}
       </>
     );
 

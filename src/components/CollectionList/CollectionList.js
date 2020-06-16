@@ -114,7 +114,9 @@ export default class CollectionList extends React.Component {
             disabled={this.props.disabled}
             userData={this.props.userData}
             errorMessages={this.props.errorMessages}
-            updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
+            updateSingleUpdateErrorMessage={
+              this.props.updateSingleUpdateErrorMessage
+            }
             notify={this.props.notify}
             selectedSpecimen={this.props.selectedSpecimen}
           />

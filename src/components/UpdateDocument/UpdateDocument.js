@@ -110,7 +110,7 @@ class UpdateDocument extends React.Component {
   }
 
   show = () => this.setState({ open: true });
-  close = () =>
+  close = () => {
     this.setState({
       open: false,
       loading: false,
@@ -179,6 +179,8 @@ class UpdateDocument extends React.Component {
       collectors: this.props.selectedSpecimen.collectors,
       updateReason: "",
     });
+    this.props.updateSingleUpdateErrorMessage(null);
+  };
 
   onChange = (e, { name, value }) => this.setState({ [name]: value });
 
@@ -213,11 +215,9 @@ class UpdateDocument extends React.Component {
   }
 
   onSubmit = (e) => {
-    if (this.state.updateReason === "") {
-      this.props.notify({
-        type: "error",
-        message: "Please enter a reason for updating.",
-      });
+    const canContinue = this.checkPages();
+
+    if (!canContinue) {
       return;
     }
 
@@ -346,9 +346,34 @@ class UpdateDocument extends React.Component {
     }
   }
 
-  checkPage() {
+  checkPages() {
     // will check for errors on current page
     // will not allow for pagination if errors present
+
+    let errors = [];
+
+    this.state.tablePages.forEach((value, key, map) => {
+      const currentPage = value;
+
+      currentPage.forEach((field) => {
+        errors = errors.concat(checkField(field, this.state[field]));
+      });
+    });
+
+    console.log(errors);
+
+    if (errors.length > 0) {
+      this.props.notify({
+        type: "error",
+        message: "Please check logs for errors",
+      });
+
+      this.props.updateSingleUpdateErrorMessage(errors);
+
+      return false;
+    } else {
+      return true;
+    }
   }
 
   canContinue() {

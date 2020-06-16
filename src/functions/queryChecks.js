@@ -510,7 +510,7 @@ export function checkField(fieldName, fieldValue) {
 
       if (includesPunctuation(fieldValue)) {
         errors.push(
-          `Format error (@ ${fieldName}): Remove punctuation from recordNumber.`
+          `Format error (@ ${fieldName}): Remove punctuation from ${fieldName}.`
         );
       }
 
