@@ -351,21 +351,77 @@ class UpdateDocument extends React.Component {
     // will not allow for pagination if errors present
   }
 
-  canContinue() {}
+  canContinue() {
+    const { page } = this.state;
 
-  paginateForward() {
+    let errors = [];
+
+    if (page === 0) {
+      // check reason
+      const reasonError = checkField("updateReason", this.state.updateReason);
+      const fieldSelErr = checkField(
+        "selectedFields",
+        this.state.selectedFields
+      );
+
+      // console.log(reasonError, fieldSelErr);
+
+      if (reasonError.length > 0 || fieldSelErr.length > 0) {
+        this.props.notify({
+          type: "error",
+          message: "Please fix errors on this page before you continue.",
+        });
+        return false;
+      } else {
+        this.generateTablePages();
+        return true;
+      }
+    } else {
+      this.state.tablePages.get(this.state.tablePage).forEach((field) => {
+        errors = errors.concat(checkField(field, this.state[field]));
+      });
+
+      if (errors.length > 0) {
+        this.props.notify({
+          type: "error",
+          message: "Please fix errors on this page before you continue.",
+        });
+        return false;
+      }
+
+      return true;
+    }
+  }
+
+  paginateTableFoward() {
     if (this.state.tablePage === this.state.tablePages.size - 1) {
       return;
-    } else {
+    } else if (this.canContinue()) {
       this.setState({ tablePage: this.state.tablePage + 1 });
     }
   }
 
-  paginateBackward() {
+  paginateTableBackward() {
     if (this.state.tablePage === 0) {
       return;
     } else {
       this.setState({ tablePage: this.state.tablePage - 1 });
+    }
+  }
+
+  paginateForward() {
+    if (this.state.page === 0 && this.canContinue()) {
+      this.setState({ page: 1 });
+    } else if (this.state.page > 0 && this.state.page < 2) {
+      this.setState({ page: this.state.page + 1 });
+    }
+  }
+
+  paginateBackward() {
+    if (this.state.page === 0) {
+      return;
+    } else {
+      this.setState({ page: this.state.page - 1 });
     }
   }
 
@@ -414,7 +470,16 @@ class UpdateDocument extends React.Component {
         <Menu.Item
           active={this.state.tablePage === i}
           as="a"
-          onClick={() => this.setState({ tablePage: i })}
+          onClick={() => {
+            if (this.state.tablePage < i) {
+              // check if can continue
+              if (this.canContinue()) {
+                this.setState({ tablePage: i });
+              }
+            } else {
+              this.setState({ tablePage: i });
+            }
+          }}
         >
           {i + 1}
         </Menu.Item>
@@ -581,11 +646,19 @@ class UpdateDocument extends React.Component {
           <Table.Row>
             <Table.HeaderCell colSpan="3">
               <Menu floated="right" pagination>
-                <Menu.Item as="a" icon onClick={() => this.paginateBackward()}>
+                <Menu.Item
+                  as="a"
+                  icon
+                  onClick={() => this.paginateTableBackward()}
+                >
                   <Icon name="chevron left" />
                 </Menu.Item>
                 {this.renderChevron()}
-                <Menu.Item as="a" icon onClick={() => this.paginateForward()}>
+                <Menu.Item
+                  as="a"
+                  icon
+                  onClick={() => this.paginateTableFoward()}
+                >
                   <Icon name="chevron right" />
                 </Menu.Item>
               </Menu>
@@ -709,6 +782,22 @@ class UpdateDocument extends React.Component {
           {this.state.page === 0 ? (
             <Modal.Content>
               <Form style={{ width: "90%", margin: "auto" }}>
+                <Form.Group widths="sixteen">
+                  <Form.Field
+                    width="sixteen"
+                    label={
+                      <Header size="small">
+                        Please enter the reason for this update
+                      </Header>
+                    }
+                    control={TextArea}
+                    name="updateReason"
+                    value={this.state.updateReason}
+                    onChange={this.onChange}
+                    error={this.basicErrorCheck("updateReason", updateReason)}
+                  />
+                </Form.Group>
+
                 <Form.Group>
                   <Form.Field
                     width="8"
@@ -723,23 +812,11 @@ class UpdateDocument extends React.Component {
                     multiple
                     name="selectedFields"
                     value={selectedFields}
+                    error={this.basicErrorCheck(
+                      "selectedFields",
+                      selectedFields
+                    )}
                     onChange={this.onChange}
-                  />
-                </Form.Group>
-
-                <Form.Group widths="sixteen">
-                  <Form.Field
-                    width="eight"
-                    label={
-                      <Header size="small">
-                        Please enter the reason for this update
-                      </Header>
-                    }
-                    control={TextArea}
-                    name="updateReason"
-                    value={this.state.updateReason}
-                    onChange={this.onChange}
-                    error={this.basicErrorCheck("updateReason", updateReason)}
                   />
                 </Form.Group>
               </Form>
@@ -757,20 +834,7 @@ class UpdateDocument extends React.Component {
                 updateError={this.props.updateSingleUpdateErrorMessage}
               />
               <Button onClick={this.close}>Cancel</Button>
-              <Button
-                onClick={() => {
-                  // generate array of forms or sm, then change page
-                  if (this.state.updateReason !== "") {
-                    this.generateTablePages();
-                    this.setState({ page: 1 });
-                  } else {
-                    this.props.notify({
-                      type: "error",
-                      message: "You must enter a reason before continuing",
-                    });
-                  }
-                }}
-              >
+              <Button onClick={this.paginateForward.bind(this)}>
                 Continue
               </Button>
             </Modal.Actions>
@@ -782,7 +846,7 @@ class UpdateDocument extends React.Component {
                 errors={this.props.errorMessages.singleUpdate}
                 updateError={this.props.updateSingleUpdateErrorMessage}
               />
-              <Button onClick={() => this.setState({ page: 0 })}>Back</Button>
+              <Button onClick={this.paginateBackward.bind(this)}>Back</Button>
               <ConfirmAuth
                 checkAuth={this.checkAuth.bind(this)}
                 handleSubmit={this.onSubmit}

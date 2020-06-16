@@ -1054,6 +1054,19 @@ export function checkField(fieldName, fieldValue) {
 
       return errors;
 
+    case "selectedFields":
+      if (fieldValue && fieldValue.length < 1) {
+        errors.push(`Query error (@${fieldName}): You must select fields.`);
+      }
+
+      if (fieldValue.indexOf("*") > -1 && fieldValue.length > 1) {
+        errors.push(
+          `Query error (@${fieldName}): If ALL is selected, no other fields should be selected.`
+        );
+      }
+
+      return errors;
+
     default:
       return errors;
   }
