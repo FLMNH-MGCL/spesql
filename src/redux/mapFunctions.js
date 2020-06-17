@@ -64,6 +64,18 @@ export function mapDispatchToProps(dispatch) {
         type: "UPDATE_SINGLE_UPDATE_ERROR_LOG",
         singleUpdate: singleUpdate,
       }),
+    updateGlobalErrorMessage: (globalError) =>
+      dispatch({ type: "UPDATE_GLOBAL_ERROR_LOG", globalError: globalError }),
+    updateAdminTableErrorMessage: (adminTblError) =>
+      dispatch({
+        type: "UPDATE_ADMIN_TABLE_ERROR_LOG",
+        adminTblError: adminTblError,
+      }),
+    updateAdminUserErrorMessage: (adminUserError) =>
+      dispatch({
+        type: "UPDATE_ADMIN_USER_ERROR_LOG",
+        adminUserError: adminUserError,
+      }),
     updateLoadingStatus: (loadingStatus) =>
       dispatch({ type: "UPDATE_LOADING_STATUS", loadingStatus: loadingStatus }),
     updateRefreshStatus: (refreshStatus) =>

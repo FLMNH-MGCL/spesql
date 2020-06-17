@@ -571,6 +571,40 @@ class UpdateDocument extends React.Component {
             error={this.basicErrorCheck(fieldName, this.state[fieldName])}
           />
         );
+
+      case "preparations":
+        return (
+          <Form.Field
+            control={Select}
+            options={preparationsControl}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+      case "identificationQualifier":
+        return (
+          <Form.Field
+            control={Select}
+            options={identificationQualifierControl}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
+      case "disposition":
+        return (
+          <Form.Field
+            control={Select}
+            options={dispositionControl}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
       case "isLoaned":
         return (
           <Form.Field

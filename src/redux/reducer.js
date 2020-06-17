@@ -15,6 +15,9 @@ export const UPDATE_SELECT_ERROR_LOG = "UPDATE_SELECT_ERROR_LOG";
 export const UPDATE_COUNT_ERROR_LOG = "UPDATE_COUNT_ERROR_LOG";
 export const UPDATE_UPDATE_ERROR_LOG = "UPDATE_UPDATE_ERROR_LOG";
 export const UPDATE_SINGLE_UPDATE_ERROR_LOG = "UPDATE_SINGLE_UPDATE_ERROR_LOG";
+export const UPDATE_GLOBAL_ERROR_LOG = "UPDATE_GLOBAL_ERROR_LOG";
+export const UPDATE_ADMIN_TABLE_ERROR_LOG = "UPDATE_ADMIN_TABLE_ERROR_LOG";
+export const UPDATE_ADMIN_USER_ERROR_LOG = "UPDATE_ADMIN_USER_ERROR_LOG";
 
 export const UPDATE_LOADING_STATUS = "UPDATE_LOADING_STATUS";
 export const UPDATE_REFRESH_STATUS = "UPDATE_REFRESH_STATUS";
@@ -43,6 +46,9 @@ const initialState = {
     countError: null,
     updateError: null,
     singleUpdate: null,
+    globalError: null,
+    adminTblError: null,
+    adminUserError: null,
   },
   loading: false,
   refreshing: false,
@@ -90,6 +96,9 @@ export default function reducer(state = initialState, action) {
           countError: null,
           updateError: null,
           singleUpdate: null,
+          globalError: null,
+          adminTblError: null,
+          adminUserError: null,
         },
         loading: false,
         refreshing: false,
@@ -125,6 +134,9 @@ export default function reducer(state = initialState, action) {
         countError: state.countError,
         updateError: state.updateError,
         singleUpdate: state.singleUpdate,
+        globalError: state.globalError,
+        adminTblError: state.adminTblError,
+        adminUserError: state.adminUserError,
       };
       return newState;
 
@@ -136,6 +148,9 @@ export default function reducer(state = initialState, action) {
         countError: state.countError,
         updateError: state.updateError,
         singleUpdate: state.singleUpdate,
+        globalError: state.globalError,
+        adminTblError: state.adminTblError,
+        adminUserError: state.adminUserError,
       };
       return newState;
 
@@ -147,6 +162,9 @@ export default function reducer(state = initialState, action) {
         countError: state.countError,
         updateError: state.updateError,
         singleUpdate: state.singleUpdate,
+        globalError: state.globalError,
+        adminTblError: state.adminTblError,
+        adminUserError: state.adminUserError,
       };
 
       return newState;
@@ -159,6 +177,9 @@ export default function reducer(state = initialState, action) {
         countError: action.countError,
         updateError: state.updateError,
         singleUpdate: state.singleUpdate,
+        globalError: state.globalError,
+        adminTblError: state.adminTblError,
+        adminUserError: state.adminUserError,
       };
       return newState;
 
@@ -170,6 +191,9 @@ export default function reducer(state = initialState, action) {
         countError: state.countError,
         updateError: action.updateError,
         singleUpdate: state.singleUpdate,
+        globalError: state.globalError,
+        adminTblError: state.adminTblError,
+        adminUserError: state.adminUserError,
       };
 
       return newState;
@@ -182,6 +206,51 @@ export default function reducer(state = initialState, action) {
         countError: state.countError,
         updateError: state.updateError,
         singleUpdate: action.singleUpdate,
+        globalError: state.globalError,
+        adminTblError: state.adminTblError,
+        adminUserError: state.adminUserError,
+      };
+      return newState;
+
+    case "UPDATE_GLOBAL_ERROR_LOG":
+      newState.errorMessages = {
+        manualInsert: state.manualInsert,
+        csvInsert: state.csvInsert,
+        selectError: state.selectError,
+        countError: state.countError,
+        updateError: state.updateError,
+        singleUpdate: state.singleUpdate,
+        globalError: action.globalError,
+        adminTblError: state.adminTblError,
+        adminUserError: state.adminUserError,
+      };
+      return newState;
+
+    case "UPDATE_ADMIN_TABLE_ERROR_LOG":
+      newState.errorMessages = {
+        manualInsert: state.manualInsert,
+        csvInsert: state.csvInsert,
+        selectError: state.selectError,
+        countError: state.countError,
+        updateError: state.updateError,
+        singleUpdate: state.singleUpdate,
+        globalError: state.globalError,
+        adminTblError: action.adminTblError,
+        adminUserError: state.adminUserError,
+      };
+      return newState;
+
+    case "UPDATE_USER_TABLE_ERROR_LOG":
+      newState.errorMessages = {
+        manualInsert: state.manualInsert,
+        csvInsert: state.csvInsert,
+        selectError: state.selectError,
+        countError: state.countError,
+        updateError: state.updateError,
+        singleUpdate: state.singleUpdate,
+        globalError: state.globalError,
+        adminTblError: state.adminTblError,
+        adminUserError: action.adminUserError,
       };
       return newState;
 

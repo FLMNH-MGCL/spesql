@@ -19,11 +19,22 @@ import {
   headerSelection,
   setOperatorOptions,
   setCountOptions,
+  countryControl,
+  sexControl,
+  lifeStageControl,
+  samplingProtocolControl,
+  yesOrNo,
+  geodeticDatumControl,
+  identificationQualifierControl,
+  preparationsControl,
+  dispositionControl,
 } from "../QueryConstants/constants";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import axios from "axios";
 import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
 import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
+import { checkField } from "../../../functions/queryChecks";
+import SemanticDatepicker from "react-semantic-ui-datepickers";
 
 const setOptions = headerSelection.slice(1, headerSelection.length);
 
@@ -386,6 +397,18 @@ export default class UPDATE extends React.Component {
     }
   };
 
+  basicErrorCheck(field, fieldValue) {
+    if (!fieldValue) {
+      fieldValue = "";
+    }
+
+    const errors = checkField(field, fieldValue);
+    if (errors.length > 0) {
+      const error = errors[0].split(":")[1];
+      return { content: error };
+    }
+  }
+
   checkConditionalContent = (index, conditionalField) => {
     let condtional = this.state.conditionals[index];
     switch (conditionalField) {
@@ -433,6 +456,189 @@ export default class UPDATE extends React.Component {
     }
   };
 
+  getSetFieldForm(index, fieldName, fieldValue) {
+    const shouldBeLike = (
+      <Form.Field
+        control={Input}
+        label="New Value"
+        placeholder="value"
+        search
+        // error={this.checkSetContent(index, "newValue")}
+        error={this.basicErrorCheck(
+          this.state.sets[index].field,
+          this.state.sets[index].newValue
+        )}
+        name="newValue"
+        value={this.state.sets[index].newValue}
+        onChange={this.handleSetItemChange}
+        id={String(index)}
+        disabled={!this.state.basic_query}
+      />
+    );
+    switch (fieldName) {
+      case "dateIdentified":
+      case "loanDate":
+      case "loanReturnDate":
+        return (
+          <SemanticDatepicker
+            label="New Date"
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+      case "country":
+        return (
+          <Form.Field
+            control={Select}
+            label="New Value"
+            options={countryControl}
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+      case "sex":
+        return (
+          <Form.Field
+            control={Select}
+            label="New Value"
+            options={sexControl}
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+      case "lifeStage":
+        return (
+          <Form.Field
+            control={Select}
+            label="New Value"
+            options={lifeStageControl}
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+      case "samplingProtocol":
+        return (
+          <Form.Field
+            control={Select}
+            label="New Value"
+            options={samplingProtocolControl}
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+      case "identificationQualifier":
+        return (
+          <Form.Field
+            control={Select}
+            label="New Value"
+            options={identificationQualifierControl}
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+      case "preparations":
+        return (
+          <Form.Field
+            control={Select}
+            label="New Value"
+            options={preparationsControl}
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+
+      case "disposition":
+        return (
+          <Form.Field
+            control={Select}
+            label="New Value"
+            options={dispositionControl}
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+
+      case "isLoaned":
+        return (
+          <Form.Field
+            control={Select}
+            label="New Value"
+            options={yesOrNo}
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+      case "loanInstitution":
+      case "loaneeName":
+        return (
+          <Form.Field
+            control={Input}
+            label="New Value"
+            placeholder="value"
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+      case "elevationInMeters":
+        return (
+          <Form.Field
+            control={Input}
+            label="New Value"
+            placeholder="value"
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck("elevationInMetersUPDATE", fieldValue)}
+          />
+        );
+      case "geodeticDatum":
+        return (
+          <Form.Field
+            control={Select}
+            label="New Value"
+            placeholder="Select One"
+            options={geodeticDatumControl}
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+      default:
+        return (
+          <Form.Field
+            control={Input}
+            label="New Value"
+            placeholder="value"
+            name={fieldName}
+            value={this.state.sets[index].newValue}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, fieldValue)}
+          />
+        );
+    }
+  }
+
   renderSets = () => {
     // each set value should be an array position in the state's set array of objs
     // so each form field should change each elements field, op and newVal when changed
@@ -465,18 +671,27 @@ export default class UPDATE extends React.Component {
             id={String(index)}
             disabled={!this.state.basic_query}
           />
-          <Form.Field
+          {this.getSetFieldForm(
+            index,
+            this.state.sets[index].field,
+            this.state.sets[index].newValue
+          )}
+          {/* <Form.Field
             control={Input}
             label="New Value"
             placeholder="value"
             search
-            error={this.checkSetContent(index, "newValue")}
+            // error={this.checkSetContent(index, "newValue")}
+            error={this.basicErrorCheck(
+              this.state.sets[index].field,
+              this.state.sets[index].newValue
+            )}
             name="newValue"
             value={this.state.sets[index].newValue}
             onChange={this.handleSetItemChange}
             id={String(index)}
             disabled={!this.state.basic_query}
-          />
+          /> */}
         </Form.Group>
       );
     });
@@ -757,7 +972,13 @@ export default class UPDATE extends React.Component {
                 // disabled={!this.state.basic_query}
               />
             </Form.Group>
-            <Segment style={{ maxHeight: "30vh", overflowY: "scroll" }}>
+            <Segment
+              style={{
+                minHeight: "100%",
+                maxHeight: "50vh",
+                overflowY: "scroll",
+              }}
+            >
               {sets}
             </Segment>
           </>
