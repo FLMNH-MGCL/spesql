@@ -4,8 +4,6 @@ import {
   Form,
   Input,
   Select,
-  Checkbox,
-  Message,
   Modal,
   Header,
   TextArea,
@@ -263,42 +261,20 @@ export default class UPDATE extends React.Component {
     command += ";";
 
     console.log(command);
-    this.props.runQuery(command);
+    // this.props.runQuery(command);
 
     setTimeout(() => {
       if (!this.props.loading && !this.props.errorMessages.updateError) {
+        this.setState({ loading: false });
         this.props.closeModal();
       } else {
         this.setState({ loading: false });
+        this.notify({
+          type: "error",
+          message: "SQL errors occurred! Please check logs.",
+        });
       }
     }, 1000);
-  };
-
-  handleAdvancedSubmit = () => {
-    // this.setState({showModal: false})
-    // this.props.clearQuery()
-    // this.props.runQuery(this.state.advanced_query)
-    // this.props.closeModal()
-    this.setState({ loading: true });
-    let errors = [];
-    errors = this.checkAdvancedPostSubmit();
-    if (errors.length > 0) {
-      this.props.notify({
-        type: "error",
-        message: "Uh oh, some errors detected. Please check UPDATE error log",
-      });
-      this.props.updateUpdateErrorMessage(errors);
-    } else {
-      this.props.runQuery(this.state.advanced_query);
-    }
-
-    setTimeout(() => {
-      if (!this.props.loading && !this.props.errorMessages.updateError) {
-        this.props.closeModal();
-      } else {
-        this.setState({ loading: false });
-      }
-    }, 500);
   };
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
@@ -906,16 +882,7 @@ export default class UPDATE extends React.Component {
   renderPage() {
     const { activePage } = this.state;
 
-    const {
-      advanced_query,
-      query_action,
-      db,
-      setCount,
-      conditionalCount,
-      reason,
-      loadingOptions,
-      dbSelection,
-    } = this.state;
+    const { query_action, db, setCount, conditionalCount, reason } = this.state;
 
     let sets = this.renderSets();
     let conditionals = this.renderConditions();
@@ -1083,24 +1050,15 @@ export default class UPDATE extends React.Component {
   }
 
   render() {
-    const {
-      advanced_query,
-      query_action,
-      db,
-      setCount,
-      conditionalCount,
-      reason,
-      loadingOptions,
-      dbSelection,
-    } = this.state;
+    const { loadingOptions, dbSelection } = this.state;
 
     if (dbSelection.length === 0 && loadingOptions) {
       this.initTableOptions("update");
     }
 
-    // console.log(this.state);
-    let sets = this.renderSets();
-    let conditionals = this.renderConditions();
+    // // console.log(this.state);
+    // let sets = this.renderSets();
+    // let conditionals = this.renderConditions();
 
     if (this.props.disabled) {
       return <div></div>;

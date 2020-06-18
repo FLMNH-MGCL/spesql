@@ -18,7 +18,13 @@ const ACCESS_LEVELS = [
   { key: "Admin", text: "Admin", value: "admin" },
 ];
 
-export default function AddUserModal({ users, checkAuth, createNotification }) {
+export default function AddUserModal({
+  users,
+  checkAuth,
+  createNotification,
+  errors,
+  updateError,
+}) {
   // const [selected, select] = useState();
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");

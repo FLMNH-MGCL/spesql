@@ -555,6 +555,7 @@ export function checkField(fieldName, fieldValue) {
 
       return errors;
 
+    // TODO: implement this check for the new | separator
     case "otherCollectors":
       if (fieldValue === "") return errors;
 
@@ -567,9 +568,8 @@ export function checkField(fieldName, fieldValue) {
           if (name.split(",").length < 2) {
             // invalid format
           } else {
-            const firstName = name.split(",")[1];
-            const lastName = name.split(",")[0];
-
+            // const firstName = name.split(",")[1];
+            // const lastName = name.split(",")[0];
             // add check for names
           }
         });
@@ -621,7 +621,7 @@ export function checkField(fieldName, fieldValue) {
       return errors;
 
     case "collectedYear":
-      if (fieldValue == "") return errors;
+      if (fieldValue === "") return errors;
 
       if (!isNumeric(fieldValue)) {
         errors.push(
@@ -824,7 +824,7 @@ export function checkField(fieldName, fieldValue) {
         );
       }
 
-      if (parsedLat !== NaN) {
+      if (!isNaN(parsedLat)) {
         if (parsedLat < -90 || parsedLat > 90) {
           errors.push(
             `Number error (@ ${fieldName}): ${fieldValue} out of range (+- 90).`
@@ -850,7 +850,7 @@ export function checkField(fieldName, fieldValue) {
         );
       }
 
-      if (parsed !== NaN) {
+      if (!isNaN(parsed)) {
         if (parsed < -180 || parsed > 180) {
           errors.push(
             `Number error (@ ${fieldName}): ${fieldValue} out of range (+- 180).`

@@ -3,12 +3,10 @@ import {
   Button,
   Form,
   TextArea,
-  Message,
   Modal,
   Divider,
   Header,
 } from "semantic-ui-react";
-import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import { checkSpecimen } from "../../../functions/queryChecks";
 import { runInsertQuery } from "../../../functions/queries";

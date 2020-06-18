@@ -5,7 +5,6 @@ import {
   Input,
   Select,
   Checkbox,
-  Message,
   Modal,
   Header,
   Statistic,
@@ -18,7 +17,6 @@ import {
   // setCountOptions,
   conditionalCountOptions,
 } from "../QueryConstants/constants";
-import CountTerminal from "../QueryTerminals/CountTerminal";
 
 import CreateHelpModal from "../../Help/CreateHelpModal";
 // import ErrorTerminal from "../QueryTerminals/ErrorTerminal";

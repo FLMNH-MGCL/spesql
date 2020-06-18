@@ -14,6 +14,8 @@ export default function AddTableModal({
   checkAuth,
   createNotification,
   refresh,
+  errors,
+  updateError,
 }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
@@ -51,6 +53,8 @@ export default function AddTableModal({
         type: "error",
         message: registerResponse.data.sqlMessage.sqlMessage,
       });
+
+      updateError([registerResponse.data.sqlMessage.sqlMessage]);
       return false;
     }
   }
@@ -84,6 +88,8 @@ export default function AddTableModal({
         type: "error",
         message: creationResponse.data.error.sqlMessage,
       });
+
+      updateError([creationResponse.data.error.sqlMessage]);
 
       return;
     }

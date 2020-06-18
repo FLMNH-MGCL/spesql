@@ -24,6 +24,8 @@ export default function EditUserModal({
   checkAuth,
   createNotification,
   currentUser,
+  errors,
+  updateError,
 }) {
   const [open, setOpen] = useState(false);
   const [selected, select] = useState();

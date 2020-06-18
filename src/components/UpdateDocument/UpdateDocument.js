@@ -2,8 +2,6 @@ import React from "react";
 import {
   Button,
   Modal,
-  Message,
-  Grid,
   Table,
   Input,
   TextArea,
@@ -321,7 +319,7 @@ class UpdateDocument extends React.Component {
 
       updateCommand += `WHERE id=${this.props.selectedSpecimen.id};`;
 
-      // console.log(updateCommand)
+      console.log(updateCommand);
 
       // this.props.runQuery(updateCommand);
       this.setState({ loading: false });
@@ -594,6 +592,17 @@ class UpdateDocument extends React.Component {
             error={this.basicErrorCheck(fieldName, this.state[fieldName])}
           />
         );
+      case "tubeSize":
+        return (
+          <Form.Field
+            control={Select}
+            options={tubeSizeControl}
+            name={fieldName}
+            value={this.state[fieldName]}
+            onChange={this.onChange}
+            error={this.basicErrorCheck(fieldName, this.state[fieldName])}
+          />
+        );
       case "disposition":
         return (
           <Form.Field
@@ -755,66 +764,7 @@ class UpdateDocument extends React.Component {
         />
       );
     } else {
-      const {
-        selectedFields,
-        catalogNumber,
-        recordNumber,
-        otherCatalogNumber,
-        order_,
-        superfamily,
-        family,
-        subfamily,
-        tribe,
-        genus,
-        subgenus,
-        specificEpithet,
-        infraspecificEpithet,
-        identificationQualifier,
-        recordedBy,
-        identifiedBy,
-        dateIdentified,
-        verbatimDate,
-        collectedYear,
-        collectedMonth,
-        collectedDay,
-        sex,
-        lifeStage,
-        habitat,
-        occurrenceRemarks,
-        molecularOccurrenceRemarks,
-        samplingProtocol,
-        country,
-        stateProvince,
-        county,
-        municipality,
-        locality,
-        elevationInMeters,
-        decimalLatitude,
-        decimalLongitude,
-        geodeticDatum,
-        coordinateUncertainty,
-        verbatimLatitude,
-        verbatimLongitude,
-        georeferencedBy,
-        disposition,
-        isLoaned,
-        loanInstitution,
-        loaneeName,
-        loanDate,
-        loanReturnDate,
-        preparations,
-        freezer,
-        rack,
-        box,
-        tubeSize,
-        associatedSequences,
-        associatedReferences,
-        withholdData,
-        reared,
-        fieldNotes,
-        collectors,
-        updateReason,
-      } = this.state;
+      const { selectedFields, updateReason } = this.state;
 
       // console.log(selectedFields);
 

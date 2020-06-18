@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Button, Loader, Icon, Label } from "semantic-ui-react";
+import { Table, Button, Loader, Icon } from "semantic-ui-react";
 import CreateHelpModal from "../Help/CreateHelpModal";
 import _ from "lodash";
 import InfiniteScroll from "react-infinite-scroll-component";

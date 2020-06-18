@@ -22,6 +22,7 @@ import {
 import "./styles.css";
 import AddTableModal from "./components/AddTableModal";
 import EditTableModal from "./components/EditTableModal";
+import CreateErrorLogModal from "../../components/Error/CreateErrorLogModal";
 
 const createNotification = (content) => {
   switch (content.type) {
@@ -86,6 +87,7 @@ function AdminPortal(props) {
 
     if (res.status !== 200 || res.err) {
       setError(res.err);
+      console.log(error);
     } else {
       setUsers(res.data);
     }
@@ -109,7 +111,7 @@ function AdminPortal(props) {
     if (!tables) {
       getTables();
     }
-  }, [tables, users]);
+  });
 
   function renderUserTable() {
     if (!users) return; // safety check
@@ -145,7 +147,7 @@ function AdminPortal(props) {
     return sqlTables;
   }
 
-  const userSelection = () => {};
+  // const userSelection = () => {};
 
   return (
     <>
@@ -207,12 +209,16 @@ function AdminPortal(props) {
                   <AddUserModal
                     users={users}
                     createNotification={createNotification}
+                    errors={props.errorMessages.adminUserError}
+                    updateError={props.updateAdminUserErrorMessage}
                     checkAuth={checkAuth}
                   />
                   <EditUserModal
                     users={users}
                     createNotification={createNotification}
                     checkAuth={checkAuth}
+                    errors={props.errorMessages.adminUserError}
+                    updateError={props.updateAdminUserErrorMessage}
                     currentUser={props.userData}
                   />
                   <Button
@@ -225,6 +231,12 @@ function AdminPortal(props) {
                   >
                     <Icon name="refresh" />
                   </Button>
+                  <CreateErrorLogModal
+                    type="Admin User Operations"
+                    errors={props.errorMessages.adminUserError}
+                    updateError={props.updateAdminUserErrorMessage}
+                    inline
+                  />
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Footer>
@@ -251,15 +263,19 @@ function AdminPortal(props) {
                     tables={tables}
                     checkAuth={checkAuth}
                     createNotification={createNotification}
+                    errors={props.errorMessages.adminTblError}
+                    updateError={props.updateAdminTableErrorMessage}
                     refresh={() => getTables()}
                   />
-
                   <EditTableModal
                     tables={tables}
                     checkAuth={checkAuth}
                     createNotification={createNotification}
+                    errors={props.errorMessages.adminTblError}
+                    updateError={props.updateAdminTableErrorMessage}
                     refresh={() => getTables()}
                   />
+
                   <Button
                     size="small"
                     icon
@@ -270,11 +286,41 @@ function AdminPortal(props) {
                   >
                     <Icon name="refresh" />
                   </Button>
+                  <CreateErrorLogModal
+                    type="Admin Table Operations"
+                    errors={props.errorMessages.adminTblError}
+                    updateError={props.updateAdminTableErrorMessage}
+                    inline
+                  />
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Footer>
           </Table>
         </Segment>
+        <div style={{ marginBottom: "2rem" }}>
+          <Button
+            onClick={() =>
+              props.updateAdminUserErrorMessage(["This is a test"])
+            }
+          >
+            create a user operation error
+          </Button>
+          <Button onClick={() => props.updateAdminUserErrorMessage(null)}>
+            reset user errors
+          </Button>
+        </div>
+        <div>
+          <Button
+            onClick={() =>
+              props.updateAdminTableErrorMessage(["This is also a test"])
+            }
+          >
+            create a table operation error
+          </Button>
+          <Button onClick={() => props.updateAdminTableErrorMessage(null)}>
+            reset table errors
+          </Button>
+        </div>
       </Container>
       <NotificationContainer />
     </>

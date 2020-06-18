@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  Button,
-  Form,
-  TextArea,
-  Dropdown,
-  Icon,
-} from "semantic-ui-react";
+import { Button, Dropdown, Icon } from "semantic-ui-react";
 import "./QueryGrid.css";
 import CreateSelectModal from "./CreateSelectModal";
 import CreateCountModal from "./CreateCountModal";

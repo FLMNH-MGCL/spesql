@@ -21,7 +21,6 @@ import {
   checkSpecimen,
   parseDate,
   parseMeasurement,
-  parseRawMonth,
 } from "../../../functions/queryChecks";
 import { runSingleInsert } from "../../../functions/queries";
 import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
@@ -32,7 +31,6 @@ import ErrorTerminal from "../../Query/QueryTerminals/ErrorTerminal";
 import "../InsertDocument.css";
 
 import {
-  familyControl,
   identificationQualifierControl,
   samplingProtocolControl,
   dispositionControl,
@@ -44,7 +42,6 @@ import {
   countryControl,
   yesOrNo,
   units,
-  conditionalCountOptions,
   geodeticDatumControl,
 } from "../../Query/QueryConstants/constants";
 import CreateHelpModal from "../../Help/CreateHelpModal";
@@ -394,6 +391,7 @@ export default class FormInsert extends React.Component {
         specimen,
         this.state.databaseTable
       );
+      console.log(insertData);
     }
 
     this.setState({ loading: false });

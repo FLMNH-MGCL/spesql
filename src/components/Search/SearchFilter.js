@@ -32,7 +32,9 @@ class SearchFilter extends React.Component {
 
   renderChecks = () => {
     let checkRow = [];
-    let checkGrid = headerSelection.map((header, index) => {
+    let checkGrid = [];
+
+    headerSelection.forEach((header, index) => {
       if (index === headerSelection.length - 1 || (index + 1) % 3 === 0) {
         checkRow.push(
           <Form.Field>
@@ -49,7 +51,7 @@ class SearchFilter extends React.Component {
 
         let tempRow = checkRow;
         checkRow = [];
-        return <Form.Group widths="equal">{tempRow}</Form.Group>;
+        checkGrid.push(<Form.Group widths="equal">{tempRow}</Form.Group>);
       } else {
         checkRow.push(
           <Form.Field>

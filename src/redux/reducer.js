@@ -240,7 +240,7 @@ export default function reducer(state = initialState, action) {
       };
       return newState;
 
-    case "UPDATE_USER_TABLE_ERROR_LOG":
+    case "UPDATE_ADMIN_USER_ERROR_LOG":
       newState.errorMessages = {
         manualInsert: state.manualInsert,
         csvInsert: state.csvInsert,

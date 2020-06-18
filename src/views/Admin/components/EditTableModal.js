@@ -24,6 +24,8 @@ export default function EditTableModal({
   checkAuth,
   createNotification,
   refresh,
+  errors,
+  updateError,
 }) {
   const [open, setOpen] = useState(false);
   const [selected, select] = useState();
