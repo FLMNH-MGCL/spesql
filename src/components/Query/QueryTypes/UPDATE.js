@@ -160,10 +160,57 @@ export default class UPDATE extends React.Component {
       });
   }
 
+  // because you must fix errors before continuing through the form
+  // it is unlikely this check will pick anything up, however for safety
+  // reasons I am keeping it here and using it before attempt is sent to
+  // sql server
+  finalCheck() {
+    // check sets and conditionals
+    let errors = [];
+
+    this.state.sets.forEach((set, index) => {
+      const fieldError = this.checkSetContent(index, "field");
+      const operatorError = this.checkSetContent(index, "operator");
+      const valueError = this.checkSetContent(index, "newValue");
+
+      if (fieldError) {
+        errors.push(fieldError.content);
+      }
+
+      if (operatorError) {
+        errors.push(operatorError.content);
+      }
+
+      if (valueError) {
+        errors.push(valueError.content);
+      }
+    });
+
+    // check conditionals
+    this.state.conditionals.forEach((cond, index) => {
+      const fieldError = this.checkConditionalContent(index, "field");
+      const operatorError = this.checkConditionalContent(index, "operator");
+      const valueError = this.checkConditionalContent(index, "searchTerms");
+
+      if (fieldError) {
+        errors.push(fieldError.content);
+      }
+
+      if (operatorError) {
+        errors.push(operatorError.content);
+      }
+
+      if (valueError) {
+        errors.push(valueError.content);
+      }
+    });
+
+    return errors;
+  }
+
   handleSubmit = () => {
-    // console.log("made it");
     this.setState({ loading: true });
-    let errors = this.checkBasicPreSubmit();
+    let errors = this.finalCheck();
 
     if (errors.length !== 0) {
       this.props.notify({
@@ -457,24 +504,6 @@ export default class UPDATE extends React.Component {
   };
 
   getSetFieldForm(index, fieldName, fieldValue) {
-    const shouldBeLike = (
-      <Form.Field
-        control={Input}
-        label="New Value"
-        placeholder="value"
-        search
-        // error={this.checkSetContent(index, "newValue")}
-        error={this.basicErrorCheck(
-          this.state.sets[index].field,
-          this.state.sets[index].newValue
-        )}
-        name="newValue"
-        value={this.state.sets[index].newValue}
-        onChange={this.handleSetItemChange}
-        id={String(index)}
-        disabled={!this.state.basic_query}
-      />
-    );
     switch (fieldName) {
       case "dateIdentified":
       case "loanDate":
@@ -482,9 +511,10 @@ export default class UPDATE extends React.Component {
         return (
           <SemanticDatepicker
             label="New Date"
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -494,9 +524,10 @@ export default class UPDATE extends React.Component {
             control={Select}
             label="New Value"
             options={countryControl}
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -506,9 +537,10 @@ export default class UPDATE extends React.Component {
             control={Select}
             label="New Value"
             options={sexControl}
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -518,9 +550,10 @@ export default class UPDATE extends React.Component {
             control={Select}
             label="New Value"
             options={lifeStageControl}
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -530,9 +563,10 @@ export default class UPDATE extends React.Component {
             control={Select}
             label="New Value"
             options={samplingProtocolControl}
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -542,9 +576,10 @@ export default class UPDATE extends React.Component {
             control={Select}
             label="New Value"
             options={identificationQualifierControl}
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -554,9 +589,10 @@ export default class UPDATE extends React.Component {
             control={Select}
             label="New Value"
             options={preparationsControl}
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -567,9 +603,10 @@ export default class UPDATE extends React.Component {
             control={Select}
             label="New Value"
             options={dispositionControl}
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -580,9 +617,10 @@ export default class UPDATE extends React.Component {
             control={Select}
             label="New Value"
             options={yesOrNo}
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -593,9 +631,10 @@ export default class UPDATE extends React.Component {
             control={Input}
             label="New Value"
             placeholder="value"
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -605,9 +644,10 @@ export default class UPDATE extends React.Component {
             control={Input}
             label="New Value"
             placeholder="value"
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck("elevationInMetersUPDATE", fieldValue)}
           />
         );
@@ -618,9 +658,10 @@ export default class UPDATE extends React.Component {
             label="New Value"
             placeholder="Select One"
             options={geodeticDatumControl}
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -630,9 +671,10 @@ export default class UPDATE extends React.Component {
             control={Input}
             label="New Value"
             placeholder="value"
-            name={fieldName}
+            name="newValue"
             value={this.state.sets[index].newValue}
-            onChange={this.onChange}
+            onChange={this.handleSetItemChange}
+            id={String(index)}
             error={this.basicErrorCheck(fieldName, fieldValue)}
           />
         );
@@ -676,22 +718,6 @@ export default class UPDATE extends React.Component {
             this.state.sets[index].field,
             this.state.sets[index].newValue
           )}
-          {/* <Form.Field
-            control={Input}
-            label="New Value"
-            placeholder="value"
-            search
-            // error={this.checkSetContent(index, "newValue")}
-            error={this.basicErrorCheck(
-              this.state.sets[index].field,
-              this.state.sets[index].newValue
-            )}
-            name="newValue"
-            value={this.state.sets[index].newValue}
-            onChange={this.handleSetItemChange}
-            id={String(index)}
-            disabled={!this.state.basic_query}
-          /> */}
         </Form.Group>
       );
     });
@@ -1086,120 +1112,8 @@ export default class UPDATE extends React.Component {
         <Modal.Content>
           <Form>{this.renderPage()}</Form>
         </Modal.Content>
-        {/* {this.renderBasicForm(
-              query_action,
-              db,
-              setCount,
-              sets,
-              conditionalCount,
-              conditionals
-            )} */}
 
         {this.renderActions()}
-      </>
-    );
-
-    return (
-      <>
-        <Modal.Header>Update Query</Modal.Header>
-        <Modal.Content>
-          <Message>
-            <p>
-              This section is for update queries. Update queries are those that
-              update values of entries within the database. If you have
-              terminal/CLI experience using MySQL commands, there is an advanced
-              query option available if checked. Click the ? button for more
-              detailed information
-            </p>
-          </Message>
-          <Form onSubmit={this.handleAdvancedSubmit}>
-            <Form.Group>
-              <Form.Field
-                control={Input}
-                label="Please enter the reason for this update"
-                placeholder="new data recieved, incorrect field update, etc"
-                name="reason"
-                value={reason}
-                onChange={this.handleChange}
-                error={
-                  this.state.reason === ""
-                    ? {
-                        content: "You must provide a reason",
-                        pointing: "above",
-                      }
-                    : false
-                }
-                width={16}
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Field
-                control={Checkbox}
-                label="Advanced"
-                name="basic_query"
-                value=""
-                onChange={this.handleAdvancedCheck}
-                width={3}
-              />
-              <Form.Field
-                control={Input}
-                name="advanced_query"
-                value={advanced_query}
-                onChange={this.handleChange}
-                disabled={this.state.basic_query}
-                width={10}
-                error={
-                  this.checkAdvancedPreSubmit() !== {}
-                    ? this.checkAdvancedPreSubmit()
-                    : false
-                }
-              />
-              <Form.Field
-                id="form-button-control-ta-submit-adv"
-                control={Button}
-                content="Submit"
-                disabled={this.state.basic_query}
-                width={3}
-              />
-            </Form.Group>
-          </Form>
-
-          {this.state.basic_query
-            ? this.renderBasicForm(
-                query_action,
-                db,
-                setCount,
-                sets,
-                conditionalCount,
-                conditionals
-              )
-            : null}
-
-          {/* {this.props.errorMessages.updateError
-            ? this.renderErrorTerminal()
-            : null} */}
-        </Modal.Content>
-        <Modal.Actions>
-          <CreateHelpModal queryType="UPDATE" />
-          <CreateErrorLogModal
-            type="Update"
-            errors={this.props.errorMessages.updateError}
-            updateError={this.props.updateUpdateErrorMessage}
-          />
-          <Button onClick={() => this.props.closeModal()}>Cancel</Button>
-          <ConfirmAuth
-            checkAuth={this.props.checkAuth}
-            handleSubmit={this.handleSubmit}
-          />
-          {/* <Button
-            style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
-            onClick={this.handleSubmit}
-            disabled={!this.state.basic_query}
-          >
-            Submit
-          </Button> */}
-        </Modal.Actions>
       </>
     );
   }

@@ -1044,7 +1044,7 @@ export function checkField(fieldName, fieldValue) {
     // NON-HEADER ERROR CHECKS !!!!
 
     case "updateReason":
-      if (fieldValue === "") {
+      if (fieldValue === undefined || fieldValue === "") {
         errors.push(`Query error (@ ${fieldValue}): You must provide a reason`);
       }
 
