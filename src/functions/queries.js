@@ -31,7 +31,7 @@ export async function runUpdateQuery(query) {
     return data;
   });
 
-  console.log(ret);
+  // console.log(ret);
 
   return ret;
 }

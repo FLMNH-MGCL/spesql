@@ -321,7 +321,8 @@ class UpdateDocument extends React.Component {
 
       console.log(updateCommand);
 
-      // this.props.runQuery(updateCommand);
+      this.props.runQuery(updateCommand);
+      this.props.runQuery(this.props.currentQuery);
       this.setState({ loading: false });
     } else {
       this.props.notify({

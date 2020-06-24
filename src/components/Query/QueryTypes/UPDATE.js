@@ -206,6 +206,33 @@ export default class UPDATE extends React.Component {
     return errors;
   }
 
+  // generateModifications() {
+  //   const { sets } = this.state;
+
+  //   const changes = sets.map((change) => {
+  //     return {
+  //       field: change.field,
+  //       oldValue: "unknown",
+  //       newValue: change.newValue,
+  //     };
+  //   });
+
+  //   var today = new Date();
+  //   var dd = String(today.getDate()).padStart(2, "0");
+  //   var mm = String(today.getMonth() + 1).padStart(2, "0");
+  //   var yyyy = today.getFullYear();
+
+  //   today = yyyy + "-" + mm + "-" + dd;
+
+  //   let modification = {
+  //     [today]: {
+  //       modifiedBy: this.props.userData.username,
+  //       fieldsChanged: changes,
+  //       reasonForChanges: this.state.reason,
+  //     },
+  //   };
+  // }
+
   handleSubmit = () => {
     this.setState({ loading: true });
     let errors = this.finalCheck();
@@ -260,8 +287,7 @@ export default class UPDATE extends React.Component {
 
     command += ";";
 
-    console.log(command);
-    // this.props.runQuery(command);
+    this.props.runQuery(command);
 
     setTimeout(() => {
       if (!this.props.loading && !this.props.errorMessages.updateError) {

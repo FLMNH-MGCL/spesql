@@ -78,8 +78,8 @@ class Home extends React.Component {
     return ret;
   }
 
-  async runQuery(query) {
-    console.log(query);
+  async runQuery(query, type = "batch") {
+    // console.log(query);
     let queryType = "";
 
     if (query.toUpperCase().startsWith("SELECT COUNT")) {
@@ -163,7 +163,7 @@ class Home extends React.Component {
         break;
 
       case "UPDATE":
-        console.log(query);
+        // console.log(query);
         let updateData = await runUpdateQuery(query);
 
         console.log(updateData);
@@ -179,7 +179,12 @@ class Home extends React.Component {
             type: "error",
             message: "Uh oh, please check error log",
           });
-          this.props.updateUpdateErrorMessage(updateError);
+
+          if (type === "single") {
+            this.props.updateSingleUpdateErrorMessage(updateError);
+          } else {
+            this.props.updateUpdateErrorMessage(updateError);
+          }
         } else {
           console.log(updateData.data);
           this.createNotification({
