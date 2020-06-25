@@ -42,9 +42,11 @@ async function main() {
   require("./routes/create-table.routes")(connection, app);
   require("./routes/delete-table.routes")(connection, app);
   require("./routes/register-table.routes")(connection, app);
+  require("./routes/reregister-table.routes")(connection, app);
   require("./routes/unregister-table.routes")(connection, app);
   require("./routes/delete-user.routes")(connection, app);
   require("./routes/list-tables-admin.routes")(connection, app);
+  require("./routes/alter-table-routes")(connection, app);
 
   app.listen(port, () => console.log(`Server now running on port ${port}!`));
 }

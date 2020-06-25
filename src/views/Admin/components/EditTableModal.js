@@ -12,6 +12,7 @@ import {
 } from "semantic-ui-react";
 import ConfirmAuth from "./ConfirmAuth";
 import axios from "axios";
+import { alterTable, reregisterTable } from "../../../functions/queries";
 
 const ACCESS_LEVELS = [
   { key: "Guest", text: "Guest", value: "guest" },
@@ -85,20 +86,77 @@ export default function EditTableModal({
     if (hasError) setHasError(false);
   }
 
-  function handleSubmit() {
-    createNotification({
-      type: "warning",
-      message: "I cant do this yet! (but soon!!)",
-    });
+  async function handleSubmit() {
+    if (hasError) {
+      createNotification({
+        type: "error",
+        message: "You must fix the errors in the form",
+      });
+
+      return;
+    }
+
+    if (selected.tbl_name !== name) {
+      // actual table must be updated
+      let command = `ALTER TABLE ${selected.tbl_name} RENAME TO ${name};`;
+
+      const renameResponse = await alterTable(command);
+      console.log(renameResponse);
+
+      if (renameResponse.error) {
+        createNotification({
+          type: "error",
+          message: renameResponse.sqlMessage.sqlMessage,
+        });
+
+        updateError([renameResponse.sqlMessage.sqlMessage]);
+        return;
+      } else {
+        createNotification({
+          type: "success",
+          message: renameResponse.data,
+        });
+      }
+    }
+    // reregister table
+    let command =
+      `UPDATE interactables SET tbl_name="${name}", ` +
+      `minimum_access_select="${minSel}", ` +
+      `minimum_access_update="${minIns}", ` +
+      `minimum_access_delete="${minUp}" ` +
+      `WHERE tbl_name="${selected.tbl_name}";`;
+
+    const reregisterResponse = await reregisterTable(command);
+
+    if (reregisterResponse.error) {
+      createNotification({
+        type: "error",
+        message: reregisterResponse.sqlMessage.sqlMessage,
+      });
+
+      updateError([
+        reregisterResponse.sqlMessage.sqlMessage,
+        "PLEASE CONTACT SUPPORT",
+      ]);
+      return;
+    } else {
+      createNotification({
+        type: "success",
+        message: reregisterResponse.data,
+      });
+    }
+
+    refresh();
+    select(undefined);
   }
 
   // TODO: add sql messages to logs
-  function handleDelete() {
+  async function handleDelete() {
     let deleted = false;
     let unregistered = false;
 
     // attempt deletion
-    const deleteData = axios.post("/api/admin/delete-table/", {
+    const deleteData = await axios.post("/api/admin/delete-table/", {
       tbl_name: selected.tbl_name,
     });
 

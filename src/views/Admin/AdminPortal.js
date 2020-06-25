@@ -149,6 +149,11 @@ function AdminPortal(props) {
 
   // const userSelection = () => {};
 
+  function refreshTables() {
+    setTables(null); // fake loading
+    getTables();
+  }
+
   return (
     <>
       <div
@@ -273,17 +278,10 @@ function AdminPortal(props) {
                     createNotification={createNotification}
                     errors={props.errorMessages.adminTblError}
                     updateError={props.updateAdminTableErrorMessage}
-                    refresh={() => getTables()}
+                    refresh={refreshTables}
                   />
 
-                  <Button
-                    size="small"
-                    icon
-                    onClick={() => {
-                      setTables(null); // fake loading
-                      getTables();
-                    }}
-                  >
+                  <Button size="small" icon onClick={refreshTables}>
                     <Icon name="refresh" />
                   </Button>
                   <CreateErrorLogModal

@@ -302,7 +302,7 @@ class UpdateDocument extends React.Component {
         allModifications = [modification];
       }
 
-      console.log(allModifications);
+      // console.log(allModifications);
       allModifications = JSON.stringify(allModifications);
       // console.log(allModifications)
 
@@ -319,9 +319,9 @@ class UpdateDocument extends React.Component {
 
       updateCommand += `WHERE id=${this.props.selectedSpecimen.id};`;
 
-      console.log(updateCommand);
+      // console.log(updateCommand);
 
-      this.props.runQuery(updateCommand);
+      this.props.runQuery(updateCommand, "single");
       this.props.runQuery(this.props.currentQuery);
       this.setState({ loading: false });
     } else {

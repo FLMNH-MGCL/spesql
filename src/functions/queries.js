@@ -89,3 +89,23 @@ export async function currentUser() {
     return currentUser;
   }
 }
+
+export async function alterTable(command) {
+  const response = await axios.post("/api/admin/alter-table", { command });
+
+  if (response.error) {
+    return response.sqlMessage;
+  } else {
+    return response.data;
+  }
+}
+
+export async function reregisterTable(command) {
+  const response = await axios.post("/api/admin/reregister-table", { command });
+
+  if (response.error) {
+    return response.sqlMessage;
+  } else {
+    return response.data;
+  }
+}

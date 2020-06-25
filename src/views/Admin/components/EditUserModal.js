@@ -128,6 +128,8 @@ export default function EditUserModal({
       })
       .catch((err) => {
         console.log(err);
+        // TODO: this might be typed wrong
+        updateError([err]);
         createNotification({
           type: "error",
           message:
@@ -141,6 +143,9 @@ export default function EditUserModal({
         message: `Sucessfully deleted user ${username}`,
       });
     } else {
+      updateError([
+        "The server had no response. Please ensure you have an internet / vpn connection and restart the application.",
+      ]);
       createNotification({
         type: "error",
         message: "Failed to delete user.",
