@@ -130,6 +130,7 @@ export default function AddUserModal({
         type: "error",
         message: "You must fix errors in form.",
       });
+
       return;
     }
 
@@ -158,6 +159,7 @@ export default function AddUserModal({
       createNotification({ type: "success", message: res.data.data });
     } else {
       createNotification({ type: "error", message: res.data.err.sqlMessage });
+      updateError([res.data.err.sqlMessage]);
     }
   };
 

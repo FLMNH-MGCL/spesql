@@ -65,6 +65,7 @@ export default function AddTableModal({
         type: "error",
         message: "You must fix errors in form.",
       });
+
       return;
     }
 
@@ -82,14 +83,14 @@ export default function AddTableModal({
 
     console.log(creationResponse);
 
-    if (creationResponse.data.error) {
+    if (creationResponse.error) {
       // short curcuit function
       createNotification({
         type: "error",
-        message: creationResponse.data.error.sqlMessage,
+        message: creationResponse.error.sqlMessage.sqlMessage,
       });
 
-      updateError([creationResponse.data.error.sqlMessage]);
+      updateError([creationResponse.data.error.sqlMessage.sqlMessage]);
 
       return;
     }
@@ -122,6 +123,9 @@ export default function AddTableModal({
     }
 
     if (name.length < 4) {
+      if (!hasError) {
+        setHasError(true);
+      }
       return { content: "Name must be at least 4 characters long." };
     }
 

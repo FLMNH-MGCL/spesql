@@ -97,26 +97,41 @@ export default function EditUserModal({
     // let changes = [];
     const user = selected;
     let newUser = user;
+    let atleastOneChange = false;
 
     // manually check each field, for each on thats diff append to changes
     let fullName = firstName + " " + lastName;
     if (user.name !== fullName) {
+      console.log(user.name, fullName);
       newUser.name = fullName;
+      atleastOneChange = true;
     }
 
     if (user.username !== username) {
+      console.log(user.username, username);
+
       newUser.username = username;
+      atleastOneChange = true;
     }
 
-    if (user.accessLevel !== accessLevel) {
+    if (user.privilege_level !== accessLevel) {
+      console.log(user.accessLevel, accessLevel);
+
       newUser.privilege_level = accessLevel;
+      atleastOneChange = true;
     }
 
     if (password && password !== "") {
+      console.log(password);
       newUser.password = password;
+      atleastOneChange = true;
     }
 
-    return { id: user.id, newUser: newUser };
+    if (!atleastOneChange) {
+      return undefined;
+    } else {
+      return { id: user.id, newUser: newUser };
+    }
   };
 
   // TODO: axios request, check if sucess
@@ -133,7 +148,7 @@ export default function EditUserModal({
         createNotification({
           type: "error",
           message:
-            "404 error code returned. Likely cause is user requested for delete does not exist.",
+            "404 error code returned. Likely cause is the user selected for deletion does not exist.",
         });
       });
 
@@ -154,40 +169,108 @@ export default function EditUserModal({
   };
 
   const errorChecks = (field) => {
-    return false;
+    let errors = [];
+
+    switch (field) {
+      case "firstName":
+        if (firstName === "" || firstName.length < 2) {
+          errors.push(
+            "Please enter a value for firstName longer than 2 characters."
+          );
+        }
+
+        return errors;
+
+      case "lastName":
+        if (lastName === "" || lastName.length < 2) {
+          errors.push(
+            "Please enter a value for lastName longer than 2 characters."
+          );
+        }
+        return errors;
+
+      case "username":
+        if (username === "" || username.length < 5) {
+          errors.push(
+            "Please enter a value for username longer than 5 characters."
+          );
+        }
+
+        const usersExcludeTarget = users.filter(
+          (user) => user.username !== selected.username
+        );
+
+        console.log(usersExcludeTarget);
+
+        if (JSON.stringify(usersExcludeTarget).includes(username)) {
+          errors.push("Entered username already exists.");
+        }
+
+        return errors;
+
+      case "password":
+        if (password !== "" && password.length < 6) {
+          errors.push("Your altered password must be 6 or more characters.");
+        }
+        return errors;
+
+      // case "accessLevel":
+      //   return errors;
+
+      case "understood":
+        if (!understood && password !== "") {
+          errors.push(
+            "You must acknowledge the disclaimer when changing the password and check the box."
+          );
+        }
+
+        return errors;
+
+      default:
+        return errors;
+    }
   };
 
   // TODO: axios request, check if sucess
   const updateUser = async (e) => {
     // get user and get changes
     // const user = selected;
-    // const changes = getChanges();
+    const changes = getChanges();
 
-    let hasError = false;
+    console.log(changes);
 
-    if (
-      errorChecks("firstName") ||
-      errorChecks("lastName") ||
-      errorChecks("username") ||
-      errorChecks("password") ||
-      errorChecks("accessLevel")
-      // || !understood
-    ) {
-      hasError = true;
+    if (!changes) {
+      createNotification({
+        type: "error",
+        message: "No changes detected.",
+      });
+
+      return;
     }
 
-    if (hasError) {
+    let errors = [];
+
+    errors = errors.concat(errorChecks("firstName"));
+    errors = errors.concat(errorChecks("lastName"));
+    errors = errors.concat(errorChecks("username"));
+    errors = errors.concat(errorChecks("password"));
+    errors = errors.concat(errorChecks("understood"));
+
+    if (errors.length > 0) {
       createNotification({
         type: "error",
         message: "You must fix errors in form.",
       });
+
+      updateError(errors);
       return;
     }
 
     // console.log("cant do this yet :)");
 
     // update user
-    // const res = await axios.post("/api/admin/update-user", changes);
+    const res = await axios.post("/api/admin/update-user", changes);
+    console.log(res);
     // notify
   };
 
@@ -255,8 +338,8 @@ export default function EditUserModal({
             control={Checkbox}
             label="I understand that, once created, this password may not be retrieved. Admins may reset and change it only."
             value={understood}
+            disabled={password === ""}
             onChange={() => setUnderstood(!understood)}
-            error={!understood}
           />
         </Form.Group>
 
