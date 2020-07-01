@@ -94,6 +94,10 @@ export default function AddUserModal({
           return { content: "Must be at least 10 characters long." };
         }
 
+        if (JSON.stringify(users).includes(username)) {
+          return { content: "Entered username already exists" };
+        }
+
         break;
 
       case "password":
@@ -107,25 +111,50 @@ export default function AddUserModal({
     }
   };
 
-  // const finalCheck = () => {
-  //   console.log("todo");
-  // };
+  const finalCheck = (field) => {
+    let errors = [];
 
-  const handleSubmit = async (e) => {
-    let hasError = false;
-
-    if (
-      errorChecks("firstName") ||
-      errorChecks("lastName") ||
-      errorChecks("username") ||
-      errorChecks("password") ||
-      errorChecks("accessLevel") ||
-      !understood
-    ) {
-      hasError = true;
+    if (firstName === "" || firstName.length < 2) {
+      errors.push(
+        "Please enter a value for firstName longer than 2 characters."
+      );
     }
 
-    if (hasError) {
+    if (lastName === "" || lastName.length < 2) {
+      errors.push(
+        "Please enter a value for lastName longer than 2 characters."
+      );
+    }
+
+    if (username === "" || username.length < 5) {
+      errors.push(
+        "Please enter a value for username longer than 5 characters."
+      );
+    }
+
+    if (JSON.stringify(users).includes(username)) {
+      errors.push("Entered username already exists.");
+    }
+
+    if (password.length < 6) {
+      errors.push("Your altered password must be 6 or more characters.");
+    }
+
+    if (!understood) {
+      errors.push(
+        "You must acknowledge the disclaimer when changing the password and check the box."
+      );
+    }
+
+    return errors;
+  };
+
+  const handleSubmit = async (e) => {
+    const errors = finalCheck();
+
+    if (errors.length > 0) {
+      // console.log(errors);
+      updateError(errors);
       createNotification({
         type: "error",
         message: "You must fix errors in form.",
