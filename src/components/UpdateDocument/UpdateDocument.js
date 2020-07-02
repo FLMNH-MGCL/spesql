@@ -687,28 +687,31 @@ class UpdateDocument extends React.Component {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {this.state.tablePages.get(this.state.tablePage).map((field) => {
-            return (
-              <>
-                <Table.Row>
-                  <Table.Cell>{field}</Table.Cell>
-                  <Table.Cell>{this.props.selectedSpecimen[field]}</Table.Cell>
-                  <Table.Cell>
-                    <Form>
-                      <Form.Group>{this.getFieldForm(field)}</Form.Group>
-                      {/* <Form.Field
+          {this.state.tablePages &&
+            this.state.tablePages.get(this.state.tablePage).map((field) => {
+              return (
+                <>
+                  <Table.Row>
+                    <Table.Cell>{field}</Table.Cell>
+                    <Table.Cell>
+                      {this.props.selectedSpecimen[field]}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Form>
+                        <Form.Group>{this.getFieldForm(field)}</Form.Group>
+                        {/* <Form.Field
                         control={Input}
                         name={field}
                         value={this.state[field]}
                         onChange={this.onChange}
                         error={this.basicErrorCheck(field, this.state[field])}
                       /> */}
-                    </Form>
-                  </Table.Cell>
-                </Table.Row>
-              </>
-            );
-          })}
+                      </Form>
+                    </Table.Cell>
+                  </Table.Row>
+                </>
+              );
+            })}
         </Table.Body>
 
         <Table.Footer>

@@ -92,6 +92,7 @@ export default class Header extends Component {
               updateSelectErrorMessage={this.props.updateSelectErrorMessage}
               updateCountErrorMessage={this.props.updateCountErrorMessage}
               updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
+              refresh={() => this.props.runQuery(this.props.current_query)}
               notify={this.props.notify}
               disabled={this.props.disabled}
               userData={this.props.userData}

@@ -79,7 +79,10 @@ class Home extends React.Component {
   }
 
   async runQuery(query, type = "batch") {
-    // console.log(query);
+    if (!query || query === "") {
+      return;
+    }
+
     let queryType = "";
 
     if (query.toUpperCase().startsWith("SELECT COUNT")) {

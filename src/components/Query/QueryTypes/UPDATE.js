@@ -26,6 +26,7 @@ import {
   identificationQualifierControl,
   preparationsControl,
   dispositionControl,
+  conditionalOperatorOptions,
 } from "../QueryConstants/constants";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import axios from "axios";
@@ -292,6 +293,7 @@ export default class UPDATE extends React.Component {
     setTimeout(() => {
       if (!this.props.loading && !this.props.errorMessages.updateError) {
         this.setState({ loading: false });
+        this.props.refresh();
         this.props.closeModal();
       } else {
         this.setState({ loading: false });
@@ -747,7 +749,7 @@ export default class UPDATE extends React.Component {
             />
             <Form.Field
               control={Select}
-              options={setOperatorOptions}
+              options={conditionalOperatorOptions}
               label="Operator"
               placeholder="="
               name="operator"

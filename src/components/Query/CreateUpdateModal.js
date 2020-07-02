@@ -13,6 +13,7 @@ export default function CreateUpdateModal({
       <UPDATE
         // dbSelection={dbSelection}
         runQuery={props.runQuery}
+        refresh={props.refresh}
         clearQuery={props.clearQuery}
         closeModal={closeModal}
         errorMessages={props.errorMessages}

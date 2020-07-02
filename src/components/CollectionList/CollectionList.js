@@ -134,7 +134,7 @@ export default class CollectionList extends React.Component {
           currentCell = specimen.otherCatalogNumber;
           break;
         case "order":
-          currentCell = specimen._order;
+          currentCell = specimen.order_;
           break;
         case "superfamily":
           currentCell = specimen.superfamily;
@@ -360,26 +360,30 @@ export default class CollectionList extends React.Component {
     }
   };
 
+  specimenIncludes(specimen, text, category = "*") {
+    if (category !== "*") {
+      return specimen[category].toLowerCase().indexOf(text.toLowerCase()) >= 0;
+    }
+
+    let doesInclude = Object.values(specimen).some((field) =>
+      String(field).includes(text)
+    );
+
+    // console.log(specimen, doesInclude);
+
+    return doesInclude;
+  }
+
   renderList = () => {
     let collectionList = this.state.data;
     try {
       collectionList = collectionList
         .filter((specimen) => {
-          if (this.props.filterCategory === "*") {
-            let tempSpecimen = { ...specimen };
-            tempSpecimen.modifiedInfo = "";
-            return (
-              JSON.stringify(tempSpecimen)
-                .toLowerCase()
-                .indexOf(this.props.filteredText.toLowerCase()) >= 0
-            );
-          } else {
-            return (
-              specimen[this.props.filterCategory]
-                .toLowerCase()
-                .indexOf(this.props.filteredText.toLowerCase()) >= 0
-            );
-          }
+          return this.specimenIncludes(
+            specimen,
+            this.props.filteredText,
+            this.props.filterCategory
+          );
         })
         .map((specimen, index) => {
           let cells = this.getCells(specimen, this.props.query_headers);
@@ -513,14 +517,16 @@ export default class CollectionList extends React.Component {
               <h4>Query Size:</h4>
               <p>{this.props.data.length}</p>
             </div>
-            <div className="query-text">
-              <h4>Filtered Size:</h4>
-              <p>
-                {this.props.filteredText !== ""
-                  ? collectionList.length
-                  : this.props.data.length}
-              </p>
-            </div>
+            {this.props.filteredText !== "" && (
+              <div className="query-text">
+                <h4>Filtered Size:</h4>
+                <p>
+                  {this.props.filteredText !== ""
+                    ? collectionList.length
+                    : this.props.data.length}
+                </p>
+              </div>
+            )}
             <div className="query-text">
               <h4>Current Loaded:</h4>
               <p>
