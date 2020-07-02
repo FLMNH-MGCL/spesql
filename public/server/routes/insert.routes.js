@@ -26,7 +26,7 @@ module.exports = function (connection, app) {
       `"${specimen.loanReturnDate}", "${specimen.preparations}", "${specimen.freezer}", "${specimen.rack}", "${specimen.box}", "${specimen.tubeSize}", "${specimen.associatedSequences}", ` +
       `"${specimen.associatedReferences}", "${specimen.withholdData}", "${specimen.reared}", "${specimen.fieldNotes}", "${specimen.modifiedInfo}");`;
     console.log(command);
-    return;
+
     connection.query(command, (err, data) => {
       if (err) {
         console.log("Insertion Failure. Error logged.");

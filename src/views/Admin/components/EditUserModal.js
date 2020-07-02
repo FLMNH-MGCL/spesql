@@ -102,27 +102,27 @@ export default function EditUserModal({
     // manually check each field, for each on thats diff append to changes
     let fullName = firstName + " " + lastName;
     if (user.name !== fullName) {
-      console.log(user.name, fullName);
+      // console.log(user.name, fullName);
       newUser.name = fullName;
       atleastOneChange = true;
     }
 
     if (user.username !== username) {
-      console.log(user.username, username);
+      // console.log(user.username, username);
 
       newUser.username = username;
       atleastOneChange = true;
     }
 
     if (user.privilege_level !== accessLevel) {
-      console.log(user.accessLevel, accessLevel);
+      // console.log(user.accessLevel, accessLevel);
 
       newUser.privilege_level = accessLevel;
       atleastOneChange = true;
     }
 
     if (password && password !== "") {
-      console.log(password);
+      // console.log(password);
       newUser.password = password;
       atleastOneChange = true;
     }
@@ -134,7 +134,6 @@ export default function EditUserModal({
     }
   };
 
-  // TODO: axios request, check if sucess
   const deleteUser = async () => {
     // axios to delete
     const res = await axios
@@ -200,7 +199,7 @@ export default function EditUserModal({
           (user) => user.username !== selected.username
         );
 
-        console.log(usersExcludeTarget);
+        // console.log(usersExcludeTarget);
 
         if (JSON.stringify(usersExcludeTarget).includes(username)) {
           errors.push("Entered username already exists.");
@@ -237,7 +236,7 @@ export default function EditUserModal({
     // const user = selected;
     const changes = getChanges();
 
-    console.log(changes);
+    // console.log(changes);
 
     if (!changes) {
       createNotification({
@@ -270,7 +269,7 @@ export default function EditUserModal({
 
     // update user
     const res = await axios.post("/api/admin/update-user", changes);
-    console.log(res);
+    // console.log(res);
     // notify
   };
 

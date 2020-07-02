@@ -503,7 +503,8 @@ export default class CollectionList extends React.Component {
             </Button>
             <CreateErrorLogModal
               type="Global Errors"
-              errors={undefined}
+              errors={this.props.errorMessages.globalError}
+              updateError={this.props.updateGlobalErrorMessage}
               inline
             />
           </div>

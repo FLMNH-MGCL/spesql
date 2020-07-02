@@ -101,7 +101,7 @@ export default function EditTableModal({
       let command = `ALTER TABLE ${selected.tbl_name} RENAME TO ${name};`;
 
       const renameResponse = await alterTable(command);
-      console.log(renameResponse);
+      // console.log(renameResponse);
 
       if (renameResponse.error) {
         createNotification({
@@ -162,7 +162,7 @@ export default function EditTableModal({
 
     if (deleteData.error) {
       // uh oh
-      console.log(deleteData.error);
+      // console.log(deleteData.error);
       return;
     } else {
       deleted = true;
@@ -175,7 +175,7 @@ export default function EditTableModal({
 
     if (unregisterData.error) {
       // uh oh
-      console.log(unregisterData.error);
+      // console.log(unregisterData.error);
       return;
     } else {
       unregistered = true;

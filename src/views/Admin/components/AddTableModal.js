@@ -41,7 +41,7 @@ export default function AddTableModal({
       tableAttributes: tableAttributes,
     });
 
-    console.log(registerResponse);
+    // console.log(registerResponse);
     if (registerResponse.data.data) {
       // createNotification({
       //   type: "success",
@@ -81,7 +81,7 @@ export default function AddTableModal({
       tableName: name,
     });
 
-    console.log(creationResponse);
+    // console.log(creationResponse);
 
     if (creationResponse.error) {
       // short curcuit function

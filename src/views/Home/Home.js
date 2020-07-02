@@ -3,7 +3,7 @@ import Papa from "papaparse";
 import CollectionList from "../../components/CollectionList/CollectionList";
 import SpecimenView from "../../components/SpecimenView/SpecimenView";
 import Header from "../../components/Header/Header";
-import { Grid, Loader, Segment } from "semantic-ui-react";
+import { Grid, Loader, Segment, Button } from "semantic-ui-react";
 import { getQueryHeaders } from "../../functions/helpers";
 import { checkHeaders } from "../../functions/queryChecks";
 import {
@@ -155,6 +155,7 @@ class Home extends React.Component {
           console.log("success");
         } else {
           console.log(deleteData.data);
+          this.props.updateGlobalErrorMessage(deleteData.data);
           this.createNotification({
             type: "error",
             message: "Uh oh, please check error log",

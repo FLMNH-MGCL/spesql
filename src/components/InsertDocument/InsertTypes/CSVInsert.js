@@ -9,7 +9,7 @@ import {
 } from "semantic-ui-react";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import { checkSpecimen } from "../../../functions/queryChecks";
-import { runInsertQuery } from "../../../functions/queries";
+import { runInsertQuery, runSingleInsert } from "../../../functions/queries";
 import CSVDrop from "./CSVDrop";
 import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
 import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
@@ -37,39 +37,36 @@ export default class CSVInsert extends React.Component {
       message:
         "Analyzing entries and sending to server, please be patient and leave this window open until completed.",
     });
+
     let errors = [];
-    let insertData = await runInsertQuery(insertions);
-    // console.log(insertData);
-    setTimeout(() => {
-      asyncForEach(insertData, async (insertion, index) => {
-        // console.log(index);
-        if (!insertion.data.success) {
-          console.log("error found");
-          errors.push(
-            `SQL ERROR: Code: ${insertion.data.data.code}, Message: ${insertion.data.data.sqlMessage}`
-          );
-        }
 
-        if (index === insertData.length - 1) {
-          if (errors.length > 0) {
-            this.props.notify({
-              type: "error",
-              message:
-                "Uh oh, some errors detected. Please check INSERT error log",
-            });
-            this.props.updateCSVInsertErrorMessage(errors);
-            this.setState({ hasError: true });
-          } else {
-            this.props.notify({
-              type: "success",
-              message: "Entries successfully submitted without errors",
-            });
-          }
+    for (let i = 0; i < insertions.length; i++) {
+      const insertData = await runSingleInsert(insertions[i], "molecularLab");
+      console.log(insertData);
 
-          this.setState({ loading: false });
-        }
+      if (!insertData.data.success) {
+        console.log("error found");
+        errors.push(
+          `SQL ERROR: Code: ${insertData.data.data.code}, Message: ${insertData.data.data.sqlMessage}`
+        );
+      }
+    }
+
+    if (errors.length > 0) {
+      this.props.notify({
+        type: "error",
+        message: "Uh oh, some errors detected. Please check INSERT error log",
       });
-    }, 500 * insertions.length);
+      this.props.updateCSVInsertErrorMessage(errors);
+      this.setState({ hasError: true });
+    } else {
+      this.props.notify({
+        type: "success",
+        message: "Entries successfully submitted without errors",
+      });
+    }
+
+    this.setState({ loading: false });
   }
 
   handleSubmit = () => {
@@ -154,8 +151,6 @@ export default class CSVInsert extends React.Component {
         fieldNotes: specimen[55],
         modifiedInfo: "",
       };
-
-      // console.log(doc);
 
       let specimenErrors = checkSpecimen(doc);
       if (specimenErrors.length > 0) {
@@ -251,8 +246,6 @@ export default class CSVInsert extends React.Component {
           <Divider horizontal>OR</Divider>
 
           <CSVDrop setCSV={this.setCSV.bind(this)} />
-
-          {/* {this.state.hasError ? this.renderErrorTerminal() : null} */}
         </Modal.Content>
         <Modal.Actions>
           <CreateHelpModal queryType="PASTE_INSERT" />

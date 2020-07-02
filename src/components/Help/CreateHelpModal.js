@@ -862,6 +862,28 @@ export default class CreateHelpModal extends React.Component {
                     matching data to the query in the database table).
                   </p>
                 </Accordion.Content>
+                <Accordion.Title
+                  active={activeIndex === 6}
+                  index={5}
+                  onClick={this.handleClick}
+                >
+                  <Icon name="dropdown" />
+                  The application, or parts of it, has randomly stopped
+                  responding?
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === 5}>
+                  <p>
+                    I've encountered this throughout development, and it would
+                    seem to be related to idle times in use. If the program is
+                    left idle, for example if the computer goes to sleep for a
+                    minute, I've found that there are small network losses that
+                    result in tiny pockets of VPN connnection loss, which the
+                    program cannot recover from. The TLDR; solution for this is
+                    to just restart the application. Connection to the server
+                    should resume as it previosuly did assuming VPN and internet
+                    connectivity
+                  </p>
+                </Accordion.Content>
               </Accordion>
               <h3 style={{ display: "block" }}>Still Stuck?</h3>
               <p>

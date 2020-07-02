@@ -420,6 +420,10 @@ export const capsChecks = (fieldName, fieldValue, upperFirst) => {
   return errors;
 };
 
+export function parseNameList(names) {
+  let nameVector = names.split(" | ");
+}
+
 export function checkField(fieldName, fieldValue) {
   let errors = [];
   switch (fieldName) {
@@ -559,7 +563,7 @@ export function checkField(fieldName, fieldValue) {
     case "otherCollectors":
       if (fieldValue === "") return errors;
 
-      const parsedNames = fieldValue.split(" ");
+      const parsedNames = fieldValue.split(" | ");
 
       // more than one person
       if (parsedNames.length > 1) {
@@ -676,8 +680,8 @@ export function checkField(fieldName, fieldValue) {
         );
       }
 
-      if (fieldValue.length !== 2) {
-        errors.push(`Format error (@ ${fieldName}): Month should be MM.`);
+      if (Number(fieldValue) > 9 && fieldValue.length !== 2) {
+        errors.push(`Format error (@ ${fieldName}): Day should be DD.`);
       }
 
       if (parseInt(fieldValue, 10) < 0 || parseInt(fieldValue, 10) > 31) {

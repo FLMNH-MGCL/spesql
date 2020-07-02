@@ -87,7 +87,7 @@ function AdminPortal(props) {
 
     if (res.status !== 200 || res.err) {
       setError(res.err);
-      console.log(error);
+      // console.log(error);
     } else {
       setUsers(res.data);
     }
@@ -295,30 +295,6 @@ function AdminPortal(props) {
             </Table.Footer>
           </Table>
         </Segment>
-        <div style={{ marginBottom: "2rem" }}>
-          <Button
-            onClick={() =>
-              props.updateAdminUserErrorMessage(["This is a test"])
-            }
-          >
-            create a user operation error
-          </Button>
-          <Button onClick={() => props.updateAdminUserErrorMessage(null)}>
-            reset user errors
-          </Button>
-        </div>
-        <div>
-          <Button
-            onClick={() =>
-              props.updateAdminTableErrorMessage(["This is also a test"])
-            }
-          >
-            create a table operation error
-          </Button>
-          <Button onClick={() => props.updateAdminTableErrorMessage(null)}>
-            reset table errors
-          </Button>
-        </div>
       </Container>
       <NotificationContainer />
     </>

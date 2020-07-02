@@ -179,10 +179,10 @@ export default function AddUserModal({
       return;
     }
 
-    console.log(JSON.stringify(user));
+    // console.log(JSON.stringify(user));
     const res = await axios.post("/api/admin/create-user/", user);
 
-    console.log(res);
+    // console.log(res);
 
     if (res.data.data) {
       createNotification({ type: "success", message: res.data.data });
