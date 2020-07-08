@@ -392,6 +392,12 @@ export default class FormInsert extends React.Component {
         this.state.databaseTable
       );
       console.log(insertData);
+
+      if (insertData.data.success) {
+        this.props.notify({type: "success", message: "Successfully inserted new specimen!"})
+      } else {
+        this.props.notify({type: "error", message: insertData.data.data.sqlMessage})
+      }
     }
 
     this.setState({ loading: false });

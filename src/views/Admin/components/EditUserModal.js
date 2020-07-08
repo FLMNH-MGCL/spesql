@@ -269,8 +269,11 @@ export default function EditUserModal({
 
     // update user
     const res = await axios.post("/api/admin/update-user", changes);
-    // console.log(res);
     // notify
+    if (res.err) {
+      console.log(res.err)
+      createNotification({type: "error", message: res.err.sqlMessage})
+    }
   };
 
   const renderEditForm = () => {

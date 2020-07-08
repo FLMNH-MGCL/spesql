@@ -20,6 +20,8 @@ module.exports = function (connection, app) {
         : `privilege_level = "${privilege_level}`
       : "";
 
+      command += ` WHERE id = ${id}`
+
     console.log(command);
 
     if (password) {
@@ -42,7 +44,6 @@ module.exports = function (connection, app) {
     } else {
       connection.query(command, (err, data) => {
         if (err) {
-          res.status(404); // maybe?
           res.json(err);
         } else {
           res.json(data);
