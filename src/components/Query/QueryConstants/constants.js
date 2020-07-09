@@ -292,9 +292,9 @@ export const lifeStageControl = [
 
 export const sexControl = [
   reset,
-  { key: "105", text: "male", value: "male" },
-  { key: "106", text: "female", value: "female" },
-  { key: "107", text: "gynandromorph", value: "gynandromorph" },
+  { key: "105", text: "Male", value: "M" },
+  { key: "106", text: "Female", value: "F" },
+  { key: "107", text: "Gynandromorph", value: "G" },
 ];
 
 export const countryControl = countryList;
