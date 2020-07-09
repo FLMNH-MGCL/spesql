@@ -280,6 +280,7 @@ export const tubeSizeControl = [
   { key: "98", text: "50falcon", value: "50falcon" },
   { key: "99", text: "15falcon", value: "15falcon" },
   { key: "100", text: "microcentrifuge", value: "microcentrifuge" },
+  { key: "smallenvelope", text: "smallenvelope", value: "smallenvelope" },
 ];
 
 export const lifeStageControl = [

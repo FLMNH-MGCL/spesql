@@ -7,13 +7,16 @@ import {
   Grid,
   Table,
   Accordion,
+  Reveal,
 } from "semantic-ui-react";
 
 export default class CreateHelpModal extends React.Component {
-  state = { open: false };
+  state = { open: false, showHiddenMessage: false };
 
   open = () => this.setState({ open: true });
   close = () => this.setState({ open: false });
+  toggleHiddenMessage = () =>
+    this.setState({ showHiddenMessage: !this.state.showHiddenMessage });
 
   handleClick = (e, titleProps) => {
     const { index } = titleProps;
@@ -242,8 +245,59 @@ export default class CreateHelpModal extends React.Component {
                   regular expression
                 </a>
                 . There are many parts to a regular expression, so please see
-                the referenced documentation if you plan on using it.
+                the referenced documentation if you plan on using it. I will
+                provide a useful scenario for using one below:
               </p>
+
+              <p>
+                Let's say you wanted to select all specimen with a LEP number in
+                the range of LEP75000 - LEP77000. These are not numeric fields,
+                as they have the LEP prepended to the number, and therefore you
+                would not be able to use an operator such as '>='. One regular
+                expression you could use to achieve this, however, would be as
+                follows:
+              </p>
+
+              <Message>
+                <Message.Content>
+                  SELECT * FROM tbl_name WHERE otherCatalogNumber REGEXP
+                  '^LEP[7][5]|LEP[7][6]|LEP[7][7]';
+                </Message.Content>
+              </Message>
+
+              <p>
+                The regular expression here is the last bit, 'REGEXP
+                '^LEP[7][5]|LEP[7][6]|LEP[7][7]'. Breaking this down into parts:
+                '^' signifies the pattern is referring to the beginning of the
+                value. So, '^LEP' is saying all values that start with LEP.
+                '^LEP[7][5]' equates to 'all values that start with LEP75'. We
+                want the range LEP75 - LEP77 essentially, so the goal is to get
+                the express to equate to the english statement of 'all values
+                that start with LEP75 or LEP76 or LEP77'. This is where the '|'
+                comes in, this is an or operator. Putting it all together,
+                '^LEP[7][5]|LEP[7][6]|LEP[7][7]' is what this says. This isn't
+                actually the simpliest solution though! Do you think you can
+                figure out what that would be? Take a minute to think about it,
+                and then hover over the hidden block below!
+              </p>
+
+              <Message
+                onMouseEnter={this.toggleHiddenMessage}
+                onMouseLeave={this.toggleHiddenMessage}
+              >
+                {this.state.showHiddenMessage ? (
+                  <Message.Content>
+                    SELECT * FROM tbl_name WHERE otherCatalogNumber REGEXP
+                    '^LEP[7][5-7]';
+                  </Message.Content>
+                ) : (
+                  <Message.Content>
+                    SELECT * FROM tbl_name WHERE otherCatalogNumber REGEXP
+                    '????????????';
+                  </Message.Content>
+                )}
+              </Message>
+
               <p style={{ paddingBottom: "2rem" }}>
                 For more generic SELECT examples, visit{" "}
                 <a
@@ -253,7 +307,9 @@ export default class CreateHelpModal extends React.Component {
                 >
                   this{" "}
                 </a>{" "}
-                link.
+                link. Additionally, please keep in mind the quotes I am using in
+                these queries are only necessary for advanced query modes, if
+                you are using the form these will be added where needed.
               </p>
             </Modal.Content>
             <Modal.Actions>

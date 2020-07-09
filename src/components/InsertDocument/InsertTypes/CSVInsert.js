@@ -42,12 +42,11 @@ export default class CSVInsert extends React.Component {
 
     for (let i = 0; i < insertions.length; i++) {
       const insertData = await runSingleInsert(insertions[i], "molecularLab");
-      console.log(insertData);
+      // console.log(insertData);
 
       if (!insertData.data.success) {
-        console.log("error found");
         errors.push(
-          `SQL ERROR: Code: ${insertData.data.data.code}, Message: ${insertData.data.data.sqlMessage}`
+          `SQL ERROR: Code: ${insertData.data.data.code}, Message: ${insertData.data.data.sqlMessage}\nError around row #${i+1}`
         );
       }
     }
@@ -57,6 +56,11 @@ export default class CSVInsert extends React.Component {
         type: "error",
         message: "Uh oh, some errors detected. Please check INSERT error log",
       });
+
+      if (this.props.errorMessages.csvInsert) {
+        errors = errors.concat(this.props.errorMessages.csvInsert)
+      }
+
       this.props.updateCSVInsertErrorMessage(errors);
       this.setState({ hasError: true });
     } else {
