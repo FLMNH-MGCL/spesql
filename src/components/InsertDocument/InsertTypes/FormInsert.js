@@ -394,127 +394,20 @@ export default class FormInsert extends React.Component {
       console.log(insertData);
 
       if (insertData.data.success) {
-        this.props.notify({type: "success", message: "Successfully inserted new specimen!"})
+        this.props.notify({
+          type: "success",
+          message: "Successfully inserted new specimen!",
+        });
       } else {
-        this.props.notify({type: "error", message: insertData.data.data.sqlMessage})
+        this.props.notify({
+          type: "error",
+          message: insertData.data.data.sqlMessage,
+        });
       }
     }
 
     this.setState({ loading: false });
   };
-
-  // FIXME: BROKEN
-  // handleSubmit = async () => {
-  //   this.setState({ loading: true });
-
-  //   //let errors = this.checkBasicPostSubmit()
-  //   if (this.state.isLoaned) {
-  //     var today = new Date();
-  //     let dd = String(today.getDate()).padStart(2, "0");
-  //     let mm = String(today.getMonth() + 1).padStart(2, "0");
-  //     let yyyy = today.getFullYear();
-
-  //     today = yyyy + "-" + mm + "-" + dd;
-
-  //     var loanInfo = {
-  //       [today]: {
-  //         institution: this.state.loanInstitution,
-  //         person: this.state.loaneeLast + ", " + this.state.loaneeFirst,
-  //         expectedReturn: parseDate(this.state.loanReturnDate),
-  //         remarks: this.state.loanRemarks,
-  //         isReturned: "No",
-  //       },
-  //     };
-
-  //     loanInfo = JSON.stringify([loanInfo]);
-  //     // alert(loanInfo);
-  //     // return;
-  //   }
-
-  //   const specimen = {
-  //     catalogNumber: this.state.catalogNumber,
-  //     recordNumber: this.state.recordNumber,
-  //     otherCatalogNumber: this.state.otherCatalogNumber,
-  //     order_: this.state.order_,
-  //     superfamily: this.state.superfamily,
-  //     family: this.state.family,
-  //     subfamily: this.state.subfamily,
-  //     tribe: this.state.tribe,
-  //     genus: this.state.genus,
-  //     subgenus: this.state.subgenus,
-  //     specificEpithet: this.state.specificEpithet,
-  //     infraspecificEpithet: this.state.infraspecificEpithet,
-  //     identificationQualifier: this.state.identificationQualifier,
-  //     recordedBy: `${this.state.recordedByLast}, ${this.state.recordedByFirst}`,
-  //     identifiedBy: `${this.state.identifiedByLast}, ${this.state.identifiedByFirst}`,
-  //     dateIdentified: parseDate(this.state.dateIdentified),
-  //     verbatimDate: this.state.verbatimDate,
-  //     collectedYear: this.state.collectedYear,
-  //     collectedMonth: parseRawMonth(this.state.collectedMonth),
-  //     collectedDay: this.state.collectedDay,
-  //     sex: this.state.sex,
-  //     lifeStage: this.state.lifeStage,
-  //     habitat: this.state.habitat,
-  //     occurrenceRemarks: this.state.occurrenceRemarks,
-  //     molecularOccurrenceRemarks: this.state.molecularOccurrenceRemarks,
-  //     samplingProtocol: this.state.samplingProtocol,
-  //     country: this.state.country,
-  //     stateProvince: this.state.stateProvince,
-  //     county: this.state.county,
-  //     municipality: this.state.municipality,
-  //     locality: this.state.locality,
-  //     elevationInMeters: this.state.elevationInMeters,
-  //     decimalLatitude: this.state.decimalLatitude,
-  //     decimalLongitude: this.state.decimalLongitude,
-  //     geodeticDatum: this.state.geodeticDatum,
-  //     coordinateUncertainty: this.state.coordinateUncertainty,
-  //     verbatimLatitude: this.state.verbatimLatitude,
-  //     verbatimLongitude: this.state.verbatimLongitude,
-  //     georeferencedBy: this.state.georeferencedBy,
-  //     disposition: this.state.disposition,
-  //     loanInfo: loanInfo,
-  //     preparations: this.state.preparations,
-  //     freezer: this.state.freezer,
-  //     rack: this.state.rack,
-  //     box: this.state.box,
-  //     tubeSize: this.state.tubeSize,
-  //     associatedSequences: this.state.associatedSequences,
-  //     associatedReferences: this.state.associatedReferences,
-  //     withholdData: this.state.withholdData,
-  //     reared: this.state.reared,
-  //     fieldNotes: this.state.fieldNotes,
-  //     collectors: this.state.collectors,
-  //   };
-
-  //   let errors = checkSpecimen(specimen);
-
-  //   console.log(errors);
-
-  //   alert(JSON.stringify(specimen, null, 2));
-  //   this.setState({ loading: false });
-
-  //   // if (errors.length === 0) {
-  //   //   // TODO: uncomment when ready
-  //   //   const insertData = await runSingleInsert(specimen);
-  //   //   console.log(insertData);
-
-  //   //   if (!insertData.data.success) {
-  //   //     let error = [
-  //   //       `SQL ERROR: Code: ${insertData.data.data.code}, Message: ${insertData.data.data.sqlMessage}`,
-  //   //     ];
-  //   //     this.props.notify({
-  //   //       type: "error",
-  //   //       message: "Uh oh, an error detected. Please check INSERT error log",
-  //   //     });
-  //   //     this.props.updateInsertErrorMessage(error);
-  //   //     this.setState({ hasError: true, loading: false });
-  //   //   } else {
-  //   //   }
-  //   // } else {
-  //   //   this.props.updateInsertErrorMessage(errors);
-  //   //   this.setState({ hasError: true, loading: false });
-  //   // }
-  // };
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 

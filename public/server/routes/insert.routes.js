@@ -7,8 +7,12 @@ module.exports = function (connection, app) {
 
     // console.log(req);
 
-    const decimalLongitude = specimen.decimalLongitude ? specimen.decimalLongitude : "NULL"
-    const decimalLatitude = specimen.decimalLatitude ? specimen.decimalLatitude : "NULL"
+    const decimalLongitude = specimen.decimalLongitude
+      ? specimen.decimalLongitude
+      : "NULL";
+    const decimalLatitude = specimen.decimalLatitude
+      ? specimen.decimalLatitude
+      : "NULL";
 
     let insertPrefix =
       `INSERT INTO ${table}(catalogNumber, otherCatalogNumber, recordNumber, order_, superfamily, family, ` +
@@ -33,7 +37,7 @@ module.exports = function (connection, app) {
     connection.query(command, (err, data) => {
       if (err) {
         console.log("Insertion Failure. Error logged.");
-        console.log(command, "FAILED")
+        console.log(command, "FAILED");
         res.json({
           success: false,
           data: err,
@@ -49,5 +53,3 @@ module.exports = function (connection, app) {
     });
   });
 };
-
-// https://stackoverflow.com/questions/8899802/how-do-i-do-a-bulk-insert-in-mysql-using-node-js

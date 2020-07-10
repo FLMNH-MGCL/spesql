@@ -559,13 +559,12 @@ export function checkField(fieldName, fieldValue) {
 
       return errors;
 
-    // TODO: implement this check for the new | separator
     case "otherCollectors":
       if (fieldValue === "") return errors;
 
       const parsedNames = fieldValue.split(" | ");
 
-      // more than one person
+      // more than one person split correctly
       if (parsedNames.length > 1) {
         // check each name
         parsedNames.forEach((name) => {
@@ -578,8 +577,12 @@ export function checkField(fieldName, fieldValue) {
           }
         });
       } else {
-        // check fieldValue for correct name
-        // TODO:
+        // check if they aren't using the | for separator
+        if (fieldValue.split(",").length > 2) {
+          errors.push(
+            `Format error (@ ${fieldName}): It seems you're not using | as the separator.`
+          );
+        }
       }
 
       return errors;

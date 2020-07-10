@@ -423,15 +423,6 @@ export default class SELECT extends React.Component {
         <Modal.Header>Select Query</Modal.Header>
 
         <Modal.Content>
-          {/* TODO: MOVE TO HELP */}
-          {/* <Message>
-            <p>
-              Select queries are those that simply fetch information from the
-              database. If you have terminal/CLI experience using MySQL
-              commands, there is an advanced query option available if checked.
-              Click the ? button for more detailed information
-            </p>
-          </Message> */}
           <Header size="small">Advanced Select Query</Header>
           <Form onSubmit={this.handleAdvancedSubmit}>
             <Form.Group>

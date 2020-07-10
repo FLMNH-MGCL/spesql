@@ -407,19 +407,6 @@ export default class COUNT extends React.Component {
       <>
         <Modal.Header>Count Query</Modal.Header>
         <Modal.Content>
-          {/* TODO: Move to help menu */}
-          {/* <Message>
-            <p>
-              This section is for count queries. Count queries are very similar
-              to select queries, and actually involve a SELECT query directly.
-              This query will count the number of entries in the database table
-              based on the select query provided. If you have terminal/CLI
-              experience using MySQL commands, there is an advanced query option
-              available if checked. Click the ? button for more detailed
-              information
-            </p>
-          </Message> */}
-
           <Header size="small">Advanced Count Query</Header>
 
           <Form onSubmit={this.handleAdvancedSubmit}>
