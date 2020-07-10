@@ -21,6 +21,7 @@ import {
 } from "react-notifications";
 import "./Home.css";
 import { Redirect } from "react-router-dom";
+import VirtualizedList from "../../components/CollectionList/VirtualizedList";
 
 class Home extends React.Component {
   // constructor(props) {
@@ -255,10 +256,15 @@ class Home extends React.Component {
               tablet={16}
               style={{ justifyContent: "center" }}
             >
-              <Loader content="Loading" active disabled={!this.props.loading} />
+              {/* <Loader content="Loading" active disabled={!this.props.loading} /> */}
               <Segment>
-                <CollectionList
+                {/* <CollectionList
                   {...this.props}
+                  runQuery={this.runQuery.bind(this)}
+                  notify={this.createNotification}
+                /> */}
+                <VirtualizedList
+                  props={this.props}
                   runQuery={this.runQuery.bind(this)}
                   notify={this.createNotification}
                 />
