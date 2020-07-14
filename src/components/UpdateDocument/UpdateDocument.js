@@ -775,16 +775,12 @@ class UpdateDocument extends React.Component {
       return (
         <Modal
           trigger={
-            <Icon
-              className="expand-on-hover"
-              name="edit"
+            <Button
+              color="yellow"
               onClick={() => this.setState({ open: true })}
-              style={
-                // this.props.selectedSpecimen.id === specimen.id
-                { float: "right" }
-                // : { display: "none" }
-              }
-            />
+            >
+              Update
+            </Button>
           }
           centered
           scrolling

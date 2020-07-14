@@ -2,6 +2,8 @@ import React from "react";
 import { Card, Image, Grid, List } from "semantic-ui-react";
 import "./SpecimenView.css";
 import axios from "axios";
+import DeleteDocument from "../DeleteDocument/DeleteDocument";
+import UpdateDocument from "../UpdateDocument/UpdateDocument";
 
 class SpecimenView extends React.Component {
   async checkAuth(user, password, callback) {
@@ -338,37 +340,42 @@ class SpecimenView extends React.Component {
       );
     } else {
       return (
-        <>
-          <Grid columns="equal" padded>
+        <div style={{ display: "block" }}>
+          <Grid columns="equal">
             <Grid.Column style={{ maxHeight: "80vh", overflowY: "scroll" }}>
-              {/* <div style={{ display: "inline-block" }}>
-                <UpdateDocument
-                  selectedSpecimen={selectedSpecimen}
-                  currentQuery={this.props.currentQuery}
-                  runQuery={this.props.runQuery}
-                  user={this.props.user}
-                  disabled={this.props.disabled}
-                  userData={this.props.userData}
-                  errorMessages={this.props.errorMessages}
-                  updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
-                  notify={this.props.notify}
-                  checkAuth={this.checkAuth.bind(this)}
-                />
-              </div>
-              <div style={{ display: "inline-block" }}>
-                <DeleteDocument
-                  target={selectedSpecimen.id}
-                  runQuery={this.props.runQuery}
-                  disabled={this.props.disabled}
-                  userData={this.props.userData}
-                  notify={this.props.notify}
-                  checkAuth={this.checkAuth.bind(this)}
-                />
-              </div> */}
               {list}
             </Grid.Column>
           </Grid>
-        </>
+          <div className="specimen-footer-title">
+            <div className="query-text">
+              <h4>
+                Available Actions for{" "}
+                {this.props.selectedSpecimen.otherCatalogNumber}:
+              </h4>
+            </div>
+          </div>
+          <div className="specimen-footer-content">
+            <UpdateDocument
+              currentQuery={this.props.currentQuery}
+              runQuery={this.props.runQuery}
+              user={this.props.user}
+              disabled={this.props.disabled}
+              userData={this.props.userData}
+              errorMessages={this.props.errorMessages}
+              updateSingleUpdateErrorMessage={
+                this.props.updateSingleUpdateErrorMessage
+              }
+              notify={this.props.notify}
+              selectedSpecimen={this.props.selectedSpecimen}
+            />
+            <DeleteDocument
+              selectedSpecimen={this.props.selectedSpecimen}
+              userData={this.props.userData}
+              notify={this.props.notify}
+              props={this.props}
+            />
+          </div>
+        </div>
       );
     }
   };
@@ -381,9 +388,6 @@ class SpecimenView extends React.Component {
         </div>
       );
     } else {
-      // const selectedSpecimen = this.props.data.find(specimen => {
-      //     return specimen.id === this.props.selectedSpecimen.id
-      // })
       const { selectedSpecimen } = this.props;
       if (
         selectedSpecimen === undefined &&
@@ -404,7 +408,11 @@ class SpecimenView extends React.Component {
           </div>
         );
       } else {
-        return <div>{this.renderView(selectedSpecimen)}</div>;
+        return (
+          <>
+            <div>{this.renderView(selectedSpecimen)}</div>
+          </>
+        );
       }
     }
   }

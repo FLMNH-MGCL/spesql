@@ -110,10 +110,17 @@ class Home extends React.Component {
           this.props.updateSelectErrorMessage([errorMessage]);
           this.props.updateLoadingStatus(false);
           this.props.updateRefreshStatus(false);
+        } else if (data.specimen.length < 1) {
+          this.createNotification({
+            type: "warning",
+            message: "Query yielded no data",
+          });
+          this.props.updateLoadingStatus(false);
+          this.props.updateQuery(query);
         } else {
           this.createNotification({
             type: "success",
-            message: "SELECT query loaded",
+            message: "Query loaded",
           });
           this.props.updateQueryData(data.specimen);
           let headers = getQueryHeaders(data.specimen[0]);
@@ -256,7 +263,7 @@ class Home extends React.Component {
               tablet={16}
               style={{ justifyContent: "center" }}
             >
-              {/* <Loader content="Loading" active disabled={!this.props.loading} /> */}
+              <Loader content="Loading" active disabled={!this.props.loading} />
               <Segment>
                 {/* <CollectionList
                   {...this.props}
@@ -274,11 +281,11 @@ class Home extends React.Component {
               computer={5}
               largeScreen={5}
               tablet={16}
-              style={{ marginTop: "1rem", justifyContent: "center" }}
+              style={{ justifyContent: "center" }}
             >
               <Segment>
                 <SpecimenView
-                  data={this.props.displayed}
+                  data={this.props.data}
                   selectedSpecimen={this.props.selectedSpecimen}
                   currentQuery={this.props.current_query}
                   runQuery={this.runQuery.bind(this)}
@@ -289,7 +296,9 @@ class Home extends React.Component {
                     this.props.userData.privilege_level !== "manager"
                   }
                   errorMessages={this.props.errorMessages}
-                  updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
+                  updateSingleUpdateErrorMessage={
+                    this.props.updateSingleUpdateErrorMessage
+                  }
                 />
               </Segment>
             </Grid.Column>
