@@ -87,7 +87,13 @@ export default function VirtualizedList({ props, runQuery, notify }) {
   function renderHeader({ dataKey, sortBy, sortDirection }) {
     return (
       <div className="header-cell" key={dataKey}>
-        {headerToReadable[dataKey]}
+        {headerToReadable[dataKey]}{" "}
+        {sorting &&
+          sorting.column === dataKey &&
+          sorting.direction === "asc" && <Icon name="angle up" />}
+        {sorting &&
+          sorting.column === dataKey &&
+          sorting.direction === "desc" && <Icon name="angle down" />}
       </div>
     );
   }
