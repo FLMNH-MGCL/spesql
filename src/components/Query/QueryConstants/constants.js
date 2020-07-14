@@ -102,8 +102,8 @@ export const headerSelection = [
 ];
 
 export const headerToReadable = {
-  catalogNumber: "Lep #",
-  otherCatalogNumber: "MGCL #",
+  otherCatalogNumber: "Lep #",
+  catalogNumber: "MGCL #",
   recordNumber: "Record #",
   order_: "Order",
   superfamily: "Superfamily",
