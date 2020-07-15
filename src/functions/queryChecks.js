@@ -1012,8 +1012,10 @@ export function checkField(fieldName, fieldValue) {
         );
       } else {
         let value = parseFloat(fieldValue);
-        if (value < 1 || value > 99) {
-          errors.push(`Number error (@ ${fieldName}): Must be from 1-99 only.`);
+        if (value < 1 || value > 999) {
+          errors.push(
+            `Number error (@ ${fieldName}): Must be from 1-999 only.`
+          );
         }
       }
 

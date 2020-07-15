@@ -264,7 +264,7 @@ class Home extends React.Component {
               style={{ justifyContent: "center" }}
             >
               <Loader content="Loading" active disabled={!this.props.loading} />
-              <Segment>
+              <Segment style={{ margin: 0 }}>
                 {/* <CollectionList
                   {...this.props}
                   runQuery={this.runQuery.bind(this)}

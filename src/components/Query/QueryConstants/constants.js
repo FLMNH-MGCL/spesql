@@ -203,7 +203,7 @@ export const filterOptions = [
   { key: "67", text: "Freezer", value: "freezer" },
   { key: "68", text: "Rack", value: "rack" },
   { key: "69", text: "Box", value: "box" },
-  { key: "70", text: "TubSize", value: "tubeSize" },
+  { key: "70", text: "TubeSize", value: "tubeSize" },
   { key: "71", text: "Collectors", value: "collectors" },
 ];
 

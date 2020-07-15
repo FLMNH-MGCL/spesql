@@ -354,27 +354,31 @@ class SpecimenView extends React.Component {
               </h4>
             </div>
           </div>
-          <div className="specimen-footer-content">
-            <UpdateDocument
-              currentQuery={this.props.currentQuery}
-              runQuery={this.props.runQuery}
-              user={this.props.user}
-              disabled={this.props.disabled}
-              userData={this.props.userData}
-              errorMessages={this.props.errorMessages}
-              updateSingleUpdateErrorMessage={
-                this.props.updateSingleUpdateErrorMessage
-              }
-              notify={this.props.notify}
-              selectedSpecimen={this.props.selectedSpecimen}
-            />
-            <DeleteDocument
-              selectedSpecimen={this.props.selectedSpecimen}
-              userData={this.props.userData}
-              notify={this.props.notify}
-              props={this.props}
-            />
-          </div>
+          {!this.props.disabled ? (
+            <div className="specimen-footer-content">
+              <UpdateDocument
+                currentQuery={this.props.currentQuery}
+                runQuery={this.props.runQuery}
+                user={this.props.user}
+                disabled={this.props.disabled}
+                userData={this.props.userData}
+                errorMessages={this.props.errorMessages}
+                updateSingleUpdateErrorMessage={
+                  this.props.updateSingleUpdateErrorMessage
+                }
+                notify={this.props.notify}
+                selectedSpecimen={this.props.selectedSpecimen}
+              />
+              <DeleteDocument
+                selectedSpecimen={this.props.selectedSpecimen}
+                userData={this.props.userData}
+                notify={this.props.notify}
+                props={this.props}
+              />
+            </div>
+          ) : (
+            <div className="specimen-footer-content">No actions available.</div>
+          )}
         </div>
       );
     }

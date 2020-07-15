@@ -136,7 +136,9 @@ export default function VirtualizedList({ props, runQuery, notify }) {
     return doesInclude;
   }
 
-  console.log(sorting);
+  function _getDatum(list, index) {
+    return list.get(index % list.size);
+  }
 
   const rowGetter = ({ index }) => _getDatum(props.data, index);
 
@@ -149,8 +151,6 @@ export default function VirtualizedList({ props, runQuery, notify }) {
     : list;
 
   return (
-    // <AutoSizer>
-    //   {({ height, width }) => (
     <>
       <SortableTable
         className="table-main"
@@ -165,8 +165,6 @@ export default function VirtualizedList({ props, runQuery, notify }) {
         onRowsRendered={updateLoading}
         onHeaderClick={handleHeaderClick}
       >
-        {/* <Column label="lep" dataKey="otherCatalogNumber" width={width / 2} />
-        <Column label="order" dataKey="order_" width={width / 2} /> */}
         {getColumns()}
       </SortableTable>
 
@@ -240,11 +238,5 @@ export default function VirtualizedList({ props, runQuery, notify }) {
         </div>
       </div>
     </>
-    // )}
-    // </AutoSizer>
   );
-}
-
-function _getDatum(list, index) {
-  return list.get(index % list.size);
 }

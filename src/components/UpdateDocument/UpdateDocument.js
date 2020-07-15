@@ -754,17 +754,7 @@ class UpdateDocument extends React.Component {
           offset="-1000x, 10px"
           position="bottom left"
           content="You must make a 'select all' query to access single update"
-          trigger={
-            <Icon
-              className="expand-on-hover"
-              name="edit"
-              style={
-                // this.props.selectedSpecimen.id === specimen.id
-                { float: "right" }
-                // : { display: "none" }
-              }
-            />
-          }
+          trigger={<Button color="yellow">Update</Button>}
         />
       );
     } else {
