@@ -101,6 +101,65 @@ export const headerSelection = [
   { key: "71", text: "Notes", value: "fieldNotes" },
 ];
 
+export const headerToReadable = {
+  otherCatalogNumber: "Lep #",
+  catalogNumber: "MGCL #",
+  recordNumber: "Record #",
+  order_: "Order",
+  superfamily: "Superfamily",
+  family: "Family",
+  subfamily: "Subfamily",
+  tribe: "Tribe",
+  genus: "Genus",
+  subgenus: "Subgenus",
+  specificEpithet: "Species",
+  infraspecificEpithet: "Subspecies",
+  identificationQualifier: "Identification Qual.",
+  recordedBy: "Recorded By",
+  otherCollectors: "Other Collectors",
+  identifiedBy: "Identified By",
+  dateIdentified: "Date Identified",
+  verbatimDate: "Verbatim Date",
+  collectedYear: "Year",
+  collectedMonth: "Month",
+  collectedDay: "Day",
+  sex: "Sex",
+  lifeStage: "Life Stage",
+  habitat: "Habiat",
+  occurrenceRemarks: "Occurence Remarks",
+  molecularOccurrenceRemarks: "Molecular Occurrence Remarks",
+  samplingProtocol: "Sampling Protocol",
+  country: "Country",
+  stateProvince: "State/Province",
+  county: "County",
+  municipality: "Municipality",
+  locality: "Locality",
+  elevationInMeters: "Elevation",
+  decimalLatitude: "Dec. Latitude",
+  decimalLongitude: "Dec. Longitude",
+  geodeticDatum: "Geodetic Datum",
+  coordinateUncertainty: "Coord. Uncertainty",
+  verbatimLatitude: "Latitude",
+  verbatimLongitude: "Longitude",
+  georeferencedBy: "Georeferenced",
+  disposition: "Disposition",
+  isLoaned: "Loaned",
+  loanInstitution: "Loan Institution",
+  loaneeName: "Loanee Name",
+  loanDate: "Loan Date",
+  loanReturnDate: "Loan Return Date",
+  preparations: "Preparations",
+  freezer: "Freezer",
+  rack: "Rack",
+  box: "Box",
+  tubeSize: "Tube Size",
+  associatedSequences: "Associated Seqs.",
+  associatedReferences: "Associated Refs.",
+  withholdData: "Withold Data",
+  reared: "Reared",
+  fieldNotes: "Notes",
+};
+
 export const filterOptions = [
   {
     key: "Lep #",
@@ -144,7 +203,7 @@ export const filterOptions = [
   { key: "67", text: "Freezer", value: "freezer" },
   { key: "68", text: "Rack", value: "rack" },
   { key: "69", text: "Box", value: "box" },
-  { key: "70", text: "TubSize", value: "tubeSize" },
+  { key: "70", text: "TubeSize", value: "tubeSize" },
   { key: "71", text: "Collectors", value: "collectors" },
 ];
 
@@ -273,6 +332,7 @@ export const preparationsControl = [
 // Rack control will be a manual check on submit
 
 // Box control will be a manual check on submit
+// 1-999
 
 export const tubeSizeControl = [
   reset,
@@ -280,7 +340,6 @@ export const tubeSizeControl = [
   { key: "98", text: "50falcon", value: "50falcon" },
   { key: "99", text: "15falcon", value: "15falcon" },
   { key: "100", text: "microcentrifuge", value: "microcentrifuge" },
-  { key: "smallenvelope", text: "smallenvelope", value: "smallenvelope" },
 ];
 
 export const lifeStageControl = [
