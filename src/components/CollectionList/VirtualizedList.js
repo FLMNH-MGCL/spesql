@@ -150,23 +150,31 @@ export default function VirtualizedList({ props, runQuery, notify }) {
     ? _.orderBy(list, [sorting.column], [sorting.direction])
     : list;
 
+  console.log(width);
+
   return (
-    <>
-      <SortableTable
-        className="table-main"
-        rowClassName="table-row"
-        height={height * 0.8}
-        width={width * 0.66 - 4}
-        headerHeight={60}
-        rowHeight={40}
-        rowCount={display.length}
-        rowGetter={({ index }) => display[index]}
-        rowRenderer={rowRenderer}
-        onRowsRendered={updateLoading}
-        onHeaderClick={handleHeaderClick}
-      >
-        {getColumns()}
-      </SortableTable>
+    <div>
+      <div style={{ height: "80vh" }}>
+        <AutoSizer>
+          {({ height, width }) => (
+            <SortableTable
+              className="table-main"
+              rowClassName="table-row"
+              height={height}
+              width={width}
+              headerHeight={60}
+              rowHeight={40}
+              rowCount={display.length}
+              rowGetter={({ index }) => display[index]}
+              rowRenderer={rowRenderer}
+              onRowsRendered={updateLoading}
+              onHeaderClick={handleHeaderClick}
+            >
+              {getColumns()}
+            </SortableTable>
+          )}
+        </AutoSizer>
+      </div>
 
       <div className="query-curr">
         <h4>Current Query:</h4>
@@ -237,6 +245,6 @@ export default function VirtualizedList({ props, runQuery, notify }) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
