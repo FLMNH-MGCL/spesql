@@ -920,14 +920,14 @@ export default class CreateHelpModal extends React.Component {
                 </Accordion.Content>
                 <Accordion.Title
                   active={activeIndex === 6}
-                  index={5}
+                  index={6}
                   onClick={this.handleClick}
                 >
                   <Icon name="dropdown" />
                   The application, or parts of it, has randomly stopped
                   responding?
                 </Accordion.Title>
-                <Accordion.Content active={activeIndex === 5}>
+                <Accordion.Content active={activeIndex === 6}>
                   <p>
                     I've encountered this throughout development, and it would
                     seem to be related to idle times in use. If the program is

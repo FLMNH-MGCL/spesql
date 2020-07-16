@@ -6,7 +6,6 @@ import axios from "axios";
 
 export default function DeleteDocument({
   selectedSpecimen,
-  specimen,
   disabled,
   userData,
   notify,
@@ -81,20 +80,9 @@ export default function DeleteDocument({
       size="mini"
       open={open}
       trigger={
-        <Icon
-          className={
-            selectedSpecimen.id === specimen.id
-              ? "expand-on-hover active"
-              : "expand-on-hover hidden"
-          }
-          name="trash alternate"
-          onClick={toggle}
-          style={
-            selectedSpecimen.id === specimen.id
-              ? { float: "right", marginLeft: ".25rem" }
-              : { display: "none" }
-          }
-        />
+        <Button color="red" onClick={toggle}>
+          Delete
+        </Button>
       }
     >
       <Modal.Header>Are you sure?</Modal.Header>

@@ -5,14 +5,14 @@ export function getQueryHeaders(specimen) {
   }
   // test for ideal headers first
   let ret = [
-    "MGCL #",
-    "Lep #",
-    "Superfamily",
-    "Family",
-    "Genus",
-    "Species",
-    "Country",
-    "Freezer",
+    "catalogNumber",
+    "otherCatalogNumber",
+    "superfamily",
+    "family",
+    "genus",
+    "specificEpithet",
+    "country",
+    "freezer",
   ];
   if (
     specimen.catalogNumber &&
@@ -33,109 +33,112 @@ export function getQueryHeaders(specimen) {
       count < 8 &&
       (specimen.catalogNumber || specimen.catalogNumber === "")
     ) {
-      ret.push("MGCL #");
+      ret.push("catalogNumber");
       count += 1;
     }
     if (
       count < 8 &&
       (specimen.otherCatalogNumber || specimen.otherCatalogNumber === "")
     ) {
-      ret.push("LEP #");
+      ret.push("otherCatalogNumber");
       count += 1;
     }
     if (count < 8 && (specimen.order_ || specimen.order_ === "")) {
-      ret.push("Order");
+      ret.push("order_");
       count += 1;
     }
     if (count < 8 && (specimen.superfamily || specimen.superfamily === "")) {
-      ret.push("Superfamily");
+      ret.push("superfamily");
       count += 1;
     }
     if (count < 8 && (specimen.family || specimen.family === "")) {
-      ret.push("Family");
+      ret.push("family");
       count += 1;
     }
     if (count < 8 && (specimen.subfamily || specimen.subfamily === "")) {
-      ret.push("Subfamily");
+      ret.push("subfamily");
       count += 1;
     }
     if (count < 8 && (specimen.tribe || specimen.tribe === "")) {
-      ret.push("Tribe");
+      ret.push("tribe");
       count += 1;
     }
     if (count < 8 && (specimen.genus || specimen.genus === "")) {
-      ret.push("Genus");
+      ret.push("genus");
       count += 1;
     }
     if (count < 8 && (specimen.subgenus || specimen.subgenus === "")) {
-      ret.push("Subgenus");
+      ret.push("subgenus");
       count += 1;
     }
     if (
       count < 8 &&
       (specimen.specificEpithet || specimen.specificEpithet === "")
     ) {
-      ret.push("Species");
+      ret.push("specificEpithet");
       count += 1;
     }
     if (count < 8 && (specimen.sex || specimen.sex === "")) {
-      ret.push("Sex");
+      ret.push("sex");
       count += 1;
     }
     if (count < 8 && (specimen.country || specimen.country === "")) {
-      ret.push("Country");
+      ret.push("country");
       count += 1;
     }
     if (
       count < 8 &&
       (specimen.stateProvince || specimen.stateProvince === "")
     ) {
-      ret.push("Province");
+      ret.push("stateProvince");
       count += 1;
     }
     if (count < 8 && (specimen.locality || specimen.locality === "")) {
-      ret.push("Locality");
+      ret.push("locality");
       count += 1;
     }
     if (
       count < 8 &&
       (specimen.verbatimLatitude || specimen.verbatimLatitude === "")
     ) {
-      ret.push("Latitude");
+      ret.push("verbatimLatitude");
       count += 1;
     }
     if (
       count < 8 &&
       (specimen.verbatimLongitude || specimen.verbatimLongitude === "")
     ) {
-      ret.push("Longitude");
+      ret.push("verbatimLongitude");
       count += 1;
     }
     if (
       count < 8 &&
       (specimen.elevationInMeters || specimen.elevationInMeters === "")
     ) {
-      ret.push("Elevation");
+      ret.push("elevationInMeters");
       count += 1;
     }
-    if (count < 8 && (specimen.collectors || specimen.collectors === "")) {
-      ret.push("Collector(s)");
+    if (
+      count < 8 &&
+      (specimen.otherCollectors || specimen.otherCollectors === "")
+    ) {
+      ret.push("otherCollectors");
       count += 1;
     }
     if (count < 8 && (specimen.freezer || specimen.freezer === "")) {
-      ret.push("Freezer");
+      ret.push("freezer");
       count += 1;
     }
     if (count < 8 && (specimen.rack || specimen.rack === "")) {
-      ret.push("Rack #");
+      ret.push("rack");
       count += 1;
     }
     if (count < 8 && (specimen.box || specimen.box === "")) {
-      ret.push("Box");
+      ret.push("box");
       count += 1;
     }
     if (count < 8 && (specimen.tubeSize || specimen.tubesize === "")) {
-      ret.push("Size");
+      ret.push("tubeSize");
       count += 1;
     }
 

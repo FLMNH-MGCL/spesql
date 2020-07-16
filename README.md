@@ -2,7 +2,7 @@
 
 ### Development
 
-This project was developed using ReactJS, Redux and Node
+This project was developed using ReactJS
 
 ### About This Project
 
@@ -14,7 +14,7 @@ to visit the <a href='https://github.com/FLMNH-MGCL/Database-App' target='_blank
 
 ### Contact / Issue Reporting
 
-<a href='http://www.aaronbleopold.com' target="_blank">Aaron Leopold</a> is the sole developer of this project. If there are any questions regarding the usage of the application, please contact him via email (his current email can be found on his site). Additionally, if you are an employee of the FLMNH, refer to the recorded <a href=''>instructional videos</a> (TBA) for more in-depth demonstrations. For issues relating to software bugs, glitches or unexpected errors, please submit a <a href='https://github.com/FLMNH-MGCL/Database-App/issues/new' target="_blank">GitHub issue</a>. Be sure to describe in
+<a href='http://www.aaronbleopold.com' target="_blank">Aaron Leopold</a> is the developer of this project. If there are any questions regarding the usage of the application, please contact him via email (his current email can be found on his site). Additionally, if you are an employee of the FLMNH, refer to the recorded instructional videos (found in the database Slack channel) for more in-depth demonstrations. For issues relating to software bugs, glitches or unexpected errors, please submit a <a href='https://github.com/FLMNH-MGCL/Database-App/issues/new' target="_blank">GitHub issue</a>. Be sure to describe in
 detail the errors, bugs or glitches that have occurred, and include the steps to reproduce the error.
 
 ### Local Usage
@@ -23,13 +23,13 @@ Instructions for local use, please read entire section before attempting use. Us
 
 ```
 cd <path to target directory>
-git clone https://github.com/FLMNH-MGCL/Database-App.git
-cd Database-App
+git clone https://github.com/FLMNH-MGCL/spesql.git
+cd spesql
 yarn
 yarn start:browser
 ```
 
-Before running `yarn start:browser`, ensure you enter your database access credentials in the config.js file. This file is excluded, however you can rename the config.example.js file to config.js and enter the appropriate information. The config template can be found at `Database-App/server/config/config.example.js`. Change the name to `config.js`, and ender the information. It should wind up look something like this:
+Before running `yarn start:browser`, ensure you enter your database access credentials in the config.js file. This file is excluded, however you can rename the config.example.js file to config.js and enter the appropriate information. The config template can be found at `spesql/public/server/config/config.example.js`. Copy the file and change the name to `config.js`, and enter the information. It should wind up look something like this:
 
 ```
 module.exports = {
@@ -43,7 +43,7 @@ module.exports = {
 }
 ```
 
-Enter the host, port, default user/password combination, and the database name to connect to the database. If you do not have these credentials or lost these credentials, please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly for eligibility. If you are an employee and need additional assistance, please refer to the <a href=''>instructional videos</a> (TBA) or contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly, as well.
+Enter the host, port, default user/password combination, and the database name to connect to the database. If you do not have these credentials or lost these credentials, please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly for eligibility. If you are an employee and need additional assistance, please refer to the instructional videos or contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly, as well.
 
 ### Citation
 
