@@ -1,4 +1,4 @@
-// TODO: refactor to consider a chunk of specimen, and what the majority of them have
+// MAYBE: refactor to consider a chunk of specimen, and what the majority of them have
 export function getQueryHeaders(specimen) {
   if (specimen === undefined) {
     return [];

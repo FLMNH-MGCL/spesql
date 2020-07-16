@@ -150,7 +150,6 @@ export default function EditTableModal({
     select(undefined);
   }
 
-  // TODO: add sql messages to logs
   async function handleDelete() {
     let deleted = false;
     let unregistered = false;
@@ -163,6 +162,7 @@ export default function EditTableModal({
     if (deleteData.error) {
       // uh oh
       // console.log(deleteData.error);
+      updateError(deleteData.error);
       return;
     } else {
       deleted = true;

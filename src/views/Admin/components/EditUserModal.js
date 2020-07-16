@@ -230,7 +230,6 @@ export default function EditUserModal({
     }
   };
 
-  // TODO: axios request, check if sucess
   const updateUser = async (e) => {
     // get user and get changes
     // const user = selected;
@@ -271,8 +270,10 @@ export default function EditUserModal({
     const res = await axios.post("/api/admin/update-user", changes);
     // notify
     if (res.err) {
-      console.log(res.err)
-      createNotification({type: "error", message: res.err.sqlMessage})
+      console.log(res.err);
+      createNotification({ type: "error", message: res.err.sqlMessage });
+    } else {
+      createNotification({ type: "success", message: "Updated user" });
     }
   };
 
