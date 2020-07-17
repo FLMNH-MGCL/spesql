@@ -1,6 +1,4 @@
 const mysql = require("mysql");
-// const bcrypt = require("bcrypt");
-// const saltRounds = 10;
 
 module.exports = function (connection, app) {
   app.post("/api/admin/delete-user/", function (req, res) {
@@ -11,12 +9,9 @@ module.exports = function (connection, app) {
 
     connection.query(command, (err, data) => {
       if (err) {
-        console.log(err);
-        res.status(404).json(err);
-        // res.json({ status: 400, details: err });
+        // console.log(err);
+        res.json({ err });
       } else {
-        // console.log(data);
-        res.status(204);
         res.json(data);
       }
     });

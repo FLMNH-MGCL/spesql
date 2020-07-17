@@ -1525,7 +1525,12 @@ export default class FormInsert extends React.Component {
               </Form.Group>
 
               <Form.Group widths="equal">
-                <Form.Field>
+                <Form.Field
+                  error={this.checkBasicPreSubmit(
+                    "elevationInMetersUPDATE",
+                    elevationInMeters
+                  )}
+                >
                   <label>elevation</label>
                   <Input
                     name="elevationInMeters"
@@ -1545,7 +1550,12 @@ export default class FormInsert extends React.Component {
                   />
                 </Form.Field>
 
-                <Form.Field>
+                <Form.Field
+                  error={this.checkBasicPreSubmit(
+                    "coordinateUncertaintyManual",
+                    coordinateUncertainty
+                  )}
+                >
                   <label>coordinateUncertainty</label>
                   <Input
                     name="coordinateUncertainty"

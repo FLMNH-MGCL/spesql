@@ -7,7 +7,6 @@ import {
   Grid,
   Table,
   Accordion,
-  Reveal,
 } from "semantic-ui-react";
 
 export default class CreateHelpModal extends React.Component {

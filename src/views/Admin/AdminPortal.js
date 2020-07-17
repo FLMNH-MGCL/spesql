@@ -42,7 +42,6 @@ const createNotification = (content) => {
 function AdminPortal(props) {
   const [users, setUsers] = useState();
   const [tables, setTables] = useState();
-  const [error, setError] = useState();
 
   async function checkAuth(user, password, callback) {
     // console.log(`${user} vs ${password}`);
@@ -86,7 +85,10 @@ function AdminPortal(props) {
     // console.log(res);
 
     if (res.status !== 200 || res.err) {
-      setError(res.err);
+      createNotification({
+        type: "error",
+        message: "Could not load users, please check internet connection",
+      });
       // console.log(error);
     } else {
       setUsers(res.data);
@@ -97,7 +99,10 @@ function AdminPortal(props) {
     const res = await axios.get("/api/admin/list-tables/");
 
     if (res.status !== 200 || res.err) {
-      setError(res.err);
+      createNotification({
+        type: "error",
+        message: "Could not load tables, please check internet connection",
+      });
     } else {
       setTables(res.data.tables);
     }

@@ -6,6 +6,10 @@
   /* box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05); */
 }
 
+.ReactVirtualized__Grid.ReactVirtualized__Table__Grid:focus {
+  outline: 0;
+}
+
 .ReactVirtualized__Table__headerRow {
   border-top-left-radius: 0.28571429rem;
   border-top-right-radius: 0.28571429rem;
@@ -19,6 +23,9 @@
 .header-cell {
   cursor: pointer;
 }
+:focus {
+  outline: 0;
+}
 
 .table-row:hover {
   background-color: #f5f5f5;
@@ -28,4 +35,83 @@
 .active-row {
   background-color: #f5f5f5;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+#scrollableDiv {
+  overflow: auto;
+  scrollbar-width: none;
+}
+::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+  background: transparent;
+}
+
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.query-info {
+  /* display: flex;
+  justify-content: space-between;
+  height: 3rem; */
+  display: flex;
+  justify-content: space-between;
+}
+
+.query-actions {
+  display: block;
+}
+
+.query-infosheet {
+  display: block;
+  padding-left: 2rem;
+}
+
+@media screen and (max-width: 1300px) {
+  .query-info {
+    display: block;
+  }
+
+  .query-infosheet {
+    padding-left: 0;
+    padding-top: 1rem;
+  }
+}
+
+.query-info div,
+h4,
+p {
+  display: inline-block;
+}
+
+.query-text {
+  /* padding-left: 2vw; */
+  margin: 0.5rem;
+}
+
+.query-text p {
+  padding-left: 0.5vw;
+  font-style: italic;
+}
+
+.query-curr {
+  display: block;
+  padding-top: 10px;
+  padding-left: 5px;
+}
+
+.query-curr p {
+  padding-left: 5px;
+}
+
+.loader-style {
+  top: 50vh;
+}
+
+.expand-on-hover:hover {
+  transform: scale(1.1);
 }

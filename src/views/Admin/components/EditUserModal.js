@@ -62,13 +62,13 @@ export default function EditUserModal({
     setUnderstood(false);
   }
 
-  const getUser = () => {
-    for (let i = 0; i < users.length; i++) {
-      if (users[i].username === selected) {
-        return users[i];
-      }
-    }
-  };
+  // const getUser = () => {
+  //   for (let i = 0; i < users.length; i++) {
+  //     if (users[i].username === selected) {
+  //       return users[i];
+  //     }
+  //   }
+  // };
 
   const initForm = (user) => {
     // get user by username
@@ -134,38 +134,32 @@ export default function EditUserModal({
     }
   };
 
-  const deleteUser = async () => {
-    // axios to delete
-    const res = await axios
-      .post("/api/admin/delete-user/", {
-        username: username,
-      })
-      .catch((err) => {
-        console.log(err);
-        // TODO: this might be typed wrong
-        updateError([err]);
-        createNotification({
-          type: "error",
-          message:
-            "404 error code returned. Likely cause is the user selected for deletion does not exist.",
-        });
-      });
+  async function deleteUser() {
+    const res = await axios.post("/api/admin/delete-user/", {
+      username: username,
+    });
 
-    if (res) {
+    console.log(res);
+    if (!res) {
+      updateError([
+        "The server had no response. Please ensure you have an internet / vpn connection and restart the application.",
+      ]);
+      return;
+    }
+
+    if (res.data.err) {
+      updateError([res.data.err.sqlMessage]);
+      createNotification({
+        type: "error",
+        message: `Query failed. ${res.data.err.sqlMessage}`,
+      });
+    } else {
       createNotification({
         type: "success",
         message: `Sucessfully deleted user ${username}`,
       });
-    } else {
-      updateError([
-        "The server had no response. Please ensure you have an internet / vpn connection and restart the application.",
-      ]);
-      createNotification({
-        type: "error",
-        message: "Failed to delete user.",
-      });
     }
-  };
+  }
 
   const errorChecks = (field) => {
     let errors = [];

@@ -9,16 +9,10 @@ import {
 } from "semantic-ui-react";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import { checkSpecimen } from "../../../functions/queryChecks";
-import { runInsertQuery, runSingleInsert } from "../../../functions/queries";
+import { runSingleInsert } from "../../../functions/queries";
 import CSVDrop from "./CSVDrop";
 import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
 import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
-
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}
 
 export default class CSVInsert extends React.Component {
   state = {
@@ -46,7 +40,9 @@ export default class CSVInsert extends React.Component {
 
       if (!insertData.data.success) {
         errors.push(
-          `SQL ERROR: Code: ${insertData.data.data.code}, Message: ${insertData.data.data.sqlMessage}\nError around row #${i+1}`
+          `SQL ERROR: Code: ${insertData.data.data.code}, Message: ${
+            insertData.data.data.sqlMessage
+          }\nError around row #${i + 1}`
         );
       }
     }
@@ -58,7 +54,7 @@ export default class CSVInsert extends React.Component {
       });
 
       if (this.props.errorMessages.csvInsert) {
-        errors = errors.concat(this.props.errorMessages.csvInsert)
+        errors = errors.concat(this.props.errorMessages.csvInsert);
       }
 
       this.props.updateCSVInsertErrorMessage(errors);

@@ -420,9 +420,11 @@ export const capsChecks = (fieldName, fieldValue, upperFirst) => {
   return errors;
 };
 
-export function parseNameList(names) {
-  let nameVector = names.split(" | ");
-}
+// export function parseNameList(names) {
+//   let nameVector = names.split(" | ");
+
+//   return nameVector;
+// }
 
 export function checkField(fieldName, fieldValue) {
   let errors = [];
@@ -884,17 +886,46 @@ export function checkField(fieldName, fieldValue) {
 
       return errors;
 
+    case "coordinateUncertaintyManual":
+      if (fieldValue === "") {
+        return errors;
+      }
+
+      if (!isNumeric(fieldValue)) {
+        errors.push(
+          `Number error (@ ${fieldName}): detected non-numeric values.`
+        );
+      }
+
+      return errors;
+
     case "coordinateUncertainty":
       if (fieldValue === "") {
         return errors;
       }
 
       // TODO: ADD CONVERSION
+      let coordVec = fieldValue.split(" ");
 
-      if (!isNumeric(fieldValue)) {
+      if (coordVec.length < 2) {
         errors.push(
-          `Number error (@ ${fieldName}): detected non-numeric values.`
+          `Format error (@ ${fieldName}): format must be digits followed by unit.`
         );
+      } else {
+        let coordNums = coordVec[0];
+        let coordUnit = coordVec[1];
+
+        if (!isNumeric(coordNums)) {
+          errors.push(
+            `Number error (@ ${fieldName}): detected non-numeric values.`
+          );
+        }
+
+        if (!controlHasString(coordUnit)) {
+          errors.push(
+            `Control error (@ ${fieldName}): ${coordUnit} not one of the accepted units.`
+          );
+        }
       }
 
       return errors;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Icon, Form, Checkbox, Button } from "semantic-ui-react";
+import { Modal, Form, Checkbox, Button } from "semantic-ui-react";
 import useBoolean from "../../utils/useBoolean";
 import ConfirmAuth from "../../views/Admin/components/ConfirmAuth";
 import axios from "axios";
