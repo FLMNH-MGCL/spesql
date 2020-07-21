@@ -3,7 +3,6 @@ import {
   Table,
   Column,
   AutoSizer,
-  defaultTableHeaderRowRenderer,
   defaultTableRowRenderer,
 } from "react-virtualized";
 import useWindowDimensions from "../utils/useWindowDimensions";
@@ -22,7 +21,7 @@ const SortableTable = SortableContainer(Table);
 const SortableTableRowRenderer = SortableElement(defaultTableRowRenderer);
 
 export default function VirtualizedList({ props, runQuery, notify }) {
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const [selected, select] = useState(props.selectedSpecimen);
   const [sorting, setSorting] = useState(undefined);
 
@@ -72,10 +71,6 @@ export default function VirtualizedList({ props, runQuery, notify }) {
       className: rowProps.className + activeClass,
     };
 
-    // if (activeClass === " active-row") {
-    //   console.log(rowProps);
-    // }
-
     return (
       <SortableTableRowRenderer
         {...rowProps}
@@ -96,10 +91,6 @@ export default function VirtualizedList({ props, runQuery, notify }) {
           sorting.direction === "desc" && <Icon name="angle down" />}
       </div>
     );
-  }
-
-  function renderCell({ cellData }) {
-    return cellData;
   }
 
   function getColumns() {
@@ -136,11 +127,11 @@ export default function VirtualizedList({ props, runQuery, notify }) {
     return doesInclude;
   }
 
-  function _getDatum(list, index) {
-    return list.get(index % list.size);
-  }
+  // function _getDatum(list, index) {
+  //   return list.get(index % list.size);
+  // }
 
-  const rowGetter = ({ index }) => _getDatum(props.data, index);
+  // const rowGetter = ({ index }) => _getDatum(props.data, index);
 
   const list = props.data.filter((specimen) => {
     return specimenIncludes(specimen, props.filteredText, props.filterCategory);
@@ -149,8 +140,6 @@ export default function VirtualizedList({ props, runQuery, notify }) {
   const display = sorting
     ? _.orderBy(list, [sorting.column], [sorting.direction])
     : list;
-
-  console.log(width);
 
   return (
     <div>

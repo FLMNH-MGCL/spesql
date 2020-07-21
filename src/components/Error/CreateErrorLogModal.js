@@ -66,8 +66,8 @@ export default function CreateErrorLogModal({
         <Button
           icon
           basic
-          floated={inline ? "" : "left"}
-          color={!errors ? "" : "red"}
+          floated={inline ? null : "left"}
+          color={!errors ? null : "red"}
           onClick={on}
           disabled={!errors}
         >

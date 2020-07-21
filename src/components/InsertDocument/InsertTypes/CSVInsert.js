@@ -8,7 +8,11 @@ import {
   Header,
 } from "semantic-ui-react";
 import CreateHelpModal from "../../Help/CreateHelpModal";
-import { checkSpecimen } from "../../../functions/queryChecks";
+import {
+  checkSpecimen,
+  checkField,
+  parseMeasurement,
+} from "../../../functions/queryChecks";
 import { runSingleInsert } from "../../../functions/queries";
 import CSVDrop from "./CSVDrop";
 import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
@@ -86,12 +90,14 @@ export default class CSVInsert extends React.Component {
     }
 
     // ret.data[0] is header row
-
     let insertions = [];
     let errors = [];
 
     for (var i = 1; i < ret.data.length; i++) {
       let specimen = ret.data[i];
+      const elevationInMeters = parseMeasurement(specimen[32]);
+      const coordinateUncertainty = parseMeasurement(specimen[36]);
+
       const doc = {
         catalogNumber: specimen[0],
         otherCatalogNumber: specimen[1],
@@ -125,11 +131,11 @@ export default class CSVInsert extends React.Component {
         county: specimen[29],
         municipality: specimen[30],
         locality: specimen[31],
-        elevationInMeters: specimen[32],
+        elevationInMeters: elevationInMeters,
         decimalLatitude: specimen[33],
         decimalLongitude: specimen[34],
         geodeticDatum: specimen[35],
-        coordinateUncertainty: specimen[36],
+        coordinateUncertainty: coordinateUncertainty,
         verbatimLatitude: specimen[37],
         verbatimLongitude: specimen[38],
         georeferencedBy: specimen[39],
@@ -153,6 +159,15 @@ export default class CSVInsert extends React.Component {
       };
 
       let specimenErrors = checkSpecimen(doc);
+
+      specimenErrors = specimenErrors.concat(
+        checkField("coordinateUncertaintyCSV", coordinateUncertainty)
+      );
+
+      specimenErrors = specimenErrors.concat(
+        checkField("elevationInMetersCSV", elevationInMeters)
+      );
+
       if (specimenErrors.length > 0) {
         errors = errors.concat(specimenErrors);
       } else {

@@ -285,9 +285,9 @@ export const parseMeasurement = (measurement) => {
       measurement.toLowerCase().endsWith(" meters") ||
       measurement.toLowerCase().endsWith(" meter")
     ) {
-      console.log(measurement);
+      // console.log(measurement);
 
-      console.log(parseFloat(measurement.split(" ")[0]));
+      // console.log(parseFloat(measurement.split(" ")[0]));
 
       numValue = parseFloat(measurement.split(" ")[0]);
     } else if (measurement.toLowerCase().endsWith(" feet")) {
@@ -886,7 +886,7 @@ export function checkField(fieldName, fieldValue) {
 
       return errors;
 
-    case "coordinateUncertaintyManual":
+    case "coordinateUncertainty":
       if (fieldValue === "") {
         return errors;
       }
@@ -899,7 +899,7 @@ export function checkField(fieldName, fieldValue) {
 
       return errors;
 
-    case "coordinateUncertainty":
+    case "coordinateUncertaintyCSV":
       if (fieldValue === "") {
         return errors;
       }
@@ -956,7 +956,6 @@ export function checkField(fieldName, fieldValue) {
 
       return errors;
 
-    // loanInfo
     // TODO: add all loan related checks
     case "isLoaned":
       if (fieldValue === "") {

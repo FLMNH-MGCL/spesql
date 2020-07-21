@@ -37,8 +37,9 @@ class SearchFilter extends React.Component {
     headerSelection.forEach((header, index) => {
       if (index === headerSelection.length - 1 || (index + 1) % 3 === 0) {
         checkRow.push(
-          <Form.Field>
+          <Form.Field key={`${header}${index}`}>
             <Checkbox
+              key={header}
               radio
               label={header.value === "*" ? "all" : header.value}
               name="checkboxRadioGroup"

@@ -1552,7 +1552,7 @@ export default class FormInsert extends React.Component {
 
                 <Form.Field
                   error={this.checkBasicPreSubmit(
-                    "coordinateUncertaintyManual",
+                    "coordinateUncertainty",
                     coordinateUncertainty
                   )}
                 >
