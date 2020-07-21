@@ -31,7 +31,6 @@ function App() {
             <Redirect to="/login" />
           </Route>
           <Route path="/login" component={Login} />
-
           <Route path="/home" component={Home} />
           <Route path="/about" component={About} />
           <Route path="/admin" component={AdminPortal} />

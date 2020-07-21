@@ -35,25 +35,18 @@ class DownloadDB extends React.Component {
           <Modal.Header>Download Options</Modal.Header>
           <Modal.Content>
             <p style={{ display: "block" }}>
-              Would you like to download the entire query or what is currently
-              visible / loaded?
+              This action will download the entire query, not just what is
+              currently visible / loaded. Do you wish to continue?
             </p>
             <div>
               <p style={{ display: "block" }}>
                 <b>Current Query Size: </b> {this.props.data.length}
-              </p>
-              <p style={{ display: "block" }}>
-                <b>Loaded Content Size: </b> {this.props.displayed.length}
               </p>
             </div>
           </Modal.Content>
           <Modal.Actions>
             <CSVLink data={this.props.data} target="_blank">
               <Button primary>Download All</Button>
-            </CSVLink>
-
-            <CSVLink data={this.props.displayed} target="_blank">
-              <Button secondary>Download Loaded</Button>
             </CSVLink>
           </Modal.Actions>
         </Modal>
