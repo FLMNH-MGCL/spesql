@@ -52,7 +52,6 @@ import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
 export default class FormInsert extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
 
     this.state = {
       page: 0,

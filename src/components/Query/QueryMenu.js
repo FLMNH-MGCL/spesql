@@ -110,8 +110,11 @@ export default function QueryMenu(props) {
           <Dropdown.Item
             icon="cloud upload"
             text="Update"
+            disabled={props.disabled}
             onClick={() => {
-              toggleUpdate(true);
+              if (!props.disabled) {
+                toggleUpdate(true);
+              }
             }}
           />
         </Dropdown.Menu>

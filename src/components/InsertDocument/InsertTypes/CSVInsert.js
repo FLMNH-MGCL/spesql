@@ -6,6 +6,7 @@ import {
   Modal,
   Divider,
   Header,
+  Select,
 } from "semantic-ui-react";
 import CreateHelpModal from "../../Help/CreateHelpModal";
 import {
@@ -19,11 +20,16 @@ import ConfirmAuth from "../../../views/Admin/components/ConfirmAuth";
 import CreateErrorLogModal from "../../Error/CreateErrorLogModal";
 
 export default class CSVInsert extends React.Component {
-  state = {
-    text_area: "",
-    hasError: false,
-    loading: false,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      text_area: "",
+      hasError: false,
+      loading: false,
+      databaseTable: undefined,
+    };
+  }
 
   setCSV(text) {
     this.setState({ text_area: text });
@@ -39,7 +45,10 @@ export default class CSVInsert extends React.Component {
     let errors = [];
 
     for (let i = 0; i < insertions.length; i++) {
-      const insertData = await runSingleInsert(insertions[i], "molecularLab");
+      const insertData = await runSingleInsert(
+        insertions[i],
+        this.state.databaseTable
+      );
       // console.log(insertData);
 
       if (!insertData.data.success) {
@@ -199,28 +208,13 @@ export default class CSVInsert extends React.Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  // renderErrorTerminal = () => (
-  //   <div style={{ marginBottom: "3rem", marginTop: "1.5rem" }}>
-  //     <ErrorTerminal errorLog={this.props.errorMessages.insertError} />
-  //     <Button
-  //       onClick={() => {
-  //         this.props.updateCSVInsertErrorMessage(null);
-  //         this.setState({ hasError: false });
-  //       }}
-  //       color="red"
-  //       style={{ float: "right" }}
-  //     >
-  //       Clear
-  //     </Button>
-  //   </div>
-  // );
-
   render() {
     if (!this.state.hasError && this.props.errorMessages.insertError !== null) {
       this.setState({ hasError: true });
     }
 
     const { text_area } = this.state;
+    console.log(this.props);
 
     if ((this.state.text_area.match(/\n/g) || []).length >= 500) {
       this.props.notify({
@@ -230,11 +224,29 @@ export default class CSVInsert extends React.Component {
       });
     }
 
+    const { databaseTable } = this.state;
+
     return (
       <>
         <Modal.Header>CSV Insertion</Modal.Header>
 
         <Modal.Content>
+          <Form>
+            <Form.Field
+              control={Select}
+              options={this.props.tableOptions}
+              label="To which table are these going?"
+              placeholder="Select One"
+              name="databaseTable"
+              value={databaseTable}
+              onChange={this.handleChange}
+              error={
+                !this.state.databaseTable
+                  ? { content: "Must select database table" }
+                  : null
+              }
+            />
+          </Form>
           <Header size="small">Paste CSV Data here</Header>
           <p>
             Be sure to include the headers, and if you need to view the template

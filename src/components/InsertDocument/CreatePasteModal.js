@@ -8,10 +8,16 @@ export default function CreatePasteModal({
   open,
   closeModal,
   checkAuth,
+  tableOptions,
 }) {
   return (
     <Modal open={open} size="small" onClose={closeModal}>
-      <CSVInsert {...props} closeModal={closeModal} checkAuth={checkAuth} />
+      <CSVInsert
+        {...props}
+        tableOptions={tableOptions}
+        closeModal={closeModal}
+        checkAuth={checkAuth}
+      />
     </Modal>
   );
 }
