@@ -214,7 +214,6 @@ export default class CSVInsert extends React.Component {
     }
 
     const { text_area } = this.state;
-    console.log(this.props);
 
     if ((this.state.text_area.match(/\n/g) || []).length >= 500) {
       this.props.notify({
@@ -251,7 +250,10 @@ export default class CSVInsert extends React.Component {
           <p>
             Be sure to include the headers, and if you need to view the template
             for CSV files, donwload it from{" "}
-            <a href="../../assets/CORRECT_HEADERS_TEMPLATE.csv" download>
+            <a
+              href={require("../../../assets/CORRECT_HEADERS_TEMPLATE.csv")}
+              download
+            >
               here
             </a>{" "}
           </p>

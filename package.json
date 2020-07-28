@@ -21,7 +21,8 @@
     "build": "yarn build:react && yarn build:electron",
     "run:dev": "nodemon public/server/server.js",
     "run:prod": "node public/server/server.js",
-    "start:browser": "concurrently \"yarn run:dev\"  \"react-scripts start\""
+    "start:browser": "concurrently \"yarn run:dev\"  \"react-scripts start\"",
+    "run:electron": "concurrently \"BROWSER=none react-scripts start\"  \"wait-on http://localhost:3000 && electron public/electron.js\""
   },
   "eslintConfig": {
     "extends": "react-app"

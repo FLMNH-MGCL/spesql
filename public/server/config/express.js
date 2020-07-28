@@ -16,14 +16,14 @@ module.exports.init = () => {
   app.use(bodyParser.json());
 
   //PROD UNCOMMENT
-  // app.use(express.static(path.join(__dirname, "../../../build")));
+  app.use(express.static(path.join(__dirname, "../../../build")));
 
   // console.log(__dirname);
 
-  // // Handle React routing, return all requests to React app
-  // app.get("/", function (req, res) {
-  //   res.sendFile(path.join(__dirname, "../../../build", "index.html"));
-  // });
+  // Handle React routing, return all requests to React app
+  app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "../../../build", "index.html"));
+  });
 
   return app;
 };

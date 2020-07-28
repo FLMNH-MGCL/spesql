@@ -50,8 +50,6 @@ function Login(props) {
       password: password,
     });
 
-    console.log(authData);
-
     if (authData.data.err) {
       if (
         authData.data.message &&
@@ -72,7 +70,6 @@ function Login(props) {
 
       setTimeout(() => {
         const { message, userData, authed } = authData.data;
-        console.log(message);
 
         props.setUserData(userData);
         props.setAuth(authed);
