@@ -8,7 +8,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1600,
     height: 980,
-    icon: __dirname + "../src/flmnhLogo.png",
+    icon: __dirname + "flmnhLogo.png",
   });
 
   mainWindow.loadURL(`http:localhost:5000`);
