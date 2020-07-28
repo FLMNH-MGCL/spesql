@@ -10,6 +10,14 @@
   outline: 0;
 }
 
+/* .ReactVirtualized__Table__rowColumn {
+  cursor: default;
+} */
+
+.ReactVirtualized__Table__row {
+  cursor: pointer;
+}
+
 .ReactVirtualized__Table__headerRow {
   border-top-left-radius: 0.28571429rem;
   border-top-right-radius: 0.28571429rem;
@@ -18,6 +26,8 @@
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
   /* border-bottom: 0.5px gray solid; */
+
+  cursor: pointer;
 }
 
 .header-cell {

@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import {
-  Table,
-  Column,
-  AutoSizer,
-  defaultTableRowRenderer,
-} from "react-virtualized";
+import { Table, Column, AutoSizer } from "react-virtualized";
 import useWindowDimensions from "../utils/useWindowDimensions";
 import "react-virtualized/styles.css";
 import { headerToReadable } from "../Query/QueryConstants/constants";
 import "./VirtualizedList.css";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import { SortableContainer } from "react-sortable-hoc";
 import SearchFilter from "../Search/SearchFilter";
 import DBSearch from "../Search/DBSearch";
 import { Button, Icon } from "semantic-ui-react";
@@ -18,25 +13,48 @@ import CreateHelpModal from "../Help/CreateHelpModal";
 import _ from "lodash";
 
 const SortableTable = SortableContainer(Table);
-const SortableTableRowRenderer = SortableElement(defaultTableRowRenderer);
 
 export default function VirtualizedList({ props, runQuery, notify }) {
   const { width } = useWindowDimensions();
-  const [selected, select] = useState(props.selectedSpecimen);
+  const [selected, select] = useState(undefined);
+  const [selectedElement, selectElement] = useState(undefined);
   const [sorting, setSorting] = useState(undefined);
 
   function updateLoading() {
     props.updateLoadingStatus(false);
   }
 
-  function handleRowClick(rowIndex) {
-    const newTarget = props.data[rowIndex];
-    if (!selected || selected.id !== newTarget.id) {
+  function handleRowClick(data) {
+    const { event, index } = data;
+    let element = event.target;
+
+    if (element.className === "ReactVirtualized__Table__rowColumn") {
+      element = element.parentNode;
+    }
+    // console.log(element);
+    const newTarget = props.data[index];
+
+    if (!selected && !selectedElement) {
+      element.classList.toggle("active-row");
+      selectElement(element);
+      select(newTarget);
+      props.updateSelectedSpecimen(newTarget);
+    } else if (selected && selectedElement && selected.id !== newTarget.id) {
+      // untoggle current active && toggle newly selected
+      selectedElement.classList.toggle("active-row");
+      element.classList.toggle("active-row");
+      selectElement(element);
       select(newTarget);
       props.updateSelectedSpecimen(newTarget);
     } else if (selected && selected.id === newTarget.id) {
       select(undefined);
+      element.classList.toggle("active-row");
+      selectElement(undefined);
       props.updateSelectedSpecimen(undefined);
+    } else {
+      // force reset
+      select(undefined);
+      selectElement(undefined);
     }
   }
 
@@ -61,22 +79,6 @@ export default function VirtualizedList({ props, runQuery, notify }) {
         direction: "asc",
       });
     }
-  }
-
-  function rowRenderer(rowProps) {
-    const activeClass =
-      selected && selected.id === rowProps.rowData.id ? " active-row" : "";
-    rowProps = {
-      ...rowProps,
-      className: rowProps.className + activeClass,
-    };
-
-    return (
-      <SortableTableRowRenderer
-        {...rowProps}
-        onRowClick={() => handleRowClick(rowProps.index)}
-      />
-    );
   }
 
   function renderHeader({ dataKey, sortBy, sortDirection }) {
@@ -155,7 +157,8 @@ export default function VirtualizedList({ props, runQuery, notify }) {
               rowHeight={40}
               rowCount={display.length}
               rowGetter={({ index }) => display[index]}
-              rowRenderer={rowRenderer}
+              // rowRenderer={rowRenderer}
+              onRowClick={handleRowClick}
               onRowsRendered={updateLoading}
               onHeaderClick={handleHeaderClick}
             >
