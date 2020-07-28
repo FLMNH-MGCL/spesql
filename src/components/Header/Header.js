@@ -62,7 +62,7 @@ export default class Header extends Component {
         size={this.state.mobileView ? "mini" : "small"}
         style={{ margin: "1rem" }}
       >
-        <Menu.Item
+        {/* <Menu.Item
           as={Link}
           name="home"
           active={"home" === this.props.current_view}
@@ -75,13 +75,9 @@ export default class Header extends Component {
           active={"view" === this.props.current_view}
           onClick={this.handleItemClick}
           to="/about"
-        />
+        /> */}
 
-        <Menu.Menu position="right">
-          {this.state.mobileView ? null : (
-            <Menu.Item style={{ width: "15rem" }}></Menu.Item>
-          )}
-
+        <Menu.Menu position="left">
           <Menu.Item>
             <QueryMenu
               runQuery={this.props.runQuery.bind(this)}
@@ -133,6 +129,8 @@ export default class Header extends Component {
               }
             />
           </Menu.Item>
+        </Menu.Menu>
+        <Menu.Menu position="right">
           <Menu.Item>
             <Dropdown
               // text={<p style={{ fontWeight: "500" }}>{this.state.user}</p>}

@@ -777,6 +777,19 @@ export default class CreateHelpModal extends React.Component {
           >
             <Modal.Header>Specimen Table Help</Modal.Header>
             <Modal.Content scrolling>
+              <h3 style={{ display: "block" }}>General Help:</h3>
+              <p>
+                See the{" "}
+                <a
+                  href="https://github.com/FLMNH-MGCL/spesql/tree/master/docs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  documentation
+                </a>{" "}
+                on GitHub for more generic, application overview information /
+                help.
+              </p>
               <h3 style={{ display: "block" }}>Common Questions:</h3>
               <Accordion styled>
                 <Accordion.Title

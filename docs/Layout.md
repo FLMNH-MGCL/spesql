@@ -12,15 +12,40 @@ There are 3 main parts of SpeSQL:
 
 \*'d items are subject to user privilege, and may not appear if you do not have access
 
+```
+/*-------------------------------------------------------------------------------------------------------------*/
+|                                                   HEADER                                                      |
+/*-------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------*/   /*----------------------------------*/
+|                            TABLE HEADER                              |   |                                    |
+/*--------------------------------------------------------------------*/   |           Specimen View            |
+|                             TABLE BODY                               |   |                                    |
+|                                                                      |   |                                    |
+|                                                                      |   |                                    |
+|                                                                      |   |                                    |
+|                                                                      |   |                                    |
+|                                                                      |   |                                    |
+|                                                                      |   |                                    |
+|                                                                      |   |                                    |
+|                                                                      |   |                                    |
+|                                                                      |   |                                    |
+|                                                                      |   |                                    |
+/*--------------------------------------------------------------------*/   |                                    |
+|                             TABLE FOOTER                             |   |                                    |
+|                                                                      |   |                                    |
+/*--------------------------------------------------------------------*/   /*----------------------------------*/
+```
+
 ### Header
 
 The header contains the triggers for interacting with the various query functionalities. Dropdown buttins will open a menu for query type selection. On the selection of one of these options, a corresponding modal will pop up. Each modal is tailored to whatever the query structure is, and the embedded form is filled out to build the target query. The header looks as follows:
 
 ```
 /*------------------------------------------------------------------------------------------------------------*/
-|                                                            /*-----*/   /*------*/   /*--------*/             |
-|                                                            | Query |   | Insert |   | Download |   username  |
-|                                                            /*-----*/   /*------*/   /*--------*/             |
+|  /*-----*/   /*------*/   /*--------*/                                                                       |
+|  | Query |   | Insert |   | Download |                                                             username  |
+|  /*-----*/   /*------*/   /*--------*/                                                                       |
 /*------------------------------------------------------------------------------------------------------------*/
 ```
 

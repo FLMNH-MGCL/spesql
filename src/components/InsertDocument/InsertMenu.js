@@ -108,7 +108,7 @@ export default function InsertMenu(props) {
         className="hideIcon"
         // open={open}
         trigger={
-          <Button icon labelPosition="right">
+          <Button icon labelPosition="left">
             Insert <Icon name="angle down" />
           </Button>
         }

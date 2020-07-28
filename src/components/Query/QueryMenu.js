@@ -83,7 +83,7 @@ export default function QueryMenu(props) {
       <Dropdown
         className="hideIcon"
         trigger={
-          <Button icon labelPosition="right">
+          <Button icon labelPosition="left">
             Query <Icon name="angle down" />
           </Button>
         }
