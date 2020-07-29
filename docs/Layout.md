@@ -114,3 +114,29 @@ The table footer has two rows: the bottom row contains a set of actions performa
 ```
 
 ### Specimen View
+
+The specimen view populates with data on the selection of a specimen in the collection table. The specimen view will display all fields in a list format, even if not queried for (fields empty will show up without a value). At the bottom of the list, there will be an *update button and a *delete button. The update button here will launch a modal for running an update query that affects the currently selected specimen only. Delete will delete the specimen from the database. The basic structure is as follows:
+
+```
+ /*----------------------------------*/
+ |                                    |
+ |           Specimen View            |
+ |                                    |
+ |                                    |
+ |                                    |
+ |                                    |
+ |                                    |
+ |                                    |
+ |                                    |
+ |                                    |
+ |                                    |
+ |                                    |
+ |                                    |
+ |                                    |
+ |                                    |
+ |------------------------------------|
+ |    /*------*/   /*-------*/        |
+ |    | Update |   | Delete  |        |
+ |    /*------*/   /*-------*/        |
+ /*----------------------------------*/
+```
