@@ -1,6 +1,6 @@
 # Server Routing
 
-This will overview the routes utilized for client -> server interactions
+This will overview the routes utilized for client -> server interactions. This document is subject to change, and this blurb will be removed when I have reached a desired amount of consistency. This was a learning experience for me, and there can definitely be improvements in consistency when it comes to how response objects look. For example, you'll see some responses with `err` vs `error` or having `data` contain either error messages or success messages. I will be converting all of these over to a new standard while writing the documentation.
 
 ### Major Routes
 
