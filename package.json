@@ -7,8 +7,8 @@
   },
   "build": {
     "appId": "spesql",
-    "win": {
-      "icon": "build/flmnhLogo.png"
+    "directories": {
+      "buildResources": "public/icon"
     }
   },
   "proxy": "http://localhost:5000",

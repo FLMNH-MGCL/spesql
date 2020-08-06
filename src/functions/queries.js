@@ -4,23 +4,17 @@ export async function runSelectQuery(query) {
   //sessionStorage.setItem('current_query', query)
 
   let data = { command: query };
-  const ret = await axios.post("/api/fetch/", data).then((response) => {
-    const data = response.data;
-    return data;
-  });
+  const res = await axios.post("/api/select/", data);
 
-  return ret;
+  return res.data;
 }
 
 export async function runCountQuery(query) {
   let data = { command: query };
 
-  const ret = await axios.post("/api/select-count/", data).then((response) => {
-    const countData = response.data;
-    return countData;
-  });
+  const res = await axios.post("/api/select-count/", data);
 
-  return ret;
+  return res.data;
 }
 
 export async function runUpdateQuery(query) {

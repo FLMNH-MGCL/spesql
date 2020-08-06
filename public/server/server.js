@@ -26,7 +26,7 @@ async function main() {
   });
 
   require("./routes/list-tables.routes")(connection, app);
-  require("./routes/fetch.routes")(connection, app);
+  require("./routes/select.routes")(connection, app);
   require("./routes/update.routes")(connection, app);
   require("./routes/select-count.routes")(connection, app);
   require("./routes/insert.routes")(connection, app);

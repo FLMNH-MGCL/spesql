@@ -69,7 +69,7 @@ function Login(props) {
       });
 
       setTimeout(() => {
-        const { message, userData, authed } = authData.data;
+        const { userData, authed } = authData.data;
 
         props.setUserData(userData);
         props.setAuth(authed);

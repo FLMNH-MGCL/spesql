@@ -144,8 +144,8 @@ export default function VirtualizedList({ props, runQuery, notify }) {
     : list;
 
   return (
-    <div>
-      <div style={{ height: "80vh" }}>
+    <div style={{ height: "85vh" }}>
+      <div style={{ height: "89%" }}>
         <AutoSizer>
           {({ height, width }) => (
             <SortableTable
@@ -167,72 +167,75 @@ export default function VirtualizedList({ props, runQuery, notify }) {
           )}
         </AutoSizer>
       </div>
+      <div style={{ height: "11%" }}>
+        <div className="query-curr">
+          <h4>Current Query:</h4>
+          <p>{props.current_query}</p>
+        </div>
 
-      <div className="query-curr">
-        <h4>Current Query:</h4>
-        <p>{props.current_query}</p>
-      </div>
-
-      <div>
-        <div className="query-info">
-          <div className="info-actions">
-            <SearchFilter
-              filterCategory={props.filterCategory}
-              updateFilteredCategory={props.updateFilteredCategory}
-              disabled={props.data.length === 0}
-            />
-            <DBSearch
-              filteredText={props.filteredText}
-              updateFilteredText={props.updateFilteredText}
-              disabled={props.data.length === 0}
-            />
-            <Button
-              negative
-              onClick={() => {
-                props.clearQuery();
-              }}
-              disabled={props.current_query === "" ? true : false}
-              style={{ marginLeft: ".2rem" }}
-            >
-              Clear Query
-            </Button>
-            <Button
-              icon
-              onClick={() => {
-                // console.log('refreshed!')
-                props.clearQuery();
-                let command = props.current_query;
-                props.updateRefreshStatus(true);
-                props.updateLoadingStatus(true);
-                runQuery(command);
-              }}
-              disabled={props.current_query === "" ? true : false}
-            >
-              <Icon name="refresh" />
-            </Button>
-            <CreateErrorLogModal
-              type="Global Errors"
-              errors={props.errorMessages.globalError}
-              updateError={props.updateGlobalErrorMessage}
-              inline
-            />
-          </div>
-          <div className="query-infosheet">
-            <div className="query-text">
-              <h4>Query Size:</h4>
-              <p>{props.data.length}</p>
+        <div>
+          <div className="query-info">
+            <div className="info-actions">
+              <SearchFilter
+                filterCategory={props.filterCategory}
+                updateFilteredCategory={props.updateFilteredCategory}
+                disabled={props.data.length === 0}
+              />
+              <DBSearch
+                filteredText={props.filteredText}
+                updateFilteredText={props.updateFilteredText}
+                disabled={props.data.length === 0}
+              />
+              <Button
+                negative
+                onClick={() => {
+                  props.clearQuery();
+                }}
+                disabled={props.current_query === "" ? true : false}
+                style={{ marginLeft: ".2rem" }}
+              >
+                Clear Query
+              </Button>
+              <Button
+                icon
+                onClick={() => {
+                  // console.log('refreshed!')
+                  props.clearQuery();
+                  let command = props.current_query;
+                  props.updateRefreshStatus(true);
+                  props.updateLoadingStatus(true);
+                  runQuery(command);
+                }}
+                disabled={props.current_query === "" ? true : false}
+              >
+                <Icon name="refresh" />
+              </Button>
+              <CreateErrorLogModal
+                type="Global Errors"
+                errors={props.errorMessages.globalError}
+                updateError={props.updateGlobalErrorMessage}
+                inline
+              />
             </div>
-            {props.filteredText !== "" && (
+            <div className="query-infosheet">
               <div className="query-text">
-                <h4>Filtered Size:</h4>
-                <p>
-                  {props.filteredText !== "" ? list.length : props.data.length}
-                </p>
+                <h4>Query Size:</h4>
+                <p>{props.data.length}</p>
               </div>
-            )}
+              {props.filteredText !== "" && (
+                <div className="query-text">
+                  <h4>Filtered Size:</h4>
+                  <p>
+                    {props.filteredText !== ""
+                      ? list.length
+                      : props.data.length}
+                  </p>
+                </div>
+              )}
 
-            <div style={{ paddingLeft: ".75rem" }}>
-              <CreateHelpModal queryType="LIST_HELP" />
+              <div style={{ paddingLeft: ".75rem" }}>
+                <CreateHelpModal queryType="LIST_HELP" />
+              </div>
             </div>
           </div>
         </div>

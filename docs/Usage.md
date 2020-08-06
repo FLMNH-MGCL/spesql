@@ -71,10 +71,20 @@ There is in-depth help provided in the help menu of the update query modal, so i
 
 #### Insert Query Paste / Drop Modal
 
+The CSV insertion option is split up into 2 main parts: table selection and data entry. You have two methods of entering the data, either pasting the CSV into the text area or dragging and dropping the file into the drop area underneath (you may also click this area to lauch a file selection window).
+
 ![Insert Paste Query](./assets/insert_modal.png)
+
+It is important to note that for both options of entering the data to be inserted, you must include the headers of the CSV file. This is to ensure that the correct data is being interpretted at the correct locations in the file.
 
 #### Insert Query Manual Entry Modal
 
-![Insert Paste Query](./assets/insert_manual_modal.png)
+The manual entry modal is a paginated insertion option that will guide you through entering every field in a single specimen manually.
+
+![Insert Manual Query](./assets/insert_manual_modal.png)
 
 ### Download Button Actions
+
+Clicking the download button when a select query has been loaded will launch a simple modal that will prompt whether or not you would like to download the loaded query as a csv file. Hitting download all will download the entire query, not just what is visible.
+
+![Download Options](./assets/download_modal.png)

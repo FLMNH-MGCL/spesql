@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Menu, Dropdown } from "semantic-ui-react";
 import InsertMenu from "../InsertDocument/InsertMenu";
-import { Link } from "react-router-dom";
 import DownloadDB from "../DownloadDB/DownloadDB";
 import QueryMenu from "../Query/QueryMenu";
 import Logout from "../Logout/Logout";

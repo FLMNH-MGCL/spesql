@@ -785,7 +785,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="recordNumber"
-                  placeholder="ADDME"
+                  placeholder="LK45"
                   name="recordNumber"
                   value={recordNumber}
                   error={this.checkBasicPreSubmit("recordNumber", recordNumber)}
