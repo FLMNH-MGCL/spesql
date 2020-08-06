@@ -1,6 +1,6 @@
 # Specimen Object Definition
 
-This will overview how a specimen is represented in the program based off the table definition in MySQL. This was created using <a href="https://dwc.tdwg.org/terms/">Darwin Core</a> principles as well as general FLMNH requirements. There are some fields which may not make immediate sense or logically match their respective datatypes on first glance, these are due to restrictions set on data entry. I.e. using VARCHAR over DATE for a date field.
+This will overview how a specimen is represented in the program based off the table definition in MySQL. This was created using <a href="https://dwc.tdwg.org/terms/">Darwin Core</a> principles as well as general FLMNH requirements. There are some fields which may not make immediate sense or logically match their respective datatypes on first glance, these are due to restrictions set on data entry. E.g. using VARCHAR over DATE for a date field.
 
 ```
 specimen = {
