@@ -6,26 +6,29 @@ This will overview the routes utilized for client -> server interactions. This d
 
 #### Login
 
-| Path                                 | `/api/login/`                                                   |
-| :----------------------------------- | :-------------------------------------------------------------- |
-| <b>Description</b>                   | Attempts to log user in                                         |
-| <b>Method </b>                       | ![Post Request](../assets/post.png)                             |
-| <b>Body Parameters</b>               |                                                                 |
-| `user`                               | Required: yes                                                   |
-|                                      | Type: string                                                    |
-|                                      | Description: The username of the user used in login             |
-| `password`                           | Required: yes                                                   |
-|                                      | Type: string                                                    |
-|                                      | Description: The plain-text password entered at login           |
-| <b>Response object</b>               |                                                                 |
-| `{ err, message, userData, authed }` | Type: JSON                                                      |
-|                                      | `err`: Success or failure of authentication attempt             |
-|                                      | `message`: Message to be used in notification system            |
-|                                      | `userData`: JSON object of user on successful login             |
-|                                      | `authed`: bool of auth state                                    |
-| `{ err, message }`                   | Type: JSON                                                      |
-|                                      | `err`: SQL error response                                       |
-|                                      | `message`: Human readable interpretation of err when applicable |
+| Path                   | `/api/login/`                                         |
+| :--------------------- | :---------------------------------------------------- |
+| <b>Description</b>     | Attempts to log user in                               |
+| <b>Method </b>         | ![Post Request](../assets/post.png)                   |
+| <b>Body Parameters</b> |                                                       |
+| `user`                 | Required: yes                                         |
+|                        | Type: string                                          |
+|                        | Description: The username of the user used in login   |
+| `password`             | Required: yes                                         |
+|                        | Type: string                                          |
+|                        | Description: The plain-text password entered at login |
+| <b>Response object</b> |                                                       |
+| `{ userData, authed }` | Type: JSON                                            |
+|                        | `userData`: JSON object of user on successful login   |
+|                        | `authed`: bool of auth state                          |
+| `{ error, authed }`    | Type: JSON                                            |
+|                        | `error`: Indication something went wrong              |
+|                        | `authed`: bool of auth state                          |
+| <b>Response Status</b> |                                                       |
+| `200`                  | Sucessful login                                       |
+| `400`                  | Bad Request: missing parameters or bad message format |
+| `401`                  | Unauthorized: failed login                            |
+| `503`                  | SQL Server Unavailable: likely a VPN issue            |
 
 #### MySQL Select Query
 

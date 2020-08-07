@@ -25,27 +25,27 @@ async function main() {
     }
   });
 
-  require("./routes/list-tables.routes")(connection, app);
-  require("./routes/select.routes")(connection, app);
-  require("./routes/update.routes")(connection, app);
-  require("./routes/select-count.routes")(connection, app);
-  require("./routes/insert.routes")(connection, app);
-  require("./routes/delete.routes")(connection, app);
-  require("./routes/login.routes")(connection, app);
-  require("./routes/fetch-users.routes")(connection, app);
-  require("./routes/generate-pass.routes")(app);
-  require("./routes/get-user.routes")(connection, app);
+  require("./routes/list-tables")(connection, app);
+  require("./routes/select")(connection, app);
+  require("./routes/update")(connection, app);
+  require("./routes/select-count")(connection, app);
+  require("./routes/insert")(connection, app);
+  require("./routes/delete")(connection, app);
+  require("./routes/login")(connection, app);
+  require("./routes/fetch-users")(connection, app);
+  require("./routes/generate-pass")(app);
+  require("./routes/get-user")(connection, app);
 
   // ADMIN ROUTES
-  require("./routes/create-user.routes")(connection, app);
-  require("./routes/update-user.routes")(connection, app);
-  require("./routes/create-table.routes")(connection, app);
-  require("./routes/delete-table.routes")(connection, app);
-  require("./routes/register-table.routes")(connection, app);
-  require("./routes/reregister-table.routes")(connection, app);
-  require("./routes/unregister-table.routes")(connection, app);
-  require("./routes/delete-user.routes")(connection, app);
-  require("./routes/list-tables-admin.routes")(connection, app);
+  require("./routes/create-user")(connection, app);
+  require("./routes/update-user")(connection, app);
+  require("./routes/create-table")(connection, app);
+  require("./routes/delete-table")(connection, app);
+  require("./routes/register-table")(connection, app);
+  require("./routes/reregister-table")(connection, app);
+  require("./routes/unregister-table")(connection, app);
+  require("./routes/delete-user")(connection, app);
+  require("./routes/list-tables-admin")(connection, app);
   require("./routes/alter-table-routes")(connection, app);
 
   app.listen(port, () => console.log(`Server now running on port ${port}!`));

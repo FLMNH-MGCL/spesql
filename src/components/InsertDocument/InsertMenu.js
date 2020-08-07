@@ -61,19 +61,24 @@ export default function InsertMenu(props) {
       return;
     }
 
-    const authData = await axios.post("/api/login/", {
-      user: user,
-      password: password,
-    });
+    const authData = await axios
+      .post("/api/login/", {
+        user: user,
+        password: password,
+      })
+      .catch((error) => {
+        // resStatus = error.response.status;
+        return null;
+      });
 
     // console.log(authData);
 
-    if (authData.data.err || authData.data.authed === false) {
+    if (!authData || authData.data.err || authData.data.authed === false) {
       // credentials did not match
-      props.notify({ type: "error", message: authData.data.err });
+      props.notify({ type: "error", message: "Authorization failed" });
     } else {
       // allow whatever command to proceed
-      props.notify({ type: "success", message: authData.data.message });
+      // props.notify({ type: "success", message: authData.data.message });
       callback();
     }
   }

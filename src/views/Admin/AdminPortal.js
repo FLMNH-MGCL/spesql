@@ -63,19 +63,23 @@ function AdminPortal(props) {
       return;
     }
 
-    const authData = await axios.post("/api/login/", {
-      user: user,
-      password: password,
-    });
+    const authData = await axios
+      .post("/api/login/", {
+        user: user,
+        password: password,
+      })
+      .catch((error) => {
+        return null;
+      });
 
     // console.log(authData);
 
-    if (authData.data.err || authData.data.authed === false) {
+    if (!authData || authData.data.err || authData.data.authed === false) {
       // credentials did not match
-      createNotification({ type: "error", message: authData.data.err });
+      createNotification({ type: "error", message: "Authorization failed" });
     } else {
       // allow whatever command to proceed
-      createNotification({ type: "success", message: authData.data.message });
+      // createNotification({ type: "success", message: authData.data.message });
       callback();
     }
   }

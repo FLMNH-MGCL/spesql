@@ -21,9 +21,9 @@ module.exports.init = () => {
   // console.log(__dirname);
 
   // Handle React routing, return all requests to React app
-  app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "../../../build", "index.html"));
-  });
+  // app.get("/", function (req, res) {
+  //   res.sendFile(path.join(__dirname, "../../../build", "index.html"));
+  // });
 
   return app;
 };

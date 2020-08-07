@@ -195,19 +195,23 @@ class UpdateDocument extends React.Component {
       return;
     }
 
-    const authData = await axios.post("/api/login/", {
-      user: user,
-      password: password,
-    });
+    const authData = await axios
+      .post("/api/login/", {
+        user: user,
+        password: password,
+      })
+      .catch((error) => {
+        return null;
+      });
 
     // console.log(authData);
 
-    if (authData.data.err || authData.data.authed === false) {
+    if (!authData || authData.data.err || authData.data.authed === false) {
       // credentials did not match
-      this.props.notify({ type: "error", message: authData.data.err });
+      this.props.notify({ type: "error", message: "Authorization failed" });
     } else {
       // allow whatever command to proceed
-      this.props.notify({ type: "success", message: authData.data.message });
+      // this.props.notify({ type: "success", message: authData.data.message });
       callback();
     }
   }

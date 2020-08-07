@@ -7,24 +7,29 @@ module.exports = function (connection, app) {
     const username = req.body.user;
     const plainPassword = req.body.password;
 
+    if (!username || !plainPassword) {
+      res.status(400);
+      res.json({
+        errror: "Missing fields",
+        authed: false,
+      });
+    }
+
     connection.query(
       `SELECT * FROM users WHERE username="${username}";`,
       (err, data) => {
         if (err) {
-          // do sm
-          console.log(err);
-          res.json({ err: err, message: "vpn likely cause" });
+          res.status(503);
+          res.json({ error: err, message: "vpn likely cause" });
         } else {
-          // compare
+          // no user data exists and therefore not a successful login attempt
           if (data.length < 1) {
-            // res.status(401);
+            res.status(401);
             res.json({
-              err: "Auth failed",
-              message: "Recieved no data",
+              error: "Auth failed",
               authed: false,
             });
           } else {
-            // console.log(data);
             const { username, password, privilege_level } = data[0];
             //console.log(password);
             bcrypt.compare(plainPassword, password).then((result) => {
@@ -35,14 +40,12 @@ module.exports = function (connection, app) {
                 };
                 res.status(200);
                 res.json({
-                  message: "Authorization sucessful.",
                   userData: userData,
                   authed: result,
                 });
               } else {
-                console.log("AUTH FAILED");
-                // res.status(401);
-                res.json({ err: "Authorization failed.", authed: result });
+                res.status(401);
+                res.json({ error: "Authorization failed.", authed: result });
               }
             });
           }

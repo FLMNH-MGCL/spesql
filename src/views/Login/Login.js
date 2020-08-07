@@ -45,22 +45,28 @@ function Login(props) {
   };
 
   const attemptLogin = async () => {
-    let authData = await axios.post("/api/login/", {
-      user: username,
-      password: password,
-    });
+    let resStatus = null;
+    let authData = await axios
+      .post("/api/login/", {
+        user: username,
+        password: password,
+      })
+      .catch((error) => {
+        resStatus = error.response.status;
+        return null;
+      });
 
-    if (authData.data.err) {
-      if (
-        authData.data.message &&
-        authData.data.message === "vpn likely cause"
-      ) {
+    if (!authData || resStatus === 401) {
+      createNotification({
+        type: "error",
+        message: "Authentication failed.",
+      });
+      return;
+    }
+
+    if (authData.data.error) {
+      if (resStatus === 503) {
         window.location.hash = "/fourohfour";
-      } else {
-        createNotification({
-          type: "error",
-          message: "Authentication failed.",
-        });
       }
     } else {
       createNotification({
