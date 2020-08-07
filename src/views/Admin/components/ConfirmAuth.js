@@ -6,6 +6,7 @@ export default function ({
   handleSubmit,
   buttonStyle,
   buttonLoading,
+  passCredentials,
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

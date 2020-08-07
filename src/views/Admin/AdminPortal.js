@@ -80,7 +80,7 @@ function AdminPortal(props) {
     } else {
       // allow whatever command to proceed
       // createNotification({ type: "success", message: authData.data.message });
-      callback();
+      callback({ username: user, pass: password });
     }
   }
 

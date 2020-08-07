@@ -177,12 +177,12 @@ class Home extends React.Component {
         // console.log(query);
         let updateData = await runUpdateQuery(query);
 
-        console.log(updateData);
+        // console.log(updateData);
 
         // failed
         if (!updateData.data.success) {
-          console.log("failed");
-          console.log(updateData.data);
+          // the client has controlled input, so I am only accounting for SQL errors here.
+          // The server however also handles invalid query type and updates with no conditions
           let updateError = [
             `SQL ERROR: Code: ${updateData.data.code}, Message: ${updateData.data.sqlMessage}`,
           ];

@@ -134,18 +134,50 @@ export default function EditUserModal({
     }
   };
 
-  async function deleteUser() {
-    const res = await axios.post("/api/admin/delete-user/", {
-      username: username,
-    });
+  async function deleteUser(adminData) {
+    let resStatus = 200;
+    const res = await axios
+      .post("/api/admin/delete-user/", {
+        username: username,
+        adminUser: adminData.username,
+        adminPass: adminData.pass,
+      })
+      .catch((error) => {
+        resStatus = error.response.status;
+        return null;
+      });
 
-    console.log(res);
-    if (!res) {
-      updateError([
-        "The server had no response. Please ensure you have an internet / vpn connection and restart the application.",
-      ]);
+    if (!res && resStatus === 503) {
+      // reroute to 404, detected bad internet or vpn
+      createNotification({
+        type: "error",
+        message: "Bad VPN/Internet connection detected",
+      });
       return;
     }
+
+    if (!res && resStatus === 400) {
+      // missing admin credentials
+      createNotification({
+        type: "error",
+        message: "Missing admin credentials",
+      });
+      return;
+    }
+
+    if (!res && resStatus === 401) {
+      // invalid admin creds
+      createNotification({ type: "error", message: "Authorization failed" });
+      return;
+    }
+    // if (!res) {
+    //   updateError([
+    //     "The server had no response. Please ensure you have an internet / vpn connection and restart the application.",
+    //   ]);
+    //   return;
+    // }
+
+    if (!res) return;
 
     if (res.data.err) {
       updateError([res.data.err.sqlMessage]);
@@ -224,7 +256,7 @@ export default function EditUserModal({
     }
   };
 
-  const updateUser = async (e) => {
+  const updateUser = async (adminData) => {
     // get user and get changes
     // const user = selected;
     const changes = getChanges();
@@ -261,7 +293,43 @@ export default function EditUserModal({
     // console.log("cant do this yet :)");
 
     // update user
-    const res = await axios.post("/api/admin/update-user", changes);
+    let resStatus = 200;
+    const res = await axios
+      .post("/api/admin/update-user", {
+        id: changes.id,
+        newUser: changes.newUser,
+        adminUser: adminData.username,
+        adminPass: adminData.pass,
+      })
+      .catch((error) => {
+        resStatus = error.response.status;
+        return null;
+      });
+
+    if (!res && resStatus === 503) {
+      // reroute to 404, detected bad internet or vpn
+      createNotification({
+        type: "error",
+        message: "Bad VPN/Internet connection detected",
+      });
+      return;
+    }
+
+    if (!res && resStatus === 400) {
+      // missing admin credentials
+      createNotification({
+        type: "error",
+        message: "Missing admin credentials",
+      });
+      return;
+    }
+
+    if (!res && resStatus === 401) {
+      // invalid admin creds
+      createNotification({ type: "error", message: "Authorization failed" });
+      return;
+    }
+
     // notify
     if (res.err) {
       console.log(res.err);

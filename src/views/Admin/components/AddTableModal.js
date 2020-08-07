@@ -59,7 +59,7 @@ export default function AddTableModal({
     }
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(adminData) {
     if (hasError) {
       createNotification({
         type: "error",
@@ -77,11 +77,41 @@ export default function AddTableModal({
     };
 
     // axios to create table
-    const creationResponse = await axios.post("/api/admin/create-table/", {
-      tableName: name,
-    });
+    let resStatus = 200;
+    const creationResponse = await axios
+      .post("/api/admin/create-table/", {
+        tableName: name,
+        adminUser: adminData.username,
+        adminPass: adminData.pass,
+      })
+      .catch((error) => {
+        resStatus = error.response.status;
+        return null;
+      });
 
-    // console.log(creationResponse);
+    if (!creationResponse && resStatus === 503) {
+      // reroute to 404, detected bad internet or vpn
+      createNotification({
+        type: "error",
+        message: "Bad VPN/Internet connection detected",
+      });
+      return;
+    }
+
+    if (!creationResponse && resStatus === 400) {
+      // missing admin credentials
+      createNotification({
+        type: "error",
+        message: "Missing admin credentials",
+      });
+      return;
+    }
+
+    if (!creationResponse && resStatus === 401) {
+      // invalid admin creds
+      createNotification({ type: "error", message: "Authorization failed" });
+      return;
+    }
 
     if (creationResponse.error) {
       // short curcuit function

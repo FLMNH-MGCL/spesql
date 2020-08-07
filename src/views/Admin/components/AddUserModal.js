@@ -149,7 +149,7 @@ export default function AddUserModal({
     return errors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (adminData) => {
     const errors = finalCheck();
 
     if (errors.length > 0) {
@@ -163,12 +163,16 @@ export default function AddUserModal({
       return;
     }
 
-    const user = {
+    const creationProps = {
       name: firstName.concat(` ${lastName}`),
       user: username,
       password: password,
       privilege_level: accessLevel,
+      adminUser: adminData.username,
+      adminPass: adminData.pass,
     };
+
+    // console.log(creationProps);
 
     if (JSON.stringify(users).includes(username)) {
       createNotification({
@@ -179,10 +183,37 @@ export default function AddUserModal({
       return;
     }
 
-    // console.log(JSON.stringify(user));
-    const res = await axios.post("/api/admin/create-user/", user);
+    let resStatus = 200;
+    const res = await axios
+      .post("/api/admin/create-user/", creationProps)
+      .catch((error) => {
+        resStatus = error.response.status;
+        return null;
+      });
 
-    // console.log(res);
+    if (!res && resStatus === 503) {
+      // reroute to 404, detected bad internet or vpn
+      createNotification({
+        type: "error",
+        message: "Bad VPN/Internet connection detected",
+      });
+      return;
+    }
+
+    if (!res && resStatus === 400) {
+      // missing admin credentials
+      createNotification({
+        type: "error",
+        message: "Missing admin credentials",
+      });
+      return;
+    }
+
+    if (!res && resStatus === 401) {
+      // invalid admin creds
+      createNotification({ type: "error", message: "Authorization failed" });
+      return;
+    }
 
     if (res.data.data) {
       createNotification({ type: "success", message: res.data.data });
@@ -288,7 +319,11 @@ export default function AddUserModal({
           <Icon name="question" />
         </Button>
         <Button onClick={() => setOpen(false)}>Cancel</Button>
-        <ConfirmAuth handleSubmit={handleSubmit} checkAuth={checkAuth} />
+        <ConfirmAuth
+          handleSubmit={handleSubmit}
+          checkAuth={checkAuth}
+          passCredentials={true}
+        />
       </Modal.Actions>
     </Modal>
   );
