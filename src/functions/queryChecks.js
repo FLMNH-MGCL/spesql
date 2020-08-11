@@ -11,6 +11,7 @@ import {
   geodeticDatumControl,
   yesOrNo,
 } from "../components/Query/QueryConstants/constants";
+import Papa from "papaparse";
 
 const correctHeaders = [
   "catalogNumber", //
@@ -134,6 +135,50 @@ export function checkHeaders(headers) {
   console.log(errors);
 
   return errors;
+}
+
+export function isValidCSV(csv) {
+  // return object with valid param
+  let obj = Papa.parse(csv);
+
+  // console.log(obj)
+  let data = obj.data;
+
+  let valid = true;
+  let errors = [];
+
+  if (data === undefined || data.length === 0) {
+    valid = false;
+    errors.push("Invalid CSV Formatting. (Detected empty submission)");
+  } else if (data.length <= 1) {
+    valid = false;
+    errors.push(
+      "Invalid CSV Formatting. (Are you missing the headers / data?)"
+    );
+  } else {
+    // check headers
+    let headerErrors = checkHeaders(data[0]);
+    if (headerErrors.length !== 0) {
+      errors = errors.concat(headerErrors);
+      valid = false;
+    }
+  }
+
+  // if headers correct, check each row and only add valid rows to insertion query
+  let ret = {};
+  if (valid) {
+    ret = {
+      valid: valid,
+      data: data,
+    };
+  } else {
+    ret = {
+      valid: valid,
+      data: errors,
+    };
+  }
+
+  return ret;
 }
 
 export function parseRawMonth(month) {

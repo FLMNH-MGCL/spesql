@@ -2,6 +2,8 @@
 
 This will overview the routes utilized for client -> server interactions. This document is subject to change, and this blurb will be removed when I have reached a desired amount of consistency. This was a learning experience for me, and there can definitely be improvements in consistency when it comes to how response objects look. For example, you'll see some responses with `err` vs `error` or having `data` contain either error messages or success messages, and responses not using status codes. I will be converting all of these over to a new standard while writing the documentation.
 
+See <a href="https://github.com/FLMNH-MGCL/spesql/blob/main/docs/development/SpecimenDefinition.md"> definition</a> of what a specimen object looks like.
+
 ### Major Routes
 
 #### Login
@@ -32,20 +34,25 @@ This will overview the routes utilized for client -> server interactions. This d
 
 #### MySQL Select Query
 
-| Path                   | `/api/select/`                                                                                                                                          |
-| :--------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <b>Description</b>     | Run select query from body                                                                                                                              |
-| <b>Method </b>         | ![Post Request](../assets/post.png)                                                                                                                     |
-| <b>Body Parameters</b> |                                                                                                                                                         |
-| `command`              | Required: yes                                                                                                                                           |
-|                        | Type: string                                                                                                                                            |
-|                        | Description: The select query to run                                                                                                                    |
-|                        | Note: Must be select query (this is enforced)                                                                                                           |
-| <b>Response object</b> |                                                                                                                                                         |
-| `{ data }`             | Type: JSON                                                                                                                                              |
-|                        | `data`: A list of specimen objects (<a href="https://github.com/FLMNH-MGCL/spesql/blob/main/docs/development/SpecimenDefinition.md">see definition</a>) |
-| `{ error }`            | Type: JSON                                                                                                                                              |
-|                        | `error`: SQL error response or string describing usage error                                                                                            |
+| Path                   | `/api/select/`                                               |
+| :--------------------- | :----------------------------------------------------------- |
+| <b>Description</b>     | Run select query from body                                   |
+| <b>Method </b>         | ![Post Request](../assets/post.png)                          |
+| <b>Body Parameters</b> |                                                              |
+| `command`              | Required: yes                                                |
+|                        | Type: string                                                 |
+|                        | Description: The select query to run                         |
+|                        | Note: Must be select query (this is enforced)                |
+| <b>Response object</b> |                                                              |
+| `{ data }`             | Type: JSON                                                   |
+|                        | `data`: A list of specimen objects                           |
+| `{ error }`            | Type: JSON                                                   |
+|                        | `error`: SQL error response or string describing usage error |
+| <b>Response Status</b> |                                                              |
+| `200`                  | Sucessful return of query data                               |
+| `400`                  | Bad Request: Invalid query                                   |
+| `401`                  | Unauthorized: failed authorization                           |
+| `503`                  | SQL Server Error: likely a VPN issue                         |
 
 #### MySQL Count Query
 
@@ -63,6 +70,11 @@ This will overview the routes utilized for client -> server interactions. This d
 |                        | Description `data`: An integer for the size of the query                 |
 | `{ error }`            | Type: JSON                                                               |
 |                        | Description `error`: SQL error response or string describing usage error |
+| <b>Response Status</b> |                                                                          |
+| `200`                  | Sucessful return of query data                                           |
+| `400`                  | Bad Request: Invalid query                                               |
+| `401`                  | Unauthorized: failed authorization                                       |
+| `503`                  | SQL Server Error: likely a VPN issue                                     |
 
 #### MySQL Insert Query
 
@@ -93,13 +105,18 @@ This will overview the routes utilized for client -> server interactions. This d
 |                        | Type: JSON object                                                               |
 |                        | Description: Contains the string representaiton of the update command           |
 |                        | Note: The command must be an update and must have conditions (this is enforced) |
+| `user`                 | Required: yes                                                                   |
+|                        | Type: string                                                                    |
+|                        | Description: The username of user attempting update                             |
+| `password`             | Required: yes                                                                   |
+|                        | Type: string                                                                    |
+|                        | Description: The password of user attempting update                             |
 | <b>Response object</b> |                                                                                 |
 | `{ success, data }`    | Type: JSON                                                                      |
 |                        | `sucess`: bool for if insertion was successful                                  |
 |                        | `data`: SQL error on failure, affected row data on success                      |
-| `{ success, error }`   | Type: JSON                                                                      |
-|                        | `sucess`: bool for if insertion was successful                                  |
-|                        | `error`: Human readable misuse error                                            |
+| `{ error }`            | Type: JSON or string                                                            |
+|                        | `error`: SQL error object or human readable misuse error                        |
 
 #### MySQL Delete Query
 
@@ -112,13 +129,18 @@ This will overview the routes utilized for client -> server interactions. This d
 |                        | Type: JSON object                                                              |
 |                        | Description: Contains the string representaiton of the delete command          |
 |                        | Note: The command must be a delete and must have conditions (this is enforced) |
+| `user`                 | Required: yes                                                                  |
+|                        | Type: string                                                                   |
+|                        | Description: The username of user attempting delete                            |
+| `password`             | Required: yes                                                                  |
+|                        | Type: string                                                                   |
+|                        | Description: The password of user attempting delete                            |
 | <b>Response object</b> |                                                                                |
 | `{ success, data }`    | Type: JSON                                                                     |
 |                        | `sucess`: bool for if deletion was successful                                  |
 |                        | `data`: SQL error on failure, affected row data on success                     |
-| `{ success, error }`   | Type: JSON                                                                     |
-|                        | `sucess`: bool for if deletion was successful                                  |
-|                        | `error`: Human readable misuse error                                           |
+| `{ error }`            | Type: JSON or string                                                           |
+|                        | `error`: SQL error object or human readable misuse error                       |
 
 ### Admin Operations
 

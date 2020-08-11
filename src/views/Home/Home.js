@@ -1,16 +1,9 @@
 import React from "react";
-import Papa from "papaparse";
 import SpecimenView from "../../components/SpecimenView/SpecimenView";
 import Header from "../../components/Header/Header";
 import { Grid, Loader, Segment } from "semantic-ui-react";
 import { getQueryHeaders } from "../../functions/helpers";
-import { checkHeaders } from "../../functions/queryChecks";
-import {
-  runSelectQuery,
-  runCountQuery,
-  runUpdateQuery,
-  runDeleteQuery,
-} from "../../functions/queries";
+import { isValidCSV } from "../../functions/queryChecks";
 import { mapStateToProps, mapDispatchToProps } from "../../redux/mapFunctions";
 import { connect } from "react-redux";
 import "react-notifications/lib/notifications.css";
@@ -21,64 +14,199 @@ import {
 import "./Home.css";
 import { Redirect } from "react-router-dom";
 import VirtualizedList from "../../components/CollectionList/VirtualizedList";
+import axios from "axios";
 
 class Home extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
   logout() {
     this.props.setUserData(null);
     this.props.setAuth(false);
   }
 
-  isValidCSV(csv) {
-    // return object with valid param
-    let obj = Papa.parse(csv);
+  async runSelectQuery(query) {
+    if (!query || query === "") return;
 
-    // console.log(obj)
-    let data = obj.data;
+    this.props.clearQuery();
+    this.props.updateLoadingStatus(true);
+    this.props.updateRefreshStatus(true);
 
-    let valid = true;
-    let errors = [];
+    const ret = await axios
+      .post("/api/select", { command: query })
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        return { error: error.response };
+      });
 
-    if (data === undefined || data.length === 0) {
-      valid = false;
-      errors.push("Invalid CSV Formatting. (Detected empty submission)");
-    } else if (data.length <= 1) {
-      valid = false;
-      errors.push(
-        "Invalid CSV Formatting. (Are you missing the headers / data?)"
-      );
-    } else {
-      // check headers
-      let headerErrors = checkHeaders(data[0]);
-      console.log(headerErrors);
-      if (headerErrors.length !== 0) {
-        errors = errors.concat(headerErrors);
-        console.log(errors);
-        valid = false;
+    // console.log(ret);
+
+    if (ret.specimen && ret.specimen.length < 1) {
+      this.createNotification({
+        type: "warning",
+        message: "Query yielded no data",
+      });
+      this.props.updateLoadingStatus(false);
+      this.props.updateQuery(query);
+    } else if (ret.specimen) {
+      this.createNotification({
+        type: "success",
+        message: "Query loaded",
+      });
+      this.props.updateQueryData(ret.specimen);
+      let headers = getQueryHeaders(ret.specimen[0]);
+      this.props.updateHeaders(headers);
+      this.props.updateQuery(query);
+    }
+    // errors occurred
+    else {
+      this.createNotification({
+        type: "error",
+        message: "Uh oh, please check error log.",
+      });
+      const error = ret.error;
+      let errorMessage = "";
+
+      if (error.status === 400) {
+        errorMessage = error.data;
+      } else if (error.status === 503) {
+        errorMessage = `SQL ERROR: Code: ${error.code}, Message: ${error.sqlMessage}`;
       }
-    }
 
-    // if headers correct, check each row and only add valid rows to insertion query
-    let ret = {};
-    if (valid) {
-      ret = {
-        valid: valid,
-        data: data,
-      };
-    } else {
-      ret = {
-        valid: valid,
-        data: errors,
-      };
+      this.props.updateSelectErrorMessage([errorMessage]);
+      this.props.updateLoadingStatus(false);
+      this.props.updateRefreshStatus(false);
     }
-
-    return ret;
   }
 
-  async runQuery(query, type = "batch") {
+  async runCountQuery(query) {
+    if (!query || query === "") return;
+
+    const ret = await axios
+      .post("/api/select-count", { command: query })
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        return { error: error.response };
+      });
+
+    // console.log(ret);
+
+    if (ret.data) {
+      const countData = ret.data[Object.keys(ret.data)[0]];
+      this.props.updateCountQueryCount(Object.values(countData)[0]); // isolate the number
+    }
+    // errors occurred
+    else {
+      this.createNotification({
+        type: "error",
+        message: "Uh oh, please check error log.",
+      });
+      const error = ret.error;
+      let errorMessage = "";
+
+      if (error.status === 400) {
+        errorMessage = error.data;
+      } else if (error.status === 503) {
+        errorMessage = `SQL ERROR: Code: ${error.code}, Message: ${error.sqlMessage}`;
+      }
+
+      this.props.updateCountErrorMessage([errorMessage]);
+    }
+  }
+
+  async runDeleteQuery(query, userData) {
+    if (!query || query === "") return;
+
+    const ret = await axios
+      .post(`/api/delete/`, {
+        command: query,
+        user: userData.user,
+        password: userData.password,
+      })
+      .then((response) => {
+        const data = response;
+        return data;
+      })
+      .catch((error) => {
+        return { error: error.response };
+      });
+
+    // console.log(ret);
+
+    if (ret.data) {
+      this.createNotification({
+        type: "success",
+        message: "Successfully deleted entry",
+      });
+      this.runSelectQuery(this.props.current_query);
+    } else {
+      this.createNotification({
+        type: "error",
+        message: "Uh oh, please check error log.",
+      });
+
+      const error = ret.error;
+      let errorMessage = "";
+
+      if (error.status === 400) {
+        errorMessage = `Delete error: ${error.data}`;
+      } else if (error.status === 503) {
+        errorMessage = `SQL ERROR: Code: ${error.code}, Message: ${error.sqlMessage}`;
+      }
+
+      this.props.updateGlobalErrorMessage([errorMessage]);
+    }
+  }
+
+  // TODO: test me more please
+  async runUpdateQuery(query, userData, type = "batch") {
+    if (!query || query === "") return;
+
+    const ret = await axios
+      .post("/api/update/", {
+        command: query,
+        user: userData.user,
+        password: userData.password,
+      })
+      .then((response) => {
+        const data = response;
+        return data;
+      })
+      .catch((error) => {
+        return { error: error.response };
+      });
+
+    if (ret.data && ret.data.success) {
+      this.createNotification({
+        type: "success",
+        message: "Successfully ran update",
+      });
+    } else {
+      this.createNotification({
+        type: "error",
+        message: "Uh oh, please check error log.",
+      });
+
+      const error = ret.error;
+      let errorMessage = "";
+
+      if (error.status === 400) {
+        errorMessage = `Delete error: ${error.data}`;
+      } else if (error.status === 503) {
+        errorMessage = `SQL ERROR: Code: ${error.code}, Message: ${error.sqlMessage}`;
+      }
+
+      if (type === "single") {
+        this.props.updateSingleUpdateErrorMessage([errorMessage]);
+      } else {
+        this.props.updateUpdateErrorMessage([errorMessage]);
+      }
+    }
+  }
+
+  // TODO: remove all queries here and replace calls to this function with the new functions
+  async runQuery(query, type = "batch", body = undefined) {
     if (!query || query === "") {
       return;
     }
@@ -93,117 +221,21 @@ class Home extends React.Component {
 
     switch (queryType.toUpperCase()) {
       case "SELECT":
-        this.props.clearQuery();
-        this.props.updateLoadingStatus(true);
-        this.props.updateRefreshStatus(true);
-
-        let data = await runSelectQuery(query);
-
-        if (data.error) {
-          this.createNotification({
-            type: "error",
-            message: "Uh oh, please check error log.",
-          });
-          let errorMessage = `SQL ERROR: Code: ${data.error.code}, Message: ${data.error.sqlMessage}`;
-          console.log(errorMessage);
-          this.props.updateSelectErrorMessage([errorMessage]);
-          this.props.updateLoadingStatus(false);
-          this.props.updateRefreshStatus(false);
-        } else if (data.specimen.length < 1) {
-          this.createNotification({
-            type: "warning",
-            message: "Query yielded no data",
-          });
-          this.props.updateLoadingStatus(false);
-          this.props.updateQuery(query);
-        } else {
-          this.createNotification({
-            type: "success",
-            message: "Query loaded",
-          });
-          this.props.updateQueryData(data.specimen);
-          let headers = getQueryHeaders(data.specimen[0]);
-          this.props.updateHeaders(headers);
-          this.props.updateQuery(query);
-        }
+        let data = await this.runSelectQuery(query);
         break;
 
       case "COUNT":
         // let data = await runSelectQuery(query)
-        let countData = await runCountQuery(query);
-
-        if (!countData.error) {
-          this.createNotification({
-            type: "success",
-            message: "COUNT query loaded",
-          });
-          countData = countData.data[Object.keys(countData.data)[0]];
-          this.props.updateCountQueryCount(Object.values(countData)[0]); // isolate the number
-          console.log(countData);
-        } else {
-          let error = [
-            `SQL ERROR: Code: ${countData.error.code}, Message: ${countData.error.sqlMessage}`,
-          ];
-          this.props.updateCountErrorMessage(error);
-          this.createNotification({
-            type: "error",
-            message: "Uh oh, please check error log",
-          });
-        }
+        let countData = await this.runCountQuery(query);
         break;
 
       case "DELETE":
-        let deleteData = await runDeleteQuery(query);
-
-        if (deleteData.data.success) {
-          // console.log(this.props.current_query)
-          this.createNotification({
-            type: "success",
-            message: "Successfully deleted entry",
-          });
-          this.runQuery(this.props.current_query);
-          console.log("success");
-        } else {
-          console.log(deleteData.data);
-          this.props.updateGlobalErrorMessage(deleteData.data);
-          this.createNotification({
-            type: "error",
-            message: "Uh oh, please check error log",
-          });
-        }
+        let deleteData = await this.runDeleteQuery(query, body);
         break;
 
       case "UPDATE":
         // console.log(query);
-        let updateData = await runUpdateQuery(query);
-
-        // console.log(updateData);
-
-        // failed
-        if (!updateData.data.success) {
-          // the client has controlled input, so I am only accounting for SQL errors here.
-          // The server however also handles invalid query type and updates with no conditions
-          let updateError = [
-            `SQL ERROR: Code: ${updateData.data.code}, Message: ${updateData.data.sqlMessage}`,
-          ];
-          this.createNotification({
-            type: "error",
-            message: "Uh oh, please check error log",
-          });
-
-          if (type === "single") {
-            this.props.updateSingleUpdateErrorMessage(updateError);
-          } else {
-            this.props.updateUpdateErrorMessage(updateError);
-          }
-        } else {
-          console.log(updateData.data);
-          this.createNotification({
-            type: "success",
-            message: "Successfully updated entry",
-          });
-        }
-
+        let updateData = await this.runUpdateQuery(query, type);
         break;
       default:
         console.log("not yet");
@@ -227,7 +259,6 @@ class Home extends React.Component {
   };
 
   render() {
-    // console.log(this.props.authenticated);
     if (!this.props.authenticated) {
       return <Redirect to="/Login" />;
     }
@@ -245,7 +276,7 @@ class Home extends React.Component {
         <Header
           {...this.props}
           current_view="home"
-          isValidCSV={this.isValidCSV.bind(this)}
+          isValidCSV={isValidCSV.bind(this)} // TODO: test after moving this
           runQuery={this.runQuery.bind(this)}
           logout={this.logout.bind(this)}
           notify={this.createNotification}
@@ -264,11 +295,6 @@ class Home extends React.Component {
             >
               <Loader content="Loading" active disabled={!this.props.loading} />
               <Segment style={{ margin: 0 }}>
-                {/* <CollectionList
-                  {...this.props}
-                  runQuery={this.runQuery.bind(this)}
-                  notify={this.createNotification}
-                /> */}
                 <VirtualizedList
                   props={this.props}
                   runQuery={this.runQuery.bind(this)}

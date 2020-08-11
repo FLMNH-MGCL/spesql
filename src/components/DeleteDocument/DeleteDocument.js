@@ -59,11 +59,11 @@ export default function DeleteDocument({
     } else {
       // allow whatever command to proceed
       // props.notify({ type: "success", message: "Authorization successful" });
-      callback();
+      callback(userData);
     }
   }
 
-  function handleConfirm() {
+  function handleConfirm(userData) {
     if (!understood) {
       props.notify({
         type: "error",
@@ -72,7 +72,10 @@ export default function DeleteDocument({
       });
     } else {
       let query = `DELETE FROM molecularLab WHERE id=${selectedSpecimen.id};`;
-      props.runQuery(query);
+      props.runQuery(query, undefined, {
+        user: userData.username,
+        password: userData.password,
+      });
       toggle();
     }
   }

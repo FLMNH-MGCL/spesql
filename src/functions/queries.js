@@ -30,13 +30,17 @@ export async function runUpdateQuery(query) {
   return ret;
 }
 
-export async function runDeleteQuery(query) {
-  let data = { command: query };
-
-  const ret = await axios.post(`/api/delete/`, data).then((response) => {
-    const data = response;
-    return data;
-  });
+export async function runDeleteQuery(query, body) {
+  const ret = await axios
+    .post(`/api/delete/`, {
+      command: query,
+      user: body.user,
+      password: body.password,
+    })
+    .then((response) => {
+      const data = response;
+      return data;
+    });
 
   return ret;
 }

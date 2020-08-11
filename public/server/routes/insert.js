@@ -5,6 +5,8 @@ module.exports = function (connection, app) {
     let { specimen } = req.body;
     let { table } = req.body;
 
+    // TODO: add auth checks and insert validation
+
     const decimalLongitude = specimen.decimalLongitude
       ? specimen.decimalLongitude
       : "NULL";
