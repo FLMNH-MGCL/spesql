@@ -7,7 +7,7 @@ export default function CreateSelectModal({ open, props, closeModal }) {
     <Modal open={open} size="small" onClose={closeModal}>
       <SELECT
         // dbSelection={dbSelection}
-        runQuery={props.runQuery}
+        runSelectQuery={props.runSelectQuery}
         clearQuery={props.clearQuery}
         closeModal={closeModal}
         errorMessages={props.errorMessages}

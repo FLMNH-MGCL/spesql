@@ -94,6 +94,13 @@ export default function EditTableModal({
       });
 
       return;
+    } else if (!understood) {
+      createNotification({
+        type: "error",
+        message: "You must accept the disclaimer in the form",
+      });
+
+      return;
     }
 
     if (selected.tbl_name !== name) {
@@ -150,19 +157,25 @@ export default function EditTableModal({
     select(undefined);
   }
 
-  async function handleDelete() {
+  async function handleDelete(userData) {
     let deleted = false;
     let unregistered = false;
 
     // attempt deletion
-    const deleteData = await axios.post("/api/admin/delete-table/", {
-      tbl_name: selected.tbl_name,
-    });
+    const deleteData = await axios
+      .post("/api/admin/delete-table/", {
+        tbl_name: selected.tbl_name,
+        user: userData.username,
+        password: userData.pass,
+      })
+      .catch((error) => {
+        return { error: error.response };
+      });
 
     if (deleteData.error) {
       // uh oh
       // console.log(deleteData.error);
-      updateError(deleteData.error);
+      updateError(deleteData.error.data);
       return;
     } else {
       deleted = true;
@@ -259,17 +272,7 @@ export default function EditTableModal({
                 //   Delete User
                 // </Button>
                 <ConfirmAuth
-                  handleSubmit={() => {
-                    if (!understood) {
-                      createNotification({
-                        type: "error",
-                        message:
-                          "You must check the disclaimer before attempting a delete.",
-                      });
-                    } else {
-                      handleDelete();
-                    }
-                  }}
+                  handleSubmit={handleDelete}
                   checkAuth={checkAuth}
                   buttonStyle={{
                     color: "red",

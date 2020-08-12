@@ -159,7 +159,6 @@ class Home extends React.Component {
     }
   }
 
-  // TODO: test me more please
   async runUpdateQuery(query, userData, type = "batch") {
     if (!query || query === "") return;
 
@@ -189,10 +188,12 @@ class Home extends React.Component {
       });
 
       const error = ret.error;
+      console.log(error);
+
       let errorMessage = "";
 
       if (error.status === 400) {
-        errorMessage = `Delete error: ${error.data}`;
+        errorMessage = `Update error: ${error.data}`;
       } else if (error.status === 503) {
         errorMessage = `SQL ERROR: Code: ${error.code}, Message: ${error.sqlMessage}`;
       }
@@ -202,44 +203,6 @@ class Home extends React.Component {
       } else {
         this.props.updateUpdateErrorMessage([errorMessage]);
       }
-    }
-  }
-
-  // TODO: remove all queries here and replace calls to this function with the new functions
-  async runQuery(query, type = "batch", body = undefined) {
-    if (!query || query === "") {
-      return;
-    }
-
-    let queryType = "";
-
-    if (query.toUpperCase().startsWith("SELECT COUNT")) {
-      queryType = "COUNT";
-    } else {
-      queryType = query.replace(/ .*/, "");
-    }
-
-    switch (queryType.toUpperCase()) {
-      case "SELECT":
-        let data = await this.runSelectQuery(query);
-        break;
-
-      case "COUNT":
-        // let data = await runSelectQuery(query)
-        let countData = await this.runCountQuery(query);
-        break;
-
-      case "DELETE":
-        let deleteData = await this.runDeleteQuery(query, body);
-        break;
-
-      case "UPDATE":
-        // console.log(query);
-        let updateData = await this.runUpdateQuery(query, type);
-        break;
-      default:
-        console.log("not yet");
-        break;
     }
   }
 
@@ -268,7 +231,7 @@ class Home extends React.Component {
       sessionStorage.getItem("current_query") &&
       this.props.data.length === 0
     ) {
-      this.runQuery(sessionStorage.getItem("current_query"));
+      this.runSelectQuery(sessionStorage.getItem("current_query"));
     }
 
     return (
@@ -276,8 +239,11 @@ class Home extends React.Component {
         <Header
           {...this.props}
           current_view="home"
-          isValidCSV={isValidCSV.bind(this)} // TODO: test after moving this
-          runQuery={this.runQuery.bind(this)}
+          isValidCSV={isValidCSV.bind(this)}
+          runSelectQuery={this.runSelectQuery.bind(this)}
+          runCountQuery={this.runCountQuery.bind(this)}
+          runUpdateQuery={this.runUpdateQuery.bind(this)}
+          runDeleteQuery={this.runDeleteQuery.bind(this)}
           logout={this.logout.bind(this)}
           notify={this.createNotification}
           disabled={
@@ -297,7 +263,7 @@ class Home extends React.Component {
               <Segment style={{ margin: 0 }}>
                 <VirtualizedList
                   props={this.props}
-                  runQuery={this.runQuery.bind(this)}
+                  runSelectQuery={this.runSelectQuery.bind(this)}
                   notify={this.createNotification}
                 />
               </Segment>
@@ -313,7 +279,9 @@ class Home extends React.Component {
                   data={this.props.data}
                   selectedSpecimen={this.props.selectedSpecimen}
                   currentQuery={this.props.current_query}
-                  runQuery={this.runQuery.bind(this)}
+                  runSelectQuery={this.runSelectQuery.bind(this)}
+                  runUpdateQuery={this.runUpdateQuery.bind(this)}
+                  runDeleteQuery={this.runDeleteQuery.bind(this)}
                   userData={this.props.userData}
                   notify={this.createNotification}
                   disabled={

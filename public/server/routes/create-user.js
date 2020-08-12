@@ -12,15 +12,15 @@ module.exports = function (connection, app) {
     const adminUsername = req.body.adminUser;
     const adminPassword = req.body.adminPass;
 
-    let authcheckStatus = authCheck(
+    let { status, message } = authCheck(
       connection,
       { username: adminUsername, password: adminPassword },
       "admin"
     );
 
-    if (authcheckStatus !== 200) {
+    if (status !== 200) {
       let responseMessage = "";
-      switch (authcheckStatus) {
+      switch (status) {
         case 400:
           responseMessage = "Missing admin credentials";
           break;
@@ -36,10 +36,9 @@ module.exports = function (connection, app) {
           break;
       }
 
-      res.status(authcheckStatus);
-      res.json({
-        error: responseMessage,
-      });
+      res.status(status);
+      res.send(responseMessage);
+      return;
     }
 
     // if authenticated

@@ -72,7 +72,7 @@ export default function DeleteDocument({
       });
     } else {
       let query = `DELETE FROM molecularLab WHERE id=${selectedSpecimen.id};`;
-      props.runQuery(query, undefined, {
+      props.runDeleteQuery(query, {
         user: userData.username,
         password: userData.password,
       });

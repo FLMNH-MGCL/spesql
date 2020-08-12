@@ -181,7 +181,7 @@ export default class SELECT extends React.Component {
       // console.log(command)
       this.props.closeModal();
       this.props.clearQuery();
-      this.props.runQuery(command);
+      this.props.runSelectQuery(command);
     }
   };
 
@@ -197,7 +197,7 @@ export default class SELECT extends React.Component {
       });
       this.props.updateSelectErrorMessage(errors);
     } else {
-      this.props.runQuery(this.state.advanced_query);
+      this.props.runSelectQuery(this.state.advanced_query);
     }
 
     setTimeout(() => {

@@ -158,7 +158,7 @@ export default class COUNT extends React.Component {
       } else command += ";";
 
       // this.setState({submitted: true})
-      this.props.runQuery(command);
+      this.props.runCountQuery(command);
     }
     this.setState({ loading: false });
   };
@@ -176,7 +176,7 @@ export default class COUNT extends React.Component {
       this.setState({ hasError: true });
     } else {
       // this.setState({submitted: true})
-      this.props.runQuery(this.state.advanced_query);
+      this.props.runCountQuery(this.state.advanced_query);
 
       setTimeout(() => {
         if (this.props.errorMessages.countError) {

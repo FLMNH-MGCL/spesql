@@ -7,7 +7,7 @@ export default function CreateCountModal({ open, props, closeModal }) {
     <Modal centered open={open} size="small" onClose={closeModal}>
       <COUNT
         // dbSelection={dbSelection}
-        runQuery={props.runQuery}
+        runCountQuery={props.runCountQuery}
         countQueryCount={props.countQueryCount}
         closeModal={closeModal}
         updateCountQueryCount={props.updateCountQueryCount}

@@ -8,19 +8,6 @@ module.exports = function (connection, app) {
     const adminUsername = req.body.adminUser;
     const adminPassword = req.body.adminPass;
 
-    let { status, message } = authCheck(
-      connection,
-      { username: adminUsername, password: adminPassword },
-      "admin"
-    );
-
-    if (status !== 200) {
-      res.status(status);
-      res.json({
-        error: message,
-      });
-    }
-
     const command = `CREATE TABLE ${tableName}
 (	
 	id INT NOT NULL AUTO_INCREMENT, catalogNumber varchar(20), otherCatalogNumber varchar(20) UNIQUE NOT NULL,

@@ -62,14 +62,6 @@ export default function EditUserModal({
     setUnderstood(false);
   }
 
-  // const getUser = () => {
-  //   for (let i = 0; i < users.length; i++) {
-  //     if (users[i].username === selected) {
-  //       return users[i];
-  //     }
-  //   }
-  // };
-
   const initForm = (user) => {
     // get user by username
     //const user = getUser()
@@ -135,7 +127,6 @@ export default function EditUserModal({
   };
 
   async function deleteUser(adminData) {
-    let resStatus = 200;
     const res = await axios
       .post("/api/admin/delete-user/", {
         username: username,
@@ -143,53 +134,41 @@ export default function EditUserModal({
         adminPass: adminData.pass,
       })
       .catch((error) => {
-        resStatus = error.response.status;
-        return null;
+        return { error: error.response };
       });
 
-    if (!res && resStatus === 503) {
-      // reroute to 404, detected bad internet or vpn
-      createNotification({
-        type: "error",
-        message: "Bad VPN/Internet connection detected",
-      });
-      return;
-    }
-
-    if (!res && resStatus === 400) {
-      // missing admin credentials
-      createNotification({
-        type: "error",
-        message: "Missing admin credentials",
-      });
-      return;
-    }
-
-    if (!res && resStatus === 401) {
-      // invalid admin creds
-      createNotification({ type: "error", message: "Authorization failed" });
-      return;
-    }
-    // if (!res) {
-    //   updateError([
-    //     "The server had no response. Please ensure you have an internet / vpn connection and restart the application.",
-    //   ]);
-    //   return;
-    // }
-
-    if (!res) return;
-
-    if (res.data.err) {
-      updateError([res.data.err.sqlMessage]);
-      createNotification({
-        type: "error",
-        message: `Query failed. ${res.data.err.sqlMessage}`,
-      });
+    if (res.data) {
+      if (res.data.err) {
+        updateError([res.data.err.sqlMessage]);
+        createNotification({
+          type: "error",
+          message: `Query failed. ${res.data.err.sqlMessage}`,
+        });
+      } else {
+        createNotification({
+          type: "success",
+          message: `Sucessfully deleted user ${username}`,
+        });
+      }
     } else {
-      createNotification({
-        type: "success",
-        message: `Sucessfully deleted user ${username}`,
-      });
+      const error = res.error;
+
+      if (error.status === 503) {
+        createNotification({
+          type: "error",
+          message: "Bad VPN/Internet connection detected",
+        });
+        return;
+      } else if (error.status === 400) {
+        createNotification({
+          type: "error",
+          message: "Missing admin credentials",
+        });
+        return;
+      } else if (error.status === 401) {
+        createNotification({ type: "error", message: "Authorization failed" });
+        return;
+      }
     }
   }
 
@@ -293,7 +272,6 @@ export default function EditUserModal({
     // console.log("cant do this yet :)");
 
     // update user
-    let resStatus = 200;
     const res = await axios
       .post("/api/admin/update-user", {
         id: changes.id,
@@ -302,38 +280,30 @@ export default function EditUserModal({
         adminPass: adminData.pass,
       })
       .catch((error) => {
-        resStatus = error.response.status;
-        return null;
+        return { error: error.response };
       });
 
-    if (!res && resStatus === 503) {
-      // reroute to 404, detected bad internet or vpn
-      createNotification({
-        type: "error",
-        message: "Bad VPN/Internet connection detected",
-      });
-      return;
-    }
-
-    if (!res && resStatus === 400) {
-      // missing admin credentials
-      createNotification({
-        type: "error",
-        message: "Missing admin credentials",
-      });
-      return;
-    }
-
-    if (!res && resStatus === 401) {
-      // invalid admin creds
-      createNotification({ type: "error", message: "Authorization failed" });
-      return;
-    }
-
-    // notify
     if (res.err) {
-      console.log(res.err);
       createNotification({ type: "error", message: res.err.sqlMessage });
+    } else if (res.error) {
+      const error = res.error;
+
+      if (error.status === 503) {
+        createNotification({
+          type: "error",
+          message: "Bad VPN/Internet connection detected",
+        });
+        return;
+      } else if (error.status === 400) {
+        createNotification({
+          type: "error",
+          message: "Missing admin credentials",
+        });
+        return;
+      } else if (error.status === 401) {
+        createNotification({ type: "error", message: "Authorization failed" });
+        return;
+      }
     } else {
       createNotification({ type: "success", message: "Updated user" });
     }

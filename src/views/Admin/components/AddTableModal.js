@@ -85,44 +85,29 @@ export default function AddTableModal({
         adminPass: adminData.pass,
       })
       .catch((error) => {
-        resStatus = error.response.status;
-        return null;
+        return { error: error.response };
       });
-
-    if (!creationResponse && resStatus === 503) {
-      // reroute to 404, detected bad internet or vpn
-      createNotification({
-        type: "error",
-        message: "Bad VPN/Internet connection detected",
-      });
-      return;
-    }
-
-    if (!creationResponse && resStatus === 400) {
-      // missing admin credentials
-      createNotification({
-        type: "error",
-        message: "Missing admin credentials",
-      });
-      return;
-    }
-
-    if (!creationResponse && resStatus === 401) {
-      // invalid admin creds
-      createNotification({ type: "error", message: "Authorization failed" });
-      return;
-    }
 
     if (creationResponse.error) {
-      // short curcuit function
-      createNotification({
-        type: "error",
-        message: creationResponse.error.sqlMessage.sqlMessage,
-      });
+      const error = creationResponse.error;
+      updateError([error.data]);
 
-      updateError([creationResponse.data.error.sqlMessage.sqlMessage]);
-
-      return;
+      if (error.status === 503) {
+        createNotification({
+          type: "error",
+          message: "Bad VPN/Internet connection detected",
+        });
+        return;
+      } else if (error.status === 400) {
+        createNotification({
+          type: "error",
+          message: "Missing admin credentials",
+        });
+        return;
+      } else if (error.status === 401) {
+        createNotification({ type: "error", message: "Authorization failed" });
+        return;
+      }
     }
 
     const registeredResponse = await registerTable(tableAttributes);

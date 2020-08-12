@@ -183,43 +183,40 @@ export default function AddUserModal({
       return;
     }
 
-    let resStatus = 200;
     const res = await axios
       .post("/api/admin/create-user/", creationProps)
       .catch((error) => {
-        resStatus = error.response.status;
-        return null;
+        return { error: error.response };
       });
 
-    if (!res && resStatus === 503) {
-      // reroute to 404, detected bad internet or vpn
-      createNotification({
-        type: "error",
-        message: "Bad VPN/Internet connection detected",
-      });
-      return;
-    }
+    console.log(res);
 
-    if (!res && resStatus === 400) {
-      // missing admin credentials
-      createNotification({
-        type: "error",
-        message: "Missing admin credentials",
-      });
-      return;
-    }
-
-    if (!res && resStatus === 401) {
-      // invalid admin creds
-      createNotification({ type: "error", message: "Authorization failed" });
-      return;
-    }
-
-    if (res.data.data) {
-      createNotification({ type: "success", message: res.data.data });
+    if (res.data) {
+      if (res.data.data) {
+        createNotification({ type: "success", message: res.data.data });
+      } else {
+        createNotification({ type: "error", message: res.data.err.sqlMessage });
+        updateError([res.data.err.sqlMessage]);
+      }
     } else {
-      createNotification({ type: "error", message: res.data.err.sqlMessage });
-      updateError([res.data.err.sqlMessage]);
+      const error = res.error;
+
+      if (error.status === 503) {
+        createNotification({
+          type: "error",
+          message: "Bad VPN/Internet connection detected",
+        });
+        return;
+      } else if (error.status === 400) {
+        createNotification({
+          type: "error",
+          message: "Missing admin credentials",
+        });
+        return;
+      } else if (error.status === 401) {
+        createNotification({ type: "error", message: "Authorization failed" });
+        return;
+      }
     }
   };
 

@@ -47,10 +47,6 @@ export default class Header extends Component {
   };
 
   componentDidMount() {
-    // window listener for the mobile friendly toolbar
-    // setTimeout(() => {
-    //   this.setState({ user: user });
-    // }, 1000);
     window.addEventListener("resize", this.checkMobile);
   }
 
@@ -61,25 +57,13 @@ export default class Header extends Component {
         size={this.state.mobileView ? "mini" : "small"}
         style={{ margin: "1rem" }}
       >
-        {/* <Menu.Item
-          as={Link}
-          name="home"
-          active={"home" === this.props.current_view}
-          onClick={this.handleItemClick}
-          to="/Home"
-        />
-        <Menu.Item
-          as={Link}
-          name="about"
-          active={"view" === this.props.current_view}
-          onClick={this.handleItemClick}
-          to="/about"
-        /> */}
-
         <Menu.Menu position="left">
           <Menu.Item>
             <QueryMenu
-              runQuery={this.props.runQuery.bind(this)}
+              runSelectQuery={this.props.runSelectQuery}
+              runCountQuery={this.props.runCountQuery}
+              runUpdateQuery={this.props.runUpdateQuery}
+              runDeleteQuery={this.props.runDeleteQuery}
               clearQuery={this.props.clearQuery}
               countQueryCount={this.props.countQueryCount}
               updateCountQueryCount={this.props.updateCountQueryCount}
@@ -87,7 +71,9 @@ export default class Header extends Component {
               updateSelectErrorMessage={this.props.updateSelectErrorMessage}
               updateCountErrorMessage={this.props.updateCountErrorMessage}
               updateUpdateErrorMessage={this.props.updateUpdateErrorMessage}
-              refresh={() => this.props.runQuery(this.props.current_query)}
+              refresh={() =>
+                this.props.runSelectQuery(this.props.current_query)
+              }
               notify={this.props.notify}
               disabled={this.props.disabled}
               userData={this.props.userData}
@@ -95,14 +81,6 @@ export default class Header extends Component {
           </Menu.Item>
           {this.props.disabled ? null : (
             <Menu.Item>
-              {/* <InsertDocument
-                isValidCSV={this.props.isValidCSV.bind(this)}
-                errorMessages={this.props.errorMessages}
-                updateInsertErrorMessage={this.props.updateInsertErrorMessage}
-                notify={this.props.notify}
-                small={this.state.mobileView}
-                disabled={this.props.disabled}
-              /> */}
               <InsertMenu
                 isValidCSV={this.props.isValidCSV.bind(this)}
                 errorMessages={this.props.errorMessages}
@@ -151,16 +129,6 @@ export default class Header extends Component {
                 <Dropdown.Divider />
 
                 <Logout logout={this.props.logout.bind(this)} />
-
-                {/* <div
-                  style={{
-                    textAlign: "center",
-                    paddingTop: "2px",
-                    paddingBottom: "5px",
-                    paddingLeft: "3px",
-                  }}
-                >
-                </div> */}
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Item>

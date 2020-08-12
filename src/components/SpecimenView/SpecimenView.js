@@ -362,7 +362,8 @@ class SpecimenView extends React.Component {
             <div className="specimen-footer-content">
               <UpdateDocument
                 currentQuery={this.props.currentQuery}
-                runQuery={this.props.runQuery}
+                runUpdateQuery={this.props.runUpdateQuery}
+                runSelectQuery={this.props.runSelectQuery}
                 user={this.props.user}
                 disabled={this.props.disabled}
                 userData={this.props.userData}

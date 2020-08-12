@@ -12,7 +12,7 @@ export default function CreateUpdateModal({
     <Modal centered open={open} size="small" onClose={closeModal}>
       <UPDATE
         // dbSelection={dbSelection}
-        runQuery={props.runQuery}
+        runUpdateQuery={props.runUpdateQuery}
         refresh={props.refresh}
         clearQuery={props.clearQuery}
         closeModal={closeModal}

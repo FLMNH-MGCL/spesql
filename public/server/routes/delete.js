@@ -1,8 +1,10 @@
 const mysql = require("mysql");
 const authCheck = require("../helpers/authCheck");
+const canAccess = require("../helpers/downAccess");
+const bcrypt = require("bcrypt");
 
 module.exports = function (connection, app) {
-  app.post("/api/delete/", function (req, res) {
+  app.post("/api/delete/", async function (req, res) {
     let command = req.body;
     const user = req.body.user;
     const password = req.body.password;
@@ -19,18 +21,45 @@ module.exports = function (connection, app) {
       res.send("Deletion missing conditions for safety");
     }
 
-    let { status, message } = authCheck(
-      connection,
-      { username: user, password: password },
-      "manager"
-    );
-
-    if (status !== 200) {
-      res.status(status);
-      res.json({
-        error: message,
-      });
+    if (!user || !password) {
+      res.status(400);
+      res.send("Missing credentials");
     }
+
+    connection.query(
+      `SELECT * FROM users WHERE username="${user}";`,
+      (err, data) => {
+        if (err) {
+          res.status(503);
+          res.send("Bad connection detected");
+          return;
+        } else if (data.length < 1 || data === [] || !data) {
+          // auth failed
+          res.status(401);
+          res.send("Authorization either failed or denied");
+          return;
+        } else {
+          // const _adminUsername = data[0].username;
+          const _password = data[0].password;
+          const privilege = data[0].privilege_level;
+
+          if (!canAccess(privilege, "manager")) {
+            res.status(403);
+            res.send("Authorization either failed or denied");
+            return;
+          }
+
+          bcrypt.compare(password, _password).then((result) => {
+            if (result !== true) {
+              // invalid auth state, unauthorized to create user
+              res.status(401);
+              res.send("Authorization either failed or denied");
+              return;
+            }
+          });
+        }
+      }
+    );
 
     // TODO: don't do data: err, instead do error: err and change client to check for data OR error
     connection.query(command.command, (err, data) => {

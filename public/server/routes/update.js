@@ -11,12 +11,14 @@ module.exports = function (connection, app) {
       // not an update query
       res.status(400);
       res.send("Invalid query type");
+      return;
     }
 
-    if (command && !command.command.toLowerCase().includes("WHERE")) {
+    if (command && !command.command.toLowerCase().includes("where")) {
       // dangerous update command
       res.status(400);
       res.json("Update missing conditions for safety");
+      return;
     }
 
     let { status, message } = authCheck(
@@ -27,9 +29,8 @@ module.exports = function (connection, app) {
 
     if (status !== 200) {
       res.status(status);
-      res.json({
-        error: message,
-      });
+      res.send(message);
+      return;
     }
 
     connection.query(command.command, (err, data) => {

@@ -373,11 +373,7 @@ export default class FormInsert extends React.Component {
       modifiedInfo: "",
     };
 
-    console.log(specimen);
-
     const errors = checkSpecimen(specimen);
-
-    console.log(errors);
 
     if (errors.length >= 1) {
       this.props.notify({
@@ -390,7 +386,6 @@ export default class FormInsert extends React.Component {
         specimen,
         this.state.databaseTable
       );
-      console.log(insertData);
 
       if (insertData.data.success) {
         this.props.notify({

@@ -207,34 +207,7 @@ export default class UPDATE extends React.Component {
     return errors;
   }
 
-  // generateModifications() {
-  //   const { sets } = this.state;
-
-  //   const changes = sets.map((change) => {
-  //     return {
-  //       field: change.field,
-  //       oldValue: "unknown",
-  //       newValue: change.newValue,
-  //     };
-  //   });
-
-  //   var today = new Date();
-  //   var dd = String(today.getDate()).padStart(2, "0");
-  //   var mm = String(today.getMonth() + 1).padStart(2, "0");
-  //   var yyyy = today.getFullYear();
-
-  //   today = yyyy + "-" + mm + "-" + dd;
-
-  //   let modification = {
-  //     [today]: {
-  //       modifiedBy: this.props.userData.username,
-  //       fieldsChanged: changes,
-  //       reasonForChanges: this.state.reason,
-  //     },
-  //   };
-  // }
-
-  handleSubmit = () => {
+  handleSubmit = (userData) => {
     this.setState({ loading: true });
     let errors = this.finalCheck();
 
@@ -288,7 +261,10 @@ export default class UPDATE extends React.Component {
 
     command += ";";
 
-    this.props.runQuery(command);
+    this.props.runUpdateQuery(command, {
+      user: userData.user,
+      password: userData.password,
+    });
 
     setTimeout(() => {
       if (!this.props.loading && !this.props.errorMessages.updateError) {
@@ -297,7 +273,7 @@ export default class UPDATE extends React.Component {
         this.props.closeModal();
       } else {
         this.setState({ loading: false });
-        this.notify({
+        this.props.notify({
           type: "error",
           message: "SQL errors occurred! Please check logs.",
         });

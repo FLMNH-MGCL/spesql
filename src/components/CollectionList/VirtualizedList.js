@@ -14,7 +14,14 @@ import _ from "lodash";
 
 const SortableTable = SortableContainer(Table);
 
-export default function VirtualizedList({ props, runQuery, notify }) {
+export default function VirtualizedList({
+  props,
+  runSelectQuery,
+  runCountQuery,
+  runUpdateQuery,
+  runDeleteQuery,
+  notify,
+}) {
   const { width } = useWindowDimensions();
   const [selected, select] = useState(undefined);
   const [selectedElement, selectElement] = useState(undefined);
@@ -204,7 +211,7 @@ export default function VirtualizedList({ props, runQuery, notify }) {
                   let command = props.current_query;
                   props.updateRefreshStatus(true);
                   props.updateLoadingStatus(true);
-                  runQuery(command);
+                  runSelectQuery(command);
                 }}
                 disabled={props.current_query === "" ? true : false}
               >

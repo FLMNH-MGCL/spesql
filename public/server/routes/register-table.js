@@ -7,7 +7,6 @@ const mysql = require("mysql");
 module.exports = function (connection, app) {
   app.post("/api/admin/register-table/", function (req, res) {
     const { tableAttributes } = req.body;
-    console.log(tableAttributes);
 
     // create the actual table in db
     // set the access afterwards
@@ -19,8 +18,6 @@ module.exports = function (connection, app) {
       `"${tableAttributes.minimum_access_insert}",` +
       `"${tableAttributes.minimum_access_update}"`;
     const command = `INSERT INTO interactables(${fields}) VALUES (${fieldValues});`;
-
-    console.log(command);
 
     connection.query(command, (err, data) => {
       if (err) {

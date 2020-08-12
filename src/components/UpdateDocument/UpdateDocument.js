@@ -212,11 +212,11 @@ class UpdateDocument extends React.Component {
     } else {
       // allow whatever command to proceed
       // this.props.notify({ type: "success", message: authData.data.message });
-      callback();
+      callback({ user: user, password: password });
     }
   }
 
-  onSubmit = (e) => {
+  onSubmit = (userData) => {
     const canContinue = this.checkPages();
 
     if (!canContinue) {
@@ -234,18 +234,6 @@ class UpdateDocument extends React.Component {
     // console.log(fields);
 
     fields.forEach((field) => {
-      // if (this.state[field] && !this.props.selectedSpecimen[field]) {
-      //   // property in state doesn't exist in selected specimen
-      //   // this means I need to update the DB to reflect the program
-      //   // this if should never hit after production, but for now it will just
-      //   // log the occurrence
-      //   console.log(`DB / Software conflict: check the ${field} field`);
-      // } else if (this.state[field] !== this.props.selectedSpecimen[field]) {
-
-      // console.log(
-      //   `${field}: ${this.state[field]} vs ${this.props.selectedSpecimen[field]}`
-      // );
-
       if (this.state[field] !== this.props.selectedSpecimen[field]) {
         let change = {
           field: field,
@@ -258,8 +246,6 @@ class UpdateDocument extends React.Component {
     });
 
     this.setState({ loading: true });
-
-    console.log(errors);
 
     if (errors.length !== 0) {
       // update error log
@@ -278,8 +264,6 @@ class UpdateDocument extends React.Component {
     if (changes.length > 0) {
       console.log("Changes were detected");
       // console.log(changes);
-
-      console.log(errors);
 
       var today = new Date();
       var dd = String(today.getDate()).padStart(2, "0");
@@ -325,8 +309,8 @@ class UpdateDocument extends React.Component {
 
       // console.log(updateCommand);
 
-      this.props.runQuery(updateCommand, "single");
-      this.props.runQuery(this.props.currentQuery);
+      this.props.runUpdateQuery(updateCommand, userData, "single");
+      this.props.runSelectQuery(this.props.currentQuery);
       this.setState({ loading: false });
     } else {
       this.props.notify({
@@ -362,8 +346,6 @@ class UpdateDocument extends React.Component {
         errors = errors.concat(checkField(field, this.state[field]));
       });
     });
-
-    console.log(errors);
 
     if (errors.length > 0) {
       this.props.notify({

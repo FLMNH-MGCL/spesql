@@ -49,7 +49,7 @@ export default function QueryMenu(props) {
     } else {
       // allow whatever command to proceed
       // props.notify({ type: "success", message: authData.data.message });
-      callback();
+      callback({ user: user, password: password });
     }
   }
 

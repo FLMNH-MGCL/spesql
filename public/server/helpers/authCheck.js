@@ -8,9 +8,9 @@ const canAccess = require("./downAccess");
  * @param {string} minimumRole - the minimum privilege level rquired for access
  * @returns {object} - response object {status, message}
  */
-module.exports = function (connection, userData, minimumRole) {
+module.exports = async function (connection, userData, minimumRole) {
   const username = userData.username;
-  const password = userData.username;
+  const password = userData.password;
 
   let retStatus = 200;
 
@@ -29,8 +29,9 @@ module.exports = function (connection, userData, minimumRole) {
         retStatus = 503;
 
         return { status: retStatus, message: "Bad connection detected" };
-      } else if (data.length < 1) {
+      } else if (data.length < 1 || data === [] || !data) {
         // auth failed
+        console.log("HERE");
         retStatus = 401;
         return {
           status: retStatus,
