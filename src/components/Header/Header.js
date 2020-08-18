@@ -126,6 +126,13 @@ export default class Header extends Component {
                   ></Dropdown.Item>
                 )}
 
+                <Dropdown.Item
+                  onClick={() => {
+                    window.location.hash = "/settings";
+                  }}
+                  text="Settings"
+                ></Dropdown.Item>
+
                 <Dropdown.Divider />
 
                 <Logout logout={this.props.logout.bind(this)} />

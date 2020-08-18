@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import Home from "./views/Home/Home";
 import NotFound from "./views/NotFound";
 import Login from "./views/Login/Login";
-// import About from "./views/About/About";
+import Settings from "./views/Settings/Settings";
 import reducer from "./redux/reducer";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
@@ -31,8 +31,9 @@ function App() {
             <Redirect to="/login" />
           </Route>
           <Route path="/login" component={Login} />
+          <Route path="/settings" component={Settings} />
+
           <Route path="/home" component={Home} />
-          {/* <Route path="/about" component={About} /> */}
           <Route path="/admin" component={AdminPortal} />
           <Route component={NotFound} />
         </Switch>

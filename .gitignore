@@ -6,6 +6,10 @@ node_modules
 /.pnp
 .pnp.js
 config.js/
+config.json/
+config copy.json/
+config.json
+config copy.json
 public/server/config/config.js
 
 

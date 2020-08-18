@@ -97,6 +97,23 @@ function Login(props) {
 
   return (
     <div>
+      <div
+        style={{
+          position: "absolute",
+          right: "2rem",
+          top: "2rem",
+        }}
+        title="See Config Settings"
+      >
+        <Icon
+          name="cog"
+          size="big"
+          className="hoverable"
+          onClick={() => {
+            window.location.hash = "settings";
+          }}
+        />
+      </div>
       <div className="login-container">
         <Segment
           style={{
