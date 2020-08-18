@@ -264,7 +264,11 @@ export default function Settings() {
                     <p>
                       A config could not be located in the file system. Please
                       fill out the form below with valid credentials to start
-                      using spesql
+                      using spesql.{" "}
+                    </p>
+                    <p style={{ color: "#5c6ac4" }}>
+                      You must restart the application <b>fully</b> after
+                      updating the config file.
                     </p>
                   </div>
                 )}
@@ -274,7 +278,11 @@ export default function Settings() {
                     <p>
                       A config file was detected in the file system. If you
                       would like to make edits, please fill out the entire form
-                      below with valid credentials
+                      below with valid credentials.{" "}
+                    </p>
+                    <p style={{ color: "#5c6ac4" }}>
+                      You must restart the application <b>fully</b> after
+                      updating the config file.
                     </p>
                   </div>
                 )}
