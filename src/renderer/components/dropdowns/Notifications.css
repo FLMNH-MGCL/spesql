@@ -1,0 +1,53 @@
+.notif-menu-container {
+  position: absolute;
+  top: 72%;
+  left: -22.5rem;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.notif-menu-body {
+  padding: 1rem;
+  height: 25rem;
+  width: 25rem;
+}
+
+.notifications {
+  height: 20rem;
+  overflow-y: scroll;
+}
+
+.notif-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid lightgray;
+}
+
+.clear-all {
+  background-color: #fff5f5;
+  color: #9b2c2c;
+  padding: 0.25rem;
+  border-radius: 10%;
+  cursor: pointer;
+}
+
+.notification-container {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-right: 0.25rem;
+}
+.notification-container:hover {
+  background-color: #f7fafc;
+}
+
+/* OVERRIDE SEMANTIC DUMB STYLE */
+p {
+  margin-bottom: 0 !important;
+}

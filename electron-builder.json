@@ -1,0 +1,19 @@
+{
+  "appId": "spesql",
+  "productName": "spesq;",
+  "compression": "store",
+  "mac": {
+    "identity": null
+  },
+  "linux": {
+    "target": "AppImage"
+  },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "aaronleopold",
+      "repo": "https://github.com/FLMNH-MGCL/spesql",
+      "releaseType": "release"
+    }
+  ]
+}
