@@ -22,6 +22,7 @@ export const UPDATE_ADMIN_USER_ERROR_LOG = "UPDATE_ADMIN_USER_ERROR_LOG";
 export const CREATE_NOTIFICATION = "CREATE_NOTIFICATION";
 export const DELETE_NOTIFICATION = "DELETE_NOTIFICATION";
 export const CLEAR_NOTIFICATIONS = "CLEAR_NOTIFICATIONS";
+export const SET_READ_NOTIFICATIONS = "SET_READ_NOTIFICATIONS";
 
 export const UPDATE_LOADING_STATUS = "UPDATE_LOADING_STATUS";
 export const UPDATE_REFRESH_STATUS = "UPDATE_REFRESH_STATUS";
@@ -55,6 +56,7 @@ const initialState = {
     adminUserError: null,
   },
   notifications: [],
+  hasUnread: false,
   loading: false,
   refreshing: false,
 };
@@ -105,6 +107,8 @@ export default function reducer(state = initialState, action) {
           adminTblError: null,
           adminUserError: null,
         },
+        notifications: state.notifications,
+        hasUnread: state.hasUnread,
         loading: false,
         refreshing: false,
       };
@@ -260,7 +264,7 @@ export default function reducer(state = initialState, action) {
       return newState;
 
     case "CREATE_NOTIFICATION":
-      newState.notifications.push(action.notification);
+      newState.notifications = [...state.notifications, action.notification];
 
       return newState;
 
@@ -271,6 +275,11 @@ export default function reducer(state = initialState, action) {
 
     case "CLEAR_NOTIFICATIONS":
       newState.notifications = [];
+
+      return newState;
+
+    case "SET_READ_NOTIFICATIONS":
+      newState.hasUnread = action.hasUnread;
 
       return newState;
 

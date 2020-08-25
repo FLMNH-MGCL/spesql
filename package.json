@@ -43,9 +43,11 @@
     "react-virtualized": "^9.22.2",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
+    "reshake": "^1.2.1",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^1.2.0",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "styled-components": "^5.1.1"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.10.4",

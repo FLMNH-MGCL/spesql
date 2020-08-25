@@ -16,6 +16,7 @@ export function mapStateToProps(state) {
     loading: state.loading,
     refreshing: state.refreshing,
     notifications: state.notifications,
+    hasUnread: state.hasUnread,
   };
 }
 
@@ -80,6 +81,8 @@ export function mapDispatchToProps(dispatch) {
     deleteNotification: (notificationId) =>
       dispatch({ type: "DELETE_NOTIFICATION", notificationId: notificationId }),
     clearNotifications: () => dispatch({ type: "CLEAR_NOTIFICATIONS" }),
+    setReadNotifications: (hasUnread) =>
+      dispatch({ type: "SET_READ_NOTIFICATIONS", hasUnread: hasUnread }),
     updateLoadingStatus: (loadingStatus) =>
       dispatch({ type: "UPDATE_LOADING_STATUS", loadingStatus: loadingStatus }),
     updateRefreshStatus: (refreshStatus) =>

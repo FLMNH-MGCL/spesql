@@ -105,8 +105,6 @@ function Home(props) {
         return { error: error.response };
       });
 
-    // console.log(ret);
-
     if (ret.data) {
       const countData = ret.data[Object.keys(ret.data)[0]];
       props.updateCountQueryCount(Object.values(countData)[0]); // isolate the number
@@ -115,18 +113,28 @@ function Home(props) {
     else {
       notify({
         type: "error",
-        message: "Uh oh, please check error log.",
+        title: "Uh oh, please check error log",
+        message: "An error occurred during a count query that needs reviewing",
       });
       const error = ret.error;
+
+      console.log(error);
+
       let errorMessage = "";
 
       if (error.status === 400) {
         errorMessage = error.data;
       } else if (error.status === 503) {
-        errorMessage = `SQL ERROR: Code: ${error.code}, Message: ${error.sqlMessage}`;
+        errorMessage = `SQL ERROR: Code: ${error.data.error.code}, Message: ${error.data.error.sqlMessage}`;
       }
 
       props.updateCountErrorMessage([errorMessage]);
+      props.createNotification({
+        header: "SQL Count Error",
+        type: "error",
+        information: errorMessage,
+      });
+      props.setReadNotifications(true);
     }
   }
 

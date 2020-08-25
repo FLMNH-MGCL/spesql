@@ -10,7 +10,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import storageSession from "redux-persist/lib/storage/session";
 // import Home from "./views/home/Home";
-import Home from "./views/Home/Home";
+import Home from "./views/home/Home";
 import NotificationSystem from "react-notification-system";
 import Login from "./views/login/Login";
 import Settings from "./views/settings/Settings";

@@ -5,3 +5,6 @@
 /* * {
   font-family: "Open Sans";
 } */
+.hoverable:hover {
+  transform: scale(1.1);
+}

@@ -1,43 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Icon, Dropdown, List, Segment, Button } from "semantic-ui-react";
 import OutsideClickHandler from "react-outside-click-handler";
 import clsx from "clsx";
 import useBoolean from "../../utils/useBoolean";
+import { ShakeRotate } from "reshake";
 import "./Notifications.css";
 
 // used to set up fake notifications
-function seed(createNotification) {
-  createNotification({
-    header: "Query Loaded",
-    type: "log",
-    information: "Select Query",
-  });
+// function seed(createNotification) {
+//   createNotification({
+//     header: "Query Loaded",
+//     type: "log",
+//     information: "Select Query",
+//   });
 
-  createNotification({
-    header: "Invalid Query Params",
-    type: "error",
-    information: "Select Modal",
-  });
+//   createNotification({
+//     header: "Invalid Query Params",
+//     type: "error",
+//     information: "Select Modal",
+//   });
 
-  createNotification({
-    header: "Configuration Changed",
-    type: "warning",
-    information: "Please restart app if you haven't already",
-  });
+//   createNotification({
+//     header: "Configuration Changed",
+//     type: "warning",
+//     information: "Please restart app if you haven't already",
+//   });
 
-  createNotification({
-    header: "Query Load Error",
-    type: "error",
-    information: "Count Modal",
-  });
-}
+//   createNotification({
+//     header: "Query Load Error",
+//     type: "error",
+//     information: "Count Modal",
+//   });
+// }
 
 function Notification(notification) {
   const { type } = notification;
   return (
     <div className="notification-container">
-      <div style={{ flex: "1 1 0%" }}>
-        <p style={{ display: "block", fontWeight: "800", color: "#2d3748" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <p style={{ fontWeight: "800", color: "#2d3748" }}>
           {notification.header}
         </p>
         <p
@@ -52,7 +53,9 @@ function Notification(notification) {
           {notification.type}
         </p>
       </div>
-      <p>{notification.information}</p>
+      <p style={{ display: "block", paddingTop: "1rem" }}>
+        {notification.information}
+      </p>
     </div>
   );
 }
@@ -60,15 +63,37 @@ function Notification(notification) {
 function Notifications(props) {
   const [open, { toggle, off }] = useBoolean(false);
 
+  useEffect(() => {
+    if (open && props.hasUnread) {
+      props.setReadNotifications(false);
+    }
+  }, [open]);
+
   const notifications = props.notifications
     .reverse()
     .map((notification, index) => {
       return <Notification key={index} {...notification} />;
     });
 
+  function clearNotifications() {
+    props.clearNotifications();
+    if (props.hasUnread) {
+      props.setReadNotifications(false);
+    }
+  }
+
+  console.log(props.hasUnread);
+
   return (
     <React.Fragment>
-      <Icon name="bell" style={{ cursor: "pointer" }} onClick={toggle} />
+      <ShakeRotate fixed={props.hasUnread && !open} int={35} r={30}>
+        <Icon
+          className="hoverable"
+          name="bell"
+          style={{ cursor: "pointer" }}
+          onClick={toggle}
+        />
+      </ShakeRotate>
 
       {open && (
         <OutsideClickHandler onOutsideClick={off}>
@@ -76,7 +101,7 @@ function Notifications(props) {
             <Segment className="notif-menu-body">
               <div className="notif-heading">
                 <p className="header-text">Notifications</p>
-                <p className="clear-all" onClick={props.clearNotifications}>
+                <p className="clear-all" onClick={clearNotifications}>
                   Clear All
                 </p>
               </div>
