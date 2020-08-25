@@ -23,6 +23,7 @@ export default function DeleteDocument({
       // attempting auth with diff account
       notify({
         type: "error",
+        title: "Authorization failed",
         message:
           "Attempting authentication with different account than logged in account.",
       });
@@ -32,7 +33,11 @@ export default function DeleteDocument({
       userData.privilege_level !== "manager"
     ) {
       // this should NEVER happen, however this is a sanity check
-      notify({ type: "error", message: "Access denied!" });
+      notify({
+        type: "error",
+        title: "Authorization failed",
+        message: "Authorization failed or access denied",
+      });
 
       // forcibly log out
       props.logout();
@@ -55,7 +60,11 @@ export default function DeleteDocument({
 
     if (!authData || authData.data.err || authData.data.authed === false) {
       // credentials did not match
-      props.notify({ type: "error", message: "Authorization failed" });
+      props.notify({
+        type: "error",
+        title: "Authorization failed",
+        message: "Authorization failed or access denied",
+      });
     } else {
       // allow whatever command to proceed
       // props.notify({ type: "success", message: "Authorization successful" });
@@ -67,6 +76,7 @@ export default function DeleteDocument({
     if (!understood) {
       props.notify({
         type: "error",
+        title: "Form error",
         message:
           "You must acknowledge the disclaimer before submitting delete query",
       });

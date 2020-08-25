@@ -44,6 +44,7 @@ export default function InsertMenu(props) {
       // attempting auth with diff account
       props.notify({
         type: "error",
+        title: "Authorization failed",
         message:
           "Attempting authentication with different account than logged in account.",
       });
@@ -74,7 +75,11 @@ export default function InsertMenu(props) {
 
     if (!authData || authData.data.err || authData.data.authed === false) {
       // credentials did not match
-      props.notify({ type: "error", message: "Authorization failed" });
+      props.notify({
+        type: "error",
+        title: "Authorization failed",
+        message: "Authorization either failed or denied",
+      });
     } else {
       // allow whatever command to proceed
       // props.notify({ type: "success", message: authData.data.message });

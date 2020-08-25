@@ -21,8 +21,7 @@ module.exports = function (app) {
           res.status(500);
           res.send("Could not load config file");
         } else {
-          console.log(data);
-          res.send(data);
+          res.send("Updated config file");
         }
       }
     );

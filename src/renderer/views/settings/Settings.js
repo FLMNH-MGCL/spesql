@@ -104,11 +104,33 @@ export default function Settings(props) {
   }
 
   async function updateConfig(newConfig) {
-    const updateResponse = await axios.post("/api/update-config", {
-      newConfig,
-    });
+    const updateResponse = await axios
+      .post("/api/update-config", {
+        newConfig,
+      })
+      .catch((error) => {
+        return error.response;
+      });
 
-    // console.log(updateResponse);
+    // TODO: debug and get format
+    console.log(updateResponse);
+
+    if (updateResponse && updateResponse.data) {
+      if (updateResponse.data === "Updated config file") {
+        notify({
+          title: "Updated JSON configuration file",
+          type: "success",
+          message: "Please fully close and restart the application",
+        });
+      } else {
+        notify({
+          title: "Failed to update JSON configuration file",
+          type: "error",
+          message: updateResponse.data,
+        });
+      }
+    }
+
     setShouldRefetch(true);
   }
 

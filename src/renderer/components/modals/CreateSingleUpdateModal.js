@@ -188,6 +188,7 @@ export default class CreateSingleUpdateModal extends React.Component {
       // attempting auth with diff account
       this.props.notify({
         type: "error",
+        title: "Authorization failed",
         message:
           "Attempting authentication with different account than logged in account.",
       });
@@ -207,7 +208,11 @@ export default class CreateSingleUpdateModal extends React.Component {
 
     if (!authData || authData.data.err || authData.data.authed === false) {
       // credentials did not match
-      this.props.notify({ type: "error", message: "Authorization failed" });
+      this.props.notify({
+        type: "error",
+        title: "Authorization failed",
+        message: "Authorization failed or access denied",
+      });
     } else {
       // allow whatever command to proceed
       // this.props.notify({ type: "success", message: authData.data.message });
@@ -252,7 +257,8 @@ export default class CreateSingleUpdateModal extends React.Component {
       // send notification
       this.props.notify({
         type: "error",
-        message: "Errors detected. Please check error log.",
+        title: "Errors in form",
+        message: "Please check corresponding error log",
       });
 
       this.setState({ loading: false });
@@ -314,7 +320,9 @@ export default class CreateSingleUpdateModal extends React.Component {
     } else {
       this.props.notify({
         type: "warning",
-        message: "No changes were detected",
+        title: "No changes detected",
+        message:
+          "Query was not sent to server, as there was no new content to request updating",
       });
       this.setState({ loading: false });
     }
@@ -349,7 +357,8 @@ export default class CreateSingleUpdateModal extends React.Component {
     if (errors.length > 0) {
       this.props.notify({
         type: "error",
-        message: "Please check logs for errors",
+        title: "Errors in form",
+        message: "Please check corresponding logs for errors",
       });
 
       this.props.updateSingleUpdateErrorMessage(errors);
@@ -378,6 +387,7 @@ export default class CreateSingleUpdateModal extends React.Component {
       if (reasonError.length > 0 || fieldSelErr.length > 0) {
         this.props.notify({
           type: "error",
+          title: "Errors in form",
           message: "Please fix errors on this page before you continue.",
         });
         return false;
@@ -393,6 +403,7 @@ export default class CreateSingleUpdateModal extends React.Component {
       if (errors.length > 0) {
         this.props.notify({
           type: "error",
+          title: "Errors in form",
           message: "Please fix errors on this page before you continue.",
         });
         return false;
