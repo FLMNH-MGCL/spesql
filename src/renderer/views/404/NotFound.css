@@ -1,0 +1,7 @@
+.fourohfour-container {
+  display: flex;
+  background-color: #edf2f7;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}

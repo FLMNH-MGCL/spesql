@@ -50,7 +50,8 @@ function Login(props) {
     } else {
       notify({
         type: "success",
-        message: "Authentication successful.",
+        title: "Authentication successful",
+        message: "You will be redirected shortly",
       });
 
       setTimeout(() => {

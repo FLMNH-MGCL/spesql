@@ -2,8 +2,11 @@ import React from "react";
 import { Menu, Button, Dropdown, Icon } from "semantic-ui-react";
 import QueryMenu from "../dropdowns/QueryMenu";
 import Notifications from "../dropdowns/Notifications";
+import InsertMenu from "../dropdowns/InsertMenu";
+import CreateDownloadModal from "../modals/CreateDownloadModal";
 
 export default function Header(props) {
+  console.log(props);
   return (
     <Menu
       borderless
@@ -16,10 +19,13 @@ export default function Header(props) {
           <QueryMenu {...props} />
         </Menu.Item>
         <Menu.Item>
-          <Button>Insert</Button>
+          <InsertMenu {...props} />
         </Menu.Item>
         <Menu.Item>
-          <Button>Download</Button>
+          <CreateDownloadModal
+            disabled={props.data === undefined || props.data.length === 0}
+            data={props.data}
+          />
         </Menu.Item>
       </Menu.Menu>
 

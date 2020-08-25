@@ -3,7 +3,7 @@ import "./index.css";
 import React, { createRef } from "react";
 import { render } from "react-dom";
 import reducer from "./redux/reducer";
-import { HashRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
@@ -14,6 +14,9 @@ import Home from "./views/Home/Home";
 import NotificationSystem from "react-notification-system";
 import Login from "./views/login/Login";
 import Settings from "./views/settings/Settings";
+import AdminPortal from "./views/admin/AdminPortal";
+import NetworkError from "./views/404/NetworkError";
+import fourohfour from "./views/404/404";
 
 // NOTE: after transitioning to webpack configuration icons would not load properly
 // this is a fix to *temporarily* include the links
@@ -71,6 +74,21 @@ function App() {
                 <Settings {...props} notify={addNotification} />
               )}
             />
+
+            <Route
+              exact
+              path="/admin"
+              render={(props) => (
+                <AdminPortal {...props} notify={addNotification} />
+              )}
+            />
+
+            <Route exact path="/home">
+              <Redirect to="/" />
+            </Route>
+
+            <Route exact path="/404/network-issues" component={NetworkError} />
+            <Route path="*" component={fourohfour} />
           </Switch>
         </HashRouter>
       </PersistGate>

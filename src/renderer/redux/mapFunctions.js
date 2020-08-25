@@ -15,6 +15,7 @@ export function mapStateToProps(state) {
     errorMessages: state.errorMessages,
     loading: state.loading,
     refreshing: state.refreshing,
+    notifications: state.notifications,
   };
 }
 
@@ -53,8 +54,6 @@ export function mapDispatchToProps(dispatch) {
         type: "UPDATE_CSV_INSERT_ERROR_LOG",
         csvInsert: csvInsert,
       }),
-    // updateInsertErrorMessage: (insertError) =>
-    //   dispatch({ type: "UPDATE_INSERT_ERROR_LOG", insertError: insertError }),
     updateCountErrorMessage: (countError) =>
       dispatch({ type: "UPDATE_COUNT_ERROR_LOG", countError: countError }),
     updateUpdateErrorMessage: (updateError) =>
@@ -76,6 +75,11 @@ export function mapDispatchToProps(dispatch) {
         type: "UPDATE_ADMIN_USER_ERROR_LOG",
         adminUserError: adminUserError,
       }),
+    createNotification: (notification) =>
+      dispatch({ type: "CREATE_NOTIFICATION", notification: notification }),
+    deleteNotification: (notificationId) =>
+      dispatch({ type: "DELETE_NOTIFICATION", notificationId: notificationId }),
+    clearNotifications: () => dispatch({ type: "CLEAR_NOTIFICATIONS" }),
     updateLoadingStatus: (loadingStatus) =>
       dispatch({ type: "UPDATE_LOADING_STATUS", loadingStatus: loadingStatus }),
     updateRefreshStatus: (refreshStatus) =>

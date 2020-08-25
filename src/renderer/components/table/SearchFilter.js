@@ -52,10 +52,14 @@ class SearchFilter extends React.Component {
 
         let tempRow = checkRow;
         checkRow = [];
-        checkGrid.push(<Form.Group widths="equal">{tempRow}</Form.Group>);
+        checkGrid.push(
+          <Form.Group widths="equal" key={`${header}${index}`}>
+            {tempRow}
+          </Form.Group>
+        );
       } else {
         checkRow.push(
-          <Form.Field>
+          <Form.Field key={`${header}${index}`}>
             <Checkbox
               radio
               label={header.value === "*" ? "all" : header.value}

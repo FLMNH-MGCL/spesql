@@ -11,12 +11,10 @@ import SpecimenView from "../../components/specimen/SpecimenView";
 
 function Home(props) {
   const notify = props.notify;
-  // const [hasConfig, setHasConfig] = useState(false);
 
   useEffect(() => {
     async function checkConfig() {
-      const config = await axios.post("/api/config-check").catch((error) => {
-        // console.log(error.response);
+      await axios.post("/api/config-check").catch((_) => {
         return false;
       });
 
@@ -223,15 +221,19 @@ function Home(props) {
     }
   }
 
-  console.log(window.location.hash);
-
   if (!props.authenticated || !props.userData) {
     window.location.hash = "/login";
   }
 
   return (
     <React.Fragment>
-      <Header {...props} runSelectQuery={runSelectQuery} />
+      <Header
+        {...props}
+        runSelectQuery={runSelectQuery}
+        runCountQuery={runCountQuery}
+        runUpdateQuery={runUpdateQuery}
+        runDeleteQuery={runDeleteQuery}
+      />
 
       <Grid columns="equal" padded stackable>
         <Grid.Row centered stretched>

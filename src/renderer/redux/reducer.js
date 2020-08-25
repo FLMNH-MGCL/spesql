@@ -19,6 +19,10 @@ export const UPDATE_GLOBAL_ERROR_LOG = "UPDATE_GLOBAL_ERROR_LOG";
 export const UPDATE_ADMIN_TABLE_ERROR_LOG = "UPDATE_ADMIN_TABLE_ERROR_LOG";
 export const UPDATE_ADMIN_USER_ERROR_LOG = "UPDATE_ADMIN_USER_ERROR_LOG";
 
+export const CREATE_NOTIFICATION = "CREATE_NOTIFICATION";
+export const DELETE_NOTIFICATION = "DELETE_NOTIFICATION";
+export const CLEAR_NOTIFICATIONS = "CLEAR_NOTIFICATIONS";
+
 export const UPDATE_LOADING_STATUS = "UPDATE_LOADING_STATUS";
 export const UPDATE_REFRESH_STATUS = "UPDATE_REFRESH_STATUS";
 export const CHANGE_USER = "CHANGE_USER";
@@ -50,6 +54,7 @@ const initialState = {
     adminTblError: null,
     adminUserError: null,
   },
+  notifications: [],
   loading: false,
   refreshing: false,
 };
@@ -252,6 +257,21 @@ export default function reducer(state = initialState, action) {
         adminTblError: state.adminTblError,
         adminUserError: action.adminUserError,
       };
+      return newState;
+
+    case "CREATE_NOTIFICATION":
+      newState.notifications.push(action.notification);
+
+      return newState;
+
+    case "DELETE_NOTIFICATION":
+      newState.notifications.splice(action.notificationId, 1);
+
+      return newState;
+
+    case "CLEAR_NOTIFICATIONS":
+      newState.notifications = [];
+
       return newState;
 
     case "UPDATE_LOADING_STATUS":
