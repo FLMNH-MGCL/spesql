@@ -34,13 +34,7 @@ export default function Header(props) {
           <Notifications {...props} />
         </Menu.Item>
         <Menu.Item>
-          <Dropdown
-            // text={<p style={{ fontWeight: "500" }}>user</p>}
-            // text={<h5>user</h5>}
-            icon="user"
-            floating
-            // className="hideIcon"
-          >
+          <Dropdown icon={<Icon className="hoverable" name="user" />} floating>
             <Dropdown.Menu>
               <Dropdown.Header
                 content={props.userData ? props.userData.username : ""}

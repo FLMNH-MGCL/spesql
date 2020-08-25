@@ -26,17 +26,16 @@ module.exports = function (connection, app) {
       res.send("Missing credentials");
     }
 
+    // START INITIAL QUERY
     connection.query(
       `SELECT * FROM users WHERE username="${user}";`,
       (err, data) => {
         if (err) {
-          res.status(503);
-          res.send("Bad connection detected");
+          res.status(503).send("Bad connection detected");
           return;
         } else if (data.length < 1 || data === [] || !data) {
           // auth failed
-          res.status(401);
-          res.send("Authorization either failed or denied");
+          res.status(401).send("Authorization either failed or denied");
           return;
         } else {
           // const _adminUsername = data[0].username;
@@ -44,37 +43,38 @@ module.exports = function (connection, app) {
           const privilege = data[0].privilege_level;
 
           if (!canAccess(privilege, "manager")) {
-            res.status(403);
-            res.send("Authorization either failed or denied");
+            res.status(403).send("Authorization either failed or denied");
             return;
           }
 
           bcrypt.compare(password, _password).then((result) => {
             if (result !== true) {
-              // invalid auth state, unauthorized to create user
-              res.status(401);
-              res.send("Authorization either failed or denied");
+              // invalid auth state, unauthorized to create table
+              res.status(401).send("Authorization either failed or denied");
               return;
+            } else {
+              // ACTUAL FUNCTION
+              // TODO: don't do data: err, instead do error: err and change client to check for data OR error
+              connection.query(command.command, (err, data) => {
+                if (err) {
+                  res.json({
+                    success: false,
+                    data: err,
+                  });
+                }
+
+                // console.log("Deleted Row(s):", data.affectedRows);
+                res.json({
+                  success: true,
+                  data: data,
+                });
+              });
+              // END ACTUAL FUNCTION
             }
           });
         }
       }
     );
-
-    // TODO: don't do data: err, instead do error: err and change client to check for data OR error
-    connection.query(command.command, (err, data) => {
-      if (err) {
-        res.json({
-          success: false,
-          data: err,
-        });
-      }
-
-      // console.log("Deleted Row(s):", data.affectedRows);
-      res.json({
-        success: true,
-        data: data,
-      });
-    });
+    // END INITIAL QUERY
   });
 };

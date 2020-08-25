@@ -20,17 +20,5 @@ module.exports = function (app) {
       .on("error", (err) => {
         console.log(err);
       });
-    // .then(res => {
-    //   res.json();
-    // })
-    // .then(json => {
-    //   console.log(json);
-    //   res.status(200);
-    //   res.json(json);
-    // })
-    // .catch(err => {
-    //   res.status(500);
-    //   res.json(err);
-    // });
   });
 };

@@ -8,7 +8,7 @@ module.exports = function (connection, app) {
   app.post("/api/admin/reregister-table/", function (req, res) {
     const { command } = req.body;
 
-    console.log(command);
+    // console.log(command);
 
     connection.query(command, (err, data) => {
       if (err) {

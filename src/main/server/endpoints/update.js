@@ -1,11 +1,17 @@
 const mysql = require("mysql");
-const authCheck = require("../helpers/authCheck");
+const canAccess = require("../helpers/downAccess");
+const bcrypt = require("bcrypt");
 
 module.exports = function (connection, app) {
   app.post("/api/update/", function (req, res) {
     let command = req.body;
     const user = req.body.user;
     const password = req.body.password;
+
+    if (!user || !password) {
+      res.status(400).send("Missing credentials");
+      return;
+    }
 
     if (!command || !command.command.toLowerCase().startsWith("update")) {
       // not an update query
@@ -21,31 +27,54 @@ module.exports = function (connection, app) {
       return;
     }
 
-    let { status, message } = authCheck(
-      connection,
-      { username: user, password: password },
-      "manager"
-    );
+    // START INITIAL QUERY
+    connection.query(
+      `SELECT * FROM users WHERE username="${user}";`,
+      (err, data) => {
+        if (err) {
+          res.status(503).send("Bad connection detected");
+          return;
+        } else if (data.length < 1 || data === [] || !data) {
+          // auth failed
+          res.status(401).send("Authorization either failed or denied");
+          return;
+        } else {
+          // const _adminUsername = data[0].username;
+          const _password = data[0].password;
+          const privilege = data[0].privilege_level;
 
-    if (status !== 200) {
-      res.status(status);
-      res.send(message);
-      return;
-    }
+          if (!canAccess(privilege, "admin")) {
+            res.status(403).send("Authorization either failed or denied");
+            return;
+          }
 
-    connection.query(command.command, (err, data) => {
-      if (err) {
-        // res.status(503);
-        res.json({
-          success: false,
-          data: err,
-        });
-      } else {
-        res.json({
-          success: true,
-          data: data,
-        });
+          bcrypt.compare(password, _password).then((result) => {
+            if (result !== true) {
+              // invalid auth state, unauthorized to create table
+              res.status(401).send("Authorization either failed or denied");
+              return;
+            } else {
+              // ACTUAL FUNCTION
+              connection.query(command.command, (err, data) => {
+                if (err) {
+                  // res.status(503);
+                  res.json({
+                    success: false,
+                    data: err,
+                  });
+                } else {
+                  res.json({
+                    success: true,
+                    data: data,
+                  });
+                }
+              });
+              // END ACTUAL FUNCTION
+            }
+          });
+        }
       }
-    });
+    );
+    // END INITIAL QUERY
   });
 };

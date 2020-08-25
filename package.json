@@ -9,7 +9,8 @@
     "compile": "electron-webpack --env.minify=false",
     "package": "electron-builder",
     "build": "yarn compile && yarn package",
-    "release": "yarn version && git push && git push --tags"
+    "release": "yarn version && git push && git push --tags",
+    "server": "nodemon src/main/server/server.js"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.10.4",
@@ -26,6 +27,7 @@
     "menubar": "^9.0.1",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.0",
+    "nodemon": "^2.0.4",
     "papaparse": "^5.2.0",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
