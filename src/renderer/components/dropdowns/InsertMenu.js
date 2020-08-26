@@ -5,6 +5,8 @@ import CreateManualModal from "../modals/CreateManualModal";
 import axios from "axios";
 import "./InsertDocument.css";
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export default function InsertMenu(props) {
   const [showPaste, togglePaste] = useState(false);
   const [showManual, toggleManual] = useState(false);
@@ -16,7 +18,7 @@ export default function InsertMenu(props) {
         let dbSelection = [];
         const { userData } = props;
         await axios
-          .post("/api/list-tables/", {
+          .post(PREFIX + "/api/list-tables/", {
             privilege_level: userData.privilege_level,
             query_type: queryType,
           })
@@ -62,7 +64,7 @@ export default function InsertMenu(props) {
     }
 
     const authData = await axios
-      .post("/api/login/", {
+      .post(PREFIX + "/api/login/", {
         user: user,
         password: password,
       })

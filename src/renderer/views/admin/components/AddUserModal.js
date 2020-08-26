@@ -18,6 +18,8 @@ const ACCESS_LEVELS = [
   { key: "Admin", text: "Admin", value: "admin" },
 ];
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export default function AddUserModal({
   users,
   checkAuth,
@@ -48,7 +50,7 @@ export default function AddUserModal({
 
   async function generateSecurePass() {
     setFetching(true);
-    const res = await axios.get("/api/admin/generate-password/");
+    const res = await axios.get(PREFIX + "/api/admin/generate-password/");
 
     if (res.status === 200 || !res.err) {
       const _password = res.data.char[0].concat(res.data.char[1]);
@@ -186,7 +188,7 @@ export default function AddUserModal({
     }
 
     const res = await axios
-      .post("/api/admin/create-user/", creationProps)
+      .post(PREFIX + "/api/admin/create-user/", creationProps)
       .catch((error) => {
         return { error: error.response };
       });

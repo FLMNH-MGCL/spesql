@@ -6,6 +6,8 @@ import CreateCountModal from "../modals/CreateCountModal";
 import CreateUpdateModal from "../modals/CreateUpdateModal";
 import axios from "axios";
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export default function QueryMenu(props) {
   const [showSelect, toggleSelect] = useState(false);
   const [showCount, toggleCount] = useState(false);
@@ -38,7 +40,7 @@ export default function QueryMenu(props) {
     }
 
     const authData = await axios
-      .post("/api/login/", {
+      .post(PREFIX + "/api/login/", {
         user: user,
         password: password,
       })

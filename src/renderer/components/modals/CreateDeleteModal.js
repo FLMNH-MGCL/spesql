@@ -4,6 +4,8 @@ import useBoolean from "../../utils/useBoolean";
 import ConfirmAuth from "../auth/ConfirmAuth";
 import axios from "axios";
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export default function DeleteDocument({
   selectedSpecimen,
   disabled,
@@ -47,7 +49,7 @@ export default function DeleteDocument({
     // let resStatus = null;
 
     const authData = await axios
-      .post("/api/login/", {
+      .post(PREFIX + "/api/login/", {
         user: user,
         password: password,
       })

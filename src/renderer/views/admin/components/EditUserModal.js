@@ -19,6 +19,8 @@ const ACCESS_LEVELS = [
   { key: "Admin", text: "Admin", value: "admin" },
 ];
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export default function EditUserModal({
   users,
   checkAuth,
@@ -74,7 +76,7 @@ export default function EditUserModal({
   };
 
   async function generateSecurePass() {
-    const res = await axios.get("/api/admin/generate-password/");
+    const res = await axios.get(PREFIX + "/api/admin/generate-password/");
 
     if (res.status === 200 || !res.err) {
       const _password = res.data.char[0].concat(res.data.char[1]);
@@ -128,7 +130,7 @@ export default function EditUserModal({
 
   async function deleteUser(adminData) {
     const res = await axios
-      .post("/api/admin/delete-user/", {
+      .post(PREFIX + "/api/admin/delete-user/", {
         username: username,
         adminUser: adminData.username,
         adminPass: adminData.pass,
@@ -283,7 +285,7 @@ export default function EditUserModal({
 
     // update user
     const res = await axios
-      .post("/api/admin/update-user", {
+      .post(PREFIX + "/api/admin/update-user", {
         id: changes.id,
         newUser: changes.newUser,
         adminUser: adminData.username,

@@ -3,7 +3,16 @@
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "description": "An interactive, MYSQL database portal for performing CRUD operations. Created for the FLMNH at the University of Florida.",
+  "author": {
+    "name": "Aaron Leopold",
+    "email": "aaronleopold1221@gmail.com",
+    "url": "https://www.aaronbleopold.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FLMNH-MGCL/spesql"
+  },
   "scripts": {
     "start": "electron-webpack dev",
     "compile": "electron-webpack --env.minify=false",

@@ -9,12 +9,14 @@ import { Grid, Loader, Segment } from "semantic-ui-react";
 import { getQueryHeaders } from "../../functions/helpers";
 import SpecimenView from "../../components/specimen/SpecimenView";
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 function Home(props) {
   const notify = props.notify;
 
   useEffect(() => {
     async function checkConfig() {
-      await axios.post("/api/config-check").catch((_) => {
+      await axios.post(PREFIX + "/api/config-check").catch((_) => {
         return false;
       });
 
@@ -45,7 +47,7 @@ function Home(props) {
     props.updateRefreshStatus(true);
 
     const ret = await axios
-      .post("/api/select", { command: query })
+      .post(PREFIX + "/api/select", { command: query })
       .then((res) => {
         return res.data;
       })
@@ -99,7 +101,7 @@ function Home(props) {
     if (!query || query === "") return;
 
     const ret = await axios
-      .post("/api/select-count", { command: query })
+      .post(PREFIX + "/api/select-count", { command: query })
       .then((res) => {
         return res.data;
       })
@@ -144,7 +146,7 @@ function Home(props) {
     if (!query || query === "") return;
 
     const ret = await axios
-      .post(`/api/delete/`, {
+      .post(PREFIX + `/api/delete/`, {
         command: query,
         user: userData.user,
         password: userData.password,
@@ -191,7 +193,7 @@ function Home(props) {
     if (!query || query === "") return;
 
     const ret = await axios
-      .post("/api/update/", {
+      .post(PREFIX + "/api/update/", {
         command: query,
         user: userData.user,
         password: userData.password,

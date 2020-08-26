@@ -9,6 +9,8 @@ const ACCESS_LEVELS = [
   { key: "Admin", text: "Admin", value: "admin" },
 ];
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export default function AddTableModal({
   tables,
   checkAuth,
@@ -37,9 +39,12 @@ export default function AddTableModal({
 
   async function registerTable(tableAttributes) {
     // axios to register table to admin table of tables
-    const registerResponse = await axios.post("/api/admin/register-table/", {
-      tableAttributes: tableAttributes,
-    });
+    const registerResponse = await axios.post(
+      PREFIX + "/api/admin/register-table/",
+      {
+        tableAttributes: tableAttributes,
+      }
+    );
 
     // console.log(registerResponse);
     if (registerResponse.data.data) {
@@ -81,7 +86,7 @@ export default function AddTableModal({
     // axios to create table
     let resStatus = 200;
     const creationResponse = await axios
-      .post("/api/admin/create-table/", {
+      .post(PREFIX + "/api/admin/create-table/", {
         tableName: name,
         adminUser: adminData.username,
         adminPass: adminData.pass,

@@ -20,6 +20,8 @@ import CreateHelpModal from "../CreateHelpModal";
 import axios from "axios";
 import CreateErrorLogModal from "../CreateErrorLogModal";
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export default class CountForm extends React.Component {
   state = {
     advanced_query: "",
@@ -40,7 +42,7 @@ export default class CountForm extends React.Component {
     let dbSelection = [];
     const { userData } = this.props;
     await axios
-      .post("/api/list-tables/", {
+      .post(PREFIX + "/api/list-tables/", {
         privilege_level: userData.privilege_level,
         query_type: query_type,
       })

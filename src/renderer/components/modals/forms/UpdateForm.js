@@ -36,6 +36,7 @@ import { checkField } from "../../../functions/queryChecks";
 import SemanticDatepicker from "react-semantic-ui-datepickers";
 
 const setOptions = headerSelection.slice(1, headerSelection.length);
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
 
 export default class UPDATE extends React.Component {
   state = {
@@ -142,7 +143,7 @@ export default class UPDATE extends React.Component {
     let dbSelection = [];
     const { userData } = this.props;
     await axios
-      .post("/api/list-tables/", {
+      .post(PREFIX + "/api/list-tables/", {
         privilege_level: userData.privilege_level,
         query_type: query_type,
       })

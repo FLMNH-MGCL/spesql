@@ -12,6 +12,13 @@ app.use(jsonParser);
 
 const port = process.env.PORT || 5000;
 
+// if (process.env.NODE_ENV === "production") {
+//   app.get("/", function (req, res) {
+//     // res.sendFile(path.join(__dirname, "index.html"));
+//     res.send(`<p>${__dirname} ${port}</p>`);
+//   });
+// }
+
 async function bootstrap(mysqlCredentials) {
   app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

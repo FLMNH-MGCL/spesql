@@ -19,6 +19,8 @@ import AddTableModal from "./components/AddTableModal";
 import EditTableModal from "./components/EditTableModal";
 import CreateErrorLogModal from "../../components/modals/CreateErrorLogModal";
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 function AdminPortal(props) {
   const notify = props.notify;
   const [users, setUsers] = useState();
@@ -50,7 +52,7 @@ function AdminPortal(props) {
     }
 
     const authData = await axios
-      .post("/api/login/", {
+      .post(PREFIX + "/api/login/", {
         user: user,
         password: password,
       })
@@ -74,7 +76,7 @@ function AdminPortal(props) {
   }
 
   async function getUsers() {
-    const res = await axios.get("/api/admin/fetch-users/");
+    const res = await axios.get(PREFIX + "/api/admin/fetch-users/");
     // console.log(res);
 
     if (res.status !== 200 || res.err) {
@@ -89,7 +91,7 @@ function AdminPortal(props) {
   }
 
   async function getTables() {
-    const res = await axios.get("/api/admin/list-tables/");
+    const res = await axios.get(PREFIX + "/api/admin/list-tables/");
 
     if (res.status !== 200 || res.err) {
       notify({

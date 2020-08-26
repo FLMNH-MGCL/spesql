@@ -41,6 +41,8 @@ function ConfigInputField(props) {
   );
 }
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export default function Settings(props) {
   const notify = props.notify;
   const [configExists, setExistence] = useState(undefined);
@@ -54,10 +56,12 @@ export default function Settings(props) {
 
   useEffect(() => {
     async function fetchConfig() {
-      const config = await axios.post("/api/config-check").catch((error) => {
-        console.log(error.response);
-        return null;
-      });
+      const config = await axios
+        .post(PREFIX + "/api/config-check")
+        .catch((error) => {
+          console.log(error.response);
+          return null;
+        });
 
       if (config && config.data) {
         setExistence(config.data);
@@ -105,7 +109,7 @@ export default function Settings(props) {
 
   async function updateConfig(newConfig) {
     const updateResponse = await axios
-      .post("/api/update-config", {
+      .post(PREFIX + "/api/update-config", {
         newConfig,
       })
       .catch((error) => {
@@ -136,7 +140,7 @@ export default function Settings(props) {
 
   async function createConfig(newConfig) {
     const createResponse = await axios
-      .post("/api/create-config", {
+      .post(PREFIX + "/api/create-config", {
         newConfig,
       })
       .catch((error) => {});

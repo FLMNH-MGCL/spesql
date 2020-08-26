@@ -20,6 +20,8 @@ const ACCESS_LEVELS = [
   { key: "Admin", text: "Admin", value: "admin" },
 ];
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export default function EditTableModal({
   tables,
   checkAuth,
@@ -180,7 +182,7 @@ export default function EditTableModal({
 
     // attempt deletion
     const deleteData = await axios
-      .post("/api/admin/delete-table/", {
+      .post(PREFIX + "/api/admin/delete-table/", {
         tbl_name: selected.tbl_name,
         user: userData.username,
         password: userData.pass,
@@ -199,7 +201,7 @@ export default function EditTableModal({
     }
 
     // attempt unregister
-    const unregisterData = axios.post("/api/admin/unregister-table/", {
+    const unregisterData = axios.post(PREFIX + "/api/admin/unregister-table/", {
       tbl_name: selected.tbl_name,
     });
 

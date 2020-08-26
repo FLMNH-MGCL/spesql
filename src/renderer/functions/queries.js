@@ -1,10 +1,12 @@
 import axios from "axios";
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export async function runSelectQuery(query) {
   //sessionStorage.setItem('current_query', query)
 
   let data = { command: query };
-  const res = await axios.post("/api/select/", data);
+  const res = await axios.post(PREFIX + "/api/select/", data);
 
   return res.data;
 }
@@ -12,7 +14,7 @@ export async function runSelectQuery(query) {
 export async function runCountQuery(query) {
   let data = { command: query };
 
-  const res = await axios.post("/api/select-count/", data);
+  const res = await axios.post(PREFIX + "/api/select-count/", data);
 
   return res.data;
 }
@@ -20,10 +22,12 @@ export async function runCountQuery(query) {
 export async function runUpdateQuery(query) {
   let data = { command: query };
 
-  const ret = await axios.post("/api/update/", data).then((response) => {
-    const data = response;
-    return data;
-  });
+  const ret = await axios
+    .post(PREFIX + "/api/update/", data)
+    .then((response) => {
+      const data = response;
+      return data;
+    });
 
   // console.log(ret);
 
@@ -32,7 +36,7 @@ export async function runUpdateQuery(query) {
 
 export async function runDeleteQuery(query, body) {
   const ret = await axios
-    .post(`/api/delete/`, {
+    .post(PREFIX + `/api/delete/`, {
       command: query,
       user: body.user,
       password: body.password,
@@ -55,7 +59,7 @@ export async function runInsertQuery(insertions, table) {
   let insertionsData = [];
   asyncForEach(insertions, async (specimen) => {
     const ret = await axios
-      .post("/api/insert", { specimen: specimen, table: table })
+      .post(PREFIX + "/api/insert", { specimen: specimen, table: table })
       .then((response) => {
         const data = response;
         return data;
@@ -68,7 +72,7 @@ export async function runInsertQuery(insertions, table) {
 }
 
 export async function runSingleInsert(specimen, table) {
-  const insertData = await axios.post("api/insert", {
+  const insertData = await axios.post(PREFIX + "api/insert", {
     specimen: specimen,
     table: table,
   });
@@ -76,7 +80,7 @@ export async function runSingleInsert(specimen, table) {
 }
 
 export async function currentUser() {
-  const response = await axios.get("/api/fetchCurrentUser/");
+  const response = await axios.get(PREFIX + "/api/fetchCurrentUser/");
   // console.log(response)
   if (response.data.success === false) {
     console.log("err");
@@ -89,7 +93,9 @@ export async function currentUser() {
 }
 
 export async function alterTable(command) {
-  const response = await axios.post("/api/admin/alter-table", { command });
+  const response = await axios.post(PREFIX + "/api/admin/alter-table", {
+    command,
+  });
 
   if (response.error) {
     return response.sqlMessage;
@@ -99,7 +105,9 @@ export async function alterTable(command) {
 }
 
 export async function reregisterTable(command) {
-  const response = await axios.post("/api/admin/reregister-table", { command });
+  const response = await axios.post(PREFIX + "/api/admin/reregister-table", {
+    command,
+  });
 
   if (response.error) {
     return response.sqlMessage;

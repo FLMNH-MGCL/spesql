@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 module.exports = (config) => {
   config.module.rules.find((rule) => {
     if (rule && rule.test && rule.test.test(".css")) {
@@ -14,9 +16,17 @@ module.exports = (config) => {
 
   config.externals = ["react", "react-dom"];
 
-  config.devServer.proxy = {
-    "/": "http://localhost:5000",
-  };
+  config.plugins = [
+    ...config.plugins,
+    new webpack.DefinePlugin({
+      PUBLIC_URL: JSON.stringify("http://localhost:5000"),
+    }),
+  ];
+
+  // UNCOMMENT FOR DEVELOPMENT WORK
+  // config.devServer.proxy = {
+  //   "/": "http://localhost:5000",
+  // };
 
   return config;
 };

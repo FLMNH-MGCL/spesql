@@ -5,6 +5,8 @@ import axios from "axios";
 import CreateDeleteModal from "../modals/CreateDeleteModal";
 import CreateSingleUpdateModal from "../modals/CreateSingleUpdateModal";
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 class SpecimenView extends React.Component {
   async checkAuth(user, password, callback) {
     if (this.props.userData.username !== user) {
@@ -33,7 +35,7 @@ class SpecimenView extends React.Component {
     }
 
     const authData = await axios
-      .post("/api/login/", {
+      .post(PREFIX + "/api/login/", {
         user: user,
         password: password,
       })

@@ -33,6 +33,8 @@ import ConfirmAuth from "../auth/ConfirmAuth";
 import CreateErrorLogModal from "./CreateErrorLogModal";
 import axios from "axios";
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 export default class CreateSingleUpdateModal extends React.Component {
   constructor(props) {
     super(props);
@@ -196,7 +198,7 @@ export default class CreateSingleUpdateModal extends React.Component {
     }
 
     const authData = await axios
-      .post("/api/login/", {
+      .post(PREFIX + "/api/login/", {
         user: user,
         password: password,
       })

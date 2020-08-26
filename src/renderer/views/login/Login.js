@@ -16,6 +16,8 @@ import { connect } from "react-redux";
 import flmnhLogo from "../../assets/flmnhLogo.png";
 // import HeaderBase from '../../components/Header/HeaderBase'
 
+const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
+
 function Login(props) {
   const notify = props.notify;
   const [username, setUsername] = useState("");
@@ -26,7 +28,7 @@ function Login(props) {
   const attemptLogin = async () => {
     let resStatus = null;
     let authData = await axios
-      .post("/api/login/", {
+      .post(PREFIX + "/api/login/", {
         user: username,
         password: password,
       })
