@@ -11,6 +11,7 @@ import CreateHelpModal from "../modals/CreateHelpModal";
 import _ from "lodash";
 import "react-virtualized/styles.css";
 import "./VirtualizedList.css";
+import CreateToolsModal from "../modals/CreateToolsModal";
 
 const SortableTable = SortableContainer(Table);
 
@@ -223,6 +224,7 @@ export default function VirtualizedList({
                 updateError={props.updateGlobalErrorMessage}
                 inline
               />
+              <CreateToolsModal {...props} />
             </div>
             <div className="query-infosheet">
               <div className="query-text">

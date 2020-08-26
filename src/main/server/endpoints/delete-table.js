@@ -1,6 +1,5 @@
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
-const authCheck = require("../helpers/authCheck");
 const canAccess = require("../helpers/downAccess");
 
 module.exports = function (connection, app) {

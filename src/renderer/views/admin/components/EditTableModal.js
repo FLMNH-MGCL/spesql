@@ -23,7 +23,7 @@ const ACCESS_LEVELS = [
 export default function EditTableModal({
   tables,
   checkAuth,
-  createNotification,
+  notify,
   refresh,
   errors,
   updateError,
@@ -88,20 +88,23 @@ export default function EditTableModal({
 
   async function handleSubmit() {
     if (hasError) {
-      createNotification({
+      notify({
         type: "error",
+        title: "Errors in form",
         message: "You must fix the errors in the form",
       });
 
       return;
-    } else if (!understood) {
-      createNotification({
-        type: "error",
-        message: "You must accept the disclaimer in the form",
-      });
-
-      return;
     }
+    // } else if (!understood) {
+    //   notify({
+    //     type: "error",
+    //     title: "Errors in form",
+    //     message: "You must accept the disclaimer in the form",
+    //   });
+
+    //   return;
+    // }
 
     if (selected.tbl_name !== name) {
       // actual table must be updated
@@ -111,16 +114,18 @@ export default function EditTableModal({
       // console.log(renameResponse);
 
       if (renameResponse.error) {
-        createNotification({
+        notify({
           type: "error",
+          title: "Errors occurred",
           message: renameResponse.sqlMessage.sqlMessage,
         });
 
         updateError([renameResponse.sqlMessage.sqlMessage]);
         return;
       } else {
-        createNotification({
+        notify({
           type: "success",
+          title: "Renamed table",
           message: renameResponse.data,
         });
       }
@@ -136,8 +141,9 @@ export default function EditTableModal({
     const reregisterResponse = await reregisterTable(command);
 
     if (reregisterResponse.error) {
-      createNotification({
+      notify({
         type: "error",
+        title: "Unable to register table",
         message: reregisterResponse.sqlMessage.sqlMessage,
       });
 
@@ -147,8 +153,9 @@ export default function EditTableModal({
       ]);
       return;
     } else {
-      createNotification({
+      notify({
         type: "success",
+        title: "Registered updated table",
         message: reregisterResponse.data,
       });
     }
@@ -158,6 +165,16 @@ export default function EditTableModal({
   }
 
   async function handleDelete(userData) {
+    if (!understood) {
+      notify({
+        type: "error",
+        title: "Errors in form",
+        message: "You must accept the disclaimer in the form",
+      });
+
+      return;
+    }
+
     let deleted = false;
     let unregistered = false;
 
@@ -196,23 +213,25 @@ export default function EditTableModal({
 
     if (deleted && unregistered) {
       // everything is good
-      createNotification({
+      notify({
         type: "success",
-        message:
-          "Deletion and unregistration successful! Table is now in the void.",
+        title: "Deletion completed",
+        message: "Table is now in the void",
       });
       resetState();
       refresh();
     } else if (deleted && !unregistered) {
       // could not unregister table, need to contact me to manually unregister
-      createNotification({
+      notify({
         type: "warning",
+        title: "Could not unregister table",
         message:
-          "Deletion succeeded, unregistration failed. Please check logs and contact Aaron for support.",
+          "Deletion succeeded, unregistration failed. Please check logs and contact support",
       });
     } else {
-      createNotification({
+      notify({
         type: "error",
+        title: "Could not delete table",
         message:
           "Deletion and unregistration of table failed. Please check logs.",
       });
@@ -267,10 +286,6 @@ export default function EditTableModal({
             <Popup
               content="This cannot be undone!"
               trigger={
-                // <Button icon labelPosition="left" color="red">
-                //   <Icon name="user delete" />
-                //   Delete User
-                // </Button>
                 <ConfirmAuth
                   handleSubmit={handleDelete}
                   checkAuth={checkAuth}

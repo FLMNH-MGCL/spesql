@@ -953,6 +953,23 @@ export default class CreateHelpModal extends React.Component {
                     connectivity
                   </p>
                 </Accordion.Content>
+
+                <Accordion.Title
+                  active={activeIndex === 7}
+                  index={7}
+                  onClick={this.handleClick}
+                >
+                  <Icon name="dropdown" />I just sent an update, it refetched my
+                  select query and I don't see my change
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === 7}>
+                  <p>
+                    I've noticed if you have a very fast connection, the program
+                    will actually start refetching as the update is finalizing.
+                    Refetching manually should work and your changes should have
+                    persisted.
+                  </p>
+                </Accordion.Content>
               </Accordion>
               <h3 style={{ display: "block" }}>Still Stuck?</h3>
               <p>

@@ -53,9 +53,6 @@ export default function CreateErrorLogModal({
   inline,
 }) {
   const [open, { on, off }] = useBoolean(false);
-  // const [hasError, setHasError] = useState(errors ? true : false);
-
-  // useEffect(() => {}, [errors]);
 
   return (
     <Modal

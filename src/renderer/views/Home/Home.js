@@ -58,14 +58,15 @@ function Home(props) {
     if (ret.specimen && ret.specimen.length < 1) {
       notify({
         type: "warning",
-        message: "Query yielded no data",
+        title: "Query returned nothing",
+        message: "There was no yielded data",
       });
       props.updateLoadingStatus(false);
       props.updateQuery(query);
     } else if (ret.specimen) {
       notify({
         type: "success",
-        message: "Query loaded",
+        title: "Query loaded",
       });
       props.updateQueryData(ret.specimen);
       let headers = getQueryHeaders(ret.specimen[0]);
@@ -76,7 +77,8 @@ function Home(props) {
     else {
       notify({
         type: "error",
-        message: "Uh oh, please check error log.",
+        title: "Errors occurred",
+        message: "Please check the corresponding error log.",
       });
       const error = ret.error;
       let errorMessage = "";
@@ -113,8 +115,8 @@ function Home(props) {
     else {
       notify({
         type: "error",
-        title: "Uh oh, please check error log",
-        message: "An error occurred during a count query that needs reviewing",
+        title: "Errors occurred",
+        message: "Please check the corresponding error log",
       });
       const error = ret.error;
 
@@ -160,13 +162,16 @@ function Home(props) {
     if (ret.data) {
       notify({
         type: "success",
+        title: "Deletion completed",
         message: "Successfully deleted entry",
       });
+      props.updateSelectedSpecimen(undefined);
       runSelectQuery(props.current_query);
     } else {
       notify({
         type: "error",
-        message: "Uh oh, please check error log.",
+        title: "Errors occurred",
+        message: "Please check corresponding error log.",
       });
 
       const error = ret.error;
@@ -202,12 +207,16 @@ function Home(props) {
     if (ret.data && ret.data.success) {
       notify({
         type: "success",
+        title: "Update completed",
         message: "Successfully ran update",
       });
+      props.updateSelectedSpecimen(undefined);
+      runSelectQuery(props.current_query);
     } else {
       notify({
         type: "error",
-        message: "Uh oh, please check error log.",
+        title: "Errors occurred",
+        message: "Please check the corresponding error log.",
       });
 
       const error = ret.error;

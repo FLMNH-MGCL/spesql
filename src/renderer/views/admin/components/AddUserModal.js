@@ -21,7 +21,7 @@ const ACCESS_LEVELS = [
 export default function AddUserModal({
   users,
   checkAuth,
-  createNotification,
+  notify,
   errors,
   updateError,
 }) {
@@ -155,8 +155,9 @@ export default function AddUserModal({
     if (errors.length > 0) {
       // console.log(errors);
       updateError(errors);
-      createNotification({
+      notify({
         type: "error",
+        title: "Errors in form",
         message: "You must fix errors in form.",
       });
 
@@ -175,8 +176,9 @@ export default function AddUserModal({
     // console.log(creationProps);
 
     if (JSON.stringify(users).includes(username)) {
-      createNotification({
+      notify({
         type: "error",
+        title: "Error in form",
         message: "Entered Username already exists",
       });
 
@@ -193,28 +195,41 @@ export default function AddUserModal({
 
     if (res.data) {
       if (res.data.data) {
-        createNotification({ type: "success", message: res.data.data });
+        notify({
+          type: "success",
+          title: "Created user",
+          message: res.data.data,
+        });
       } else {
-        createNotification({ type: "error", message: res.data.err.sqlMessage });
+        notify({
+          type: "error",
+          title: "Errors occurred",
+          message: res.data.err.sqlMessage,
+        });
         updateError([res.data.err.sqlMessage]);
       }
     } else {
       const error = res.error;
 
       if (error.status === 503) {
-        createNotification({
+        notify({
           type: "error",
           message: "Bad VPN/Internet connection detected",
         });
         return;
       } else if (error.status === 400) {
-        createNotification({
+        notify({
           type: "error",
+          title: "Create user failed",
           message: "Missing admin credentials",
         });
         return;
       } else if (error.status === 401) {
-        createNotification({ type: "error", message: "Authorization failed" });
+        notify({
+          type: "error",
+          title: "Authorization failed",
+          message: "Authorization either failed or was denied",
+        });
         return;
       }
     }

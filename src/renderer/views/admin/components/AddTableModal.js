@@ -12,7 +12,7 @@ const ACCESS_LEVELS = [
 export default function AddTableModal({
   tables,
   checkAuth,
-  createNotification,
+  notify,
   refresh,
   errors,
   updateError,
@@ -43,14 +43,15 @@ export default function AddTableModal({
 
     // console.log(registerResponse);
     if (registerResponse.data.data) {
-      // createNotification({
+      // notify({
       //   type: "success",
       //   message: registerResponse.data.data,
       // });
       return true;
     } else {
-      createNotification({
+      notify({
         type: "error",
+        title: "Errors occurred",
         message: registerResponse.data.sqlMessage.sqlMessage,
       });
 
@@ -61,8 +62,9 @@ export default function AddTableModal({
 
   async function handleSubmit(adminData) {
     if (hasError) {
-      createNotification({
+      notify({
         type: "error",
+        title: "Errors in form",
         message: "You must fix errors in form.",
       });
 
@@ -93,19 +95,25 @@ export default function AddTableModal({
       updateError([error.data]);
 
       if (error.status === 503) {
-        createNotification({
+        notify({
           type: "error",
+          title: "Connection error",
           message: "Bad VPN/Internet connection detected",
         });
         return;
       } else if (error.status === 400) {
-        createNotification({
+        notify({
           type: "error",
+          title: "Authorization failed",
           message: "Missing admin credentials",
         });
         return;
       } else if (error.status === 401) {
-        createNotification({ type: "error", message: "Authorization failed" });
+        notify({
+          type: "error",
+          title: "Authorization failed",
+          message: "Authorization either failed or was denied",
+        });
         return;
       }
     }
@@ -114,15 +122,17 @@ export default function AddTableModal({
 
     if (!registeredResponse) {
       // this should never happen
-      createNotification({
+      notify({
         type: "warning",
+        title: "Unable to register table",
         message:
-          "Table successfully created, however could not register to interactables. Please contact Aaron for support and check the logs.",
+          "Table successfully created, however could not register as interactable. Please contact support and check the corresponding logs.",
       });
     } else {
-      createNotification({
+      notify({
         type: "success",
-        message: "Successfully created and registered table!",
+        title: "Table creation completed",
+        message: "Successfully created and registered table",
       });
     }
   }

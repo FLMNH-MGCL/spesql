@@ -23,6 +23,11 @@ app.on("ready", () => {
     title: "Electron App",
   });
 
+  win.webContents.on("new-window", function (e, url) {
+    e.preventDefault();
+    require("electron").shell.openExternal(url);
+  });
+
   if (is.dev()) {
     console.log("THIS IS THE PORT", process.env.ELECTRON_WEBPACK_WDS_PORT);
     win.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);

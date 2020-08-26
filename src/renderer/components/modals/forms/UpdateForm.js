@@ -124,6 +124,7 @@ export default class UPDATE extends React.Component {
     } else {
       this.props.notify({
         type: "error",
+        title: "Errors in form",
         message: "Please fix errors on this page before continuing",
       });
     }
@@ -214,7 +215,8 @@ export default class UPDATE extends React.Component {
     if (errors.length !== 0) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check UPDATE error log",
+        title: "Errors detected",
+        message: "Please check the corresponding error log",
       });
       this.props.updateUpdateErrorMessage(errors);
       this.setState({ loading: false });
@@ -275,7 +277,8 @@ export default class UPDATE extends React.Component {
         this.setState({ loading: false });
         this.props.notify({
           type: "error",
-          message: "SQL errors occurred! Please check logs.",
+          title: "SQL errors occurred",
+          message: "Please check the corresponding logs.",
         });
       }
     }, 1000);

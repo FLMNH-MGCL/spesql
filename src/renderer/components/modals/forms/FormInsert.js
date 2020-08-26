@@ -375,7 +375,8 @@ export default class FormInsert extends React.Component {
     if (errors.length >= 1) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, errors detected. Please check error log below",
+        title: "Errors detected",
+        message: "Please check the corresponding error log",
       });
       this.props.updateManualInsertErrorMessage(errors);
     } else {
@@ -387,11 +388,13 @@ export default class FormInsert extends React.Component {
       if (insertData.data.success) {
         this.props.notify({
           type: "success",
+          title: "Insertion Completed",
           message: "Successfully inserted new specimen!",
         });
       } else {
         this.props.notify({
           type: "error",
+          title: "SQL Error detected",
           message: insertData.data.data.sqlMessage,
         });
       }

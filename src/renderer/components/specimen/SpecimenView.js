@@ -11,8 +11,9 @@ class SpecimenView extends React.Component {
       // attempting auth with diff account
       this.props.notify({
         type: "error",
+        title: "Authorization failed",
         message:
-          "Attempting authentication with different account than logged in account.",
+          "Attempting authentication with different credentials than logged in account.",
       });
       return;
     } else if (
@@ -20,7 +21,11 @@ class SpecimenView extends React.Component {
       this.props.userData.privilege_level !== "manager"
     ) {
       // this should NEVER happen, however this is a sanity check
-      this.props.notify({ type: "error", message: "Access denied!" });
+      this.props.notify({
+        type: "error",
+        title: "Authorization failed",
+        message: "Access either failed or was denied!",
+      });
 
       // forcibly log out
       this.props.logout();
@@ -40,10 +45,13 @@ class SpecimenView extends React.Component {
 
     if (!authData || authData.data.err || authData.data.authed === false) {
       // credentials did not match or other error
-      this.props.notify({ type: "error", message: "Authorization failed" });
+      this.props.notify({
+        type: "error",
+        title: "Authorization failed",
+        message: "Authorization either failed or was denied",
+      });
     } else {
       // allow whatever command to proceed
-      // this.props.notify({ type: "success", message: authData.data.message });
       callback();
     }
   }

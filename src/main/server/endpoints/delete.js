@@ -1,5 +1,4 @@
 const mysql = require("mysql");
-const authCheck = require("../helpers/authCheck");
 const canAccess = require("../helpers/downAccess");
 const bcrypt = require("bcrypt");
 

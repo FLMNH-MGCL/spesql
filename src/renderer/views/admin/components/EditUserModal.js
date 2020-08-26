@@ -22,7 +22,7 @@ const ACCESS_LEVELS = [
 export default function EditUserModal({
   users,
   checkAuth,
-  createNotification,
+  notify,
   currentUser,
   errors,
   updateError,
@@ -140,13 +140,15 @@ export default function EditUserModal({
     if (res.data) {
       if (res.data.err) {
         updateError([res.data.err.sqlMessage]);
-        createNotification({
+        notify({
           type: "error",
-          message: `Query failed. ${res.data.err.sqlMessage}`,
+          title: "Could not delete user",
+          message: `${res.data.err.sqlMessage}`,
         });
       } else {
-        createNotification({
+        notify({
           type: "success",
+          title: "Deletion completed",
           message: `Sucessfully deleted user ${username}`,
         });
       }
@@ -154,19 +156,25 @@ export default function EditUserModal({
       const error = res.error;
 
       if (error.status === 503) {
-        createNotification({
+        notify({
           type: "error",
+          title: "Connection error",
           message: "Bad VPN/Internet connection detected",
         });
         return;
       } else if (error.status === 400) {
-        createNotification({
+        notify({
           type: "error",
+          title: "Authorization failed",
           message: "Missing admin credentials",
         });
         return;
       } else if (error.status === 401) {
-        createNotification({ type: "error", message: "Authorization failed" });
+        notify({
+          type: "error",
+          title: "Authorization failed",
+          message: "Authorization either failed or was denied",
+        });
         return;
       }
     }
@@ -243,9 +251,10 @@ export default function EditUserModal({
     // console.log(changes);
 
     if (!changes) {
-      createNotification({
+      notify({
         type: "error",
-        message: "No changes detected.",
+        title: "No changes detected",
+        message: "No data to send to server",
       });
 
       return;
@@ -260,8 +269,9 @@ export default function EditUserModal({
     errors = errors.concat(errorChecks("understood"));
 
     if (errors.length > 0) {
-      createNotification({
+      notify({
         type: "error",
+        title: "Form errors",
         message: "You must fix errors in form.",
       });
 
@@ -284,28 +294,42 @@ export default function EditUserModal({
       });
 
     if (res.err) {
-      createNotification({ type: "error", message: res.err.sqlMessage });
+      notify({
+        type: "error",
+        title: "Could not update user",
+        message: res.err.sqlMessage,
+      });
     } else if (res.error) {
       const error = res.error;
 
       if (error.status === 503) {
-        createNotification({
+        notify({
           type: "error",
+          title: "Connection error",
           message: "Bad VPN/Internet connection detected",
         });
         return;
       } else if (error.status === 400) {
-        createNotification({
+        notify({
           type: "error",
+          title: "Authorization failed",
           message: "Missing admin credentials",
         });
         return;
       } else if (error.status === 401) {
-        createNotification({ type: "error", message: "Authorization failed" });
+        notify({
+          type: "error",
+          title: "Authorization failed",
+          message: "Authorization either failed or was denied",
+        });
         return;
       }
     } else {
-      createNotification({ type: "success", message: "Updated user" });
+      notify({
+        type: "success",
+        title: "Updated user",
+        message: "Successfully updated user",
+      });
     }
   };
 

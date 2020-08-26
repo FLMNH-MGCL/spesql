@@ -135,7 +135,8 @@ export default class SelectForm extends React.Component {
       // errors found, update redux error for select query
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check SELECT error log",
+        title: "Errors detected",
+        message: "Please check the corresponding error log",
       });
       this.props.updateSelectErrorMessage(errors);
       return;
@@ -194,7 +195,8 @@ export default class SelectForm extends React.Component {
     if (errors.length > 0) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check SELECT error log",
+        title: "Errors detected",
+        message: "Please check the corresponding error log",
       });
       this.props.updateSelectErrorMessage(errors);
     } else {

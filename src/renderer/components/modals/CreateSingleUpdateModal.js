@@ -315,7 +315,7 @@ export default class CreateSingleUpdateModal extends React.Component {
       // console.log(updateCommand);
 
       this.props.runUpdateQuery(updateCommand, userData, "single");
-      this.props.runSelectQuery(this.props.currentQuery);
+      // this.props.runSelectQuery(this.props.currentQuery);
       this.setState({ loading: false });
     } else {
       this.props.notify({

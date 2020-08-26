@@ -119,7 +119,8 @@ export default class CountForm extends React.Component {
     if (errors.length !== 0) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check COUNT error log",
+        title: "Errors detected",
+        message: "Please check the corresponding error log",
       });
       this.props.updateCountErrorMessage(errors);
       this.setState({ hasError: true });
@@ -171,7 +172,8 @@ export default class CountForm extends React.Component {
     if (errors.length > 0) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check COUNT error log",
+        title: "Errors detected",
+        message: "Please check the corresponding error log",
       });
       this.props.updateCountErrorMessage(errors);
       this.setState({ hasError: true });

@@ -38,7 +38,8 @@ function Login(props) {
     if (!authData || resStatus === 401) {
       notify({
         type: "error",
-        message: "Authentication failed.",
+        title: "Authentication failed",
+        message: "Authentication either failed or was denied",
       });
       return;
     }

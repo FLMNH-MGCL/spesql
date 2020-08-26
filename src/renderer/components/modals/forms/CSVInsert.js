@@ -38,6 +38,7 @@ export default class CSVInsert extends React.Component {
   async runQuery(insertions) {
     this.props.notify({
       type: "warning",
+      title: "Don't close this window",
       message:
         "Analyzing entries and sending to server, please be patient and leave this window open until completed.",
     });
@@ -63,7 +64,8 @@ export default class CSVInsert extends React.Component {
     if (errors.length > 0) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check INSERT error log",
+        title: "Errors detected",
+        message: "Please check the corresponding error log",
       });
 
       if (this.props.errorMessages.csvInsert) {
@@ -75,6 +77,7 @@ export default class CSVInsert extends React.Component {
     } else {
       this.props.notify({
         type: "success",
+        title: "Insertion Successful",
         message: "Entries successfully submitted without errors",
       });
     }
@@ -91,7 +94,8 @@ export default class CSVInsert extends React.Component {
     if (!ret.valid) {
       this.props.notify({
         type: "error",
-        message: "Uh oh, some errors detected. Please check INSERT error log",
+        title: "Errors detected",
+        message: "Please check the corresponding error log",
       });
       this.props.updateCSVInsertErrorMessage(ret.data);
       this.setState({ hasError: true, loading: false });
@@ -187,8 +191,9 @@ export default class CSVInsert extends React.Component {
     if (errors.length > 0) {
       this.props.notify({
         type: "warning",
+        title: "Invalid entries detected",
         message:
-          "Errors were detected. Skipping rows that are invalid, please wait until valid entries have been uploaded fully before retrying invalid rows.",
+          "The insertion will skip entries that are invalid, please wait until valid entries have been uploaded fully before retrying the invalid entries.",
       });
 
       //   console.log(errors);
@@ -200,6 +205,7 @@ export default class CSVInsert extends React.Component {
     } else {
       this.props.notify({
         type: "warning",
+        title: "Invalid data",
         message: "Please check submission. No valid entries were found.",
       });
       this.setState({ loading: false });
@@ -218,8 +224,9 @@ export default class CSVInsert extends React.Component {
     if ((this.state.text_area.match(/\n/g) || []).length >= 500) {
       this.props.notify({
         type: "warning",
+        title: "Large insertion detected",
         message:
-          "Large insertion detected. Please limit to 1000 entries maximum and be patient when submitted.",
+          "Please limit to 1000 entries maximum and be patient when submitted (do not close window until completion)",
       });
     }
 

@@ -31,13 +31,18 @@ function AdminPortal(props) {
       // attempting auth with diff account
       notify({
         type: "error",
+        title: "Authorization failed",
         message:
-          "Attempting authentication with different account than logged in account.",
+          "Attempting authentication with different credentials than logged in account.",
       });
       return;
     } else if (props.userData.privilege_level !== "admin") {
       // this should NEVER happen, however this is a sanity check
-      notify({ type: "error", message: "Access denied!" });
+      notify({
+        type: "error",
+        title: "Authorization failed",
+        message: "Authorization failed or access was denied",
+      });
 
       // forcibly log out
       props.logout();
@@ -57,10 +62,13 @@ function AdminPortal(props) {
 
     if (!authData || authData.data.err || authData.data.authed === false) {
       // credentials did not match
-      notify({ type: "error", message: "Authorization failed" });
+      notify({
+        type: "error",
+        title: "Authorization failed",
+        message: "Authorization either failed or was denied",
+      });
     } else {
       // allow whatever command to proceed
-      // notify({ type: "success", message: authData.data.message });
       callback({ username: user, pass: password });
     }
   }
@@ -72,9 +80,9 @@ function AdminPortal(props) {
     if (res.status !== 200 || res.err) {
       notify({
         type: "error",
-        message: "Could not load users, please check internet connection",
+        title: "Connection error",
+        message: "Could not load users, please check internet/VPN connection",
       });
-      // console.log(error);
     } else {
       setUsers(res.data);
     }
@@ -86,6 +94,7 @@ function AdminPortal(props) {
     if (res.status !== 200 || res.err) {
       notify({
         type: "error",
+        title: "Connection error",
         message: "Could not load tables, please check internet connection",
       });
     } else {
@@ -201,14 +210,14 @@ function AdminPortal(props) {
                 <Table.HeaderCell colSpan="4">
                   <AddUserModal
                     users={users}
-                    createNotification={notify}
+                    notify={notify}
                     errors={props.errorMessages.adminUserError}
                     updateError={props.updateAdminUserErrorMessage}
                     checkAuth={checkAuth}
                   />
                   <EditUserModal
                     users={users}
-                    createNotification={notify}
+                    notify={notify}
                     checkAuth={checkAuth}
                     errors={props.errorMessages.adminUserError}
                     updateError={props.updateAdminUserErrorMessage}
@@ -255,7 +264,7 @@ function AdminPortal(props) {
                   <AddTableModal
                     tables={tables}
                     checkAuth={checkAuth}
-                    createNotification={notify}
+                    notify={notify}
                     errors={props.errorMessages.adminTblError}
                     updateError={props.updateAdminTableErrorMessage}
                     refresh={() => getTables()}
@@ -263,7 +272,7 @@ function AdminPortal(props) {
                   <EditTableModal
                     tables={tables}
                     checkAuth={checkAuth}
-                    createNotification={notify}
+                    notify={notify}
                     errors={props.errorMessages.adminTblError}
                     updateError={props.updateAdminTableErrorMessage}
                     refresh={refreshTables}
