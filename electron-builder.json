@@ -11,8 +11,8 @@
   "publish": [
     {
       "provider": "github",
-      "owner": "aaronleopold",
-      "repo": "https://github.com/FLMNH-MGCL/spesql",
+      "owner": "FLMNH-MGCL",
+      "repo": "spesql",
       "releaseType": "release"
     }
   ]
