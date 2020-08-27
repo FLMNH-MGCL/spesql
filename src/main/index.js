@@ -26,7 +26,6 @@ let win = null;
 
 app.on("ready", () => {
   const customMenu = Menu.getApplicationMenu().items.map((item) => {
-    console.log(item.role);
     if (item.role === "filemenu") {
       const newItem = {
         ...item,

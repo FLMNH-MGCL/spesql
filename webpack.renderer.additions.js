@@ -23,10 +23,11 @@ module.exports = (config) => {
     }),
   ];
 
-  // UNCOMMENT FOR DEVELOPMENT WORK
-  // config.devServer.proxy = {
-  //   "/": "http://localhost:5000",
-  // };
+  if (process.env.NODE_ENV === "development") {
+    config.devServer.proxy = {
+      "/": "http://localhost:5000",
+    };
+  }
 
   return config;
 };
