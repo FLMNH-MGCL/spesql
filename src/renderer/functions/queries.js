@@ -71,10 +71,12 @@ export async function runInsertQuery(insertions, table) {
   return insertionsData;
 }
 
-export async function runSingleInsert(specimen, table) {
+export async function runSingleInsert(specimen, table, userData) {
   const insertData = await axios.post(PREFIX + "api/insert", {
     specimen: specimen,
     table: table,
+    username: userData.username,
+    password: userData.password,
   });
   return insertData;
 }

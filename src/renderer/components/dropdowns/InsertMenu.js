@@ -85,7 +85,7 @@ export default function InsertMenu(props) {
     } else {
       // allow whatever command to proceed
       // props.notify({ type: "success", message: authData.data.message });
-      callback();
+      callback({ username: user, password });
     }
   }
 

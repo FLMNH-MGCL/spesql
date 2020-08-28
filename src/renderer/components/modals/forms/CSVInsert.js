@@ -35,7 +35,7 @@ export default class CSVInsert extends React.Component {
     this.setState({ text_area: text });
   }
 
-  async runQuery(insertions) {
+  async runQuery(insertions, userData) {
     this.props.notify({
       type: "warning",
       title: "Don't close this window",
@@ -48,9 +48,36 @@ export default class CSVInsert extends React.Component {
     for (let i = 0; i < insertions.length; i++) {
       const insertData = await runSingleInsert(
         insertions[i],
-        this.state.databaseTable
-      );
-      // console.log(insertData);
+        this.state.databaseTable,
+        userData
+      ).catch((error) => {
+        const res = error.response;
+
+        if (res.status === 400) {
+          errors.push(`Bad request: query forcibly cancelled. '${res.data}'`);
+
+          throws.props.notify({
+            type: "error",
+            title: "Cancelling query",
+            message: "Invalid request sent to server",
+          });
+        } else if (res.status === 503) {
+          errors.push(
+            `Bad connection: query forcibly cancelled. '${res.data}'`
+          );
+          throws.props.notify({
+            type: "error",
+            title: "Cancelling query",
+            message: "Bad connection detected, please check VPN or internet",
+          });
+        }
+
+        return null;
+      });
+
+      if (!insertData) {
+        break;
+      }
 
       if (!insertData.data.success) {
         errors.push(
@@ -85,7 +112,7 @@ export default class CSVInsert extends React.Component {
     this.setState({ loading: false });
   }
 
-  handleSubmit = () => {
+  handleSubmit = (userData) => {
     // check valid data
     // if data is valid, loop through and axios.post each item
     this.setState({ loading: true });
@@ -201,7 +228,7 @@ export default class CSVInsert extends React.Component {
     }
 
     if (insertions.length > 0) {
-      this.runQuery(insertions);
+      this.runQuery(insertions, userData);
     } else {
       this.props.notify({
         type: "warning",

@@ -24,8 +24,10 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState();
   const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const attemptLogin = async () => {
+    setLoading(true);
     let resStatus = null;
     let authData = await axios
       .post(PREFIX + "/api/login/", {
@@ -33,24 +35,43 @@ function Login(props) {
         password: password,
       })
       .catch((error) => {
+        // console.log(error);
         resStatus = error.response.status;
         return null;
       });
 
-    if (!authData || resStatus === 401) {
-      notify({
-        type: "error",
-        title: "Authentication failed",
-        message: "Authentication either failed or was denied",
-      });
-      return;
-    }
-
-    if (authData.data.error) {
-      if (resStatus === 503) {
-        window.location.hash = "/fourohfour";
+    if (!authData) {
+      if (resStatus === 401) {
+        notify({
+          type: "error",
+          title: "Authentication failed",
+          message: "Authentication either failed or was denied",
+        });
+      } else if (resStatus === 400) {
+        notify({
+          type: "error",
+          title: "Authentication failed",
+          message:
+            "Bad request, missing parameters (i.e. username or password)",
+        });
+      } else if (resStatus === 404) {
+        notify({
+          type: "error",
+          title: "Authentication failed",
+          message: "It seems like your config file is missing / invalid",
+        });
+      } else if (resStatus === 503) {
+        notify({
+          type: "error",
+          title: "Authentication failed",
+          message:
+            "A server error occurred, a likely cause is having no VPN connected",
+        });
       }
+
+      setLoading(false);
     } else {
+      setLoading(false);
       notify({
         type: "success",
         title: "Authentication successful",
@@ -183,6 +204,7 @@ function Login(props) {
                     backgroundColor: "#5c6ac4",
                     color: "#fff",
                   }}
+                  loading={loading}
                 >
                   Login
                 </Button>

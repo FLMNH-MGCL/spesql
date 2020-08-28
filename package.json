@@ -14,7 +14,7 @@
     "url": "https://github.com/FLMNH-MGCL/spesql"
   },
   "scripts": {
-    "start": "electron-webpack dev",
+    "dev": "electron-webpack dev",
     "compile": "electron-webpack --env.minify=false",
     "package": "electron-builder",
     "build": "yarn compile && yarn package",
