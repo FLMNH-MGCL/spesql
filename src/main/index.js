@@ -108,6 +108,13 @@ autoUpdater.on("checking-for-update", () => {
   sendStatusToWindow({ type: "logging", message: "Checking for update..." });
 });
 
+autoUpdater.on("update-not-available", () => {
+  sendStatusToWindow({
+    type: "logging",
+    message: "No updates available, you are up to date!",
+  });
+});
+
 // autoUpdater.on("update-available", (info) => {
 //   sendStatusToWindow({ type: "logging", message: "update available" });
 // });
