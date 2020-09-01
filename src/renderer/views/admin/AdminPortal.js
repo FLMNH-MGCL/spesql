@@ -148,6 +148,11 @@ function AdminPortal(props) {
     return sqlTables;
   }
 
+  function refreshUsers() {
+    setUsers(null);
+    getUsers();
+  }
+
   function refreshTables() {
     setTables(null); // fake loading
     getTables();
@@ -216,6 +221,7 @@ function AdminPortal(props) {
                     errors={props.errorMessages.adminUserError}
                     updateError={props.updateAdminUserErrorMessage}
                     checkAuth={checkAuth}
+                    refreshUsers={refreshUsers}
                   />
                   <EditUserModal
                     users={users}
@@ -224,15 +230,9 @@ function AdminPortal(props) {
                     errors={props.errorMessages.adminUserError}
                     updateError={props.updateAdminUserErrorMessage}
                     currentUser={props.userData}
+                    refreshUsers={refreshUsers}
                   />
-                  <Button
-                    size="small"
-                    icon
-                    onClick={() => {
-                      setUsers(null); // fake loading
-                      getUsers();
-                    }}
-                  >
+                  <Button size="small" icon onClick={refreshUsers}>
                     <Icon name="refresh" />
                   </Button>
                   <CreateErrorLogModal
@@ -269,7 +269,7 @@ function AdminPortal(props) {
                     notify={notify}
                     errors={props.errorMessages.adminTblError}
                     updateError={props.updateAdminTableErrorMessage}
-                    refresh={() => getTables()}
+                    refresh={refreshTables}
                   />
                   <EditTableModal
                     tables={tables}

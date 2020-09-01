@@ -26,6 +26,7 @@ export default function AddUserModal({
   notify,
   errors,
   updateError,
+  refreshUsers,
 }) {
   // const [selected, select] = useState();
   const [open, setOpen] = useState(false);
@@ -193,7 +194,7 @@ export default function AddUserModal({
         return { error: error.response };
       });
 
-    console.log(res);
+    // console.log(res);
 
     if (res.data) {
       if (res.data.data) {
@@ -202,6 +203,9 @@ export default function AddUserModal({
           title: "Created user",
           message: res.data.data,
         });
+
+        setOpen(false);
+        refreshUsers();
       } else {
         notify({
           type: "error",

@@ -18,6 +18,8 @@ import AdminPortal from "./views/admin/AdminPortal";
 import NetworkError from "./views/404/NetworkError";
 import fourohfour from "./views/404/404";
 
+import { ipcRenderer } from "electron";
+
 // NOTE: after transitioning to webpack configuration icons would not load properly
 // this is a fix to *temporarily* include the links
 export const styleLink = document.createElement("link");
@@ -48,6 +50,16 @@ function App() {
       level: content.type,
     });
   };
+
+  ipcRenderer.on("message", function (event, information) {
+    const { type, message } = information;
+
+    addNotification({
+      title: "System Notification",
+      message: message,
+      type: type === "logging" ? "warning" : "error",
+    });
+  });
 
   // addNotification();
 

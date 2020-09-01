@@ -5,8 +5,6 @@ import is from "electron-is";
 import { autoUpdater } from "electron-updater";
 import "./server/server";
 
-autoUpdater.checkForUpdatesAndNotify();
-
 app.commandLine.appendSwitch("ignore-certificate-errors");
 
 const EXPRESS_PORT = process.env.PORT || 5000;
@@ -31,16 +29,23 @@ app.on("ready", () => {
         ...item,
         submenu: [
           {
+            label: "Restart",
+            click() {
+              app.relaunch();
+              app.exit();
+            },
+          },
+          {
             label: "Exit",
             click() {
               app.exit();
             },
           },
+          { type: "separator" },
           {
-            label: "Restart",
+            label: "Check for updates",
             click() {
-              app.relaunch();
-              app.exit();
+              autoUpdater.checkForUpdates();
             },
           },
         ],
@@ -88,4 +93,48 @@ app.on("window-all-closed", (event) => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+// UPDATING
+function sendStatusToWindow(information) {
+  if (win) {
+    win.webContents.send("message", information);
+  }
+}
+
+autoUpdater.checkForUpdatesAndNotify();
+
+autoUpdater.on("checking-for-update", () => {
+  sendStatusToWindow({ type: "logging", message: "Checking for update..." });
+});
+
+// autoUpdater.on("update-available", (info) => {
+//   sendStatusToWindow({ type: "logging", message: "update available" });
+// });
+
+autoUpdater.on("error", (error) => {
+  sendStatusToWindow({
+    type: "error",
+    message: `An update error occurred: ${error.toString()}`,
+  });
+});
+
+autoUpdater.on("download-progress", (progress) => {
+  if (Math.ceil(progress.percent) % 25 === 0) {
+    sendStatusToWindow({
+      type: "logging",
+      message: `Downloaded ${progress.percent}% - (${progress.transferred} + '/' + ${progress.total} + )`,
+    });
+  }
+});
+
+autoUpdater.on("update-downloaded", () => {
+  sendStatusToWindow({
+    type: "logging",
+    message: "Update finished downloading and will install now",
+  });
+});
+
+autoUpdater.on("update-downloaded", (info) => {
+  autoUpdater.quitAndInstall();
 });

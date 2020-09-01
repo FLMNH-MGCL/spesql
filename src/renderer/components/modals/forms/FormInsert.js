@@ -1003,7 +1003,7 @@ export default class FormInsert extends React.Component {
                   <Form.Field width="16">
                     <label>occurrenceRemarks</label>
                     <TextArea
-                      placeholder="ADD EXAMPLE TO ME"
+                      placeholder="Add your remarks here"
                       name="occurrenceRemarks"
                       value={occurrenceRemarks}
                       onChange={this.handleChange}
@@ -1031,7 +1031,7 @@ export default class FormInsert extends React.Component {
                   <Form.Field width="16">
                     <label>molecularOccurrenceRemarks</label>
                     <TextArea
-                      placeholder="ADD EXAMPLE TO ME"
+                      placeholder="Add your remarks here"
                       name="molecularOccurrenceRemarks"
                       value={molecularOccurrenceRemarks}
                       onChange={this.handleChange}
@@ -1204,7 +1204,7 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Input}
                   label="box"
-                  placeholder="1-20"
+                  placeholder="1-99"
                   name="box"
                   value={box}
                   onChange={this.handleChange}

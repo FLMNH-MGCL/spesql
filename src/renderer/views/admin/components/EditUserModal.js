@@ -28,6 +28,7 @@ export default function EditUserModal({
   currentUser,
   errors,
   updateError,
+  refreshUsers,
 }) {
   const [open, setOpen] = useState(false);
   const [selected, select] = useState();
@@ -151,8 +152,11 @@ export default function EditUserModal({
         notify({
           type: "success",
           title: "Deletion completed",
-          message: `Sucessfully deleted user ${username}`,
+          message: `User ${username} has entered the void`,
         });
+
+        setOpen(false);
+        refreshUsers();
       }
     } else {
       const error = res.error;
@@ -332,6 +336,9 @@ export default function EditUserModal({
         title: "Updated user",
         message: "Successfully updated user",
       });
+
+      setOpen(false);
+      refreshUsers();
     }
   };
 
