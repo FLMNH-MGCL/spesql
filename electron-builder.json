@@ -3,10 +3,15 @@
   "productName": "spesql",
   "compression": "store",
   "mac": {
-    "identity": null
+    "identity": null,
+    "icon": "src/main/icon/icon.icns"
   },
   "linux": {
-    "target": "AppImage"
+    "target": "AppImage",
+    "icon": "src/main/icon/icon.icns"
+  },
+  "win": {
+    "icon": "src/main/icon/icon.icns"
   },
   "publish": [
     {
@@ -15,5 +20,6 @@
       "repo": "spesql",
       "releaseType": "release"
     }
-  ]
+  ],
+  "files": ["src/main/icon/flmnhLogo.png"]
 }

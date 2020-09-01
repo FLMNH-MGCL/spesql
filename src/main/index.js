@@ -20,6 +20,8 @@ const EXPRESS_PORT = process.env.PORT || 5000;
 //   path.join(__dirname, "icon/icon.icns")
 // );
 
+console.log(path.resolve(__dirname, "flmnhLogo.png"));
+
 let win = null;
 
 app.on("ready", () => {
