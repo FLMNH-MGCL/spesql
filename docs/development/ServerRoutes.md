@@ -284,10 +284,10 @@ See <a href="https://github.com/FLMNH-MGCL/spesql/blob/main/docs/development/Spe
 | `command`               | Required: yes                                                    |
 |                         | Type: string                                                     |
 |                         | Description: The name of the table                               |
-| `adminUser`             | Required: yes                                                    |
+| `user`                  | Required: yes                                                    |
 |                         | Type: string                                                     |
 |                         | Description: The username of the admin updating table            |
-| `adminPass`             | Required: yes                                                    |
+| `password`              | Required: yes                                                    |
 |                         | Type: string                                                     |
 |                         | Description: The plain-text password of the admin updating table |
 | <b>Response object</b>  |                                                                  |
