@@ -44,8 +44,8 @@ See <a href="https://github.com/FLMNH-MGCL/spesql/blob/main/docs/development/Spe
 |                        | Description: The select query to run                         |
 |                        | Note: Must be select query (this is enforced)                |
 | <b>Response object</b> |                                                              |
-| `{ data }`             | Type: JSON                                                   |
-|                        | `data`: A list of specimen objects                           |
+| `{ specimen }`         | Type: JSON                                                   |
+|                        | `specimen`: A list of specimen objects                       |
 | `{ error }`            | Type: JSON                                                   |
 |                        | `error`: SQL error response or string describing usage error |
 | <b>Response Status</b> |                                                              |
@@ -93,6 +93,11 @@ See <a href="https://github.com/FLMNH-MGCL/spesql/blob/main/docs/development/Spe
 | `{ success, data }`    | Type: JSON                                                                   |
 |                        | `sucess`: bool for if insertion was successful                               |
 |                        | `data`: SQL error on failure, affected row data on success                   |
+| <b>Response Status</b> |                                                                              |
+| `200`                  | Sucessful return of query data                                               |
+| `400`                  | Bad Request: Invalid query                                                   |
+| `401`                  | Unauthorized: failed authorization                                           |
+| `503`                  | SQL Server Error: likely a VPN issue                                         |
 
 #### MySQL Update Query
 
@@ -144,7 +149,7 @@ See <a href="https://github.com/FLMNH-MGCL/spesql/blob/main/docs/development/Spe
 
 ### Admin Operations
 
-#### Creating Users
+#### Users CRUD
 
 | Path                   | `/api/admin/create-user/`                                       |
 | :--------------------- | :-------------------------------------------------------------- |
@@ -182,8 +187,6 @@ See <a href="https://github.com/FLMNH-MGCL/spesql/blob/main/docs/development/Spe
 | `401`                  | Unauthorized: failed admin authorization                        |
 | `503`                  | SQL Server Unavailable: likely a VPN issue                      |
 
-#### Updating Users
-
 | Path                   | `/api/admin/update-user/`                                                |
 | :--------------------- | :----------------------------------------------------------------------- |
 | <b>Description</b>     | Attempts to update user                                                  |
@@ -216,8 +219,6 @@ See <a href="https://github.com/FLMNH-MGCL/spesql/blob/main/docs/development/Spe
 | `401`                  | Unauthorized: failed admin authorization                                 |
 | `503`                  | SQL Server Unavailable: likely a VPN issue                               |
 
-#### Deleting Users
-
 | Path                   | `/api/admin/delete-user/`                                       |
 | :--------------------- | :-------------------------------------------------------------- |
 | <b>Description</b>     | Attempts to delete user                                         |
@@ -245,7 +246,7 @@ See <a href="https://github.com/FLMNH-MGCL/spesql/blob/main/docs/development/Spe
 | `401`                  | Unauthorized: failed admin authorization                        |
 | `503`                  | SQL Server Unavailable: likely a VPN issue                      |
 
-#### Creating Tables
+#### Tables CRUD
 
 | Path                    | `/api/admin/create-table/`                                       |
 | :---------------------- | :--------------------------------------------------------------- |
@@ -275,6 +276,58 @@ See <a href="https://github.com/FLMNH-MGCL/spesql/blob/main/docs/development/Spe
 | `401`                   | Unauthorized: failed admin authorization                         |
 | `503`                   | SQL Server Unavailable: likely a VPN issue                       |
 
-#### Editing Tables
+| Path                    | `/api/admin/alter-table/`                                        |
+| :---------------------- | :--------------------------------------------------------------- |
+| <b>Description</b>      | Attempts to update table                                         |
+| <b>Method </b>          | ![Post Request](../assets/post.png)                              |
+| <b>Body Parameters</b>  |                                                                  |
+| `command`               | Required: yes                                                    |
+|                         | Type: string                                                     |
+|                         | Description: The name of the table                               |
+| `adminUser`             | Required: yes                                                    |
+|                         | Type: string                                                     |
+|                         | Description: The username of the admin updating table            |
+| `adminPass`             | Required: yes                                                    |
+|                         | Type: string                                                     |
+|                         | Description: The plain-text password of the admin updating table |
+| <b>Response object</b>  |                                                                  |
+| `{ data }`              | Type: JSON                                                       |
+|                         | `data`: Success message                                          |
+| `{ error, sqlMessage }` | Type: JSON                                                       |
+|                         | `error`: Human readable misuse error                             |
+|                         | `sqlMessage`: SQL error message                                  |
+| `{ error }`             | Type: JSON                                                       |
+|                         | `error`: Human readable misuse error                             |
+| <b>Response Status</b>  |                                                                  |
+| `201`                   | Sucessful authorization and table update                         |
+| `400`                   | Bad Request: missing admin credentials                           |
+| `401`                   | Unauthorized: failed admin authorization                         |
+| `503`                   | SQL Server Unavailable: likely a VPN issue                       |
 
-#### Deleting Tables
+| Path                    | `/api/admin/delete-table/`                                       |
+| :---------------------- | :--------------------------------------------------------------- |
+| <b>Description</b>      | Attempts to delete table                                         |
+| <b>Method </b>          | ![Post Request](../assets/post.png)                              |
+| <b>Body Parameters</b>  |                                                                  |
+| `tbl_name`              | Required: yes                                                    |
+|                         | Type: string                                                     |
+|                         | Description: The name of the table                               |
+| `user`                  | Required: yes                                                    |
+|                         | Type: string                                                     |
+|                         | Description: The username of the admin deleting table            |
+| `password`              | Required: yes                                                    |
+|                         | Type: string                                                     |
+|                         | Description: The plain-text password of the admin deleting table |
+| <b>Response object</b>  |                                                                  |
+| `{ data }`              | Type: JSON                                                       |
+|                         | `data`: Success message                                          |
+| `{ error, sqlMessage }` | Type: JSON                                                       |
+|                         | `error`: Human readable misuse error                             |
+|                         | `sqlMessage`: SQL error message                                  |
+| `{ error }`             | Type: JSON                                                       |
+|                         | `error`: Human readable misuse error                             |
+| <b>Response Status</b>  |                                                                  |
+| `201`                   | Sucessful authorization and table deletion                       |
+| `400`                   | Bad Request: missing admin credentials                           |
+| `401`                   | Unauthorized: failed admin authorization                         |
+| `503`                   | SQL Server Unavailable: likely a VPN issue                       |

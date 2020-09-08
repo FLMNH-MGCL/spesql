@@ -761,6 +761,62 @@ export default class CreateHelpModal extends React.Component {
             </Modal.Actions>
           </Modal>
         );
+
+      case "MANUAL_INSERT":
+        return (
+          <Modal
+            open={open}
+            onOpen={this.open}
+            onClose={this.close}
+            size="small"
+            trigger={
+              <Button icon basic color="linkedin" floated="left">
+                <Icon name="question" />
+              </Button>
+            }
+          >
+            <Modal.Header>Insert Query Help (Manual Insert)</Modal.Header>
+            <Modal.Content>
+              <Message>
+                <Message.Header>Insert Query: Basic Structure</Message.Header>
+                <Message.Content>
+                  <br />
+                  INSERT INTO `table_name`(table_headers_inserting)
+                  VALUES(table_headers_values);
+                </Message.Content>
+              </Message>
+              <p>
+                While this is the basic structure of an Insert query, this
+                program won't actually let you perform it manually, and
+                therefore you will not be using that structure in any advanced
+                Insert query forms (as they do not exist). This is intended, as
+                Insert queries can be rather large, especially for tables with
+                many headers / columns. This page allows a single insertion into
+                the database, where you manually enter all of the fields. <br />
+                <br />
+                <br />
+              </p>
+
+              <p>
+                While it is not required to fill out the entire form, there are
+                some required fields. All fields entered must be in the correct
+                format. If a field is incorrectly formatting, a notification
+                will tell you before you are able to / allowed to submit. Once
+                the form is complete, an insert query will be generated and sent
+                to the server for you. A progress bar is at the bottom of this
+                modal to give an idea of how much of the form is completed. Keep
+                in mind, this is page based, not item based (so it will not
+                register as any additional percent completed until you navigate
+                forward)
+                <br />
+                <br />
+              </p>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button icon="check" content="Got it!" onClick={this.close} />
+            </Modal.Actions>
+          </Modal>
+        );
       case "LIST_HELP":
         const { activeIndex } = this.state;
         return (

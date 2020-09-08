@@ -647,7 +647,7 @@ export default class FormInsert extends React.Component {
       // render submit actions
       return (
         <>
-          <CreateHelpModal />
+          <CreateHelpModal queryType="MANUAL_INSERT" />
           <CreateErrorLogModal
             type="Manual Insert"
             errors={this.props.errorMessages.manualInsert}
@@ -670,7 +670,7 @@ export default class FormInsert extends React.Component {
       // console.log(this.props);
       return (
         <>
-          <CreateHelpModal />
+          <CreateHelpModal queryType="MANUAL_INSERT" />
           <CreateErrorLogModal
             type="Manual Insert"
             errors={this.props.errorMessages.manualInsert}
