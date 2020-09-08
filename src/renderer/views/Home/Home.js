@@ -12,7 +12,18 @@ import SpecimenView from "../../components/specimen/SpecimenView";
 const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
 
 function Home(props) {
-  const notify = props.notify;
+  const notify = (content) => {
+    console.log(content);
+    props.notify(content);
+
+    if (content.type !== "success") {
+      props.createNotification({
+        type: content.type,
+        header: content.title,
+        information: content.message,
+      });
+    }
+  };
 
   useEffect(() => {
     async function checkConfig() {

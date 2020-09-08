@@ -41,14 +41,16 @@ function App() {
   const notificationSystem = createRef();
 
   const addNotification = (content) => {
-    // console.log(content);
-    // event.preventDefault();
+    // alert with banner
     const notification = notificationSystem.current;
     notification.addNotification({
       title: content.title,
       message: content.message,
       level: content.type,
     });
+
+    // create notification to store until cleared
+    // {type, header, information}
   };
 
   ipcRenderer.on("message", function (event, information) {

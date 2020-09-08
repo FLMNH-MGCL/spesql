@@ -973,15 +973,7 @@ export default class UPDATE extends React.Component {
                 // disabled={!this.state.basic_query}
               />
             </Form.Group>
-            <Segment
-              style={{
-                minHeight: "100%",
-                maxHeight: "50vh",
-                overflowY: "scroll",
-              }}
-            >
-              {sets}
-            </Segment>
+            <Segment>{sets}</Segment>
           </>
         );
 
@@ -999,9 +991,7 @@ export default class UPDATE extends React.Component {
                 disabled={!this.state.basic_query}
               />
             </Form.Group>
-            <Segment style={{ maxHeight: "30vh", overflowY: "scroll" }}>
-              {conditionals}
-            </Segment>
+            <Segment>{conditionals}</Segment>
           </>
         );
 

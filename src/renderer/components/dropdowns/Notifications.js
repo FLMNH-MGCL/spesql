@@ -6,33 +6,6 @@ import useBoolean from "../../utils/useBoolean";
 import { ShakeRotate } from "reshake";
 import "./Notifications.css";
 
-// used to set up fake notifications
-// function seed(createNotification) {
-//   createNotification({
-//     header: "Query Loaded",
-//     type: "log",
-//     information: "Select Query",
-//   });
-
-//   createNotification({
-//     header: "Invalid Query Params",
-//     type: "error",
-//     information: "Select Modal",
-//   });
-
-//   createNotification({
-//     header: "Configuration Changed",
-//     type: "warning",
-//     information: "Please restart app if you haven't already",
-//   });
-
-//   createNotification({
-//     header: "Query Load Error",
-//     type: "error",
-//     information: "Count Modal",
-//   });
-// }
-
 function Notification(notification) {
   const { type } = notification;
   return (
