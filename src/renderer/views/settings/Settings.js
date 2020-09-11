@@ -116,9 +116,6 @@ export default function Settings(props) {
         return error.response;
       });
 
-    // TODO: debug and get format
-    console.log(updateResponse);
-
     if (updateResponse && updateResponse.data) {
       if (updateResponse.data === "Updated config file") {
         notify({

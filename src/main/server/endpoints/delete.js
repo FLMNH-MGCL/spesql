@@ -53,7 +53,6 @@ module.exports = function (connection, app) {
               return;
             } else {
               // ACTUAL FUNCTION
-              // TODO: don't do data: err, instead do error: err and change client to check for data OR error
               connection.query(command.command, (err, data) => {
                 if (err) {
                   res.json({

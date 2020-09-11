@@ -8,8 +8,6 @@ module.exports = function (connection, app) {
     const username = req.body.adminUser;
     const password = req.body.adminPass;
 
-    //TODO: add cred check
-
     // authenticate user trying to create table
     connection.query(
       `SELECT * FROM users WHERE username="${username}";`,

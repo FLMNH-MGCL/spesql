@@ -5,10 +5,6 @@ const homedir = require("os").homedir();
 
 const CONFIG_DIR = ".spesql";
 
-// "/Users/aaronleopold/Documents/museum/spesql/dist/mac/spesql.app/Contents/Resources/app.asar/build/server/config/config.json"
-
-// TODO: create a config file in users directory, right now in prod the app.asar does not have access to the file
-
 module.exports = function (app) {
   app.post("/api/config-check", function (req, res) {
     // check to see if node may access directory
