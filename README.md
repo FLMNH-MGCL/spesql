@@ -1,4 +1,5 @@
-# spesql
+# spesql 
+[![DOI](https://zenodo.org/badge/226447097.svg)](https://zenodo.org/badge/latestdoi/226447097)
 
 A portal for interacting with a remote MySQL database, written in JavaScript (React, Node & Electron).
 
@@ -19,7 +20,3 @@ If you do not have these credentials or lost these credentials, please contact t
 
 <a href='http://www.aaronbleopold.com' target="_blank">Aaron Leopold</a> developed this software. If there are any questions regarding the usage of the application, please contact him via email (aaronleopold1221@gmail.com). Additionally, if you are an employee of the FLMNH, refer to the recorded instructional videos (check `#database` in the Slack workspace) for more in-depth demonstrations. For issues relating to software bugs, glitches or unexpected errors, please submit a <a href='https://github.com/FLMNH-MGCL/Database-App/issues/new' target="_blank">GitHub issue</a>. Be sure to describe in
 detail the errors, bugs or glitches that have occurred, and include the steps to reproduce the error. Feel free to include screenshots, as well.
-
-### Citation
-
-<b>Pending its first release,</b> this software will be paired with a DOI number. On first release, the DOI number generated will be here for citation purposes.
