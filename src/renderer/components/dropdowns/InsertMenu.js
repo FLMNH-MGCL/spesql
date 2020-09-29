@@ -113,8 +113,6 @@ export default function InsertMenu(props) {
     }
   }
 
-  console.log(props);
-
   return (
     <>
       <Dropdown

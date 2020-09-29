@@ -76,22 +76,20 @@ app.on("ready", () => {
     require("electron").shell.openExternal(url);
   });
 
-  if (is.dev()) {
-    win.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
-    // win.webContents.openDevTools();
-  } else {
-    win.loadURL(
-      url.format({
-        pathname: path.join(__dirname, "index.html"),
-        protocol: "file:",
-        slashes: true,
-      })
-    );
-    // win.loadURL(`http://localhost:${EXPRESS_PORT}`);
-  }
+  win.loadURL(
+    is.dev()
+      ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+      : url.format({
+          pathname: path.join(__dirname, "index.html"),
+          protocol: "file:",
+          slashes: true,
+        })
+  );
+
+  is.dev() && win.webContents.openDevTools();
 });
 
-app.on("window-all-closed", (event) => {
+app.on("window-all-closed", (_event) => {
   if (process.platform !== "darwin") {
     app.quit();
   }
@@ -117,9 +115,12 @@ autoUpdater.on("update-not-available", () => {
   });
 });
 
-// autoUpdater.on("update-available", (info) => {
-//   sendStatusToWindow({ type: "logging", message: "update available" });
-// });
+autoUpdater.on("update-available", (_info) => {
+  sendStatusToWindow({
+    type: "logging",
+    message: "Update available, starting download...",
+  });
+});
 
 autoUpdater.on("error", (error) => {
   sendStatusToWindow({
@@ -129,7 +130,7 @@ autoUpdater.on("error", (error) => {
 });
 
 autoUpdater.on("download-progress", (progress) => {
-  if (Math.ceil(progress.percent) % 25 === 0) {
+  if (Math.round(progress.percent) % 10 === 0) {
     sendStatusToWindow({
       type: "logging",
       message: `Downloaded ${progress.percent}% - (${progress.transferred} + '/' + ${progress.total} + )`,

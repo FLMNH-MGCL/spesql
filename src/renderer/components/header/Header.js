@@ -1,12 +1,11 @@
 import React from "react";
-import { Menu, Button, Dropdown, Icon } from "semantic-ui-react";
+import { Menu, Dropdown, Icon } from "semantic-ui-react";
 import QueryMenu from "../dropdowns/QueryMenu";
 import Notifications from "../dropdowns/Notifications";
 import InsertMenu from "../dropdowns/InsertMenu";
 import CreateDownloadModal from "../modals/CreateDownloadModal";
 
 export default function Header(props) {
-  console.log(props);
   return (
     <Menu
       borderless
@@ -56,6 +55,13 @@ export default function Header(props) {
               ></Dropdown.Item>
 
               <Dropdown.Divider />
+
+              <Dropdown.Item
+                onClick={() => {
+                  props.logout();
+                }}
+                text="Logout"
+              ></Dropdown.Item>
 
               {/* <Logout logout={props.logout} /> */}
             </Dropdown.Menu>

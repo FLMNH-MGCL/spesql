@@ -55,8 +55,6 @@ function Notifications(props) {
     }
   }
 
-  console.log(props.hasUnread);
-
   return (
     <React.Fragment>
       <ShakeRotate fixed={props.hasUnread && !open} int={35} r={30}>

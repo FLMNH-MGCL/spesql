@@ -1026,6 +1026,29 @@ export default class CreateHelpModal extends React.Component {
                     persisted.
                   </p>
                 </Accordion.Content>
+
+                <Accordion.Title
+                  active={activeIndex === 8}
+                  index={8}
+                  onClick={this.handleClick}
+                >
+                  <Icon name="dropdown" />
+                  "Can't get code signature for running application"
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === 8}>
+                  <p>
+                    This is related to the auto update feature of this
+                    application. If you're on macOS, you'll likely get this
+                    error when the application attempts to automatically update.
+                    It doesn't ALWAYS do this, which is the strange thing, but
+                    what it is saying is that the application is not officially
+                    registered with Apple (i.e. we do not pay them money to sign
+                    the application with a certificate essentially) and so they
+                    are blocking the auto update. To correct this, just navigate
+                    to the GitHub, download the updated version and replace the
+                    currently installed one.
+                  </p>
+                </Accordion.Content>
               </Accordion>
               <h3 style={{ display: "block" }}>Still Stuck?</h3>
               <p>

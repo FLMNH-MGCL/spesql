@@ -20,6 +20,8 @@ import fourohfour from "./views/404/404";
 
 import { ipcRenderer } from "electron";
 
+require("dotenv").config();
+
 // NOTE: after transitioning to webpack configuration icons would not load properly
 // this is a fix to *temporarily* include the links
 export const styleLink = document.createElement("link");
@@ -29,7 +31,7 @@ styleLink.href =
 document.head.appendChild(styleLink);
 
 const persistConfig = {
-  key: "root",
+  key: process.env.ELECTRON_WEBPACK_WDS_SECRET_KEY,
   storage: storageSession,
 };
 

@@ -28,6 +28,7 @@
     "bcrypt": "^5.0.0",
     "clsx": "^1.1.1",
     "cssnano": "^4.1.10",
+    "dotenv": "^8.2.0",
     "electron-is": "^3.0.0",
     "electron-store": "^6.0.0",
     "framer-motion": "^2.4.1",
