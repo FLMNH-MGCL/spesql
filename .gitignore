@@ -64,4 +64,6 @@ yarn-error.log*
 # User-specific stuff
 .idea/*
 
-zOLD
+zOL
+
+.env
