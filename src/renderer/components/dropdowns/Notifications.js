@@ -43,10 +43,10 @@ function Notifications(props) {
   }, [open]);
 
   const notifications = props.notifications
-    .reverse()
-    .map((notification, index) => {
-      return <Notification key={index} {...notification} />;
-    });
+    ? props.notifications.reverse().map((notification, index) => {
+        return <Notification key={index} {...notification} />;
+      })
+    : [];
 
   function clearNotifications() {
     props.clearNotifications();

@@ -376,6 +376,8 @@ export const units = [
   { key: "miles", text: "Miles", value: "miles" },
 ];
 
+export const CHARTS = [{ key: "SANEKY", value: "Sankey", text: "Saneky" }];
+
 // catalogNumber control will be a manual check on submit
 
 /*

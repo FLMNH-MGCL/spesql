@@ -149,8 +149,34 @@ export function getQueryHeaders(specimen) {
 /**
  * this function will be responsible for creating some of the 'metadata' the table will have.
  *
- * fields would include: recordEnteredBy, etc.
+ * @param {[]} source: array of specimen objects
+ * @param {[]} restriction: array of headers to restrict
  */
-export function createAutoGenFields(/* requires things like current user, date, etc */) {}
+export function createDataSlice(source, restriction) {
+  if (restriction === ["*"]) {
+    return source;
+  }
 
-// export function headerToField
+  const slice = [
+    restriction,
+    ...source.map((specimen) => {
+      let slidedSpecimenArray = [];
+      restriction.forEach((field) => {
+        if (specimen[field]) {
+          if (field === "collectedDay") {
+            const item = parseInt(specimen[field], 10);
+            if (item === NaN) {
+            } else if (item < 0) {
+            } else slidedSpecimenArray.push(item);
+          } else slidedSpecimenArray.push(specimen[field]);
+        } else {
+          slidedSpecimenArray.push("");
+        }
+      });
+
+      return slidedSpecimenArray;
+    }),
+  ];
+
+  return slice.slice(0, 50);
+}

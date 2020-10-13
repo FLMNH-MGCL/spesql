@@ -9,6 +9,8 @@ export function mapStateToProps(state) {
     sortBy: state.sortBy,
     data: state.data,
     displayed: state.displayed,
+    userInterface: state.userInterface,
+    visualizationConfig: state.visualizationConfig,
     countQueryCount: state.countQueryCount,
     current_query: state.current_query,
     query_headers: state.query_headers,
@@ -22,7 +24,15 @@ export function mapStateToProps(state) {
 
 export function mapDispatchToProps(dispatch) {
   return {
+    changeUserInterface: (newInterface) =>
+      dispatch({ type: "CHANGE_INTERFACE", newInterface: newInterface }),
     refreshList: () => dispatch({ type: "REFRESH_LIST" }),
+    updateChartConfigChartType: (newChart) =>
+      dispatch({ type: "UPDATE_CHART_TYPE", newChart }),
+    updateChartConfigChartHeaders: (newHeaders) =>
+      dispatch({ type: "UPDATE_CHART_HEADERS", newHeaders }),
+    generateChartConfig: (finalizedConfig) =>
+      dispatch({ type: "CREATE_CHART_CONFIG", finalizedConfig }),
     updateQueryData: (data) =>
       dispatch({ type: "UPDATE_QUERY_DATA", data: data }),
     updateQuery: (current_query) =>

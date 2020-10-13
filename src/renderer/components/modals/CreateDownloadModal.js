@@ -26,12 +26,12 @@ export default function CreateDownloadModal({ disabled, data }) {
         </p>
         <div>
           <p style={{ display: "block" }}>
-            <b>Current Query Size: </b> {data.length}
+            <b>Current Query Size: </b> {data ? data.length : 0}
           </p>
         </div>
       </Modal.Content>
       <Modal.Actions>
-        <CSVLink data={data} target="_blank">
+        <CSVLink data={data ? data : []} target="_blank">
           <Button primary>Download All</Button>
         </CSVLink>
       </Modal.Actions>
