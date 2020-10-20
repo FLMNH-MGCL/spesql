@@ -1,7 +1,6 @@
 import React from 'react';
 import HelpButton from '../buttons/HelpButton';
 import Button, { ButtonGroup } from '../ui/Button';
-import Dropdown from '../ui/Dropdown';
 import Modal from '../ui/Modal';
 import useToggle from '../utils/useToggle';
 

@@ -17,9 +17,11 @@ type OptionProps = {
 };
 
 // TODO:
+// @ts-ignore
 function Option({ option, onSelect }: OptionProps) {}
 
 // TODO:
+// @ts-ignore
 function MultiSelect({ options, onSelect }: SelectProps) {
   return <div></div>;
 }
@@ -29,7 +31,7 @@ export default function Select({ muliple, ...props }: SelectProps) {
     return <MultiSelect {...props} />;
   }
 
-  const { onSelect } = props;
+  // const { onSelect } = props;
 
   return <div></div>;
 }

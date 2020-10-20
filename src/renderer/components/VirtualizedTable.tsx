@@ -50,6 +50,7 @@ type TableProps = {
   data: Specimen[];
 };
 
+// TODO: make me
 export default function ({ headers, data }: TableProps) {
   const { width } = useWindowDimensions();
 

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
 export default function logout(req: Request, res: Response) {
   req.session?.destroy((error) => {
@@ -8,5 +8,7 @@ export default function logout(req: Request, res: Response) {
     }
 
     res.clearCookie(process.env.SESSION_NAME!);
+
+    res.sendStatus(200);
   });
 }

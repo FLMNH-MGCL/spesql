@@ -1,4 +1,6 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
+import { connection } from '../../server';
 
 export default function login(req: Request, res: Response) {
   const { username, password } = req.body;
@@ -7,21 +9,41 @@ export default function login(req: Request, res: Response) {
     res.sendStatus(400);
   }
 
-  const user = { id: 0, username, password };
+  // const user = { id: 0, username, password };
+  else if (!connection) {
+  } else {
+    connection.query(
+      `SELECT * FROM users WHERE username='${username}'`,
+      (error, data) => {
+        if (error) {
+          res.status(500).send(error);
+        } else if (data && data.length === 1) {
+          const target = data[0];
 
-  if (user) {
-    req.session!.userId = user.id;
-    req.session?.save((error) => {
-      if (error) {
-        console.log(error);
-        res.sendStatus(500);
-      } else {
-        console.log("no error");
+          const id = target.id;
+          const hashedPassword = target.password;
+
+          bcrypt.compare(password, hashedPassword, (error, same) => {
+            if (!same && !error) {
+              res.status(401).send('Authorization either failed or denied');
+            } else if (error) {
+              // console.log(error);
+              res.status(401).send(error);
+            } else {
+              req.session!.userId = id;
+              req.session!.save((error) => {
+                if (error) {
+                  res.status(500).send(error);
+                } else {
+                  res.sendStatus(200);
+                }
+              });
+            }
+          });
+        } else {
+          res.status(500).send('MySQL query returned invalid data'); // TODO: should this be 401?
+        }
       }
-    });
+    );
   }
-
-  console.log(req.session!);
-
-  res.json(user.id);
 }
