@@ -1,7 +1,7 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import CreateConfirmModal from "./modals/CreateConfirmModal";
-import Dropdown from "./ui/Dropdown";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import CreateConfirmModal from './modals/CreateConfirmModal';
+import Dropdown from './ui/Dropdown';
 
 export default function UserMenu() {
   const navigate = useNavigate();
@@ -29,9 +29,9 @@ export default function UserMenu() {
       }
       rounded
     >
-      <Dropdown.Header text={"Hello, username"} />
+      <Dropdown.Header text={'Hello, username'} />
       <Dropdown.Item text="Admin Portal" />
-      <Dropdown.Item text="Settings" onClick={() => navigate("settings")} />
+      <Dropdown.Item text="Settings" onClick={() => navigate('settings')} />
       <CreateConfirmModal
         details="This action will require you to log back in to continue usage"
         trigger={<Dropdown.Item text="Logout" />}

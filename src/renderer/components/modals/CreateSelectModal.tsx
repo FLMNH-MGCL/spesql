@@ -1,10 +1,10 @@
-import React from "react";
-import Button, { ButtonGroup } from "../ui/Button";
-import Dropdown from "../ui/Dropdown";
-import Form from "../ui/Form";
-import Modal from "../ui/Modal";
-import Select from "../ui/SelectBAD";
-import useToggle from "../utils/useToggle";
+import React from 'react';
+import Button, { ButtonGroup } from '../ui/Button';
+import Dropdown from '../ui/Dropdown';
+import Form from '../ui/Form';
+import Modal from '../ui/Modal';
+import Select from '../ui/SelectBAD';
+import useToggle from '../utils/useToggle';
 
 export default function CreateSelectModal() {
   const [open, { on, off }] = useToggle(false);

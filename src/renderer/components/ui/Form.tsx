@@ -1,5 +1,5 @@
-import clsx from "clsx";
-import React from "react";
+import clsx from 'clsx';
+import React from 'react';
 
 const ConfigTypes = {
   input: FormInput,
@@ -11,13 +11,13 @@ const ConfigTypes = {
 
 type FormInputProps = {
   className?: string;
-  width?: "full" | "1/2" | "1/3" | "auto";
+  width?: 'full' | '1/2' | '1/3' | 'auto';
 };
 
 function FormInput({ className, width }: FormInputProps) {
   return (
     <span>
-      <input className={clsx(width && `w-${width}`, "form-input", className)} />
+      <input className={clsx(width && `w-${width}`, 'form-input', className)} />
     </span>
   );
 }
@@ -31,13 +31,13 @@ function FormGroup() {}
 type FormFieldProps = {
   type: keyof typeof ConfigTypes;
   className?: string;
-  width?: "full" | "1/2" | "1/3" | "auto";
+  width?: 'full' | '1/2' | '1/3' | 'auto';
 };
 
 // TODO: render corresponding form input types above
-function FormField({ type, width = "auto", ...props }: FormFieldProps) {
+function FormField({ type, width = 'auto', ...props }: FormFieldProps) {
   switch (type) {
-    case "input":
+    case 'input':
       return <FormInput {...props} />;
     default: {
       throw new Error(

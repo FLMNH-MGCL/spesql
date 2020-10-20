@@ -1,6 +1,6 @@
-import React from "react";
-import CreateBulkInsertModal from "./modals/CreateBulkInsertModal";
-import Dropdown from "./ui/Dropdown";
+import React from 'react';
+import CreateBulkInsertModal from './modals/CreateBulkInsertModal';
+import Dropdown from './ui/Dropdown';
 
 export default function InsertMenu() {
   return (

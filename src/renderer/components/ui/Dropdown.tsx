@@ -1,9 +1,9 @@
-import React from "react";
-import clsx from "clsx";
-import { AnimatePresence, motion } from "framer-motion";
+import React from 'react';
+import clsx from 'clsx';
+import { AnimatePresence, motion } from 'framer-motion';
 // import OutsideClickHandler from "react-outside-click-handler";
-import useKeyboard from "../utils/useKeyboard";
-import useToggle from "../utils/useToggle";
+import useKeyboard from '../utils/useKeyboard';
+import useToggle from '../utils/useToggle';
 
 type ItemProps = {
   text: string;
@@ -48,8 +48,8 @@ function Header({ text }: HeaderProps) {
 type Props = {
   open?: boolean;
   label?: string;
-  origin?: "left" | "right";
-  labelIconPosition?: "left" | "right";
+  origin?: 'left' | 'right';
+  labelIconPosition?: 'left' | 'right';
   rounded?: boolean;
   labelIcon?: React.ReactNode;
   icon?: React.ReactNode;
@@ -61,16 +61,16 @@ type Props = {
 export default function Dropdown({
   open = false,
   label,
-  origin = "left",
+  origin = 'left',
   rounded,
   labelIcon,
-  labelIconPosition = "left",
+  labelIconPosition = 'left',
   icon,
   children,
 }: Props) {
   const [visible, { toggle, off }] = useToggle(open);
 
-  useKeyboard("Escape", () => {
+  useKeyboard('Escape', () => {
     off();
   });
 
@@ -84,14 +84,14 @@ export default function Dropdown({
         <span className="rounded-md shadow-sm">
           <button
             className={clsx(
-              rounded ? "rounded-full p-2" : "rounded-md px-4 py-2",
-              "inline-flex justify-center items-center w-full border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
+              rounded ? 'rounded-full p-2' : 'rounded-md px-4 py-2',
+              'inline-flex justify-center items-center w-full border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150'
             )}
             onClick={toggle}
           >
-            {labelIconPosition === "left" && labelIcon && labelIcon}
+            {labelIconPosition === 'left' && labelIcon && labelIcon}
             {label}
-            {labelIconPosition === "right" && labelIcon && labelIcon}
+            {labelIconPosition === 'right' && labelIcon && labelIcon}
             {icon ?? (
               <svg
                 className="-mr-1 ml-2 h-5 w-5"
@@ -116,12 +116,12 @@ export default function Dropdown({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.1, ease: "easeInOut" }}
+            transition={{ duration: 0.1, ease: 'easeInOut' }}
             className={clsx(
-              origin === "left"
-                ? "origin-top-left left-0"
-                : "origin-top-right right-0",
-              "absolute mt-2 w-56 rounded-md shadow-lg z-20"
+              origin === 'left'
+                ? 'origin-top-left left-0'
+                : 'origin-top-right right-0',
+              'absolute mt-2 w-56 rounded-md shadow-lg z-20'
             )}
           >
             <div

@@ -1,7 +1,7 @@
-import React, { ComponentProps } from "react";
-import { Navigate, Route } from "react-router-dom";
-import { useMst } from "../../models";
-import { PropsOf } from "../types";
+import React, { ComponentProps } from 'react';
+import { Navigate, Route } from 'react-router-dom';
+import { useMst } from '../../models';
+import { PropsOf } from '../types';
 
 function RouteElement({ element }: ComponentProps<typeof Route>) {
   const store = useMst();

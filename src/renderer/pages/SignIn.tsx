@@ -1,6 +1,6 @@
-import React, { FormEvent } from "react";
-import flmnhLogo from "../assets/flmnhLogo.png";
-import Heading from "../components/ui/Heading";
+import React, { FormEvent } from 'react';
+import flmnhLogo from '../assets/flmnhLogo.png';
+import Heading from '../components/ui/Heading';
 
 export default function SignIn() {
   async function handleSubmit(e: FormEvent) {
@@ -16,7 +16,7 @@ export default function SignIn() {
       </p>
 
       <div>
-        Don't have an account? You can{" "}
+        Don't have an account? You can{' '}
         <a href="mailto:kawahara@flmnh.ufl.edu">request</a> one here.
       </div>
 

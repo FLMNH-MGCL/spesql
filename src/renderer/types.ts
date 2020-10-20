@@ -20,7 +20,7 @@ export type SpecimenFields = {
   collectedYear: number;
   collectedMonth: number;
   collectedDay: number;
-  sex: "M" | "F" | "G";
+  sex: 'M' | 'F' | 'G';
   lifeStage: string;
   habitat: string;
   occurrenceRemarks: string;

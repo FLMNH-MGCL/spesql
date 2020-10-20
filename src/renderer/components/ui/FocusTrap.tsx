@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from "react";
+import React, { useRef, useCallback, useEffect } from 'react';
 
 const focusableSelector = `
 a[href]:not([tabindex="-1"]),
@@ -58,7 +58,7 @@ export default function FocusTrap({ children, disabled }: FocusTrapProps) {
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (disabled || event.key !== "Tab") {
+      if (disabled || event.key !== 'Tab') {
         return;
       }
 

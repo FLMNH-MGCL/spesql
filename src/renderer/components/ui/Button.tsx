@@ -1,6 +1,6 @@
-import React from "react";
-import clsx from "clsx";
-import { BUTTONS } from "./constants";
+import React from 'react';
+import clsx from 'clsx';
+import { BUTTONS } from './constants';
 
 export function ButtonGroup({ children }: { children: React.ReactNode }) {
   return (
@@ -18,7 +18,7 @@ export type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export default function Button({
   className,
-  variant = "default",
+  variant = 'default',
   fullWidth,
   ...props
 }: Props) {
@@ -26,14 +26,14 @@ export default function Button({
 
   return (
     <button
-      type={props.type || "button"}
+      type={props.type || 'button'}
       className={clsx(
-        props.rounded ? "p-2 rounded-full" : "px-4 py-2 rounded-md",
-        "shadow-sm relative inline-flex items-center border text-sm leading-5 font-medium transition ease-in-out duration-150 focus:outline-none",
+        props.rounded ? 'p-2 rounded-full' : 'px-4 py-2 rounded-md',
+        'shadow-sm relative inline-flex items-center border text-sm leading-5 font-medium transition ease-in-out duration-150 focus:outline-none',
         buttonStyle.base,
-        props.disabled && "cursor-default",
+        props.disabled && 'cursor-default',
         props.disabled ? buttonStyle.disabled : buttonStyle.active,
-        fullWidth && "w-full text-center justify-center",
+        fullWidth && 'w-full text-center justify-center',
         className
       )}
       {...props}

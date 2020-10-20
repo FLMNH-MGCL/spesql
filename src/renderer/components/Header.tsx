@@ -1,9 +1,9 @@
-import React from "react";
-import CreateDownloadModal from "./modals/CreateDownloadModal";
-import InsertMenu from "./InsertMenu";
-import QueryMenu from "./QueryMenu";
-import UserMenu from "./UserMenu";
-import VisualizationToggle from "./VisualizationToggle";
+import React from 'react';
+import CreateDownloadModal from './modals/CreateDownloadModal';
+import InsertMenu from './InsertMenu';
+import QueryMenu from './QueryMenu';
+import UserMenu from './UserMenu';
+import VisualizationToggle from './VisualizationToggle';
 
 export default function Header() {
   return (

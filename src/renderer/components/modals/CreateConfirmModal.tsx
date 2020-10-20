@@ -1,8 +1,8 @@
-import React from "react";
-import Button, { ButtonGroup } from "../ui/Button";
-import Dropdown from "../ui/Dropdown";
-import Modal from "../ui/Modal";
-import useToggle from "../utils/useToggle";
+import React from 'react';
+import Button, { ButtonGroup } from '../ui/Button';
+import Dropdown from '../ui/Dropdown';
+import Modal from '../ui/Modal';
+import useToggle from '../utils/useToggle';
 
 type Props = {
   details: string;

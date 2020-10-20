@@ -1,15 +1,15 @@
-import React from "react";
-import { Table, Column, AutoSizer } from "react-virtualized";
-import useWindowDimensions from "./utils/useWindowDimensions";
-import { SortableContainer } from "react-sortable-hoc";
-import _ from "lodash";
-import "react-virtualized/styles.css";
+import React from 'react';
+import { Table, Column, AutoSizer } from 'react-virtualized';
+import useWindowDimensions from './utils/useWindowDimensions';
+import { SortableContainer } from 'react-sortable-hoc';
+import _ from 'lodash';
+import 'react-virtualized/styles.css';
 
-import { Specimen } from "../types";
-import { FilterToggle, FilterSearch } from "./Filter";
-import ClearQueryButton from "./buttons/ClearQueryButton";
-import RefreshQueryButton from "./buttons/RefreshQueryButton";
-import CreateHelpModal from "./modals/CreateHelpModal";
+import { Specimen } from '../types';
+import { FilterToggle, FilterSearch } from './Filter';
+import ClearQueryButton from './buttons/ClearQueryButton';
+import RefreshQueryButton from './buttons/RefreshQueryButton';
+import CreateHelpModal from './modals/CreateHelpModal';
 // import "./VirtualizedList.css";
 
 const SortableTable = SortableContainer(Table);

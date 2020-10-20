@@ -1,8 +1,8 @@
-import React from "react";
-import Dropdown from "../ui/Dropdown";
-import Form from "../ui/Form";
-import Modal from "../ui/Modal";
-import useToggle from "../utils/useToggle";
+import React from 'react';
+import Dropdown from '../ui/Dropdown';
+import Form from '../ui/Form';
+import Modal from '../ui/Modal';
+import useToggle from '../utils/useToggle';
 
 export default function CreateBulkInsertModal() {
   const [open, { on, off }] = useToggle(false);

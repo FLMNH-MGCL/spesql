@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
 //TODO: implement me
 type Props = {
-  tag?: "h1" | "h2" | "h3" | "h4" | "h5";
+  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
   children: React.ReactNode;
 };
 

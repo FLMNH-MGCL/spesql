@@ -1,8 +1,8 @@
-import { observer } from "mobx-react-lite";
-import React from "react";
-import DeleteButton from "./buttons/DeleteButton";
-import EditSpecimen from "./buttons/EditSpecimen";
-import Heading from "./ui/Heading";
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import DeleteButton from './buttons/DeleteButton';
+import EditSpecimen from './buttons/EditSpecimen';
+import Heading from './ui/Heading';
 
 function SpecimenOverview() {
   return <div></div>;

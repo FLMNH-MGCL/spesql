@@ -1,16 +1,16 @@
-import React from "react";
-import HelpButton from "../buttons/HelpButton";
-import Button, { ButtonGroup } from "../ui/Button";
-import Dropdown from "../ui/Dropdown";
-import Modal from "../ui/Modal";
-import useToggle from "../utils/useToggle";
+import React from 'react';
+import HelpButton from '../buttons/HelpButton';
+import Button, { ButtonGroup } from '../ui/Button';
+import Dropdown from '../ui/Dropdown';
+import Modal from '../ui/Modal';
+import useToggle from '../utils/useToggle';
 
 function GlobalHelpModal() {
   return <Modal.Content title="General Help">todo</Modal.Content>;
 }
 
 type HelpModalProps = {
-  variant: "global" | "";
+  variant: 'global' | '';
 };
 
 export default function CreateHelpModal({ variant }: HelpModalProps) {
@@ -20,7 +20,7 @@ export default function CreateHelpModal({ variant }: HelpModalProps) {
 
   function determineModalToRender() {
     switch (variant) {
-      case "global": {
+      case 'global': {
         return <GlobalHelpModal />;
       }
 
