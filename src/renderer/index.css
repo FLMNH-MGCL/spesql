@@ -1,6 +1,13 @@
+/* purgecss start ignore */
 @tailwind base;
 @tailwind components;
+/* purgecss end ignore */
+
 @tailwind utilities;
+
+form {
+  margin-block-end: 0;
+}
 
 .h-main {
   height: calc(90vh - 4rem);
@@ -25,4 +32,10 @@
 
 .table-height {
   height: calc(100% - 4rem);
+}
+
+/* OVERRIDES!! */
+
+.select__indicator-separator {
+  display: none !important;
 }

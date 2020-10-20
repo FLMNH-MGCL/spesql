@@ -1,7 +1,8 @@
 import React from "react";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
-import OutsideClickHandler from "react-outside-click-handler";
+// import OutsideClickHandler from "react-outside-click-handler";
+import useKeyboard from "../utils/useKeyboard";
 import useToggle from "../utils/useToggle";
 
 type ItemProps = {
@@ -67,7 +68,11 @@ export default function Dropdown({
   icon,
   children,
 }: Props) {
-  const [visible, { toggle }] = useToggle(open);
+  const [visible, { toggle, off }] = useToggle(open);
+
+  useKeyboard("Escape", () => {
+    off();
+  });
 
   // TODO: maybe use context to store reference to this, so children may close it
   // when clicked?

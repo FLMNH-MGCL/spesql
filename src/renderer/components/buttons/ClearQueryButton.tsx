@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import Button from "./ui/Button";
+import Button from "../ui/Button";
 
 export default observer(() => {
   const disabled = true;

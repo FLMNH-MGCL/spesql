@@ -3,6 +3,7 @@ import CreateDownloadModal from "./modals/CreateDownloadModal";
 import InsertMenu from "./InsertMenu";
 import QueryMenu from "./QueryMenu";
 import UserMenu from "./UserMenu";
+import VisualizationToggle from "./VisualizationToggle";
 
 export default function Header() {
   return (
@@ -12,6 +13,7 @@ export default function Header() {
         <QueryMenu />
         <InsertMenu />
         <CreateDownloadModal />
+        <VisualizationToggle />
       </div>
       {/* user interactions */}
       <div>

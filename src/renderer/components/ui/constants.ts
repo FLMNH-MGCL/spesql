@@ -1,5 +1,7 @@
 export enum COLORS {}
 
+export const TEXT = {};
+
 export const BUTTONS = {
   primary: {
     base: "border-transparent text-white focus:outline-none",

@@ -23,7 +23,10 @@ function FormInput({ className, width }: FormInputProps) {
 }
 
 function FormSelect() {}
+
 function FormTextArea() {}
+
+function FormGroup() {}
 
 type FormFieldProps = {
   type: keyof typeof ConfigTypes;
@@ -55,5 +58,6 @@ export default function Form({ onSubmit, children }: FormProps) {
   return <form onSubmit={onSubmit}>{children}</form>;
 }
 
+Form.Group = FormGroup;
 Form.Field = FormField;
 Form.Actions = FormActions;

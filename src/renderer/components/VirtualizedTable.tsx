@@ -7,31 +7,41 @@ import "react-virtualized/styles.css";
 
 import { Specimen } from "../types";
 import { FilterToggle, FilterSearch } from "./Filter";
-import ClearQueryButton from "./ClearQueryButton";
+import ClearQueryButton from "./buttons/ClearQueryButton";
+import RefreshQueryButton from "./buttons/RefreshQueryButton";
+import CreateHelpModal from "./modals/CreateHelpModal";
 // import "./VirtualizedList.css";
 
 const SortableTable = SortableContainer(Table);
 
 function TableFooter() {
   return (
-    <div
-      style={{ height: "10%" }}
-      className="flex items-center bg-gray-500 px-4"
-    >
-      <div>
-        <div className="block">
-          <div className="flex justify-between items-center space-x-2">
-            <FilterToggle />
-            <ClearQueryButton />
-            <FilterSearch />
-          </div>
-        </div>
-
-        <div className="block">
-          <div className="flex justify-between items-center"></div>
-        </div>
+    <div className="h-16 bg-gray-50 flex items-center justify-between px-4">
+      <div className="flex space-x-2">
+        <FilterToggle />
+        <ClearQueryButton />
+        <FilterSearch />
+        <RefreshQueryButton />
+      </div>
+      <div className="flex space-x-2">
+        <CreateHelpModal variant="global" />
       </div>
     </div>
+
+    // <div className="bg-gray-50 flex items-center border border-gray-100 px-4 h-16 w-full">
+    //   <div className="flex justify-between">
+    //     <div className="justify-between items-center space-x-2 ">
+    //       <FilterToggle />
+    //       <ClearQueryButton />
+    //       <FilterSearch />
+    //       <RefreshQueryButton />
+    //     </div>
+
+    //     <div>
+    //       <CreateHelpModal variant="global" />
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
 
@@ -62,7 +72,7 @@ export default function ({ headers, data }: TableProps) {
 
   return (
     <React.Fragment>
-      <div style={{ height: "90%" }}>
+      <div className="table-height">
         <AutoSizer>
           {({ height, width }) => (
             <SortableTable

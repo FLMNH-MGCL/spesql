@@ -13,7 +13,7 @@ type ContentProps = {
 // TODO: do
 function ModalContent({ title, children }: ContentProps) {
   return (
-    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-t-md">
       <div className="mt-3 sm:mt-0">
         {typeof title === "string" ? (
           <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -32,7 +32,7 @@ function ModalContent({ title, children }: ContentProps) {
 // TODO: do
 function ModalFooter({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse sticky">
+    <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse sticky rounded-b-md">
       {children}
     </div>
   );
@@ -69,7 +69,7 @@ export default function Modal({
 
   const modalIn = {
     opacity: 1,
-    y: 0,
+    scale: 1,
   };
 
   useEffect(() => {
@@ -108,10 +108,9 @@ export default function Modal({
                 animate={modalIn}
                 exit={modalInitial}
                 transition={{ duration: 0.2, ease: "easeOut" }}
-                role="dialog"
                 className={clsx(
                   modalSize,
-                  "relative bg-white rounded-lg overflow-hidden shadow-xl w-full z-30 max-h-full"
+                  "relative shadow-xl w-full z-30 max-h-full"
                 )}
               >
                 {children}
