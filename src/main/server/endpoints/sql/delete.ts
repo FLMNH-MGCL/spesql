@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-export default function (req: Request, res: Response) {
+export default function (_req: Request, res: Response) {
   res.json({
-    test: ["hi", "hello there"],
+    test: ['hi', 'hello there'],
   });
 }

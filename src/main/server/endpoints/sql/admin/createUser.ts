@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-export default function update(_req: Request, res: Response) {
+export default function createUser(_req: Request, res: Response) {
   res.json({
     test: ['hi', 'hello there'],
   });
