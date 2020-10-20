@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.h-main {
+  height: calc(90vh - 4rem);
+  overflow: hidden;
+}
+
+.h-minus-header {
+  height: calc(100vh - 4rem);
+}
+
+.shadow-around-lg {
+  /* box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05); */
+
+  box-shadow: -1px -3px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.table-footer-height {
+  height: 4rem;
+}
+
+.table-height {
+  height: calc(100% - 4rem);
+}

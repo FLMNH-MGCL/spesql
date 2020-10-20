@@ -3,6 +3,7 @@ import FocusTrap from "./FocusTrap";
 import Portal from "./Portal";
 import { AnimatePresence, motion } from "framer-motion";
 import noScroll from "no-scroll";
+import clsx from "clsx";
 
 type ContentProps = {
   title: string | React.ReactNode;
@@ -37,14 +38,30 @@ function ModalFooter({ children }: { children: React.ReactNode }) {
   );
 }
 
+const SIZES = {
+  tiny: "max-w-lg",
+  small: "max-w-xl",
+  medium: "",
+  large: "",
+  massive: "",
+};
+
 type ModalProps = {
   open: boolean;
+  size?: keyof typeof SIZES;
   onClose(): void;
   children: React.ReactNode;
 };
 
 // TODO: use media queries
-export default function Modal({ open, onClose, children }: ModalProps) {
+export default function Modal({
+  open,
+  size = "small",
+  onClose,
+  children,
+}: ModalProps) {
+  const modalSize = SIZES[size];
+
   const modalInitial = {
     opacity: 0,
     scale: 0.95,
@@ -92,7 +109,10 @@ export default function Modal({ open, onClose, children }: ModalProps) {
                 exit={modalInitial}
                 transition={{ duration: 0.2, ease: "easeOut" }}
                 role="dialog"
-                className="relative bg-white rounded-lg overflow-hidden shadow-xl sm:max-w-lg sm:w-full z-30 max-h-full"
+                className={clsx(
+                  modalSize,
+                  "relative bg-white rounded-lg overflow-hidden shadow-xl w-full z-30 max-h-full"
+                )}
               >
                 {children}
               </motion.div>

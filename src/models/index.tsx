@@ -6,12 +6,12 @@ import { RootModel } from "./Root";
 const store = new Store();
 
 export const rootStore = RootModel.create({
-  session: {},
+  session: {
+    currentQuery: {},
+  },
 });
 
 const STORAGE_KEY = process.env.ELECTRON_WEBPACK_WDS_SECRET_KEY!;
-
-console.log(STORAGE_KEY);
 
 onSnapshot(rootStore, (snapshot) => {
   console.log("Snapshot: ", snapshot);

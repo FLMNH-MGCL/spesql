@@ -7,6 +7,7 @@ import SignIn from "./pages/SignIn";
 import Visualization from "./pages/Visualization";
 import { Provider } from "../models";
 import Layout from "./components/Layout";
+import AuthRoute from "./components/AuthRoute";
 
 export default function App() {
   return (
@@ -14,10 +15,10 @@ export default function App() {
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/visualization" element={<Visualization />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/settings" element={<Settings />} />
+            <AuthRoute path="/" element={<Home />} />
+            <AuthRoute path="visualization" element={<Visualization />} />
+            <Route path="signin" element={<SignIn />} />
+            <Route path="settings" element={<Settings />} />
             <Route path="*">
               <Lost />
             </Route>

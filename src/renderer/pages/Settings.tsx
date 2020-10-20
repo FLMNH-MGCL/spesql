@@ -1,5 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
-  return <div></div>;
+  const navigate = useNavigate();
+
+  // navigate("/");
+  return (
+    <div>
+      <button onClick={() => navigate("..")}>go home</button>
+    </div>
+  );
 }
