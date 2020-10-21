@@ -7,7 +7,7 @@ export default function updateConfig(req: Request, res: Response) {
   const newConfig: MySqlCredentials = req.body.newConfig;
 
   if (!newConfig) {
-    res.status(401).send('Missing config content');
+    res.status(400).send('Missing config content');
     return;
   }
 

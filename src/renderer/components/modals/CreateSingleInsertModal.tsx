@@ -8,15 +8,15 @@ type Props = {
   onClose(): void;
 };
 
-export default function CreateUpdateModal({ open, onClose }: Props) {
+export default function CreateSingleInsertModal({ open, onClose }: Props) {
   useKeyboard('Escape', () => {
     onClose();
   });
 
   return (
     <React.Fragment>
-      <Modal open={open} onClose={onClose}>
-        <Modal.Content title="Update Query">todo</Modal.Content>
+      <Modal open={open} onClose={onClose} size="massive">
+        <Modal.Content title="Insert Query">todo</Modal.Content>
 
         <Modal.Footer>
           <ButtonGroup>

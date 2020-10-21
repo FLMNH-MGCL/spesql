@@ -1,26 +1,139 @@
-import React, { FormEvent } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import flmnhLogo from '../assets/flmnhLogo.png';
-import Heading from '../components/ui/Heading';
+import CircleButton from '../components/buttons/CircleButton';
+import Divider from '../components/ui/Divider';
+import Form, { Values } from '../components/ui/form/Form';
+import axios from 'axios';
+import { BACKEND_URL } from '../types';
+import { useMst } from '../../models';
 
 export default function SignIn() {
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
+  const navigate = useNavigate();
+  const store = useMst();
+
+  async function handleSubmit(values: Values) {
+    const { username, password } = values;
+
+    const loginResponse = await axios
+      .post(BACKEND_URL + '/api/login', {
+        username,
+        password,
+      })
+      .catch((error) => error.response);
+
+    console.log(loginResponse);
+
+    if (loginResponse.status === 200) {
+      const { id, accessRole } = loginResponse.data;
+      // create spesql session
+      store.session.createSession(username, id, accessRole);
+      navigate('/home');
+    }
   }
+
   return (
-    <div className="max-w-xl justify-center">
-      <Heading>Welcome to SpeSQL!</Heading>
-      <img src={flmnhLogo} />
-      <p>
-        The database management application for the Florida Museum of Natural
-        History
-      </p>
+    <div className="h-screen flex items-center">
+      <div className="mx-auto w-full max-w-md">
+        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <div className="flex justify-center pb-4">
+            <img
+              className="object-scale-down max-h-24 shadow rounded-sm"
+              src={flmnhLogo}
+            />
+          </div>
+          <Form onSubmit={handleSubmit}>
+            <Form.Input name="username" label="Username" required />
 
-      <div>
-        Don't have an account? You can{' '}
-        <a href="mailto:kawahara@flmnh.ufl.edu">request</a> one here.
+            <Form.Input
+              className="mt-6"
+              name="password"
+              label="Password"
+              type="password"
+              required
+            />
+
+            <div className="mt-6 flex text-sm leading-5">
+              <p className="font-medium mr-1">Don't have an account?</p>
+              <a
+                href="mailto:kawahara@flmnh.ufl.edu"
+                target="_blank"
+                rel="noopener"
+                className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+              >
+                Request one here
+              </a>
+            </div>
+
+            <div className="mt-6">
+              <span className="block w-full rounded-md shadow-sm">
+                {/* TODO: change to UI button */}
+                <button
+                  type="submit"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                >
+                  Sign in
+                </button>
+              </span>
+            </div>
+          </Form>
+
+          <div className="mt-6">
+            <Divider text="Or view" />
+
+            <div className="pt-4 flex justify-center items-center space-x-6">
+              <CircleButton
+                onClick={() => navigate('/settings')}
+                icon={
+                  <div title="Settings">
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                  </div>
+                }
+              />
+              <CircleButton
+                onClick={() => {}}
+                icon={
+                  <div title="Documentation">
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                  </div>
+                }
+              />
+            </div>
+          </div>
+        </div>
       </div>
-
-      <form onSubmit={handleSubmit}>yo</form>
     </div>
   );
 }

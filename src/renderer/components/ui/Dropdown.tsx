@@ -1,9 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
-// import OutsideClickHandler from "react-outside-click-handler";
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 type ItemProps = {
   text: string;
@@ -78,67 +78,67 @@ export default function Dropdown({
   // when clicked?
 
   return (
-    // <OutsideClickHandler onOutsideClick={off}>
-    <div className="relative inline-block text-left">
-      <div>
-        <span className="rounded-md shadow-sm">
-          <button
-            className={clsx(
-              rounded ? 'rounded-full p-2' : 'rounded-md px-4 py-2',
-              'inline-flex justify-center items-center w-full border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150'
-            )}
-            onClick={toggle}
-          >
-            {labelIconPosition === 'left' && labelIcon && labelIcon}
-            {label}
-            {labelIconPosition === 'right' && labelIcon && labelIcon}
-            {icon ?? (
-              <svg
-                className="-mr-1 ml-2 h-5 w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            )}
-          </button>
-        </span>
-      </div>
-
-      <AnimatePresence>
-        {visible && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.1, ease: 'easeInOut' }}
-            className={clsx(
-              origin === 'left'
-                ? 'origin-top-left left-0'
-                : 'origin-top-right right-0',
-              'absolute mt-2 w-56 rounded-md shadow-lg z-20'
-            )}
-          >
-            <div
-              className="rounded-md bg-white shadow-xs"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="options-menu"
+    <OutsideClickHandler onOutsideClick={off}>
+      <div className="relative inline-block text-left">
+        <div>
+          <span className="rounded-md shadow-sm">
+            <button
+              className={clsx(
+                rounded ? 'rounded-full p-2' : 'rounded-md px-4 py-2',
+                'inline-flex justify-center items-center w-full border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150'
+              )}
+              onClick={toggle}
             >
-              <div className="border-t border-gray-100"></div>
-              <div className="py-1">{children}</div>
-              <div className="border-t border-gray-100"></div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-    // </OutsideClickHandler>
+              {labelIconPosition === 'left' && labelIcon && labelIcon}
+              {label}
+              {labelIconPosition === 'right' && labelIcon && labelIcon}
+              {icon ?? (
+                <svg
+                  className="-mr-1 ml-2 h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              )}
+            </button>
+          </span>
+        </div>
+
+        <AnimatePresence>
+          {visible && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.1, ease: 'easeInOut' }}
+              className={clsx(
+                origin === 'left'
+                  ? 'origin-top-left left-0'
+                  : 'origin-top-right right-0',
+                'absolute mt-2 w-56 rounded-md shadow-lg z-20'
+              )}
+            >
+              <div
+                className="rounded-md bg-white shadow-xs"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="options-menu"
+              >
+                <div className="border-t border-gray-100"></div>
+                <div className="py-1">{children}</div>
+                <div className="border-t border-gray-100"></div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </OutsideClickHandler>
   );
 }
 

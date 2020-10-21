@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Lost from './pages/Lost';
 import Settings from './pages/Settings';
@@ -8,30 +8,28 @@ import Visualization from './pages/Visualization';
 import { Provider } from '../models';
 import Layout from './components/Layout';
 import Header from './components/Header';
+import AuthRoute from './components/AuthRoute';
 
-function MainLayout() {
+function HomeStack() {
   return (
     <React.Fragment>
       <Header />
-      <Outlet />
+      <Routes>
+        <AuthRoute path="/" element={<Home />} />
+        <AuthRoute path="/visualization" element={<Visualization />} />
+      </Routes>
     </React.Fragment>
   );
 }
 
 export default function App() {
+  console.log(window.location.href);
   return (
     <Provider>
-      <BrowserRouter>
+      <MemoryRouter initialEntries={['/home']}>
         <Layout>
           <Routes>
-            <Route path="/" element={<MainLayout />}>
-              <Route path="/">
-                <Home />
-              </Route>
-              <Route path="/visualization">
-                <Visualization />
-              </Route>
-            </Route>
+            <Route path="/home/*" element={<HomeStack />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*">
@@ -39,7 +37,7 @@ export default function App() {
             </Route>
           </Routes>
         </Layout>
-      </BrowserRouter>
+      </MemoryRouter>
     </Provider>
   );
 }

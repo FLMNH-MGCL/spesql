@@ -1,23 +1,32 @@
 import React from 'react';
-import Dropdown from '../ui/Dropdown';
-import Form from '../ui/Form';
+import Button, { ButtonGroup } from '../ui/Button';
 import Modal from '../ui/Modal';
-import useToggle from '../utils/useToggle';
+import useKeyboard from '../utils/useKeyboard';
 
-export default function CreateCountModal() {
-  const [open, { on, off }] = useToggle(false);
+type Props = {
+  open: boolean;
+  onClose(): void;
+};
+
+export default function CreateCountModal({ open, onClose }: Props) {
+  useKeyboard('Escape', () => {
+    onClose();
+  });
 
   return (
     <React.Fragment>
-      <Modal open={open} onClose={off}>
-        <Modal.Content title="Count Query">
-          <Form>
-            <Form.Field type="input" />
-          </Form>
-        </Modal.Content>
+      <Modal open={open} onClose={onClose}>
+        <Modal.Content title="Count Query">todo</Modal.Content>
+
+        <Modal.Footer>
+          <ButtonGroup>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button variant="primary">Confirm</Button>
+          </ButtonGroup>
+        </Modal.Footer>
       </Modal>
 
-      <Dropdown.Item text="Count" onClick={on} />
+      {/* <Dropdown.Item text="Select" onClick={on} /> */}
     </React.Fragment>
   );
 }

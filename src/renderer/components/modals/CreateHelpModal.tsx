@@ -15,8 +15,6 @@ type HelpModalProps = {
 export default function CreateHelpModal({ variant }: HelpModalProps) {
   const [open, { on, off }] = useToggle(false);
 
-  // function handleSubmit(query: string) {}
-
   function determineModalToRender() {
     switch (variant) {
       case 'global': {

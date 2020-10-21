@@ -64,3 +64,8 @@ export type Specimen = Partial<SpecimenFields>;
 export type PropsOf<TTag = any> = TTag extends React.ElementType
   ? React.ComponentProps<TTag>
   : never;
+
+export const BACKEND_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.BACKEND_URL!
+    : 'http://localhost:5000';

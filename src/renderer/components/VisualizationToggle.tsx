@@ -7,10 +7,11 @@ export default function VisualizationToggle() {
   const navigate = useNavigate();
 
   function toggle() {
-    if (location.pathname === '/') {
-      navigate('visualization');
+    console.log(location.pathname);
+    if (location.pathname === '/home') {
+      navigate('/home/visualization');
     } else {
-      navigate('/');
+      navigate('/home');
     }
   }
 
@@ -18,7 +19,7 @@ export default function VisualizationToggle() {
     <div className="flex space-x-2 items-center">
       <p>Table</p>
       <Switch
-        enabled={location.pathname === '/visualization'}
+        enabled={location.pathname === '/home/visualization'}
         onToggle={toggle}
       />
       <p>Charts</p>

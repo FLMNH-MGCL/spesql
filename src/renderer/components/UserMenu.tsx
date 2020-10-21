@@ -1,10 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMst } from '../../models';
 import CreateConfirmModal from './modals/CreateConfirmModal';
 import Dropdown from './ui/Dropdown';
 
 export default function UserMenu() {
   const navigate = useNavigate();
+  const store = useMst();
+
+  if (!store.session.user) {
+    return null;
+  }
+
+  const { username } = store.session.user;
 
   return (
     <Dropdown
@@ -29,7 +37,7 @@ export default function UserMenu() {
       }
       rounded
     >
-      <Dropdown.Header text={'Hello, username'} />
+      <Dropdown.Header text={`Hello, @${username}`} />
       <Dropdown.Item text="Admin Portal" />
       <Dropdown.Item text="Settings" onClick={() => navigate('settings')} />
       <CreateConfirmModal

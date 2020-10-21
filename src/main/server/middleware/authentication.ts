@@ -10,7 +10,7 @@ export function validateSession(
 ) {
   if (req.session?.userId === undefined) {
     console.log(req.session);
-    res.sendStatus(403);
+    res.status(409).send('The session has expired');
   } else {
     next();
   }

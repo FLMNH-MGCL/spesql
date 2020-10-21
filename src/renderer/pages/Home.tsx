@@ -15,6 +15,8 @@ export default observer(() => {
     }
   });
 
+  console.log('HOME');
+
   return (
     <div>
       <div className="flex justify-center items-center space-x-4 mx-4 h-minus-header">
