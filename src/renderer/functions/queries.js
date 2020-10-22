@@ -72,7 +72,8 @@ export async function runInsertQuery(insertions, table) {
 }
 
 export async function runSingleInsert(specimen, table, userData) {
-  const insertData = await axios.post(PREFIX + "api/insert", {
+  console.log(PREFIX);
+  const insertData = await axios.post(PREFIX + "/api/insert", {
     specimen: specimen,
     table: table,
     username: userData.username,

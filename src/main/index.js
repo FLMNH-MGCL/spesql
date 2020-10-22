@@ -3,11 +3,10 @@ import url from "url";
 import { app, BrowserWindow, nativeImage, Menu, MenuItem } from "electron";
 import is from "electron-is";
 import { autoUpdater } from "electron-updater";
+
 import "./server/server";
 
 app.commandLine.appendSwitch("ignore-certificate-errors");
-
-const EXPRESS_PORT = process.env.PORT || 5000;
 
 // TODO: icons are broken in electron right now
 // const iconUrl = url.format({

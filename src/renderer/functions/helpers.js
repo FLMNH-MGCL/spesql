@@ -146,11 +146,16 @@ export function getQueryHeaders(specimen) {
   }
 }
 
+// TODO: have this slice data differently according to the chart type, therefore it must take in the chart type
+// this will allow for ensuring the columns are of the correct types relative to the chart wanted.
+// this is a prime example of where TypeScript would be amazing for this project, however it would be quite the undertaking
+// to convert this entire project to TypeScript so.
+
 /**
  * this function will be responsible for creating some of the 'metadata' the table will have.
  *
- * @param {[]} source: array of specimen objects
- * @param {[]} restriction: array of headers to restrict
+ * @param {object[]} source: array of specimen objects
+ * @param {string[]} restriction: array of headers to restrict
  */
 export function createDataSlice(source, restriction) {
   if (restriction === ["*"]) {

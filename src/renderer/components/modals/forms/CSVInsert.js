@@ -13,6 +13,7 @@ import {
   checkSpecimen,
   checkField,
   parseMeasurement,
+  isValidCSV,
 } from "../../../functions/queryChecks";
 import { runSingleInsert } from "../../../functions/queries";
 import CSVDrop from "./CSVDrop";
@@ -51,6 +52,7 @@ export default class CSVInsert extends React.Component {
         this.state.databaseTable,
         userData
       ).catch((error) => {
+        console.log(error);
         const res = error.response;
 
         if (res.status === 400) {
@@ -116,7 +118,7 @@ export default class CSVInsert extends React.Component {
     // check valid data
     // if data is valid, loop through and axios.post each item
     this.setState({ loading: true });
-    const ret = this.props.isValidCSV(this.state.text_area);
+    const ret = isValidCSV(this.state.text_area);
 
     if (!ret.valid) {
       this.props.notify({
@@ -281,15 +283,12 @@ export default class CSVInsert extends React.Component {
             />
           </Form>
           <Header size="small">Paste CSV Data here</Header>
-          <p>
+          <p style={{ paddingBottom: "1rem" }}>
             Be sure to include the headers, and if you need to view the template
             for CSV files, donwload it from{" "}
-            <a
-              // href={require("../../../assets/CORRECT_HEADERS_TEMPLATE.csv")}
-              download
-            >
+            <a href="../../../assets/CORRECT_HEADERS.csv" download>
               here
-            </a>{" "}
+            </a>
           </p>
           <Form padded="vertically" onSubmit={this.handleCSVSubmit}>
             <Form.Group>
@@ -329,14 +328,8 @@ export default class CSVInsert extends React.Component {
             checkAuth={this.props.checkAuth}
             handleSubmit={this.handleSubmit.bind(this)}
             buttonLoading={this.state.loading}
+            disabled={!databaseTable}
           />
-          {/* <Button
-            style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
-            onClick={this.handleSubmit}
-            loading={this.state.loading}
-          >
-            Submit
-          </Button> */}
         </Modal.Actions>
       </>
     );

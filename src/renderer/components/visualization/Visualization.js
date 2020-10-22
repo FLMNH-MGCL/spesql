@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Chart } from "react-google-charts";
 import { Loader } from "semantic-ui-react";
 
 export default function Visualization(props) {
   const { finalizedConfig } = props.visualizationConfig;
+
+  useEffect(() => {
+    props.notify({
+      type: "warning",
+      title: "Experimental feature",
+      message: "Warning: this feature is incomplete and nonfunctional",
+    });
+  }, []);
 
   function renderChart() {
     if (!props.data) {

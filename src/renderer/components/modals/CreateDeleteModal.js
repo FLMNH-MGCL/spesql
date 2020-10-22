@@ -58,8 +58,6 @@ export default function DeleteDocument({
         return null;
       });
 
-    // console.log(authData);
-
     if (!authData || authData.data.err || authData.data.authed === false) {
       // credentials did not match
       props.notify({
@@ -70,7 +68,7 @@ export default function DeleteDocument({
     } else {
       // allow whatever command to proceed
       // props.notify({ type: "success", message: "Authorization successful" });
-      callback(userData);
+      callback({ username: user, password: password });
     }
   }
 
@@ -83,6 +81,7 @@ export default function DeleteDocument({
           "You must acknowledge the disclaimer before submitting delete query",
       });
     } else {
+      console.log(userData);
       let query = `DELETE FROM molecularLab WHERE id=${selectedSpecimen.id};`;
       props.runDeleteQuery(query, {
         user: userData.username,

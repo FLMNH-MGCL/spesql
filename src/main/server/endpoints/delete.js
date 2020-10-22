@@ -5,8 +5,7 @@ const bcrypt = require("bcrypt");
 module.exports = function (connection, app) {
   app.post("/api/delete/", async function (req, res) {
     let command = req.body;
-    const user = req.body.user;
-    const password = req.body.password;
+    const { user, password } = req.body;
 
     if (!command || !command.command.toLowerCase().startsWith("delete")) {
       // not an update query

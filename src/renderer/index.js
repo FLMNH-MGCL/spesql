@@ -17,7 +17,7 @@ import Settings from "./views/settings/Settings";
 import AdminPortal from "./views/admin/AdminPortal";
 import NetworkError from "./views/404/NetworkError";
 import fourohfour from "./views/404/404";
-
+import ErrorBoundary from "./components/utils/ErrorBoundary";
 import { ipcRenderer } from "electron";
 
 require("dotenv").config();
@@ -70,43 +70,51 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <HashRouter>
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={(props) => <Home {...props} notify={addNotification} />}
-            />
+        <ErrorBoundary>
+          <HashRouter>
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={(props) => <Home {...props} notify={addNotification} />}
+              />
 
-            <Route
-              exact
-              path="/login"
-              render={(props) => <Login {...props} notify={addNotification} />}
-            />
-            <Route
-              exact
-              path="/settings"
-              render={(props) => (
-                <Settings {...props} notify={addNotification} />
-              )}
-            />
+              <Route
+                exact
+                path="/login"
+                render={(props) => (
+                  <Login {...props} notify={addNotification} />
+                )}
+              />
+              <Route
+                exact
+                path="/settings"
+                render={(props) => (
+                  <Settings {...props} notify={addNotification} />
+                )}
+              />
 
-            <Route
-              exact
-              path="/admin"
-              render={(props) => (
-                <AdminPortal {...props} notify={addNotification} />
-              )}
-            />
+              <Route
+                exact
+                path="/admin"
+                render={(props) => (
+                  <AdminPortal {...props} notify={addNotification} />
+                )}
+              />
 
-            <Route exact path="/home">
-              <Redirect to="/" />
-            </Route>
+              <Route exact path="/home">
+                <Redirect to="/" />
+              </Route>
 
-            <Route exact path="/404/network-issues" component={NetworkError} />
-            <Route path="*" component={fourohfour} />
-          </Switch>
-        </HashRouter>
+              <Route
+                exact
+                path="/404/network-issues"
+                component={NetworkError}
+              />
+              <Route path="*" component={fourohfour} />
+            </Switch>
+          </HashRouter>
+        </ErrorBoundary>
       </PersistGate>
       <NotificationSystem ref={notificationSystem} />
     </Provider>

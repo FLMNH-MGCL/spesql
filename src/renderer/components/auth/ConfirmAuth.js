@@ -7,6 +7,7 @@ export default function ({
   buttonStyle,
   buttonLoading,
   passCredentials,
+  disabled,
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -30,6 +31,7 @@ export default function ({
               color={buttonStyle.color}
               onClick={() => setShow(true)}
               loading={buttonLoading ? buttonLoading : false}
+              disabled={disabled ? disabled : false}
             >
               {buttonStyle.icon ? buttonStyle.icon : null}
               {buttonStyle.text}
@@ -39,6 +41,7 @@ export default function ({
               style={{ backgroundColor: "#5c6ac4", color: "#fff" }}
               onClick={() => setShow(true)}
               loading={buttonLoading ? buttonLoading : false}
+              disabled={disabled ? disabled : false}
             >
               Submit
             </Button>
