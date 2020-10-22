@@ -6,16 +6,28 @@ import {
   UnpackNestedValue,
   useForm,
 } from 'react-hook-form';
-import Input from '../Input';
-import createFormComponent from './createFormComponent';
+import Input from './Input';
+import createFormComponent from '../utils/createFormComponent';
+import Radio from './Radio';
+import clsx from 'clsx';
 
 const FormInput = createFormComponent(Input);
+
+const FormRadio = createFormComponent(Radio);
 
 // function FormSelect() {}
 
 // function FormTextArea() {}
 
-// function FormGroup() {}
+type GroupProps = {
+  children: React.ReactNode;
+  flex?: boolean;
+};
+function FormGroup({ children, flex }: GroupProps) {
+  return (
+    <div className={clsx(flex && 'flex space-x-2', 'py-2')}>{children}</div>
+  );
+}
 
 // function FormActions() {}
 
@@ -53,3 +65,5 @@ export default function Form<T = Values>({
 }
 
 Form.Input = FormInput;
+Form.Radio = FormRadio;
+Form.Group = FormGroup;

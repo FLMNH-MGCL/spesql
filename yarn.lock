@@ -1142,6 +1142,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.68.tgz#dd5acf4a52a458ff1d9ef4fd66406fba0afbbb33"
   integrity sha512-3RW2s24ewB7F9dAHvgb9FRvNHn6nO9IK6Eaknbz7HTOe2a5GVne5XbUh5+YA+kcCn67glyHhClUUdFP73LWrgQ==
 
+"@types/number-to-words@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@types/number-to-words/-/number-to-words-1.2.0.tgz#b59ec27835ebe51d8dd56df58a2a66c92bc66b81"
+  integrity sha1-tZ7CeDXr5R2N1W31iipmySvGa4E=
+
 "@types/prop-types@*":
   version "15.7.3"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
@@ -4519,6 +4524,11 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
+goober@^2.0.4:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/goober/-/goober-2.0.9.tgz#eb4a8d89d2df6e127d22dab5cb7ef7d82b4c018c"
+  integrity sha512-+xgHN5hdUpexSjrFWaCH0yrCx2blkKlCStyh2Kmji7+vCuLQ0Ovrc+L7SJGDT+2CSQZ3SnTctJhwnICzXct21Q==
+
 got@^9.6.0:
   version "9.6.0"
   resolved "https://registry.yarnpkg.com/got/-/got-9.6.0.tgz#edf45e7d67f99545705de1f7bbeeeb121765ed85"
@@ -6467,6 +6477,11 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
+number-to-words@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/number-to-words/-/number-to-words-1.2.4.tgz#e0f124de9628f8d86c4eeb89bac6c07699264501"
+  integrity sha512-/fYevVkXRcyBiZDg6yzZbm0RuaD6i0qRfn8yr+6D0KgBMOndFPxuW10qCHpzs50nN8qKuv78k8MuotZhcVX6Pw==
+
 oauth-sign@~0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.9.0.tgz#47a7b016baa68b5fa0ecf3dee08a85c679ac6455"
@@ -7655,6 +7670,13 @@ react-load-script@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/react-load-script/-/react-load-script-0.0.6.tgz#db6851236aaa25bb622677a2eb51dad4f8d2c258"
   integrity sha512-aRGxDGP9VoLxcsaYvKWIW+LRrMOzz2eEcubTS4NvQPPugjk2VvMhow0wWTkSl7RxookomD1MwcP4l5UStg5ShQ==
+
+react-multi-select-component@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-multi-select-component/-/react-multi-select-component-3.0.4.tgz#3e2d6f0c978d4f40b8b97bb425fa77adc374f302"
+  integrity sha512-0qpp+2A+4UABLmhdP8gZBItPq+BAZEH6G+3OCCNyFMgfnNY3ZsJclxKOnOFOxvk2DcATRIbekXk2LaLQ+5d5QA==
+  dependencies:
+    goober "^2.0.4"
 
 react-notification-system@^0.4.0:
   version "0.4.0"

@@ -4,10 +4,11 @@ import { forwardRef } from 'react';
 
 export type Props = {
   label?: string;
+  fullWidth?: boolean;
 } & React.ComponentProps<'input'>;
 
 export default forwardRef<HTMLInputElement, Props>(
-  ({ label, className, ...props }, ref) => {
+  ({ label, className, fullWidth, ...props }, ref) => {
     // @ts-ignore: this will work I promise
     const errors = props.errors && props.name && props.errors[props.name];
     console.log(errors);
@@ -15,6 +16,7 @@ export default forwardRef<HTMLInputElement, Props>(
       <label
         className={clsx(
           className,
+          fullWidth && 'flex-1',
           'block text-sm font-medium leading-5 text-gray-700'
         )}
       >

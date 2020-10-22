@@ -7,7 +7,6 @@ export default function VisualizationToggle() {
   const navigate = useNavigate();
 
   function toggle() {
-    console.log(location.pathname);
     if (location.pathname === '/home') {
       navigate('/home/visualization');
     } else {

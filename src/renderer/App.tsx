@@ -23,7 +23,6 @@ function HomeStack() {
 }
 
 export default function App() {
-  console.log(window.location.href);
   return (
     <Provider>
       <MemoryRouter initialEntries={['/home']}>

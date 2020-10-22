@@ -1,5 +1,7 @@
 import React from 'react';
+import SelectQueryForm from '../forms/SelectQueryForm';
 import Button, { ButtonGroup } from '../ui/Button';
+import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
 import useKeyboard from '../utils/useKeyboard';
 
@@ -13,20 +15,26 @@ export default function CreateSelectModal({ open, onClose }: Props) {
     onClose();
   });
 
+  function runQuery(values: Values) {
+    console.log(values);
+  }
+
   return (
     <React.Fragment>
-      <Modal open={open} onClose={onClose}>
-        <Modal.Content title="Select Query">todo</Modal.Content>
+      <Modal open={open} onClose={onClose} size="medium">
+        <Modal.Content title="Select Query">
+          <SelectQueryForm onSubmit={runQuery} />
+        </Modal.Content>
 
         <Modal.Footer>
           <ButtonGroup>
             <Button onClick={onClose}>Cancel</Button>
-            <Button variant="primary">Confirm</Button>
+            <Button variant="primary" type="submit" form="select-form">
+              Confirm
+            </Button>
           </ButtonGroup>
         </Modal.Footer>
       </Modal>
-
-      {/* <Dropdown.Item text="Select" onClick={on} /> */}
     </React.Fragment>
   );
 }

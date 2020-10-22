@@ -2,7 +2,13 @@ import { NextFunction, Request, Response } from 'express';
 import { connection } from '../server';
 import bcrypt from 'bcrypt';
 
-// this function will verify the session token
+/**
+ * Middleware function to verify a valid, current session
+ *
+ * @param {Request} req: the request context sent to the server
+ * @param {Response} res: the response context
+ * @param {NextFunction} next: the function in queue, will only get called on successful validation
+ */
 export function validateSession(
   req: Request,
   res: Response,
@@ -16,6 +22,13 @@ export function validateSession(
   }
 }
 
+/**
+ * Middleware function to restrict next function to only those with admin access
+ *
+ * @param {Request} req: the request context sent to the server
+ * @param {Response} res: the response context
+ * @param {NextFunction} next: the function in queue, will only get called on successful validation
+ */
 export function adminRoute(req: Request, res: Response, next: NextFunction) {
   const userId = req.session!.userId;
   const username = req.body.username;
@@ -24,7 +37,7 @@ export function adminRoute(req: Request, res: Response, next: NextFunction) {
   if (!username || !password) {
     res.status(400).send('You must provide credentials for admin routes');
   } else if (!connection) {
-    res.status(502).send('Connection to the MySQL database was lost');
+    res.status(502).send('Connection to the MySQL database was lost'); // TODO: is there a better code?
   } else {
     // grab the current user from session and query the db for the user
     connection.query(
@@ -64,6 +77,13 @@ export function adminRoute(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+/**
+ * Middleware function to restrict next function to only those with manager access
+ *
+ * @param {Request} req: the request context sent to the server
+ * @param {Response} res: the response context
+ * @param {NextFunction} next: the function in queue, will only get called on successful validation
+ */
 export function managerRoute(req: Request, res: Response, next: NextFunction) {
   const userId = req.session!.userId;
   const username = req.body.username;
@@ -75,6 +95,8 @@ export function managerRoute(req: Request, res: Response, next: NextFunction) {
     res.status(502).send('Connection to the MySQL database was lost');
   } else {
     // grab the current user from session and query the db for the user
+    // this will be used to validate the person attempting this route matches
+    // the credentials stored in the current session.
     connection.query(
       `SELECT * FROM users WHERE id='${userId}'`,
       (error, data) => {
@@ -88,11 +110,21 @@ export function managerRoute(req: Request, res: Response, next: NextFunction) {
           const accessRole = user.access_role;
           const hashedPassword = user.password;
 
+          // I do not allow for people to operate on the database with accounts
+          // other than the one that is logged in. this is why if the username
+          // the user used to validate the current credentials differs from the
+          // credentials recieved from the session id I send a 401. A new session
+          // will need to be started, in this case (i.e. log out and log in using
+          // your own account)
           if (queriedUsername !== username) {
             res
               .status(401)
               .send('Attempting authentication with conflicting accounts');
-          } else if (accessRole !== 'manager') {
+          }
+
+          // admins are still able to access manager routes, there is a down access
+          // schema in this backend
+          else if (accessRole !== 'manager' || accessRole !== 'admin') {
             res.status(403).send('You must be an manager to access this route'); // TODO: should I change this to 401 to be ambiguous?
           } else {
             // this is the true 'validation' part of this function, password match

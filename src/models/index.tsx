@@ -3,6 +3,8 @@ import { Instance, onSnapshot, applySnapshot } from 'mobx-state-tree';
 import Store from 'electron-store';
 import { RootModel } from './Root';
 
+// TODO: replace with zustand ????
+
 const store = new Store();
 
 export const rootStore = RootModel.create({
@@ -28,6 +30,9 @@ export function Provider({ children }: { children: React.ReactNode }) {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    // I don't want to cache sessions, so I have this uncommented. This way
+    // if the user exits the app they must reauthenticate
+
     // const data = store.get(STORAGE_KEY);
     // if (data) {
     //   console.log('Hydrating store from snapshot', data);

@@ -10,7 +10,6 @@ type ContentProps = {
   children: React.ReactNode;
 };
 
-// TODO: do
 function ModalContent({ title, children }: ContentProps) {
   return (
     <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-t-md">
@@ -29,7 +28,6 @@ function ModalContent({ title, children }: ContentProps) {
   );
 }
 
-// TODO: do
 function ModalFooter({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse sticky rounded-b-md">
@@ -41,8 +39,8 @@ function ModalFooter({ children }: { children: React.ReactNode }) {
 const SIZES = {
   tiny: 'max-w-lg',
   small: 'max-w-xl',
-  medium: '',
-  large: '',
+  medium: 'max-w-2xl',
+  large: 'max-w-3xl',
   massive: '',
 };
 

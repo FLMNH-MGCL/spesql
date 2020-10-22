@@ -16,7 +16,10 @@ export default function login(req: Request, res: Response) {
       `SELECT * FROM users WHERE username='${username}'`,
       (error, data) => {
         if (error) {
-          res.status(500).send(error);
+          // I am hardcoding this query, so in theory the only time an error
+          // should hit here is if the connection to the DB (i.e. the VPN is not
+          // connected) is unable to be made
+          res.status(504).send(error);
         } else if (data && data.length === 1) {
           const target = data[0];
 

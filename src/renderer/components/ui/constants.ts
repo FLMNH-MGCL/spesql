@@ -1,7 +1,17 @@
 export enum COLORS {}
 
-export const TEXT = {};
+export const TEXT = {
+  label: {
+    base: 'text-sm font-medium leading-5 text-gray-700',
+    error: 'text-sm font-medium leading-5 text-red-700',
+  },
+  subtext: {
+    base: '',
+    error: '',
+  },
+};
 
+// TODO: make theme more aligned with museum
 export const BUTTONS = {
   primary: {
     base: 'border-transparent text-white focus:outline-none',

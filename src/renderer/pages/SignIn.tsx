@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import flmnhLogo from '../assets/flmnhLogo.png';
 import CircleButton from '../components/buttons/CircleButton';
 import Divider from '../components/ui/Divider';
-import Form, { Values } from '../components/ui/form/Form';
+import Form, { Values } from '../components/ui/Form';
 import axios from 'axios';
 import { BACKEND_URL } from '../types';
 import { useMst } from '../../models';

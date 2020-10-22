@@ -71,6 +71,21 @@ export default function ({ headers, data }: TableProps) {
     return columns;
   }
 
+  function renderHeader({ dataKey, sortBy, sortDirection }: any) {
+    return (
+      <div className="header-cell" key={dataKey}>
+        {dataKey}
+        {/* {headerToReadable[dataKey]}{' '} */}
+        {/* {sorting &&
+          sorting.column === dataKey &&
+          sorting.direction === 'asc' && <Icon name="angle up" />}
+        {sorting &&
+          sorting.column === dataKey &&
+          sorting.direction === 'desc' && <Icon name="angle down" />} */}
+      </div>
+    );
+  }
+
   return (
     <React.Fragment>
       <div className="table-height">
@@ -79,10 +94,11 @@ export default function ({ headers, data }: TableProps) {
             <SortableTable
               height={height}
               width={width}
-              headerHeight={60}
               rowHeight={40}
+              headerHeight={60}
               rowCount={0}
-              // rowGetter={({ index }) => display[index]}
+              rowGetter={({ index }) => data[index]}
+              headerRenderer={renderHeader}
               // rowRenderer={rowRenderer}
               // onRowClick={handleRowClick}
               // onRowsRendered={updateLoading}

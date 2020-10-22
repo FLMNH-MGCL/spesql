@@ -8,10 +8,10 @@ function RouteElement({ element }: ComponentProps<typeof Route>) {
 
   const { user } = store.session;
 
-  // not logged in
-  if (!user) {
-    return <Navigate to="/signin" />;
-  }
+  // not logged in TODO: uncomment me
+  // if (!user) {
+  //   return <Navigate to="/signin" />;
+  // }
 
   // allowed to go to route
   return element ?? null;

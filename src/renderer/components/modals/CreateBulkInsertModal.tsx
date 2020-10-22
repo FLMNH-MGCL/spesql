@@ -1,9 +1,7 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import Button, { ButtonGroup } from '../ui/Button';
-import Dropdown from '../ui/Dropdown';
 import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
-import useToggle from '../utils/useToggle';
 import { useDropzone } from 'react-dropzone';
 
 type UploadProps = { onFileUpload(data: string | ArrayBuffer | null): void };

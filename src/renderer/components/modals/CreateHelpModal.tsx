@@ -31,7 +31,7 @@ export default function CreateHelpModal({ variant }: HelpModalProps) {
 
   return (
     <React.Fragment>
-      <Modal open={open} onClose={off}>
+      <Modal open={open} onClose={off} size="large">
         {determineModalToRender()}
 
         <Modal.Footer>

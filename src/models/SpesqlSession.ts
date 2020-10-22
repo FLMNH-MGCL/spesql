@@ -3,6 +3,7 @@ import { User } from './User';
 
 export const QueryData = types.model({
   queryString: types.optional(types.string, ''),
+  // data: types.array()
 });
 
 export const SpesqlSession = types
