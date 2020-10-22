@@ -9,6 +9,11 @@ export const UPDATE_FILTER_TEXT = "UPDATE_FILTER_TEXT";
 export const UPDATE_FILTER_CATEGORY = "UPDATE_FILTER_CATEGORY";
 export const UPDATE_SELECTED_SPECIMEN = "UPDATE_SELECTED_SPECIMEN";
 
+export const CHANGE_INTERFACE = "CHANGE_INTERFACE";
+export const UPDATE_CHART_TYPE = "UPDATE_CHART_TYPE";
+export const UPDATE_CHART_HEADERS = "UPDATE_CHART_HEADERS";
+export const CREATE_CHART_CONFIG = "CREATE_CHART_CONFIG";
+
 export const UPDATE_CSV_INSERT_ERROR_LOG = "UPDATE_CSV_INSERT_ERROR_LOG";
 export const UPDATE_MANUAL_INSERT_ERROR_LOG = "UPDATE_MANUAL_INSERT_ERROR_LOG";
 export const UPDATE_SELECT_ERROR_LOG = "UPDATE_SELECT_ERROR_LOG";
@@ -32,6 +37,12 @@ export const SET_AUTH = "SET_AUTH";
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 
+const defaultVisualizationConfig = {
+  chart: "",
+  headers: [],
+  finalizedConfig: null,
+};
+
 const initialState = {
   authenticated: false,
   user: "guest",
@@ -43,6 +54,8 @@ const initialState = {
   displayed: [],
   current_query: "",
   query_headers: [],
+  userInterface: "table",
+  visualizationConfig: defaultVisualizationConfig,
   countQuerycount: undefined,
   errorMessages: {
     manualInsert: null,
@@ -95,6 +108,8 @@ export default function reducer(state = initialState, action) {
         displayed: [],
         current_query: "",
         query_headers: [],
+        userInterface: "table",
+        visualizationConfig: defaultVisualizationConfig,
         countQueryCount: undefined,
         errorMessages: {
           manualInsert: null,
@@ -113,6 +128,39 @@ export default function reducer(state = initialState, action) {
         refreshing: false,
       };
       sessionStorage.removeItem("current_query");
+      return newState;
+
+    case "CHANGE_INTERFACE":
+      const newInterface = action.newInterface;
+      if (newInterface !== "table" && newInterface !== "chart") {
+        return newState;
+      } else {
+        newState.userInterface = newInterface;
+        return newState;
+      }
+
+    case "UPDATE_CHART_TYPE":
+      newState.visualizationConfig = {
+        ...newState.visualizationConfig,
+        chart: action.newChart,
+      };
+
+      return newState;
+
+    case "UPDATE_CHART_HEADERS":
+      newState.visualizationConfig = {
+        ...newState.visualizationConfig,
+        headers: action.newHeaders,
+      };
+
+      return newState;
+
+    case "CREATE_CHART_CONFIG":
+      newState.visualizationConfig = {
+        ...newState.visualizationConfig,
+        finalizedConfig: action.finalizedConfig,
+      };
+
       return newState;
 
     case "UPDATE_QUERY_HEADERS":

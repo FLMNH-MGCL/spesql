@@ -1,11 +1,12 @@
 import React from "react";
-import { Menu, Dropdown, Icon } from "semantic-ui-react";
+import { Menu, Dropdown, Icon, Radio } from "semantic-ui-react";
 import QueryMenu from "../dropdowns/QueryMenu";
 import Notifications from "../dropdowns/Notifications";
 import InsertMenu from "../dropdowns/InsertMenu";
 import CreateDownloadModal from "../modals/CreateDownloadModal";
 
 export default function Header(props) {
+  console.log(props);
   return (
     <Menu
       borderless
@@ -25,6 +26,30 @@ export default function Header(props) {
             disabled={props.data === undefined || props.data.length === 0}
             data={props.data}
           />
+        </Menu.Item>
+        <Menu.Item>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            Table
+            <Radio
+              checked={props.userInterface === "chart"}
+              onClick={() => {
+                console.log("clicked");
+                if (props.userInterface === "chart") {
+                  props.changeUserInterface("table");
+                } else {
+                  props.changeUserInterface("chart");
+                }
+              }}
+              slider
+              style={{ marginLeft: ".5rem", marginRight: ".5rem" }}
+            />
+            Visualization
+          </div>
         </Menu.Item>
       </Menu.Menu>
 

@@ -137,12 +137,6 @@ export default function VirtualizedList({
     return doesInclude;
   }
 
-  // function _getDatum(list, index) {
-  //   return list.get(index % list.size);
-  // }
-
-  // const rowGetter = ({ index }) => _getDatum(props.data, index);
-
   const list = props.data.filter((specimen) => {
     return specimenIncludes(specimen, props.filteredText, props.filterCategory);
   });

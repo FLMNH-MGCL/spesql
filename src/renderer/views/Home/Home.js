@@ -8,6 +8,8 @@ import VirtualizedList from "../../components/table/VirtualizedList";
 import { Grid, Loader, Segment } from "semantic-ui-react";
 import { getQueryHeaders } from "../../functions/helpers";
 import SpecimenView from "../../components/specimen/SpecimenView";
+import Visualization from "../../components/visualization/Visualization";
+import VisualizationControls from "../../components/visualization/VisualizationControls";
 
 const PREFIX = process.env.NODE_ENV === "production" ? PUBLIC_URL : "";
 
@@ -255,6 +257,8 @@ function Home(props) {
     window.location.hash = "/login";
   }
 
+  console.log(props);
+
   return (
     <React.Fragment>
       <Header
@@ -266,7 +270,7 @@ function Home(props) {
       />
 
       <Grid columns="equal" padded stackable>
-        <Grid.Row centered stretched>
+        <Grid.Row centered stretched style={{ paddingTop: 0 }}>
           <Grid.Column
             computer={11}
             largeScreen={11}
@@ -275,11 +279,15 @@ function Home(props) {
           >
             <Loader content="Loading" active disabled={!props.loading} />
             <Segment style={{ margin: 0 }}>
-              <VirtualizedList
-                props={props}
-                runSelectQuery={runSelectQuery}
-                notify={props.notify}
-              />
+              {props.userInterface === "table" ? (
+                <VirtualizedList
+                  props={props}
+                  runSelectQuery={runSelectQuery}
+                  notify={props.notify}
+                />
+              ) : (
+                <Visualization {...props} notify={props.notify} />
+              )}
             </Segment>
           </Grid.Column>
           <Grid.Column
@@ -289,25 +297,29 @@ function Home(props) {
             style={{ justifyContent: "center" }}
           >
             <Segment>
-              <SpecimenView
-                data={props.data}
-                selectedSpecimen={props.selectedSpecimen}
-                currentQuery={props.current_query}
-                runSelectQuery={runSelectQuery.bind(this)}
-                runUpdateQuery={runUpdateQuery.bind(this)}
-                runDeleteQuery={runDeleteQuery.bind(this)}
-                userData={props.userData}
-                notify={notify}
-                disabled={
-                  !props.userData ||
-                  (props.userData.privilege_level !== "admin" &&
-                    props.userData.privilege_level !== "manager")
-                }
-                errorMessages={props.errorMessages}
-                updateSingleUpdateErrorMessage={
-                  props.updateSingleUpdateErrorMessage
-                }
-              />
+              {props.userInterface === "table" ? (
+                <SpecimenView
+                  data={props.data}
+                  selectedSpecimen={props.selectedSpecimen}
+                  currentQuery={props.current_query}
+                  runSelectQuery={runSelectQuery.bind(this)}
+                  runUpdateQuery={runUpdateQuery.bind(this)}
+                  runDeleteQuery={runDeleteQuery.bind(this)}
+                  userData={props.userData}
+                  notify={notify}
+                  disabled={
+                    !props.userData ||
+                    (props.userData.privilege_level !== "admin" &&
+                      props.userData.privilege_level !== "manager")
+                  }
+                  errorMessages={props.errorMessages}
+                  updateSingleUpdateErrorMessage={
+                    props.updateSingleUpdateErrorMessage
+                  }
+                />
+              ) : (
+                <VisualizationControls {...props} />
+              )}
             </Segment>
           </Grid.Column>
         </Grid.Row>

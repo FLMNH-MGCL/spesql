@@ -146,11 +146,42 @@ export function getQueryHeaders(specimen) {
   }
 }
 
+// TODO: have this slice data differently according to the chart type, therefore it must take in the chart type
+// this will allow for ensuring the columns are of the correct types relative to the chart wanted.
+// this is a prime example of where TypeScript would be amazing for this project, however it would be quite the undertaking
+// to convert this entire project to TypeScript so.
+
 /**
  * this function will be responsible for creating some of the 'metadata' the table will have.
  *
- * fields would include: recordEnteredBy, etc.
+ * @param {object[]} source: array of specimen objects
+ * @param {string[]} restriction: array of headers to restrict
  */
-export function createAutoGenFields(/* requires things like current user, date, etc */) {}
+export function createDataSlice(source, restriction) {
+  if (restriction === ["*"]) {
+    return source;
+  }
 
-// export function headerToField
+  const slice = [
+    restriction,
+    ...source.map((specimen) => {
+      let slidedSpecimenArray = [];
+      restriction.forEach((field) => {
+        if (specimen[field]) {
+          if (field === "collectedDay") {
+            const item = parseInt(specimen[field], 10);
+            if (item === NaN) {
+            } else if (item < 0) {
+            } else slidedSpecimenArray.push(item);
+          } else slidedSpecimenArray.push(specimen[field]);
+        } else {
+          slidedSpecimenArray.push("");
+        }
+      });
+
+      return slidedSpecimenArray;
+    }),
+  ];
+
+  return slice.slice(0, 50);
+}
