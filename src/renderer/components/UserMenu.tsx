@@ -39,11 +39,14 @@ export default function UserMenu() {
     >
       <Dropdown.Header text={`Hello, @${username}`} />
       <Dropdown.Item text="Admin Portal" />
-      <Dropdown.Item text="Settings" onClick={() => navigate('settings')} />
+      <Dropdown.Item text="Settings" onClick={() => navigate('/settings')} />
       <CreateConfirmModal
         details="This action will require you to log back in to continue usage"
         trigger={<Dropdown.Item text="Logout" />}
-        onConfirm={() => {}}
+        onConfirm={() => {
+          store.session.destroySession();
+          navigate('/signin');
+        }}
       />
     </Dropdown>
   );

@@ -17,3 +17,7 @@ export function validateAdvancedCountQuery(query: string) {
     return true;
   }
 }
+
+export function validateFieldSelection(fields: string[]) {
+  return 'bad no no';
+}

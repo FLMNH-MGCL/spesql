@@ -15,4 +15,7 @@ export const SpesqlSession = types
     createSession(username: string, id: number, accessRole: string) {
       self.user = User.create({ username, id, accessRole });
     },
+    destroySession() {
+      self.user = null;
+    },
   }));

@@ -10,10 +10,13 @@ import Input from './Input';
 import createFormComponent from '../utils/createFormComponent';
 import Radio from './Radio';
 import clsx from 'clsx';
+import Select from './Select';
 
 const FormInput = createFormComponent(Input);
 
 const FormRadio = createFormComponent(Radio);
+
+const FormSelect = createFormComponent(Select);
 
 // function FormSelect() {}
 
@@ -65,5 +68,6 @@ export default function Form<T = Values>({
 }
 
 Form.Input = FormInput;
+Form.Select = FormSelect;
 Form.Radio = FormRadio;
 Form.Group = FormGroup;

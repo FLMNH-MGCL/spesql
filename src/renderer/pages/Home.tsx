@@ -10,12 +10,10 @@ export default observer(() => {
   const store = useMst();
 
   useEffect(() => {
-    if (!store.session.user) {
-      // navigate("signin");
-    }
+    // if (!store.session.user) {
+    //   // navigate("signin");
+    // }
   });
-
-  console.log('HOME');
 
   return (
     <div>

@@ -11,7 +11,7 @@ export default forwardRef<HTMLInputElement, Props>(
   ({ label, className, fullWidth, ...props }, ref) => {
     // @ts-ignore: this will work I promise
     const errors = props.errors && props.name && props.errors[props.name];
-    console.log(errors);
+
     return (
       <label
         className={clsx(

@@ -1,9 +1,27 @@
 import React, { useState } from 'react';
-import { validateAdvancedSelectQuery } from '../../functions/validation';
+import {
+  validateAdvancedSelectQuery,
+  validateFieldSelection,
+} from '../../functions/validation';
 import Form, { Values } from '../ui/Form';
 import numberParser from 'number-to-words';
 import Heading from '../ui/Heading';
 import Text from '../ui/Text';
+
+const options = [
+  {
+    value: 'foo',
+    label: 'Foo',
+  },
+  {
+    value: 'bar',
+    label: 'Bar',
+  },
+  {
+    value: 'baz',
+    label: 'Baz',
+  },
+];
 
 type Props = {
   onSubmit(values: Values): void;
@@ -36,20 +54,27 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           name="queryType"
           disabled
           value="SELECT"
+          onChange={() => {}}
           label="Query Type"
           fullWidth
         />
-        <Form.Input
+
+        <Form.Select
           name="fields"
           label="Fields"
           disabled={advanced}
           fullWidth
+          multiple
+          options={options}
+          register={{ validate: validateFieldSelection }}
         />
-        <Form.Input
+
+        <Form.Select
           name="databaseTable"
           label="Table"
           disabled={advanced}
           fullWidth
+          options={options}
         />
       </Form.Group>
 
@@ -58,6 +83,7 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           name="queryType"
           label="How many conditions?"
           value={conditionCount}
+          onChange={() => {}}
           disabled={advanced}
           fullWidth
         />
