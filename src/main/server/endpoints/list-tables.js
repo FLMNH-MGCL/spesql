@@ -15,10 +15,10 @@ module.exports = function (connection, app) {
     } else {
       if (query_type === "select") {
         command = `SELECT * FROM interactables WHERE minimum_access_${query_type}="guest";`;
-      } else if (query_type === "update") {
+      } else if (query_type === "delete") {
         command = `SELECT * FROM interactables WHERE minimum_access_${query_type}="manager"`;
-      } else if (query_type === "insert") {
-        command = `SELECT * FROM interactables WHERE minimum_access_${query_type}="manager"`;
+      } else if (query_type === "update" || query_type === "insert") {
+        command = `SELECT * FROM interactables WHERE minimum_access_update="manager"`;
       }
     }
 
