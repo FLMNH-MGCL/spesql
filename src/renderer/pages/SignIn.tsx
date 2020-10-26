@@ -6,11 +6,16 @@ import Divider from '../components/ui/Divider';
 import Form, { Values } from '../components/ui/Form';
 import axios from 'axios';
 import { BACKEND_URL } from '../types';
-import { useMst } from '../../models';
+// import { useMst } from '../../models';
+import { useStore } from '../../stores';
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const store = useMst();
+  // const store = useMst();
+
+  // const store = useStore();
+
+  const login = useStore((state) => state.login);
 
   async function handleSubmit(values: Values) {
     const { username, password } = values;
@@ -27,7 +32,9 @@ export default function SignIn() {
     if (loginResponse.status === 200) {
       const { id, accessRole } = loginResponse.data;
       // create spesql session
-      store.session.createSession(username, id, accessRole);
+      // store.session.createSession(username, id, accessRole);
+
+      login(id, username, accessRole);
       navigate('/home');
     }
   }

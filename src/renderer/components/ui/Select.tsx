@@ -262,7 +262,7 @@ export default forwardRef<HTMLSelectElement, Props>(
             {options.map((item: SelectOption) => (
               <option
                 key={`raw-option-${item.value}`}
-                selected={calculateSelected(item)}
+                selected={calculateSelected(item)} // FIXME: this throws a warning about not setting selected on option
                 value={item.value}
               >
                 {item.label}

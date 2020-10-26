@@ -1,18 +1,25 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import shallow from 'zustand/shallow';
 import { useMst } from '../../models';
+import { useStore } from '../../stores';
 import CreateConfirmModal from './modals/CreateConfirmModal';
 import Dropdown from './ui/Dropdown';
 
 export default function UserMenu() {
   const navigate = useNavigate();
-  const store = useMst();
+  // const store = useMst();
 
-  if (!store.session.user) {
+  const { user, logout } = useStore(
+    (state) => ({ user: state.user, logout: state.logout }),
+    shallow
+  );
+
+  if (!user) {
     return null;
   }
 
-  const { username } = store.session.user;
+  const { username } = user;
 
   return (
     <Dropdown
@@ -44,7 +51,8 @@ export default function UserMenu() {
         details="This action will require you to log back in to continue usage"
         trigger={<Dropdown.Item text="Logout" />}
         onConfirm={() => {
-          store.session.destroySession();
+          // store.session.destroySession();
+          logout();
           navigate('/signin');
         }}
       />

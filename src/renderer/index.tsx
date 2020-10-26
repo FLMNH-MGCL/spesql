@@ -4,6 +4,9 @@ import './index.css';
 import React from 'react';
 import { render } from 'react-dom';
 import App from './App';
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
 
 // NOTE: after transitioning to webpack configuration icons would not load properly
 // this is a fix to *temporarily* include the links

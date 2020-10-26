@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from 'express';
+import cors from 'cors';
 import session from 'express-session';
 import login from './endpoints/auth/login';
 import logout from './endpoints/auth/logout';
@@ -10,6 +11,7 @@ import {
   validateSession,
 } from './middleware/authentication';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import {
   validateSelectQuery,
   validateUpdateQuery,
@@ -35,17 +37,26 @@ export let connection: Pool | null = null;
 async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
   const app: Application = express();
 
-  app.use(function (_req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept'
-    );
-    next();
-  });
+  const corsOptions = {
+    origin: [process.env.FRONTEND_URL!],
+    credentials: true,
+  };
+
+  // app.use(function (_req, res, next) {
+  //   res.header('Access-Control-Allow-Origin', '*');
+  //   res.header(
+  //     'Access-Control-Allow-Headers',
+  //     'Origin, X-Requested-With, Content-Type, Accept'
+  //   );
+  //   next();
+  // });
+
+  app.use(cors(corsOptions));
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
+
+  app.use(cookieParser());
 
   app.use(
     session({
@@ -55,7 +66,8 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
       saveUninitialized: false,
       cookie: {
         // maxAge: 1000 * 60 * 60 * 2, // 2h
-        maxAge: 1000 * 60, // 1m timeout for development purposes
+        // maxAge: 1000 * 60, // 1m timeout for development purposes
+        maxAge: 1000 * 60 * 30, // 30m
         secure: false,
       },
     })

@@ -10,6 +10,7 @@ import { FilterToggle, FilterSearch } from './Filter';
 import ClearQueryButton from './buttons/ClearQueryButton';
 import RefreshQueryButton from './buttons/RefreshQueryButton';
 import CreateHelpModal from './modals/CreateHelpModal';
+import CreateHeaderConfigModal from './modals/CreateHeaderConfigModal';
 // import "./VirtualizedList.css";
 
 const SortableTable = SortableContainer(Table);
@@ -22,6 +23,7 @@ function TableFooter() {
         <ClearQueryButton />
         <FilterSearch />
         <RefreshQueryButton />
+        <CreateHeaderConfigModal />
       </div>
       <div className="flex space-x-2">
         <CreateHelpModal variant="global" />

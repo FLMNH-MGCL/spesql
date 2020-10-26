@@ -35,6 +35,7 @@ export default function login(req: Request, res: Response) {
               res.status(401).send(error);
             } else {
               req.session!.userId = id;
+              console.log(req.session);
               req.session!.save((error) => {
                 if (error) {
                   res.status(500).send(error);

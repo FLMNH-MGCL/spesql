@@ -7,21 +7,7 @@ import Form, { Values } from '../ui/Form';
 import numberParser from 'number-to-words';
 import Heading from '../ui/Heading';
 import Text from '../ui/Text';
-
-const options = [
-  {
-    value: 'foo',
-    label: 'Foo',
-  },
-  {
-    value: 'bar',
-    label: 'Bar',
-  },
-  {
-    value: 'baz',
-    label: 'Baz',
-  },
-];
+import { conditionCountOptions, fieldOptions } from '../utils/constants';
 
 type Props = {
   onSubmit(values: Values): void;
@@ -65,8 +51,8 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           disabled={advanced}
           fullWidth
           multiple
-          options={options}
-          register={{ validate: validateFieldSelection }}
+          options={fieldOptions}
+          // register={{ validate: validateFieldSelection }}
         />
 
         <Form.Select
@@ -74,18 +60,20 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           label="Table"
           disabled={advanced}
           fullWidth
-          options={options}
+          options={fieldOptions}
         />
       </Form.Group>
 
+      {/* TODO: make Select component controllable... :( */}
       <Form.Group flex>
-        <Form.Input
+        <Form.Select
           name="queryType"
           label="How many conditions?"
           value={conditionCount}
-          onChange={() => {}}
           disabled={advanced}
           fullWidth
+          options={conditionCountOptions}
+          onChange={(e) => setConditionCount(parseInt(e.target.value))}
         />
       </Form.Group>
 

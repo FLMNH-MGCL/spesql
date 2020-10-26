@@ -4,6 +4,8 @@ import Button, { ButtonGroup } from '../ui/Button';
 import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
 import useKeyboard from '../utils/useKeyboard';
+import axios from 'axios';
+import { BACKEND_URL } from '../../types';
 
 type Props = {
   open: boolean;
@@ -15,8 +17,17 @@ export default function CreateSelectModal({ open, onClose }: Props) {
     onClose();
   });
 
-  function runQuery(values: Values) {
-    console.log(values);
+  async function runQuery(values: Values) {
+    // console.log(values);
+    const selectResponse = await axios
+      .post(BACKEND_URL + '/api/select', {
+        query: 'SELECT * FROM molecularLab;',
+      })
+      .catch((error) => error.response);
+
+    // console.log(selectResponse);
+
+    console.log(selectResponse.data.slice(0, 10));
   }
 
   return (
