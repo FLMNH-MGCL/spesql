@@ -11,6 +11,22 @@ export const TEXT = {
   },
 };
 
+export const TEXT_SIZES = {
+  sm: '',
+  md: 'text-lg',
+  lg: '',
+  xl: '',
+  massive: 'text-5xl',
+};
+
+export const HEADINGS = {
+  h1: 'font-extrabold text-gray-900 leading-none tracking-tight',
+  h2: '',
+  h3: 'leading-6 font-medium text-gray-900',
+  h4: '',
+  h5: '',
+};
+
 // TODO: make theme more aligned with museum
 export const BUTTONS = {
   primary: {

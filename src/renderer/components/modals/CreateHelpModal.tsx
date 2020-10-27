@@ -10,9 +10,10 @@ function GlobalHelpModal() {
 
 type HelpModalProps = {
   variant: 'global' | '';
+  float?: 'left' | 'right';
 };
 
-export default function CreateHelpModal({ variant }: HelpModalProps) {
+export default function CreateHelpModal({ variant, float }: HelpModalProps) {
   const [open, { on, off }] = useToggle(false);
 
   function determineModalToRender() {
@@ -43,7 +44,13 @@ export default function CreateHelpModal({ variant }: HelpModalProps) {
         </Modal.Footer>
       </Modal>
 
-      <HelpButton onClick={on} />
+      {float && float === 'left' ? (
+        <div className="flex-1">
+          <HelpButton onClick={on} />
+        </div>
+      ) : (
+        <HelpButton onClick={on} />
+      )}
     </React.Fragment>
   );
 }

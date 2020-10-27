@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-// import { useMst } from '../../models';
 // import { useNavigate } from "react-router-dom";
 import VirtualizedTable from '../components/VirtualizedTable';
 import SpecimenView from '../components/SpecimenView';
@@ -23,7 +22,7 @@ export default observer(() => {
         <div className="bg-white rounded-md shadow-around-lg w-3/4 h-main">
           <VirtualizedTable
             data={Array.from({ length: 50 }, () => testSpecimen)} // TODO: remove me
-            headers={new Set(['catalogNumber', 'otherCatalogNumber', 'genus'])}
+            // headers={new Set(['catalogNumber', 'otherCatalogNumber', 'genus'])}
           />
         </div>
 

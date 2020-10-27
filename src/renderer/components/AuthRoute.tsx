@@ -1,15 +1,10 @@
 import React, { ComponentProps } from 'react';
 import { Navigate, Route } from 'react-router-dom';
-// import { useMst } from '../../models';
 import { useStore } from '../../stores';
 import { PropsOf } from '../types';
 import shallow from 'zustand/shallow';
 
 function RouteElement({ element }: ComponentProps<typeof Route>) {
-  // const store = useMst();
-
-  // const { user } = store.session;
-
   const { user } = useStore((state) => ({ user: state.user }), shallow);
 
   console.log(user);

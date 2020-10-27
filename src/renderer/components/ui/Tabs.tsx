@@ -18,7 +18,7 @@ function ActiveIndicator({ className, styles }: ActiveIndicatorProps) {
 function Tab({ text, onClick }: { text: string; onClick(): void }) {
   return (
     <button
-      className="space-y-1 font-bold focus:outline-none"
+      className="space-y-1 font-semibold focus:outline-none"
       onClick={onClick}
     >
       <p className="p-2 pb-0">{text}</p>

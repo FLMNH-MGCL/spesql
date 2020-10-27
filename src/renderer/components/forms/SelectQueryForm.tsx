@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   validateAdvancedSelectQuery,
-  validateFieldSelection,
+  // validateFieldSelection,
 } from '../../functions/validation';
 import Form, { Values } from '../ui/Form';
 import numberParser from 'number-to-words';

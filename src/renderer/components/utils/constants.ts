@@ -2,8 +2,13 @@ export const conditionCountOptions = Array.from({ length: 15 }, (_, index) => {
   return { label: String(index), value: index };
 });
 
-export const headerOptionsMinusDefault = [
+export const headerOptions = [
   'id',
+  'catalogNumber',
+  'otherCatalogNumber',
+  'order_',
+  'genus',
+  'specificEpithet',
   'recordNumber',
   'superfamily',
   'family',
@@ -57,7 +62,7 @@ export const headerOptionsMinusDefault = [
   'reared',
   'recordEnteredBy',
   'modifiedInfo',
-  '{fieldNotes}',
+  'fieldNotes',
 ];
 
 export const fieldOptions = [

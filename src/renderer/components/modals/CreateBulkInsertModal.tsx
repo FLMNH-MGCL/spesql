@@ -91,6 +91,8 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const [tab, setTab] = useState(0);
   const [data, setData] = useState('');
 
+  console.log(data);
+
   return (
     <React.Fragment>
       <Modal open={open} onClose={onClose}>

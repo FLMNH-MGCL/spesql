@@ -19,5 +19,6 @@ export function validateAdvancedCountQuery(query: string) {
 }
 
 export function validateFieldSelection(fields: string[]) {
+  console.log(fields);
   return 'bad no no';
 }

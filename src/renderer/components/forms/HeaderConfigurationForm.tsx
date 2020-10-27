@@ -12,9 +12,12 @@ import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 import Badge from '../ui/Badge';
 import Heading from '../ui/Heading';
-import { headerOptionsMinusDefault } from '../utils/constants';
+import { headerOptions } from '../utils/constants';
+import { useNotify } from '../utils/context';
 
-// TODO: figure out droppable warnings!!
+// FIXME: figure out droppable warnings!!
+// ex: Invariant failed: Draggable[id: recordEnteredBy]: Unable to find drag handle
+// they are not breaking functionality, but I want to figure out the cause
 
 type DroppableListProps = {
   heading: string;
@@ -39,7 +42,6 @@ function DroppableList({
     <div>
       <Heading>{heading}</Heading>
       <div
-        // className="flex flex-col"
         {...provided.droppableProps}
         ref={provided.innerRef}
         style={getListStyle(snapshot.isDraggingOver)}
@@ -54,15 +56,20 @@ function DroppableList({
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                   className="my-2"
+                  key={`${item}-${index}-inner`}
                 >
-                  <Badge label={item} truncate />
+                  <Badge
+                    label={item}
+                    truncate
+                    key={`${item}-${index}-banner`}
+                  />
                 </div>
               )}
             </Draggable>
           </React.Fragment>
         ))}
+        {provided.placeholder}
       </div>
-      {provided.placeholder}
     </div>
   );
 }
@@ -76,8 +83,10 @@ export default function HeaderConfigurationForm() {
     shallow
   );
 
+  const { notify } = useNotify();
+
   const [availableHeaders, setAvailableHeaders] = useState(
-    headerOptionsMinusDefault
+    headerOptions.filter((header) => !tableConfig.headers.includes(header))
   );
 
   function reorder(list: string[], source: number, destination: number) {
@@ -148,11 +157,19 @@ export default function HeaderConfigurationForm() {
         destination
       );
 
-      console.log('selected items update:', result.selectedHeaders);
-      console.log('available items update:', result.availableHeaders);
+      if (result.selectedHeaders.length > 8) {
+        notify({
+          title: 'Usage Error',
+          message: 'You may only select 8 headers for the table',
+          level: 'error',
+        });
+      } else {
+        updateTableHeaders(result.selectedHeaders);
+        setAvailableHeaders(result.availableHeaders);
+      }
 
-      updateTableHeaders(result.selectedHeaders);
-      setAvailableHeaders(result.availableHeaders);
+      // console.log('selected items update:', result.selectedHeaders);
+      // console.log('available items update:', result.availableHeaders);
     }
   }
 

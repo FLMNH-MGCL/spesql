@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { Specimen, SpecimenFields } from '../renderer/types';
+import { Specimen } from '../renderer/types';
 
 type User = {
   id: string;

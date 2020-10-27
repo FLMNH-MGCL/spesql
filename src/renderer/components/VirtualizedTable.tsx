@@ -11,6 +11,8 @@ import ClearQueryButton from './buttons/ClearQueryButton';
 import RefreshQueryButton from './buttons/RefreshQueryButton';
 import CreateHelpModal from './modals/CreateHelpModal';
 import CreateHeaderConfigModal from './modals/CreateHeaderConfigModal';
+import { useStore } from '../../stores';
+import shallow from 'zustand/shallow';
 // import "./VirtualizedList.css";
 
 const SortableTable = SortableContainer(Table);
@@ -48,13 +50,18 @@ function TableFooter() {
 }
 
 type TableProps = {
-  headers: Set<keyof Specimen>;
+  // headers: Set<keyof Specimen>;
   data: Specimen[];
 };
 
 // TODO: make me
-export default function ({ headers, data }: TableProps) {
+export default function ({ data }: TableProps) {
   const { width } = useWindowDimensions();
+
+  const { headers } = useStore(
+    (state) => ({ headers: state.tableConfig.headers }),
+    shallow
+  );
 
   function getColumns() {
     const columns = Array.from(headers).map((header) => {
@@ -65,7 +72,7 @@ export default function ({ headers, data }: TableProps) {
           dataKey={header}
           flexGrow={1}
           flexShrink={1}
-          width={width / headers.size}
+          width={width / headers.length}
         />
       );
     });
@@ -74,6 +81,7 @@ export default function ({ headers, data }: TableProps) {
   }
 
   function renderHeader({ dataKey, sortBy, sortDirection }: any) {
+    console.log(sortBy, sortDirection);
     return (
       <div className="header-cell" key={dataKey}>
         {dataKey}

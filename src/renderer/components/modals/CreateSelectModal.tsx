@@ -18,7 +18,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
   });
 
   async function runQuery(values: Values) {
-    // console.log(values);
+    console.log(values);
     const selectResponse = await axios
       .post(BACKEND_URL + '/api/select', {
         query: 'SELECT * FROM molecularLab;',

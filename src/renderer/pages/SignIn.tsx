@@ -6,15 +6,12 @@ import Divider from '../components/ui/Divider';
 import Form, { Values } from '../components/ui/Form';
 import axios from 'axios';
 import { BACKEND_URL } from '../types';
-// import { useMst } from '../../models';
 import { useStore } from '../../stores';
+import { useNotify } from '../components/utils/context';
 
 export default function SignIn() {
   const navigate = useNavigate();
-  // const store = useMst();
-
-  // const store = useStore();
-
+  const { notify } = useNotify();
   const login = useStore((state) => state.login);
 
   async function handleSubmit(values: Values) {
@@ -30,12 +27,20 @@ export default function SignIn() {
     console.log(loginResponse);
 
     if (loginResponse.status === 200) {
-      const { id, accessRole } = loginResponse.data;
-      // create spesql session
-      // store.session.createSession(username, id, accessRole);
+      notify({
+        title: `Welcome, ${username}`,
+        message: 'You will be redirected shortly',
+        level: 'success',
+      });
 
-      login(id, username, accessRole);
-      navigate('/home');
+      setTimeout(() => {
+        const { id, accessRole } = loginResponse.data;
+        // create spesql session
+        // store.session.createSession(username, id, accessRole);
+
+        login(id, username, accessRole);
+        navigate('/home');
+      }, 500);
     }
   }
 
