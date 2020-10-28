@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 // import { useNavigate } from "react-router-dom";
 import VirtualizedTable from '../components/VirtualizedTable';
 import SpecimenView from '../components/SpecimenView';
-import { testSpecimen } from '../components/utils/TESTDATA';
+// import { testSpecimen } from '../components/utils/TESTDATA';
 
 export default observer(() => {
   // const navigate = useNavigate();
@@ -21,8 +21,8 @@ export default observer(() => {
         {/* left half */}
         <div className="bg-white rounded-md shadow-around-lg w-3/4 h-main">
           <VirtualizedTable
-            data={Array.from({ length: 50 }, () => testSpecimen)} // TODO: remove me
-            // headers={new Set(['catalogNumber', 'otherCatalogNumber', 'genus'])}
+          // data={Array.from({ length: 50 }, () => testSpecimen)} // TODO: remove me
+          // headers={new Set(['catalogNumber', 'otherCatalogNumber', 'genus'])}
           />
         </div>
 

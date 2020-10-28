@@ -25,6 +25,7 @@ import fs from 'fs';
 import { MySqlCredentials } from './types';
 import updateConfig from './endpoints/updateConfig';
 import createUser from './endpoints/sql/admin/createUser';
+import { getQueriables } from './endpoints/sql/utils/queriables';
 
 require('dotenv').config();
 
@@ -65,9 +66,10 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        // maxAge: 1000 * 60 * 60 * 2, // 2h
-        // maxAge: 1000 * 60, // 1m timeout for development purposes
-        maxAge: 1000 * 60 * 30, // 30m
+        maxAge:
+          process.env.NODE_ENV === 'production'
+            ? 1000 * 60 * 60 * 2
+            : 1000 * 60 * 30, // 2h for production, 30m timeout for development purposes
         secure: false,
       },
     })
@@ -100,14 +102,16 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
     res.send('Hello world!');
   });
 
-  // GLOBAL ROUTES
+  // GLOBAL / GUEST ROUTES
   app.get('/api/config/get', getConfig);
   app.post('/api/config/update', updateConfig);
 
   app.post('/api/login', login);
   app.post('/api/logout', logout);
   app.post('/api/select', validateSession, validateSelectQuery, select);
-  // END GLOBAL ROUTES
+
+  app.get('/api/queriables/select', validateSession, getQueriables);
+  // END GLOBAL / GUEST ROUTES
 
   // MANAGER ROUTES
   app.post(
@@ -137,6 +141,19 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
     managerRoute,
     validateDeleteQuery,
     select
+  );
+
+  app.get(
+    '/api/queriables/insert',
+    validateSession,
+    managerRoute,
+    getQueriables
+  );
+  app.get(
+    '/api/queriables/update',
+    validateSession,
+    managerRoute,
+    getQueriables
   );
   // END MANAGER ROUTES
 

@@ -7,9 +7,16 @@ type User = {
   accessRole: string;
 };
 
-type Query = {
+type QueryConfig = {
   queryString: string;
   data: Specimen[];
+  setData(data: Specimen[]): void;
+  setCurrentQuery(query: string): void;
+};
+
+const defaultQueryConfig = {
+  queryString: '',
+  data: [],
 };
 
 type TableConfig = {
@@ -27,9 +34,10 @@ const defaultTableConfig = {
   ],
 };
 
+// TODO: change naming scheme for some of these fields, they don't make sense
 type SpesqlSession = {
   user?: User | null;
-  queryData?: Query | null;
+  queryData: QueryConfig;
   tableConfig: TableConfig;
   login(id: string, username: string, accessRole: string): void;
   logout(): void;
@@ -37,7 +45,19 @@ type SpesqlSession = {
 
 export const useStore = create<SpesqlSession>((set) => ({
   user: null,
-  queryData: null,
+  queryData: {
+    ...defaultQueryConfig,
+    setData: (data: Specimen[]) =>
+      set((state) => ({
+        ...state,
+        queryData: { ...state.queryData, data },
+      })),
+    setCurrentQuery: (query: string) =>
+      set((state) => ({
+        ...state,
+        queryData: { ...state.queryData, queryString: query },
+      })),
+  },
   tableConfig: {
     ...defaultTableConfig,
     updateTableHeaders: (newHeaders: string[]) =>

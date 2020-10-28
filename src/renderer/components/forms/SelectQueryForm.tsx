@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  NeutralValidator,
   validateAdvancedSelectQuery,
-  // validateFieldSelection,
+  validateFieldSelection,
 } from '../../functions/validation';
 import Form, { Values } from '../ui/Form';
 import numberParser from 'number-to-words';
 import Heading from '../ui/Heading';
 import Text from '../ui/Text';
 import { conditionCountOptions, fieldOptions } from '../utils/constants';
+import axios from 'axios';
+import { BACKEND_URL } from '../../types';
+import { useStore } from '../../../stores';
+import { SelectOption } from '../ui/Select';
 
 type Props = {
   onSubmit(values: Values): void;
@@ -16,6 +21,46 @@ type Props = {
 export default function SelectQueryForm({ onSubmit }: Props) {
   const [advanced, setAdvanced] = useState(false);
   const [conditionCount, setConditionCount] = useState(0);
+  const [tables, setTables] = useState<SelectOption[]>([]);
+
+  const { user } = useStore((store) => ({ user: store.user }));
+
+  useEffect(() => {
+    async function fetchTables() {
+      const res = await axios
+        .get(BACKEND_URL + '/api/queriables/select/')
+        .catch((error) => error.response);
+
+      console.log(res);
+
+      if (res.data && res.data.tables) {
+        setTables(
+          res.data.tables.map((table: string) => {
+            return { label: table, value: table };
+          })
+        );
+      }
+      // .then((response) => {
+      //   if (response.data.error) {
+      //     this.setState({ loading: false });
+      //   } else {
+      //     // console.log(response);
+      //     dbSelection = response.data.tables.map((table, index) => {
+      //       return { key: index + 1 * 1002, text: table, value: table };
+      //     });
+
+      //     // console.log(dbSelection);
+      //     this.setState({ dbSelection: dbSelection, loading: false });
+      //   }
+      // })
+      // .catch((error) => {
+      //   const response = error.response;
+      //   this.setState({ dbSelection: [], loading: false });
+      // });
+    }
+
+    fetchTables();
+  }, []);
 
   return (
     <Form onSubmit={onSubmit} id="select-form">
@@ -30,7 +75,11 @@ export default function SelectQueryForm({ onSubmit }: Props) {
         <Form.Input
           name="advancedQuery"
           disabled={!advanced}
-          register={{ validate: validateAdvancedSelectQuery }}
+          register={
+            advanced
+              ? { validate: validateAdvancedSelectQuery }
+              : NeutralValidator
+          }
           fullWidth
         />
       </Form.Group>
@@ -52,7 +101,9 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           fullWidth
           multiple
           options={fieldOptions}
-          // register={{ validate: validateFieldSelection }}
+          register={
+            advanced ? NeutralValidator : { validate: validateFieldSelection }
+          }
         />
 
         <Form.Select
@@ -60,7 +111,7 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           label="Table"
           disabled={advanced}
           fullWidth
-          options={fieldOptions}
+          options={tables}
         />
       </Form.Group>
 

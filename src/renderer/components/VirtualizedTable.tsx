@@ -49,19 +49,19 @@ function TableFooter() {
   );
 }
 
-type TableProps = {
-  // headers: Set<keyof Specimen>;
-  data: Specimen[];
-};
-
 // TODO: make me
-export default function ({ data }: TableProps) {
+export default function () {
   const { width } = useWindowDimensions();
 
-  const { headers } = useStore(
-    (state) => ({ headers: state.tableConfig.headers }),
+  const { headers, data } = useStore(
+    (state) => ({
+      headers: state.tableConfig.headers,
+      data: state.queryData.data,
+    }),
     shallow
   );
+
+  console.log(data);
 
   function getColumns() {
     const columns = Array.from(headers).map((header) => {
