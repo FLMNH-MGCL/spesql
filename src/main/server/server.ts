@@ -26,6 +26,7 @@ import { MySqlCredentials } from './types';
 import updateConfig from './endpoints/updateConfig';
 import createUser from './endpoints/sql/admin/createUser';
 import { getQueriables } from './endpoints/sql/utils/queriables';
+// import { win } from '..';
 
 require('dotenv').config();
 
@@ -42,15 +43,6 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
     origin: [process.env.FRONTEND_URL!],
     credentials: true,
   };
-
-  // app.use(function (_req, res, next) {
-  //   res.header('Access-Control-Allow-Origin', '*');
-  //   res.header(
-  //     'Access-Control-Allow-Headers',
-  //     'Origin, X-Requested-With, Content-Type, Accept'
-  //   );
-  //   next();
-  // });
 
   app.use(cors(corsOptions));
 
@@ -86,6 +78,8 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
         console.log('Connected to MySQL Server');
       } else if (err) {
         console.log(err);
+        // tell react what's up
+        // win?.webContents.send('NO CONNECTION');
       }
     });
   }

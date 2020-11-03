@@ -1,9 +1,13 @@
 import React from 'react';
 import Button from '../ui/Button';
 
-export default function DeleteButton() {
+type Props = {
+  disabled?: boolean;
+};
+
+export default function DeleteButton({ disabled }: Props) {
   return (
-    <Button variant="clear" rounded>
+    <Button variant="clear" rounded disabled={disabled}>
       <svg
         className="w-5 h-5"
         fill="none"

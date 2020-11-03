@@ -50,7 +50,7 @@ export function adminRoute(req: Request, res: Response, next: NextFunction) {
           const user = data[0];
 
           const queriedUsername = user.username;
-          const accessRole = user.access_role;
+          const accessRole = user.role;
           const hashedPassword = user.password;
 
           if (queriedUsername !== username) {
@@ -107,7 +107,7 @@ export function managerRoute(req: Request, res: Response, next: NextFunction) {
           const user = data[0];
 
           const queriedUsername = user.username;
-          const accessRole = user.access_role;
+          const accessRole = user.role;
           const hashedPassword = user.password;
 
           // I do not allow for people to operate on the database with accounts

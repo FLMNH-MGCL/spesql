@@ -13,7 +13,8 @@ export default function login(req: Request, res: Response) {
   else if (!connection) {
   } else {
     connection.query(
-      `SELECT * FROM users WHERE username='${username}'`,
+      // FIXME: change to users once matching users_new
+      `SELECT * FROM users_new WHERE username='${username}'`,
       (error, data) => {
         if (error) {
           // I am hardcoding this query, so in theory the only time an error
@@ -25,7 +26,7 @@ export default function login(req: Request, res: Response) {
 
           const id = target.id;
           const hashedPassword = target.password;
-          const accessRole = target.access_role;
+          const accessRole = target.role;
 
           bcrypt.compare(password, hashedPassword, (error, same) => {
             if (!same && !error) {
@@ -46,7 +47,7 @@ export default function login(req: Request, res: Response) {
             }
           });
         } else {
-          res.status(500).send('MySQL query returned invalid data'); // TODO: should this be 401?
+          res.status(401).send('Authorization either failed or denied'); // TODO: should this be 401?
         }
       }
     );

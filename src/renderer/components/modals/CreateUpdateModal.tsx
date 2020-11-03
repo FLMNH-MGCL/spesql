@@ -2,6 +2,7 @@ import React from 'react';
 import Button, { ButtonGroup } from '../ui/Button';
 import Modal from '../ui/Modal';
 import useKeyboard from '../utils/useKeyboard';
+import CreateLogModal from './CreateLogModal';
 
 type Props = {
   open: boolean;
@@ -23,6 +24,8 @@ export default function CreateUpdateModal({ open, onClose }: Props) {
             <Button onClick={onClose}>Cancel</Button>
             <Button variant="primary">Confirm</Button>
           </ButtonGroup>
+
+          <CreateLogModal initialTab={3} />
         </Modal.Footer>
       </Modal>
 

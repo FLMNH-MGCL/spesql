@@ -6,6 +6,7 @@ import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
 import Statistic from '../ui/Statistic';
 import useKeyboard from '../utils/useKeyboard';
+import CreateLogModal from './CreateLogModal';
 
 type Props = {
   open: boolean;
@@ -40,6 +41,8 @@ export default function CreateCountModal({ open, onClose }: Props) {
               Confirm
             </Button>
           </ButtonGroup>
+
+          <CreateLogModal initialTab={1} />
         </Modal.Footer>
       </Modal>
     </React.Fragment>

@@ -1,10 +1,10 @@
-import { observer } from 'mobx-react-lite';
+import clsx from 'clsx';
 import React from 'react';
 import Button from './ui/Button';
 
-export function FilterToggle() {
+export function FilterToggle({ disabled }: { disabled?: boolean }) {
   return (
-    <Button variant="clear" rounded>
+    <Button variant="clear" rounded disabled={disabled}>
       <svg
         className="w-5 h-5"
         fill="none"
@@ -23,7 +23,7 @@ export function FilterToggle() {
   );
 }
 
-export const FilterSearch = observer(() => {
+export function FilterSearch({ disabled }: { disabled?: boolean }) {
   return (
     <React.Fragment>
       <label className="sr-only">Search</label>
@@ -43,11 +43,15 @@ export const FilterSearch = observer(() => {
         </div>
         <input
           id="search"
-          className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-md leading-5 bg-white text-gray-300  focus:outline-none focus:bg-white focus:text-gray-900 sm:text-sm transition duration-150 ease-in-out"
+          className={clsx(
+            disabled ? 'bg-gray-100' : 'bg-white',
+            'block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-md leading-5  text-gray-300  focus:outline-none focus:bg-white focus:text-gray-900 sm:text-sm transition duration-150 ease-in-out'
+          )}
           placeholder="Search"
           type="search"
+          disabled={disabled}
         />
       </div>
     </React.Fragment>
   );
-});
+}

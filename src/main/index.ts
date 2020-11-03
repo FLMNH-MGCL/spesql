@@ -13,7 +13,7 @@ app.commandLine.appendSwitch('ignore-certificate-errors');
 
 console.log(path.resolve(__dirname, 'flmnhLogo.png'));
 
-let win: BrowserWindow | null = null;
+export let win: BrowserWindow | null = null;
 
 app.on('ready', () => {
   const customMenu: any = Menu.getApplicationMenu()?.items.map((item: any) => {

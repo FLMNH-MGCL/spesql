@@ -11,6 +11,13 @@ export const TEXT = {
   },
 };
 
+export const SPINNER_SIZES = {
+  sm: 'h-5 w-5',
+  md: 'h-8 w-8',
+  lg: 'h-24 w-24',
+  massive: 'h-48 w-48',
+};
+
 export const TEXT_SIZES = {
   sm: '',
   md: 'text-lg',
@@ -51,6 +58,12 @@ export const BUTTONS = {
     base: 'border-gray-300',
     active:
       'text-gray-700 hover:text-gray-500 focus:border-blue-300 focus:shadow-outline',
+    disabled: 'bg-gray-100',
+  },
+  danger_outline: {
+    base: 'border-red-300',
+    active:
+      'text-red-700 hover:text-red-500 focus:border-red-300 focus:shadow-outline',
     disabled: 'bg-gray-100',
   },
 };

@@ -3,6 +3,7 @@ import Button, { ButtonGroup } from '../ui/Button';
 import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import { useDropzone } from 'react-dropzone';
+import CreateLogModal from './CreateLogModal';
 
 type UploadProps = { onFileUpload(data: string | ArrayBuffer | null): void };
 
@@ -119,6 +120,8 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
             <Button onClick={onClose}>Cancel</Button>
             <Button variant="primary">Submit</Button>
           </ButtonGroup>
+
+          <CreateLogModal initialTab={2} />
         </Modal.Footer>
       </Modal>
     </React.Fragment>

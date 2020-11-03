@@ -5,7 +5,6 @@ import { SortableContainer } from 'react-sortable-hoc';
 import _ from 'lodash';
 import 'react-virtualized/styles.css';
 
-import { Specimen } from '../types';
 import { FilterToggle, FilterSearch } from './Filter';
 import ClearQueryButton from './buttons/ClearQueryButton';
 import RefreshQueryButton from './buttons/RefreshQueryButton';
@@ -13,21 +12,28 @@ import CreateHelpModal from './modals/CreateHelpModal';
 import CreateHeaderConfigModal from './modals/CreateHeaderConfigModal';
 import { useStore } from '../../stores';
 import shallow from 'zustand/shallow';
+import Spinner from './ui/Spinner';
+import CreateLogModal from './modals/CreateLogModal';
 // import "./VirtualizedList.css";
 
 const SortableTable = SortableContainer(Table);
 
-function TableFooter() {
+type FooterProps = {
+  disableInteractables?: boolean;
+};
+
+function TableFooter({ disableInteractables }: FooterProps) {
   return (
     <div className="h-16 bg-gray-50 flex items-center justify-between px-4">
       <div className="flex space-x-2">
-        <FilterToggle />
-        <ClearQueryButton />
-        <FilterSearch />
-        <RefreshQueryButton />
+        <FilterToggle disabled={disableInteractables} />
+        <ClearQueryButton disabled={disableInteractables} />
+        <FilterSearch disabled={disableInteractables} />
+        <RefreshQueryButton disabled={disableInteractables} />
         <CreateHeaderConfigModal />
       </div>
       <div className="flex space-x-2">
+        <CreateLogModal />
         <CreateHelpModal variant="global" />
       </div>
     </div>
@@ -53,13 +59,16 @@ function TableFooter() {
 export default function () {
   const { width } = useWindowDimensions();
 
-  const { headers, data } = useStore(
+  const { headers, data, loading } = useStore(
     (state) => ({
       headers: state.tableConfig.headers,
       data: state.queryData.data,
+      loading: state.loading,
     }),
     shallow
   );
+
+  const toggleLoading = useStore((state) => state.toggleLoading);
 
   console.log(data);
 
@@ -99,6 +108,8 @@ export default function () {
   return (
     <React.Fragment>
       <div className="table-height">
+        <Spinner active={loading} />
+
         <AutoSizer>
           {({ height, width }) => (
             <SortableTable
@@ -106,12 +117,12 @@ export default function () {
               width={width}
               rowHeight={40}
               headerHeight={60}
-              rowCount={0}
+              rowCount={data.length}
               rowGetter={({ index }) => data[index]}
               headerRenderer={renderHeader}
               // rowRenderer={rowRenderer}
               // onRowClick={handleRowClick}
-              // onRowsRendered={updateLoading}
+              onRowsRendered={() => toggleLoading(false)}
               // onHeaderClick={handleHeaderClick}
             >
               {getColumns()}
@@ -119,7 +130,7 @@ export default function () {
           )}
         </AutoSizer>
       </div>
-      <TableFooter />
+      <TableFooter disableInteractables={!data || !data.length} />
     </React.Fragment>
   );
 }

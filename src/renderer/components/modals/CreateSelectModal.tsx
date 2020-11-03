@@ -8,6 +8,7 @@ import axios from 'axios';
 import { BACKEND_URL } from '../../types';
 import { useNotify } from '../utils/context';
 import { useStore } from '../../../stores';
+import CreateLogModal from './CreateLogModal';
 
 type Props = {
   open: boolean;
@@ -22,11 +23,14 @@ export default function CreateSelectModal({ open, onClose }: Props) {
     setCurrentQuery: state.queryData.setCurrentQuery,
   }));
 
+  const toggleLoading = useStore((state) => state.toggleLoading);
+
   useKeyboard('Escape', () => {
     onClose();
   });
 
   async function runQuery(values: Values) {
+    toggleLoading(true);
     console.log(values);
 
     // TODO: generate query
@@ -48,6 +52,8 @@ export default function CreateSelectModal({ open, onClose }: Props) {
       const error = selectResponse.data;
       notify({ title: 'TODO', message: error, level: 'error' });
     }
+
+    toggleLoading(false);
   }
 
   return (
@@ -64,6 +70,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
               Confirm
             </Button>
           </ButtonGroup>
+          <CreateLogModal initialTab={0} />
         </Modal.Footer>
       </Modal>
     </React.Fragment>

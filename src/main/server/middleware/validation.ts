@@ -52,7 +52,7 @@ export async function validateInsertQuery(
     res.status(502).send('Connection to the MySQL database was lost');
   } else {
     const userId = req.session!.userId;
-    connection.query(`SELECT access_role FROM users WHERE id='${userId}'`);
+    connection.query(`SELECT role FROM users WHERE id='${userId}'`);
   }
   next();
 }
@@ -83,7 +83,7 @@ export async function validateUpdateQuery(
     res.status(502).send('Connection to the MySQL database was lost');
   } else {
     const userId = req.session!.userId;
-    connection.query(`SELECT access_role FROM users WHERE id='${userId}'`);
+    connection.query(`SELECT role FROM users WHERE id='${userId}'`);
   }
   next();
 }
@@ -114,7 +114,7 @@ export async function validateDeleteQuery(
     res.status(502).send('Connection to the MySQL database was lost');
   } else {
     const userId = req.session!.userId;
-    connection.query(`SELECT access_role FROM users WHERE id='${userId}'`);
+    connection.query(`SELECT role FROM users WHERE id='${userId}'`);
   }
   next();
 }
