@@ -8,7 +8,11 @@ import Form, { Values } from '../ui/Form';
 import numberParser from 'number-to-words';
 import Heading from '../ui/Heading';
 import Text from '../ui/Text';
-import { conditionCountOptions, fieldOptions } from '../utils/constants';
+import {
+  conditionCountOptions,
+  fieldOptions,
+  operators,
+} from '../utils/constants';
 import axios from 'axios';
 import { BACKEND_URL } from '../../types';
 import { useStore } from '../../../stores';
@@ -136,16 +140,23 @@ export default function SelectQueryForm({ onSubmit }: Props) {
 
             return (
               <Form.Group flex>
-                <Form.Input
+                <Form.Select
                   name={`conditionalField_${numberInEnglish}`}
                   label="Field"
                   disabled={advanced}
                   fullWidth
+                  options={fieldOptions}
+                  register={
+                    advanced
+                      ? NeutralValidator
+                      : { validate: validateFieldSelection }
+                  }
                 />
-                <Form.Input
+                <Form.Select
                   name={`conditionalOperator${numberInEnglish}`}
                   label="Operator"
                   disabled={advanced}
+                  options={operators}
                   fullWidth
                 />
                 <Form.Input
@@ -153,6 +164,9 @@ export default function SelectQueryForm({ onSubmit }: Props) {
                   label="Value"
                   disabled={advanced}
                   fullWidth
+                  // register={
+                  //   advanced ? NeutralValidator : { validate: () => validateDynamicFieldValue() }
+                  // }
                 />
               </Form.Group>
             );
