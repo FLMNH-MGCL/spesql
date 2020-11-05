@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import {
   NeutralValidator,
   validateAdvancedSelectQuery,
+  validateConditionSelection,
   validateFieldSelection,
+  validateTableSelection,
 } from '../../functions/validation';
 import Form, { Values } from '../ui/Form';
 import numberParser from 'number-to-words';
@@ -116,6 +118,9 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           disabled={advanced}
           fullWidth
           options={tables}
+          register={
+            advanced ? NeutralValidator : { validate: validateTableSelection }
+          }
         />
       </Form.Group>
 
@@ -129,6 +134,11 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           fullWidth
           options={conditionCountOptions}
           onChange={(e) => setConditionCount(parseInt(e.target.value))}
+          register={
+            advanced
+              ? NeutralValidator
+              : { validate: validateConditionSelection }
+          }
         />
       </Form.Group>
 

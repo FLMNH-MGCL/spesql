@@ -67,6 +67,28 @@ export type SpecimenFields = {
 // fields available
 export type Specimen = Partial<SpecimenFields>;
 
+// TODO: I HATE this solution. I need to research a better solution, I do not want
+// to have to create a dummy object just to validate. I should be able to validate with
+// just the type ALONE
+export function isSpecimen(obj: any) {
+  const obj_keys = Object.keys(obj);
+  const correct_keys = Object.keys(SpecimenValidator);
+
+  let invalidFields = [];
+
+  for (let i = 0; i < obj_keys.length; i++) {
+    const key = obj_keys[i];
+    // const valid = existsInSpecimen(obj, key);
+    const valid = correct_keys.includes(key);
+
+    if (!valid) {
+      invalidFields.push(key);
+    }
+  }
+
+  return invalidFields;
+}
+
 export type PropsOf<TTag = any> = TTag extends React.ElementType
   ? React.ComponentProps<TTag>
   : never;
@@ -86,4 +108,68 @@ export type NotificationContent = {
   title: string;
   message: string;
   level: 'error' | 'warning' | 'success';
+};
+
+// TODO: see above @isSpecimen
+const SpecimenValidator: Specimen = {
+  id: 0,
+  catalogNumber: '', // MGCL-123456
+  otherCatalogNumber: '', // LEP123456
+  recordNumber: null,
+  order_: null,
+  superfamily: null,
+  family: null,
+  subfamily: null,
+  tribe: null,
+  genus: null,
+  subgenus: null,
+  specificEpithet: null,
+  infraspecificEpithet: null,
+  identificationQualifier: null,
+  recordedBy: null, // First Last | First Last
+  otherCollectors: null,
+  identifiedBy: null,
+  dateIdentified: null,
+  verbatimDate: null,
+  collectedYear: 0,
+  collectedMonth: 0,
+  collectedDay: 0,
+  dateEntered: null,
+  sex: null,
+  lifeStage: null,
+  habitat: null,
+  occurrenceRemarks: null,
+  molecularOccurrenceRemarks: null,
+  samplingProtocol: null,
+  country: null,
+  stateProvince: null,
+  county: null,
+  municipality: null,
+  locality: null,
+  elevationInMeters: null,
+  decimalLatitude: 0,
+  decimalLongitude: 0,
+  geodeticDatum: null,
+  coordinateUncertainty: null,
+  verbatimLatitude: null,
+  verbatimLongitude: null,
+  georeferencedBy: null,
+  disposition: null,
+  isLoaned: null,
+  loanInstitution: null,
+  loaneeName: null,
+  loanDate: null,
+  loanReturnDate: null,
+  preparations: null,
+  freezer: null,
+  rack: null,
+  box: null,
+  tubeSize: null,
+  associatedSequences: null,
+  associatedReferences: null,
+  withholdData: null,
+  reared: null,
+  recordEnteredBy: null,
+  modifiedInfo: null,
+  fieldNotes: null,
 };

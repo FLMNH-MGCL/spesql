@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
+// import CopyButton from '../buttons/CopyButton';
 import WarningButton from '../buttons/WarningButton';
 import Button, { ButtonGroup } from '../ui/Button';
 import Modal from '../ui/Modal';
@@ -15,7 +16,7 @@ type LogProps = {
 };
 
 function Log({ errors }: LogProps) {
-  return <div></div>;
+  return <div>{/* <CopyButton value="test" /> */}</div>;
 }
 
 type Props = {
@@ -33,7 +34,6 @@ export default function CreateLogModal({ initialTab }: Props) {
     return false;
   }
 
-  // TODO: render with correct errors based on index
   function renderTab() {
     switch (tab) {
       // select errors

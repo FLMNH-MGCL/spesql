@@ -45,6 +45,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
     console.log(selectResponse);
 
     if (selectResponse.status === 200 && selectResponse.data) {
+      onClose();
       setData(selectResponse.data.slice(0, 10));
       setCurrentQuery(query);
     } else {

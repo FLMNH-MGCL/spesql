@@ -1,48 +1,72 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Button, { ButtonGroup } from '../ui/Button';
 import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
-import { useDropzone } from 'react-dropzone';
 import CreateLogModal from './CreateLogModal';
+import { CSVReader } from 'react-papaparse';
+import { isSpecimen } from '../../types';
+import { useNotify } from '../utils/context';
 
-type UploadProps = { onFileUpload(data: string | ArrayBuffer | null): void };
+// TODO: add typings in this file
 
-function FileUpload({ onFileUpload }: UploadProps) {
-  const onDrop = useCallback(
-    (acceptedFiles: any) => {
-      console.log(acceptedFiles);
+function CSVParser({ onFileUpload }: UploadProps) {
+  const { notify } = useNotify();
+  function handleOnFileLoad(data: any) {
+    // FIXME: I am waiting on version 4.0 release for papaparse, which will introduce
+    // convenient hooks for offloading files programatically!!
 
-      if (acceptedFiles.length > 1 || acceptedFiles.length === 0) {
-        alert('You must upload only 1 file');
-        return;
-      }
+    if (!data || !data.length) {
+      notify({
+        title: 'Upload Error',
+        message:
+          'No entries were found in the uploaded file. Please remove the selected file',
+        level: 'error',
+      });
+    }
 
-      const file = acceptedFiles[0];
-      const reader = new FileReader();
+    const invalidFields = isSpecimen(data[0].data);
 
-      reader.onabort = () => console.log('file reading was aborted');
-      reader.onerror = () => console.log('file reading has failed');
-      reader.onload = () => {
-        const binaryStr = reader.result;
-        onFileUpload(binaryStr);
+    if (invalidFields.length > 0) {
+      let message = 'Entries were found that are not valid specimen: ';
 
-        alert(binaryStr);
-      };
-      reader.readAsText(file);
-    },
-    [onFileUpload]
-  );
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: ['text/csv'],
-  });
+      invalidFields.forEach((field, index) => {
+        if (index != invalidFields.length - 1) {
+          message += field + ', ';
+        } else {
+          message += field + '... ';
+        }
+      });
+
+      message += 'Please remove the selected file.';
+
+      notify({
+        title: 'Upload Error',
+        message,
+        level: 'error',
+      });
+    } else {
+      onFileUpload(data);
+    }
+  }
+  function handleOnError(error: any) {
+    // TODO: notify
+
+    console.log(error);
+  }
+
+  function handleRemoveFile(data: any) {
+    onFileUpload(data);
+  }
 
   return (
-    <div
-      className="max-w-lg flex justify-center pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer mx-auto"
-      {...getRootProps()}
+    <CSVReader
+      onDrop={handleOnFileLoad}
+      onError={handleOnError}
+      config={{ header: true }}
+      style={{ borderRadius: '0.375rem' }}
+      onRemoveFile={handleRemoveFile}
+      addRemoveButton
     >
-      <input {...getInputProps()} />
       <div className="text-center">
         <svg
           className="mx-auto h-12 w-12 text-gray-400"
@@ -58,17 +82,18 @@ function FileUpload({ onFileUpload }: UploadProps) {
             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
           />
         </svg>
-
         <p className="mt-1 text-sm text-gray-600">
-          {isDragActive
-            ? 'Cool looking file!'
-            : 'Click or drag and drop to upload a file'}
+          Click or drag and drop to upload a file
         </p>
-        <p className="mt-1 text-xs text-gray-500">CSV files only</p>
+        <p className="mt-1 text-xs text-gray-500">
+          CSV files only (don't worry, I'm working on XLSX)
+        </p>{' '}
       </div>
-    </div>
+    </CSVReader>
   );
 }
+
+type UploadProps = { onFileUpload(data: any): void };
 
 function PasteUpload({ onFileUpload }: UploadProps) {
   return (
@@ -91,8 +116,16 @@ type Props = {
 export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const [tab, setTab] = useState(0);
   const [data, setData] = useState('');
+  const [rawData, setRawFile] = useState<any>();
 
-  console.log(data);
+  // console.log(data, rawData);
+
+  // look into xlsx package:
+  // https://stackoverflow.com/questions/46909260/reading-excel-file-in-reactjs
+
+  //https://github.com/Bunlong/react-papaparse/blob/master/demo/CSVReader1.js
+
+  async function handleSubmit() {}
 
   return (
     <React.Fragment>
@@ -106,7 +139,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
           <div className="py-8">
             {tab === 0 && (
-              <FileUpload onFileUpload={(data: any) => setData(data)} />
+              <CSVParser onFileUpload={(data: any) => setRawFile(data)} />
             )}
 
             {tab === 1 && (
@@ -118,7 +151,9 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         <Modal.Footer>
           <ButtonGroup>
             <Button onClick={onClose}>Cancel</Button>
-            <Button variant="primary">Submit</Button>
+            <Button variant="primary" onClick={handleSubmit}>
+              Submit
+            </Button>
           </ButtonGroup>
 
           <CreateLogModal initialTab={2} />

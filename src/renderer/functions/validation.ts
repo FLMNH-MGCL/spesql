@@ -34,8 +34,28 @@ export function validateAdvancedCountQuery(query: string) {
 }
 
 export function validateFieldSelection(fields: string[]) {
-  console.log(fields);
-  return 'bad no no';
+  if (fields.length < 1) {
+    return 'You must select a field';
+  } else if (fields.indexOf('*') > -1 && fields.length > 1) {
+    return "'All' may not be combined with other fields";
+  }
+
+  return true;
+}
+
+export function validateTableSelection(table: string) {
+  console.log(table);
+  if (!table || !table.length) {
+    return 'You must select a table';
+  }
+
+  return true;
+}
+
+export function validateConditionSelection(table: string) {
+  console.log(table);
+
+  return true;
 }
 
 // TODO: remove some of these and abstract to broad validator
@@ -56,8 +76,8 @@ export function validateCatalogNumber(value: string) {
 export function validateOtherCatalogNumber(value: string) {
   let pattern = new RegExp('^MGCL_[0-9]{6,8}');
 
-  if (value === '') {
-    return 'catalogNumber is required';
+  if (!value || value.length < 1) {
+    return true;
   } else if (!pattern.test(value)) {
     return 'Invald format: MGCL_ followed by 6-8 digits';
   }
@@ -243,16 +263,25 @@ export function validateTubeSize(value: string) {
 
 // TODO
 export function validateElevation(value: string) {
+  if (value) {
+    return true;
+  }
   return true;
 }
 
 // TODO
 export function validateLatitude(value: string) {
+  if (value) {
+    return true;
+  }
   return true;
 }
 
 // TODO
 export function validateLongitude(value: string) {
+  if (value) {
+    return true;
+  }
   return true;
 }
 
@@ -271,21 +300,33 @@ export function validateGeodeticDatum(value: string) {
 
 // TODO
 export function validateDisposition(value: string) {
+  if (value) {
+    return true;
+  }
   return true;
 }
 
 // TODO
 export function validateFreezer(value: string) {
+  if (value) {
+    return true;
+  }
   return true;
 }
 
 // TODO
 export function validateRack(value: string) {
+  if (value) {
+    return true;
+  }
   return true;
 }
 
 // TODO
 export function validateBox(value: string) {
+  if (value) {
+    return true;
+  }
   return true;
 }
 
