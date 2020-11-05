@@ -562,6 +562,7 @@ export default class CreateSingleUpdateModal extends React.Component {
           <Form.Field
             control={Select}
             options={samplingProtocolControl}
+            multiple
             name={fieldName}
             value={this.state[fieldName]}
             onChange={this.onChange}

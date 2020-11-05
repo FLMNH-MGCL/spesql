@@ -45,6 +45,7 @@ import CreateHelpModal from "../CreateHelpModal";
 import ConfirmAuth from "../../auth/ConfirmAuth";
 import { Checkmark } from "react-checkmark";
 import CreateErrorLogModal from "../CreateErrorLogModal";
+import { protocol } from "electron";
 
 export default class FormInsert extends React.Component {
   constructor(props) {
@@ -87,7 +88,7 @@ export default class FormInsert extends React.Component {
       occurrenceRemarks: "",
       isMolecular: false,
       molecularOccurrenceRemarks: "",
-      samplingProtocol: "",
+      samplingProtocol: [],
       country: "",
       stateProvince: "",
       county: "",
@@ -164,7 +165,7 @@ export default class FormInsert extends React.Component {
       hasRemarks: false,
       occurrenceRemarks: "",
       molecularOccurrenceRemarks: "",
-      samplingProtocol: "",
+      samplingProtocol: [],
       country: "",
       stateProvince: "",
       county: "",
@@ -231,6 +232,22 @@ export default class FormInsert extends React.Component {
       }
     });
     return otherCollectorsString;
+  };
+
+  gatherProtocols = () => {
+    let protocols = "";
+
+    this.state.samplingProtocol.forEach((protocol, index) => {
+      if (index !== this.state.samplingProtocol.length - 1) {
+        // add the separator
+        protocols += `${protocol}|`;
+      } else {
+        // dont add separator
+        protocols += protocol;
+      }
+    });
+
+    return protocols;
   };
 
   handleSubmit = async (userData) => {
@@ -309,6 +326,10 @@ export default class FormInsert extends React.Component {
 
     const fieldNotes = this.state.hasNotes ? this.state.fieldNotes : "";
 
+    const samplingProtocol = this.state.samplingProtocol
+      ? this.gatherProtocols()
+      : "";
+
     const specimen = {
       catalogNumber: this.state.catalogNumber,
       recordNumber: this.state.recordNumber,
@@ -335,7 +356,7 @@ export default class FormInsert extends React.Component {
       habitat: this.state.habitat,
       occurrenceRemarks: occurrenceRemarks,
       molecularOccurrenceRemarks: molecularOccurrenceRemarks,
-      samplingProtocol: this.state.samplingProtocol,
+      samplingProtocol: samplingProtocol,
       country: this.state.country,
       stateProvince: this.state.stateProvince,
       county: this.state.county,
@@ -784,13 +805,13 @@ export default class FormInsert extends React.Component {
               <Form.Group widths="equal">
                 <Form.Field
                   control={Input}
-                  label="catalogNumber"
+                  label="otherCatalogNumber"
                   placeholder="MGCL_######"
-                  name="catalogNumber"
-                  value={catalogNumber}
+                  name="otherCatalogNumber"
+                  value={otherCatalogNumber}
                   error={this.checkBasicPreSubmit(
-                    "catalogNumber",
-                    catalogNumber
+                    "otherCatalogNumber",
+                    otherCatalogNumber
                   )}
                   onChange={this.handleChange}
                 />
@@ -807,13 +828,13 @@ export default class FormInsert extends React.Component {
 
                 <Form.Field
                   control={Input}
-                  label="otherCatalogNumber"
+                  label="catalogNumber"
                   placeholder="LEP#####"
-                  name="otherCatalogNumber"
-                  value={otherCatalogNumber}
+                  name="catalogNumber"
+                  value={catalogNumber}
                   error={this.checkBasicPreSubmit(
-                    "otherCatalogNumber",
-                    otherCatalogNumber
+                    "catalogNumber",
+                    catalogNumber
                   )}
                   onChange={this.handleChange}
                 />
@@ -955,8 +976,9 @@ export default class FormInsert extends React.Component {
                 <Form.Field
                   control={Select}
                   options={samplingProtocolControl}
+                  multiple
                   label="samplingProtocol"
-                  placeholder="Select One"
+                  placeholder="Select"
                   name="samplingProtocol"
                   value={samplingProtocol}
                   error={this.checkBasicPreSubmit(

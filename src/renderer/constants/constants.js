@@ -36,8 +36,8 @@ export const countQueryOption = [{ key: "42", text: "COUNT", value: "COUNT" }];
 
 export const headerSelection = [
   { key: "2", text: "ALL", value: "*" },
-  { key: "43", text: "Lep #", value: "otherCatalogNumber" },
-  { key: "44", text: "MGCL #", value: "catalogNumber" },
+  { key: "43", text: "Lep #", value: "catalogNumber" },
+  { key: "44", text: "MGCL #", value: "otherCatalogNumber" },
   { key: "recordNumberSel", text: "Record #", value: "recordNumber" },
   { key: "14", text: "Order", value: "order_" },
   { key: "13", text: "Superfamily", value: "superfamily" },
@@ -102,8 +102,8 @@ export const headerSelection = [
 ];
 
 export const headerToReadable = {
-  otherCatalogNumber: "Lep #",
-  catalogNumber: "MGCL #",
+  catalogNumber: "Lep #",
+  otherCatalogNumber: "MGCL #",
   recordNumber: "Record #",
   order_: "Order",
   superfamily: "Superfamily",
@@ -168,8 +168,8 @@ export const filterOptions = [
     label: { color: "blue", empty: true, circular: true },
   },
   { key: "2", text: "ALL", value: "*" },
-  { key: "43", text: "Lep #", value: "otherCatalogNumber" },
-  { key: "44", text: "MGCL #", value: "catalogNumber" },
+  { key: "43", text: "Lep #", value: "catalogNumber" },
+  { key: "44", text: "MGCL #", value: "otherCatalogNumber" },
   { key: "recordNumberFilter", text: "Record #", value: "recordNumber" },
   { key: "14", text: "Order", value: "order_" },
   { key: "13", text: "Superfamily", value: "superfamily" },

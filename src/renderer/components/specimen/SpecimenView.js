@@ -80,12 +80,12 @@ class SpecimenView extends React.Component {
       <List divided verticalAlign="middle" relaxed>
         <List.Item float="left">
           <List.Content>
-            <b>LEP #: </b> {selectedSpecimen.otherCatalogNumber}
+            <b>LEP #: </b> {selectedSpecimen.catalogNumber}
           </List.Content>
         </List.Item>
         <List.Item float="left">
           <List.Content>
-            <b>MGCL #: </b> {selectedSpecimen.catalogNumber}
+            <b>MGCL #: </b> {selectedSpecimen.otherCatalogNumber}
           </List.Content>
         </List.Item>
         <List.Item float="left">
@@ -364,7 +364,7 @@ class SpecimenView extends React.Component {
             <div className="query-text">
               <h4>
                 Available Actions for{" "}
-                {this.props.selectedSpecimen.otherCatalogNumber}:
+                {this.props.selectedSpecimen.catalogNumber}:
               </h4>
             </div>
           </div>

@@ -37,7 +37,7 @@ module.exports = function (connection, app) {
             } else {
               const command = `CREATE TABLE ${tableName}
               (
-                id INT NOT NULL AUTO_INCREMENT, catalogNumber varchar(20), otherCatalogNumber varchar(20) UNIQUE NOT NULL,
+                id INT NOT NULL AUTO_INCREMENT, catalogNumber varchar(20) UNIQUE NOT NULL, otherCatalogNumber varchar(20),
                   recordNumber varchar(20), order_ varchar(40), superfamily varchar(40), family varchar(40),
                   subfamily varchar(40), tribe varchar(40), genus varchar(40), subgenus varchar(40), specificEpithet varchar(40),
                   infraspecificEpithet varchar(30), identificationQualifier varchar(10), recordedBy varchar(255), identifiedBy varchar(255),

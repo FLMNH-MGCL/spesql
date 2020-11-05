@@ -479,7 +479,7 @@ export function checkField(fieldName, fieldValue) {
         errors.push(`Query error (@ ${fieldName}): Must select a table.`);
       }
       return errors;
-    case "catalogNumber":
+    case "otherCatalogNumber":
       if (fieldValue === "") {
         return errors;
       }
@@ -517,7 +517,7 @@ export function checkField(fieldName, fieldValue) {
 
       return errors;
 
-    case "otherCatalogNumber":
+    case "catalogNumber":
       if (fieldValue === "") {
         return errors;
       }
@@ -785,14 +785,40 @@ export function checkField(fieldName, fieldValue) {
       return errors;
 
     case "samplingProtocol":
-      if (fieldValue === "") {
-        return errors;
-      }
+      if (typeof fieldValue === "string") {
+        if (fieldValue === "") {
+          return errors;
+        }
 
-      if (!controlHasString(samplingProtocolControl, fieldValue)) {
-        errors.push(
-          `Control error (@ ${fieldName}): ${fieldValue} is not one of the accepted inputs.`
-        );
+        const protocols = fieldValue.split("|");
+
+        if (fieldValue.split(",").length > 2 && protocols.length > 1) {
+          errors.push(
+            `Format error (@ ${fieldName}): It seems you're not using | as the separator.`
+          );
+        } else {
+          protocols.forEach((protocol) => {
+            if (!controlHasString(samplingProtocolControl, protocol.trim())) {
+              errors.push(
+                `Control error (@ ${fieldName}): ${samplingProtocolVal.trim()} is not one of the accepted inputs.`
+              );
+            }
+          });
+        }
+      } else {
+        if (fieldValue.length < 1) {
+          return errors;
+        }
+
+        // const samplingProtocols = fieldValue.split("|");
+
+        fieldValue.forEach((protocol) => {
+          if (!controlHasString(samplingProtocolControl, protocol.trim())) {
+            errors.push(
+              `Control error (@ ${fieldName}): ${samplingProtocolVal.trim()} is not one of the accepted inputs.`
+            );
+          }
+        });
       }
 
       return errors;

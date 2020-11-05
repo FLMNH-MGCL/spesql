@@ -260,7 +260,7 @@ export default class CreateHelpModal extends React.Component {
 
               <Message>
                 <Message.Content>
-                  SELECT * FROM tbl_name WHERE otherCatalogNumber REGEXP
+                  SELECT * FROM tbl_name WHERE catalogNumber REGEXP
                   '^LEP[7][5]|LEP[7][6]|LEP[7][7]';
                 </Message.Content>
               </Message>
@@ -287,12 +287,12 @@ export default class CreateHelpModal extends React.Component {
               >
                 {this.state.showHiddenMessage ? (
                   <Message.Content>
-                    SELECT * FROM tbl_name WHERE otherCatalogNumber REGEXP
+                    SELECT * FROM tbl_name WHERE catalogNumber REGEXP
                     '^LEP[7][5-7]';
                   </Message.Content>
                 ) : (
                   <Message.Content>
-                    SELECT * FROM tbl_name WHERE otherCatalogNumber REGEXP
+                    SELECT * FROM tbl_name WHERE catalogNumber REGEXP
                     '????????????';
                   </Message.Content>
                 )}
