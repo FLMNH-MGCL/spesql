@@ -41,7 +41,8 @@ export default function RefreshQueryButton({
     console.log(selectResponse);
 
     if (selectResponse.status === 200 && selectResponse.data) {
-      setData(selectResponse.data);
+      const { specimen } = selectResponse.data;
+      setData(specimen);
     } else {
       // TODO: interpret status
       const error = selectResponse.data;

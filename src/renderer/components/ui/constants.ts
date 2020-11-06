@@ -12,6 +12,7 @@ export const TEXT = {
 };
 
 export const SPINNER_SIZES = {
+  tiny: 'h-3 w-3',
   sm: 'h-5 w-5',
   md: 'h-8 w-8',
   lg: 'h-24 w-24',

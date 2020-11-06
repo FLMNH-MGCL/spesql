@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { BUTTONS } from './constants';
+import Spinner from './Spinner';
 
 export function ButtonGroup({ children }: { children: React.ReactNode }) {
   return (
@@ -42,7 +43,11 @@ export default function Button({
           className
         )}
         {...props}
-      />
+      >
+        <span className="flex items-center justify-center">
+          <Spinner size="sm" color="white" inline active={loading} />
+        </span>
+      </button>
     );
   } else {
     return (

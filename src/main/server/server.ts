@@ -26,6 +26,7 @@ import { MySqlCredentials } from './types';
 import updateConfig from './endpoints/updateConfig';
 import createUser from './endpoints/sql/admin/createUser';
 import { getQueriables } from './endpoints/sql/utils/queriables';
+import viewer from './endpoints/auth/viewer';
 // import { win } from '..';
 
 require('dotenv').config();
@@ -97,6 +98,8 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
   });
 
   // GLOBAL / GUEST ROUTES
+  app.get('/api/viewer', viewer);
+
   app.get('/api/config/get', getConfig);
   app.post('/api/config/update', updateConfig);
 

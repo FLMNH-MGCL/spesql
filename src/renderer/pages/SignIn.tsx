@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import flmnhLogo from '../assets/flmnhLogo.png';
 import CircleButton from '../components/buttons/CircleButton';
@@ -24,7 +24,7 @@ export default function SignIn() {
       })
       .catch((error) => error.response);
 
-    console.log(loginResponse);
+    // console.log(loginResponse);
 
     if (loginResponse.status === 200) {
       notify({
@@ -43,6 +43,24 @@ export default function SignIn() {
       }, 500);
     }
   }
+
+  useEffect(() => {
+    async function checkSession() {
+      const res = await axios
+        .get(BACKEND_URL + '/api/viewer')
+        .catch((error) => {
+          return error.response;
+        });
+
+      if (res.data) {
+        const { id, username, accessRole } = res.data;
+        login(id, username, accessRole);
+        navigate('/home');
+      }
+    }
+
+    checkSession();
+  }, []);
 
   return (
     <div className="h-screen flex items-center">

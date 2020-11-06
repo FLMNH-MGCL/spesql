@@ -9,6 +9,9 @@ import { BACKEND_URL } from '../../types';
 import { useNotify } from '../utils/context';
 import { useStore } from '../../../stores';
 import CreateLogModal from './CreateLogModal';
+import numberParser from 'number-to-words';
+import { buildSelectQuery } from '../../functions/builder';
+import shallow from 'zustand/shallow';
 
 type Props = {
   open: boolean;
@@ -25,6 +28,8 @@ export default function CreateSelectModal({ open, onClose }: Props) {
 
   const toggleLoading = useStore((state) => state.toggleLoading);
 
+  const loading = useStore((state) => state.loading, shallow);
+
   useKeyboard('Escape', () => {
     onClose();
   });
@@ -33,21 +38,68 @@ export default function CreateSelectModal({ open, onClose }: Props) {
     toggleLoading(true);
     console.log(values);
 
+    const { advancedQuery, conditionalCount, databaseTable, fields } = values;
+
+    let query: string = '';
+    let columns = null;
+    let conditions = null;
+
+    if (advancedQuery) {
+      query = advancedQuery;
+    } else {
+      // construct query
+      const numConditions = parseInt(conditionalCount, 10);
+      let conditionals = [];
+      columns = fields;
+
+      for (let i = 0; i < numConditions; i++) {
+        const current = numberParser.toWords(i);
+
+        conditionals.push({
+          field: values[`conditionalField_${current}`],
+          operator: values[`conditionalOperator_${current}`],
+          value: values[`conditionalValue_${current}`],
+        });
+      }
+
+      const { queryString, queryArray } = buildSelectQuery(
+        databaseTable,
+        conditionals
+      );
+
+      query = queryString;
+      conditions = queryArray;
+    }
+
     // TODO: generate query
-    const query = 'SELECT * FROM molecularLab;';
+    // const query = 'SELECT * FROM molecularLab;';
+
+    if (!query) return;
 
     const selectResponse = await axios
       .post(BACKEND_URL + '/api/select', {
         query,
+        columns,
+        conditions,
       })
       .catch((error) => error.response);
 
     console.log(selectResponse);
 
     if (selectResponse.status === 200 && selectResponse.data) {
-      onClose();
-      setData(selectResponse.data.slice(0, 10));
-      setCurrentQuery(query);
+      const { specimen, query } = selectResponse.data;
+
+      if (!specimen.length) {
+        notify({
+          title: 'Empty Return',
+          message: 'Query yielded no data',
+          level: 'warning',
+        });
+      } else {
+        onClose();
+        setData(specimen);
+        setCurrentQuery(query);
+      }
     } else {
       // TODO: interpret status
       const error = selectResponse.data;
@@ -67,7 +119,12 @@ export default function CreateSelectModal({ open, onClose }: Props) {
         <Modal.Footer>
           <ButtonGroup>
             <Button onClick={onClose}>Cancel</Button>
-            <Button variant="primary" type="submit" form="select-form">
+            <Button
+              variant="primary"
+              type="submit"
+              form="select-form"
+              loading={loading}
+            >
               Confirm
             </Button>
           </ButtonGroup>

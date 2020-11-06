@@ -5,17 +5,33 @@ import { SPINNER_SIZES } from './constants';
 type Props = {
   active?: boolean;
   size?: keyof typeof SPINNER_SIZES;
+  inline?: boolean;
+  color?: 'gray' | 'white';
 };
 
-export default function Spinner({ active, size = 'md' }: Props) {
+export default function Spinner({
+  inline,
+  active,
+  size = 'md',
+  color = 'gray',
+}: Props) {
   const SIZE = SPINNER_SIZES[size] ?? SPINNER_SIZES.md;
 
   if (!active) return null;
 
   return (
-    <div className="absolute bottom-0 inset-0 flex items-center justify-center pointer-events-none">
+    <div
+      className={clsx(
+        inline ? 'mx-auto' : 'absolute bottom-0 inset-0',
+        'flex items-center justify-center pointer-events-none'
+      )}
+    >
       <svg
-        className={clsx('animate-spin -ml-1 mr-3 text-gray-600', SIZE)}
+        className={clsx(
+          color === 'gray' ? ' text-gray-600' : 'text-white',
+          'animate-spin -ml-1 mr-3',
+          SIZE
+        )}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -26,7 +42,7 @@ export default function Spinner({ active, size = 'md' }: Props) {
           cy="12"
           r="10"
           stroke="currentColor"
-          stroke-width="4"
+          strokeWidth="4"
         ></circle>
         <path
           className="opacity-75"

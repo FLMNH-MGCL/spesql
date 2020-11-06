@@ -82,8 +82,8 @@ export const BooleanField = [
 
 export const fieldOptions = [
   { label: 'All', value: '*' },
-  { label: 'Lep #', value: 'otherCatalogNumber' },
-  { label: 'MGCL #', value: 'catalogNumber' },
+  { label: 'Lep #', value: 'catalogNumber' },
+  { label: 'MGCL #', value: 'otherCatalogNumber' },
   { label: 'Record #', value: 'recordNumber' },
   { label: 'Order', value: 'order_' },
   { label: 'Superfamily', value: 'superfamily' },

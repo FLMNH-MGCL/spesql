@@ -155,7 +155,7 @@ function UISelect({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.1, ease: 'easeInOut' }}
-              className="absolute mt-1 w-full rounded-md bg-white shadow-lg z-30"
+              className="absolute mt-1 w-full rounded-md bg-white shadow-lg z-50"
             >
               <ul className="max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5">
                 {options.map((option) => {
@@ -180,10 +180,12 @@ function UISelect({
   );
 }
 
+// I do not like the way I allow controllable forms here. I need to do more research into this
 export type Props = {
   label?: string;
   fullWidth?: boolean;
   options: SelectOption[];
+  updateControlled?(newVal: any): void;
 } & React.ComponentProps<'select'>;
 
 export default forwardRef<HTMLSelectElement, Props>(
@@ -216,6 +218,7 @@ export default forwardRef<HTMLSelectElement, Props>(
           }
         }
       } else {
+        props.updateControlled && props.updateControlled(item.value);
         setDisplay(item);
         setSelected(item.value);
       }
@@ -237,7 +240,7 @@ export default forwardRef<HTMLSelectElement, Props>(
       return false;
     }
 
-    console.log(selected);
+    // console.log(selected);
 
     return (
       <label
@@ -251,9 +254,6 @@ export default forwardRef<HTMLSelectElement, Props>(
         <div className="mt-1 relative">
           <select
             value={selected}
-            onChange={() => {
-              () => selected;
-            }}
             className="hidden"
             multiple={multiple}
             ref={ref}

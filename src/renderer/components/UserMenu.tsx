@@ -4,6 +4,8 @@ import shallow from 'zustand/shallow';
 import { useStore } from '../../stores';
 import CreateConfirmModal from './modals/CreateConfirmModal';
 import Dropdown from './ui/Dropdown';
+import axios from 'axios';
+import { BACKEND_URL } from '../types';
 
 export default function UserMenu() {
   const navigate = useNavigate();
@@ -16,6 +18,12 @@ export default function UserMenu() {
 
   if (!user) {
     return null;
+  }
+
+  function handleLogout() {
+    axios.post(BACKEND_URL + '/api/logout');
+    logout();
+    navigate('/signin');
   }
 
   const { username } = user;
@@ -49,11 +57,7 @@ export default function UserMenu() {
       <CreateConfirmModal
         details="This action will require you to log back in to continue usage"
         trigger={<Dropdown.Item text="Logout" />}
-        onConfirm={() => {
-          // store.session.destroySession();
-          logout();
-          navigate('/signin');
-        }}
+        onConfirm={handleLogout}
       />
     </Dropdown>
   );

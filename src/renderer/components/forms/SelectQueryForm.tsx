@@ -37,8 +37,6 @@ export default function SelectQueryForm({ onSubmit }: Props) {
         .get(BACKEND_URL + '/api/queriables/select/')
         .catch((error) => error.response);
 
-      console.log(res);
-
       if (res.data && res.data.tables) {
         setTables(
           res.data.tables.map((table: string) => {
@@ -127,13 +125,15 @@ export default function SelectQueryForm({ onSubmit }: Props) {
       {/* TODO: make Select component controllable... :( */}
       <Form.Group flex>
         <Form.Select
-          name="queryType"
+          name="conditionalCount"
           label="How many conditions?"
           value={conditionCount}
           disabled={advanced}
           fullWidth
           options={conditionCountOptions}
-          onChange={(e) => setConditionCount(parseInt(e.target.value))}
+          updateControlled={(newVal: any) => {
+            setConditionCount(newVal);
+          }}
           register={
             advanced
               ? NeutralValidator
@@ -143,44 +143,46 @@ export default function SelectQueryForm({ onSubmit }: Props) {
       </Form.Group>
 
       <Heading className="pt-3 pb-1">Conditions</Heading>
-      <div className="bg-gray-50 rounded-lg w-full p-3 conditional-div-height overflow-y-auto">
-        {conditionCount > 0 &&
-          Array.from({ length: conditionCount }).map((_, index) => {
-            const numberInEnglish = numberParser.toWords(index);
+      <div className="z-0 bg-gray-50 rounded-lg w-full p-3 conditional-div-height overflow-y-auto">
+        <div className="">
+          {conditionCount > 0 &&
+            Array.from({ length: conditionCount }).map((_, index) => {
+              const numberInEnglish = numberParser.toWords(index);
 
-            return (
-              <Form.Group flex>
-                <Form.Select
-                  name={`conditionalField_${numberInEnglish}`}
-                  label="Field"
-                  disabled={advanced}
-                  fullWidth
-                  options={fieldOptions}
-                  register={
-                    advanced
-                      ? NeutralValidator
-                      : { validate: validateFieldSelection }
-                  }
-                />
-                <Form.Select
-                  name={`conditionalOperator${numberInEnglish}`}
-                  label="Operator"
-                  disabled={advanced}
-                  options={operators}
-                  fullWidth
-                />
-                <Form.Input
-                  name={`conditionalValue_${numberInEnglish}`}
-                  label="Value"
-                  disabled={advanced}
-                  fullWidth
-                  // register={
-                  //   advanced ? NeutralValidator : { validate: () => validateDynamicFieldValue() }
-                  // }
-                />
-              </Form.Group>
-            );
-          })}
+              return (
+                <Form.Group flex key={index}>
+                  <Form.Select
+                    name={`conditionalField_${numberInEnglish}`}
+                    label="Field"
+                    disabled={advanced}
+                    fullWidth
+                    options={fieldOptions}
+                    register={
+                      advanced
+                        ? NeutralValidator
+                        : { validate: validateFieldSelection }
+                    }
+                  />
+                  <Form.Select
+                    name={`conditionalOperator_${numberInEnglish}`}
+                    label="Operator"
+                    disabled={advanced}
+                    options={operators}
+                    fullWidth
+                  />
+                  <Form.Input
+                    name={`conditionalValue_${numberInEnglish}`}
+                    label="Value"
+                    disabled={advanced}
+                    fullWidth
+                    // register={
+                    //   advanced ? NeutralValidator : { validate: () => validateDynamicFieldValue() }
+                    // }
+                  />
+                </Form.Group>
+              );
+            })}
+        </div>
 
         {conditionCount === 0 && (
           <Text>Condition forms will render here if you need them</Text>

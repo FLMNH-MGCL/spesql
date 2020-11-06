@@ -70,8 +70,6 @@ export default function () {
 
   const toggleLoading = useStore((state) => state.toggleLoading);
 
-  console.log(data);
-
   function getColumns() {
     const columns = Array.from(headers).map((header) => {
       return (
@@ -90,7 +88,7 @@ export default function () {
   }
 
   function renderHeader({ dataKey, sortBy, sortDirection }: any) {
-    console.log(sortBy, sortDirection);
+    // console.log(sortBy, sortDirection);
     return (
       <div className="header-cell" key={dataKey}>
         {dataKey}

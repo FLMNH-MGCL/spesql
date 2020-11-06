@@ -74,6 +74,7 @@ function DroppableList({
   );
 }
 
+// TODO: add reset?
 export default function HeaderConfigurationForm() {
   const { tableConfig, updateTableHeaders } = useStore(
     (state) => ({
