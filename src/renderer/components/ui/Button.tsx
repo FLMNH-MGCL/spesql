@@ -44,7 +44,7 @@ export default function Button({
         )}
         {...props}
       >
-        <span className="flex items-center justify-center">
+        <span className="flex items-center justify-center mx-auto">
           <Spinner size="sm" color="white" inline active={loading} />
         </span>
       </button>
