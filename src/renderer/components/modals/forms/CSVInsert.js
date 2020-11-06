@@ -137,6 +137,9 @@ export default class CSVInsert extends React.Component {
 
     for (var i = 1; i < ret.data.length; i++) {
       let specimen = ret.data[i];
+
+      console.log("reviewing:", specimen);
+
       const elevationInMeters = parseMeasurement(specimen[32]);
       const coordinateUncertainty = parseMeasurement(specimen[36]);
 
@@ -200,6 +203,8 @@ export default class CSVInsert extends React.Component {
         modifiedInfo: "",
       };
 
+      console.log("created obj:", doc);
+
       let specimenErrors = checkSpecimen(doc);
 
       specimenErrors = specimenErrors.concat(
@@ -216,6 +221,9 @@ export default class CSVInsert extends React.Component {
         insertions.push(doc);
       }
     }
+
+    console.log("errors:", errors);
+    console.log("insertions:", insertions);
 
     if (errors.length > 0) {
       this.props.notify({
