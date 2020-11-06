@@ -189,7 +189,18 @@ export type Props = {
 } & React.ComponentProps<'select'>;
 
 export default forwardRef<HTMLSelectElement, Props>(
-  ({ label, className, fullWidth, multiple, options, ...props }, ref) => {
+  (
+    {
+      label,
+      className,
+      fullWidth,
+      multiple,
+      options,
+      updateControlled,
+      ...props
+    },
+    ref
+  ) => {
     // @ts-ignore: this will work I promise
     const errors = props.errors && props.name && props.errors[props.name];
 
@@ -218,7 +229,7 @@ export default forwardRef<HTMLSelectElement, Props>(
           }
         }
       } else {
-        props.updateControlled && props.updateControlled(item.value);
+        updateControlled && updateControlled(item.value);
         setDisplay(item);
         setSelected(item.value);
       }
@@ -255,6 +266,7 @@ export default forwardRef<HTMLSelectElement, Props>(
           <select
             value={selected}
             className="hidden"
+            onChange={() => selected}
             multiple={multiple}
             ref={ref}
             {...props}
@@ -262,7 +274,7 @@ export default forwardRef<HTMLSelectElement, Props>(
             {options.map((item: SelectOption) => (
               <option
                 key={`raw-option-${item.value}`}
-                selected={calculateSelected(item)} // FIXME: this throws a warning about not setting selected on option
+                // selected={calculateSelected(item)} // FIXME: this throws a warning about not setting selected on option
                 value={item.value}
               >
                 {item.label}
