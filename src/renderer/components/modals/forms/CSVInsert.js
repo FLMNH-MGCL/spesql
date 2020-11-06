@@ -52,13 +52,13 @@ export default class CSVInsert extends React.Component {
         this.state.databaseTable,
         userData
       ).catch((error) => {
-        console.log(error);
+        console.log("error occurred:", error);
         const res = error.response;
 
         if (res.status === 400) {
           errors.push(`Bad request: query forcibly cancelled. '${res.data}'`);
 
-          throws.props.notify({
+          this.props.notify({
             type: "error",
             title: "Cancelling query",
             message: "Invalid request sent to server",
@@ -67,7 +67,7 @@ export default class CSVInsert extends React.Component {
           errors.push(
             `Bad connection: query forcibly cancelled. '${res.data}'`
           );
-          throws.props.notify({
+          this.props.notify({
             type: "error",
             title: "Cancelling query",
             message: "Bad connection detected, please check VPN or internet",
@@ -225,11 +225,11 @@ export default class CSVInsert extends React.Component {
           "The insertion will skip entries that are invalid, please wait until valid entries have been uploaded fully before retrying the invalid entries.",
       });
 
-      //   console.log(errors);
       this.props.updateCSVInsertErrorMessage(errors);
     }
 
     if (insertions.length > 0) {
+      console.log(insertions.length, "valid insertions detected...");
       this.runQuery(insertions, userData);
     } else {
       this.props.notify({
@@ -237,6 +237,7 @@ export default class CSVInsert extends React.Component {
         title: "Invalid data",
         message: "Please check submission. No valid entries were found.",
       });
+
       this.setState({ loading: false });
     }
   };

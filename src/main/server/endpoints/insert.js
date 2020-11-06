@@ -8,6 +8,8 @@ module.exports = function (connection, app) {
     let { table } = req.body;
     let { username, password } = req.body;
 
+    console.log("specimen to insert:", specimen);
+
     if (!username || !password) {
       res.status(400);
       res.send("Missing credentials");
