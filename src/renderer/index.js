@@ -31,7 +31,8 @@ styleLink.href =
 document.head.appendChild(styleLink);
 
 const persistConfig = {
-  key: process.env.ELECTRON_WEBPACK_WDS_SECRET_KEY,
+  key:
+    process.env.ELECTRON_WEBPACK_WDS_SECRET_KEY || "THIS SHOULD NOT EVER HIT",
   storage: storageSession,
 };
 
