@@ -9,7 +9,6 @@ function RouteElement({ element }: ComponentProps<typeof Route>) {
 
   console.log(user);
 
-  // not logged in TODO: uncomment me
   if (!user) {
     return <Navigate to="/signin" />;
   }

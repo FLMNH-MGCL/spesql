@@ -3,7 +3,11 @@ import Button, { ButtonGroup } from '../ui/Button';
 import Modal from '../ui/Modal';
 import useToggle from '../utils/useToggle';
 
-export default function CreateCountModal() {
+type Props = {
+  disableDownload?: boolean;
+};
+
+export default function CreateCountModal({ disableDownload }: Props) {
   const [open, { on, off }] = useToggle(false);
 
   function onDownload() {
@@ -24,7 +28,7 @@ export default function CreateCountModal() {
         </Modal.Footer>
       </Modal>
 
-      <Button onClick={on}>
+      <Button onClick={on} disabled={disableDownload}>
         <svg
           className="w-4 h-4 mr-2"
           fill="none"

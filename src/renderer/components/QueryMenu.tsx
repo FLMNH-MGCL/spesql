@@ -4,7 +4,11 @@ import CreateSelectModal from './modals/CreateSelectModal';
 import CreateUpdateModal from './modals/CreateUpdateModal';
 import Dropdown from './ui/Dropdown';
 
-export default function QueryMenu() {
+type Props = {
+  disableCrud: boolean;
+};
+
+export default function QueryMenu({ disableCrud }: Props) {
   const [currentModal, setCurrentModal] = useState<string>();
 
   return (
@@ -37,7 +41,7 @@ export default function QueryMenu() {
         <Dropdown.Item text="Count" onClick={() => setCurrentModal('count')} />
         <Dropdown.Item
           text="Update"
-          onClick={() => setCurrentModal('update')}
+          onClick={disableCrud ? undefined : () => setCurrentModal('update')}
         />
       </Dropdown>
       <CreateSelectModal
@@ -49,7 +53,7 @@ export default function QueryMenu() {
         onClose={() => setCurrentModal(undefined)}
       />
       <CreateUpdateModal
-        open={currentModal === 'update'}
+        open={disableCrud ? false : currentModal === 'update'}
         onClose={() => setCurrentModal(undefined)}
       />
     </React.Fragment>

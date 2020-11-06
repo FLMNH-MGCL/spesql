@@ -3,7 +3,11 @@ import CreateBulkInsertModal from './modals/CreateBulkInsertModal';
 import CreateSingleInsertModal from './modals/CreateSingleInsertModal';
 import Dropdown from './ui/Dropdown';
 
-export default function InsertMenu() {
+type Props = {
+  disableCrud: boolean;
+};
+
+export default function InsertMenu({ disableCrud }: Props) {
   const [currentModal, setCurrentModal] = useState<string>();
   return (
     <React.Fragment>
@@ -29,20 +33,20 @@ export default function InsertMenu() {
         <Dropdown.Header text="Insert Menu" />
         <Dropdown.Item
           text="Bulk Insert"
-          onClick={() => setCurrentModal('bulk')}
+          onClick={disableCrud ? undefined : () => setCurrentModal('bulk')}
         />
         <Dropdown.Item
           text="Single Insert"
-          onClick={() => setCurrentModal('single')}
+          onClick={disableCrud ? undefined : () => setCurrentModal('single')}
         />
       </Dropdown>
 
       <CreateBulkInsertModal
-        open={currentModal === 'bulk'}
+        open={disableCrud ? false : currentModal === 'bulk'}
         onClose={() => setCurrentModal(undefined)}
       />
       <CreateSingleInsertModal
-        open={currentModal === 'single'}
+        open={disableCrud ? false : currentModal === 'single'}
         onClose={() => setCurrentModal(undefined)}
       />
     </React.Fragment>

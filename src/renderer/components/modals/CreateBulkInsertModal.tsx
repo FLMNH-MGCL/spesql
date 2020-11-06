@@ -103,7 +103,7 @@ function PasteUpload({ onFileUpload }: UploadProps) {
       }
       rows={4}
       placeholder="Be sure to include the CSV header row"
-      className="max-w-lg flex w-full justify-center px-6 mx-auto pt-5 pb-6 border-2 border-gray-200 rounded-md h-full "
+      className="flex w-full justify-center px-6 mx-auto pt-5 pb-6 border border-gray-500 rounded-md h-full "
     ></textarea>
   );
 }
@@ -129,7 +129,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
   return (
     <React.Fragment>
-      <Modal open={open} onClose={onClose}>
+      <Modal open={open} size="medium" onClose={onClose}>
         <Modal.Content title="Bulk Insert Query">
           <Tabs
             tabs={['File Upload', 'CSV Paste']}

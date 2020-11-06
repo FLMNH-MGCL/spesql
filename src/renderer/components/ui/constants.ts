@@ -1,4 +1,6 @@
-export enum COLORS {}
+export enum COLORS {
+  BLUE = '#639CFF',
+}
 
 export const TEXT = {
   label: {
@@ -29,7 +31,7 @@ export const TEXT_SIZES = {
 
 export const HEADINGS = {
   h1: 'font-extrabold text-gray-900 leading-none tracking-tight',
-  h2: '',
+  h2: 'font-bold text-gray-900 leading-none tracking-tight',
   h3: 'leading-6 font-medium text-gray-900',
   h4: '',
   h5: '',

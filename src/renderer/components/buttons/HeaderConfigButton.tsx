@@ -2,12 +2,13 @@ import React from 'react';
 import Button from '../ui/Button';
 
 type Props = {
+  disabled?: boolean;
   onClick?(): void;
 };
 
-export default function HeaderConfigButton({ onClick }: Props) {
+export default function HeaderConfigButton({ disabled, onClick }: Props) {
   return (
-    <Button variant="clear" rounded onClick={onClick}>
+    <Button variant="clear" rounded onClick={onClick} disabled={disabled}>
       <svg
         className="w-5 h-5"
         fill="none"

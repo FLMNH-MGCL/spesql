@@ -30,7 +30,7 @@ function TableFooter({ disableInteractables }: FooterProps) {
         <ClearQueryButton disabled={disableInteractables} />
         <FilterSearch disabled={disableInteractables} />
         <RefreshQueryButton disabled={disableInteractables} />
-        <CreateHeaderConfigModal />
+        <CreateHeaderConfigModal disabled={disableInteractables} />
       </div>
       <div className="flex space-x-2">
         <CreateLogModal />
@@ -71,18 +71,21 @@ export default function () {
   const toggleLoading = useStore((state) => state.toggleLoading);
 
   function getColumns() {
-    const columns = Array.from(headers).map((header) => {
-      return (
-        <Column
-          key={header}
-          label={header}
-          dataKey={header}
-          flexGrow={1}
-          flexShrink={1}
-          width={width / headers.length}
-        />
-      );
-    });
+    const columns =
+      !data || !data.length
+        ? []
+        : Array.from(headers).map((header) => {
+            return (
+              <Column
+                key={header}
+                label={header}
+                dataKey={header}
+                flexGrow={1}
+                flexShrink={1}
+                width={width / headers.length}
+              />
+            );
+          });
 
     return columns;
   }

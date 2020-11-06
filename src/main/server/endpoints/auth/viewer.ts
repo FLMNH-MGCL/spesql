@@ -14,9 +14,9 @@ export default function viewer(req: Request, res: Response) {
         if (error) {
           res.status(500).send('Server error');
         } else if (data && data.length === 1) {
-          const { username, id, accessRole } = data[0];
+          const { username, id, role } = data[0];
 
-          res.status(200).send({ username, id, accessRole });
+          res.status(200).send({ username, id, accessRole: role });
         } else {
           console.log(data);
           res.status(401).send(null);

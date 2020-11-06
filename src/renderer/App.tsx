@@ -11,6 +11,7 @@ import AuthRoute from './components/AuthRoute';
 import NotificationSystem from 'react-notification-system';
 import { NotificationContent } from './types';
 import { NotificationContext } from './components/utils/context';
+import Admin from './pages/Admin';
 
 function HomeStack() {
   return (
@@ -45,11 +46,10 @@ export default function App() {
         <Layout>
           <Routes>
             <Route path="/home/*" element={<HomeStack />} />
+            <Route path="/shhhhh/secret/admin" element={<Admin />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="*">
-              <Lost />
-            </Route>
+            <Route path="*" element={<Lost />} />
           </Routes>
         </Layout>
       </NotificationContext.Provider>

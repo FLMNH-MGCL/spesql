@@ -26,7 +26,7 @@ export default function UserMenu() {
     navigate('/signin');
   }
 
-  const { username } = user;
+  const { username, accessRole } = user;
 
   return (
     <Dropdown
@@ -52,7 +52,13 @@ export default function UserMenu() {
       rounded
     >
       <Dropdown.Header text={`Hello, @${username}`} />
-      <Dropdown.Item text="Admin Portal" />
+      {accessRole === 'admin' && (
+        <Dropdown.Item
+          text="Admin Portal"
+          onClick={() => navigate('/shhhhh/secret/admin')}
+        />
+      )}
+
       <Dropdown.Item text="Settings" onClick={() => navigate('/settings')} />
       <CreateConfirmModal
         details="This action will require you to log back in to continue usage"

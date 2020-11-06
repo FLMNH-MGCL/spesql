@@ -7,7 +7,11 @@ import Text from '../ui/Text';
 import useToggle from '../utils/useToggle';
 import CreateHelpModal from './CreateHelpModal';
 
-export default function CreateHeaderConfigModal() {
+type Props = {
+  disabled?: boolean;
+};
+
+export default function CreateHeaderConfigModal({ disabled }: Props) {
   const [open, { on, off }] = useToggle(false);
 
   return (
@@ -29,7 +33,7 @@ export default function CreateHeaderConfigModal() {
         </Modal.Footer>
       </Modal>
 
-      <HeaderConfigButton onClick={on} />
+      <HeaderConfigButton onClick={on} disabled={disabled} />
     </React.Fragment>
   );
 }
