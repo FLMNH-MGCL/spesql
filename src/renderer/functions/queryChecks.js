@@ -800,7 +800,7 @@ export function checkField(fieldName, fieldValue) {
           protocols.forEach((protocol) => {
             if (!controlHasString(samplingProtocolControl, protocol.trim())) {
               errors.push(
-                `Control error (@ ${fieldName}): ${samplingProtocolVal.trim()} is not one of the accepted inputs.`
+                `Control error (@ ${fieldName}): ${protocol.trim()} is not one of the accepted inputs.`
               );
             }
           });
@@ -815,7 +815,7 @@ export function checkField(fieldName, fieldValue) {
         fieldValue.forEach((protocol) => {
           if (!controlHasString(samplingProtocolControl, protocol.trim())) {
             errors.push(
-              `Control error (@ ${fieldName}): ${samplingProtocolVal.trim()} is not one of the accepted inputs.`
+              `Control error (@ ${fieldName}): ${protocol.trim()} is not one of the accepted inputs.`
             );
           }
         });
