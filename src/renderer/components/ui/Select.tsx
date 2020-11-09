@@ -51,7 +51,7 @@ function SelectItem({ label, selected, onSelect }: SelectItemProps) {
     <li
       id="listbox-item-0"
       role="option"
-      className="text-gray-900 cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-gray-50"
+      className="bg-white text-gray-900 cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-gray-50"
       onClick={onSelect}
     >
       <div className="flex items-center space-x-3">
@@ -104,7 +104,7 @@ function UISelect({
               errors ??
                 'border  border-gray-300 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300',
               'appearance-none block w-full text-left pl-3 pr-10 px-3 py-2 rounded-md transition duration-150 ease-in-out text-sm leading-5',
-              disabled && 'bg-gray-100'
+              disabled ? 'bg-gray-100' : 'bg-white'
             )}
           >
             <div className="flex items-center space-x-3">
@@ -157,7 +157,7 @@ function UISelect({
               transition={{ duration: 0.1, ease: 'easeInOut' }}
               className="absolute mt-1 w-full rounded-md bg-white shadow-lg z-50"
             >
-              <ul className="max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5">
+              <ul className="bg-white max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5">
                 {options.map((option) => {
                   return (
                     <SelectItem

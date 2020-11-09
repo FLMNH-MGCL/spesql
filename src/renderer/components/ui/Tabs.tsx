@@ -15,10 +15,19 @@ function ActiveIndicator({ className, styles }: ActiveIndicatorProps) {
   );
 }
 
-function Tab({ text, onClick }: { text: string; onClick(): void }) {
+type TabProps = {
+  text: string;
+  onClick(): void;
+  fullWidth?: boolean;
+};
+
+function Tab({ text, fullWidth, onClick }: TabProps) {
   return (
     <button
-      className="space-y-1 font-semibold focus:outline-none"
+      className={clsx(
+        fullWidth && 'flex-1',
+        'space-y-1 font-semibold focus:outline-none'
+      )}
       onClick={onClick}
     >
       <p className="p-2 pb-0">{text}</p>
@@ -29,10 +38,16 @@ function Tab({ text, onClick }: { text: string; onClick(): void }) {
 type Props = {
   tabs: string[];
   selectedIndex: number;
+  fullWidth?: boolean;
   onChange(index: number): void;
 };
 
-export default function Tabs({ tabs, selectedIndex, onChange }: Props) {
+export default function Tabs({
+  tabs,
+  selectedIndex,
+  fullWidth,
+  onChange,
+}: Props) {
   const tabsRef = useRef<HTMLDivElement>(null);
   const [activeStyles, setActiveStyles] = useState({ width: 0, left: 0 });
 
@@ -53,7 +68,12 @@ export default function Tabs({ tabs, selectedIndex, onChange }: Props) {
     <div className="relative">
       <div className="flex space-x-4" ref={tabsRef}>
         {tabs.map((tab, index) => (
-          <Tab key={index} onClick={() => onChange(index)} text={tab} />
+          <Tab
+            key={index}
+            fullWidth={fullWidth}
+            onClick={() => onChange(index)}
+            text={tab}
+          />
         ))}
       </div>
 

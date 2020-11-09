@@ -29,7 +29,7 @@ export default function Spinner({
       <svg
         className={clsx(
           color === 'gray' ? ' text-gray-600' : 'text-white',
-          'animate-spin -ml-1 mr-3',
+          'animate-spin',
           SIZE
         )}
         xmlns="http://www.w3.org/2000/svg"

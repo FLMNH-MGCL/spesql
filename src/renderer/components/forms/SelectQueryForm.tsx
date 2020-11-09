@@ -143,7 +143,7 @@ export default function SelectQueryForm({ onSubmit }: Props) {
       </Form.Group>
 
       <Heading className="pt-3 pb-1">Conditions</Heading>
-      <div className="z-0 bg-gray-50 rounded-lg w-full p-3 conditional-div-height overflow-y-auto">
+      <div className="z-0 bg-gray-50 rounded-lg w-full p-3">
         <div className="">
           {conditionCount > 0 &&
             Array.from({ length: conditionCount }).map((_, index) => {

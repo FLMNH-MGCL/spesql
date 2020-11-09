@@ -132,6 +132,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       <Modal open={open} size="medium" onClose={onClose}>
         <Modal.Content title="Bulk Insert Query">
           <Tabs
+            fullWidth
             tabs={['File Upload', 'CSV Paste']}
             selectedIndex={tab}
             onChange={setTab}

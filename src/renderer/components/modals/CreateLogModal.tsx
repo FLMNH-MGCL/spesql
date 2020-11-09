@@ -70,6 +70,7 @@ export default function CreateLogModal({ initialTab }: Props) {
       <Modal open={open} onClose={off} size="large">
         <Modal.Content title="Error Logs">
           <Tabs
+            fullWidth
             tabs={['Select', 'Count', 'Insert', 'Update', 'Delete']}
             selectedIndex={tab}
             onChange={setTab}

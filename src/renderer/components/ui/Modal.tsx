@@ -70,26 +70,27 @@ export default function Modal({
     scale: 1,
   };
 
-  useEffect(() => {
-    // we do not want external scrolling on modals,
-    // only internal modal scrolling
-    if (open) {
-      noScroll.on();
-    }
+  // TODO: don't really need this for this application
+  // useEffect(() => {
+  //   // we do not want external scrolling on modals,
+  //   // only internal modal scrolling
+  //   if (open) {
+  //     noScroll.on();
+  //   }
 
-    // on unmount, toggle scrolling to be
-    // enabled again
-    return () => {
-      noScroll.off();
-    };
-  }, [open]);
+  //   // on unmount, toggle scrolling to be
+  //   // enabled again
+  //   return () => {
+  //     noScroll.off();
+  //   };
+  // }, [open]);
 
   return (
     <AnimatePresence>
       {open && (
         <Portal>
           <FocusTrap>
-            <div className="z-30 fixed bottom-0 items-center inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center">
+            <div className="z-30 overflow-auto fixed bottom-0 items-center inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center">
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

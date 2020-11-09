@@ -102,8 +102,8 @@ export default function CreateSelectModal({ open, onClose }: Props) {
       }
     } else {
       // TODO: interpret status
-      const error = selectResponse.data;
-      notify({ title: 'TODO', message: error, level: 'error' });
+      // const error = selectResponse.data;
+      notify({ title: 'TODO', message: 'TODO', level: 'error' });
     }
 
     toggleLoading(false);

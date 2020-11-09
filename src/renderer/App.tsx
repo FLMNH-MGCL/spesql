@@ -12,6 +12,7 @@ import NotificationSystem from 'react-notification-system';
 import { NotificationContent } from './types';
 import { NotificationContext } from './components/utils/context';
 import Admin from './pages/Admin';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function HomeStack() {
   return (
@@ -42,17 +43,19 @@ export default function App() {
 
   return (
     <MemoryRouter initialEntries={['/home']}>
-      <NotificationContext.Provider value={{ notify }}>
-        <Layout>
-          <Routes>
-            <Route path="/home/*" element={<HomeStack />} />
-            <Route path="/shhhhh/secret/admin" element={<Admin />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="*" element={<Lost />} />
-          </Routes>
-        </Layout>
-      </NotificationContext.Provider>
+      <ErrorBoundary>
+        <NotificationContext.Provider value={{ notify }}>
+          <Layout>
+            <Routes>
+              <Route path="/home/*" element={<HomeStack />} />
+              <Route path="/shhhhh/secret/admin" element={<Admin />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="*" element={<Lost />} />
+            </Routes>
+          </Layout>
+        </NotificationContext.Provider>
+      </ErrorBoundary>
 
       {/* @ts-ignore */}
       <NotificationSystem ref={notificationSystem} />

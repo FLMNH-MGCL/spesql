@@ -14,7 +14,6 @@ import { useStore } from '../../stores';
 import shallow from 'zustand/shallow';
 import Spinner from './ui/Spinner';
 import CreateLogModal from './modals/CreateLogModal';
-// import "./VirtualizedList.css";
 
 const SortableTable = SortableContainer(Table);
 
@@ -37,21 +36,6 @@ function TableFooter({ disableInteractables }: FooterProps) {
         <CreateHelpModal variant="global" />
       </div>
     </div>
-
-    // <div className="bg-gray-50 flex items-center border border-gray-100 px-4 h-16 w-full">
-    //   <div className="flex justify-between">
-    //     <div className="justify-between items-center space-x-2 ">
-    //       <FilterToggle />
-    //       <ClearQueryButton />
-    //       <FilterSearch />
-    //       <RefreshQueryButton />
-    //     </div>
-
-    //     <div>
-    //       <CreateHelpModal variant="global" />
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
 
