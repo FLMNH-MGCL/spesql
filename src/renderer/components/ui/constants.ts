@@ -70,3 +70,9 @@ export const BUTTONS = {
     disabled: 'bg-gray-100',
   },
 };
+
+export const BUTTON_GAPS = {
+  sm: 'space-y-2 sm:space-y-0 sm:space-x-2',
+  md: 'space-y-3 sm:space-y-0 sm:space-x-3',
+  lg: 'space-y-6 sm:space-y-0 sm:space-x-6',
+};

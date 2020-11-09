@@ -1,6 +1,6 @@
 import React from 'react';
 import CountQueryForm from '../forms/CountQueryForm';
-import Button, { ButtonGroup } from '../ui/Button';
+import Button from '../ui/Button';
 import Divider from '../ui/Divider';
 import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
@@ -35,12 +35,12 @@ export default function CreateCountModal({ open, onClose }: Props) {
         </Modal.Content>
 
         <Modal.Footer>
-          <ButtonGroup>
+          <Button.Group>
             <Button onClick={onClose}>Cancel</Button>
             <Button variant="primary" type="submit" form="count-form">
               Confirm
             </Button>
-          </ButtonGroup>
+          </Button.Group>
 
           <CreateLogModal initialTab={1} />
         </Modal.Footer>

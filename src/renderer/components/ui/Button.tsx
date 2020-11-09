@@ -1,11 +1,23 @@
 import React from 'react';
 import clsx from 'clsx';
-import { BUTTONS } from './constants';
+import { BUTTONS, BUTTON_GAPS } from './constants';
 import Spinner from './Spinner';
 
-export function ButtonGroup({ children }: { children: React.ReactNode }) {
+type GroupProps = {
+  children: React.ReactNode;
+  className?: string;
+  gap?: keyof typeof BUTTON_GAPS;
+};
+function ButtonGroup({ children, className, gap = 'md' }: GroupProps) {
+  const groupStyles = BUTTON_GAPS[gap] ?? BUTTON_GAPS.md;
   return (
-    <div className="space-y-3 sm:space-y-0 sm:space-x-3 flex flex-col-reverse sm:flex-row space-y-reverse justify-end">
+    <div
+      className={clsx(
+        groupStyles,
+        'flex flex-col-reverse sm:flex-row space-y-reverse justify-end',
+        className
+      )}
+    >
       {children}
     </div>
   );
@@ -67,3 +79,5 @@ export default function Button({
     );
   }
 }
+
+Button.Group = ButtonGroup;

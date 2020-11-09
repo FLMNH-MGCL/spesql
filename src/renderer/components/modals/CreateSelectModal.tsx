@@ -1,6 +1,6 @@
 import React from 'react';
 import SelectQueryForm from '../forms/SelectQueryForm';
-import Button, { ButtonGroup } from '../ui/Button';
+import Button from '../ui/Button';
 import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
 import useKeyboard from '../utils/useKeyboard';
@@ -12,6 +12,7 @@ import CreateLogModal from './CreateLogModal';
 import numberParser from 'number-to-words';
 import { buildSelectQuery } from '../../functions/builder';
 import shallow from 'zustand/shallow';
+import CreateHelpModal from './CreateHelpModal';
 
 type Props = {
   open: boolean;
@@ -117,7 +118,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
         </Modal.Content>
 
         <Modal.Footer>
-          <ButtonGroup>
+          <Button.Group>
             <Button onClick={onClose}>Cancel</Button>
             <Button
               variant="primary"
@@ -127,8 +128,12 @@ export default function CreateSelectModal({ open, onClose }: Props) {
             >
               Confirm
             </Button>
-          </ButtonGroup>
-          <CreateLogModal initialTab={0} />
+          </Button.Group>
+
+          <div className="flex space-x-2 flex-1">
+            <CreateLogModal initialTab={0} />
+            <CreateHelpModal variant="select" />
+          </div>
         </Modal.Footer>
       </Modal>
     </React.Fragment>

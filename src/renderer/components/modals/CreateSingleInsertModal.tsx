@@ -1,5 +1,5 @@
 import React from 'react';
-import Button, { ButtonGroup } from '../ui/Button';
+import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import useKeyboard from '../utils/useKeyboard';
 
@@ -20,10 +20,10 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
         <Modal.Content title="Insert Query">todo</Modal.Content>
 
         <Modal.Footer>
-          <ButtonGroup>
+          <Button.Group>
             <Button onClick={onClose}>Cancel</Button>
             <Button variant="primary">Confirm</Button>
-          </ButtonGroup>
+          </Button.Group>
         </Modal.Footer>
       </Modal>
 

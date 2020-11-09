@@ -1,7 +1,7 @@
 import React from 'react';
 import HeaderConfigButton from '../buttons/HeaderConfigButton';
 import HeaderConfigurationForm from '../forms/HeaderConfigurationForm';
-import Button, { ButtonGroup } from '../ui/Button';
+import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import Text from '../ui/Text';
 import useToggle from '../utils/useToggle';
@@ -25,9 +25,9 @@ export default function CreateHeaderConfigModal({ disabled }: Props) {
           <HeaderConfigurationForm />
         </Modal.Content>
         <Modal.Footer>
-          <ButtonGroup>
+          <Button.Group>
             <Button onClick={off}>Close</Button>
-          </ButtonGroup>
+          </Button.Group>
 
           <CreateHelpModal variant="global" float="left" />
         </Modal.Footer>

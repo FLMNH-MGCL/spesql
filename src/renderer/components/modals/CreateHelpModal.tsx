@@ -1,15 +1,13 @@
 import React from 'react';
 import HelpButton from '../buttons/HelpButton';
-import Button, { ButtonGroup } from '../ui/Button';
+import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import useToggle from '../utils/useToggle';
-
-function GlobalHelpModal() {
-  return <Modal.Content title="General Help">todo</Modal.Content>;
-}
+import GlobalHelpModal from './help/GlobalHelpModal';
+import SelectHelpModal from './help/SelectHelpModal';
 
 type HelpModalProps = {
-  variant: 'global' | '';
+  variant: 'global' | 'select' | 'count' | 'update' | 'admin';
   float?: 'left' | 'right';
 };
 
@@ -20,6 +18,10 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
     switch (variant) {
       case 'global': {
         return <GlobalHelpModal />;
+      }
+
+      case 'select': {
+        return <SelectHelpModal />;
       }
 
       default: {
@@ -36,11 +38,11 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
         {determineModalToRender()}
 
         <Modal.Footer>
-          <ButtonGroup>
+          <Button.Group>
             <Button onClick={off} variant="primary">
               Got it!
             </Button>
-          </ButtonGroup>
+          </Button.Group>
         </Modal.Footer>
       </Modal>
 

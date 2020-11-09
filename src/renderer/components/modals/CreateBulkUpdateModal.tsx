@@ -1,7 +1,7 @@
 import React from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
-import Button, { ButtonGroup } from '../ui/Button';
+import Button from '../ui/Button';
 import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
 import { useNotify } from '../utils/context';
@@ -134,7 +134,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
         </Modal.Content>
 
         <Modal.Footer>
-          <ButtonGroup>
+          <Button.Group>
             <Button onClick={onClose}>Cancel</Button>
             <Button
               variant="primary"
@@ -144,7 +144,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
             >
               Confirm
             </Button>
-          </ButtonGroup>
+          </Button.Group>
 
           <CreateLogModal initialTab={3} />
         </Modal.Footer>

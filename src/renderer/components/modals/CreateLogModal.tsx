@@ -3,7 +3,7 @@ import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 // import CopyButton from '../buttons/CopyButton';
 import WarningButton from '../buttons/WarningButton';
-import Button, { ButtonGroup } from '../ui/Button';
+import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import useKeyboard from '../utils/useKeyboard';
@@ -21,9 +21,10 @@ function Log({ errors }: LogProps) {
 
 type Props = {
   initialTab?: number;
+  fullWidth?: boolean;
 };
 
-export default function CreateLogModal({ initialTab }: Props) {
+export default function CreateLogModal({ initialTab, fullWidth }: Props) {
   const [open, { on, off }] = useToggle(false);
   const [tab, setTab] = useState(initialTab ?? 0);
 
@@ -80,13 +81,13 @@ export default function CreateLogModal({ initialTab }: Props) {
         </Modal.Content>
 
         <Modal.Footer>
-          <ButtonGroup>
+          <Button.Group>
             <Button onClick={off}>Close</Button>
-          </ButtonGroup>
+          </Button.Group>
         </Modal.Footer>
       </Modal>
 
-      {initialTab !== undefined ? (
+      {fullWidth ? (
         <div className="flex-1">
           <WarningButton danger={calculateHasDanger()} onClick={on} />
         </div>

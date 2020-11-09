@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
-import Button, { ButtonGroup } from '../ui/Button';
+import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import CreateLogModal from './CreateLogModal';
@@ -150,12 +150,12 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         </Modal.Content>
 
         <Modal.Footer>
-          <ButtonGroup>
+          <Button.Group>
             <Button onClick={onClose}>Cancel</Button>
             <Button variant="primary" onClick={handleSubmit}>
               Submit
             </Button>
-          </ButtonGroup>
+          </Button.Group>
 
           <CreateLogModal initialTab={2} />
         </Modal.Footer>

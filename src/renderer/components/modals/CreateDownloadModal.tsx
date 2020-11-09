@@ -1,5 +1,5 @@
 import React from 'react';
-import Button, { ButtonGroup } from '../ui/Button';
+import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import useToggle from '../utils/useToggle';
 
@@ -19,12 +19,12 @@ export default function CreateCountModal({ disableDownload }: Props) {
       <Modal open={open} onClose={off} size="tiny">
         <Modal.Content title="Download Options">todo</Modal.Content>
         <Modal.Footer>
-          <ButtonGroup>
+          <Button.Group>
             <Button onClick={off}>Cancel</Button>
             <Button variant="primary" onClick={onDownload}>
               Confirm
             </Button>
-          </ButtonGroup>
+          </Button.Group>
         </Modal.Footer>
       </Modal>
 

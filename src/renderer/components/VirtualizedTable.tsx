@@ -21,6 +21,8 @@ type FooterProps = {
   disableInteractables?: boolean;
 };
 
+// TODO: CONSIDER https://medium.com/better-programming/an-introduction-to-react-table-6ebd34d8059e
+
 function TableFooter({ disableInteractables }: FooterProps) {
   return (
     <div className="h-16 bg-gray-50 flex items-center justify-between px-4">

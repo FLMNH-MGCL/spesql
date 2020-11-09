@@ -1,6 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-
 import errorBoundary from '../assets/svg/error_boundary.svg';
 import CopyButton from './buttons/CopyButton';
 import Button from './ui/Button';
@@ -10,8 +8,6 @@ import Text from './ui/Text';
 // TODO: type my things plz
 
 function TopLevelErrorBoundary({ error }: { error?: Error }) {
-  console.log(error);
-  const navigate = useNavigate();
   return (
     <div className="h-screen flex justify-center">
       <div className="flex flex-col text-center space-y-4 mt-4">
@@ -55,7 +51,7 @@ function TopLevelErrorBoundary({ error }: { error?: Error }) {
                 : ''
             }
           />
-          <Button variant="danger" onClick={() => navigate('/home')}>
+          <Button variant="danger" onClick={() => window.location.reload()}>
             Take me back to safety!
           </Button>
         </div>
@@ -81,10 +77,6 @@ export default class ErrorBoundary extends React.Component<
   static getDerivedStateFromError(error: Error) {
     return { error, hasError: true };
   }
-
-  // componentDidCatch(error: Error, errorInfo: Object) {
-  //   console.log(error, errorInfo);
-  // }
 
   render() {
     if (this.state.hasError) {
