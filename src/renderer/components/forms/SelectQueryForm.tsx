@@ -2,23 +2,18 @@ import React, { useEffect, useState } from 'react';
 import {
   NeutralValidator,
   validateAdvancedSelectQuery,
-  validateConditionSelection,
   validateFieldSelection,
   validateTableSelection,
 } from '../../functions/validation';
 import Form, { Values } from '../ui/Form';
-import numberParser from 'number-to-words';
-import Heading from '../ui/Heading';
-import Text from '../ui/Text';
-import {
-  conditionCountOptions,
-  fieldOptions,
-  operators,
-} from '../utils/constants';
+
+import { fieldOptions } from '../utils/constants';
 import axios from 'axios';
 import { BACKEND_URL } from '../../types';
 import { useStore } from '../../../stores';
 import { SelectOption } from '../ui/Select';
+import ConditionalForm from './ConditionalForm';
+import { fetchTables } from './utils';
 
 type Props = {
   onSubmit(values: Values): void;
@@ -26,44 +21,19 @@ type Props = {
 
 export default function SelectQueryForm({ onSubmit }: Props) {
   const [advanced, setAdvanced] = useState(false);
-  const [conditionCount, setConditionCount] = useState(0);
   const [tables, setTables] = useState<SelectOption[]>([]);
 
   const { user } = useStore((store) => ({ user: store.user }));
 
+  // TODO: type validator as function
+  function setValidator(validator: any) {
+    if (!advanced) {
+      return validator;
+    } else return NeutralValidator;
+  }
+
   useEffect(() => {
-    async function fetchTables() {
-      const res = await axios
-        .get(BACKEND_URL + '/api/queriables/select/')
-        .catch((error) => error.response);
-
-      if (res.data && res.data.tables) {
-        setTables(
-          res.data.tables.map((table: string) => {
-            return { label: table, value: table };
-          })
-        );
-      }
-      // .then((response) => {
-      //   if (response.data.error) {
-      //     this.setState({ loading: false });
-      //   } else {
-      //     // console.log(response);
-      //     dbSelection = response.data.tables.map((table, index) => {
-      //       return { key: index + 1 * 1002, text: table, value: table };
-      //     });
-
-      //     // console.log(dbSelection);
-      //     this.setState({ dbSelection: dbSelection, loading: false });
-      //   }
-      // })
-      // .catch((error) => {
-      //   const response = error.response;
-      //   this.setState({ dbSelection: [], loading: false });
-      // });
-    }
-
-    fetchTables();
+    fetchTables(setTables);
   }, []);
 
   return (
@@ -105,9 +75,7 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           fullWidth
           multiple
           options={fieldOptions}
-          register={
-            advanced ? NeutralValidator : { validate: validateFieldSelection }
-          }
+          register={{ validate: setValidator(validateFieldSelection) }}
         />
 
         <Form.Select
@@ -116,78 +84,11 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           disabled={advanced}
           fullWidth
           options={tables}
-          register={
-            advanced ? NeutralValidator : { validate: validateTableSelection }
-          }
+          register={{ validate: setValidator(validateTableSelection) }}
         />
       </Form.Group>
 
-      {/* TODO: make Select component controllable... :( */}
-      <Form.Group flex>
-        <Form.Select
-          name="conditionalCount"
-          label="How many conditions?"
-          value={conditionCount}
-          disabled={advanced}
-          fullWidth
-          options={conditionCountOptions}
-          updateControlled={(newVal: any) => {
-            setConditionCount(newVal);
-          }}
-          register={
-            advanced
-              ? NeutralValidator
-              : { validate: validateConditionSelection }
-          }
-        />
-      </Form.Group>
-
-      <Heading className="pt-3 pb-1">Conditions</Heading>
-      <div className="z-0 bg-gray-50 rounded-lg w-full p-3">
-        <div className="">
-          {conditionCount > 0 &&
-            Array.from({ length: conditionCount }).map((_, index) => {
-              const numberInEnglish = numberParser.toWords(index);
-
-              return (
-                <Form.Group flex key={index}>
-                  <Form.Select
-                    name={`conditionalField_${numberInEnglish}`}
-                    label="Field"
-                    disabled={advanced}
-                    fullWidth
-                    options={fieldOptions}
-                    register={
-                      advanced
-                        ? NeutralValidator
-                        : { validate: validateFieldSelection }
-                    }
-                  />
-                  <Form.Select
-                    name={`conditionalOperator_${numberInEnglish}`}
-                    label="Operator"
-                    disabled={advanced}
-                    options={operators}
-                    fullWidth
-                  />
-                  <Form.Input
-                    name={`conditionalValue_${numberInEnglish}`}
-                    label="Value"
-                    disabled={advanced}
-                    fullWidth
-                    // register={
-                    //   advanced ? NeutralValidator : { validate: () => validateDynamicFieldValue() }
-                    // }
-                  />
-                </Form.Group>
-              );
-            })}
-        </div>
-
-        {conditionCount === 0 && (
-          <Text>Condition forms will render here if you need them</Text>
-        )}
-      </div>
+      <ConditionalForm advanced={advanced} />
     </Form>
   );
 }

@@ -50,7 +50,7 @@ export default function Form<T = Values>({
   defaultValues,
   autoComplete,
   disabled = false,
-  mode = 'onChange',
+  mode = 'onSubmit',
   ...props
 }: FormProps<T>) {
   const form = useForm<T>({

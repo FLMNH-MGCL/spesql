@@ -8,13 +8,17 @@ import axios from 'axios';
 import { BACKEND_URL } from '../types';
 import { useStore } from '../../stores';
 import { useNotify } from '../components/utils/context';
+import useToggle from '../components/utils/useToggle';
+import Button from '../components/ui/Button';
 
 export default function SignIn() {
+  const [loading, { on, off }] = useToggle(false);
   const navigate = useNavigate();
   const { notify } = useNotify();
   const login = useStore((state) => state.login);
 
   async function handleSubmit(values: Values) {
+    on();
     const { username, password } = values;
 
     const loginResponse = await axios
@@ -23,6 +27,8 @@ export default function SignIn() {
         password,
       })
       .catch((error) => error.response);
+
+    off();
 
     // console.log(loginResponse);
 
@@ -98,12 +104,14 @@ export default function SignIn() {
             <div className="mt-6">
               <span className="block w-full rounded-md shadow-sm">
                 {/* TODO: change to UI button */}
-                <button
+                <Button
                   type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out"
+                  variant="primary"
+                  fullWidth
+                  loading={loading}
                 >
                   Sign in
-                </button>
+                </Button>
               </span>
             </div>
           </Form>

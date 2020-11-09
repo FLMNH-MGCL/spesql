@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CreateCountModal from './modals/CreateCountModal';
 import CreateSelectModal from './modals/CreateSelectModal';
-import CreateUpdateModal from './modals/CreateUpdateModal';
+import CreateBulkUpdateModal from './modals/CreateBulkUpdateModal';
 import Dropdown from './ui/Dropdown';
 
 type Props = {
@@ -52,7 +52,7 @@ export default function QueryMenu({ disableCrud }: Props) {
         open={currentModal === 'count'}
         onClose={() => setCurrentModal(undefined)}
       />
-      <CreateUpdateModal
+      <CreateBulkUpdateModal
         open={disableCrud ? false : currentModal === 'update'}
         onClose={() => setCurrentModal(undefined)}
       />

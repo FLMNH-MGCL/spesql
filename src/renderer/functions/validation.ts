@@ -6,6 +6,7 @@ import {
   lifeStageControl,
   samplingProtocolControl,
   geodeticDatumControl,
+  fieldOptions,
 } from '../components/utils/constants';
 
 // TODO: ADD DOCUMENTATION
@@ -15,7 +16,7 @@ export const NeutralValidator = { validate: () => true };
 
 export function validateAdvancedSelectQuery(query: string) {
   if (query === '') {
-    return true;
+    return 'Cannot be empty';
   } else if (!query.toLowerCase().startsWith('select')) {
     return 'Invalid Select query';
   } else {
@@ -33,6 +34,10 @@ export function validateAdvancedCountQuery(query: string) {
   }
 }
 
+export function validateAdvancedUpdateQuery(query: string) {
+  return 'Cannot do this yet';
+}
+
 export function validateFieldSelection(fields: string[]) {
   if (fields.length < 1) {
     return 'You must select a field';
@@ -41,6 +46,14 @@ export function validateFieldSelection(fields: string[]) {
   }
 
   return true;
+}
+
+export function validateOperator(operator: string) {}
+
+export function validateConditionalValue(condition: string, field: string) {
+  console.log(field);
+
+  return determineAndRunFieldValidator(field, condition);
 }
 
 export function validateTableSelection(table: string) {
@@ -379,4 +392,18 @@ export function validateDateField(date: string) {
 }
 
 // TODO: call all above validators, return an array of errors
-export function validateSpeciment(specimen: any, currentIndex: number) {}
+export function validateSpecimen(specimen: any, currentIndex: number) {}
+
+// TODO: types need changing??
+// TODO: don't call validators for REGEXP operator
+function determineAndRunFieldValidator(field: string, value: any) {
+  switch (field) {
+    case 'catalogNumber':
+      return validateCatalogNumber(value);
+    case 'otherCatalogNumber':
+      return validateOtherCatalogNumber(value);
+    default:
+      // throw new Error('Invalid field was selected as a conditional!');
+      return 'Cannot handle this field yet';
+  }
+}

@@ -251,7 +251,7 @@ export default forwardRef<HTMLSelectElement, Props>(
       return false;
     }
 
-    // console.log(selected);
+    console.log('SELECT COMP', selected);
 
     return (
       <label

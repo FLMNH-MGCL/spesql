@@ -43,11 +43,15 @@ function TopLevelErrorBoundary({ error }: { error?: Error }) {
           <CopyButton
             value={
               error
-                ? JSON.stringify({
-                    error: error.name,
-                    message: error.message,
-                    stack: error.stack,
-                  })
+                ? JSON.stringify(
+                    {
+                      error: error.name,
+                      message: error.message,
+                      stack: error.stack,
+                    },
+                    null,
+                    2
+                  )
                 : ''
             }
           />
