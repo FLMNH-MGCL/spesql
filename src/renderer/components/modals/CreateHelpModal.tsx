@@ -7,7 +7,15 @@ import GlobalHelpModal from './help/GlobalHelpModal';
 import SelectHelpModal from './help/SelectHelpModal';
 
 type HelpModalProps = {
-  variant: 'global' | 'select' | 'count' | 'update' | 'admin';
+  variant:
+    | 'global'
+    | 'select'
+    | 'count'
+    | 'update'
+    | 'single-update'
+    | 'insert'
+    | 'single-insert'
+    | 'admin';
   float?: 'left' | 'right';
 };
 

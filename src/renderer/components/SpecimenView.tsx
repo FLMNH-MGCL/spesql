@@ -14,14 +14,17 @@ import emptyDataIcon from '../assets/svg/empty_data_waiting.svg';
 import selectItemIconTest from '../assets/svg/specimen.svg';
 import { Specimen } from '../types';
 
+// TODO: remove ? where needed
 type OverviewProps = {
   specimen: Specimen;
+  showEmpty?: boolean;
 };
 
 function SpecimenOverview({ specimen }: OverviewProps) {
   return <div>{JSON.stringify(specimen)}</div>;
 }
 
+// TODO: add toggle to show empty values
 export default function () {
   const [editing, { on, off }] = useToggle(false);
 
@@ -34,8 +37,6 @@ export default function () {
     }),
     shallow
   );
-
-  console.log(hasQueried);
 
   function cancelEdit() {
     // do stuff here
@@ -75,7 +76,11 @@ export default function () {
             </div>
           </div>
         ) : selectedSpecimen ? (
-          <SpecimenOverview specimen={selectedSpecimen} />
+          editing ? (
+            <div>TODO: replace me with form</div>
+          ) : (
+            <SpecimenOverview specimen={selectedSpecimen} />
+          )
         ) : (
           <div className="flex items-center justify-center h-full">
             <div>

@@ -6,6 +6,7 @@ import CreateLogModal from './CreateLogModal';
 import { CSVReader } from 'react-papaparse';
 import { isSpecimen } from '../../types';
 import { useNotify } from '../utils/context';
+import CreateHelpModal from './CreateHelpModal';
 
 // TODO: add typings in this file
 
@@ -157,7 +158,10 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
             </Button>
           </Button.Group>
 
-          <CreateLogModal initialTab={2} />
+          <div className="flex space-x-2 flex-1">
+            <CreateLogModal initialTab={2} />
+            <CreateHelpModal variant="insert" />
+          </div>
         </Modal.Footer>
       </Modal>
     </React.Fragment>

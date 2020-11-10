@@ -6,6 +6,7 @@ import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
 import Statistic from '../ui/Statistic';
 import useKeyboard from '../utils/useKeyboard';
+import CreateHelpModal from './CreateHelpModal';
 import CreateLogModal from './CreateLogModal';
 
 type Props = {
@@ -42,7 +43,10 @@ export default function CreateCountModal({ open, onClose }: Props) {
             </Button>
           </Button.Group>
 
-          <CreateLogModal initialTab={1} />
+          <div className="flex space-x-2 flex-1">
+            <CreateLogModal initialTab={1} />
+            <CreateHelpModal variant="count" />
+          </div>
         </Modal.Footer>
       </Modal>
     </React.Fragment>

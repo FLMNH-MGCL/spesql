@@ -8,8 +8,6 @@ import {
 import Form, { Values } from '../ui/Form';
 
 import { fieldOptions } from '../utils/constants';
-import axios from 'axios';
-import { BACKEND_URL } from '../../types';
 import { useStore } from '../../../stores';
 import { SelectOption } from '../ui/Select';
 import ConditionalForm from './ConditionalForm';

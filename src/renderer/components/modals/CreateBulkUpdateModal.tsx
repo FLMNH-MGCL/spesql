@@ -12,6 +12,7 @@ import { buildSelectQuery } from '../../functions/builder';
 import axios from 'axios';
 import { BACKEND_URL } from '../../types';
 import UpdateBulkQueryForm from '../forms/UpdateBulkQueryForm';
+import CreateHelpModal from './CreateHelpModal';
 
 type Props = {
   open: boolean;
@@ -146,7 +147,10 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
             </Button>
           </Button.Group>
 
-          <CreateLogModal initialTab={3} />
+          <div className="flex space-x-2 flex-1">
+            <CreateLogModal initialTab={3} />
+            <CreateHelpModal variant="update" />
+          </div>
         </Modal.Footer>
       </Modal>
 

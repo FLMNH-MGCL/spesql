@@ -4,10 +4,12 @@ import CopyButton from './buttons/CopyButton';
 import Button from './ui/Button';
 import Heading from './ui/Heading';
 import Text from './ui/Text';
+import useToggle from './utils/useToggle';
 
 // TODO: type my things plz
 
 function TopLevelErrorBoundary({ error }: { error?: Error }) {
+  const [loading, { on }] = useToggle(false);
   return (
     <div className="h-screen flex justify-center">
       <div className="flex flex-col text-center space-y-4 mt-4">
@@ -51,7 +53,14 @@ function TopLevelErrorBoundary({ error }: { error?: Error }) {
                 : ''
             }
           />
-          <Button variant="danger" onClick={() => window.location.reload()}>
+          <Button
+            variant="danger"
+            onClick={() => {
+              on();
+              window.location.reload();
+            }}
+            loading={loading}
+          >
             Take me back to safety!
           </Button>
         </div>

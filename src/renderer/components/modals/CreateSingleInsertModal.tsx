@@ -2,6 +2,8 @@ import React from 'react';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import useKeyboard from '../utils/useKeyboard';
+import CreateHelpModal from './CreateHelpModal';
+import CreateLogModal from './CreateLogModal';
 
 type Props = {
   open: boolean;
@@ -24,6 +26,11 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
             <Button onClick={onClose}>Cancel</Button>
             <Button variant="primary">Confirm</Button>
           </Button.Group>
+
+          <div className="flex space-x-2 flex-1">
+            <CreateLogModal initialTab={2} />
+            <CreateHelpModal variant="single-insert" />
+          </div>
         </Modal.Footer>
       </Modal>
 
