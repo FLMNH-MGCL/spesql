@@ -15,6 +15,9 @@ import shallow from 'zustand/shallow';
 import Spinner from './ui/Spinner';
 import CreateLogModal from './modals/CreateLogModal';
 import { Specimen } from '../types';
+import Heading from './ui/Heading';
+
+import serverImage from '../assets/svg/data_processing_two.svg';
 
 const SortableTable = SortableContainer(Table);
 
@@ -22,6 +25,20 @@ type SortingConfig = {
   direction: 'asc' | 'desc';
   column: string;
 };
+
+function EmptyTableArt() {
+  return (
+    <div className="absolute bottom-0 inset-0 flex flex-col items-center justify-center pointer-events-none">
+      <img
+        className="object-scale-down h-96 mt-6 offset-table-header -ml-20"
+        src={serverImage}
+      />
+      <Heading tag="h3" className="mt-3 text-center ">
+        Make a query for the specimen to appear!
+      </Heading>
+    </div>
+  );
+}
 
 type FooterProps = {
   disableInteractables?: boolean;
@@ -55,6 +72,7 @@ export default function () {
   const {
     headers,
     data,
+    hasQueried,
     selectedSpecimen,
     setSelectedSpecimen,
     loading,
@@ -62,6 +80,9 @@ export default function () {
     (state) => ({
       headers: state.tableConfig.headers,
       data: state.queryData.data,
+      hasQueried:
+        state.queryData.queryString !== undefined &&
+        state.queryData.queryString !== '',
       selectedSpecimen: state.selectedSpecimen,
       setSelectedSpecimen: state.setSelectedSpecimen,
       loading: state.loading,
@@ -72,22 +93,6 @@ export default function () {
   let display = sortingDirection
     ? _.orderBy(data, [sortingDirection.column], [sortingDirection.direction])
     : data;
-
-  // const [display, setDisplay] = useState(data);
-
-  // useEffect(() => {
-  //   setDisplay(data);
-  // }, [data]);
-
-  // useEffect(() => {
-  //   if (!sortingDirection) {
-  //     setDisplay(data);
-  //   } else if (sortingDirection.direction === 'asc') {
-  //     _.orderBy(list, [sorting.column], [sorting.direction])
-  //   } else if (sortingDirection.direction === 'desc') {
-
-  //   }
-  // }, [sortingDirection]);
 
   const toggleLoading = useStore((state) => state.toggleLoading);
 
@@ -208,6 +213,8 @@ export default function () {
     <React.Fragment>
       <div className="table-height">
         <Spinner active={loading} />
+
+        {!hasQueried && !loading && <EmptyTableArt />}
 
         <AutoSizer>
           {({ height, width }) => (

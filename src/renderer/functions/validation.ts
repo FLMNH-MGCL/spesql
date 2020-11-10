@@ -392,7 +392,9 @@ export function validateDateField(date: string) {
 }
 
 // TODO: call all above validators, return an array of errors
-export function validateSpecimen(specimen: any, currentIndex: number) {}
+export function validateSpecimen(specimen: any, currentIndex: number) {
+  return [];
+}
 
 // TODO: types need changing??
 // TODO: don't call validators for REGEXP operator

@@ -70,9 +70,9 @@ export default function () {
           <div className="flex items-center justify-center h-full">
             <div>
               <img className="object-scale-down h-48" src={emptyDataIcon} />
-              <Heading tag="h3" className="mt-3 text-center">
+              {/* <Heading tag="h3" className="mt-3 text-center">
                 Make a query to get started
-              </Heading>
+              </Heading> */}
             </div>
           </div>
         ) : selectedSpecimen ? (

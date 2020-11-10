@@ -9,6 +9,11 @@ form {
   margin-block-end: 0;
 }
 
+.offset-table-header {
+  margin-top: 60;
+  margin-bottom: 2rem;
+}
+
 .h-main {
   height: calc(90vh - 4rem);
   overflow: hidden;

@@ -32,6 +32,20 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
         return <SelectHelpModal />;
       }
 
+      case 'count': {
+      }
+
+      // case 'update': {
+      // }
+
+      // case 'single-update': {}
+
+      case 'insert': {
+        return <SelectHelpModal />;
+      }
+
+      // case 'single-insert': {}
+
       default: {
         throw new Error(
           `Error when attempting to create Help Modal: ${variant} is not a valid variant`

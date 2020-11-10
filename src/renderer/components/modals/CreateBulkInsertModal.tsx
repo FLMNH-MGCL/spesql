@@ -4,9 +4,10 @@ import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import CreateLogModal from './CreateLogModal';
 import { CSVReader } from 'react-papaparse';
-import { isSpecimen } from '../../types';
+import { isSpecimen, Specimen } from '../../types';
 import { useNotify } from '../utils/context';
 import CreateHelpModal from './CreateHelpModal';
+import { validateSpecimen } from '../../functions/validation';
 
 // TODO: add typings in this file
 
@@ -126,7 +127,26 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
   //https://github.com/Bunlong/react-papaparse/blob/master/demo/CSVReader1.js
 
-  async function handleSubmit() {}
+  // TODO: types and stuff
+  async function handleSubmit() {
+    if (rawData && rawData.length > 0) {
+      console.log(rawData);
+      let allErrors = [];
+      let insertionValues = [];
+      for (let i = 0; i < rawData.length; i++) {
+        const currentSpecimen = rawData[i].data as Specimen;
+        const specimenErrors = validateSpecimen(currentSpecimen, i);
+
+        if (specimenErrors && specimenErrors.length) {
+          allErrors.push(specimenErrors);
+        } else {
+          insertionValues.push(currentSpecimen);
+        }
+      }
+
+      console.log(insertionValues);
+    }
+  }
 
   return (
     <React.Fragment>
