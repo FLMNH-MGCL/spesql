@@ -5,10 +5,11 @@ import { forwardRef } from 'react';
 export type Props = {
   label?: string;
   fullWidth?: boolean;
+  slim?: boolean;
 } & React.ComponentProps<'input'>;
 
 export default forwardRef<HTMLInputElement, Props>(
-  ({ label, className, fullWidth, ...props }, ref) => {
+  ({ label, className, fullWidth, slim, ...props }, ref) => {
     // @ts-ignore: this will work I promise
     const errors = props.errors && props.name && props.errors[props.name];
 
@@ -24,11 +25,12 @@ export default forwardRef<HTMLInputElement, Props>(
         <div className="mt-1 relative">
           <input
             className={clsx(
+              slim ? 'py-0.5' : 'py-2',
               errors &&
                 'border border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red',
               errors ??
                 'border  border-gray-300 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300',
-              'appearance-none block w-full px-3 py-2 rounded-md transition duration-150 ease-in-out text-sm leading-5',
+              'appearance-none block w-full px-3 rounded-md transition duration-150 ease-in-out text-sm leading-5',
               props.disabled && 'bg-gray-100'
             )}
             ref={ref}

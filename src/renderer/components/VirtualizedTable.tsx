@@ -177,15 +177,24 @@ export default function () {
   }
 
   function getRowStyle({ index }: { index: number }) {
+    // -1 is the header row
     if (index === -1) {
       return { backgroundColor: '#f7fafc' };
-    } else if (display[index]?.id === selectedSpecimen?.id) {
+    }
+
+    // styles for actively selected row
+    else if (display[index]?.id === selectedSpecimen?.id) {
       return {
         backgroundColor: '#f7fafc',
         boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        cursor: 'pointer',
       };
     }
-    return {};
+
+    // default styles for all rows
+    return {
+      cursor: 'pointer',
+    };
   }
 
   function getColumns() {

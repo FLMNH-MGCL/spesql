@@ -4,6 +4,9 @@ import session from 'express-session';
 import login from './endpoints/auth/login';
 import logout from './endpoints/auth/logout';
 import select from './endpoints/sql/select';
+import insert from './endpoints/sql/insert';
+import update from './endpoints/sql/update';
+import bulkInsert from './endpoints/sql/bulkInsert';
 import getConfig from './endpoints/getConfig';
 import {
   adminRoute,
@@ -116,21 +119,21 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
     validateSession,
     managerRoute,
     validateUpdateQuery,
-    select
+    update
   );
   app.post(
     '/api/insert/single',
     validateSession,
     managerRoute,
     validateInsertQuery,
-    select
+    insert
   );
   app.post(
     '/api/insert/bulk',
     validateSession,
     managerRoute,
     validateInsertQuery,
-    select
+    bulkInsert
   );
   app.post(
     '/api/delete',

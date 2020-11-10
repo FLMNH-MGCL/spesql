@@ -10,16 +10,17 @@ export default function insert(req: Request, res: Response) {
   } else if (!table || !specimen) {
     res.status(400).send('You must provide a table and an entry to insert');
   } else {
-    connection.query(
-      'INSERT INTO ?? SET ?',
-      [table, specimen],
-      (error, data) => {
-        if (error) {
-          res.status(503).send(error);
-        } else {
-          res.status(201).send(data);
-        }
-      }
-    );
+    res.send('NOT YET');
+    // connection.query(
+    //   'INSERT INTO ?? SET ?',
+    //   [table, specimen],
+    //   (error, data) => {
+    //     if (error) {
+    //       res.status(503).send(error);
+    //     } else {
+    //       res.status(201).send(data);
+    //     }
+    //   }
+    // );
   }
 }

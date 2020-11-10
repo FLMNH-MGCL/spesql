@@ -13,20 +13,55 @@ import emptyDataIcon from '../assets/svg/empty_data_waiting.svg';
 // import selectItemIcon from '../assets/svg/select_item_third.svg';
 import selectItemIconTest from '../assets/svg/specimen.svg';
 import { Specimen } from '../types';
+import List from './List';
+import Radio from './ui/Radio';
+import { Values } from './ui/Form';
 
 // TODO: remove ? where needed
 type OverviewProps = {
   specimen: Specimen;
   showEmpty?: boolean;
+  editing?: boolean;
+  onCommitEdit?(values: Values): void;
+  onCancelEdit?(): void;
 };
 
-function SpecimenOverview({ specimen }: OverviewProps) {
-  return <div>{JSON.stringify(specimen)}</div>;
+function SpecimenOverview({
+  specimen,
+  showEmpty,
+  editing,
+  onCommitEdit,
+}: OverviewProps) {
+  return (
+    <List onEditSubmit={onCommitEdit} formId="inline-update-form">
+      {Object.keys(specimen).map((key) => {
+        // @ts-ignore
+        const isEmpty = !specimen[key];
+
+        // console.log(key, specimen[key], isEmpty);
+
+        if ((isEmpty && showEmpty) || !isEmpty) {
+          return (
+            <List.Item
+              editable={editing}
+              key={key}
+              label={key}
+              // @ts-ignore
+              value={specimen[key]}
+            />
+          );
+        } else {
+          return null;
+        }
+      })}
+    </List>
+  );
 }
 
 // TODO: add toggle to show empty values
 export default function () {
   const [editing, { on, off }] = useToggle(false);
+  const [showMissing, missingToggles] = useToggle(false);
 
   const { hasQueried, selectedSpecimen } = useStore(
     (state) => ({
@@ -43,7 +78,8 @@ export default function () {
     off();
   }
 
-  function commitEdit() {
+  function commitEdit(values: Values) {
+    console.log(values);
     // do stuff here
     // make query
     // interpret response
@@ -53,34 +89,21 @@ export default function () {
 
   return (
     <React.Fragment>
-      <div className="table-height px-4 pt-4">
-        {/* {selected ? (
-          <SpecimenOverview />
-        ) : hasQueried ? (
-          <Heading tag="h3" className="text-center">
-            No specimen selected
-          </Heading>
-        ) : (
-          <Heading tag="h3" className="text-center">
-            Make a query to get started
-          </Heading>
-        )} */}
-
+      <div className="table-height overflow-auto px-4 pt-4">
         {!hasQueried ? (
           <div className="flex items-center justify-center h-full">
             <div>
               <img className="object-scale-down h-48" src={emptyDataIcon} />
-              {/* <Heading tag="h3" className="mt-3 text-center">
-                Make a query to get started
-              </Heading> */}
             </div>
           </div>
         ) : selectedSpecimen ? (
-          editing ? (
-            <div>TODO: replace me with form</div>
-          ) : (
-            <SpecimenOverview specimen={selectedSpecimen} />
-          )
+          <SpecimenOverview
+            editing={editing}
+            specimen={selectedSpecimen}
+            showEmpty={showMissing}
+            onCommitEdit={commitEdit}
+            onCancelEdit={cancelEdit}
+          />
         ) : (
           <div className="flex items-center justify-center h-full">
             <div>
@@ -96,15 +119,21 @@ export default function () {
         )}
       </div>
       <div className="bg-gray-50 h-16 flex items-center px-4 justify-between">
-        <div className="space-x-2 items-center">
+        <div className="flex flex-row space-x-2 items-center">
           <EditSpecimen onClick={on} disabled={!selectedSpecimen || editing} />
           <DeleteButton disabled={!selectedSpecimen} />
+          <Radio
+            checked={showMissing}
+            onChange={missingToggles.toggle}
+            stacked
+            label="Show Missing"
+          />
         </div>
 
         {editing && (
           <div className="space-x-2 items-center">
             <CancelEditButton onClick={cancelEdit} />
-            <ConfirmEditButton onClick={commitEdit} />
+            <ConfirmEditButton type="submit" form="inline-update-form" />
           </div>
         )}
       </div>

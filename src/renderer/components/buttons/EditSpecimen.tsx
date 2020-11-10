@@ -5,12 +5,12 @@ import CircleButton from './CircleButton';
 
 type Props = {
   disabled?: boolean;
-} & Pick<PropsOf<typeof Button>, 'onClick'>;
+} & PropsOf<'button'>;
 
-export function ConfirmEditButton({ onClick }: { onClick(): void }) {
+export function ConfirmEditButton({ disabled, type, ...props }: Props) {
   return (
     <CircleButton
-      onClick={onClick}
+      type={type}
       icon={
         <svg
           className="w-5 h-5"
@@ -27,6 +27,7 @@ export function ConfirmEditButton({ onClick }: { onClick(): void }) {
           />
         </svg>
       }
+      {...props}
     />
   );
 }

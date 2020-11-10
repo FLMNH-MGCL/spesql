@@ -35,8 +35,8 @@ export default function createFormComponent<Props>(
     return (
       // @ts-ignore:
       <Component
-        ref={register ? form.register(register) : form.register}
-        errors={form.errors}
+        ref={register ? form?.register(register) : form?.register}
+        errors={form?.errors}
         {...props}
       />
     );
