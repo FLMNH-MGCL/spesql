@@ -7,7 +7,7 @@ type Props = {
 
 export default function HelpButton({ onClick }: Props) {
   return (
-    <Button variant="clear" rounded onClick={onClick}>
+    <Button variant="outline" rounded onClick={onClick}>
       <svg
         className="w-5 h-5"
         fill="none"

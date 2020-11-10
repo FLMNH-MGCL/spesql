@@ -10,24 +10,27 @@ import Heading from './ui/Heading';
 import useToggle from './utils/useToggle';
 
 import emptyDataIcon from '../assets/svg/empty_data_waiting.svg';
-import selectItemIcon from '../assets/svg/select_item_third.svg';
+// import selectItemIcon from '../assets/svg/select_item_third.svg';
 import selectItemIconTest from '../assets/svg/specimen.svg';
+import { Specimen } from '../types';
 
-function SpecimenOverview() {
-  return <div></div>;
+type OverviewProps = {
+  specimen: Specimen;
+};
+
+function SpecimenOverview({ specimen }: OverviewProps) {
+  return <div>{JSON.stringify(specimen)}</div>;
 }
 
 export default function () {
-  // TODO: get selected from store!
-  const selected = undefined;
-
   const [editing, { on, off }] = useToggle(false);
 
-  const { hasQueried } = useStore(
+  const { hasQueried, selectedSpecimen } = useStore(
     (state) => ({
       hasQueried:
         state.queryData.queryString !== undefined &&
         state.queryData.queryString !== '',
+      selectedSpecimen: state.selectedSpecimen,
     }),
     shallow
   );
@@ -71,8 +74,8 @@ export default function () {
               </Heading>
             </div>
           </div>
-        ) : selected ? (
-          <SpecimenOverview />
+        ) : selectedSpecimen ? (
+          <SpecimenOverview specimen={selectedSpecimen} />
         ) : (
           <div className="flex items-center justify-center h-full">
             <div>
@@ -89,8 +92,8 @@ export default function () {
       </div>
       <div className="bg-gray-50 h-16 flex items-center px-4 justify-between">
         <div className="space-x-2 items-center">
-          <EditSpecimen onClick={on} disabled={!selected || editing} />
-          <DeleteButton disabled={!selected} />
+          <EditSpecimen onClick={on} disabled={!selectedSpecimen || editing} />
+          <DeleteButton disabled={!selectedSpecimen} />
         </div>
 
         {editing && (

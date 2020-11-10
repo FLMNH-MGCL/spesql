@@ -46,15 +46,20 @@ form {
 
 .ReactVirtualized__Table__headerRow {
   --bg-opacity: 1;
-  background-color: #f9fafb;
-  background-color: rgba(249, 250, 251, var(--bg-opacity));
+  background-color: #f9fafb !important;
+  background-color: rgba(249, 250, 251, var(--bg-opacity)) !important;
+  text-transform: none !important;
 }
 
 .ReactVirtualized__Table__headerTruncatedText {
-  text-transform: none;
+  text-transform: none !important;
 }
 
 .ReactVirtualized__Table__headerColumn:not(:first-child) {
   /* border-left-width: 1px;
   border-color: #cbd5e0; */
+}
+
+.ReactVirtualized__Grid:focus {
+  outline: none;
 }

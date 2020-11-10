@@ -52,7 +52,7 @@ export default function RefreshQueryButton({
     toggleLoading(false);
   }
   return (
-    <Button variant="clear" rounded disabled={disabled} onClick={refresh}>
+    <Button variant="outline" rounded disabled={disabled} onClick={refresh}>
       <svg
         className="w-5 h-5"
         fill="none"

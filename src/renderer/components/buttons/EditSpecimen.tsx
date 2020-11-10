@@ -57,7 +57,7 @@ export function CancelEditButton({ onClick }: { onClick(): void }) {
 
 export default function EditSpecimen({ disabled, onClick }: Props) {
   return (
-    <Button variant="clear" rounded disabled={disabled} onClick={onClick}>
+    <Button variant="outline" rounded disabled={disabled} onClick={onClick}>
       <svg
         className="w-5 h-5"
         fill="none"

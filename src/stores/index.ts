@@ -63,12 +63,15 @@ type SpesqlSession = {
   queryData: QueryConfig;
   tableConfig: TableConfig;
 
+  selectedSpecimen: Specimen | null;
+
   // globals
   loading: boolean;
   errors: Logs;
 
   // actions
   toggleLoading(newLoading?: boolean): void;
+  setSelectedSpecimen(specimen: Specimen | null): void;
   login(id: string, username: string, accessRole: string): void;
   logout(): void;
 };
@@ -97,6 +100,14 @@ export const useStore = create<SpesqlSession>((set) => ({
         ...state,
         tableConfig: { ...state.tableConfig, headers: newHeaders },
       })),
+  },
+
+  selectedSpecimen: null,
+  setSelectedSpecimen: (specimen: Specimen | null) => {
+    set((state) => ({
+      ...state,
+      selectedSpecimen: specimen,
+    }));
   },
 
   errors: defaultLogs,

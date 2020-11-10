@@ -8,10 +8,12 @@ type Props = {
 
 export default function ({ disabled }: Props) {
   const setData = useStore((state) => state.queryData.setData);
+  const setCurrentQuery = useStore((state) => state.queryData.setCurrentQuery);
 
   // TODO: should clear entire config
   function onClear() {
     setData([]);
+    setCurrentQuery('');
   }
 
   return (

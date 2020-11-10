@@ -4,7 +4,7 @@ import Button from './ui/Button';
 
 export function FilterToggle({ disabled }: { disabled?: boolean }) {
   return (
-    <Button variant="clear" rounded disabled={disabled}>
+    <Button variant="outline" rounded disabled={disabled}>
       <svg
         className="w-5 h-5"
         fill="none"

@@ -69,6 +69,7 @@ function SelectItem({ label, selected, onSelect }: SelectItemProps) {
 }
 
 type UISelectProps = {
+  multiple?: boolean;
   errors: any; // TODO: type me
   display: SelectOption | SelectOption[] | undefined;
   options: SelectOption[];
@@ -78,6 +79,7 @@ type UISelectProps = {
 };
 
 function UISelect({
+  multiple,
   display,
   options,
   onSelect,
@@ -164,7 +166,13 @@ function UISelect({
                       key={option.label}
                       selected={calculateSelected(option)}
                       label={option.label}
-                      onSelect={() => onSelect(option)}
+                      onSelect={() => {
+                        onSelect(option);
+
+                        if (!multiple) {
+                          off();
+                        }
+                      }}
                     />
                   );
                 })}
@@ -251,7 +259,7 @@ export default forwardRef<HTMLSelectElement, Props>(
       return false;
     }
 
-    console.log('SELECT COMP', selected);
+    // console.log('SELECT COMP', selected);
 
     return (
       <label
@@ -282,6 +290,7 @@ export default forwardRef<HTMLSelectElement, Props>(
             ))}
           </select>
           <UISelect
+            multiple={multiple}
             errors={errors}
             display={display}
             onSelect={handleSelection}

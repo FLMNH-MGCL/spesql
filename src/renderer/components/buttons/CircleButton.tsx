@@ -8,7 +8,7 @@ type Props = {
 
 export default function CircleButton({ icon, onClick }: Props) {
   return (
-    <Button variant="clear" rounded onClick={onClick}>
+    <Button variant="outline" rounded onClick={onClick}>
       {icon}
     </Button>
   );

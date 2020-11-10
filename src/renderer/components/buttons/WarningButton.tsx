@@ -9,7 +9,7 @@ type Props = {
 export default function WarningButton({ danger, onClick }: Props) {
   return (
     <Button
-      variant={danger ? 'danger_outline' : 'clear'}
+      variant={danger ? 'danger_outline' : 'outline'}
       rounded
       onClick={onClick}
     >

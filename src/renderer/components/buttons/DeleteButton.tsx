@@ -7,7 +7,7 @@ type Props = {
 
 export default function DeleteButton({ disabled }: Props) {
   return (
-    <Button variant="clear" rounded disabled={disabled}>
+    <Button variant="outline" rounded disabled={disabled}>
       <svg
         className="w-5 h-5"
         fill="none"
