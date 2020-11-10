@@ -1,10 +1,12 @@
 import React from 'react';
 import Form, { Values } from './ui/Form';
 import { getFormElementForField } from './forms/utils';
+import clsx from 'clsx';
 
 // TODO: fix types
 
 type ItemProps = {
+  fullWidth?: boolean;
   img?: React.ReactNode;
   label: any;
   value: any;
@@ -12,11 +14,11 @@ type ItemProps = {
   formId?: string;
 };
 
-function Item({ img, label, value, editable }: ItemProps) {
+function Item({ fullWidth, img, label, value, editable }: ItemProps) {
   return (
     <li className="py-2 flex space-x-3">
       {img}
-      <div className="flex flex-col">
+      <div className={clsx(fullWidth && 'w-full', 'flex flex-col')}>
         {editable ? (
           getFormElementForField(label, value)
         ) : (
@@ -37,6 +39,9 @@ type ListProps = {
   formId?: string;
 };
 
+// NOTE: this component is not in the ui folder because I felt it was too specific,
+// the use of getFormElementForField on an editable field makes it less compatible with
+// any list that isn't a specimen list
 export default function List({ children, onEditSubmit, formId }: ListProps) {
   if ((onEditSubmit && !formId) || (formId && !onEditSubmit)) {
     throw new Error(

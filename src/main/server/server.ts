@@ -17,6 +17,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import {
   validateSelectQuery,
+  validateCountQuery,
   validateUpdateQuery,
   validateDeleteQuery,
   validateInsertQuery,
@@ -30,6 +31,7 @@ import updateConfig from './endpoints/updateConfig';
 import createUser from './endpoints/sql/admin/createUser';
 import { getQueriables } from './endpoints/sql/utils/queriables';
 import viewer from './endpoints/auth/viewer';
+import count from './endpoints/sql/count';
 // import { win } from '..';
 
 require('dotenv').config();
@@ -109,6 +111,7 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
   app.post('/api/login', login);
   app.post('/api/logout', logout);
   app.post('/api/select', validateSession, validateSelectQuery, select);
+  app.post('/api/count', validateSession, validateCountQuery, count);
 
   app.get('/api/queriables/select', validateSession, getQueriables);
   // END GLOBAL / GUEST ROUTES

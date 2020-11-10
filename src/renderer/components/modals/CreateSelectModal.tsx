@@ -37,7 +37,6 @@ export default function CreateSelectModal({ open, onClose }: Props) {
 
   async function runQuery(values: Values) {
     toggleLoading(true);
-    console.log(values);
 
     const { advancedQuery, conditionalCount, databaseTable, fields } = values;
 
@@ -74,6 +73,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
 
     // TODO: generate query
     // const query = 'SELECT * FROM molecularLab;';
+    console.log(query, columns, conditions);
 
     if (!query) return;
 

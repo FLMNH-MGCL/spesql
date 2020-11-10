@@ -69,6 +69,7 @@ function SelectItem({ label, selected, onSelect }: SelectItemProps) {
 }
 
 type UISelectProps = {
+  slim?: boolean;
   multiple?: boolean;
   errors: any; // TODO: type me
   display: SelectOption | SelectOption[] | undefined;
@@ -79,6 +80,7 @@ type UISelectProps = {
 };
 
 function UISelect({
+  slim,
   multiple,
   display,
   options,
@@ -101,11 +103,12 @@ function UISelect({
             type="button"
             onClick={toggle}
             className={clsx(
+              slim ? 'py-1' : 'py-2',
               errors &&
                 'border border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red',
               errors ??
                 'border  border-gray-300 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300',
-              'appearance-none block w-full text-left pl-3 pr-10 px-3 py-2 rounded-md transition duration-150 ease-in-out text-sm leading-5',
+              'appearance-none block w-full text-left pl-3 pr-10 px-3 rounded-md transition duration-150 ease-in-out text-sm leading-5',
               disabled ? 'bg-gray-100' : 'bg-white'
             )}
           >
@@ -190,6 +193,7 @@ function UISelect({
 
 // I do not like the way I allow controllable forms here. I need to do more research into this
 export type Props = {
+  slim?: boolean;
   label?: string;
   fullWidth?: boolean;
   options: SelectOption[];
@@ -199,6 +203,7 @@ export type Props = {
 export default forwardRef<HTMLSelectElement, Props>(
   (
     {
+      slim,
       label,
       className,
       fullWidth,
@@ -290,6 +295,7 @@ export default forwardRef<HTMLSelectElement, Props>(
             ))}
           </select>
           <UISelect
+            slim={slim}
             multiple={multiple}
             errors={errors}
             display={display}

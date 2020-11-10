@@ -43,6 +43,7 @@ function SpecimenOverview({
         if ((isEmpty && showEmpty) || !isEmpty) {
           return (
             <List.Item
+              fullWidth
               editable={editing}
               key={key}
               label={key}
@@ -59,6 +60,10 @@ function SpecimenOverview({
 }
 
 // TODO: add toggle to show empty values
+// TODO: make editing a global, zustand value... this will enable me to disallow
+// the user from selecting another specimen while already editing another!
+// TODO: once that is completed, send a notification when they attempt to do this so
+// they aren't clueless as to why their clicks aren't working
 export default function () {
   const [editing, { on, off }] = useToggle(false);
   const [showMissing, missingToggles] = useToggle(false);
@@ -123,7 +128,8 @@ export default function () {
           <EditSpecimen onClick={on} disabled={!selectedSpecimen || editing} />
           <DeleteButton disabled={!selectedSpecimen} />
           <Radio
-            checked={showMissing}
+            disabled={!hasQueried}
+            checked={!hasQueried ? false : showMissing}
             onChange={missingToggles.toggle}
             stacked
             label="Show Missing"

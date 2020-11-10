@@ -76,6 +76,13 @@ export default function CountQueryForm({ onSubmit }: Props) {
         />
       </Form.Group>
 
+      <Form.Group>
+        <Form.Radio
+          name="distinct"
+          label="Distinct (i.e. tuples with differing combinations of values)"
+        />
+      </Form.Group>
+
       <ConditionalForm advanced={advanced} />
     </Form>
   );

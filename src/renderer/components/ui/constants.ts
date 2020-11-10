@@ -57,6 +57,12 @@ export const BUTTONS = {
       'bg-red-600 hover:bg-red-500 focus:border-red-700 focus:shadow-outline-red',
     disabled: 'bg-red-400',
   },
+  warning: {
+    base: 'border-transparent text-white',
+    active:
+      'bg-yellow-400 hover:bg-yellow-300 focus:border-yellow-400 focus:shadow-outline-yellow',
+    disabled: 'bg-yellow-300',
+  },
   clear: {
     base: 'border-gray-300',
     active:

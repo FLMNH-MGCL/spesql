@@ -25,7 +25,7 @@ export default forwardRef<HTMLInputElement, Props>(
         <div className="mt-1 relative">
           <input
             className={clsx(
-              slim ? 'py-0.5' : 'py-2',
+              slim ? 'py-1' : 'py-2',
               errors &&
                 'border border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red',
               errors ??

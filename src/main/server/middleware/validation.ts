@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { connection } from '../server';
 
+// TODO: should I be accounting for nested CRUD queries??
+
 /**
  * Middleware function to validate a select query.
  *
@@ -24,6 +26,34 @@ export function validateSelectQuery(
     res
       .status(403)
       .send('Only Select queries may be issued from this endpoint');
+  } else {
+    next();
+  }
+}
+
+/**
+ * Middleware function to validate a count query.
+ *
+ * There are few restriction set on count queries, mainly just a check to ensure
+ * that a query was passed to through the request and that it is in fact a count query
+ *
+ * @param {Request} req: the request context sent to the server
+ * @param {Response} res: the response context
+ * @param {NextFunction} next: the function in queue, will only get called on successful validation
+ */
+export function validateCountQuery(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const query: string = req.body.query;
+
+  if (!query) {
+    res.status(400).send('No query detected');
+  } else if (!query.toLowerCase().startsWith('select')) {
+    res
+      .status(403)
+      .send('Only Select Count queries may be issued from this endpoint');
   } else {
     next();
   }

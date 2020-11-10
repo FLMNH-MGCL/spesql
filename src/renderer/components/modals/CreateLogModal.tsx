@@ -3,6 +3,7 @@ import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 // import CopyButton from '../buttons/CopyButton';
 import WarningButton from '../buttons/WarningButton';
+import LogTerminal from '../LogTerminal';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
@@ -16,7 +17,12 @@ type LogProps = {
 };
 
 function Log({ errors }: LogProps) {
-  return <div>{/* <CopyButton value="test" /> */}</div>;
+  return (
+    <div>
+      {/* <CopyButton value="test" /> */}
+      <LogTerminal />
+    </div>
+  );
 }
 
 type Props = {
