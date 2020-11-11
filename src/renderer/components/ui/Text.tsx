@@ -7,17 +7,31 @@ type Props = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   children: React.ReactText;
   className?: string;
+  centered?: boolean;
+  onClick?(): void;
 };
 
 export default function Text({
+  centered,
   children,
   variant = 'subtext',
   size = 'sm',
   className,
+  onClick,
 }: Props) {
   const textStyle = TEXT[variant] || TEXT.subtext;
 
   return (
-    <p className={clsx(`text-${size}`, textStyle, className)}>{children}</p>
+    <p
+      className={clsx(
+        `text-${size}`,
+        textStyle,
+        centered && 'text-center',
+        className
+      )}
+      onClick={onClick}
+    >
+      {children}
+    </p>
   );
 }

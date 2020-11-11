@@ -15,6 +15,7 @@ type HelpModalProps = {
     | 'single-update'
     | 'insert'
     | 'single-insert'
+    | 'queryBuilder'
     | 'admin';
   float?: 'left' | 'right';
 };
@@ -41,6 +42,10 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
       // case 'single-update': {}
 
       case 'insert': {
+        return <SelectHelpModal />;
+      }
+
+      case 'queryBuilder': {
         return <SelectHelpModal />;
       }
 

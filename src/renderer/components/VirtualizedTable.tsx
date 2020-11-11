@@ -18,6 +18,7 @@ import { Specimen } from '../types';
 import Heading from './ui/Heading';
 
 import serverImage from '../assets/svg/data_processing_two.svg';
+import ShowQueryButton from './buttons/ShowQueryButton';
 
 const SortableTable = SortableContainer(Table);
 
@@ -55,7 +56,9 @@ function TableFooter({ disableInteractables }: FooterProps) {
         <FilterSearch disabled={disableInteractables} />
         <RefreshQueryButton disabled={disableInteractables} />
         <CreateHeaderConfigModal disabled={disableInteractables} />
+        <ShowQueryButton disabled={disableInteractables} />
       </div>
+
       <div className="flex space-x-2">
         <CreateLogModal />
         <CreateHelpModal variant="global" />

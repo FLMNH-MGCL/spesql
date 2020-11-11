@@ -86,6 +86,14 @@ export default function SelectQueryForm({ onSubmit }: Props) {
         />
       </Form.Group>
 
+      <Form.Group>
+        <Form.Radio
+          name="distinct"
+          label="Distinct (i.e. tuples with differing combinations of values)"
+          disabled={advanced}
+        />
+      </Form.Group>
+
       <ConditionalForm advanced={advanced} />
     </Form>
   );

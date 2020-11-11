@@ -8,6 +8,7 @@ type GroupProps = {
   className?: string;
   gap?: keyof typeof BUTTON_GAPS;
 };
+
 function ButtonGroup({ children, className, gap = 'md' }: GroupProps) {
   const groupStyles = BUTTON_GAPS[gap] ?? BUTTON_GAPS.md;
   return (

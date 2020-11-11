@@ -7,10 +7,12 @@ type Props = {
   tag?: keyof typeof HEADINGS;
   size?: keyof typeof TEXT_SIZES;
   className?: string;
+  centered?: boolean;
   children: React.ReactNode;
 };
 
 export default function Heading({
+  centered,
   children,
   className,
   tag = 'h3',
@@ -19,6 +21,15 @@ export default function Heading({
   const headerStyles = HEADINGS[tag] ?? HEADINGS.h3;
   const headerSize = TEXT_SIZES[size] ?? TEXT_SIZES.md;
   return (
-    <h3 className={clsx(className, headerStyles, headerSize)}>{children}</h3>
+    <h3
+      className={clsx(
+        className,
+        headerStyles,
+        headerSize,
+        centered && 'text-center'
+      )}
+    >
+      {children}
+    </h3>
   );
 }

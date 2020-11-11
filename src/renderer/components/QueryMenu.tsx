@@ -3,6 +3,7 @@ import CreateCountModal from './modals/CreateCountModal';
 import CreateSelectModal from './modals/CreateSelectModal';
 import CreateBulkUpdateModal from './modals/CreateBulkUpdateModal';
 import Dropdown from './ui/Dropdown';
+import CreateQueryBuilderModal from './modals/CreateQueryBuilderModal';
 
 type Props = {
   disableCrud: boolean;
@@ -43,6 +44,10 @@ export default function QueryMenu({ disableCrud }: Props) {
           text="Update"
           onClick={disableCrud ? undefined : () => setCurrentModal('update')}
         />
+        <Dropdown.Item
+          text="Advanced"
+          onClick={disableCrud ? undefined : () => setCurrentModal('advanced')}
+        />
       </Dropdown>
       <CreateSelectModal
         open={currentModal === 'select'}
@@ -54,6 +59,10 @@ export default function QueryMenu({ disableCrud }: Props) {
       />
       <CreateBulkUpdateModal
         open={disableCrud ? false : currentModal === 'update'}
+        onClose={() => setCurrentModal(undefined)}
+      />
+      <CreateQueryBuilderModal
+        open={disableCrud ? false : currentModal === 'advanced'}
         onClose={() => setCurrentModal(undefined)}
       />
     </React.Fragment>

@@ -41,6 +41,7 @@ const SIZES = {
   small: 'max-w-xl',
   medium: 'max-w-2xl',
   large: 'max-w-3xl',
+  almostMassive: 'max-w-4xl',
   massive: '',
 };
 

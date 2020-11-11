@@ -15,6 +15,7 @@ import axios from 'axios';
 import { BACKEND_URL } from '../../types';
 import { useNotify } from '../utils/context';
 import Radio from '../ui/Radio';
+import Spinner from '../ui/Spinner';
 
 type Props = {
   open: boolean;
@@ -52,6 +53,8 @@ export default function CreateCountModal({ open, onClose }: Props) {
           'You must toggle Distinct when specifying more than one database field',
         level: 'error',
       });
+
+      off();
 
       return;
     }
@@ -93,7 +96,10 @@ export default function CreateCountModal({ open, onClose }: Props) {
 
     console.log(query, columns, conditions);
 
-    if (!query) return;
+    if (!query) {
+      off();
+      return;
+    }
 
     const countResponse = await axios
       .post(BACKEND_URL + '/api/count', {
@@ -129,8 +135,10 @@ export default function CreateCountModal({ open, onClose }: Props) {
           <CountQueryForm onSubmit={runQuery} />
 
           <Divider text="Results" />
-          <div className="bg-gray-50 rounded-lg w-full p-3 mt-3">
-            <Statistic value={count} unit="specimen" />
+          <div className="relative bg-gray-50 rounded-lg w-full p-3 mt-3 min-h-32">
+            {!loading && <Statistic value={count} unit="specimen" />}
+
+            <Spinner active={loading} />
 
             {showQuery && (
               <p className="order-2 mt-2 text-xs leading-6 font-medium text-gray-700 text-center">
@@ -146,7 +154,13 @@ export default function CreateCountModal({ open, onClose }: Props) {
             <Button disabled={!countQuery} onClick={onClear} variant="warning">
               Clear
             </Button>
-            <Button variant="primary" type="submit" form="count-form">
+            <Button
+              variant="primary"
+              type="submit"
+              form="count-form"
+              loading={loading}
+              disabled={loading}
+            >
               Confirm
             </Button>
           </Button.Group>

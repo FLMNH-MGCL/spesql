@@ -50,7 +50,7 @@ export function validateCountQuery(
 
   if (!query) {
     res.status(400).send('No query detected');
-  } else if (!query.toLowerCase().startsWith('select')) {
+  } else if (!query.toLowerCase().startsWith('select count')) {
     res
       .status(403)
       .send('Only Select Count queries may be issued from this endpoint');

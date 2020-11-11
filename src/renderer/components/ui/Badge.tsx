@@ -23,7 +23,7 @@ export default function Badge({
 }: BadgeProps) {
   return (
     <span
-      className="flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-gray-100 text-gray-800 hover:bg-gray-200 space-x-2 max-w-1/2"
+      className="flex items-center px-2 py-0.5 rounded text-xs font-medium leading-4 bg-gray-100 text-gray-800 hover:bg-gray-200 space-x-2 max-w-1/2 cursor-pointer"
       onClick={onClick}
     >
       {label ? (
