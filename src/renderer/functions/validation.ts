@@ -71,6 +71,11 @@ export function validateConditionSelection(table: string) {
   return true;
 }
 
+// TODO
+export function validateBooleanField(value: string) {
+  return true;
+}
+
 // TODO: remove some of these and abstract to broad validator
 // eg validatePronoun, validateLowercaseStart, etc
 
@@ -137,7 +142,7 @@ export function validateLowerCase(value: string) {
 // export function validateSpecificEpithet(value: string) {}
 // export function validateInfraSpecificEpithet(value: string) {}
 
-// FIXME: list?
+// FIXME: list OR string
 export function validateIndentificationQualifier(values: string[]) {
   if (!values || values.length < 1) {
     return true;
@@ -236,17 +241,47 @@ export function validateHabitat(value: string) {
   return true;
 }
 
-export function validateSamplingProtocol(values: string[]) {
-  if (!values || values.length < 1) {
+export function validateSamplingProtocol(values: string[] | string) {
+  if (Array.isArray(values)) {
+    if (!values || values.length < 1) {
+      return true;
+    }
+
+    for (let i = 0; i < values.length; i++) {
+      const currentValue = values[i];
+      if (!samplingProtocolControl.some((el) => el.value === currentValue)) {
+        return `${currentValue} is not an accepted input`;
+      }
+    }
+
+    return true;
+  } else {
+    if (!values || values.length < 1) {
+      return true;
+    }
+
+    const splitList = values.split('|');
+
+    // if there are less than 2 items in the split list, that means theres just one,
+    // so if there are more commas that means the user is not formatting the list
+    // correctly
+    if (splitList.length < 2 && (values.match(/,/g) || []).length > 1) {
+      return "It seems you're not using | as the separator";
+    }
+
+    for (let i = 0; i < splitList.length; i++) {
+      const currentValue = splitList[i];
+      if (!samplingProtocolControl.some((el) => el.value === currentValue)) {
+        return `${currentValue} is not an accepted input`;
+      }
+    }
+
     return true;
   }
+}
 
-  for (let value in values) {
-    if (!samplingProtocolControl.some((el) => el.value === value)) {
-      return `${value} is not an accepted input`;
-    }
-  }
-
+// TODO
+export function validateCountry(value: string) {
   return true;
 }
 
@@ -393,19 +428,142 @@ export function validateDateField(date: string) {
 
 // TODO: call all above validators, return an array of errors
 export function validateSpecimen(specimen: any, currentIndex: number) {
-  return [];
+  let errors = [];
+
+  const specimenKeys = Object.keys(specimen);
+
+  for (let i = 0; i < specimenKeys.length; i++) {
+    const field = specimenKeys[i];
+    const ret = determineAndRunFieldValidator(field, specimen[field]);
+
+    if (ret === true || ret === undefined) {
+      continue;
+    } else {
+      errors.push({ field, message: ret });
+    }
+  }
+
+  return errors;
 }
 
-// TODO: types need changing??
-// TODO: don't call validators for REGEXP operator
+// TODO: types need changing?? value might be string or number or string[]
+// TODO: don't call validators for REGEXP operator!!
 function determineAndRunFieldValidator(field: string, value: any) {
   switch (field) {
     case 'catalogNumber':
       return validateCatalogNumber(value);
     case 'otherCatalogNumber':
       return validateOtherCatalogNumber(value);
+    case 'recordNumber':
+      return true;
+    case 'order_':
+    case 'superfamily':
+    case 'family':
+    case 'subfamily':
+    case 'tribe':
+    case 'genus':
+    case 'subgenus':
+      return validatePronoun(value);
+
+    case 'specificEpithet':
+      return validateLowerCase(value);
+    case 'infraspecificEpithet':
+      return true;
+    case 'identificationQualifier':
+      return validateIndentificationQualifier(value);
+    case 'recordedBy':
+    case 'otherCollectors':
+      return validateListField(value);
+    case 'identifiedBy':
+      return validatePronoun(value);
+    case 'dateIdentified':
+      return validateDateField(value);
+    case 'verbatimDate':
+      return true;
+    case 'collectedYear':
+      return validateCollectedYear(value);
+    case 'collectedMonth':
+      return validateCollectedMonth(value);
+    case 'collectedDay':
+      return validateCollectedDay(value);
+    case 'dateEntered':
+      return validateDateField(value);
+    case 'sex':
+      return validateSex(value);
+    case 'lifeStage':
+      return validateLifeStage(value);
+    case 'habitat':
+      return validateHabitat(value);
+
+    case 'occurrenceRemarks':
+    case 'molecularOccurrenceRemarks':
+      return true;
+
+    case 'samplingProtocol':
+      return validateSamplingProtocol(value);
+    case 'country':
+      return validateCountry(value);
+    case 'stateProvince':
+    case 'county':
+    case 'municipality':
+    case 'locality':
+      return validatePronoun(value); // FIXME: maybe not??
+    case 'elevationInMeters':
+      return true;
+    case 'decimalLatitude':
+      return true;
+    case 'decimalLongitude':
+      return true;
+    case 'geodeticDatum':
+      return validateGeodeticDatum(value);
+    case 'coordinateUncertainty':
+      return true;
+    case 'verbatimLatitude':
+      return true;
+    case 'verbatimLongitude':
+      return true;
+    case 'georeferencedBy':
+      return true;
+    case 'disposition':
+      return validateDisposition(value);
+    case 'isLoaned':
+      return true;
+    case 'loanInstitution':
+      return true;
+    case 'loaneeName':
+      return true;
+    case 'loanDate':
+      return true;
+    case 'loanReturnDate':
+      return true;
+    case 'preparations':
+      return validatePreparations(value);
+    case 'freezer':
+      return validateFreezer(value);
+    case 'rack':
+      return validateRack(value);
+    case 'box':
+      return validateBox(value);
+    case 'tubeSize':
+      return validateTubeSize(value);
+    case 'associatedSequences':
+      return true;
+    case 'associatedReferences':
+      return true;
+    case 'withholdData':
+    case 'reared':
+      return validateBooleanField(value);
+    case 'recordEnteredBy':
+      return true;
+    case 'modifiedInfo':
+      return true;
+    case 'fieldNotes':
+      return true;
     default:
+      // I believe react-hook-form does some wierd async process here, and so I cannot throw this
+      // error and have my boundary pick it up! TODO:
+      // so for now, it just fails the validation
       // throw new Error('Invalid field was selected as a conditional!');
-      return 'Cannot handle this field yet';
+      return false;
   }
 }

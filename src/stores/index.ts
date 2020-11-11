@@ -24,17 +24,24 @@ type TableConfig = {
   updateTableHeaders(newHeaders: string[]): void;
 };
 
-type LoggingError = {
+export type LoggingError = {
+  index?: number; // refers to the line number in the CSV
   code?: string | number;
   message: string;
 };
 
-type Logs = {
+export type InsertError = {
+  index: number;
+  errors: { field: string; message: string | boolean }[];
+};
+
+export type Logs = {
   select: LoggingError[];
   count: LoggingError[];
   update: LoggingError[];
-  insert: LoggingError[];
+  insert: InsertError[];
   delete: LoggingError[];
+  global: LoggingError[];
 };
 
 const defaultTableConfig = {
@@ -53,6 +60,7 @@ const defaultLogs = {
   update: [],
   insert: [],
   delete: [],
+  global: [],
 };
 
 // TODO: change naming scheme for some of these fields, they don't make sense
@@ -68,6 +76,12 @@ type SpesqlSession = {
   // globals
   loading: boolean;
   errors: Logs;
+
+  updateSelectLog(newLog: LoggingError[]): void;
+  updateCountLog(newLog: LoggingError[]): void;
+  updateUpdateLog(newLog: LoggingError[]): void;
+  updateInsertLog(newLog: InsertError[]): void;
+  updateDeleteLog(newLog: LoggingError[]): void;
 
   // actions
   toggleLoading(newLoading?: boolean): void;
@@ -111,6 +125,53 @@ export const useStore = create<SpesqlSession>((set) => ({
   },
 
   errors: defaultLogs,
+
+  updateSelectLog: (newLog: LoggingError[]) => {
+    set((state) => ({
+      ...state,
+      errors: {
+        ...state.errors,
+        select: newLog,
+      },
+    }));
+  },
+
+  updateCountLog: (newLog: LoggingError[]) => {
+    set((state) => ({
+      ...state,
+      errors: {
+        ...state.errors,
+        count: newLog,
+      },
+    }));
+  },
+  updateUpdateLog: (newLog: UpdateError[]) => {
+    set((state) => ({
+      ...state,
+      errors: {
+        ...state.errors,
+        update: newLog,
+      },
+    }));
+  },
+  updateInsertLog: (newLog: InsertError[]) => {
+    set((state) => ({
+      ...state,
+      errors: {
+        ...state.errors,
+        insert: newLog,
+      },
+    }));
+  },
+  updateDeleteLog: (newLog: LoggingError[]) => {
+    set((state) => ({
+      ...state,
+      errors: {
+        ...state.errors,
+        delete: newLog,
+      },
+    }));
+  },
 
   // APP STATES
   loading: false,

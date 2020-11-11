@@ -8,6 +8,7 @@ import { isSpecimen, Specimen } from '../../types';
 import { useNotify } from '../utils/context';
 import CreateHelpModal from './CreateHelpModal';
 import { validateSpecimen } from '../../functions/validation';
+import { useStore } from '../../../stores';
 
 // TODO: add typings in this file
 
@@ -116,9 +117,13 @@ type Props = {
 };
 
 export default function CreateBulkInsertModal({ open, onClose }: Props) {
+  const { notify } = useNotify();
+
   const [tab, setTab] = useState(0);
   const [data, setData] = useState('');
   const [rawData, setRawFile] = useState<any>();
+
+  const updateInsertLog = useStore((state) => state.updateInsertLog);
 
   // console.log(data, rawData);
 
@@ -138,13 +143,29 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         const specimenErrors = validateSpecimen(currentSpecimen, i);
 
         if (specimenErrors && specimenErrors.length) {
-          allErrors.push(specimenErrors);
+          console.log('ERROR OCCURRED:', currentSpecimen);
+          allErrors.push({ index: i, errors: specimenErrors });
         } else {
           insertionValues.push(currentSpecimen);
         }
       }
 
-      console.log(insertionValues);
+      console.log('VALID:\n', insertionValues);
+      console.log('============================');
+      console.log('INVALID:\n', allErrors);
+
+      if (allErrors.length) {
+        // TODO: update errors
+        notify({
+          title: 'Insert Errors',
+          message:
+            'There were one or more errors that occurred during this request that prevented it from being submitted. Please review the appropriate logs.',
+          level: 'error',
+        });
+        updateInsertLog(allErrors);
+      } else {
+        console.log('yeet no errors');
+      }
     }
   }
 
@@ -179,7 +200,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           </Button.Group>
 
           <div className="flex space-x-2 flex-1">
-            <CreateLogModal initialTab={2} />
+            <CreateLogModal initialTab={2} watch="insert" />
             <CreateHelpModal variant="insert" />
           </div>
         </Modal.Footer>
