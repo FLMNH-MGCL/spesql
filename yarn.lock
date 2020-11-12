@@ -1107,6 +1107,11 @@
   resolved "https://registry.yarnpkg.com/@types/html-minifier-terser/-/html-minifier-terser-5.1.1.tgz#3c9ee980f1a10d6021ae6632ca3e79ca2ec4fb50"
   integrity sha512-giAlZwstKbmvMk1OO7WXSj4OZ0keXAcl2TQq4LWHiiPH2ByaH7WeUzng+Qej8UPxxv+8lRTuouo0iaNDBuzIBA==
 
+"@types/js-quantities@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@types/js-quantities/-/js-quantities-1.6.2.tgz#62688c490b9c508ed739366eda2c386613bc2733"
+  integrity sha512-ylwLf5kMzD+16kUZ6h5BDBx7FdUs5gnkP0+YX8hiV/iV5+AcuHyWUkZA4GTDfJ59KXp7woCdDbFX57H/taBIqA==
+
 "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.6":
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.6.tgz#f4c7ec43e81b319a9815115031709f26987891f0"
@@ -5482,6 +5487,11 @@ jquery@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
   integrity sha512-XwIBPqcMn57FxfT+Go5pzySnm4KWkT1Tv7gjrpT1srtf8Weynl6R273VJ5GjkRb51IzMp5nbaPjJXMWeju2MKg==
+
+js-quantities@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/js-quantities/-/js-quantities-1.7.5.tgz#e8a6c5b1b85df9ceebd1f91659f78dc20efa6d8f"
+  integrity sha512-4rnv5eKQSDyRPREOkzw6OG/IY7/zfAlTgjvUcfA2eQ76/sYND3eo0fMl5q5uQEjdAnfDmZNJZrJvlOJzgqV6AA==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"

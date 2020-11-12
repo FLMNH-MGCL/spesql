@@ -11,16 +11,10 @@ import useToggle from '../utils/useToggle';
 import { Logs } from '../../../stores/index';
 import Heading from '../ui/Heading';
 import Text from '../ui/Text';
+import CopyButton from '../buttons/CopyButton';
+import clsx from 'clsx';
 
 const tabPages = ['select', 'count', 'insert', 'update', 'delete', 'global'];
-
-function EmptyLog() {
-  return (
-    <div className="flex flex-col items-center justify-center bg-gray-100 rounded-md h-56 overflow-auto p-2">
-      <p>No errors exist in the log</p>
-    </div>
-  );
-}
 
 type LogProps = {
   // TODO: create type for errors
@@ -29,30 +23,61 @@ type LogProps = {
 };
 
 function Log({ errors }: LogProps) {
+  const disabled = !errors || !errors.insert || !errors.insert.length;
+  const clearErrors = useStore((state) => state.clearErrors);
+
   return (
-    <div>
-      {/* <CopyButton value="test" /> */}
-      {/* <LogTerminal /> */}
+    <div className="-mb-6">
+      <div className="mt-4 h-56 bg-gray-100 rounded-md overflow-scroll">
+        <div
+          className={clsx(
+            disabled && 'h-full',
+            'p-2 flex flex-col items-center justify-center'
+          )}
+        >
+          {/* {renderLog()} */}
+          <p>No errors exist in the log</p>
+        </div>
+      </div>
+
+      <div className="mt-3 flex space-x-2 items-center justify-end">
+        <Button
+          disabled={disabled}
+          variant="warning"
+          // onClick={() => clearErrors('')}
+        >
+          Clear
+        </Button>
+        <CopyButton
+          disabled={disabled}
+          value={JSON.stringify(errors?.insert, null, 2) ?? ''}
+        />
+      </div>
     </div>
   );
 }
 
 function InsertErrorLog({ errors }: LogProps) {
-  if (!errors || !errors.insert || !errors.insert.length) return <EmptyLog />;
+  const disabled = !errors || !errors.insert || !errors.insert.length;
 
-  const { insert } = errors;
+  const clearErrors = useStore((state) => state.clearErrors);
 
   function renderLog() {
+    if (!errors || !errors.insert || !errors.insert.length)
+      return <p>No errors exist in the log</p>;
+
+    const { insert } = errors;
+
     return insert.map((error) => {
       const csvRow = error.index + 2;
 
       return (
-        <div className="py-2 w-full">
+        <div className="py-2 w-full" key={csvRow}>
           <Heading>Error(s) @ Row {csvRow}:</Heading>
           <div>
             {error.errors.map(({ field, message }) => {
               return (
-                <div className="flex space-x-2">
+                <div className="flex space-x-2" key={field + message}>
                   <Text>{`  - ${field}:`}</Text>
                   <Text>
                     {typeof message !== 'boolean' ? message : 'INVALID'}
@@ -67,9 +92,30 @@ function InsertErrorLog({ errors }: LogProps) {
   }
 
   return (
-    <div className="my-3 mt-4 h-56 bg-gray-100 rounded-md overflow-scroll">
-      <div className="p-2 flex flex-col items-center justify-center">
-        {renderLog()}
+    <div className="-mb-6">
+      <div className="mt-4 h-56 bg-gray-100 rounded-md overflow-scroll">
+        <div
+          className={clsx(
+            disabled && 'h-full',
+            'p-2 flex flex-col items-center justify-center'
+          )}
+        >
+          {renderLog()}
+        </div>
+      </div>
+
+      <div className="mt-3 flex space-x-2 items-center justify-end">
+        <Button
+          disabled={disabled}
+          variant="warning"
+          onClick={() => clearErrors('insert')}
+        >
+          Clear
+        </Button>
+        <CopyButton
+          disabled={disabled}
+          value={JSON.stringify(errors?.insert, null, 2) ?? ''}
+        />
       </div>
     </div>
   );

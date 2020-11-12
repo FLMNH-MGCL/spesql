@@ -80,6 +80,8 @@ export const BooleanField = [
   { label: 'No', value: 'N' },
 ];
 
+export const validUnits = ['m', 'ft', 'mi'];
+
 export const fieldOptions = [
   { label: 'All', value: '*' },
   { label: 'Lep #', value: 'catalogNumber' },

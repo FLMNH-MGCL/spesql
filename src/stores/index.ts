@@ -77,6 +77,8 @@ type SpesqlSession = {
   loading: boolean;
   errors: Logs;
 
+  clearErrors(target: string): void;
+
   updateSelectLog(newLog: LoggingError[]): void;
   updateCountLog(newLog: LoggingError[]): void;
   updateUpdateLog(newLog: LoggingError[]): void;
@@ -126,6 +128,16 @@ export const useStore = create<SpesqlSession>((set) => ({
 
   errors: defaultLogs,
 
+  clearErrors: (target: string) => {
+    set((state) => ({
+      ...state,
+      errors: {
+        ...state.errors,
+        [target]: [],
+      },
+    }));
+  },
+
   updateSelectLog: (newLog: LoggingError[]) => {
     set((state) => ({
       ...state,
@@ -135,7 +147,6 @@ export const useStore = create<SpesqlSession>((set) => ({
       },
     }));
   },
-
   updateCountLog: (newLog: LoggingError[]) => {
     set((state) => ({
       ...state,
@@ -145,7 +156,7 @@ export const useStore = create<SpesqlSession>((set) => ({
       },
     }));
   },
-  updateUpdateLog: (newLog: UpdateError[]) => {
+  updateUpdateLog: (newLog: LoggingError[]) => {
     set((state) => ({
       ...state,
       errors: {

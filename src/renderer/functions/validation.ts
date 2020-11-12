@@ -1,3 +1,4 @@
+import { countries } from '../assets/countries';
 import {
   identificationQualifierControl,
   sexControl,
@@ -7,7 +8,12 @@ import {
   samplingProtocolControl,
   geodeticDatumControl,
   fieldOptions,
+  BooleanField,
+  validUnits,
+  dispositionControl,
 } from '../components/utils/constants';
+
+import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
 
 // TODO: ADD DOCUMENTATION
 
@@ -50,6 +56,7 @@ export function validateFieldSelection(fields: string[]) {
 
 export function validateOperator(operator: string) {}
 
+// TODO: add ignore when REGEX
 export function validateConditionalValue(condition: string, field: string) {
   console.log(field);
 
@@ -73,11 +80,14 @@ export function validateConditionSelection(table: string) {
 
 // TODO
 export function validateBooleanField(value: string) {
+  if (!value || value === '') {
+    return true;
+  } else if (!BooleanField.some((el) => el.value === value)) {
+    return `${value} is not an accepted input`;
+  }
+
   return true;
 }
-
-// TODO: remove some of these and abstract to broad validator
-// eg validatePronoun, validateLowercaseStart, etc
 
 export function validateCatalogNumber(value: string) {
   let pattern = new RegExp('^LEP[0-9]{5,7}');
@@ -103,6 +113,7 @@ export function validateOtherCatalogNumber(value: string) {
   return true;
 }
 
+// TODO: implement me?
 // export function validateRecordNumber(value: string) {}
 
 export function validatePronoun(value: string) {
@@ -142,15 +153,38 @@ export function validateLowerCase(value: string) {
 // export function validateSpecificEpithet(value: string) {}
 // export function validateInfraSpecificEpithet(value: string) {}
 
-// FIXME: list OR string
-export function validateIndentificationQualifier(values: string[]) {
-  if (!values || values.length < 1) {
-    return true;
-  }
+export function validateIndentificationQualifier(values: string[] | string) {
+  if (Array.isArray(values)) {
+    if (!values || values.length < 1) {
+      return true;
+    }
 
-  for (let value in values) {
-    if (!identificationQualifierControl.some((el) => el.value === value)) {
-      return `${value} is not an accepted input`;
+    for (let value in values) {
+      if (!identificationQualifierControl.some((el) => el.value === value)) {
+        return `${value} is not an accepted input`;
+      }
+    }
+  } else {
+    if (!values || values.length < 1) {
+      return true;
+    }
+
+    const splitList = values.split('|');
+
+    // if there are less than 2 items in the split list, that means theres just one,
+    // so if there are more commas that means the user is not formatting the list
+    // correctly
+    if (splitList.length < 2 && (values.match(/,/g) || []).length >= 1) {
+      return "It seems you're not using | as the separator";
+    }
+
+    for (let i = 0; i < splitList.length; i++) {
+      const currentValue = splitList[i];
+      if (
+        !identificationQualifierControl.some((el) => el.value === currentValue)
+      ) {
+        return `${currentValue} is not an accepted input`;
+      }
     }
   }
 
@@ -232,11 +266,11 @@ export function validateLifeStage(value: string) {
   return true;
 }
 
-// TODO
-export function validateHabitat(value: string) {
-  if (!value) {
-    return true;
-  }
+// TODO: anything?
+export function validateHabitat(_value: string) {
+  // if (!value || !value.length) {
+  //   return true;
+  // }
 
   return true;
 }
@@ -265,7 +299,7 @@ export function validateSamplingProtocol(values: string[] | string) {
     // if there are less than 2 items in the split list, that means theres just one,
     // so if there are more commas that means the user is not formatting the list
     // correctly
-    if (splitList.length < 2 && (values.match(/,/g) || []).length > 1) {
+    if (splitList.length < 2 && (values.match(/,/g) || []).length >= 1) {
       return "It seems you're not using | as the separator";
     }
 
@@ -280,10 +314,19 @@ export function validateSamplingProtocol(values: string[] | string) {
   }
 }
 
-// TODO
 export function validateCountry(value: string) {
+  if (!value || !value.length) {
+    return true;
+  }
+
+  if (!countries.some((country) => country.name === value)) {
+    return `${value} is not an accepted input`;
+  }
+
   return true;
 }
+
+// TODO: other locality data
 
 export function validatePreparations(value: string) {
   if (!value) {
@@ -309,33 +352,60 @@ export function validateTubeSize(value: string) {
   return true;
 }
 
-// TODO
 export function validateElevation(value: string) {
-  if (value) {
+  if (!value || !value.length) {
     return true;
   }
-  return true;
+
+  try {
+    const qty = new Qty(value);
+
+    if (qty.isUnitless()) {
+      return 'You must provide a unit';
+    } else if (!validUnits.includes(qty.units())) {
+      return `Unit must be: ${validUnits.toString()}`;
+    }
+
+    return true;
+  } catch {
+    return 'Invalid elevation input';
+  }
 }
 
-// TODO
 export function validateLatitude(value: string) {
-  if (value) {
+  if (!value || !value.length) {
     return true;
   }
+
+  const parsedLat = parseFloat(value);
+
+  if (!isNumeric(value) || isNaN(parsedLat)) {
+    return 'Must be numeric';
+  } else if (parsedLat < -90 || parsedLat > 90) {
+    return 'Value out of range: -90 <= x <= 90';
+  }
+
   return true;
 }
 
-// TODO
 export function validateLongitude(value: string) {
-  if (value) {
+  if (!value || !value.length) {
     return true;
   }
+
+  const parsedLong = parseFloat(value);
+
+  if (!isNumeric(value) || isNaN(parsedLong)) {
+    return 'Must be numeric';
+  } else if (parsedLong < -180 || parsedLong > 180) {
+    return 'Value out of range: -180 <= x <= 180';
+  }
+
   return true;
 }
 
-// TODO
 export function validateGeodeticDatum(value: string) {
-  if (!value) {
+  if (!value || !value.length) {
     return true;
   }
 
@@ -346,35 +416,58 @@ export function validateGeodeticDatum(value: string) {
   return true;
 }
 
-// TODO
 export function validateDisposition(value: string) {
-  if (value) {
+  if (!value || !value.length) {
     return true;
   }
+
+  if (!dispositionControl.some((el) => el.value === value)) {
+    return `${value} is not an accepted input`;
+  }
+
   return true;
 }
 
-// TODO
 export function validateFreezer(value: string) {
-  if (value) {
+  if (!value || !value.length) {
     return true;
   }
-  return true;
+
+  /* prettier-ignore */
+  const pattern = new RegExp("Kawahara\d\d")
+
+  const matches = pattern.test(value);
+
+  return matches ?? 'Invalid: must match Kawahara##';
 }
 
 // TODO
 export function validateRack(value: string) {
-  if (value) {
+  if (!value || !value.length) {
     return true;
   }
+
+  if (value && value.length > 3) {
+    return 'Must be 1-3 characters long';
+  }
+
   return true;
 }
 
 // TODO
 export function validateBox(value: string) {
-  if (value) {
+  if (!value || !value.length) {
     return true;
   }
+
+  const parsedBox = parseFloat(value);
+
+  if (!isNumeric(value) || isNaN(parsedBox)) {
+    return 'Must be numeric';
+  } else if (parsedBox < 1 || parsedBox > 999) {
+    return 'Value out of range: 1 <= x <= 999';
+  }
+
   return true;
 }
 
@@ -426,8 +519,13 @@ export function validateDateField(date: string) {
   return true;
 }
 
+function isNumeric(n: string) {
+  const parsed = parseFloat(n);
+  return !isNaN(parsed) && isFinite(parsed);
+}
+
 // TODO: call all above validators, return an array of errors
-export function validateSpecimen(specimen: any, currentIndex: number) {
+export function validateSpecimen(specimen: any) {
   let errors = [];
 
   const specimenKeys = Object.keys(specimen);
