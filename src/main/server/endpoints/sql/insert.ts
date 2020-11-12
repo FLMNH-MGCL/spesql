@@ -3,24 +3,23 @@ import { connection } from '../../server';
 
 // TODO: I can use nested arrays for bulk inserts, should this go in here?
 export default function insert(req: Request, res: Response) {
-  const { table, specimen } = req.body;
+  const { table, values } = req.body;
 
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
-  } else if (!table || !specimen) {
-    res.status(400).send('You must provide a table and an entry to insert');
+  } else if (!table || !values) {
+    res
+      .status(400)
+      .send('You must provide a table and valid entries to insert');
   } else {
-    res.send('NOT YET');
-    // connection.query(
-    //   'INSERT INTO ?? SET ?',
-    //   [table, specimen],
-    //   (error, data) => {
-    //     if (error) {
-    //       res.status(503).send(error);
-    //     } else {
-    //       res.status(201).send(data);
-    //     }
-    //   }
-    // );
+    connection.query('INSERT INTO ?? SET ?', [table, values], (error, data) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send(error);
+      } else {
+        console.log(data);
+        res.status(201).send(data);
+      }
+    });
   }
 }

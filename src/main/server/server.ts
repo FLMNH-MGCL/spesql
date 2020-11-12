@@ -6,6 +6,7 @@ import logout from './endpoints/auth/logout';
 import select from './endpoints/sql/select';
 import insert from './endpoints/sql/insert';
 import update from './endpoints/sql/update';
+import deleteQuery from './endpoints/sql/delete';
 import bulkInsert from './endpoints/sql/bulkInsert';
 import getConfig from './endpoints/getConfig';
 import {
@@ -143,7 +144,7 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
     validateSession,
     managerRoute,
     validateDeleteQuery,
-    select
+    deleteQuery
   );
 
   app.get(

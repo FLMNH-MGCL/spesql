@@ -14,6 +14,7 @@ import {
 } from '../components/utils/constants';
 
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
+import { Specimen } from '../types';
 
 // TODO: ADD DOCUMENTATION
 
@@ -542,6 +543,74 @@ export function validateSpecimen(specimen: any) {
   }
 
   return errors;
+}
+
+// TODO:
+// some fields are correct as input, but incorrect for storage. for example,
+// measurements! we only store in meters, but we allow the input of ft or miles.
+// this function will correct these fields and return the updated specimen
+export function fixPartiallyCorrect(partiallyCorrect: Specimen) {
+  // const updatedElevation = ...
+  let {
+    elevationInMeters,
+    collectedYear,
+    collectedMonth,
+    collectedDay,
+    dateEntered,
+    decimalLatitude,
+    decimalLongitude,
+  } = partiallyCorrect as any;
+
+  const elevationQuantity = partiallyCorrect.elevationInMeters
+    ? new Qty(partiallyCorrect.elevationInMeters)
+    : null;
+
+  if (elevationQuantity) {
+    elevationInMeters = elevationQuantity.to('m').toString();
+  }
+
+  if (!collectedYear) {
+    collectedYear = null;
+  } else {
+    collectedYear = parseInt(collectedYear, 10); // needs to be number
+  }
+
+  if (!collectedMonth) {
+    collectedMonth = null;
+  } else {
+    collectedMonth = parseInt(collectedMonth, 10); // needs to be number
+  }
+
+  if (!collectedDay) {
+    collectedDay = null;
+  } else {
+    collectedDay = parseInt(collectedDay, 10); // needs to be number
+  }
+
+  // TODO: date??
+
+  if (!decimalLatitude) {
+    decimalLatitude = null;
+  } else {
+    decimalLatitude = parseFloat(decimalLatitude);
+  }
+
+  if (!decimalLongitude) {
+    decimalLongitude = null;
+  } else {
+    decimalLongitude = parseFloat(decimalLongitude);
+  }
+
+  return {
+    ...partiallyCorrect,
+    elevationInMeters,
+    collectedYear,
+    collectedMonth,
+    collectedDay,
+    dateEntered,
+    decimalLatitude,
+    decimalLongitude,
+  } as Specimen;
 }
 
 // TODO: types need changing?? value might be string or number or string[]

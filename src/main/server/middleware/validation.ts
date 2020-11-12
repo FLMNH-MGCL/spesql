@@ -84,6 +84,7 @@ export async function validateInsertQuery(
     const userId = req.session!.userId;
     connection.query(`SELECT role FROM users WHERE id='${userId}'`);
   }
+
   next();
 }
 

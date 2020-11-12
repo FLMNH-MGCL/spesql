@@ -51,6 +51,7 @@ export default function RefreshQueryButton({
 
     toggleLoading(false);
   }
+
   return (
     <Button variant="outline" rounded disabled={disabled} onClick={refresh}>
       <svg

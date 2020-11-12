@@ -5,6 +5,10 @@ import { connection } from '../../server';
 export default function bulkInsert(req: Request, res: Response) {
   const { table, values } = req.body;
 
+  console.log(table, values);
+  // res.send(...values);
+  // return;
+
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
   } else if (!table || !values || !values.length) {
@@ -12,18 +16,19 @@ export default function bulkInsert(req: Request, res: Response) {
       .status(400)
       .send('You must provide a table and valid entries to insert');
   } else {
-    res.send('NOT YET');
-    // connection.query(
-    //   'INSERT INTO ?? SET ?',
-    //   [table, ...values],
-    //   (error, data) => {
-    //     if (error) {
-    //       res.status(503).send(error);
-    //     } else {
-    //       res.status(201).send(data);
-    //     }
-    //   }
-    // );
+    connection.query(
+      'INSERT INTO ?? VALUES ?',
+      [table, ...values],
+      (error, data) => {
+        if (error) {
+          console.log(error);
+          res.status(503).send(error);
+        } else {
+          console.log(data);
+          res.status(201).send(data);
+        }
+      }
+    );
   }
 }
 

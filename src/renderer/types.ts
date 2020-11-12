@@ -20,9 +20,9 @@ export type SpecimenFields = {
   identifiedBy: StringOrNull;
   dateIdentified: StringOrNull;
   verbatimDate: StringOrNull;
-  collectedYear: number;
-  collectedMonth: number;
-  collectedDay: number;
+  collectedYear: number | null;
+  collectedMonth: number | null;
+  collectedDay: number | null;
   dateEntered: Date | null;
   sex: 'M' | 'F' | 'G' | null;
   lifeStage: StringOrNull;
@@ -36,8 +36,8 @@ export type SpecimenFields = {
   municipality: StringOrNull;
   locality: StringOrNull;
   elevationInMeters: StringOrNull;
-  decimalLatitude: number;
-  decimalLongitude: number;
+  decimalLatitude: number | null;
+  decimalLongitude: number | null;
   geodeticDatum: StringOrNull;
   coordinateUncertainty: StringOrNull;
   verbatimLatitude: StringOrNull;

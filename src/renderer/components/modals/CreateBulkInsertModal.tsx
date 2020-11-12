@@ -4,11 +4,16 @@ import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import CreateLogModal from './CreateLogModal';
 import { CSVReader } from 'react-papaparse';
-import { isSpecimen, Specimen } from '../../types';
+import { BACKEND_URL, isSpecimen, Specimen } from '../../types';
 import { useNotify } from '../utils/context';
 import CreateHelpModal from './CreateHelpModal';
-import { validateSpecimen } from '../../functions/validation';
+import {
+  fixPartiallyCorrect,
+  validateSpecimen,
+} from '../../functions/validation';
 import { useStore } from '../../../stores';
+import axios from 'axios';
+import useToggle from '../utils/useToggle';
 
 // TODO: add typings in this file
 
@@ -123,6 +128,8 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const [data, setData] = useState('');
   const [rawData, setRawFile] = useState<any>();
 
+  const [loading, { on, off }] = useToggle(false);
+
   const updateInsertLog = useStore((state) => state.updateInsertLog);
 
   // console.log(data, rawData);
@@ -135,6 +142,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   // TODO: types and stuff
   async function handleSubmit() {
     if (rawData && rawData.length > 0) {
+      on();
       console.log(rawData);
       let allErrors = [];
       let insertionValues = [];
@@ -146,7 +154,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           console.log('ERROR OCCURRED:', currentSpecimen);
           allErrors.push({ index: i, errors: specimenErrors });
         } else {
-          insertionValues.push(currentSpecimen);
+          insertionValues.push(fixPartiallyCorrect(currentSpecimen));
         }
       }
 
@@ -163,15 +171,54 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           level: 'error',
         });
         updateInsertLog(allErrors);
+        off();
       } else {
-        console.log('yeet no errors');
+        let serverErrors = [];
+
+        for (let i = 0; i < insertionValues.length; i++) {
+          const currentValue = insertionValues[i];
+          const insertResponse = await axios
+            .post(BACKEND_URL + '/api/insert/single', {
+              values: currentValue,
+              table: 'molecularLab',
+            })
+            .catch((error) => error.response);
+
+          if (insertResponse.status !== 201) {
+            const { code, sqlMessage } = insertResponse.data;
+            serverErrors.push({
+              index: i,
+              errors: [{ field: code, message: sqlMessage }],
+            });
+          }
+        }
+
+        if (serverErrors.length) {
+          // TODO: handle these!
+          // console.log(serverErrors);
+          notify({
+            title: 'Server Errors Occurred',
+            message:
+              'Some or all of the insertions emitted errors. Please review the appropriate logs.',
+            level: 'warning',
+          });
+          updateInsertLog(serverErrors);
+        } else {
+          notify({
+            title: 'Insertions Complete',
+            message: 'No errors detected',
+            level: 'success',
+          });
+        }
+        off();
       }
     }
   }
 
   return (
     <React.Fragment>
-      <Modal open={open} size="medium" onClose={onClose}>
+      {/* I do not want you to be able to close this while it is loading */}
+      <Modal open={loading ? true : open} size="medium" onClose={onClose}>
         <Modal.Content title="Bulk Insert Query">
           <Tabs
             fullWidth
@@ -193,8 +240,15 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
         <Modal.Footer>
           <Button.Group>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button variant="primary" onClick={handleSubmit}>
+            <Button onClick={onClose} disabled={loading}>
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleSubmit}
+              disabled={loading}
+              loading={loading}
+            >
               Submit
             </Button>
           </Button.Group>

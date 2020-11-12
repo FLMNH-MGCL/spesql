@@ -9,14 +9,17 @@ type User = {
 
 type QueryConfig = {
   queryString: string;
+  table: string;
   data: Specimen[];
   setData(data: Specimen[]): void;
+  setTable(table: string): void;
   setCurrentQuery(query: string): void;
 };
 
 const defaultQueryConfig = {
   queryString: '',
   data: [],
+  table: '',
 };
 
 type TableConfig = {
@@ -102,6 +105,11 @@ export const useStore = create<SpesqlSession>((set) => ({
       set((state) => ({
         ...state,
         queryData: { ...state.queryData, data },
+      })),
+    setTable: (table: string) =>
+      set((state) => ({
+        ...state,
+        queryData: { ...state.queryData, table },
       })),
     setCurrentQuery: (query: string) =>
       set((state) => ({

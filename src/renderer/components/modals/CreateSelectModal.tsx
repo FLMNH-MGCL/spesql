@@ -22,8 +22,9 @@ type Props = {
 export default function CreateSelectModal({ open, onClose }: Props) {
   const { notify } = useNotify();
 
-  const { setData, setCurrentQuery } = useStore((state) => ({
+  const { setData, setTable, setCurrentQuery } = useStore((state) => ({
     setData: state.queryData.setData,
+    setTable: state.queryData.setTable,
     setCurrentQuery: state.queryData.setCurrentQuery,
   }));
 
@@ -99,6 +100,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
       } else {
         onClose();
         setData(specimen);
+        setTable(databaseTable);
         setCurrentQuery(query);
       }
     } else {

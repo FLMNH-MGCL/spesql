@@ -12,10 +12,13 @@ import useToggle from './utils/useToggle';
 import emptyDataIcon from '../assets/svg/empty_data_waiting.svg';
 // import selectItemIcon from '../assets/svg/select_item_third.svg';
 import selectItemIconTest from '../assets/svg/specimen.svg';
-import { Specimen } from '../types';
+import { BACKEND_URL, Specimen } from '../types';
 import List from './List';
 import Radio from './ui/Radio';
 import { Values } from './ui/Form';
+import CreateConfirmModal from './modals/CreateConfirmModal';
+import axios from 'axios';
+import { useNotify } from './utils/context';
 
 // TODO: remove ? where needed
 type OverviewProps = {
@@ -65,15 +68,28 @@ function SpecimenOverview({
 // TODO: once that is completed, send a notification when they attempt to do this so
 // they aren't clueless as to why their clicks aren't working
 export default function () {
+  const { notify } = useNotify();
   const [editing, { on, off }] = useToggle(false);
   const [showMissing, missingToggles] = useToggle(false);
+  const table = useStore((state) => state.queryData.table);
 
-  const { hasQueried, selectedSpecimen } = useStore(
+  const {
+    hasQueried,
+    queryString,
+    setData,
+    selectedSpecimen,
+    setSelectedSpecimen,
+    toggleLoading,
+  } = useStore(
     (state) => ({
       hasQueried:
         state.queryData.queryString !== undefined &&
         state.queryData.queryString !== '',
+      queryString: state.queryData.queryString,
+      setData: state.queryData.setData,
       selectedSpecimen: state.selectedSpecimen,
+      setSelectedSpecimen: state.setSelectedSpecimen,
+      toggleLoading: state.toggleLoading,
     }),
     shallow
   );
@@ -90,6 +106,52 @@ export default function () {
     // interpret response
 
     off();
+  }
+
+  async function refresh() {
+    if (!queryString || queryString === '') {
+      return;
+    }
+
+    setData([]);
+
+    toggleLoading(true);
+
+    const selectResponse = await axios
+      .post(BACKEND_URL + '/api/select', {
+        query: queryString,
+      })
+      .catch((error) => error.response);
+
+    console.log(selectResponse);
+
+    if (selectResponse.status === 200 && selectResponse.data) {
+      const { specimen } = selectResponse.data;
+      setData(specimen);
+    } else {
+      // TODO: interpret status
+      const error = selectResponse.data;
+      notify({ title: 'TODO', message: error, level: 'error' });
+    }
+
+    toggleLoading(false);
+  }
+
+  // TODO: handle errors
+  async function handleDelete(id?: number) {
+    if (id === undefined || !table) {
+      console.log(id, table);
+      return;
+    } else {
+      const deleteResponse = await axios.post(BACKEND_URL + '/api/delete', {
+        id,
+        table,
+      });
+
+      console.log(deleteResponse);
+      setSelectedSpecimen(null);
+      refresh();
+    }
   }
 
   return (
@@ -126,7 +188,13 @@ export default function () {
       <div className="bg-gray-50 h-16 flex items-center px-4 justify-between">
         <div className="flex flex-row space-x-2 items-center">
           <EditSpecimen onClick={on} disabled={!selectedSpecimen || editing} />
-          <DeleteButton disabled={!selectedSpecimen} />
+          <CreateConfirmModal
+            disabled={!selectedSpecimen}
+            trigger={<DeleteButton disabled={!selectedSpecimen} />}
+            details="This action cannot be undone"
+            onConfirm={() => handleDelete(selectedSpecimen?.id)}
+          />
+
           <Radio
             disabled={!hasQueried}
             checked={!hasQueried ? false : showMissing}
