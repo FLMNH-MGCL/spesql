@@ -68,3 +68,27 @@ form {
 .ReactVirtualized__Grid:focus {
   outline: none;
 }
+
+.ReactVirtualized__Table__row {
+  /* divide-y divide-gray-200 px-6 py-3 */
+
+  /* px-6 */
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+
+  /* py-3 */
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+
+  /* divide-y divide-gray-200 */
+  border-top-width: 1px;
+  border-color: #edf2f7;
+}
+:focus {
+  outline: none;
+}
+.ReactVirtualized__Grid__innerScrollContainer {
+  /* divide-y divide-gray-200 */
+  border-top-width: 1px;
+  border-color: #edf2f7;
+}

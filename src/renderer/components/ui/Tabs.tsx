@@ -19,18 +19,20 @@ type TabProps = {
   text: string;
   onClick(): void;
   fullWidth?: boolean;
+  active?: boolean;
 };
 
-function Tab({ text, fullWidth, onClick }: TabProps) {
+function Tab({ text, fullWidth, onClick, active }: TabProps) {
   return (
     <button
       className={clsx(
         fullWidth && 'flex-1',
-        'space-y-1 font-semibold focus:outline-none'
+        !active && 'border-b-2 border-transparent hover:border-gray-300',
+        'space-y-1 leading-6 font-medium text-gray-900  hover:text-gray-700 focus:outline-none focus:text-gray-700 '
       )}
       onClick={onClick}
     >
-      <p className="p-2 pb-0">{text}</p>
+      <p className="pb-0 p-2">{text}</p>
     </button>
   );
 }
@@ -73,6 +75,7 @@ export default function Tabs({
             fullWidth={fullWidth}
             onClick={() => onChange(index)}
             text={tab}
+            active={selectedIndex === index}
           />
         ))}
       </div>

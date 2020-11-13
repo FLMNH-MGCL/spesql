@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Table, Column, AutoSizer } from 'react-virtualized';
 import useWindowDimensions from './utils/useWindowDimensions';
 import { SortableContainer } from 'react-sortable-hoc';
@@ -230,6 +230,7 @@ export default function () {
 
         <AutoSizer>
           {({ height, width }) => (
+            // Should I capitalize the header row??
             <SortableTable
               height={height}
               width={width}
@@ -241,7 +242,9 @@ export default function () {
               onHeaderClick={handleHeaderClick}
               onRowsRendered={() => toggleLoading(false)}
               rowStyle={getRowStyle}
-              headerClassName="cursor-pointer focus:outline-none"
+              headerClassName="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600  tracking-wider cursor-pointer focus:outline-none"
+              rowClassName=""
+              gridClassName="whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
             >
               {getColumns()}
             </SortableTable>

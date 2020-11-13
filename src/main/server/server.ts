@@ -33,6 +33,7 @@ import createUser from './endpoints/sql/admin/createUser';
 import { getQueriables } from './endpoints/sql/utils/queriables';
 import viewer from './endpoints/auth/viewer';
 import count from './endpoints/sql/count';
+import getUsers from './endpoints/sql/admin/getUsers';
 // import { win } from '..';
 
 require('dotenv').config();
@@ -162,6 +163,7 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
   // END MANAGER ROUTES
 
   // ADMIN ROUTES
+  app.get('/api/admin/users', validateSession, adminRoute, getUsers);
   app.post('/api/admin/user/create', validateSession, adminRoute, createUser);
   // END ADMIN ROUTES
 

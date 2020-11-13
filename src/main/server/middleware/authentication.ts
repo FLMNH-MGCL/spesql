@@ -31,17 +31,18 @@ export function validateSession(
  */
 export function adminRoute(req: Request, res: Response, next: NextFunction) {
   const userId = req.session!.userId;
-  const username = req.body.username;
-  const password = req.body.password;
+  // const username = req.body.username;
+  // const password = req.body.password;
 
-  if (!username || !password) {
-    res.status(400).send('You must provide credentials for admin routes');
-  } else if (!connection) {
-    res.status(502).send('Connection to the MySQL database was lost'); // TODO: is there a better code?
+  if (!connection) {
+    res.status(502).send('Connection to the MySQL database was lost');
   } else {
     // grab the current user from session and query the db for the user
+    // this will be used to validate the person attempting this route matches
+    // the credentials stored in the current session.
     connection.query(
-      `SELECT * FROM users WHERE id='${userId}'`,
+      'SELECT * FROM users_new WHERE id = ?',
+      userId,
       (error, data) => {
         if (error) {
           res.status(500).send(error);
@@ -49,27 +50,12 @@ export function adminRoute(req: Request, res: Response, next: NextFunction) {
           // returns an array, so will need to grab the first element
           const user = data[0];
 
-          const queriedUsername = user.username;
           const accessRole = user.role;
-          const hashedPassword = user.password;
 
-          if (queriedUsername !== username) {
-            res
-              .status(401)
-              .send('Attempting authentication with conflicting accounts');
-          } else if (accessRole !== 'admin') {
+          if (accessRole !== 'admin') {
             res.status(403).send('You must be an admin to access this route'); // TODO: should I change this to 401 to be ambiguous?
           } else {
-            // this is the true 'validation' part of this function, password match
-            bcrypt.compare(password, hashedPassword, (error, same) => {
-              if (!same && !error) {
-                res.status(401).send('Authorization either failed or denied');
-              } else if (error) {
-                res.status(401).send(error);
-              } else {
-                next();
-              }
-            });
+            next();
           }
         }
       }

@@ -163,7 +163,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       console.log('INVALID:\n', allErrors);
 
       if (allErrors.length) {
-        // TODO: update errors
         notify({
           title: 'Insert Errors',
           message:
@@ -194,8 +193,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         }
 
         if (serverErrors.length) {
-          // TODO: handle these!
-          // console.log(serverErrors);
           notify({
             title: 'Server Errors Occurred',
             message:
