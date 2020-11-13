@@ -1,9 +1,0 @@
-ELECTRON_WEBPACK_WDS_SECRET_KEY=REDUXn!av*308^wv=vf%ies*+wipi%nw83dyg)&)sedrr_@8%ei0-0t
-ACCESS_SECRET=hi
-REFRESH_SECRET=there
-SESSION_SECRET=there
-SESSION_NAME=spesql
-SALT=12
-BACKEND_URL=http://localhost:5000
-FRONTEND_URL=http://localhost:9080
-PORT=5000
