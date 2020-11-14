@@ -8,9 +8,10 @@ import CreateLogModal from './CreateLogModal';
 import CreateHelpModal from './CreateHelpModal';
 import Heading from '../ui/Heading';
 import Text from '../ui/Text';
+import QueryBuilder from '../QueryBuilder';
+import { formatQuery } from 'react-querybuilder';
 
 import coderConstruction from '../../assets/svg/coder_two.svg';
-import QueryBuilder from '../QueryBuilder';
 
 // IDEAS
 // https://reactjsexample.com/drag-and-drop-sortable-component-for-nested-data-and-hierarchies/
@@ -48,7 +49,7 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
   }
 
   function logQuery(query: any) {
-    console.log(query);
+    console.log(formatQuery(query, 'sql'));
   }
 
   return (

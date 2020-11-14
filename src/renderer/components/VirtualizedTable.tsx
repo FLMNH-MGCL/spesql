@@ -22,7 +22,7 @@ import ShowQueryButton from './buttons/ShowQueryButton';
 
 const SortableTable = SortableContainer(Table);
 
-type SortingConfig = {
+export type SortingConfig = {
   direction: 'asc' | 'desc';
   column: string;
 };

@@ -30,7 +30,7 @@ export default function SignIn() {
 
     off();
 
-    // console.log(loginResponse);
+    console.log(loginResponse);
 
     if (loginResponse.status === 200) {
       notify({

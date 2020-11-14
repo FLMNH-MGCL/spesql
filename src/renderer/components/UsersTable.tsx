@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { AutoSizer, Column, Table } from 'react-virtualized';
+import { AutoSizer, Column, Table, TableRowProps } from 'react-virtualized';
 import Button from './ui/Button';
 import axios from 'axios';
 import useWindowDimensions from './utils/useWindowDimensions';
+import { SortingConfig } from './VirtualizedTable';
+import _ from 'lodash';
+import useToggle from './utils/useToggle';
+import Spinner from './ui/Spinner';
+import Badge from './ui/Badge';
+import CreateEditUserModal from './modals/CreateEditUserModal';
+import CreateDeleteUserModal from './modals/CreateDeleteUserModal';
 
 export type User = {
   id: number;
@@ -12,14 +19,116 @@ export type User = {
   created_at: any;
 };
 
+type TableRowRenderer = (
+  props: TableRowProps & {
+    onEditClick: React.Dispatch<React.SetStateAction<number | undefined>>;
+    onDeleteClick: React.Dispatch<React.SetStateAction<number | undefined>>;
+  }
+) => React.ReactNode;
+
+const rowRenderer: TableRowRenderer = ({
+  className,
+  columns,
+  index,
+  key,
+  onRowClick,
+  onRowDoubleClick,
+  onRowMouseOut,
+  onRowMouseOver,
+  onRowRightClick,
+  rowData,
+  style,
+  onEditClick,
+  onDeleteClick,
+}) => {
+  const a11yProps = { 'aria-rowindex': index + 1 } as any;
+
+  if (
+    onRowClick ||
+    onRowDoubleClick ||
+    onRowMouseOut ||
+    onRowMouseOver ||
+    onRowRightClick
+  ) {
+    a11yProps['aria-label'] = 'row';
+    a11yProps.tabIndex = 0;
+
+    if (onRowClick) {
+      a11yProps.onClick = (event: any) => onRowClick({ event, index, rowData });
+    }
+    if (onRowDoubleClick) {
+      a11yProps.onDoubleClick = (event: any) =>
+        onRowDoubleClick({ event, index, rowData });
+    }
+    if (onRowMouseOut) {
+      a11yProps.onMouseOut = (event: any) =>
+        onRowMouseOut({ event, index, rowData });
+    }
+    if (onRowMouseOver) {
+      a11yProps.onMouseOver = (event: any) =>
+        onRowMouseOver({ event, index, rowData });
+    }
+    if (onRowRightClick) {
+      a11yProps.onContextMenu = (event: any) =>
+        onRowRightClick({ event, index, rowData });
+    }
+  }
+
+  return (
+    <div
+      {...a11yProps}
+      className={className}
+      key={key}
+      role="row"
+      style={style}
+    >
+      {columns.map((col: any, index) => {
+        if (index === 5) {
+          return (
+            <div
+              aria-colindex={7}
+              className="ReactVirtualized__Table__rowColumn"
+              role="gridcell"
+              title=""
+              style={{ overflow: 'hidden', flex: '1 1 330.6px' }}
+            >
+              <div className="flex justify-center space-x-2">
+                <Badge onClick={() => onEditClick(rowData.id)}>Edit</Badge>
+                <Badge onClick={() => onDeleteClick(rowData.id)}>Delete</Badge>
+              </div>
+            </div>
+          );
+        } else {
+          return col;
+        }
+      })}
+    </div>
+  );
+};
+
 export default function UsersTable() {
   const { width } = useWindowDimensions();
   const [users, setUsers] = useState<User[]>();
+  const [sortingDirection, setSortingDirection] = useState<SortingConfig>();
+  const [editing, setEditing] = useState<number>();
+  const [deleting, setDeleting] = useState<number>();
+  const [loading, { on, off }] = useToggle(false);
 
-  const display = users ?? [];
+  let display = users
+    ? sortingDirection
+      ? _.orderBy(
+          users,
+          [sortingDirection.column],
+          [sortingDirection.direction]
+        )
+      : users
+    : [];
+
+  console.log(editing);
 
   useEffect(() => {
     async function getUsers() {
+      on();
       const response = await axios
         .get('/api/admin/users')
         .catch((error) => error.response);
@@ -27,12 +136,14 @@ export default function UsersTable() {
       console.log(response);
       if (response.status !== 200) {
         // notify
+        off();
         return;
       }
 
       const { query, users } = response.data;
       console.log(query);
       setUsers(users.map((user: any) => user as User));
+      off();
     }
 
     if (!users || !users.length) {
@@ -40,35 +151,137 @@ export default function UsersTable() {
     }
   }, []);
 
-  function renderHeader() {
-    return <div></div>;
+  function handleHeaderClick({ dataKey }: any) {
+    if (!dataKey || dataKey === '') {
+      return;
+    }
+
+    if (!sortingDirection) {
+      setSortingDirection({
+        column: dataKey,
+        direction: 'asc',
+      });
+    } else if (sortingDirection && sortingDirection.column === dataKey) {
+      if (sortingDirection.direction === 'asc') {
+        setSortingDirection({
+          ...sortingDirection,
+          direction: 'desc',
+        });
+      } else {
+        setSortingDirection(undefined);
+      }
+    } else {
+      setSortingDirection({
+        column: dataKey,
+        direction: 'asc',
+      });
+    }
+  }
+
+  function renderHeader({ dataKey }: any) {
+    let icon = null;
+
+    if (sortingDirection && sortingDirection.column === dataKey) {
+      if (sortingDirection.direction === 'asc') {
+        icon = (
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 15l7-7 7 7"
+            />
+          </svg>
+        );
+      } else {
+        icon = (
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        );
+      }
+    }
+
+    return (
+      <div key={dataKey} className="flex space-x-2 items-center">
+        <p>{dataKey}</p>
+        {icon}
+      </div>
+    );
   }
 
   function getColumns() {
     const columns =
       !users || !users.length
         ? []
-        : Object.keys(users[0]).map((header) => {
-            return (
-              <Column
-                key={header}
-                label={header}
-                dataKey={header}
-                flexGrow={1}
-                flexShrink={1}
-                width={width / Object.keys(users[0]).length}
-                headerRenderer={renderHeader}
-              />
-            );
-          });
+        : [
+            ...Object.keys(users[0]).map((header) => {
+              return (
+                <Column
+                  key={header}
+                  label={header}
+                  dataKey={header}
+                  flexGrow={1}
+                  flexShrink={1}
+                  width={width / (Object.keys(users[0]).length + 1)}
+                  headerRenderer={renderHeader}
+                />
+              );
+            }),
+            <Column
+              key=""
+              // label={header}
+              dataKey=""
+              flexGrow={1}
+              flexShrink={1}
+              width={width / (Object.keys(users[0]).length + 1)}
+              headerRenderer={renderHeader}
+            />,
+          ];
 
-    console.log(columns);
     return columns;
   }
 
   return (
     <React.Fragment>
+      {editing && users && (
+        <CreateEditUserModal
+          open={editing !== undefined}
+          user={users.find((user) => user.id === editing)!}
+          onClose={() => setEditing(undefined)}
+        />
+      )}
+
+      {deleting && users && (
+        <CreateDeleteUserModal
+          open={deleting !== undefined}
+          user={users.find((user) => user.id === deleting)!}
+          onClose={() => {
+            setDeleting(undefined);
+            // TODO: REFRESH
+          }}
+        />
+      )}
+
       <div className="w-full align-middle overflow-x-auto overflow-hidden table-height">
+        <Spinner active={loading} />
         <AutoSizer>
           {({ height, width }) => (
             <Table
@@ -76,10 +289,18 @@ export default function UsersTable() {
               width={width}
               rowHeight={40}
               headerHeight={60}
-              rowCount={0}
+              rowCount={display.length}
               rowGetter={({ index }) => display[index]}
-              // onRowClick={handleRowClick}
-              // onHeaderClick={handleHeaderClick}
+              onHeaderClick={handleHeaderClick}
+              headerClassName="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600  tracking-wider cursor-pointer focus:outline-none"
+              gridClassName="whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
+              rowRenderer={(props) =>
+                rowRenderer({
+                  ...props,
+                  onEditClick: setEditing,
+                  onDeleteClick: setDeleting,
+                })
+              }
             >
               {getColumns()}
             </Table>
@@ -97,75 +318,11 @@ export default function UsersTable() {
         </div>
         <div className="flex-1 flex justify-between sm:justify-end">
           <Button.Group>
-            <Button>Previous</Button>
-            <Button>Next</Button>
+            <Button disabled>Previous</Button>
+            <Button disabled>Next</Button>
           </Button.Group>
         </div>
       </nav>
     </React.Fragment>
-  );
-
-  return (
-    <table className="divide-y divide-cool-gray-200">
-      <thead>
-        <tr>
-          <th className="px-6 py-3 bg-cool-gray-50 text-left text-xs leading-4 font-medium text-cool-gray-500 uppercase tracking-wider">
-            Transaction
-          </th>
-          <th className="px-6 py-3 bg-cool-gray-50 text-right text-xs leading-4 font-medium text-cool-gray-500 uppercase tracking-wider">
-            Amount
-          </th>
-          <th className="hidden px-6 py-3 bg-cool-gray-50 text-left text-xs leading-4 font-medium text-cool-gray-500 uppercase tracking-wider md:block">
-            Status
-          </th>
-          <th className="px-6 py-3 bg-cool-gray-50 text-right text-xs leading-4 font-medium text-cool-gray-500 uppercase tracking-wider">
-            Date
-          </th>
-        </tr>
-      </thead>
-      <tbody className="bg-white divide-y divide-cool-gray-200 table-height">
-        <tr className="bg-white">
-          <td className="max-w-0 w-full px-6 py-4 whitespace-no-wrap text-sm leading-5 text-cool-gray-900">
-            <div className="flex">
-              <a
-                href="#"
-                className="group inline-flex space-x-2 truncate text-sm leading-5"
-              >
-                {/* <!-- Heroicon name: cash --> */}
-                <svg
-                  className="flex-shrink-0 h-5 w-5 text-cool-gray-400 group-hover:text-cool-gray-500 transition ease-in-out duration-150"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                <p className="text-cool-gray-500 truncate group-hover:text-cool-gray-900 transition ease-in-out duration-150">
-                  Payment to Molly Sanders
-                </p>
-              </a>
-            </div>
-          </td>
-          <td className="px-6 py-4 text-right whitespace-no-wrap text-sm leading-5 text-cool-gray-500">
-            <span className="text-cool-gray-900 font-medium">$20,000 </span>
-            USD
-          </td>
-          <td className="hidden px-6 py-4 whitespace-no-wrap text-sm leading-5 text-cool-gray-500 md:block">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-green-100 text-green-800 capitalize">
-              success
-            </span>
-          </td>
-          <td className="px-6 py-4 text-right whitespace-no-wrap text-sm leading-5 text-cool-gray-500">
-            July 11, 2020
-          </td>
-        </tr>
-
-        {/* <!-- More rows... --> */}
-      </tbody>
-    </table>
   );
 }

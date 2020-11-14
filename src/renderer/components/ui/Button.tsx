@@ -29,6 +29,7 @@ export type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   fullWidth?: boolean;
   rounded?: boolean;
   loading?: boolean;
+  tiny?: boolean;
 };
 
 // TODO: implement the loading distinction in this button element
