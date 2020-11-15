@@ -1,5 +1,9 @@
 export enum COLORS {
-  BLUE = '#639CFF',
+  BLUE = '#639CFF', // Cornflower Blue
+  DARK_BLUE = '#2B4570', // Dark Cornflower Blue
+  MUSEUM_GREEN = '#008A83', // Dark Cyan
+  WARNING = '#E0CA3C', // Citrine
+  DANGER = '#c20114', // Venetian Red
 }
 
 export const TEXT = {

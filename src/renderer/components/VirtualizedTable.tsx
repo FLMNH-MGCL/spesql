@@ -3,8 +3,6 @@ import { Table, Column, AutoSizer } from 'react-virtualized';
 import useWindowDimensions from './utils/useWindowDimensions';
 import { SortableContainer } from 'react-sortable-hoc';
 import _ from 'lodash';
-import 'react-virtualized/styles.css';
-
 import { FilterToggle, FilterSearch } from './Filter';
 import ClearQueryButton from './buttons/ClearQueryButton';
 import RefreshQueryButton from './buttons/RefreshQueryButton';
@@ -19,6 +17,8 @@ import Heading from './ui/Heading';
 
 import serverImage from '../assets/svg/data_processing_two.svg';
 import ShowQueryButton from './buttons/ShowQueryButton';
+
+import 'react-virtualized/styles.css';
 
 const SortableTable = SortableContainer(Table);
 

@@ -19,10 +19,11 @@ import useToggle from '../utils/useToggle';
 
 function CSVParser({ onFileUpload }: UploadProps) {
   const { notify } = useNotify();
-  function handleOnFileLoad(data: any) {
-    // FIXME: I am waiting on version 4.0 release for papaparse, which will introduce
-    // convenient hooks for offloading files programatically!!
 
+  const [isReset, setReset] = useState(false);
+
+  function handleOnFileLoad(data: any) {
+    console.log(data);
     if (!data || !data.length) {
       notify({
         title: 'Upload Error',
@@ -63,15 +64,23 @@ function CSVParser({ onFileUpload }: UploadProps) {
   }
 
   function handleRemoveFile(data: any) {
+    // FIXME: I am waiting on version 4.0 release for papaparse, which will introduce
+    // convenient, react hooks for offloading files programatically!!
+    // until then, I have to trigger the reset state twice to get the cache to clear
     onFileUpload(data);
+
+    setReset(true);
+
+    setTimeout(() => setReset(false), 200);
   }
 
+  // documentation for styling the CSV reader https://github.com/Bunlong/react-papaparse/wiki/CSVReader-(Drag-to-Upload)-Style
   return (
     <CSVReader
       onDrop={handleOnFileLoad}
       onError={handleOnError}
       config={{ header: true }}
-      style={{ borderRadius: '0.375rem' }}
+      style={{ dropArea: { borderRadius: '.375rem' } }}
       onRemoveFile={handleRemoveFile}
       addRemoveButton
     >
