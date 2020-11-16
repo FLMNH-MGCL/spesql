@@ -70,6 +70,10 @@ const defaultLogs = {
 type SpesqlSession = {
   user?: User | null;
 
+  expiredSession: boolean;
+
+  expireSession(): void;
+
   // query config
   queryData: QueryConfig;
   tableConfig: TableConfig;
@@ -97,6 +101,24 @@ type SpesqlSession = {
 
 export const useStore = create<SpesqlSession>((set) => ({
   user: null,
+
+  expiredSession: true,
+
+  expireSession: () =>
+    set((state) => ({
+      ...state,
+      expiredSession: true,
+    })),
+
+  login: (id: string, username: string, accessRole: string) =>
+    set((state) => ({
+      ...state,
+      user: { id, username, accessRole },
+      expiredSession: false,
+    })),
+
+  logout: () =>
+    set((state) => ({ ...state, user: null, expiredSession: true })),
 
   // QUERY CONFIGS
   queryData: {
@@ -199,8 +221,4 @@ export const useStore = create<SpesqlSession>((set) => ({
       ...state,
       loading: newLoading ?? !state.loading,
     })),
-
-  login: (id: string, username: string, accessRole: string) =>
-    set((state) => ({ ...state, user: { id, username, accessRole } })),
-  logout: () => set((state) => ({ ...state, user: null })),
 }));

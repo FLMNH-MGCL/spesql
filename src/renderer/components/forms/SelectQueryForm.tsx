@@ -12,6 +12,7 @@ import { useStore } from '../../../stores';
 import { SelectOption } from '../ui/Select';
 import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
+import shallow from 'zustand/shallow';
 
 type Props = {
   onSubmit(values: Values): void;
@@ -21,7 +22,13 @@ export default function SelectQueryForm({ onSubmit }: Props) {
   const [advanced, setAdvanced] = useState(false);
   const [tables, setTables] = useState<SelectOption[]>([]);
 
-  const { user } = useStore((store) => ({ user: store.user }));
+  const { expireSession, expiredSession } = useStore(
+    (store) => ({
+      expireSession: store.expireSession,
+      expiredSession: store.expiredSession,
+    }),
+    shallow
+  );
 
   // TODO: type validator as function
   function setValidator(validator: any) {
@@ -31,8 +38,21 @@ export default function SelectQueryForm({ onSubmit }: Props) {
   }
 
   useEffect(() => {
-    fetchTables(setTables);
-  }, []);
+    async function init() {
+      const errored = await fetchTables(setTables);
+
+      if (errored) {
+        if (errored === 'BAD SESSION') {
+          expireSession();
+        } else {
+          console.log(errored);
+          throw new Error('Some other error occurred!');
+        }
+      }
+    }
+
+    init();
+  }, [expiredSession]);
 
   return (
     <Form onSubmit={onSubmit} id="select-form">

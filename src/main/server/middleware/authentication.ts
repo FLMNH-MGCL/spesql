@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { connection } from '../server';
-import bcrypt from 'bcrypt';
 
 /**
  * Middleware function to verify a valid, current session
@@ -16,7 +15,7 @@ export function validateSession(
 ) {
   if (req.session?.userId === undefined) {
     console.log(req.session);
-    res.status(409).send('The session has expired');
+    res.status(401).send('The session has expired');
   } else {
     next();
   }

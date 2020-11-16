@@ -11,7 +11,7 @@ export default function login(req: Request, res: Response) {
 
   // const user = { id: 0, username, password };
   else if (!connection) {
-    res.status(500).send('Lost connection with database')
+    res.status(500).send('Lost connection with database');
   } else {
     connection.query(
       // FIXME: change to users once matching users_new

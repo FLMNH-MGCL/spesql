@@ -86,8 +86,6 @@ export default function CreateSelectModal({ open, onClose }: Props) {
       })
       .catch((error) => error.response);
 
-    console.log(selectResponse);
-
     if (selectResponse.status === 200 && selectResponse.data) {
       const { specimen, query } = selectResponse.data;
 

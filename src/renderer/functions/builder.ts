@@ -26,7 +26,6 @@ export function buildSelectQuery(table: string, conditionals?: any[]) {
 }
 
 // TODO: type me plz
-// TODO: distinct boolean
 export function buildCountQuery(
   table: string,
   fields: string[],

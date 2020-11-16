@@ -3,7 +3,7 @@ import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import CreateLogModal from './CreateLogModal';
-import { CSVReader } from 'react-papaparse';
+import { CSVReader, readString } from 'react-papaparse';
 import { BACKEND_URL, isSpecimen, Specimen } from '../../types';
 import { useNotify } from '../utils/context';
 import CreateHelpModal from './CreateHelpModal';
@@ -14,6 +14,8 @@ import {
 import { useStore } from '../../../stores';
 import axios from 'axios';
 import useToggle from '../utils/useToggle';
+import shallow from 'zustand/shallow';
+import { sleep } from '../../functions/util';
 
 // TODO: add typings in this file
 
@@ -83,6 +85,7 @@ function CSVParser({ onFileUpload }: UploadProps) {
       style={{ dropArea: { borderRadius: '.375rem' } }}
       onRemoveFile={handleRemoveFile}
       addRemoveButton
+      isReset={isReset}
     >
       <div className="text-center">
         <svg
@@ -134,12 +137,20 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const { notify } = useNotify();
 
   const [tab, setTab] = useState(0);
-  const [data, setData] = useState('');
+  const [pasteData, setPasteData] = useState('');
   const [rawData, setRawFile] = useState<any>();
 
   const [loading, { on, off }] = useToggle(false);
 
   const updateInsertLog = useStore((state) => state.updateInsertLog);
+
+  const { expiredSession, expireSession } = useStore(
+    (state) => ({
+      expiredSession: state.expiredSession,
+      expireSession: state.expireSession,
+    }),
+    shallow
+  );
 
   // console.log(data, rawData);
 
@@ -148,76 +159,107 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
   //https://github.com/Bunlong/react-papaparse/blob/master/demo/CSVReader1.js
 
+  async function handleUploadSubmit() {
+    on();
+    // console.log(rawData);
+    let allErrors = [];
+    let insertionValues = [];
+    for (let i = 0; i < rawData.length; i++) {
+      const currentSpecimen = rawData[i].data as Specimen;
+      const specimenErrors = validateSpecimen(currentSpecimen);
+
+      if (specimenErrors && specimenErrors.length) {
+        console.log('ERROR OCCURRED:', currentSpecimen);
+        allErrors.push({ index: i, errors: specimenErrors });
+      } else {
+        insertionValues.push(fixPartiallyCorrect(currentSpecimen));
+      }
+    }
+
+    console.log('VALID:\n', insertionValues);
+    console.log('============================');
+    console.log('INVALID:\n', allErrors);
+
+    if (allErrors.length) {
+      notify({
+        title: 'Insert Errors',
+        message:
+          'There were one or more errors that occurred during this request that prevented it from being submitted. Please review the appropriate logs.',
+        level: 'error',
+      });
+      updateInsertLog(allErrors);
+      off();
+    } else {
+      let serverErrors = [];
+
+      for (let i = 0; i < insertionValues.length; i++) {
+        const currentValue = insertionValues[i];
+        const insertResponse = await axios
+          .post(BACKEND_URL + '/api/insert/single', {
+            values: currentValue,
+            table: 'molecularLab',
+          })
+          .catch((error) => error.response);
+
+        if (insertResponse.status !== 201) {
+          const { code, sqlMessage } = insertResponse.data;
+          serverErrors.push({
+            index: i,
+            errors: [{ field: code, message: sqlMessage }],
+          });
+        } else if (insertResponse.status === 401) {
+          // session expired
+          expireSession();
+
+          // wait for reauth
+          // FIXME: I am guessing this will break hard
+          while (expiredSession) {
+            await sleep(2000);
+            // reauth modal will launch, which will 'relogin'
+          }
+
+          notify({
+            title: 'Session Restored',
+            message: 'Insert query resuming',
+            level: 'success',
+          });
+
+          // set the counter back one
+          i -= 1;
+        }
+      }
+
+      if (serverErrors.length) {
+        notify({
+          title: 'Server Errors Occurred',
+          message:
+            'Some or all of the insertions emitted errors. Please review the appropriate logs.',
+          level: 'warning',
+        });
+        updateInsertLog(serverErrors);
+      } else {
+        notify({
+          title: 'Insertions Complete',
+          message: 'No errors detected',
+          level: 'success',
+        });
+      }
+      off();
+    }
+  }
+
+  async function handlePasteSubmit() {
+    const readingConfig = { header: true };
+
+    const results = readString(pasteData, readingConfig);
+  }
+
   // TODO: types and stuff
   async function handleSubmit() {
     if (rawData && rawData.length > 0) {
-      on();
-      console.log(rawData);
-      let allErrors = [];
-      let insertionValues = [];
-      for (let i = 0; i < rawData.length; i++) {
-        const currentSpecimen = rawData[i].data as Specimen;
-        const specimenErrors = validateSpecimen(currentSpecimen);
-
-        if (specimenErrors && specimenErrors.length) {
-          console.log('ERROR OCCURRED:', currentSpecimen);
-          allErrors.push({ index: i, errors: specimenErrors });
-        } else {
-          insertionValues.push(fixPartiallyCorrect(currentSpecimen));
-        }
-      }
-
-      console.log('VALID:\n', insertionValues);
-      console.log('============================');
-      console.log('INVALID:\n', allErrors);
-
-      if (allErrors.length) {
-        notify({
-          title: 'Insert Errors',
-          message:
-            'There were one or more errors that occurred during this request that prevented it from being submitted. Please review the appropriate logs.',
-          level: 'error',
-        });
-        updateInsertLog(allErrors);
-        off();
-      } else {
-        let serverErrors = [];
-
-        for (let i = 0; i < insertionValues.length; i++) {
-          const currentValue = insertionValues[i];
-          const insertResponse = await axios
-            .post(BACKEND_URL + '/api/insert/single', {
-              values: currentValue,
-              table: 'molecularLab',
-            })
-            .catch((error) => error.response);
-
-          if (insertResponse.status !== 201) {
-            const { code, sqlMessage } = insertResponse.data;
-            serverErrors.push({
-              index: i,
-              errors: [{ field: code, message: sqlMessage }],
-            });
-          }
-        }
-
-        if (serverErrors.length) {
-          notify({
-            title: 'Server Errors Occurred',
-            message:
-              'Some or all of the insertions emitted errors. Please review the appropriate logs.',
-            level: 'warning',
-          });
-          updateInsertLog(serverErrors);
-        } else {
-          notify({
-            title: 'Insertions Complete',
-            message: 'No errors detected',
-            level: 'success',
-          });
-        }
-        off();
-      }
+      handleUploadSubmit();
+    } else if (pasteData) {
+      handlePasteSubmit();
     }
   }
 
@@ -239,7 +281,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
             )}
 
             {tab === 1 && (
-              <PasteUpload onFileUpload={(data: any) => setData(data)} />
+              <PasteUpload onFileUpload={(data: any) => setPasteData(data)} />
             )}
           </div>
         </Modal.Content>

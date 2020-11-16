@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import shallow from 'zustand/shallow';
+import { useStore } from '../../../stores';
 import {
   NeutralValidator,
   validateAdvancedCountQuery,
@@ -19,6 +21,14 @@ export default function CountQueryForm({ onSubmit }: Props) {
   const [advanced, setAdvanced] = useState(false);
   const [tables, setTables] = useState<SelectOption[]>([]);
 
+  const { expireSession, expiredSession } = useStore(
+    (store) => ({
+      expireSession: store.expireSession,
+      expiredSession: store.expiredSession,
+    }),
+    shallow
+  );
+
   // TODO: type validator as function
   function setValidator(validator: any) {
     if (!advanced) {
@@ -27,8 +37,21 @@ export default function CountQueryForm({ onSubmit }: Props) {
   }
 
   useEffect(() => {
-    fetchTables(setTables);
-  }, []);
+    async function init() {
+      const errored = await fetchTables(setTables);
+
+      if (errored) {
+        if (errored === 'BAD SESSION') {
+          expireSession();
+        } else {
+          console.log(errored);
+          throw new Error('Some other error occurred!');
+        }
+      }
+    }
+
+    init();
+  }, [expiredSession]);
 
   return (
     <Form onSubmit={onSubmit} id="count-form" className="mb-3">

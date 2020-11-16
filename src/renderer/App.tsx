@@ -13,11 +13,13 @@ import { NotificationContent } from './types';
 import { NotificationContext } from './components/utils/context';
 import Admin from './pages/Admin';
 import ErrorBoundary from './components/ErrorBoundary';
+import CreateVerifySessionModal from './components/modals/CreateVerifySessionModal';
 
 function HomeStack() {
   return (
     <React.Fragment>
       <Header />
+      <CreateVerifySessionModal />
       <Routes>
         <AuthRoute path="/" element={<Home />} />
         <AuthRoute path="/visualization" element={<Visualization />} />

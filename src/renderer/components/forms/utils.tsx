@@ -44,6 +44,8 @@ export async function fetchTables(setTables: any) {
         return { label: table, value: table };
       })
     );
+  } else if (res.status === 401) {
+    return 'BAD SESSION';
   }
 }
 
