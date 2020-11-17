@@ -30,8 +30,6 @@ export default function SignIn() {
 
     off();
 
-    console.log(loginResponse);
-
     if (loginResponse.status === 200) {
       notify({
         title: `Welcome, ${username}`,
@@ -41,12 +39,31 @@ export default function SignIn() {
 
       setTimeout(() => {
         const { id, accessRole } = loginResponse.data;
-        // create spesql session
-        // store.session.createSession(username, id, accessRole);
 
         login(id, username, accessRole);
         navigate('/home');
       }, 500);
+    } else if (loginResponse.status === 401) {
+      notify({
+        title: 'Could not authenticate',
+        message:
+          'The username or password combination you entered is either invalid or does not exist',
+        level: 'error',
+      });
+    } else if (loginResponse.status === 500 || loginResponse.status === 504) {
+      notify({
+        title: 'Server error',
+        message:
+          'It is possible you lost connection to the database, please check your internet and VPN status.',
+        level: 'error',
+      });
+    } else {
+      notify({
+        title: 'Unhandled error!',
+        message:
+          'Please (on the top tool bar) go to View > Toggle Developer Tools > Console and then copy/screenshot what you see and send it to Aaron',
+        level: 'error',
+      });
     }
   }
 

@@ -14,6 +14,7 @@ import { NotificationContext } from './components/utils/context';
 import Admin from './pages/Admin';
 import ErrorBoundary from './components/ErrorBoundary';
 import CreateVerifySessionModal from './components/modals/CreateVerifySessionModal';
+import say from 'say';
 
 function HomeStack() {
   return (
@@ -34,6 +35,10 @@ export default function App() {
   function notify(content: NotificationContent) {
     const notification = notificationSystem.current;
     const { title, message, level } = content;
+
+    if (level === 'error') {
+      say.speak('Error Occurred');
+    }
 
     // @ts-ignore
     notification.addNotification({

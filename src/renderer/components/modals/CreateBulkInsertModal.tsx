@@ -1,10 +1,10 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import CreateLogModal from './CreateLogModal';
 import { CSVReader, readString } from 'react-papaparse';
-import { BACKEND_URL, isSpecimen, Specimen } from '../../types';
+import { BACKEND_URL, isSpecimen, Specimen, SpecimenFields } from '../../types';
 import { useNotify } from '../utils/context';
 import CreateHelpModal from './CreateHelpModal';
 import {
@@ -16,6 +16,8 @@ import axios from 'axios';
 import useToggle from '../utils/useToggle';
 import shallow from 'zustand/shallow';
 import { sleep } from '../../functions/util';
+import Select, { SelectOption } from '../ui/Select';
+import { fetchTables } from '../forms/utils';
 
 // TODO: add typings in this file
 
@@ -139,6 +141,8 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const [tab, setTab] = useState(0);
   const [pasteData, setPasteData] = useState('');
   const [rawData, setRawFile] = useState<any>();
+  const [databaseTable, setDatabaseTable] = useState();
+  const [tables, setTables] = useState<SelectOption[]>([]);
 
   const [loading, { on, off }] = useToggle(false);
 
@@ -152,6 +156,42 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     shallow
   );
 
+  const expiredRef = useRef(expiredSession);
+
+  //FIXME: attempting to fix some memory leaks
+  // TODO: maybe fixed??
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    async function init() {
+      const res = await axios
+        .get(BACKEND_URL + '/api/queriables/select/')
+        .catch((error) => error.response);
+
+      if (res.data && res.data.tables) {
+        if (mountedRef.current === true) {
+          setTables(
+            res.data.tables.map((table: string) => {
+              return { label: table, value: table };
+            })
+          );
+        }
+      } else if (res.status === 401) {
+        expireSession();
+      }
+    }
+
+    expiredRef.current = expiredSession;
+    if (mountedRef.current === true) {
+      init();
+    }
+
+    return () => {
+      console.log('TODO: cleanup');
+      mountedRef.current = false;
+    };
+  }, [expiredSession]);
+
   // console.log(data, rawData);
 
   // look into xlsx package:
@@ -159,9 +199,29 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
   //https://github.com/Bunlong/react-papaparse/blob/master/demo/CSVReader1.js
 
-  async function handleUploadSubmit() {
-    on();
-    // console.log(rawData);
+  async function awaitReauth() {
+    notify({
+      title: 'Session Expired',
+      message: 'Pausing the insertion query until you revalidate the session',
+      level: 'warning',
+    });
+
+    while (expiredRef.current === true) {
+      await sleep(2000);
+    }
+
+    if (expiredRef.current === false) {
+      notify({
+        title: 'Session Restored',
+        message: 'Insert query resuming',
+        level: 'success',
+      });
+    }
+
+    return '';
+  }
+
+  function parseUploadRows() {
     let allErrors = [];
     let insertionValues = [];
     for (let i = 0; i < rawData.length; i++) {
@@ -176,9 +236,78 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       }
     }
 
-    console.log('VALID:\n', insertionValues);
-    console.log('============================');
-    console.log('INVALID:\n', allErrors);
+    return { allErrors, insertionValues };
+  }
+
+  function parsePasteRows(result: any[]) {
+    let allErrors = [];
+    let insertionValues = [];
+    for (let i = 0; i < result.length; i++) {
+      const currentSpecimen = result[i] as Specimen;
+      const specimenErrors = validateSpecimen(currentSpecimen);
+
+      if (specimenErrors && specimenErrors.length) {
+        console.log('ERROR OCCURRED:', currentSpecimen);
+        allErrors.push({ index: i, errors: specimenErrors });
+      } else {
+        insertionValues.push(fixPartiallyCorrect(currentSpecimen));
+      }
+    }
+
+    return { allErrors, insertionValues };
+  }
+
+  async function insertRows(insertionValues: Partial<SpecimenFields>[]) {
+    let serverErrors = [];
+    for (let i = 0; i < insertionValues.length; i++) {
+      const currentValue = insertionValues[i];
+      const insertResponse = await axios
+        .post(BACKEND_URL + '/api/insert/single', {
+          values: currentValue,
+          table: databaseTable,
+        })
+        .catch((error) => error.response);
+
+      if (insertResponse.status === 401) {
+        // session expired
+        expireSession();
+
+        await awaitReauth().then(() => {
+          i -= 1;
+        });
+      } else if (insertResponse.status !== 201) {
+        const { code, sqlMessage } = insertResponse.data;
+        serverErrors.push({
+          index: i,
+          errors: [{ field: code, message: sqlMessage }],
+        });
+      }
+    }
+
+    return serverErrors;
+  }
+
+  async function handleUploadSubmit() {
+    on();
+    // let allErrors = [];
+    // let insertionValues = [];
+    // for (let i = 0; i < rawData.length; i++) {
+    //   const currentSpecimen = rawData[i].data as Specimen;
+    //   const specimenErrors = validateSpecimen(currentSpecimen);
+
+    //   if (specimenErrors && specimenErrors.length) {
+    //     console.log('ERROR OCCURRED:', currentSpecimen);
+    //     allErrors.push({ index: i, errors: specimenErrors });
+    //   } else {
+    //     insertionValues.push(fixPartiallyCorrect(currentSpecimen));
+    //   }
+    // }
+
+    const { allErrors, insertionValues } = parseUploadRows();
+
+    // console.log('VALID:\n', insertionValues);
+    // console.log('============================');
+    // console.log('INVALID:\n', allErrors);
 
     if (allErrors.length) {
       notify({
@@ -190,44 +319,34 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       updateInsertLog(allErrors);
       off();
     } else {
-      let serverErrors = [];
+      // let serverErrors = [];
 
-      for (let i = 0; i < insertionValues.length; i++) {
-        const currentValue = insertionValues[i];
-        const insertResponse = await axios
-          .post(BACKEND_URL + '/api/insert/single', {
-            values: currentValue,
-            table: 'molecularLab',
-          })
-          .catch((error) => error.response);
+      const serverErrors = await insertRows(insertionValues);
 
-        if (insertResponse.status !== 201) {
-          const { code, sqlMessage } = insertResponse.data;
-          serverErrors.push({
-            index: i,
-            errors: [{ field: code, message: sqlMessage }],
-          });
-        } else if (insertResponse.status === 401) {
-          // session expired
-          expireSession();
+      // for (let i = 0; i < insertionValues.length; i++) {
+      //   const currentValue = insertionValues[i];
+      //   const insertResponse = await axios
+      //     .post(BACKEND_URL + '/api/insert/single', {
+      //       values: currentValue,
+      //       table: 'molecularLab',
+      //     })
+      //     .catch((error) => error.response);
 
-          // wait for reauth
-          // FIXME: I am guessing this will break hard
-          while (expiredSession) {
-            await sleep(2000);
-            // reauth modal will launch, which will 'relogin'
-          }
+      //   if (insertResponse.status === 401) {
+      //     // session expired
+      //     expireSession();
 
-          notify({
-            title: 'Session Restored',
-            message: 'Insert query resuming',
-            level: 'success',
-          });
-
-          // set the counter back one
-          i -= 1;
-        }
-      }
+      //     await awaitReauth().then(() => {
+      //       i -= 1;
+      //     });
+      //   } else if (insertResponse.status !== 201) {
+      //     const { code, sqlMessage } = insertResponse.data;
+      //     serverErrors.push({
+      //       index: i,
+      //       errors: [{ field: code, message: sqlMessage }],
+      //     });
+      //   }
+      // }
 
       if (serverErrors.length) {
         notify({
@@ -252,16 +371,60 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     const readingConfig = { header: true };
 
     const results = readString(pasteData, readingConfig);
+
+    on();
+
+    const { allErrors, insertionValues } = parsePasteRows(results.data);
+
+    console.log(allErrors, insertionValues);
+
+    if (allErrors.length) {
+      notify({
+        title: 'Insert Errors',
+        message:
+          'There were one or more errors that occurred during this request that prevented it from being submitted. Please review the appropriate logs.',
+        level: 'error',
+      });
+      updateInsertLog(allErrors);
+      off();
+    } else {
+      const serverErrors = await insertRows(insertionValues);
+
+      if (serverErrors.length) {
+        notify({
+          title: 'Server Errors Occurred',
+          message:
+            'Some or all of the insertions emitted errors. Please review the appropriate logs.',
+          level: 'warning',
+        });
+        updateInsertLog(serverErrors);
+      } else {
+        notify({
+          title: 'Insertions Complete',
+          message: 'No errors detected',
+          level: 'success',
+        });
+      }
+      off();
+    }
   }
 
   // TODO: types and stuff
   async function handleSubmit() {
-    if (rawData && rawData.length > 0) {
+    if (!databaseTable) {
+      notify({
+        title: 'Invalid Table',
+        message: 'You must select a table!',
+        level: 'error',
+      });
+    } else if (rawData && rawData.length > 0) {
       handleUploadSubmit();
     } else if (pasteData) {
       handlePasteSubmit();
     }
   }
+
+  console.log(databaseTable);
 
   return (
     <React.Fragment>
@@ -276,6 +439,15 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           />
 
           <div className="py-8">
+            <Select
+              className="pb-3 -mt-3"
+              options={tables}
+              value={databaseTable}
+              label="Select a Table"
+              updateControlled={(newVal: any) => {
+                setDatabaseTable(newVal);
+              }}
+            />
             {tab === 0 && (
               <CSVParser onFileUpload={(data: any) => setRawFile(data)} />
             )}
