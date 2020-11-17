@@ -3,13 +3,13 @@ import {
   ActionWithRulesProps,
   CombinatorSelectorProps,
   default as Builder,
-  Field,
+  // Field,
   FieldSelectorProps,
-  NameLabelPair,
+  // NameLabelPair,
   QueryBuilderProps,
 } from 'react-querybuilder';
 import Button from './ui/Button';
-import Select, { SelectOption } from './ui/Select';
+import Select from './ui/Select';
 
 /**
  * NOTE: QueryBuilder is a custom component wrapper around the QueryBuilder from
@@ -19,10 +19,10 @@ import Select, { SelectOption } from './ui/Select';
  * this library, and then overriding the QueryBuilder's control elements with these
  */
 
-function convertFieldSelectOptions(options: Field[]) {
-  // return options.map((opt) => {
-  // })
-}
+// function convertFieldSelectOptions(options: Field[]) {
+//   // return options.map((opt) => {
+//   // })
+// }
 
 function convertCombinatorSelectorOptions(
   options: { name: string; label: string }[]
@@ -72,10 +72,10 @@ function CombinatorSelectorSelect({
 
 // TODO: very broken
 function FieldSelectorSelect({
-  options,
+  // options,
   value,
   title,
-  operator,
+  // operator,
   handleOnChange,
 }: FieldSelectorProps) {
   return (

@@ -66,6 +66,7 @@ export default function ConditionalForm({ advanced }: ConditionalFormProps) {
               ];
 
               // TODO, pass to validateConditionalValue
+              //@ts-ignore
               const conditionalOperator = getValues()[
                 `conditionalOperator_${numberInEnglish}`
               ];

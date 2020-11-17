@@ -34,6 +34,7 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
       }
 
       case 'count': {
+        return <SelectHelpModal />;
       }
 
       // case 'update': {

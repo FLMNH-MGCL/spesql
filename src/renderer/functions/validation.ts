@@ -7,7 +7,6 @@ import {
   lifeStageControl,
   samplingProtocolControl,
   geodeticDatumControl,
-  fieldOptions,
   BooleanField,
   validUnits,
   dispositionControl,
@@ -41,7 +40,7 @@ export function validateAdvancedCountQuery(query: string) {
   }
 }
 
-export function validateAdvancedUpdateQuery(query: string) {
+export function validateAdvancedUpdateQuery(_query: string) {
   return 'Cannot do this yet';
 }
 
@@ -55,7 +54,7 @@ export function validateFieldSelection(fields: string[]) {
   return true;
 }
 
-export function validateOperator(operator: string) {}
+export function validateOperator(_operator: string) {}
 
 // TODO: add ignore when REGEX
 export function validateConditionalValue(condition: string, field: string) {
@@ -479,7 +478,7 @@ export function validateBox(value: string) {
  */
 
 // TODO
-export function validateMeasuredField(value: string) {
+export function validateMeasuredField(_value: string) {
   return true;
 }
 

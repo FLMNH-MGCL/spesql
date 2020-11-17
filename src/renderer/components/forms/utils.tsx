@@ -47,6 +47,8 @@ export async function fetchTables(setTables: any) {
   } else if (res.status === 401) {
     return 'BAD SESSION';
   }
+
+  return undefined;
 }
 
 export function getFormElementForField(key: string, currentValue: any) {

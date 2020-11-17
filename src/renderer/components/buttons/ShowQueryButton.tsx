@@ -1,9 +1,7 @@
-import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 import { useStore } from '../../../stores';
 import Badge from '../ui/Badge';
-import Text from '../ui/Text';
 import useToggle from '../utils/useToggle';
 
 type Props = {

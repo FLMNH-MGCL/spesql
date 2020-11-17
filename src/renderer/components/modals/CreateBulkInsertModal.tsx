@@ -17,7 +17,6 @@ import useToggle from '../utils/useToggle';
 import shallow from 'zustand/shallow';
 import { sleep } from '../../functions/util';
 import Select, { SelectOption } from '../ui/Select';
-import { fetchTables } from '../forms/utils';
 
 // TODO: add typings in this file
 
@@ -25,6 +24,7 @@ function CSVParser({ onFileUpload }: UploadProps) {
   const { notify } = useNotify();
 
   const [isReset, setReset] = useState(false);
+  const updateInsertLog = useStore((state) => state.updateInsertLog);
 
   function handleOnFileLoad(data: any) {
     console.log(data);
@@ -62,9 +62,26 @@ function CSVParser({ onFileUpload }: UploadProps) {
     }
   }
   function handleOnError(error: any) {
-    // TODO: notify
+    notify({
+      title: 'CSV Parsing Error',
+      message:
+        'An unknown error occurred, please notify Aaron to look into this (you can find the error in the logs)',
+      level: 'error',
+    });
 
-    console.log(error);
+    // FIXME: I do not know the structure of an error like this,
+    // if it ever happens and is reported to me I will update this section to match
+    updateInsertLog([
+      {
+        index: 0,
+        errors: [
+          {
+            field: 'N/A: CSV Parsing Error',
+            message: JSON.stringify(error),
+          },
+        ],
+      },
+    ]);
   }
 
   function handleRemoveFile(data: any) {
@@ -125,7 +142,7 @@ function PasteUpload({ onFileUpload }: UploadProps) {
       }
       rows={4}
       placeholder="Be sure to include the CSV header row"
-      className="flex w-full justify-center px-6 mx-auto pt-5 pb-6 border border-gray-500 rounded-md h-full "
+      className="flex w-full justify-center px-6 mx-auto pt-5 pb-6 border border-gray-400 rounded-md h-full "
     ></textarea>
   );
 }
@@ -158,8 +175,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
   const expiredRef = useRef(expiredSession);
 
-  //FIXME: attempting to fix some memory leaks
-  // TODO: maybe fixed??
   const mountedRef = useRef(true);
 
   useEffect(() => {
@@ -187,7 +202,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     }
 
     return () => {
-      console.log('TODO: cleanup');
       mountedRef.current = false;
     };
   }, [expiredSession]);
@@ -289,25 +303,8 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
   async function handleUploadSubmit() {
     on();
-    // let allErrors = [];
-    // let insertionValues = [];
-    // for (let i = 0; i < rawData.length; i++) {
-    //   const currentSpecimen = rawData[i].data as Specimen;
-    //   const specimenErrors = validateSpecimen(currentSpecimen);
-
-    //   if (specimenErrors && specimenErrors.length) {
-    //     console.log('ERROR OCCURRED:', currentSpecimen);
-    //     allErrors.push({ index: i, errors: specimenErrors });
-    //   } else {
-    //     insertionValues.push(fixPartiallyCorrect(currentSpecimen));
-    //   }
-    // }
 
     const { allErrors, insertionValues } = parseUploadRows();
-
-    // console.log('VALID:\n', insertionValues);
-    // console.log('============================');
-    // console.log('INVALID:\n', allErrors);
 
     if (allErrors.length) {
       notify({
@@ -319,34 +316,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       updateInsertLog(allErrors);
       off();
     } else {
-      // let serverErrors = [];
-
       const serverErrors = await insertRows(insertionValues);
-
-      // for (let i = 0; i < insertionValues.length; i++) {
-      //   const currentValue = insertionValues[i];
-      //   const insertResponse = await axios
-      //     .post(BACKEND_URL + '/api/insert/single', {
-      //       values: currentValue,
-      //       table: 'molecularLab',
-      //     })
-      //     .catch((error) => error.response);
-
-      //   if (insertResponse.status === 401) {
-      //     // session expired
-      //     expireSession();
-
-      //     await awaitReauth().then(() => {
-      //       i -= 1;
-      //     });
-      //   } else if (insertResponse.status !== 201) {
-      //     const { code, sqlMessage } = insertResponse.data;
-      //     serverErrors.push({
-      //       index: i,
-      //       errors: [{ field: code, message: sqlMessage }],
-      //     });
-      //   }
-      // }
 
       if (serverErrors.length) {
         notify({
@@ -409,7 +379,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     }
   }
 
-  // TODO: types and stuff
   async function handleSubmit() {
     if (!databaseTable) {
       notify({
@@ -423,8 +392,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       handlePasteSubmit();
     }
   }
-
-  console.log(databaseTable);
 
   return (
     <React.Fragment>

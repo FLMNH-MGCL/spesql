@@ -95,7 +95,7 @@ export type PropsOf<TTag = any> = TTag extends React.ElementType
 
 export const BACKEND_URL =
   process.env.NODE_ENV === 'production'
-    ? process.env.BACKEND_URL!
+    ? process.env.ELECTRON_WEBPACK_APP_BACKEND_URL!
     : 'http://localhost:5000';
 
 export type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };

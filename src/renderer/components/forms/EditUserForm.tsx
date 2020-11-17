@@ -10,6 +10,8 @@ type Props = {
   onSubmit(values: Values): void;
 };
 
+// TODO
+// @ts-ignore
 export default function EditUserForm({ user, onSubmit }: Props) {
   //   const { user } = useStore((store) => ({ user: store.user }));
 

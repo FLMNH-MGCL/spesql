@@ -7,7 +7,7 @@ export default function logout(req: Request, res: Response) {
       res.sendStatus(500);
     }
 
-    res.clearCookie(process.env.SESSION_NAME!);
+    res.clearCookie(process.env.ELECTRON_WEBPACK_APP_SESSION_NAME!);
 
     res.sendStatus(200);
   });

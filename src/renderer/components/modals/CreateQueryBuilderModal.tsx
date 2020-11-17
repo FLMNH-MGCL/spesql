@@ -1,7 +1,7 @@
 import React from 'react';
 import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
-import { useNotify } from '../utils/context';
+// import { useNotify } from '../utils/context';
 import useKeyboard from '../utils/useKeyboard';
 import Button from '../ui/Button';
 import CreateLogModal from './CreateLogModal';
@@ -24,7 +24,7 @@ type Props = {
 };
 
 export default function CreateQueryBuilderModal({ open, onClose }: Props) {
-  const { notify } = useNotify();
+  // const { notify } = useNotify();
   // I am using local loading state here, since it doesn't really
   // interact with global state in this modal
   // const [loading, { on, off }] = useToggle(false);
@@ -44,6 +44,7 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     onClose();
   });
 
+  // @ts-ignore: I know it isnt called yet
   async function runQuery(values: Values) {
     console.log(values);
   }

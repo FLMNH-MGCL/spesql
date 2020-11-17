@@ -48,7 +48,7 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
   const app: Application = express();
 
   const corsOptions = {
-    origin: [process.env.FRONTEND_URL!],
+    origin: [process.env.ELECTRON_WEBPACK_APP_FRONTEND_URL!],
     credentials: true,
   };
 
@@ -61,8 +61,8 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
 
   app.use(
     session({
-      name: process.env.SESSION_NAME!,
-      secret: process.env.SESSION_SECRET!,
+      name: process.env.ELECTRON_WEBPACK_APP_SESSION_NAME!,
+      secret: process.env.ELECTRON_WEBPACK_APP_SESSION_SECRET!,
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -93,18 +93,6 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
       }
     });
   }
-
-  // BASIC UNPROTECTED ROUTE TEST
-  app.get('/', (_req: Request, res: Response) => {
-    console.log(_req.session);
-    res.send('Hello world!');
-  });
-
-  // BASIC PROTECTED ROUTE TEST
-  app.get('/protected', validateSession, (_req: Request, res: Response) => {
-    console.log(_req.session);
-    res.send('Hello world!');
-  });
 
   // GLOBAL / GUEST ROUTES
   app.get('/api/viewer', viewer);

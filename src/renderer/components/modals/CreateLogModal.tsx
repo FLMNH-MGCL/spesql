@@ -14,7 +14,7 @@ import Text from '../ui/Text';
 import CopyButton from '../buttons/CopyButton';
 import clsx from 'clsx';
 
-const tabPages = ['select', 'count', 'insert', 'update', 'delete', 'global'];
+// const tabPages = ['select', 'count', 'insert', 'update', 'delete', 'global'];
 
 type LogProps = {
   // TODO: create type for errors
@@ -24,7 +24,7 @@ type LogProps = {
 
 function Log({ errors }: LogProps) {
   const disabled = !errors || !errors.insert || !errors.insert.length;
-  const clearErrors = useStore((state) => state.clearErrors);
+  // const clearErrors = useStore((state) => state.clearErrors);
 
   return (
     <div className="-mb-6">
@@ -141,7 +141,7 @@ export default function CreateLogModal({
 
   // TODO:
   function calculateHasDanger() {
-    console.log(watchErrors, errors[watchErrors]);
+    // console.log(watchErrors, errors[watchErrors]);
     if (errors && errors[watchErrors].length) {
       return true;
     }

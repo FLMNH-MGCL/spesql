@@ -36,6 +36,7 @@ export default function App() {
     const notification = notificationSystem.current;
     const { title, message, level } = content;
 
+    // TODO: REPLACE ME WITH SOUND NOT SAY
     if (level === 'error') {
       say.speak('Error Occurred');
     }

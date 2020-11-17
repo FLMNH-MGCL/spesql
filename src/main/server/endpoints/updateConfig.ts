@@ -15,7 +15,7 @@ export default function updateConfig(req: Request, res: Response) {
     if (err) {
       res.status(500).send('Could not load config file');
     } else {
-      res.status(200).send('Updated config file');
+      res.status(201).send('Updated config file');
     }
   });
 }

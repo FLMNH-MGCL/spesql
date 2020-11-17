@@ -7,7 +7,7 @@ import is from 'electron-is';
 import { autoUpdater } from 'electron-updater';
 import './server/server';
 
-console.log(process.env.SECRET_KEY);
+console.log(process.env.ELECTRON_WEBPACK_APP_SECRET_KEY);
 
 app.commandLine.appendSwitch('ignore-certificate-errors');
 

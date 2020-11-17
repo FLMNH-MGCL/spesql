@@ -21,21 +21,23 @@ export default function createUser(req: Request, res: Response) {
           'Missing either name, username, password, access_role (or all) from newUser'
         );
     } else {
-      bcrypt.hash(password, parseInt(process.env.SALT!, 10)).then((hash) => {
-        connection?.query(
-          // FIXME: change to users once matching users_new
-          `INSERT INTO users_new(name, username, password, role) VALUES ("${name}", "${username}", "${hash}", "${access_role}");`,
-          (err, data) => {
-            if (err) {
-              res.status(503);
-              res.json({ err: err });
-            } else {
-              console.log('sucessfully created user');
-              res.status(201).send(data);
+      bcrypt
+        .hash(password, parseInt(process.env.ELECTRON_WEBPACK_APP_SALT!, 10))
+        .then((hash) => {
+          connection?.query(
+            // FIXME: change to users once matching users_new
+            `INSERT INTO users_new(name, username, password, role) VALUES ("${name}", "${username}", "${hash}", "${access_role}");`,
+            (err, data) => {
+              if (err) {
+                res.status(503);
+                res.json({ err: err });
+              } else {
+                console.log('sucessfully created user');
+                res.status(201).send(data);
+              }
             }
-          }
-        );
-      });
+          );
+        });
     }
   }
 }

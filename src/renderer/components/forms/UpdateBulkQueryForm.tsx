@@ -8,7 +8,7 @@ import {
 } from '../../functions/validation';
 import Form, { Values } from '../ui/Form';
 import Heading from '../ui/Heading';
-import numberParser from 'number-to-words';
+// import numberParser from 'number-to-words';
 import { SelectOption } from '../ui/Select';
 import { conditionCountOptions, fieldOptions } from '../utils/constants';
 import ConditionalForm from './ConditionalForm';
@@ -20,6 +20,7 @@ type SetFormProps = {
 
 // TODO: add sets!
 function SetForm({ advanced }: SetFormProps) {
+  // @ts-ignore: TODO
   const { getValues, watch } = useFormContext();
   const setCountOptions = conditionCountOptions.filter((el) => el.value !== 0);
 
@@ -55,8 +56,8 @@ function SetForm({ advanced }: SetFormProps) {
 
       <div className="z-0 bg-gray-50 rounded-lg w-full p-3">
         <div className="">
-          {Array.from({ length: setCount }).map((_, index) => {
-            const numberInEnglish = numberParser.toWords(index);
+          {Array.from({ length: setCount }).map((_, _index) => {
+            // const numberInEnglish = numberParser.toWords(index);
 
             return <Form.Group>todo</Form.Group>;
           })}

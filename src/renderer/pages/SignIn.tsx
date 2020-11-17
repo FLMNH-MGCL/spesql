@@ -12,10 +12,37 @@ import useToggle from '../components/utils/useToggle';
 import Button from '../components/ui/Button';
 
 export default function SignIn() {
-  const [loading, { on, off }] = useToggle(false);
-  const navigate = useNavigate();
   const { notify } = useNotify();
+  const navigate = useNavigate();
+
+  const [loading, { on, off }] = useToggle(false);
+
   const login = useStore((state) => state.login);
+
+  useEffect(() => {
+    async function checkConfig() {
+      const config = await axios.get(BACKEND_URL + '/api/config/get');
+
+      if (config.status === 201) {
+        // file did not exist, created it
+        notify({
+          title: 'Config Created',
+          message:
+            'A spesql config file was created, please complete it in Settings',
+          level: 'warning',
+        });
+      } else if (config.status === 500) {
+        // server error
+        notify({
+          title: 'Server Error',
+          message: `Error when trying to access spesql config: ${config.data}`,
+          level: 'error',
+        });
+      }
+    }
+
+    checkConfig();
+  }, []);
 
   async function handleSubmit(values: Values) {
     on();

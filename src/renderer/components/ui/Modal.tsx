@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import FocusTrap from './FocusTrap';
 import Portal from './Portal';
 import { AnimatePresence, motion } from 'framer-motion';
-import noScroll from 'no-scroll';
 import clsx from 'clsx';
 
 type ContentProps = {
