@@ -96,3 +96,9 @@ export function buildUpdateQuery(
 
   return { queryString, conditionalPairs, updates };
 }
+
+export function buildSingleUpdateQuery(table: string) {
+  let queryString = clsx('UPDATE', table, 'SET ? WHERE ?? = ?');
+
+  return { queryString };
+}

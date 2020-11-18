@@ -156,7 +156,7 @@ export function getFormElementForField(key: string, currentValue: any) {
     identificationQualifier: (
       <Form.Select
         slim
-        name="order_"
+        name="identificationQualifier"
         register={{ validate: validateIndentificationQualifier }}
         options={identificationQualifierControl}
         defaultValue={currentValue}
@@ -239,7 +239,7 @@ export function getFormElementForField(key: string, currentValue: any) {
     sex: (
       <Form.Select
         slim
-        name="dateIdentified"
+        name="sex"
         register={{ validate: validateSex }}
         options={sexControl}
         defaultValue={currentValue}
@@ -248,7 +248,7 @@ export function getFormElementForField(key: string, currentValue: any) {
     lifeStage: (
       <Form.Select
         slim
-        name="dateIdentified"
+        name="lifeStage"
         register={{ validate: validateLifeStage }}
         options={lifeStageControl}
         defaultValue={currentValue}
@@ -378,7 +378,7 @@ export function getFormElementForField(key: string, currentValue: any) {
     withholdData: (
       <Form.Select
         slim
-        name="withodData"
+        name="withholdData"
         // register={{ validate: validateYe }}
         options={BooleanField}
         defaultValue={currentValue}

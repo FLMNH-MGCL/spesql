@@ -124,7 +124,6 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
     return sets;
   }
 
-  // TODO: implement me
   async function runQuery(values: Values) {
     on();
     console.log(values);

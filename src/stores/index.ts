@@ -112,6 +112,8 @@ export const useStore = create<SpesqlSession>((set) => ({
       expiredSession: true,
     })),
 
+  // TODO: should i add a queue for functions to be rerun on expired session?
+
   prefersSound: true,
   toggleSoundPreference: (newVal?: boolean) =>
     set((state) => ({

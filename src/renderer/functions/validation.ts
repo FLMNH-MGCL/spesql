@@ -17,6 +17,16 @@ import { Specimen } from '../types';
 
 // TODO: ADD DOCUMENTATION
 
+export const specialCaseEmpties = {
+  collectedDay: null,
+  collectedMonth: null,
+  collectedYear: null,
+  dateEntered: null,
+  decimalLatitude: null,
+  decimalLongitude: null,
+  elevationInMeters: undefined,
+};
+
 export const NeutralValidator = { validate: () => true };
 // TODO: look into conditional register settings for validator, I do not like this solution at all
 
@@ -621,7 +631,7 @@ export function fixPartiallyCorrect(partiallyCorrect: Specimen) {
 
 // TODO: types need changing?? value might be string or number or string[]
 // TODO: don't call validators for REGEXP operator!!
-function determineAndRunFieldValidator(field: string, value: any) {
+export function determineAndRunFieldValidator(field: string, value: any) {
   switch (field) {
     case 'catalogNumber':
       return validateCatalogNumber(value);

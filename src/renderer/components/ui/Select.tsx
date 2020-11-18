@@ -308,6 +308,7 @@ export default forwardRef<HTMLSelectElement, Props>(
             ref={ref}
             {...props}
           >
+            <option></option>
             {options.map((item: SelectOption) => (
               <option
                 key={`raw-option-${item.value}`}

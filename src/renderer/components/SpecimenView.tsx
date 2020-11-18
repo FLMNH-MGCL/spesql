@@ -12,13 +12,19 @@ import useToggle from './utils/useToggle';
 import emptyDataIcon from '../assets/svg/empty_data_waiting.svg';
 // import selectItemIcon from '../assets/svg/select_item_third.svg';
 import selectItemIconTest from '../assets/svg/specimen.svg';
-import { BACKEND_URL, Specimen } from '../types';
+import { BACKEND_URL, Specimen, SpecimenFields } from '../types';
 import List from './List';
 import Radio from './ui/Radio';
 import { Values } from './ui/Form';
 import CreateConfirmModal from './modals/CreateConfirmModal';
 import axios from 'axios';
 import { useNotify } from './utils/context';
+import {
+  determineAndRunFieldValidator,
+  fixPartiallyCorrect,
+  specialCaseEmpties,
+} from '../functions/validation';
+import { buildSingleUpdateQuery } from '../functions/builder';
 
 // TODO: remove ? where needed
 type OverviewProps = {
@@ -40,8 +46,6 @@ function SpecimenOverview({
       {Object.keys(specimen).map((key) => {
         // @ts-ignore
         const isEmpty = !specimen[key];
-
-        // console.log(key, specimen[key], isEmpty);
 
         if ((isEmpty && showEmpty) || !isEmpty) {
           return (
@@ -76,6 +80,7 @@ export default function () {
   const {
     hasQueried,
     queryString,
+    databaseTable,
     setData,
     selectedSpecimen,
     setSelectedSpecimen,
@@ -86,6 +91,7 @@ export default function () {
         state.queryData.queryString !== undefined &&
         state.queryData.queryString !== '',
       queryString: state.queryData.queryString,
+      databaseTable: state.queryData.table,
       setData: state.queryData.setData,
       selectedSpecimen: state.selectedSpecimen,
       setSelectedSpecimen: state.setSelectedSpecimen,
@@ -93,20 +99,6 @@ export default function () {
     }),
     shallow
   );
-
-  function cancelEdit() {
-    // do stuff here
-    off();
-  }
-
-  function commitEdit(values: Values) {
-    console.log(values);
-    // do stuff here
-    // make query
-    // interpret response
-
-    off();
-  }
 
   async function refresh() {
     if (!queryString || queryString === '') {
@@ -135,6 +127,93 @@ export default function () {
     }
 
     toggleLoading(false);
+  }
+
+  function cancelEdit() {
+    // do stuff here
+    off();
+  }
+
+  async function commitEdit(values: Values) {
+    if (!selectedSpecimen) {
+      return;
+    }
+    console.log(values);
+
+    let errors: any[] = [];
+    let updates: any = {};
+
+    // TODO: try and break me please
+    Object.keys(values).forEach((key) => {
+      if (selectedSpecimen[key as keyof SpecimenFields] !== values[key]) {
+        const error = determineAndRunFieldValidator(key, values[key]);
+
+        if (error !== true) {
+          errors.push({ field: key, message: error });
+        } else if (key in specialCaseEmpties) {
+          // IF the value[key] is empty (null, undefined, ''), and if it doesn't match its
+          // special case empty value (e.g. if it needs to be null or undefined but is '', or vice-versa)
+          // then it should not be updated
+          if (
+            !values[key] &&
+            specialCaseEmpties[key as keyof typeof specialCaseEmpties] !==
+              values[key]
+          ) {
+            // therefore, I do nothing with it
+          } else {
+            // update the field
+            updates[key] = values[key];
+          }
+        } else {
+          updates[key] = values[key];
+        }
+      }
+    });
+
+    console.log(errors, updates);
+
+    if (errors.length) {
+      notify({
+        title: 'Update Failed',
+        message: 'Please check logs to correct errors in the form',
+        level: 'error',
+      });
+
+      // TODO: write to log
+    } else {
+      const conditions = ['id', selectedSpecimen.id];
+      const { queryString } = buildSingleUpdateQuery(databaseTable);
+
+      off();
+
+      const updateResponse = await axios
+        .post(BACKEND_URL + '/api/update', {
+          query: queryString,
+          conditions,
+          updates,
+        })
+        .catch((error) => error.response);
+
+      if (updateResponse.status === 200 && updateResponse.data) {
+        const { message } = updateResponse.data;
+
+        notify({
+          title: 'Update Successful',
+          message,
+          level: 'success',
+        });
+
+        refresh();
+
+        // TODO: refresh the selected specimen
+      } else {
+        // TODO: interpret status
+        // const error = updateResponse.data;
+        notify({ title: 'TODO', message: 'TODO', level: 'error' });
+      }
+    }
+
+    off();
   }
 
   // TODO: handle errors
