@@ -14,7 +14,7 @@ import Spinner from './ui/Spinner';
 import CreateLogModal from './modals/CreateLogModal';
 import { Specimen } from '../types';
 import Heading from './ui/Heading';
-
+import Text from './ui/Text';
 import serverImage from '../assets/svg/data_processing_two.svg';
 import ShowQueryButton from './buttons/ShowQueryButton';
 
@@ -43,11 +43,12 @@ function EmptyTableArt() {
 
 type FooterProps = {
   disableInteractables?: boolean;
+  count: number;
 };
 
 // TODO: CONSIDER https://medium.com/better-programming/an-introduction-to-react-table-6ebd34d8059e
 
-function TableFooter({ disableInteractables }: FooterProps) {
+function TableFooter({ disableInteractables, count }: FooterProps) {
   return (
     <div className="h-16 bg-gray-50 flex items-center justify-between px-4">
       <div className="flex space-x-2">
@@ -56,10 +57,14 @@ function TableFooter({ disableInteractables }: FooterProps) {
         <FilterSearch disabled={disableInteractables} />
         <RefreshQueryButton disabled={disableInteractables} />
         <CreateHeaderConfigModal disabled={disableInteractables} />
+
         <ShowQueryButton disabled={disableInteractables} />
       </div>
 
       <div className="flex space-x-2">
+        {count > 0 && (
+          <Text className="self-center px-1">{`Count: ${count}`}</Text>
+        )}
         <CreateLogModal />
         <CreateHelpModal variant="global" />
       </div>
@@ -251,7 +256,10 @@ export default function () {
           )}
         </AutoSizer>
       </div>
-      <TableFooter disableInteractables={!display || !display.length} />
+      <TableFooter
+        disableInteractables={!display || !display.length}
+        count={display.length}
+      />
     </React.Fragment>
   );
 }

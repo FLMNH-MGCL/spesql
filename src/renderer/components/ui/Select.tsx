@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { forwardRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -219,6 +219,30 @@ export default forwardRef<HTMLSelectElement, Props>(
 
     const [display, setDisplay] = useState<SelectOption | SelectOption[]>();
     const [selected, setSelected] = useState<string | string[]>();
+
+    useEffect(() => {
+      // TODO: test me!
+      if (multiple && props.value !== undefined && Array.isArray(props.value)) {
+        const items = props.value.map((rawItem) => {
+          const item = options.find((el) => el.value === rawItem);
+          return item;
+        });
+
+        items.forEach((item) => {
+          if (item) {
+            setDisplay([...display, item]);
+            setSelected([...selected, item.value]);
+          }
+        });
+      } else if (props.value !== undefined) {
+        const item = options.find((el) => el.value === props.value);
+
+        if (item) {
+          setDisplay(item);
+          setSelected(item.value);
+        }
+      }
+    }, []);
 
     function handleSelection(item: SelectOption) {
       if (multiple) {

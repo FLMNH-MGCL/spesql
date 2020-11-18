@@ -4,15 +4,23 @@ import {
   NeutralValidator,
   validateAdvancedUpdateQuery,
   validateFieldSelection,
+  validateOperator,
   validateTableSelection,
+  validateSetValue,
 } from '../../functions/validation';
 import Form, { Values } from '../ui/Form';
 import Heading from '../ui/Heading';
-// import numberParser from 'number-to-words';
+import numberParser from 'number-to-words';
 import { SelectOption } from '../ui/Select';
-import { conditionCountOptions, fieldOptions } from '../utils/constants';
+import {
+  conditionCountOptions,
+  fieldOptions,
+  operators,
+} from '../utils/constants';
 import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
+
+const updateFieldOptions = fieldOptions.filter((el) => el.value !== '*');
 
 type SetFormProps = {
   advanced: boolean;
@@ -20,7 +28,6 @@ type SetFormProps = {
 
 // TODO: add sets!
 function SetForm({ advanced }: SetFormProps) {
-  // @ts-ignore: TODO
   const { getValues, watch } = useFormContext();
   const setCountOptions = conditionCountOptions.filter((el) => el.value !== 0);
 
@@ -28,12 +35,11 @@ function SetForm({ advanced }: SetFormProps) {
 
   watch();
 
-  // TODO: type validator as function
-  // function setValidator(validator: any) {
-  //   if (!advanced) {
-  //     return validator;
-  //   } else return NeutralValidator;
-  // }
+  function setValidator(validator: any) {
+    if (!advanced) {
+      return validator;
+    } else return NeutralValidator;
+  }
 
   return (
     <React.Fragment>
@@ -56,10 +62,50 @@ function SetForm({ advanced }: SetFormProps) {
 
       <div className="z-0 bg-gray-50 rounded-lg w-full p-3">
         <div className="">
-          {Array.from({ length: setCount }).map((_, _index) => {
-            // const numberInEnglish = numberParser.toWords(index);
+          {Array.from({ length: setCount }).map((_, index) => {
+            const numberInEnglish = numberParser.toWords(index);
 
-            return <Form.Group>todo</Form.Group>;
+            const setFieldVal = getValues()[`setField_${numberInEnglish}`];
+
+            // TODO, pass to validateConditionalValue
+            //@ts-ignore
+            const setOperator = getValues()[`setOperator_${numberInEnglish}`];
+
+            return (
+              <Form.Group flex key={index}>
+                <Form.Select
+                  name={`setField_${numberInEnglish}`}
+                  label="Field"
+                  disabled={advanced}
+                  fullWidth
+                  options={updateFieldOptions}
+                  register={{
+                    validate: setValidator(validateFieldSelection),
+                  }}
+                />
+                <Form.Select
+                  name={`setOperator_${numberInEnglish}`}
+                  label="Operator"
+                  disabled={advanced}
+                  options={operators}
+                  fullWidth
+                  register={{
+                    validate: setValidator(validateOperator),
+                  }}
+                />
+                <Form.Input
+                  name={`setValue_${numberInEnglish}`}
+                  label="Value"
+                  disabled={advanced}
+                  fullWidth
+                  register={{
+                    validate: setValidator((value: any) =>
+                      validateSetValue(value, setFieldVal)
+                    ),
+                  }}
+                />
+              </Form.Group>
+            );
           })}
         </div>
       </div>
@@ -99,7 +145,9 @@ export default function UpdateBulkQueryForm({ onSubmit }: Props) {
         <Form.Input
           name="advancedQuery"
           disabled={!advanced}
-          register={{ validate: validateAdvancedUpdateQuery }}
+          register={{
+            validate: advanced ? validateAdvancedUpdateQuery : NeutralValidator,
+          }}
           fullWidth
         />
       </Form.Group>
@@ -112,15 +160,16 @@ export default function UpdateBulkQueryForm({ onSubmit }: Props) {
           label="Query Type"
           fullWidth
         />
-        <Form.Select
+        {/* TODO: Not sure I want this */}
+        {/* <Form.Select
           name="fields"
           label="Fields"
           disabled={advanced}
           fullWidth
           multiple
-          options={fieldOptions}
+          options={updateFieldOptions}
           register={{ validate: setValidator(validateFieldSelection) }}
-        />
+        /> */}
 
         <Form.Select
           name="databaseTable"
@@ -134,7 +183,11 @@ export default function UpdateBulkQueryForm({ onSubmit }: Props) {
 
       <SetForm advanced={advanced} />
 
-      <ConditionalForm advanced={advanced} />
+      <ConditionalForm
+        advanced={advanced}
+        min={1}
+        fieldsOverride={updateFieldOptions}
+      />
     </Form>
   );
 }

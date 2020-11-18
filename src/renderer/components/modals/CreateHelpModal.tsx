@@ -37,8 +37,9 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
         return <SelectHelpModal />;
       }
 
-      // case 'update': {
-      // }
+      case 'update': {
+        return <SelectHelpModal />;
+      }
 
       // case 'single-update': {}
 

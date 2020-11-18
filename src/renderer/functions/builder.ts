@@ -42,6 +42,7 @@ export function buildCountQuery(
     table,
     conditionals?.length && 'WHERE'
   );
+
   let queryArray: any[] = [];
 
   conditionals?.forEach((conditional, index) => {
@@ -58,4 +59,40 @@ export function buildCountQuery(
   });
 
   return { queryString, queryArray };
+}
+
+export function buildUpdateQuery(
+  table: string,
+  conditionals: any[],
+  sets: any[]
+  // distinct?: boolean
+) {
+  // console.log(table, conditionals, sets);
+
+  let queryString = clsx('UPDATE', table, 'SET ? WHERE');
+
+  let conditionalPairs: any[] = [];
+
+  conditionals.forEach((condition, index) => {
+    queryString = clsx(
+      queryString,
+      '??',
+      condition.operator,
+      '?',
+      index !== conditionals.length - 1 && 'AND'
+    );
+
+    conditionalPairs.push(condition.field);
+    conditionalPairs.push(condition.value);
+  });
+
+  let updates: any = {};
+
+  sets.forEach((statement) => {
+    updates[statement.field] = statement.value;
+  });
+
+  console.log(queryString, conditionalPairs, updates);
+
+  return { queryString, conditionalPairs, updates };
 }

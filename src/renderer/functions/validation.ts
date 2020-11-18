@@ -63,6 +63,13 @@ export function validateConditionalValue(condition: string, field: string) {
   return determineAndRunFieldValidator(field, condition);
 }
 
+// TODO: add ignore when REGEX
+export function validateSetValue(condition: string, field: string) {
+  console.log(field);
+
+  return determineAndRunFieldValidator(field, condition);
+}
+
 export function validateTableSelection(table: string) {
   console.log(table);
   if (!table || !table.length) {
@@ -454,7 +461,7 @@ export function validateRack(value: string) {
   return true;
 }
 
-// TODO
+// TODO: parse as INT
 export function validateBox(value: string) {
   if (!value || !value.length) {
     return true;

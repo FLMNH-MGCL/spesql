@@ -19,11 +19,25 @@ import Text from '../ui/Text';
 
 type ConditionalFormProps = {
   advanced: boolean;
+  min?: number;
+  fieldsOverride?: {
+    label: string;
+    value: string;
+  }[];
 };
 
-export default function ConditionalForm({ advanced }: ConditionalFormProps) {
+export default function ConditionalForm({
+  advanced,
+  min,
+  fieldsOverride,
+}: ConditionalFormProps) {
   const { getValues, watch } = useFormContext();
-  const [conditionCount, setConditionCount] = useState(0);
+
+  const [conditionCount, setConditionCount] = useState(min ?? 0);
+
+  const conditionalCounts = min
+    ? conditionCountOptions.filter((el) => el.value >= min)
+    : conditionCountOptions;
 
   // I want it to update the form state when this form changes, so it
   // picks up new fields on the conditional count changes
@@ -47,7 +61,7 @@ export default function ConditionalForm({ advanced }: ConditionalFormProps) {
           value={conditionCount}
           disabled={advanced}
           fullWidth
-          options={conditionCountOptions}
+          options={conditionalCounts}
           updateControlled={(newVal: any) => {
             setConditionCount(newVal);
           }}
@@ -78,7 +92,7 @@ export default function ConditionalForm({ advanced }: ConditionalFormProps) {
                     label="Field"
                     disabled={advanced}
                     fullWidth
-                    options={fieldOptions}
+                    options={fieldsOverride ?? fieldOptions}
                     register={{
                       validate: setValidator(validateFieldSelection),
                     }}

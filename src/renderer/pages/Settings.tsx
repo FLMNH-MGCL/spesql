@@ -6,6 +6,10 @@ import { MySqlCredentials } from '../../main/server/types';
 import { useNotify } from '../components/utils/context';
 import CreateUpdateConfigModal from '../components/modals/CreateUpdateConfigModal';
 import { BACKEND_URL } from '../types';
+import Radio from '../components/ui/Radio';
+import Heading from '../components/ui/Heading';
+import { useStore } from '../../stores';
+import shallow from 'zustand/shallow';
 
 // use the component in your app!
 
@@ -14,6 +18,14 @@ export default function Settings() {
 
   const [config, setConfig] = useState<MySqlCredentials | {}>({});
   const [newConfig, setNewConfig] = useState<MySqlCredentials | {}>({});
+
+  const { toggleSoundPreference, prefersSound } = useStore(
+    (state) => ({
+      toggleSoundPreference: state.toggleSoundPreference,
+      prefersSound: state.prefersSound,
+    }),
+    shallow
+  );
 
   async function getConfig() {
     const config = await axios.get(BACKEND_URL + '/api/config/get');
@@ -88,7 +100,15 @@ export default function Settings() {
 
       <div className="h-screen flex items-center">
         <div className="mx-auto w-full max-w-lg py-8 px-10 bg-white shadow rounded-lg">
-          <label className="block text-sm font-medium leading-5 text-gray-700 pb-3">
+          <Heading className="pb-2.5">Settings</Heading>
+
+          <Radio
+            label="Mute Notifications"
+            onChange={() => toggleSoundPreference()}
+            checked={!prefersSound}
+          />
+
+          <label className="mt-4 block text-sm font-medium leading-5 text-gray-700 pb-3">
             MySQL Access Credentials
           </label>
           <div className="bg-gray-100 rounded-lg py-2 px-3">

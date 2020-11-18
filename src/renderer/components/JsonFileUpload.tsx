@@ -5,9 +5,15 @@ import { useNotify } from './utils/context';
 
 type Props = {
   setJson(content: any): void;
+  prompt?: string;
+  draggingPrompt?: string;
 };
 
-export default function JsonFileUpload({ setJson }: Props) {
+export default function JsonFileUpload({
+  setJson,
+  prompt,
+  draggingPrompt,
+}: Props) {
   const { notify } = useNotify();
 
   const onDrop = useCallback(
@@ -50,7 +56,7 @@ export default function JsonFileUpload({ setJson }: Props) {
     getRootProps,
     getInputProps,
     isDragActive,
-  } = useDropzone({ onDrop });
+  } = useDropzone({ onDrop, accept: 'application/json' });
 
   const acceptedFile = acceptedFiles.length ? (
     <Text>{`${acceptedFiles[0].name} - ${acceptedFiles[0].size} bytes`}</Text>
@@ -79,9 +85,9 @@ export default function JsonFileUpload({ setJson }: Props) {
         </svg>
 
         {isDragActive ? (
-          <div>Nice file! Just drop it here!</div>
+          <Text>{draggingPrompt ?? 'Nice file! Just drop it here!'}</Text>
         ) : (
-          <div>Drag and drop a JSON file</div>
+          <Text>{prompt ?? 'Drag and drop a JSON file'}</Text>
         )}
       </div>
 

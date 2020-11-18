@@ -71,8 +71,10 @@ type SpesqlSession = {
   user?: User | null;
 
   expiredSession: boolean;
-
   expireSession(): void;
+
+  prefersSound: boolean;
+  toggleSoundPreference(newVal?: boolean): void;
 
   // query config
   queryData: QueryConfig;
@@ -108,6 +110,13 @@ export const useStore = create<SpesqlSession>((set) => ({
     set((state) => ({
       ...state,
       expiredSession: true,
+    })),
+
+  prefersSound: true,
+  toggleSoundPreference: (newVal?: boolean) =>
+    set((state) => ({
+      ...state,
+      prefersSound: newVal ?? !state.prefersSound,
     })),
 
   login: (id: string, username: string, accessRole: string) =>

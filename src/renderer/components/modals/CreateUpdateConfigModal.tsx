@@ -34,7 +34,10 @@ export default function CreateUpdateConfigModal({ setJson }: Props) {
     <React.Fragment>
       <Modal open={open} onClose={off}>
         <Modal.Content title="Upload Config">
-          <JsonFileUpload setJson={setConfig} />
+          <JsonFileUpload
+            setJson={setConfig}
+            prompt="Drag 'n Drop a config.json file"
+          />
         </Modal.Content>
 
         <Modal.Footer>
