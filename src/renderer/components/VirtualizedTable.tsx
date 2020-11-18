@@ -188,6 +188,10 @@ export default function () {
     // -1 is the header row
     if (index === -1) {
       return { backgroundColor: '#f7fafc' };
+    } else if (!selectedSpecimen) {
+      return {
+        cursor: 'pointer',
+      };
     }
 
     // styles for actively selected row

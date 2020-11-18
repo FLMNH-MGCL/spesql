@@ -21,7 +21,6 @@ import axios from 'axios';
 import { useNotify } from './utils/context';
 import {
   determineAndRunFieldValidator,
-  fixPartiallyCorrect,
   specialCaseEmpties,
 } from '../functions/validation';
 import { buildSingleUpdateQuery } from '../functions/builder';

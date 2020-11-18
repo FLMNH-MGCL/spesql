@@ -53,6 +53,10 @@ export default function CreateSelectModal({ open, onClose }: Props) {
       let conditionals = [];
       columns = fields;
 
+      if (!columns.includes('id') && !columns.includes('*')) {
+        columns = ['id', ...fields];
+      }
+
       for (let i = 0; i < numConditions; i++) {
         const current = numberParser.toWords(i);
 
@@ -74,7 +78,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
 
     // TODO: generate query
     // const query = 'SELECT * FROM molecularLab;';
-    console.log(query, columns, conditions);
+    // console.log(query, columns, conditions);
 
     if (!query) return;
 

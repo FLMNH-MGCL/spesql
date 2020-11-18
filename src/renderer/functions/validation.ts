@@ -81,7 +81,7 @@ export function validateSetValue(condition: string, field: string) {
 }
 
 export function validateTableSelection(table: string) {
-  console.log(table);
+  // console.log(table);
   if (!table || !table.length) {
     return 'You must select a table';
   }
