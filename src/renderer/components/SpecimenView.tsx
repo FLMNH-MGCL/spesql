@@ -8,15 +8,13 @@ import EditSpecimen, {
 } from './buttons/EditSpecimen';
 import Heading from './ui/Heading';
 import useToggle from './utils/useToggle';
-
 import emptyDataIcon from '../assets/svg/empty_data_waiting.svg';
 import selectItemIconTest from '../assets/svg/specimen.svg';
-import { BACKEND_URL, Specimen } from '../types';
+import { Specimen } from '../types';
 import List from './List';
 import Radio from './ui/Radio';
 import { Values } from './ui/Form';
 import CreateConfirmModal from './modals/CreateConfirmModal';
-import axios from 'axios';
 import { useNotify } from './utils/context';
 import { buildSingleUpdateQuery } from '../functions/builder';
 import useQuery from './utils/useQuery';
@@ -80,17 +78,15 @@ export default function () {
       state.queryData.queryString !== '',
   }));
 
-  const { databaseTable, selectedSpecimen, setSelectedSpecimen } = useStore(
+  const { databaseTable, selectedSpecimen } = useStore(
     (state) => ({
-      queryString: state.queryData.queryString,
       databaseTable: state.queryData.table,
       selectedSpecimen: state.selectedSpecimen,
-      setSelectedSpecimen: state.setSelectedSpecimen,
     }),
     shallow
   );
 
-  const [{ refresh, update }] = useQuery();
+  const [{ update, deleteSpecimen }] = useQuery();
 
   function cancelEdit() {
     off();
@@ -127,7 +123,6 @@ export default function () {
     off();
   }
 
-  // TODO: handle errors
   async function handleDelete(id?: number) {
     if (id === undefined || !table) {
       notify({
@@ -138,14 +133,8 @@ export default function () {
       });
       return;
     } else {
-      const deleteResponse = await axios.post(BACKEND_URL + '/api/delete', {
-        id,
-        table,
-      });
-
-      console.log(deleteResponse);
-      setSelectedSpecimen(null);
-      refresh();
+      // TODO: recieve errors ??
+      await deleteSpecimen(id, table);
     }
   }
 

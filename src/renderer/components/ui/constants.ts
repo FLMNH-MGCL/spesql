@@ -87,6 +87,11 @@ export const BUTTONS = {
   },
 };
 
+export const BADGE_COLORS = {
+  gray: 'bg-gray-100 text-gray-800 hover:bg-gray-200',
+  red: 'bg-red-100 text-red-800 hover:bg-red-200',
+};
+
 export const BUTTON_GAPS = {
   sm: 'space-y-2 sm:space-y-0 sm:space-x-2',
   md: 'space-y-3 sm:space-y-0 sm:space-x-3',

@@ -1,56 +1,13 @@
 import React from 'react';
-import { useStore } from '../../../stores';
-import { BACKEND_URL } from '../../types';
 import Button from '../ui/Button';
-import axios from 'axios';
-import { useNotify } from '../utils/context';
-import shallow from 'zustand/shallow';
+import useQuery from '../utils/useQuery';
 
 export default function RefreshQueryButton({
   disabled,
 }: {
   disabled?: boolean;
 }) {
-  const { notify } = useNotify();
-
-  const { queryString, setData } = useStore(
-    (state) => ({
-      queryString: state.queryData.queryString,
-      setData: state.queryData.setData,
-    }),
-    shallow
-  );
-
-  const toggleLoading = useStore((state) => state.toggleLoading);
-
-  async function refresh() {
-    if (!queryString || queryString === '') {
-      return;
-    }
-
-    setData([]);
-
-    toggleLoading(true);
-
-    const selectResponse = await axios
-      .post(BACKEND_URL + '/api/select', {
-        query: queryString,
-      })
-      .catch((error) => error.response);
-
-    console.log(selectResponse);
-
-    if (selectResponse.status === 200 && selectResponse.data) {
-      const { specimen } = selectResponse.data;
-      setData(specimen);
-    } else {
-      // TODO: interpret status
-      const error = selectResponse.data;
-      notify({ title: 'TODO', message: error, level: 'error' });
-    }
-
-    toggleLoading(false);
-  }
+  const [{ refresh }] = useQuery();
 
   return (
     <Button variant="outline" rounded disabled={disabled} onClick={refresh}>

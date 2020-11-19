@@ -69,9 +69,10 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
         maxAge:
           process.env.NODE_ENV === 'production'
             ? 1000 * 60 * 60 * 2
-            : // : 1000 * 60 * 30, // 2h for production, 30m timeout for development purposes
-              // : 1000 * 60, // 1m
-              (1000 * 60) / 2, // 30s
+            : // prettier-ignore: REMOVE ME
+              1000 * 60 * 30, // 2h for production, 30m timeout for development purposes
+        // : 1000 * 60, // 1m
+        // : (1000 * 60) / 2, // 30s
         secure: false,
       },
     })

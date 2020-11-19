@@ -86,6 +86,7 @@ const rowRenderer: TableRowRenderer = ({
         if (index === 5) {
           return (
             <div
+              key={index}
               aria-colindex={7}
               className="ReactVirtualized__Table__rowColumn"
               role="gridcell"
@@ -94,7 +95,9 @@ const rowRenderer: TableRowRenderer = ({
             >
               <div className="flex justify-center space-x-2">
                 <Badge onClick={() => onEditClick(rowData.id)}>Edit</Badge>
-                <Badge onClick={() => onDeleteClick(rowData.id)}>Delete</Badge>
+                <Badge color="red" onClick={() => onDeleteClick(rowData.id)}>
+                  Delete
+                </Badge>
               </div>
             </div>
           );
@@ -124,7 +127,7 @@ export default function UsersTable() {
       : users
     : [];
 
-  console.log(editing);
+  // console.log(editing);
 
   useEffect(() => {
     async function getUsers() {
@@ -133,15 +136,15 @@ export default function UsersTable() {
         .get('/api/admin/users')
         .catch((error) => error.response);
 
-      console.log(response);
+      // console.log(response);
       if (response.status !== 200) {
         // notify
         off();
         return;
       }
 
-      const { query, users } = response.data;
-      console.log(query);
+      // TODO: use query from data?
+      const { users } = response.data;
       setUsers(users.map((user: any) => user as User));
       off();
     }

@@ -4,9 +4,6 @@ import Button from '../ui/Button';
 import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
 import useKeyboard from '../utils/useKeyboard';
-import axios from 'axios';
-import { BACKEND_URL } from '../../types';
-import { useNotify } from '../utils/context';
 import { useStore } from '../../../stores';
 import CreateLogModal from './CreateLogModal';
 import numberParser from 'number-to-words';
@@ -21,14 +18,6 @@ type Props = {
 };
 
 export default function CreateSelectModal({ open, onClose }: Props) {
-  // const { notify } = useNotify();
-
-  // const { setData, setTable, setCurrentQuery } = useStore((state) => ({
-  //   setData: state.queryData.setData,
-  //   setTable: state.queryData.setTable,
-  //   setCurrentQuery: state.queryData.setCurrentQuery,
-  // }));
-
   const [{ select }] = useQuery();
 
   const toggleLoading = useStore((state) => state.toggleLoading);
@@ -39,7 +28,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
     onClose();
   });
 
-  async function runQuery(values: Values) {
+  async function handleSubmit(values: Values) {
     toggleLoading(true);
 
     const { advancedQuery, conditionalCount, databaseTable, fields } = values;
@@ -51,7 +40,6 @@ export default function CreateSelectModal({ open, onClose }: Props) {
     if (advancedQuery) {
       query = advancedQuery;
     } else {
-      // construct query
       const numConditions = parseInt(conditionalCount, 10);
       let conditionals = [];
       columns = fields;
@@ -79,42 +67,9 @@ export default function CreateSelectModal({ open, onClose }: Props) {
       conditions = queryArray;
     }
 
-    // TODO: generate query
-    // const query = 'SELECT * FROM molecularLab;';
-    // console.log(query, columns, conditions);
-
     if (!query) return;
 
     await select(query, columns, conditions, databaseTable, onClose);
-
-    // const selectResponse = await axios
-    //   .post(BACKEND_URL + '/api/select', {
-    //     query,
-    //     columns,
-    //     conditions,
-    //   })
-    //   .catch((error) => error.response);
-
-    // if (selectResponse.status === 200 && selectResponse.data) {
-    //   const { specimen, query } = selectResponse.data;
-
-    //   if (!specimen.length) {
-    //     notify({
-    //       title: 'Empty Return',
-    //       message: 'Query yielded no data',
-    //       level: 'warning',
-    //     });
-    //   } else {
-    //     onClose();
-    //     setData(specimen);
-    //     setTable(databaseTable);
-    //     setCurrentQuery(query);
-    //   }
-    // } else {
-    //   // TODO: interpret status
-    //   // const error = selectResponse.data;
-    //   notify({ title: 'TODO', message: 'TODO', level: 'error' });
-    // }
 
     toggleLoading(false);
   }
@@ -123,7 +78,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
     <React.Fragment>
       <Modal open={open} onClose={onClose} size="medium">
         <Modal.Content title="Select Query">
-          <SelectQueryForm onSubmit={runQuery} />
+          <SelectQueryForm onSubmit={handleSubmit} />
         </Modal.Content>
 
         <Modal.Footer>

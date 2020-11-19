@@ -10,6 +10,7 @@ import {
 import Form, { Values } from '../ui/Form';
 import { SelectOption } from '../ui/Select';
 import { fieldOptions } from '../utils/constants';
+import useExpiredSession from '../utils/useExpiredSession';
 import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
 
@@ -21,13 +22,7 @@ export default function CountQueryForm({ onSubmit }: Props) {
   const [advanced, setAdvanced] = useState(false);
   const [tables, setTables] = useState<SelectOption[]>([]);
 
-  const { expireSession, expiredSession } = useStore(
-    (store) => ({
-      expireSession: store.expireSession,
-      expiredSession: store.expiredSession,
-    }),
-    shallow
-  );
+  const [expiredSession, { expireSession }] = useExpiredSession();
 
   // TODO: type validator as function
   function setValidator(validator: any) {
@@ -36,6 +31,9 @@ export default function CountQueryForm({ onSubmit }: Props) {
     } else return NeutralValidator;
   }
 
+  // if modal launches and session is expired, trigger reauth modal
+  // once reauthed, the effect will retrigger and load the tables for the
+  // select input
   useEffect(() => {
     async function init() {
       const errored = await fetchTables(setTables);
@@ -51,7 +49,7 @@ export default function CountQueryForm({ onSubmit }: Props) {
     }
 
     init();
-  }, [expiredSession]);
+  }, [expiredSession.current]);
 
   return (
     <Form onSubmit={onSubmit} id="count-form" className="mb-3">

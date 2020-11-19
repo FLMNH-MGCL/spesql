@@ -29,7 +29,7 @@ export default function useExpiredSession() {
       async awaitReauth() {
         notify({
           title: 'Session Expired',
-          message: 'Pausing the update until you revalidate the session',
+          message: 'Pausing the request until you revalidate the session',
           level: 'warning',
         });
 
@@ -40,7 +40,7 @@ export default function useExpiredSession() {
         if (expiredRef.current === false) {
           notify({
             title: 'Session Restored',
-            message: 'Insert query resuming',
+            message: 'Request is now resuming',
             level: 'success',
           });
         }

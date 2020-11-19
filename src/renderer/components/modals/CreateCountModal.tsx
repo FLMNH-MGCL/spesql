@@ -11,25 +11,34 @@ import CreateHelpModal from './CreateHelpModal';
 import CreateLogModal from './CreateLogModal';
 import numberParser from 'number-to-words';
 import { buildCountQuery } from '../../functions/builder';
-import axios from 'axios';
-import { BACKEND_URL } from '../../types';
 import { useNotify } from '../utils/context';
 import Radio from '../ui/Radio';
 import Spinner from '../ui/Spinner';
+import useQuery from '../utils/useQuery';
 
 type Props = {
   open: boolean;
   onClose(): void;
 };
 
+export type CountQueryReturn = {
+  numTuples: number;
+  queryString: string;
+};
+
 export default function CreateCountModal({ open, onClose }: Props) {
   const { notify } = useNotify();
-  const [count, setCount] = useState<number>();
-  const [countQuery, setCountQuery] = useState<string>();
+
+  const [queryReturn, setQueryReturn] = useState<CountQueryReturn>();
+
+  // const [count, setCount] = useState<number>();
+  // const [countQuery, setCountQuery] = useState<string>();
   const [showQuery, showQueryToggles] = useToggle(false);
   // I am using local loading state here, since it doesn't really
   // interact with global state in this modal
   const [loading, { on, off }] = useToggle(false);
+
+  const [{ count }] = useQuery();
 
   useKeyboard('Escape', () => {
     onClose();
@@ -91,9 +100,6 @@ export default function CreateCountModal({ open, onClose }: Props) {
       conditions = queryArray;
     }
 
-    // TODO: generate query
-    // const query = 'SELECT * FROM molecularLab;';
-
     console.log(query, columns, conditions);
 
     if (!query) {
@@ -101,31 +107,13 @@ export default function CreateCountModal({ open, onClose }: Props) {
       return;
     }
 
-    const countResponse = await axios
-      .post(BACKEND_URL + '/api/count', {
-        query,
-        columns,
-        conditions,
-      })
-      .catch((error) => error.response);
-
-    if (countResponse.status === 200 && countResponse.data) {
-      const { count, query } = countResponse.data;
-
-      setCount(count);
-      setCountQuery(query);
-    } else {
-      // TODO: interpret status
-      // const error = selectResponse.data;
-      notify({ title: 'TODO', message: 'TODO', level: 'error' });
-    }
+    await count(query, columns, conditions, setQueryReturn);
 
     off();
   }
 
   function onClear() {
-    setCount(undefined);
-    setCountQuery(undefined);
+    setQueryReturn(undefined);
   }
 
   return (
@@ -136,13 +124,15 @@ export default function CreateCountModal({ open, onClose }: Props) {
 
           <Divider text="Results" />
           <div className="relative bg-gray-50 rounded-lg w-full p-3 mt-3 min-h-32">
-            {!loading && <Statistic value={count} unit="specimen" />}
+            {!loading && (
+              <Statistic value={queryReturn?.numTuples} unit="specimen" />
+            )}
 
             <Spinner active={loading} />
 
             {showQuery && (
               <p className="order-2 mt-2 text-xs leading-6 font-medium text-gray-700 text-center">
-                {countQuery}
+                {queryReturn?.queryString}
               </p>
             )}
           </div>
@@ -151,7 +141,7 @@ export default function CreateCountModal({ open, onClose }: Props) {
         <Modal.Footer>
           <Button.Group className="ml-3">
             <Button onClick={onClose}>Cancel</Button>
-            <Button disabled={!countQuery} onClick={onClear} variant="warning">
+            <Button disabled={!queryReturn} onClick={onClear} variant="warning">
               Clear
             </Button>
             <Button
@@ -166,9 +156,9 @@ export default function CreateCountModal({ open, onClose }: Props) {
           </Button.Group>
 
           <Radio
-            checked={!countQuery ? false : showQuery}
+            checked={!queryReturn ? false : showQuery}
             label="Show Query"
-            disabled={!countQuery}
+            disabled={!queryReturn}
             onChange={showQueryToggles.toggle}
           />
 

@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
-import { resetSelectedSpecimen, sleep } from '../../functions/util';
+import { resetSelectedSpecimen } from '../../functions/util';
 import { BACKEND_URL } from '../../types';
 import { useNotify } from './context';
 import useExpiredSession from './useExpiredSession';
 import axios from 'axios';
-import { count } from 'console';
+import { CountQueryReturn } from '../modals/CreateCountModal';
 
 export default function useQuery() {
   const { notify } = useNotify();
@@ -36,7 +36,65 @@ export default function useQuery() {
 
   const queries = useMemo(
     () => ({
-      async count() {},
+      async count(
+        query: string,
+        columns: any[],
+        conditions: any[] | null,
+        setState: React.Dispatch<
+          React.SetStateAction<CountQueryReturn | undefined>
+        >
+      ) {
+        const countResponse = await axios
+          .post(BACKEND_URL + '/api/count', {
+            query,
+            columns,
+            conditions,
+          })
+          .catch((error) => error.response);
+
+        if (countResponse.status === 200 && countResponse.data) {
+          const { count, query } = countResponse.data;
+
+          setState({ numTuples: count, queryString: query });
+        } else if (countResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          queries.count(query, columns, conditions, setState);
+        } else {
+          // TODO: interpret status
+          // const error = selectResponse.data;
+          notify({ title: 'TODO', message: 'TODO', level: 'error' });
+        }
+      },
+      async deleteSpecimen(id: number, table: string) {
+        const deleteResponse = await axios.post(BACKEND_URL + '/api/delete', {
+          id,
+          table,
+        });
+
+        if (deleteResponse.status === 200) {
+          setSelectedSpecimen(null);
+          queries.refresh();
+        } else if (deleteResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          await queries.deleteSpecimen(id, table);
+        } else {
+          notify({
+            title: 'Unknown Error',
+            message: 'Please notify Aaron of this bug',
+            level: 'error',
+          });
+        }
+      },
+      async deleteUser() {
+        // TODO: make me please
+      },
+      async deleteTable() {
+        // TODO: make me please
+      },
       async refresh() {
         if (!query || query === '') {
           return;
@@ -64,7 +122,7 @@ export default function useQuery() {
           expireSession();
 
           await awaitReauth();
-          this.refresh();
+          queries.refresh();
         } else {
           // TODO: interpret status
           const error = selectResponse.data;
