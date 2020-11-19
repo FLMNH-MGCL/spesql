@@ -10,20 +10,16 @@ import Heading from './ui/Heading';
 import useToggle from './utils/useToggle';
 
 import emptyDataIcon from '../assets/svg/empty_data_waiting.svg';
-// import selectItemIcon from '../assets/svg/select_item_third.svg';
 import selectItemIconTest from '../assets/svg/specimen.svg';
-import { BACKEND_URL, Specimen, SpecimenFields } from '../types';
+import { BACKEND_URL, Specimen } from '../types';
 import List from './List';
 import Radio from './ui/Radio';
 import { Values } from './ui/Form';
 import CreateConfirmModal from './modals/CreateConfirmModal';
 import axios from 'axios';
 import { useNotify } from './utils/context';
-import {
-  determineAndRunFieldValidator,
-  specialCaseEmpties,
-} from '../functions/validation';
 import { buildSingleUpdateQuery } from '../functions/builder';
+import useQuery from './utils/useQuery';
 
 // TODO: remove ? where needed
 type OverviewProps = {
@@ -65,71 +61,38 @@ function SpecimenOverview({
   );
 }
 
-// TODO: add toggle to show empty values
 // TODO: make editing a global, zustand value... this will enable me to disallow
 // the user from selecting another specimen while already editing another!
 // TODO: once that is completed, send a notification when they attempt to do this so
 // they aren't clueless as to why their clicks aren't working
 export default function () {
   const { notify } = useNotify();
+
   const [editing, { on, off }] = useToggle(false);
   const [showMissing, missingToggles] = useToggle(false);
+  const [loading, loadingToggles] = useToggle(false);
+
   const table = useStore((state) => state.queryData.table);
 
-  const {
-    hasQueried,
-    queryString,
-    databaseTable,
-    setData,
-    selectedSpecimen,
-    setSelectedSpecimen,
-    toggleLoading,
-  } = useStore(
+  const { hasQueried } = useStore((state) => ({
+    hasQueried:
+      state.queryData.queryString !== undefined &&
+      state.queryData.queryString !== '',
+  }));
+
+  const { databaseTable, selectedSpecimen, setSelectedSpecimen } = useStore(
     (state) => ({
-      hasQueried:
-        state.queryData.queryString !== undefined &&
-        state.queryData.queryString !== '',
       queryString: state.queryData.queryString,
       databaseTable: state.queryData.table,
-      setData: state.queryData.setData,
       selectedSpecimen: state.selectedSpecimen,
       setSelectedSpecimen: state.setSelectedSpecimen,
-      toggleLoading: state.toggleLoading,
     }),
     shallow
   );
 
-  async function refresh() {
-    if (!queryString || queryString === '') {
-      return;
-    }
-
-    setData([]);
-
-    toggleLoading(true);
-
-    const selectResponse = await axios
-      .post(BACKEND_URL + '/api/select', {
-        query: queryString,
-      })
-      .catch((error) => error.response);
-
-    console.log(selectResponse);
-
-    if (selectResponse.status === 200 && selectResponse.data) {
-      const { specimen } = selectResponse.data;
-      setData(specimen);
-    } else {
-      // TODO: interpret status
-      const error = selectResponse.data;
-      notify({ title: 'TODO', message: error, level: 'error' });
-    }
-
-    toggleLoading(false);
-  }
+  const [{ refresh, update }] = useQuery();
 
   function cancelEdit() {
-    // do stuff here
     off();
   }
 
@@ -137,39 +100,14 @@ export default function () {
     if (!selectedSpecimen) {
       return;
     }
-    console.log(values);
 
-    let errors: any[] = [];
-    let updates: any = {};
+    loadingToggles.on();
 
-    // TODO: try and break me please
-    Object.keys(values).forEach((key) => {
-      if (selectedSpecimen[key as keyof SpecimenFields] !== values[key]) {
-        const error = determineAndRunFieldValidator(key, values[key]);
-
-        if (error !== true) {
-          errors.push({ field: key, message: error });
-        } else if (key in specialCaseEmpties) {
-          // IF the value[key] is empty (null, undefined, ''), and if it doesn't match its
-          // special case empty value (e.g. if it needs to be null or undefined but is '', or vice-versa)
-          // then it should not be updated
-          if (
-            !values[key] &&
-            specialCaseEmpties[key as keyof typeof specialCaseEmpties] !==
-              values[key]
-          ) {
-            // therefore, I do nothing with it
-          } else {
-            // update the field
-            updates[key] = values[key];
-          }
-        } else {
-          updates[key] = values[key];
-        }
-      }
-    });
-
-    console.log(errors, updates);
+    const { errors, updates, query } = buildSingleUpdateQuery(
+      databaseTable,
+      values,
+      selectedSpecimen
+    );
 
     if (errors.length) {
       notify({
@@ -181,44 +119,23 @@ export default function () {
       // TODO: write to log
     } else {
       const conditions = ['id', selectedSpecimen.id];
-      const { queryString } = buildSingleUpdateQuery(databaseTable);
 
-      off();
-
-      const updateResponse = await axios
-        .post(BACKEND_URL + '/api/update', {
-          query: queryString,
-          conditions,
-          updates,
-        })
-        .catch((error) => error.response);
-
-      if (updateResponse.status === 200 && updateResponse.data) {
-        const { message } = updateResponse.data;
-
-        notify({
-          title: 'Update Successful',
-          message,
-          level: 'success',
-        });
-
-        refresh();
-
-        // TODO: refresh the selected specimen
-      } else {
-        // TODO: interpret status
-        // const error = updateResponse.data;
-        notify({ title: 'TODO', message: 'TODO', level: 'error' });
-      }
+      await update(query, conditions, updates);
     }
 
+    loadingToggles.off();
     off();
   }
 
   // TODO: handle errors
   async function handleDelete(id?: number) {
     if (id === undefined || !table) {
-      console.log(id, table);
+      notify({
+        title: 'Missing ID or Table',
+        message:
+          'These fields are typically extracted automatically, however they cannot be found. Please submit this as a bug!',
+        level: 'error',
+      });
       return;
     } else {
       const deleteResponse = await axios.post(BACKEND_URL + '/api/delete', {
@@ -284,8 +201,12 @@ export default function () {
 
         {editing && (
           <div className="space-x-2 items-center">
-            <CancelEditButton onClick={cancelEdit} />
-            <ConfirmEditButton type="submit" form="inline-update-form" />
+            <CancelEditButton onClick={cancelEdit} loading={loading} />
+            <ConfirmEditButton
+              type="submit"
+              form="inline-update-form"
+              loading={loading}
+            />
           </div>
         )}
       </div>

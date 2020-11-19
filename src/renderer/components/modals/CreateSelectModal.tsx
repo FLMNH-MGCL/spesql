@@ -13,6 +13,7 @@ import numberParser from 'number-to-words';
 import { buildSelectQuery } from '../../functions/builder';
 import shallow from 'zustand/shallow';
 import CreateHelpModal from './CreateHelpModal';
+import useQuery from '../utils/useQuery';
 
 type Props = {
   open: boolean;
@@ -20,13 +21,15 @@ type Props = {
 };
 
 export default function CreateSelectModal({ open, onClose }: Props) {
-  const { notify } = useNotify();
+  // const { notify } = useNotify();
 
-  const { setData, setTable, setCurrentQuery } = useStore((state) => ({
-    setData: state.queryData.setData,
-    setTable: state.queryData.setTable,
-    setCurrentQuery: state.queryData.setCurrentQuery,
-  }));
+  // const { setData, setTable, setCurrentQuery } = useStore((state) => ({
+  //   setData: state.queryData.setData,
+  //   setTable: state.queryData.setTable,
+  //   setCurrentQuery: state.queryData.setCurrentQuery,
+  // }));
+
+  const [{ select }] = useQuery();
 
   const toggleLoading = useStore((state) => state.toggleLoading);
 
@@ -82,34 +85,36 @@ export default function CreateSelectModal({ open, onClose }: Props) {
 
     if (!query) return;
 
-    const selectResponse = await axios
-      .post(BACKEND_URL + '/api/select', {
-        query,
-        columns,
-        conditions,
-      })
-      .catch((error) => error.response);
+    await select(query, columns, conditions, databaseTable, onClose);
 
-    if (selectResponse.status === 200 && selectResponse.data) {
-      const { specimen, query } = selectResponse.data;
+    // const selectResponse = await axios
+    //   .post(BACKEND_URL + '/api/select', {
+    //     query,
+    //     columns,
+    //     conditions,
+    //   })
+    //   .catch((error) => error.response);
 
-      if (!specimen.length) {
-        notify({
-          title: 'Empty Return',
-          message: 'Query yielded no data',
-          level: 'warning',
-        });
-      } else {
-        onClose();
-        setData(specimen);
-        setTable(databaseTable);
-        setCurrentQuery(query);
-      }
-    } else {
-      // TODO: interpret status
-      // const error = selectResponse.data;
-      notify({ title: 'TODO', message: 'TODO', level: 'error' });
-    }
+    // if (selectResponse.status === 200 && selectResponse.data) {
+    //   const { specimen, query } = selectResponse.data;
+
+    //   if (!specimen.length) {
+    //     notify({
+    //       title: 'Empty Return',
+    //       message: 'Query yielded no data',
+    //       level: 'warning',
+    //     });
+    //   } else {
+    //     onClose();
+    //     setData(specimen);
+    //     setTable(databaseTable);
+    //     setCurrentQuery(query);
+    //   }
+    // } else {
+    //   // TODO: interpret status
+    //   // const error = selectResponse.data;
+    //   notify({ title: 'TODO', message: 'TODO', level: 'error' });
+    // }
 
     toggleLoading(false);
   }

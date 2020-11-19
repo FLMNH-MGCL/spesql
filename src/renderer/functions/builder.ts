@@ -1,4 +1,10 @@
 import clsx from 'clsx';
+import { Values } from '../components/ui/Form';
+import { SpecimenFields } from '../types';
+import {
+  determineAndRunFieldValidator,
+  specialCaseEmpties,
+} from './validation';
 
 // TODO: type me plz
 export function buildSelectQuery(table: string, conditionals?: any[]) {
@@ -97,8 +103,48 @@ export function buildUpdateQuery(
   return { queryString, conditionalPairs, updates };
 }
 
-export function buildSingleUpdateQuery(table: string) {
-  let queryString = clsx('UPDATE', table, 'SET ? WHERE ?? = ?');
+// export function buildSingleUpdateQuery(table: string) {
+//   let queryString = clsx('UPDATE', table, 'SET ? WHERE ?? = ?');
 
-  return { queryString };
+//   return { queryString };
+// }
+
+export function buildSingleUpdateQuery(
+  table: string,
+  values: Values,
+  selectedSpecimen: Partial<SpecimenFields>
+) {
+  let query = clsx('UPDATE', table, 'SET ? WHERE ?? = ?');
+
+  let errors: any[] = [];
+  let updates: any = {};
+
+  // TODO: try and break me please
+  Object.keys(values).forEach((key) => {
+    if (selectedSpecimen[key as keyof SpecimenFields] !== values[key]) {
+      const error = determineAndRunFieldValidator(key, values[key]);
+
+      if (error !== true) {
+        errors.push({ field: key, message: error });
+      } else if (key in specialCaseEmpties) {
+        // IF the value[key] is empty (null, undefined, ''), and if it doesn't match its
+        // special case empty value (e.g. if it needs to be null or undefined but is '', or vice-versa)
+        // then it should not be updated
+        if (
+          !values[key] &&
+          specialCaseEmpties[key as keyof typeof specialCaseEmpties] !==
+            values[key]
+        ) {
+          // therefore, I do nothing with it
+        } else {
+          // update the field
+          updates[key] = values[key];
+        }
+      } else {
+        updates[key] = values[key];
+      }
+    }
+  });
+
+  return { errors, updates, query };
 }

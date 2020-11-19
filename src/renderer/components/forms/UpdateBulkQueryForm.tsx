@@ -19,6 +19,7 @@ import {
 } from '../utils/constants';
 import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
+import useExpiredSession from '../utils/useExpiredSession';
 
 const updateFieldOptions = fieldOptions.filter((el) => el.value !== '*');
 
@@ -121,6 +122,8 @@ export default function UpdateBulkQueryForm({ onSubmit }: Props) {
   const [advanced, setAdvanced] = useState(false);
   const [tables, setTables] = useState<SelectOption[]>([]);
 
+  const [expiredSession, { expireSession }] = useExpiredSession();
+
   // TODO: type validator as function
   function setValidator(validator: any) {
     if (!advanced) {
@@ -128,9 +131,25 @@ export default function UpdateBulkQueryForm({ onSubmit }: Props) {
     } else return NeutralValidator;
   }
 
+  // if modal launches and session is expired, trigger reauth modal
+  // once reauthed, the effect will retrigger and load the tables for the
+  // select input
   useEffect(() => {
-    fetchTables(setTables);
-  }, []);
+    async function init() {
+      const errored = await fetchTables(setTables);
+
+      if (errored) {
+        if (errored === 'BAD SESSION') {
+          expireSession();
+        } else {
+          console.log(errored);
+          throw new Error('Some other error occurred!');
+        }
+      }
+    }
+
+    init();
+  }, [expiredSession.current]);
 
   return (
     <Form onSubmit={onSubmit} id="update-bulk-form" className="mb-3">
@@ -160,16 +179,6 @@ export default function UpdateBulkQueryForm({ onSubmit }: Props) {
           label="Query Type"
           fullWidth
         />
-        {/* TODO: Not sure I want this */}
-        {/* <Form.Select
-          name="fields"
-          label="Fields"
-          disabled={advanced}
-          fullWidth
-          multiple
-          options={updateFieldOptions}
-          register={{ validate: setValidator(validateFieldSelection) }}
-        /> */}
 
         <Form.Select
           name="databaseTable"

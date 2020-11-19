@@ -5,12 +5,20 @@ import CircleButton from './CircleButton';
 
 type Props = {
   disabled?: boolean;
+  loading?: boolean;
 } & PropsOf<'button'>;
 
-export function ConfirmEditButton({ disabled, type, ...props }: Props) {
+export function ConfirmEditButton({
+  disabled,
+  type,
+  loading,
+  ...props
+}: Props) {
   return (
     <CircleButton
       type={type}
+      loading={loading}
+      disabled={loading}
       icon={
         <svg
           className="w-5 h-5"
@@ -32,10 +40,16 @@ export function ConfirmEditButton({ disabled, type, ...props }: Props) {
   );
 }
 
-export function CancelEditButton({ onClick }: { onClick(): void }) {
+type CancelProps = {
+  onClick(): void;
+  loading?: boolean;
+};
+export function CancelEditButton({ onClick, loading }: CancelProps) {
   return (
     <CircleButton
       onClick={onClick}
+      loading={loading}
+      disabled={loading}
       icon={
         <svg
           className="w-5 h-5"

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useStore } from '../../../stores';
 import Button from '../ui/Button';
 import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
@@ -8,12 +7,10 @@ import useKeyboard from '../utils/useKeyboard';
 import CreateLogModal from './CreateLogModal';
 import numberParser from 'number-to-words';
 import { buildUpdateQuery } from '../../functions/builder';
-import axios from 'axios';
-import { BACKEND_URL } from '../../types';
 import UpdateBulkQueryForm from '../forms/UpdateBulkQueryForm';
 import CreateHelpModal from './CreateHelpModal';
 import useToggle from '../utils/useToggle';
-import shallow from 'zustand/shallow';
+import useQuery from '../utils/useQuery';
 
 type Props = {
   open: boolean;
@@ -23,50 +20,13 @@ type Props = {
 export default function CreateBulkUpdateModal({ open, onClose }: Props) {
   const { notify } = useNotify();
 
-  const { setData, queryString, toggleLoading } = useStore(
-    (state) => ({
-      setData: state.queryData.setData,
-      queryString: state.queryData.queryString,
-      toggleLoading: state.toggleLoading,
-    }),
-    shallow
-  );
-
   const [loading, { on, off }] = useToggle(false);
+
+  const [{ update }] = useQuery();
 
   useKeyboard('Escape', () => {
     onClose();
   });
-
-  async function refresh() {
-    if (!queryString || queryString === '') {
-      return;
-    }
-
-    setData([]);
-
-    toggleLoading(true);
-
-    const selectResponse = await axios
-      .post(BACKEND_URL + '/api/select', {
-        query: queryString,
-      })
-      .catch((error) => error.response);
-
-    console.log(selectResponse);
-
-    // TODO: add session validation too
-    if (selectResponse.status === 200 && selectResponse.data) {
-      const { specimen } = selectResponse.data;
-      setData(specimen);
-    } else {
-      // TODO: interpret status
-      const error = selectResponse.data;
-      notify({ title: 'TODO', message: error, level: 'error' });
-    }
-
-    toggleLoading(false);
-  }
 
   function parseConditions(count: any, values: Values) {
     const numConditions = parseInt(count, 10);
@@ -124,9 +84,8 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
     return sets;
   }
 
-  async function runQuery(values: Values) {
+  async function handleSubmit(values: Values) {
     on();
-    console.log(values);
 
     const { advancedQuery, setCount, conditionalCount, databaseTable } = values;
 
@@ -165,41 +124,17 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
         return;
       }
 
-      const updateResponse = await axios
-        .post(BACKEND_URL + '/api/update', {
-          query,
-          conditions,
-          updates,
-        })
-        .catch((error) => error.response);
+      await update(query, conditions, updates);
 
-      console.log(updateResponse);
-
-      if (updateResponse.status === 200 && updateResponse.data) {
-        const { message } = updateResponse.data;
-
-        notify({
-          title: 'Update Successful',
-          message,
-          level: 'success',
-        });
-
-        refresh();
-      } else {
-        // TODO: interpret status
-        // const error = updateResponse.data;
-        notify({ title: 'TODO', message: 'TODO', level: 'error' });
-      }
+      off();
     }
-
-    off();
   }
 
   return (
     <React.Fragment>
       <Modal open={open} onClose={onClose} size="medium">
         <Modal.Content title="Update Query">
-          <UpdateBulkQueryForm onSubmit={runQuery} />
+          <UpdateBulkQueryForm onSubmit={handleSubmit} />
         </Modal.Content>
 
         <Modal.Footer>
