@@ -89,7 +89,7 @@ export default function useQuery() {
           });
         }
       },
-      async deleteUser() {
+      async deleteUser(id: number) {
         // TODO: make me please
       },
       async deleteTable() {

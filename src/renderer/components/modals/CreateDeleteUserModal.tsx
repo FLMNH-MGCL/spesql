@@ -3,6 +3,7 @@ import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import { User } from '../UsersTable';
 import useKeyboard from '../utils/useKeyboard';
+import useQuery from '../utils/useQuery';
 
 type Props = {
   open: boolean;
@@ -12,14 +13,19 @@ type Props = {
 
 // TODO: have onClose take in a refresh boolean
 export default function CreateDeleteUserModal({ user, open, onClose }: Props) {
+  const [{ deleteUser }] = useQuery();
+
   useKeyboard('Escape', () => {
     onClose();
   });
 
-  function handleDelete() {
+  async function handleDelete() {
     console.log('Woah there, I cant do that disasterous thing yet');
-
     onClose();
+
+    // double check if admin
+    // attempt query
+    // await deleteUser(user.id)
   }
 
   return (
