@@ -1,4 +1,5 @@
 import React from 'react';
+import { useStore } from '../../../stores';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import { User } from '../UsersTable';
@@ -15,17 +16,20 @@ type Props = {
 export default function CreateDeleteUserModal({ user, open, onClose }: Props) {
   const [{ deleteUser }] = useQuery();
 
+  const currentUser = useStore((state) => state.user);
+
   useKeyboard('Escape', () => {
     onClose();
   });
 
   async function handleDelete() {
-    console.log('Woah there, I cant do that disasterous thing yet');
-    onClose();
+    if (!currentUser || currentUser.accessRole !== 'admin') {
+      throw new Error('Non-admins should not have access to this screen!');
+    } else {
+      await deleteUser(user.id);
+    }
 
-    // double check if admin
-    // attempt query
-    // await deleteUser(user.id)
+    onClose();
   }
 
   return (
