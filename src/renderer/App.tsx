@@ -16,6 +16,8 @@ import ErrorBoundary from './components/ErrorBoundary';
 import CreateVerifySessionModal from './components/modals/CreateVerifySessionModal';
 import useSound from 'use-sound';
 import bulb from './assets/sounds/Bulb.mp3';
+import crosswalk from './assets/sounds/Crosswalk.mp3';
+import { useStore } from '../stores';
 
 function HomeStack() {
   return (
@@ -32,15 +34,25 @@ function HomeStack() {
 
 export default function App() {
   const [playError] = useSound(bulb);
+  const [playSuccess] = useSound(crosswalk);
+
+  const prefersSound = useStore((state) => state.prefersSound);
 
   const notificationSystem = createRef();
 
-  function notify(content: NotificationContent) {
+  function notify(
+    content: NotificationContent,
+    sound?: 'error' | 'success' | 'warning'
+  ) {
     const notification = notificationSystem.current;
     const { title, message, level } = content;
 
-    if (level === 'error') {
-      playError();
+    if (prefersSound) {
+      if (level === 'error' || sound === 'error') {
+        playError();
+      } else if (sound === 'success') {
+        playSuccess();
+      }
     }
 
     // @ts-ignore

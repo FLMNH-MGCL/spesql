@@ -18,9 +18,6 @@ import shallow from 'zustand/shallow';
 import { sleep } from '../../functions/util';
 import Select, { SelectOption } from '../ui/Select';
 
-import crosswalk from '../../assets/sounds/Crosswalk.mp3';
-import useSound from 'use-sound';
-
 // TODO: add typings in this file
 
 function CSVParser({ onFileUpload }: UploadProps) {
@@ -157,8 +154,6 @@ type Props = {
 
 export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const { notify } = useNotify();
-
-  const [playSuccess] = useSound(crosswalk);
 
   const [tab, setTab] = useState(0);
   const [pasteData, setPasteData] = useState('');
@@ -332,13 +327,14 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         });
         updateInsertLog(serverErrors);
       } else {
-        notify({
-          title: 'Insertions Complete',
-          message: 'No errors detected',
-          level: 'success',
-        });
-
-        playSuccess();
+        notify(
+          {
+            title: 'Insertions Complete',
+            message: 'No errors detected',
+            level: 'success',
+          },
+          'success'
+        );
       }
       off();
     }
