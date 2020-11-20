@@ -14,7 +14,8 @@ import { NotificationContext } from './components/utils/context';
 import Admin from './pages/Admin';
 import ErrorBoundary from './components/ErrorBoundary';
 import CreateVerifySessionModal from './components/modals/CreateVerifySessionModal';
-import say from 'say';
+import useSound from 'use-sound';
+import bulb from './assets/sounds/Bulb.mp3';
 
 function HomeStack() {
   return (
@@ -30,15 +31,16 @@ function HomeStack() {
 }
 
 export default function App() {
+  const [playError] = useSound(bulb);
+
   const notificationSystem = createRef();
 
   function notify(content: NotificationContent) {
     const notification = notificationSystem.current;
     const { title, message, level } = content;
 
-    // TODO: REPLACE ME WITH SOUND NOT SAY
     if (level === 'error') {
-      say.speak('Error Occurred');
+      playError();
     }
 
     // @ts-ignore
