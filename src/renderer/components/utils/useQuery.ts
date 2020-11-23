@@ -7,6 +7,7 @@ import { useNotify } from './context';
 import useExpiredSession from './useExpiredSession';
 import axios from 'axios';
 import { CountQueryReturn } from '../modals/CreateCountModal';
+import { User } from '../UsersTable';
 
 export default function useQuery() {
   const { notify } = useNotify();
@@ -66,6 +67,37 @@ export default function useQuery() {
           // const error = selectResponse.data;
           notify({ title: 'TODO', message: 'TODO', level: 'error' });
         }
+      },
+      async createUser(newUser: Partial<User>) {
+        const creationResponse = await axios
+          .post(BACKEND_URL + '/api/admin/user/create', { newUser })
+          .catch((error) => error.response);
+
+        if (creationResponse.status === 201) {
+          notify({
+            title: 'Success',
+            message: `Created new user @${newUser.username}`,
+            level: 'success',
+          });
+        } else if (creationResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          await queries.createUser(newUser);
+        } else {
+          notify({
+            title: 'Error Occurred',
+            message: 'Please check the logs',
+            level: 'error',
+          });
+
+          return {
+            status: creationResponse.status,
+            data: creationResponse.data,
+          };
+        }
+
+        return;
       },
       async deleteSpecimen(id: number, table: string) {
         const deleteResponse = await axios.post(BACKEND_URL + '/api/delete', {

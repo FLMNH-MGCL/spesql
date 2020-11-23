@@ -8,9 +8,9 @@ import Heading from '../components/ui/Heading';
 function AdminHeader({ username }: { username?: string }) {
   return (
     // TODO: fix styles, make grid please
-    <div className="w-full flex h-16 px-4 justify-between items-center">
+    <div className="w-full flex h-16 px-4 items-center">
       <BackButton to="/home" />
-      <Heading className="mt-4" centered>
+      <Heading className="flex-1" centered>
         Welcome, @{username}
       </Heading>
     </div>

@@ -4,6 +4,8 @@ Fields denoted with (\*) are required and may not be left blank. Those not denot
 
 Fields that do not have any generalized, restricted formatting will have relaxed insertion requirements. You may see additional information about what the field is by referencing the [Darwin Core](https://dwc.tdwg.org/terms/) guide.
 
+Note: Some fields are automatically generated/determined, these fields should <b>not</b> be included in the CSV for batch insertions. An example is `recordEnteredBy`, the credentials of the logged in user will be applied for this information.
+
 ## Available Specimen Fields:
 
 (click to view formatting information)
@@ -11,6 +13,8 @@ Fields that do not have any generalized, restricted formatting will have relaxed
 - [catalogNumber](###catalogNumber)
 - [otherCatalogNumber](###otherCatalogNumber)
 - [recordNumber](###recordNumber)
+- [otherIdentifier](###otherIdentifier)
+- [projectNumber](###projectNumber)
 - [order\_](###order_)
 - [superfamily](###superfamily)
 - [family](###family)
@@ -93,7 +97,7 @@ This is the LEP number. The general format is:
 `lep1234567`
 <br/><br/>
 
-### otherCatalogNumber <section id='##otherCatalogNumber'/> <section id='##'/>
+### otherCatalogNumber <section id='##otherCatalogNumber'/>
 
 This is the MGCL number. The general format is:
 
@@ -125,6 +129,14 @@ This is a Collector's record number. There is no specified, mandatory formatting
 ##### Passing Examples
 
 `LK45`
+
+### otherIdentifier
+
+This is a new field and has not had any formatting guidelines generated yet.
+
+### projectNumber
+
+This is a new field and has not had any formatting guidelines generated yet.
 
 ### order\_ <section id='##order\_'/>
 
@@ -307,6 +319,9 @@ Identification qualifier for the specimen. Case sensitive, and must match one (o
 `sensu stricto`
 `sensu lato`
 
+</br>
+<b>Darwin Core:</b> A brief phrase or a standard term ("cf.", "aff.") to express the determiner's doubts about the Identification.
+
 <br/><br/>
 
 ### recordedBy <section id='##recordedBy'/>
@@ -326,7 +341,10 @@ Either is accepted, however please make note of how the order changes when using
 
 ##### Failing Examples
 
-`Leopold,aaron` `aaron leopold` `Leopold` `Aaron`
+`Leopold,aaron`
+`aaron leopold`
+`Aaron`
+`Unknown Unknown`
 
 <br/><br/>
 
@@ -359,27 +377,42 @@ The list separator must be the pipe character '|'. Either list format/naming ord
 
 ### identifiedBy <section id='##identifiedBy'/>
 
-The name of who identified specimen, should only be one name pair. The general format is:
+The name(s) of who identified the specimen, may be multiple names.
+
+</br>
+<b>Darwin Core:</b> A list (concatenated and separated) of names of people, groups, or organizations who assigned the Taxon to the subject.
+
+The general format is:
 
 ```
   Last,First
+  Last1,First1 | Last2,First2
+  Last1,First1|Last2,First2
+
   First Last
+  First1 Last1 | First2 Last2
+  First1 Last1|First2 Last2
 ```
 
 Either is accepted, however please make note of how the order changes when using a comma. The resulting value stored in the database will be of the format `Last,First`. Please do not enter a value if this is unknown, instead of iterations of `Unknown Unknown`
 
 ##### Passing Examples
 
-`Leopold,Aaron` `Aaron Leopold` `Leopold,Unknown` `Unknown Leopold`
+`Leopold,Aaron` `Aaron Leopold` `Leopold,Aaron | Doe,Jane` `Leopold,Aaron|Doe,Jane`
 
 ##### Failing Examples
 
-`Leopold,aaron` `aaron leopold` `Leopold` `Aaron`
+`Leopold` `leopold,aaron` `Leopold,aaron | doe,Jane` `Leopold,Aaron, Doe,Jane`
 <br/><br/>
 
 ### dateIdentified <section id='##dateIdentified'/>
 
-The date in which the specimen was identified. This follows the general date format:
+The date in which the specimen was identified.
+
+</br>
+<b>Darwin Core:</b> The date on which the subject was determined as representing the Taxon.
+
+This follows the general date format:
 
 ```
   YYYY-MM-DD
@@ -440,6 +473,9 @@ The sex of the specimen. Must match the <b>_first letter_</b> of one of the cont
 
 `Male` `Female` `Gynandromorph`
 
+</br>
+<b>Darwin Core:</b> The sex of the biological individual(s) represented in the Occurrence.
+
 ##### Passing Examples
 
 `M` `F` `G`
@@ -456,19 +492,30 @@ The life stage the specimen is in. Must match one (only one) of the control valu
 
 `egg` `larva` `pupa` `adult`
 
+</br>
+<b>Darwin Core:</b> The age class or life stage of the biological individual(s) at the time the Occurrence was recorded.
+
 <br/><br/>
 
 ### habitat <section id='##habitat'/>
 
+</br>
+<b>Darwin Core:</b> A category or description of the habitat in which the Event occurred.
+
 There are no generalized formatting schemas for this field
 
-TODO: get examples
+##### General Examples
+
+`oak savanna` `pre-cordilleran steppe`
 
 <br/><br/>
 
 ### occurrenceRemarks <section id='##occurrenceRemarks'/>
 
 Remarks from the collector. Not generalized formatting schemas for this field
+
+</br>
+<b>Darwin Core:</b> Comments or notes about the Occurrence.
 
 <br/><br/>
 
@@ -485,6 +532,9 @@ The protocol in which the specimen was sampled. May be a list, where each item m
 `HandDirect` `NetAerial` `Light` `LightUV` `LightMV` `LightMH` `LightLED` `LightOther` `Bait` `TrapMalaise` `Trap`
 
 The format of the list follows previous field formatting, in that it must be delimited using the pipe '|' character.
+
+</br>
+<b>Darwin Core:</b> The name of, reference to, or description of the method or protocol used during an Event.
 
 ##### Passing Examples
 
@@ -552,11 +602,27 @@ The Municipality of the collected specimen. Follows traditional proper noun form
   No random capitalization.
 ```
 
+</br>
+<b>Darwin Core:</b> The full, unabbreviated name of the next smaller administrative region than county (city, municipality, etc.) in which the Location occurs. Do not use this term for a nearby named place that does not contain the actual location.
+
+Darwin Core Recommendation: Recommended best practice is to use a controlled vocabulary such as the Getty Thesaurus of Geographic Names.
+
+##### General Examples
+
+`Holzminden` `Araçatuba` `Ga-Segonyana`
+
 <br/><br/>
 
 ### locality <section id='##locality'/>
 
 The Locality data of the collected specimen. No generalized formatting in place.
+
+</br>
+<b>Darwin Core:</b> The specific description of the place. Less specific geographic information can be provided in other geographic terms. This term may contain information modified from the original to correct perceived errors or standardize the description.
+
+##### General Example
+
+`Bariloche, 25 km NNE via Ruta Nacional 40 (=Ruta 237)`
 
 <br/><br/>
 
@@ -602,6 +668,9 @@ The coordinate system used. Must match one (only one) of the control values (cas
 
 `EPSG:4326` `WGS84` `NAD27` `Campo Inchauspe` `European 1950` `Clarke 1866` `Unknown`
 
+</br>
+<b>Darwin Core:</b> The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
+
 <br/><br/>
 
 ### coordinateUncertainty <section id='##coordinateUncertainty'/>
@@ -610,13 +679,16 @@ The value indicating the uncertainty of the recorded coordinates at which the sp
 
 `m` for meters, `mi` for miles, `ft` for feet
 
+</br>
+<b>Darwin Core:</b> The horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location. Leave the value empty if the uncertainty is unknown, cannot be estimated, or is not applicable (because there are no coordinates). Zero is not a valid value for this term.
+
 ##### Passing Examples
 
 `50m` `1mi` `100ft`
 
 ##### Failing Examples
 
-`50 meters` `1 mile` `1 foot` `100`
+`50 meters` `1 mile` `1 foot` `100` `0m` `0`
 
 <br/><br/>
 
@@ -634,9 +706,25 @@ The longitude as written on the label (if present). No generalized formatting, a
 
 ### georeferencedBy <section id='##georeferencedBy'/>
 
-TODO:
+</br>
+<b>Darwin Core:</b> A list (concatenated and separated) of names of people, groups, or organizations who determined the georeference (spatial representation) for the Location.
+
+This follows the standard, list format:
+
+```
+  Last,First
+  Last1,First1 | Last2,First2
+  Last1,First1|Last2,First2
+
+  First Last
+  First1 Last1 | First2 Last2
+  First1 Last1|First2 Last2
+```
 
 ##### Passing Examples
+
+`Brad Millen | Kristina Yamamoto | Janet Fang`
+`Millen,Brad | Yamamoto,Kristina | Fang,Janet`
 
 ##### Failing Examples
 
@@ -644,7 +732,7 @@ TODO:
 
 ### disposition <section id='##disposition'/>
 
-The disposition of the specimen as it is currently in the collection. Must match one (only one) of the control values (case sensitive):
+The disposition (current state) of the specimen as it is currently in the collection. Must match one (only one) of the control values (case sensitive):
 
 `Present` `Missing` `Sample Used Up` `On Loan`
 
@@ -694,112 +782,152 @@ If the isLoaned field is indicated as `Y` this field is required.
 
 Expected return date for specimen, update to actual when returned.
 
+This follows the general date format:
+
+```
+  YYYY-MM-DD
+  YYYY-MM
+  YYYY
+```
+
+May not preceed reasonable floor thresholds (e.g. less than 1990)
+
 <br/><br/>
 
 ### preparations <section id='##preparations'/>
 
-##### Passing Examples
+The preparations of the specimen. Must match one of the control values (case sensitive)
 
-##### Failing Examples
+`Wing Voucher` `Molecular Collection` `Pinned Collection` `Larval Collection` `Genetic Collection`
 
-`example`
+</br>
+<b>Darwin Core:</b> A preparation or preservation method for a specimen.
+
 <br/><br/>
 
 ### freezer <section id='##freezer'/>
 
+The freezer the specimen is stored in (if applicable). The general format is as follows:
+
+```
+  'Kawahara' followed by two digits:
+  Kawahara##
+```
+
 ##### Passing Examples
+
+`Kawahara05` `Kawahara11`
 
 ##### Failing Examples
 
-`example`
+`kawahara 5` `karahara30` `Kawahara119`
+
 <br/><br/>
 
 ### rack <section id='##rack'/>
 
+The rack on/in which the specimen is stored. The general format is:
+
+```
+  1-3 characters long.
+  No punctuation.
+  Alphanumeric
+```
+
 ##### Passing Examples
 
-##### Failing Examples
+`B32`
 
-`example`
 <br/><br/>
 
 ### box <section id='##box'/>
 
-##### Passing Examples
+Box number of specimen. The general format is:
 
-##### Failing Examples
+```
+  Integer value between 1-99.
+  1 <= box <= 99
+```
 
-`example`
 <br/><br/>
 
 ### tubeSize <section id='##tubeSize'/>
 
-##### Passing Examples
+The size of the tube/container/other used. It must match one (only one) of the control values:
 
-##### Failing Examples
+`papered` `50falcon` `15falcon` `microcentrifuge`
 
-`example`
 <br/><br/>
 
 ### associatedSequences <section id='##associatedSequences'/>
 
-##### Passing Examples
+A list of identifiers (publication, bibliographic reference, global unique identifier, URI) of literature associated with the Occurrence.
 
-##### Failing Examples
+Note: This field is too complex to validate programmatically, so please refer to the example below to see the manner in which you should structure the list.
 
-`example`
+##### General Example
+
+`http://www.sciencemag.org/cgi/content/abstract/322/5899/261, Christopher J. Conroy, Jennifer L. Neuwald. 2008. Phylogeographic study of the California vole, Microtus californicus Journal of Mammalogy, 89(3):755-767., Steven R. Hoofer and Ronald A. Van Den Bussche. 2001. Phylogenetic Relationships of Plecotine Bats and Allies Based on Mitochondrial Ribosomal Sequences. Journal of Mammalogy 82(1):131-137. | Walker, Faith M., Jeffrey T. Foster, Kevin P. Drees, Carol L. Chambers. 2014. Spotted bat (Euderma maculatum) microsatellite discovery using illumina sequencing. Conservation Genetics Resources.`
+
 <br/><br/>
 
 ### associatedReferences <section id='##associatedReferences'/>
 
+A list of identifiers (publication, global unique identifier, URI) of genetic sequence information associated with the Occurrence.
+
+The general format follows the standard list format, and is as follows:
+
+```
+link
+linkOne|linkTwo
+linkOne | linkTwo
+```
+
 ##### Passing Examples
+
+`http://www.ncbi.nlm.nih.gov/nuccore/U34853.1 | http://www.ncbi.nlm.nih.gov/nuccore/GU328060 | http://www.ncbi.nlm.nih.gov/nuccore/AF326093`
 
 ##### Failing Examples
 
-`example`
+`http://www.ncbi.nlm.nih.gov/nuccore/U34853.1, http://www.ncbi.nlm.nih.gov/nuccore/GU328060, http://www.ncbi.nlm.nih.gov/nuccore/AF326093`
 <br/><br/>
 
 ### withholdData <section id='##withholdData'/>
 
-##### Passing Examples
+Indication of if there was data withheld. Must be one of the two accepted values (case sensitive):
 
-##### Failing Examples
+`Y` for yes, `N` for no
 
-`example`
+Note: please refer to informationWithheld in Darwin Core to view more about what this field is
+
 <br/><br/>
 
 ### reared <section id='##reared'/>
 
-##### Passing Examples
+Indication of if the specimen has been reared. Must be one of the two accepted values (case sensitive):
 
-##### Failing Examples
+`Y` for yes, `N` for no
 
-`example`
 <br/><br/>
 
 ### recordEnteredBy <section id='##recordEnteredBy'/>
 
-##### Passing Examples
+The (spesql) credentials of the individual inserting this into the database. This is automatically determined, <b>DO NOT</b> manually attempt to insert this field. The insertion will fail.
 
-##### Failing Examples
+This field is available for logging and querying.
 
-`example`
 <br/><br/>
 
 ### modifiedInfo <section id='##modifiedInfo'/>
 
-##### Passing Examples
+The edit history of this entry in the database. This is automatically determined and updated as changes to the entry are made, <b>DO NOT</b> manually attempt to insert this field. The insertion will fail.
 
-##### Failing Examples
+This field is available for logging and querying.
 
-`example`
 <br/><br/>
 
 ### fieldNotes <section id='##fieldNotes'/>
 
-##### Passing Examples
+Notes from field, other notes about specimen. There is no specified formatting to follow
 
-##### Failing Examples
-
-`example`
 <br/><br/>

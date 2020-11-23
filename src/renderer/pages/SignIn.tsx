@@ -123,14 +123,22 @@ export default function SignIn() {
             />
           </div>
           <Form onSubmit={handleSubmit}>
-            <Form.Input name="username" label="Username" required />
+            <Form.Input
+              name="username"
+              label="Username"
+              placeholder="Username"
+              required
+              icon="atMention"
+            />
 
             <Form.Input
               className="mt-6"
               name="password"
               label="Password"
+              placeholder="••••••••••"
               type="password"
               required
+              icon="password"
             />
 
             <div className="mt-6 flex text-sm leading-5">

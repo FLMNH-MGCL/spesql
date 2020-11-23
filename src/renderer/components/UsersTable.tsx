@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { AutoSizer, Column, Table, TableRowProps } from 'react-virtualized';
-import Button from './ui/Button';
 import axios from 'axios';
 import useWindowDimensions from './utils/useWindowDimensions';
 import { SortingConfig } from './VirtualizedTable';
@@ -10,6 +9,9 @@ import Spinner from './ui/Spinner';
 import Badge from './ui/Badge';
 import CreateEditUserModal from './modals/CreateEditUserModal';
 import CreateDeleteUserModal from './modals/CreateDeleteUserModal';
+import CreateLogModal from './modals/CreateLogModal';
+import CreateHelpModal from './modals/CreateHelpModal';
+import CreateCreateUserModal from './modals/CreateCreateUserModal';
 
 export type User = {
   id: number;
@@ -128,26 +130,44 @@ export default function UsersTable() {
     : [];
 
   // console.log(editing);
+  async function getUsers() {
+    on();
+    const response = await axios
+      .get('/api/admin/users')
+      .catch((error) => error.response);
+
+    // console.log(response);
+    if (response.status !== 200) {
+      // notify
+      off();
+      return;
+    }
+
+    // TODO: use query from data?
+    const { users } = response.data;
+    setUsers(users.map((user: any) => user as User));
+    off();
+  }
 
   useEffect(() => {
-    async function getUsers() {
-      on();
-      const response = await axios
-        .get('/api/admin/users')
-        .catch((error) => error.response);
+    // async function getUsers() {
+    //   on();
+    //   const response = await axios
+    //     .get('/api/admin/users')
+    //     .catch((error) => error.response);
 
-      // console.log(response);
-      if (response.status !== 200) {
-        // notify
-        off();
-        return;
-      }
+    //   // console.log(response);
+    //   if (response.status !== 200) {
+    //     // notify
+    //     off();
+    //     return;
+    //   }
 
-      // TODO: use query from data?
-      const { users } = response.data;
-      setUsers(users.map((user: any) => user as User));
-      off();
-    }
+    //   // TODO: use query from data?
+    //   const { users } = response.data;
+    //   setUsers(users.map((user: any) => user as User));
+    //   off();
+    // }
 
     if (!users || !users.length) {
       getUsers();
@@ -311,19 +331,13 @@ export default function UsersTable() {
         </AutoSizer>
       </div>
       <nav className="bg-gray-50 px-4 py-3 flex items-center justify-between sm:px-6 border-t border-cool-gray-100">
-        <div className="hidden sm:block">
-          <p className="text-sm leading-5 text-cool-gray-700">
-            Showing <span className="font-medium">1 </span>
-            to <span className="font-medium">10 </span>
-            of <span className="font-medium">20 </span>
-            results
-          </p>
+        <div className="flex space-x-2 items-center">
+          <CreateCreateUserModal refresh={getUsers} />
         </div>
-        <div className="flex-1 flex justify-between sm:justify-end">
-          <Button.Group>
-            <Button disabled>Previous</Button>
-            <Button disabled>Next</Button>
-          </Button.Group>
+        <div className="flex space-x-2 items-center">
+          {/* TODO: create ADMIN log modal */}
+          <CreateLogModal />
+          <CreateHelpModal variant="admin-user" />
         </div>
       </nav>
     </React.Fragment>

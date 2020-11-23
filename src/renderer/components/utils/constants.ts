@@ -206,3 +206,9 @@ export const geodeticDatumControl = [
   { label: 'Clarke 1866', value: 'Clarke 1866' },
   { label: 'Unknown', value: 'Unknown' },
 ];
+
+export const accessRoles = [
+  { label: 'Guest', value: 'guest' },
+  { label: 'Manager', value: 'manager' },
+  { label: 'Admin', value: 'admin' },
+];

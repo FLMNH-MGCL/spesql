@@ -16,13 +16,14 @@ type HelpModalProps = {
     | 'insert'
     | 'single-insert'
     | 'queryBuilder'
-    | 'admin';
+    | 'admin-user'
+    | 'admin-table';
   float?: 'left' | 'right';
 };
 
 export default function CreateHelpModal({ variant, float }: HelpModalProps) {
   const [open, { on, off }] = useToggle(false);
-
+  //TODO:
   function determineModalToRender() {
     switch (variant) {
       case 'global': {
@@ -48,6 +49,14 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
       }
 
       case 'queryBuilder': {
+        return <SelectHelpModal />;
+      }
+
+      case 'admin-user': {
+        return <SelectHelpModal />;
+      }
+
+      case 'admin-table': {
         return <SelectHelpModal />;
       }
 
