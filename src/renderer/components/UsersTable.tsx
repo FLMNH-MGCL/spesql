@@ -9,9 +9,9 @@ import Spinner from './ui/Spinner';
 import Badge from './ui/Badge';
 import CreateEditUserModal from './modals/CreateEditUserModal';
 import CreateDeleteUserModal from './modals/CreateDeleteUserModal';
-import CreateLogModal from './modals/CreateLogModal';
 import CreateHelpModal from './modals/CreateHelpModal';
 import CreateCreateUserModal from './modals/CreateCreateUserModal';
+import CreateAdminLogModal from './modals/CreateAdminLogModal';
 
 export type User = {
   id: number;
@@ -336,7 +336,7 @@ export default function UsersTable() {
         </div>
         <div className="flex space-x-2 items-center">
           {/* TODO: create ADMIN log modal */}
-          <CreateLogModal />
+          <CreateAdminLogModal />
           <CreateHelpModal variant="admin-user" />
         </div>
       </nav>

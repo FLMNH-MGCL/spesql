@@ -5,20 +5,42 @@ import Button from '../ui/Button';
 import Form, { Values } from '../ui/Form';
 import { accessRoles } from '../utils/constants';
 import useToggle from '../utils/useToggle';
+import axios from 'axios';
+import { BACKEND_URL } from '../../types';
+import { useNotify } from '../utils/context';
 
 type Props = {
   onSubmit(values: Values): void;
 };
 
 function PasswordField() {
+  const { notify } = useNotify();
   const { setValue } = useFormContext();
 
   const [visible, { toggle }] = useToggle(false);
 
+  const [fetching, { on, off }] = useToggle(false);
+
   async function generateSecurePassword() {
-    // get secure password
-    // then setValue
-    setValue('password', 'TODO: implement me');
+    on();
+
+    const res = await axios
+      .get(BACKEND_URL + '/api/admin/user/generatePassword')
+      .catch((error) => error.response);
+
+    if (res.status === 200) {
+      const { data } = res;
+      setValue('password', data);
+    } else {
+      notify({
+        title: 'Error Occurred',
+        message:
+          'A server error occurred when trying to generate a secure password. Please check the logs',
+        level: 'error',
+      });
+    }
+
+    off();
   }
 
   return (
@@ -35,7 +57,12 @@ function PasswordField() {
 
       <div className="flex items-end">
         {/* TODO: */}
-        <Button type="button" onClick={generateSecurePassword}>
+        <Button
+          type="button"
+          onClick={generateSecurePassword}
+          loading={fetching}
+          variant="warning"
+        >
           Generate
         </Button>
       </div>

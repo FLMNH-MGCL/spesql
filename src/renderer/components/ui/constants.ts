@@ -49,6 +49,12 @@ export const BUTTONS = {
       'bg-indigo-600 hover:bg-indigo-500 focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-700',
     disabled: 'bg-indigo-400',
   },
+  primaryBlue: {
+    base: 'border-transparent text-white focus:outline-none',
+    active:
+      'bg-blue-600 hover:bg-blue-500 focus:shadow-outline-blue focus:border-blue-700 active:bg-blue-700',
+    disabled: 'bg-blue-400',
+  },
   default: {
     base: 'border-gray-300',
     active:
