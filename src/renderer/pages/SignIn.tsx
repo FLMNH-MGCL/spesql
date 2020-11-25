@@ -200,7 +200,7 @@ export default function SignIn() {
                 }
               />
               <CircleButton
-                onClick={() => {}}
+                onClick={() => navigate('/documentation')}
                 icon={
                   <div title="Documentation">
                     <svg
