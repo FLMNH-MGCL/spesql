@@ -59,7 +59,7 @@ export default function Admin() {
         </div>
         <div className="flex space-x-3 flex-nowrap overflow-x-auto pt-3 pb-6">
           {tableStats?.map((props) => (
-            <TableCard {...props} />
+            <TableCard key={props.table_name} {...props} />
           ))}
         </div>
 

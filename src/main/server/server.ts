@@ -37,6 +37,7 @@ import getUsers from './endpoints/sql/admin/getUsers';
 import generatePassword from './endpoints/auth/generatePassword';
 import deleteUser from './endpoints/sql/admin/deleteUser';
 import { queriablesStats } from './endpoints/sql/utils/queriablesStats';
+import getTableLogs from './endpoints/sql/admin/getTableLogs';
 // import { win } from '..';
 
 require('dotenv').config();
@@ -172,6 +173,7 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
     adminRoute,
     generatePassword
   );
+  app.post('/api/admin/table/logs', validateSession, adminRoute, getTableLogs);
   // END ADMIN ROUTES
 
   app.listen(PORT, () => {

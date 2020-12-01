@@ -100,6 +100,7 @@ export default function useQuery() {
 
         return;
       },
+
       async deleteSpecimen(id: number, table: string) {
         const deleteResponse = await axios.post(BACKEND_URL + '/api/delete', {
           id,
@@ -122,6 +123,7 @@ export default function useQuery() {
           });
         }
       },
+
       async deleteUser(id: number): Promise<boolean> {
         const deleteResponse = await axios
           .post(BACKEND_URL + '/api/admin/user/delete', { id })
@@ -144,9 +146,36 @@ export default function useQuery() {
           return false;
         }
       },
+
       async deleteTable() {
         // TODO: make me please
       },
+
+      async getTableLogs(table: string): Promise<any | undefined> {
+        const logResponse = await axios
+          .post(BACKEND_URL + '/api/admin/table/logs', {
+            table: table + '_logs',
+          })
+          .catch((error) => error.response);
+
+        if (logResponse.status === 200) {
+          return logResponse.data;
+        } else if (logResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          return await queries.getTableLogs(table);
+        } else {
+          notify({
+            title: 'Unknown Error',
+            message: 'Please notify Aaron of this bug',
+            level: 'error',
+          });
+
+          return undefined;
+        }
+      },
+
       async refresh() {
         if (!query || query === '') {
           return;
@@ -183,6 +212,7 @@ export default function useQuery() {
 
         toggleLoading(false);
       },
+
       async select(
         query: string,
         columns: any[],
@@ -232,6 +262,7 @@ export default function useQuery() {
 
         toggleLoading(false);
       },
+
       async queriablesStats(): Promise<any[]> {
         const statsResponse = await axios
           .get(BACKEND_URL + '/api/admin/queriables/stats')

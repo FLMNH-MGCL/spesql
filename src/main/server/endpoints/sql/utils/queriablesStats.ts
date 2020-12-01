@@ -9,7 +9,7 @@ export function queriablesStats(_req: Request, res: Response) {
     SELECT
       table_name,
       table_rows as 'rows',
-      round(((data_length + index_length) / 1024 / 1024), 2) 'size'
+      round(((data_length + index_length)), 2) 'size'
     FROM information_schema.TABLES
     WHERE table_name in (SELECT tbl_name FROM interactables);`;
 

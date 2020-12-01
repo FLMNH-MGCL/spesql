@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import https from 'https';
 
-export default function generatePassword(req: Request, res: Response) {
+export default function generatePassword(_req: Request, res: Response) {
   https
     .get('https://www.passwordrandom.com/query?command=password', (resp) => {
       let resData = '';
