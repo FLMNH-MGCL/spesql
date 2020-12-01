@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../../stores';
 import shallow from 'zustand/shallow';
 import BackButton from '../components/buttons/BackButton';
 import UsersTable from '../components/UsersTable';
 import Heading from '../components/ui/Heading';
+import TableCard from '../components/TableCard';
+import { TableStats } from '../types';
+import useQuery from '../components/utils/useQuery';
+import Badge from '../components/ui/Badge';
+import CreateCreateTableModal from '../components/modals/CreateCreateTableModal';
 
 function AdminHeader({ username }: { username?: string }) {
   return (
-    // TODO: fix styles, make grid please
-    <div className="w-full flex h-16 px-4 items-center">
+    <div className="w-full flex h-16 items-center px-4 mb-4 bg-white shadow">
       <BackButton to="/home" />
       <Heading className="flex-1" centered>
         Welcome, @{username}
@@ -19,6 +23,9 @@ function AdminHeader({ username }: { username?: string }) {
 
 export default function Admin() {
   const { user } = useStore((state) => ({ user: state.user }), shallow);
+  const { queriablesStats } = useQuery();
+
+  const [tableStats, setTableStats] = useState<TableStats[]>();
 
   useEffect(() => {
     if (!user || user.accessRole !== 'admin') {
@@ -26,18 +33,39 @@ export default function Admin() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!tableStats) {
+      getStats();
+    }
+  }, []);
+
+  async function getStats() {
+    const stats = await queriablesStats();
+    setTableStats(stats);
+  }
+
   return (
     <React.Fragment>
       <AdminHeader username={user?.username} />
-      <div className="-mt-6">
-        <div className="flex justify-center items-center space-x-4 mx-4 h-minus-header">
-          {/* left half */}
-          <div className="bg-white rounded-md shadow-around-lg w-3/4 h-main">
-            <UsersTable />
-          </div>
 
-          {/* right half */}
-          <div className="bg-white rounded-md shadow-around-lg w-1/4 h-main"></div>
+      <div className="h-minus-header flex flex-col px-4">
+        <div className="flex space-x-1">
+          <Heading>
+            Tables {tableStats && <span>({tableStats.length})</span>}
+          </Heading>
+          <span className="flex pl-3">
+            <CreateCreateTableModal />
+          </span>
+        </div>
+        <div className="flex space-x-3 flex-nowrap overflow-x-auto pt-3 pb-6">
+          {tableStats?.map((props) => (
+            <TableCard {...props} />
+          ))}
+        </div>
+
+        <Heading className="pb-3">Users</Heading>
+        <div className="bg-white rounded-md shadow-around-lg w-full flex-1 mb-16">
+          <UsersTable />
         </div>
       </div>
     </React.Fragment>

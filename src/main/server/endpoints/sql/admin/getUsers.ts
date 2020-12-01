@@ -5,7 +5,7 @@ export default function getUsers(_req: Request, res: Response) {
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
   } else {
-    const query = 'SELECT id,name,username,role,created_at FROM users_new';
+    const query = 'SELECT id,name,username,role,created_at FROM users';
 
     connection.query(query, (error, data) => {
       if (error) {

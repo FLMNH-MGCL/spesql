@@ -8,7 +8,7 @@ export default function viewer(req: Request, res: Response) {
     res.status(401).send(null);
   } else {
     connection.query(
-      'SELECT * FROM users_new WHERE ?? = ?',
+      'SELECT * FROM users WHERE ?? = ?',
       ['id', userId],
       (error, data) => {
         if (error) {

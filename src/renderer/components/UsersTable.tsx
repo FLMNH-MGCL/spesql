@@ -136,7 +136,6 @@ export default function UsersTable() {
       .get('/api/admin/users')
       .catch((error) => error.response);
 
-    // console.log(response);
     if (response.status !== 200) {
       // notify
       off();
@@ -150,25 +149,6 @@ export default function UsersTable() {
   }
 
   useEffect(() => {
-    // async function getUsers() {
-    //   on();
-    //   const response = await axios
-    //     .get('/api/admin/users')
-    //     .catch((error) => error.response);
-
-    //   // console.log(response);
-    //   if (response.status !== 200) {
-    //     // notify
-    //     off();
-    //     return;
-    //   }
-
-    //   // TODO: use query from data?
-    //   const { users } = response.data;
-    //   setUsers(users.map((user: any) => user as User));
-    //   off();
-    // }
-
     if (!users || !users.length) {
       getUsers();
     }
@@ -298,8 +278,8 @@ export default function UsersTable() {
           user={users.find((user) => user.id === deleting)!}
           onClose={() => {
             setDeleting(undefined);
-            // TODO: REFRESH
           }}
+          refreshUsers={() => getUsers()}
         />
       )}
 

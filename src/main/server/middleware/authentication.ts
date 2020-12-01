@@ -40,7 +40,7 @@ export function adminRoute(req: Request, res: Response, next: NextFunction) {
     // this will be used to validate the person attempting this route matches
     // the credentials stored in the current session.
     connection.query(
-      'SELECT * FROM users_new WHERE id = ?',
+      'SELECT * FROM users WHERE id = ?',
       userId,
       (error, data) => {
         if (error) {
@@ -81,7 +81,7 @@ export function managerRoute(req: Request, res: Response, next: NextFunction) {
     // this will be used to validate the person attempting this route matches
     // the credentials stored in the current session.
     connection.query(
-      'SELECT * FROM users_new WHERE id = ?',
+      'SELECT * FROM users WHERE id = ?',
       userId,
       (error, data) => {
         if (error) {

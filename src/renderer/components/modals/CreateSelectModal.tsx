@@ -18,7 +18,7 @@ type Props = {
 };
 
 export default function CreateSelectModal({ open, onClose }: Props) {
-  const [{ select }] = useQuery();
+  const { select } = useQuery();
 
   const toggleLoading = useStore((state) => state.toggleLoading);
 

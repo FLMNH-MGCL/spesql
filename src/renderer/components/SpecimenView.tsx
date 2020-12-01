@@ -86,7 +86,7 @@ export default function () {
     shallow
   );
 
-  const [{ update, deleteSpecimen }] = useQuery();
+  const { update, deleteSpecimen } = useQuery();
 
   function cancelEdit() {
     off();

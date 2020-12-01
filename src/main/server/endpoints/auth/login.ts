@@ -14,8 +14,7 @@ export default function login(req: Request, res: Response) {
     res.status(500).send('Lost connection with database');
   } else {
     connection.query(
-      // FIXME: change to users once matching users_new
-      `SELECT * FROM users_new WHERE username='${username}'`,
+      `SELECT * FROM users WHERE username='${username}'`,
       (error, data) => {
         if (error) {
           // I am hardcoding this query, so in theory the only time an error

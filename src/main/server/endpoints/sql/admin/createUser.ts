@@ -25,8 +25,7 @@ export default function createUser(req: Request, res: Response) {
         .hash(password, parseInt(process.env.ELECTRON_WEBPACK_APP_SALT!, 10))
         .then((hash) => {
           connection?.query(
-            // FIXME: change to users once matching users_new
-            `INSERT INTO users_new(name, username, password, role) VALUES ("${name}", "${username}", "${hash}", "${access_role}");`,
+            `INSERT INTO users(name, username, password, role) VALUES ("${name}", "${username}", "${hash}", "${access_role}");`,
             (err, data) => {
               if (err) {
                 res.status(503);

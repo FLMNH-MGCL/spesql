@@ -38,7 +38,7 @@ export default function CreateCountModal({ open, onClose }: Props) {
   // interact with global state in this modal
   const [loading, { on, off }] = useToggle(false);
 
-  const [{ count }] = useQuery();
+  const { count } = useQuery();
 
   useKeyboard('Escape', () => {
     onClose();

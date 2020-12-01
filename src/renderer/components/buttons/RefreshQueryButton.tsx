@@ -7,7 +7,7 @@ export default function RefreshQueryButton({
 }: {
   disabled?: boolean;
 }) {
-  const [{ refresh }] = useQuery();
+  const { refresh } = useQuery();
 
   return (
     <Button variant="outline" rounded disabled={disabled} onClick={refresh}>

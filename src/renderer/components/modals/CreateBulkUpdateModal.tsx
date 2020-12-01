@@ -22,7 +22,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
 
   const [loading, { on, off }] = useToggle(false);
 
-  const [{ update }] = useQuery();
+  const { update } = useQuery();
 
   useKeyboard('Escape', () => {
     onClose();

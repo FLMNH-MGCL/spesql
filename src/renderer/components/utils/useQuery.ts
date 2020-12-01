@@ -8,6 +8,7 @@ import useExpiredSession from './useExpiredSession';
 import axios from 'axios';
 import { CountQueryReturn } from '../modals/CreateCountModal';
 import { User } from '../UsersTable';
+import { queriablesStats } from '../../../main/server/endpoints/sql/utils/queriablesStats';
 
 export default function useQuery() {
   const { notify } = useNotify();
@@ -121,8 +122,27 @@ export default function useQuery() {
           });
         }
       },
-      async deleteUser(id: number) {
-        // TODO: make me please
+      async deleteUser(id: number): Promise<boolean> {
+        const deleteResponse = await axios
+          .post(BACKEND_URL + '/api/admin/user/delete', { id })
+          .catch((error) => error.response);
+
+        if (deleteResponse.status === 200) {
+          return true;
+        } else if (deleteResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          return await queries.deleteUser(id);
+        } else {
+          notify({
+            title: 'Unknown Error',
+            message: 'Please notify Aaron of this bug',
+            level: 'error',
+          });
+
+          return false;
+        }
       },
       async deleteTable() {
         // TODO: make me please
@@ -212,6 +232,22 @@ export default function useQuery() {
 
         toggleLoading(false);
       },
+      async queriablesStats(): Promise<any[]> {
+        const statsResponse = await axios
+          .get(BACKEND_URL + '/api/admin/queriables/stats')
+          .catch((error) => error.response);
+
+        if (statsResponse.status === 200 && statsResponse.data) {
+          return statsResponse.data;
+        } else if (statsResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          return await queries.queriablesStats();
+        } else {
+          return [];
+        }
+      },
       async update(query: string, conditions: any[], updates: any) {
         const updateResponse = await axios
           .post(BACKEND_URL + '/api/update', {
@@ -238,10 +274,11 @@ export default function useQuery() {
           await queries.update(query, conditions, updates);
         }
       },
+      async updateTable(table: string, updates: any) {},
     }),
     [query, selectedSpecimen]
   );
 
   // TODO: change return if adding more stuff to this hook
-  return [queries] as const;
+  return queries;
 }

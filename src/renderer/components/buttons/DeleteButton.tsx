@@ -3,11 +3,12 @@ import Button from '../ui/Button';
 
 type Props = {
   disabled?: boolean;
+  onClick?(): void;
 };
 
-export default function DeleteButton({ disabled }: Props) {
+export default function DeleteButton({ disabled, onClick }: Props) {
   return (
-    <Button variant="outline" rounded disabled={disabled}>
+    <Button variant="outline" onClick={onClick} rounded disabled={disabled}>
       <svg
         className="w-5 h-5"
         fill="none"

@@ -15,7 +15,7 @@ export default function CreateCreateUserModal({ refresh }: Props) {
   const [open, { on, off }] = useToggle(false);
   const [loading, { toggle }] = useToggle(false);
 
-  const [{ createUser }] = useQuery();
+  const { createUser } = useQuery();
 
   async function handleSubmit(values: Values) {
     toggle();

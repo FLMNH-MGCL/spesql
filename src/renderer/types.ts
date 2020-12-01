@@ -173,3 +173,9 @@ const SpecimenValidator: Specimen = {
   modifiedInfo: null,
   fieldNotes: null,
 };
+
+export type TableStats = {
+  table_name: string;
+  rows: number;
+  size: number;
+};

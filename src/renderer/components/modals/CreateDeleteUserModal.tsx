@@ -3,6 +3,7 @@ import { useStore } from '../../../stores';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import { User } from '../UsersTable';
+import { useNotify } from '../utils/context';
 import useKeyboard from '../utils/useKeyboard';
 import useQuery from '../utils/useQuery';
 
@@ -10,11 +11,18 @@ type Props = {
   open: boolean;
   onClose(): void;
   user: User;
+  refreshUsers(): void;
 };
 
 // TODO: have onClose take in a refresh boolean
-export default function CreateDeleteUserModal({ user, open, onClose }: Props) {
-  const [{ deleteUser }] = useQuery();
+export default function CreateDeleteUserModal({
+  user,
+  open,
+  onClose,
+  refreshUsers,
+}: Props) {
+  const { deleteUser } = useQuery();
+  const { notify } = useNotify();
 
   const currentUser = useStore((state) => state.user);
 
@@ -26,7 +34,17 @@ export default function CreateDeleteUserModal({ user, open, onClose }: Props) {
     if (!currentUser || currentUser.accessRole !== 'admin') {
       throw new Error('Non-admins should not have access to this screen!');
     } else {
-      await deleteUser(user.id);
+      const success = await deleteUser(user.id);
+
+      if (success) {
+        notify({
+          title: 'Success',
+          message: `${user.username} is now in the void`,
+          level: 'success',
+        });
+
+        refreshUsers();
+      }
     }
 
     onClose();
