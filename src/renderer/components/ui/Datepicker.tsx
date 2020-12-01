@@ -19,6 +19,7 @@ type Props = {
 };
 
 // TODO: handle initial date for both variants
+// TODO: add validation
 
 function SinglePicker({ label, fullWidth }: Props) {
   const [value, setValue] = useState<Date>();

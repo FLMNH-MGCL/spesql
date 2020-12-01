@@ -17,6 +17,25 @@ export const TEXT = {
   },
 };
 
+export const NOTIFICATION_COLORS = {
+  error: {
+    title: 'text-red-800',
+    text: 'text-red-500',
+  },
+  success: {
+    title: 'text-green-800',
+    text: 'text-green-500',
+  },
+  warning: {
+    title: 'text-yellow-800',
+    text: 'text-yellow-400',
+  },
+  info: {
+    title: 'text-blue-800',
+    text: 'text-blue-500',
+  },
+};
+
 export const SPINNER_SIZES = {
   tiny: 'h-3 w-3',
   sm: 'h-5 w-5',

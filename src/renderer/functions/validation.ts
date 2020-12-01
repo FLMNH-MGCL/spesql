@@ -536,6 +536,45 @@ export function validateDateField(date: string) {
   return true;
 }
 
+// TODO: check me please
+export function validateStringDateRange(
+  dateRange: string,
+  futureOnly?: boolean,
+  pastOnly?: boolean
+) {
+  if (!dateRange || !dateRange.length) {
+    return true;
+  }
+
+  const parts = dateRange.split(' - '); // FIXME: I am not sure if this is best
+
+  const from = parts[0].trim();
+  const to = parts[1].trim();
+
+  const today = new Date();
+
+  // check if from comes before to
+  if (Date.parse(from) > Date.parse(to)) {
+    return 'Dates must be in chronological order (from - to)';
+  }
+
+  if (futureOnly) {
+    if (Date.parse(from) < Date.parse(today.toDateString())) {
+      return "'from' date must be in the future";
+    } else if (Date.parse(to) < Date.parse(today.toDateString())) {
+      return "'to' date must be in the future";
+    }
+  } else if (pastOnly) {
+    if (Date.parse(from) > Date.parse(today.toDateString())) {
+      return "'from' date must be in the past";
+    } else if (Date.parse(to) > Date.parse(today.toDateString())) {
+      return "'to' date must be in the past";
+    }
+  }
+
+  return true;
+}
+
 function isNumeric(n: string) {
   const parsed = parseFloat(n);
   return !isNaN(parsed) && isFinite(parsed);

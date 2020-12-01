@@ -19,6 +19,7 @@ import bulb from './assets/sounds/Bulb.mp3';
 import crosswalk from './assets/sounds/Crosswalk.mp3';
 import { useStore } from '../stores';
 import Documentation from './pages/Documentation';
+import Notification from './components/ui/Notification';
 
 function HomeStack() {
   return (
@@ -58,9 +59,8 @@ export default function App() {
 
     // @ts-ignore
     notification.addNotification({
-      title,
-      message,
       level,
+      children: <Notification title={title} message={message} level={level} />,
     });
   }
 

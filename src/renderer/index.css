@@ -39,10 +39,6 @@ form {
   height: calc(100% - 4rem);
 }
 
-.conditional-div-height {
-  /* max-height: 15rem; */
-}
-
 /* OVERRIDES!! */
 
 .select__indicator-separator {
@@ -60,10 +56,10 @@ form {
   text-transform: none !important;
 }
 
-.ReactVirtualized__Table__headerColumn:not(:first-child) {
-  /* border-left-width: 1px;
-  border-color: #cbd5e0; */
-}
+/* .ReactVirtualized__Table__headerColumn:not(:first-child) {
+  border-left-width: 1px;
+  border-color: #cbd5e0;
+} */
 
 .ReactVirtualized__Grid:focus {
   outline: none;
@@ -91,4 +87,10 @@ form {
   /* divide-y divide-gray-200 */
   border-top-width: 1px;
   border-color: #edf2f7;
+}
+
+.notification-tr {
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }

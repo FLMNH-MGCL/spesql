@@ -2,18 +2,12 @@
 
 [![DOI](https://zenodo.org/badge/226447097.svg)](https://zenodo.org/badge/latestdoi/226447097)
 
-A portal for interacting with a remote MySQL database, written in JavaScript (React, Node & Electron).
-
-# Important Note:
-
-This branch is the ongoing rewrite project for spesql. This is far from completion. I am transitioning over to TypeScript to improve the safety of the application, as well as completely reworking the backend authentication logic. Much of this will remain the same, apart from a new UI library that will be created in house using Tailwind CSS, as opposed to the packaged Semantic UI.
+A portal for interacting with a remote MySQL database, written in TypeScript (React & Electron).
 
 ### About This Project
 
-This project is intended for use by the McGuire Center of Lepidoptera and Biodiversity (MGCL) at the Florida Museum of Natural History (FLMNH). As such, by default, the
-application is only compatible with institutions having identical, MySQL database schemes. It is possible to adapt this software to another isntitution's requirements,
-however the more closely structured to MGCL's configuration the more seamless the conversion. For more information regarding the structures neccessary for adopting this software,
-please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly.
+This project is intended for use by the McGuire Center of Lepidoptera and Biodiversity (MGCL) at the Florida Museum of Natural History (FLMNH). As such, by default, the application is only compatible with institutions having identical, MySQL database schemes. It is possible to adapt this software to another isntitution's requirements, however the more closely structured to MGCL's configuration the more seamless the conversion. For more information regarding the structures neccessary for adopting this software,
+please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly. See the Database Schema section for more information, as well.
 
 ### Installation
 
