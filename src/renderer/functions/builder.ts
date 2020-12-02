@@ -117,6 +117,7 @@ export function buildSingleUpdateQuery(
   let query = clsx('UPDATE', table, 'SET ? WHERE ?? = ?');
 
   let errors: any[] = [];
+  let logUpdates: any[] = [];
   let updates: any = {};
 
   // TODO: try and break me please
@@ -139,12 +140,24 @@ export function buildSingleUpdateQuery(
         } else {
           // update the field
           updates[key] = values[key];
+          logUpdates.push({
+            [key]: {
+              old: selectedSpecimen[key as keyof SpecimenFields],
+              new: values[key],
+            },
+          });
         }
       } else {
         updates[key] = values[key];
+        logUpdates.push({
+          [key]: {
+            old: selectedSpecimen[key as keyof SpecimenFields],
+            new: values[key],
+          },
+        });
       }
     }
   });
 
-  return { errors, updates, query };
+  return { errors, updates, query, logUpdates };
 }

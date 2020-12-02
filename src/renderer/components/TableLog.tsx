@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { AutoSizer, Column, Table } from 'react-virtualized';
+import { AutoSizer, Column, Table, TableRowProps } from 'react-virtualized';
 import RefreshButton from './buttons/RefreshButton';
 import Spinner from './ui/Spinner';
+import { useNotify } from './utils/context';
 import useQuery from './utils/useQuery';
 import useToggle from './utils/useToggle';
 import useWindowDimensions from './utils/useWindowDimensions';
 import { SortingConfig } from './VirtualizedTable';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import CreateDownloadModal from './modals/CreateDownloadModal';
+import CreateConfirmModal from './modals/CreateConfirmModal';
+import Button from './ui/Button';
 
 const headerStrings = [
   'catalogNumber',
@@ -17,7 +22,101 @@ const headerStrings = [
   'timestamp',
 ];
 
+type TableRowRenderer = (
+  props: TableRowProps & {
+    onCopy(): void;
+  }
+) => React.ReactNode;
+
+const rowRenderer: TableRowRenderer = ({
+  className,
+  columns,
+  index,
+  key,
+  onRowClick,
+  onRowDoubleClick,
+  onRowMouseOut,
+  onRowMouseOver,
+  onRowRightClick,
+  rowData,
+  style,
+  onCopy,
+  // onDeleteClick,
+}) => {
+  const a11yProps = { 'aria-rowindex': index + 1 } as any;
+
+  if (
+    onRowClick ||
+    onRowDoubleClick ||
+    onRowMouseOut ||
+    onRowMouseOver ||
+    onRowRightClick
+  ) {
+    a11yProps['aria-label'] = 'row';
+    a11yProps.tabIndex = 0;
+
+    if (onRowClick) {
+      a11yProps.onClick = (event: any) => onRowClick({ event, index, rowData });
+    }
+    if (onRowDoubleClick) {
+      a11yProps.onDoubleClick = (event: any) =>
+        onRowDoubleClick({ event, index, rowData });
+    }
+    if (onRowMouseOut) {
+      a11yProps.onMouseOut = (event: any) =>
+        onRowMouseOut({ event, index, rowData });
+    }
+    if (onRowMouseOver) {
+      a11yProps.onMouseOver = (event: any) =>
+        onRowMouseOver({ event, index, rowData });
+    }
+    if (onRowRightClick) {
+      a11yProps.onContextMenu = (event: any) =>
+        onRowRightClick({ event, index, rowData });
+    }
+  }
+
+  return (
+    <div
+      {...a11yProps}
+      className={className}
+      key={key}
+      role="row"
+      style={style}
+    >
+      {columns.map((col: any, index) => {
+        // query
+        if (index === 1) {
+          const queryString = col.props?.children;
+
+          return (
+            <CopyToClipboard
+              text={queryString ?? ''}
+              onCopy={onCopy}
+              key={index}
+            >
+              <div
+                // key={index}
+                aria-colindex={2}
+                className="ReactVirtualized__Table__rowColumn cursor-pointer"
+                role="gridcell"
+                title="Click to copy"
+                style={{ overflow: 'hidden', flex: '1 1 330.6px' }}
+              >
+                {queryString}
+              </div>
+            </CopyToClipboard>
+          );
+        } else {
+          return col;
+        }
+      })}
+    </div>
+  );
+};
+
 export default function TableLog({ table }: { table: string }) {
+  const { notify } = useNotify();
   const { getTableLogs } = useQuery();
   const { height, width } = useWindowDimensions();
 
@@ -39,6 +138,14 @@ export default function TableLog({ table }: { table: string }) {
     off();
   }
 
+  function onCopy() {
+    notify({
+      title: 'Query Copied',
+      message: '',
+      level: 'success',
+    });
+  }
+
   useEffect(() => {
     if (!logs) {
       getLogs();
@@ -57,7 +164,6 @@ export default function TableLog({ table }: { table: string }) {
       let baseLog: any = { catalogNumber, query, user, timestamp };
 
       if (updates) {
-        console.log(updates);
         updates.forEach((update: any) => {
           const field = Object.keys(update)[0];
           const oldValue = update[field].old;
@@ -126,6 +232,33 @@ export default function TableLog({ table }: { table: string }) {
     );
   }
 
+  function handleHeaderClick({ dataKey }: any) {
+    if (!dataKey || dataKey === '') {
+      return;
+    }
+
+    if (!sortingDirection) {
+      setSortingDirection({
+        column: dataKey,
+        direction: 'asc',
+      });
+    } else if (sortingDirection && sortingDirection.column === dataKey) {
+      if (sortingDirection.direction === 'asc') {
+        setSortingDirection({
+          ...sortingDirection,
+          direction: 'desc',
+        });
+      } else {
+        setSortingDirection(undefined);
+      }
+    } else {
+      setSortingDirection({
+        column: dataKey,
+        direction: 'asc',
+      });
+    }
+  }
+
   function getColumns() {
     const columns =
       !logs || !logs.length
@@ -147,7 +280,7 @@ export default function TableLog({ table }: { table: string }) {
     return columns;
   }
 
-  console.log(display, getColumns());
+  async function handleClearLogs() {}
 
   return (
     <div className="bg-white rounded-md shadow-around-lg w-full mt-4 mb-2">
@@ -165,16 +298,15 @@ export default function TableLog({ table }: { table: string }) {
               headerHeight={60}
               rowCount={display.length}
               rowGetter={({ index }) => display[index]}
-              // onHeaderClick={handleHeaderClick}
+              onHeaderClick={handleHeaderClick}
               headerClassName="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600  tracking-wider cursor-pointer focus:outline-none"
               gridClassName="whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
-              // rowRenderer={(props) =>
-              //   rowRenderer({
-              //     ...props,
-              //     onEditClick: setEditing,
-              //     onDeleteClick: setDeleting,
-              //   })
-              // }
+              rowRenderer={(props) =>
+                rowRenderer({
+                  ...props,
+                  onCopy,
+                })
+              }
             >
               {getColumns()}
             </Table>
@@ -183,15 +315,16 @@ export default function TableLog({ table }: { table: string }) {
       </div>
       <nav className="bg-gray-50 px-4 py-3 flex items-center justify-between sm:px-6 border-t border-cool-gray-100">
         <RefreshButton />
+
+        <Button.Group>
+          <CreateDownloadModal data={display} variant="default" />
+          <CreateConfirmModal
+            details="You will not be able to retrieve the logs once cleared! It is recommeded to download them first."
+            onConfirm={handleClearLogs}
+            trigger={<Button variant="danger">Clear</Button>}
+          />
+        </Button.Group>
       </nav>
     </div>
   );
 }
-
-// logs: Array(1)
-// 0:
-//  catalogNumber: "LEP75596"
-//  query: "fakequerylawl"
-//  timestamp: "2020-12-01T21:00:11.000Z"
-//  updates: "{"otherCatalogNumber": {"new": "MGCL_12346758", "old": ""}}"
-// query: "SELECT * FROM molecularLab_logs"

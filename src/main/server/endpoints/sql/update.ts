@@ -24,7 +24,7 @@ export default function update(req: Request, res: Response) {
       } else {
         // const ret = { specimen: data, query };
 
-        res.send(data);
+        res.send({ result: data, query });
       }
     });
   }

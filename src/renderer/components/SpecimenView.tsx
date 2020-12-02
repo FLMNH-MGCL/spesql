@@ -86,7 +86,7 @@ export default function () {
     shallow
   );
 
-  const { update, deleteSpecimen } = useQuery();
+  const { update, deleteSpecimen, logKnownUpdate } = useQuery();
 
   function cancelEdit() {
     off();
@@ -99,7 +99,7 @@ export default function () {
 
     loadingToggles.on();
 
-    const { errors, updates, query } = buildSingleUpdateQuery(
+    const { errors, updates, query, logUpdates } = buildSingleUpdateQuery(
       databaseTable,
       values,
       selectedSpecimen
@@ -116,7 +116,18 @@ export default function () {
     } else {
       const conditions = ['id', selectedSpecimen.id];
 
-      await update(query, conditions, updates);
+      const storedCatalogNumber = selectedSpecimen.catalogNumber;
+
+      const queryString = await update(query, conditions, updates);
+
+      if (queryString) {
+        await logKnownUpdate(
+          queryString,
+          logUpdates,
+          table,
+          storedCatalogNumber!
+        );
+      }
     }
 
     loadingToggles.off();

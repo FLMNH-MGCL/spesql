@@ -38,6 +38,7 @@ import generatePassword from './endpoints/auth/generatePassword';
 import deleteUser from './endpoints/sql/admin/deleteUser';
 import { queriablesStats } from './endpoints/sql/utils/queriablesStats';
 import getTableLogs from './endpoints/sql/admin/getTableLogs';
+import logUpdate from './endpoints/sql/utils/logUpdate';
 // import { win } from '..';
 
 require('dotenv').config();
@@ -111,6 +112,8 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
   app.post('/api/count', validateSession, validateCountQuery, count);
 
   app.get('/api/queriables/select', validateSession, getQueriables);
+
+  app.post('/api/log/update', validateSession, logUpdate);
   // END GLOBAL / GUEST ROUTES
 
   // MANAGER ROUTES

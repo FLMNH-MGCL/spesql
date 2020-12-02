@@ -8,8 +8,9 @@ import { useStore } from '../../stores';
 import shallow from 'zustand/shallow';
 
 export default function Header() {
-  const { disableDownload, disableCrud } = useStore(
+  const { data, disableDownload, disableCrud } = useStore(
     (state) => ({
+      data: state.queryData.data,
       disableDownload: !state.queryData.data || !state.queryData.data.length,
       disableCrud:
         !state.user || !['manager', 'admin'].includes(state.user?.accessRole),
@@ -23,7 +24,7 @@ export default function Header() {
       <div className="flex items-center space-x-4">
         <QueryMenu disableCrud={disableCrud} />
         <InsertMenu disableCrud={disableCrud} />
-        <CreateDownloadModal disableDownload={disableDownload} />
+        <CreateDownloadModal data={data} disableDownload={disableDownload} />
         <VisualizationToggle />
       </div>
       {/* user interactions */}

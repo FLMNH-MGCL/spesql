@@ -21,6 +21,7 @@ export default function useQuery() {
     selectedSpecimen,
     setSelectedSpecimen,
     toggleLoading,
+    username,
   } = useStore(
     (state) => ({
       query: state.queryData.queryString,
@@ -30,6 +31,7 @@ export default function useQuery() {
       selectedSpecimen: state.selectedSpecimen,
       setSelectedSpecimen: state.setSelectedSpecimen,
       toggleLoading: state.toggleLoading,
+      username: state.user?.username,
     }),
     shallow
   );
@@ -154,7 +156,7 @@ export default function useQuery() {
       async getTableLogs(table: string): Promise<any | undefined> {
         const logResponse = await axios
           .post(BACKEND_URL + '/api/admin/table/logs', {
-            table: table + '_logs',
+            table: table,
           })
           .catch((error) => error.response);
 
@@ -173,6 +175,34 @@ export default function useQuery() {
           });
 
           return undefined;
+        }
+      },
+
+      async logKnownUpdate(
+        query: string,
+        updates: any,
+        table: string,
+        catalogNumber: string
+      ) {
+        const logResponse = await axios
+          .post(BACKEND_URL + '/api/log/update', {
+            query,
+            updates,
+            table,
+            catalogNumber,
+            username,
+          })
+          .catch((error) => error.respnse);
+
+        if (logResponse.status === 201) {
+          // good
+        } else if (logResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          await queries.logKnownUpdate(query, updates, table, catalogNumber);
+        } else {
+          // TODO: notify of error
         }
       },
 
@@ -279,7 +309,12 @@ export default function useQuery() {
           return [];
         }
       },
-      async update(query: string, conditions: any[], updates: any) {
+
+      async update(
+        query: string,
+        conditions: any[],
+        updates: any
+      ): Promise<string | undefined> {
         const updateResponse = await axios
           .post(BACKEND_URL + '/api/update', {
             query,
@@ -289,7 +324,8 @@ export default function useQuery() {
           .catch((error) => error.response);
 
         if (updateResponse.status === 200 && updateResponse.data) {
-          const { message } = updateResponse.data;
+          const { message } = updateResponse.data.result;
+          const queryString = updateResponse.data.query;
 
           notify({
             title: 'Update Successful',
@@ -298,11 +334,21 @@ export default function useQuery() {
           });
 
           await queries.refresh();
+
+          return queryString;
         } else if (updateResponse.status === 401) {
           expireSession();
 
           await awaitReauth();
-          await queries.update(query, conditions, updates);
+          return await queries.update(query, conditions, updates);
+        } else {
+          notify({
+            title: 'Update Failed',
+            message: 'An unknown error occurred',
+            level: 'error',
+          });
+
+          return undefined;
         }
       },
       async updateTable(table: string, updates: any) {},
