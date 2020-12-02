@@ -103,26 +103,35 @@ export default function useQuery() {
         return;
       },
 
-      async deleteSpecimen(id: number, table: string) {
+      async deleteSpecimen(
+        id: number,
+        table: string
+      ): Promise<any | undefined> {
         const deleteResponse = await axios.post(BACKEND_URL + '/api/delete', {
           id,
           table,
         });
 
-        if (deleteResponse.status === 200) {
+        if (deleteResponse.status === 201) {
           setSelectedSpecimen(null);
           queries.refresh();
+
+          const { query } = deleteResponse.data;
+
+          return query;
         } else if (deleteResponse.status === 401) {
           expireSession();
 
           await awaitReauth();
-          await queries.deleteSpecimen(id, table);
+          return await queries.deleteSpecimen(id, table);
         } else {
           notify({
             title: 'Unknown Error',
             message: 'Please notify Aaron of this bug',
             level: 'error',
           });
+
+          return undefined;
         }
       },
 
@@ -178,11 +187,11 @@ export default function useQuery() {
         }
       },
 
-      async logKnownUpdate(
+      async logUpdate(
         query: string,
         updates: any,
         table: string,
-        catalogNumber: string
+        catalogNumber: string | null
       ) {
         const logResponse = await axios
           .post(BACKEND_URL + '/api/log/update', {
@@ -200,7 +209,35 @@ export default function useQuery() {
           expireSession();
 
           await awaitReauth();
-          await queries.logKnownUpdate(query, updates, table, catalogNumber);
+          await queries.logUpdate(query, updates, table, catalogNumber);
+        } else {
+          // TODO: notify of error
+        }
+      },
+
+      async logDelete(
+        query: string,
+        specimen: string,
+        table: string,
+        catalogNumber: string | null
+      ) {
+        const logResponse = await axios
+          .post(BACKEND_URL + '/api/log/delete', {
+            query,
+            updates: [{ specimen: { old: specimen, new: '' } }],
+            table,
+            catalogNumber,
+            username,
+          })
+          .catch((error) => error.respnse);
+
+        if (logResponse.status === 201) {
+          // good
+        } else if (logResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          await queries.logUpdate(query, specimen, table, catalogNumber);
         } else {
           // TODO: notify of error
         }

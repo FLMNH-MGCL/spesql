@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { connection } from '../../server';
+import mysql from 'mysql';
 
 // TODO
 export default function (req: Request, res: Response) {
@@ -10,16 +11,13 @@ export default function (req: Request, res: Response) {
   } else if (!id || !table) {
     res.status(400).send('No entry id or table was found in request');
   } else {
-    connection.query(
-      'DELETE FROM ?? WHERE id = ?',
-      [table, id],
-      (error, data) => {
-        if (error) {
-          res.status(503).send(error);
-        } else {
-          res.status(201).send(data);
-        }
+    const query = mysql.format('DELETE FROM ?? WHERE id = ?', [table, id]);
+    connection.query(query, (error, data) => {
+      if (error) {
+        res.status(503).send(error);
+      } else {
+        res.status(201).send({ ...data, query });
       }
-    );
+    });
   }
 }

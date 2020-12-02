@@ -61,6 +61,7 @@ export default function App() {
     notification.addNotification({
       level,
       children: <Notification title={title} message={message} level={level} />,
+      // autoDismiss: 1000, DEBUG
     });
   }
 

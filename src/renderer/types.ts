@@ -107,7 +107,7 @@ export type MutuallyExclusive<T, U> = T | U extends object
 export type NotificationContent = {
   title: string;
   message: string;
-  level: 'error' | 'warning' | 'success';
+  level: 'error' | 'warning' | 'success' | 'info';
 };
 
 // TODO: see above @isSpecimen

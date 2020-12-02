@@ -4,7 +4,7 @@ import { NotificationContent } from '../../types';
 export const NotificationContext = createContext<{
   notify(
     content: NotificationContent,
-    sound?: 'error' | 'success' | 'warning'
+    sound?: 'error' | 'success' | 'warning' | 'info'
   ): void;
 }>({ notify: () => {} });
 

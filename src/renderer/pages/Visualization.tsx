@@ -17,7 +17,7 @@ export default function Visualization() {
         title: 'Feedback?',
         message:
           'Let me (Aaron!) know how I can improve the visualization features of the charts page!',
-        level: 'warning',
+        level: 'info',
       });
     };
   }, []);

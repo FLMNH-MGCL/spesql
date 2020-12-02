@@ -86,7 +86,7 @@ export default function () {
     shallow
   );
 
-  const { update, deleteSpecimen, logKnownUpdate } = useQuery();
+  const { update, deleteSpecimen, logUpdate, logDelete } = useQuery();
 
   function cancelEdit() {
     off();
@@ -121,12 +121,7 @@ export default function () {
       const queryString = await update(query, conditions, updates);
 
       if (queryString) {
-        await logKnownUpdate(
-          queryString,
-          logUpdates,
-          table,
-          storedCatalogNumber!
-        );
+        await logUpdate(queryString, logUpdates, table, storedCatalogNumber!);
       }
     }
 
@@ -145,7 +140,16 @@ export default function () {
       return;
     } else {
       // TODO: recieve errors ??
-      await deleteSpecimen(id, table);
+      const queryString = await deleteSpecimen(id, table);
+
+      if (queryString) {
+        await logDelete(
+          queryString,
+          JSON.stringify(selectedSpecimen),
+          table,
+          selectedSpecimen?.catalogNumber ?? null
+        );
+      }
     }
   }
 

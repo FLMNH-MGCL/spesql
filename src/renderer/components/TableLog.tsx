@@ -11,6 +11,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import CreateDownloadModal from './modals/CreateDownloadModal';
 import CreateConfirmModal from './modals/CreateConfirmModal';
 import Button from './ui/Button';
+import _ from 'lodash';
 
 const headerStrings = [
   'catalogNumber',
@@ -24,7 +25,7 @@ const headerStrings = [
 
 type TableRowRenderer = (
   props: TableRowProps & {
-    onCopy(): void;
+    onCopy(index: number): void;
   }
 ) => React.ReactNode;
 
@@ -85,31 +86,53 @@ const rowRenderer: TableRowRenderer = ({
       style={style}
     >
       {columns.map((col: any, index) => {
-        // query
-        if (index === 1) {
-          const queryString = col.props?.children;
+        console.log(col);
+        // // query
+        // if (index === 1) {
+        //   const queryString = col.props?.children;
 
-          return (
-            <CopyToClipboard
-              text={queryString ?? ''}
-              onCopy={onCopy}
-              key={index}
+        //   return (
+        //     <CopyToClipboard
+        //       text={queryString ?? ''}
+        //       onCopy={onCopy}
+        //       key={index}
+        //     >
+        //       <div
+        //         // key={index}
+        //         aria-colindex={2}
+        //         className="ReactVirtualized__Table__rowColumn cursor-pointer"
+        //         role="gridcell"
+        //         title="Click to copy"
+        //         style={{ overflow: 'hidden', flex: '1 1 330.6px' }}
+        //       >
+        //         {queryString}
+        //       </div>
+        //     </CopyToClipboard>
+        //   );
+        // } else {
+        //   return col;
+        // }
+
+        const queryString = col.props?.children;
+
+        return (
+          <CopyToClipboard
+            text={queryString ?? ''}
+            onCopy={() => onCopy(index)}
+            key={index}
+          >
+            <div
+              // key={index}
+              aria-colindex={index + 1}
+              className="ReactVirtualized__Table__rowColumn cursor-pointer"
+              role="gridcell"
+              title="Click to copy"
+              style={{ overflow: 'hidden', flex: '1 1 330.6px' }}
             >
-              <div
-                // key={index}
-                aria-colindex={2}
-                className="ReactVirtualized__Table__rowColumn cursor-pointer"
-                role="gridcell"
-                title="Click to copy"
-                style={{ overflow: 'hidden', flex: '1 1 330.6px' }}
-              >
-                {queryString}
-              </div>
-            </CopyToClipboard>
-          );
-        } else {
-          return col;
-        }
+              {queryString}
+            </div>
+          </CopyToClipboard>
+        );
       })}
     </div>
   );
@@ -138,9 +161,9 @@ export default function TableLog({ table }: { table: string }) {
     off();
   }
 
-  function onCopy() {
+  function onCopy(index: number) {
     notify({
-      title: 'Query Copied',
+      title: `${headerStrings[index]} Copied`,
       message: '',
       level: 'success',
     });
@@ -178,7 +201,15 @@ export default function TableLog({ table }: { table: string }) {
       }
     });
 
-    return display;
+    if (sortingDirection) {
+      return _.orderBy(
+        display,
+        [sortingDirection.column],
+        [sortingDirection.direction]
+      );
+    } else {
+      return display;
+    }
   }
 
   const display = generateDisplay();
