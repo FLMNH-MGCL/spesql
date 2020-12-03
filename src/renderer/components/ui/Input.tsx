@@ -16,6 +16,8 @@ export default forwardRef<HTMLInputElement, Props>(
     const errors = props.errors && props.name && props.errors[props.name];
     const icon = props.icon ? INPUT_ICONS[props.icon] : null;
 
+    // console.log(errors);
+
     return (
       <label
         className={clsx(

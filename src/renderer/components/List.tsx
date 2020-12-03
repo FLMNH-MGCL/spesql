@@ -18,7 +18,7 @@ function Item({ fullWidth, img, label, value, editable }: ItemProps) {
   return (
     <li className="py-2 flex space-x-3">
       {img}
-      <div className={clsx(fullWidth && 'w-full', 'flex flex-col')}>
+      <div className={clsx(fullWidth && 'w-full', 'flex flex-col space-y-2')}>
         {editable ? (
           getFormElementForField(label, value)
         ) : (

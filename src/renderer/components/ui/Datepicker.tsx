@@ -7,6 +7,7 @@ import useToggle from '../utils/useToggle';
 import OutsideClickHandler from 'react-outside-click-handler';
 import useKeyboard from '../utils/useKeyboard';
 import { AnimatePresence, motion } from 'framer-motion';
+import { PropsOf } from '../../types';
 
 type Props = {
   label?: string;
@@ -15,20 +16,32 @@ type Props = {
   pastOnly?: boolean;
   ranged?: boolean;
   fullWidth?: boolean;
-  initialDate?: string;
-};
+  initialDate?: string | Date;
+} & PropsOf<typeof Form.Input>;
 
-// TODO: handle initial date for both variants
-// TODO: add validation
+// TODO: handle initial date for BOTH variants
 
-function SinglePicker({ label, fullWidth }: Props) {
+function SinglePicker({ label, fullWidth, initialDate, ...props }: Props) {
   const [value, setValue] = useState<Date>();
   const [dateString, setDateString] = useState(getDateString());
 
   const [visible, { on, off }] = useToggle(false);
 
-  function getInitialState() {
-    return undefined;
+  function setInitialState() {
+    if (initialDate) {
+      if (typeof initialDate === 'object') {
+        setValue(initialDate);
+      } else {
+        try {
+          const date = new Date(initialDate);
+          setValue(date);
+        } catch {
+          throw new Error(
+            `Attempted to parse invalid date in DatePicker: ${initialDate}`
+          );
+        }
+      }
+    }
   }
 
   function handleDayClick(day: Date) {
@@ -44,8 +57,12 @@ function SinglePicker({ label, fullWidth }: Props) {
   }
 
   function handleResetClick() {
-    setValue(getInitialState());
+    setValue(undefined);
   }
+
+  useEffect(() => {
+    setInitialState();
+  }, []);
 
   useEffect(() => {
     setDateString(getDateString());
@@ -85,11 +102,13 @@ function SinglePicker({ label, fullWidth }: Props) {
 
           {/* Doing this to access the string during onSubmit */}
           <Form.Input
+            slim={props.slim}
             placeholder="Select a day"
-            name={name}
+            name={props.name}
             value={dateString}
             onChange={() => dateString}
             onClick={on}
+            register={props.register}
           />
 
           <div className="cursor-pointer absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
@@ -134,7 +153,7 @@ function SinglePicker({ label, fullWidth }: Props) {
 
 type Range = { from?: Date; to?: Date };
 
-function RangedPicker({ label, fullWidth }: Props) {
+function RangedPicker({ label, fullWidth, ...props }: Props) {
   const [range, setRange] = useState<Range>(getInitialState());
   const [rangeString, setRangeString] = useState(getDateString());
 
@@ -214,8 +233,10 @@ function RangedPicker({ label, fullWidth }: Props) {
 
           {/* Doing this to access the string during onSubmit */}
           <Form.Input
+            slim={props.slim}
             placeholder="Select a range"
-            name={name}
+            name={props.name}
+            register={props.register}
             value={rangeString}
             onChange={() => rangeString}
             onClick={on}
@@ -268,3 +289,11 @@ export default function Datepicker({ ranged, ...props }: Props) {
     return <SinglePicker {...props} />;
   }
 }
+
+// export function MonthPicker() {
+
+// }
+
+// export function DayPicker() {
+
+// }

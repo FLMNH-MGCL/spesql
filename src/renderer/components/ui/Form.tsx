@@ -25,10 +25,13 @@ const FormSelect = createFormComponent(Select);
 type GroupProps = {
   children: React.ReactNode;
   flex?: boolean;
+  hidden?: boolean;
 };
-function FormGroup({ children, flex }: GroupProps) {
+function FormGroup({ children, flex, hidden }: GroupProps) {
   return (
-    <div className={clsx(flex && 'flex space-x-2', 'py-2')}>{children}</div>
+    <div className={clsx(flex && 'flex space-x-2', 'py-2', hidden && 'hidden')}>
+      {children}
+    </div>
   );
 }
 

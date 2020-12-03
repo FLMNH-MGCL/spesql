@@ -60,7 +60,9 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
         return <SelectHelpModal />;
       }
 
-      // case 'single-insert': {}
+      case 'single-insert': {
+        return <SelectHelpModal />;
+      }
 
       default: {
         throw new Error(

@@ -32,6 +32,7 @@ import {
   sexControl,
   tubeSizeControl,
 } from '../utils/constants';
+import Datepicker from '../ui/Datepicker';
 
 export async function fetchTables(setTables: any) {
   const res = await axios
@@ -188,7 +189,7 @@ export function getFormElementForField(key: string, currentValue: any) {
     ),
     // TODO: make a date input
     dateIdentified: (
-      <Form.Input
+      <Datepicker
         slim
         name="dateIdentified"
         register={{ validate: validateDateField }}
@@ -196,12 +197,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       />
     ),
     verbatimDate: (
-      <Form.Input
-        slim
-        name="verbatimDate"
-        // register={{ validate: validateDateField }}
-        defaultValue={currentValue}
-      />
+      <Form.Input slim name="verbatimDate" defaultValue={currentValue} />
     ),
     collectedYear: (
       <Form.Input
@@ -227,9 +223,8 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    // TODO: make date field
     dateEntered: (
-      <Form.Input
+      <Datepicker
         slim
         name="dateEntered"
         register={{ validate: validateDateField }}
@@ -350,8 +345,22 @@ export function getFormElementForField(key: string, currentValue: any) {
     isLoaned: null,
     loanInstitution: null,
     loaneeName: null,
-    loanDate: null,
-    loanReturnDate: null,
+    loanDate: (
+      <Datepicker
+        slim
+        name="loanDate"
+        register={{ validate: validateDateField }}
+        defaultValue={currentValue}
+      />
+    ),
+    loanReturnDate: (
+      <Datepicker
+        slim
+        name="loanReturnDate"
+        register={{ validate: validateDateField }}
+        defaultValue={currentValue}
+      />
+    ),
     preparations: (
       <Form.Select
         slim
