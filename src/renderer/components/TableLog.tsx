@@ -86,32 +86,7 @@ const rowRenderer: TableRowRenderer = ({
       style={style}
     >
       {columns.map((col: any, index) => {
-        console.log(col);
-        // // query
-        // if (index === 1) {
-        //   const queryString = col.props?.children;
-
-        //   return (
-        //     <CopyToClipboard
-        //       text={queryString ?? ''}
-        //       onCopy={onCopy}
-        //       key={index}
-        //     >
-        //       <div
-        //         // key={index}
-        //         aria-colindex={2}
-        //         className="ReactVirtualized__Table__rowColumn cursor-pointer"
-        //         role="gridcell"
-        //         title="Click to copy"
-        //         style={{ overflow: 'hidden', flex: '1 1 330.6px' }}
-        //       >
-        //         {queryString}
-        //       </div>
-        //     </CopyToClipboard>
-        //   );
-        // } else {
-        //   return col;
-        // }
+        // console.log(col);
 
         const queryString = col.props?.children;
 
@@ -122,7 +97,6 @@ const rowRenderer: TableRowRenderer = ({
             key={index}
           >
             <div
-              // key={index}
               aria-colindex={index + 1}
               className="ReactVirtualized__Table__rowColumn cursor-pointer"
               role="gridcell"

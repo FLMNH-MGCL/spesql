@@ -120,6 +120,8 @@ export function buildSingleUpdateQuery(
   let logUpdates: any[] = [];
   let updates: any = {};
 
+  // console.log(values);
+
   // TODO: try and break me please
   Object.keys(values).forEach((key) => {
     if (selectedSpecimen[key as keyof SpecimenFields] !== values[key]) {

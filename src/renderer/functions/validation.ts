@@ -89,13 +89,13 @@ export function validateTableSelection(table: string) {
   return true;
 }
 
+// TODO
 export function validateConditionSelection(table: string) {
   console.log(table);
 
   return true;
 }
 
-// TODO
 export function validateBooleanField(value: string) {
   if (!value || value === '') {
     return true;
@@ -160,6 +160,7 @@ export function validateLowerCase(value: string) {
   return true;
 }
 
+// ALL OF THESE USE validatePronoun
 // export function validateOrder(value: string) {}
 // export function validateSuperFamily(value: string) {}
 // export function validateFamily(value: string) {}
@@ -167,10 +168,13 @@ export function validateLowerCase(value: string) {
 // export function validateTribe(value: string) {}
 // export function validateGenus(value: string) {}
 // export function validateSubGenus(value: string) {}
+
+// ALL OF THESE USE validateLowerCase
 // export function validateSpecificEpithet(value: string) {}
 // export function validateInfraSpecificEpithet(value: string) {}
 
 export function validateIndentificationQualifier(values: string[] | string) {
+  console.log(values);
   if (Array.isArray(values)) {
     if (!values || values.length < 1) {
       return true;
@@ -458,7 +462,6 @@ export function validateFreezer(value: string) {
   return matches ?? 'Invalid: must match Kawahara##';
 }
 
-// TODO
 export function validateRack(value: string) {
   if (!value || !value.length) {
     return true;
@@ -471,13 +474,12 @@ export function validateRack(value: string) {
   return true;
 }
 
-// TODO: parse as INT
 export function validateBox(value: string) {
   if (!value || !value.length) {
     return true;
   }
 
-  const parsedBox = parseFloat(value);
+  const parsedBox = parseInt(value, 10);
 
   if (!isNumeric(value) || isNaN(parsedBox)) {
     return 'Must be numeric';
@@ -494,7 +496,7 @@ export function validateBox(value: string) {
  *
  */
 
-// TODO
+// TODO: needed?
 export function validateMeasuredField(_value: string) {
   return true;
 }
@@ -546,7 +548,11 @@ export function validateStringDateRange(
     return true;
   }
 
-  const parts = dateRange.split(' - '); // FIXME: I am not sure if this is best
+  const parts = dateRange.split('-'); // FIXME: I am not sure if this is best
+
+  if (parts.length !== 2) {
+    return 'Malformated date range: ' + dateRange;
+  }
 
   const from = parts[0].trim();
   const to = parts[1].trim();

@@ -75,7 +75,7 @@ type UISelectProps = {
   display: SelectOption | SelectOption[] | undefined;
   options: SelectOption[];
   disabled?: boolean;
-  onSelect(item: SelectOption): void;
+  onSelect(item?: SelectOption): void;
   calculateSelected(item: SelectOption): boolean;
 };
 
@@ -135,9 +135,26 @@ function UISelect({
                 <p className="text-gray-400">Select</p>
               )}
             </div>
-            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+            <span className="absolute inset-y-0 right-0 flex items-center pr-2">
+              {display && (
+                <svg
+                  onClick={() => onSelect(undefined)}
+                  className="h-5 w-5 text-red-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              )}
               <svg
-                className="h-5 w-5 text-gray-400"
+                className="h-5 w-5 text-gray-400 pointer-events-none"
                 viewBox="0 0 20 20"
                 fill="none"
                 stroke="currentColor"
@@ -234,8 +251,33 @@ export default forwardRef<HTMLSelectElement, Props>(
             setSelected([...selected, item.value]);
           }
         });
+      } else if (
+        multiple &&
+        props.defaultValue !== undefined &&
+        Array.isArray(props.defaultValue)
+      ) {
+        const items = props.defaultValue.map((rawItem) => {
+          const item = options.find((el) => el.value === rawItem);
+          return item;
+        });
+
+        items.forEach((item) => {
+          if (item) {
+            setDisplay([...display, item]);
+            setSelected([...selected, item.value]);
+          }
+        });
+      } else if (props.defaultValue !== undefined) {
+        const item = options.find((el) => el.value === props.defaultValue);
+
+        if (item) {
+          setDisplay(item);
+          setSelected(item.value);
+        }
       } else if (props.value !== undefined) {
         const item = options.find((el) => el.value === props.value);
+
+        // console.log(item);
 
         if (item) {
           setDisplay(item);
@@ -244,7 +286,15 @@ export default forwardRef<HTMLSelectElement, Props>(
       }
     }, []);
 
-    function handleSelection(item: SelectOption) {
+    // TODO: create hook to handle display every selected change
+
+    function handleSelection(item?: SelectOption) {
+      if (!item) {
+        setSelected('');
+        setDisplay(undefined);
+        return;
+      }
+
       if (multiple) {
         if (!display || !selected) {
           setDisplay([item]);
@@ -273,7 +323,7 @@ export default forwardRef<HTMLSelectElement, Props>(
     }
 
     function calculateSelected(item: SelectOption) {
-      if (!selected || !display) {
+      if (selected === undefined || !display) {
         return false;
       } else if (multiple && Array.isArray(display)) {
         if (display.some((el: SelectOption) => el.value === item.value)) {
@@ -308,13 +358,10 @@ export default forwardRef<HTMLSelectElement, Props>(
             ref={ref}
             {...props}
           >
-            <option></option>
+            {/* TODO: I don't love this solution */}
+            <option value=""></option>
             {options.map((item: SelectOption) => (
-              <option
-                key={`raw-option-${item.value}`}
-                // selected={calculateSelected(item)} // FIXME: this throws a warning about not setting selected on option
-                value={item.value}
-              >
+              <option key={`raw-option-${item.value}`} value={item.value}>
                 {item.label}
               </option>
             ))}
