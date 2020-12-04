@@ -1,8 +1,3 @@
-// declare module 'react-step-progress-bar' {
-//   import ProgressBar from './components/ProgressBar';
-//   export { ProgressBar };
-// }
-
 interface StepFunctionProps {
   accomplished: boolean;
   position: number;
@@ -28,6 +23,8 @@ interface ProgressBarProps {
 }
 
 declare module 'react-step-progress-bar' {
+  import * as React from 'react';
+
   export class ProgressBar extends React.PureComponent<ProgressBarProps, any> {}
   export class Step extends React.PureComponent<StepProps, any> {}
 }

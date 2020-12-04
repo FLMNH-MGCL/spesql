@@ -17,6 +17,7 @@ type Props = {
   ranged?: boolean;
   fullWidth?: boolean;
   initialDate?: string | Date;
+  placeholder?: string;
 } & PropsOf<typeof Form.Input>;
 
 // TODO: handle initial date for BOTH variants
@@ -24,6 +25,8 @@ type Props = {
 function SinglePicker({ label, fullWidth, initialDate, ...props }: Props) {
   const [value, setValue] = useState<Date>();
   const [dateString, setDateString] = useState(getDateString());
+
+  // const placeholder = new Date().toISOString().split('T')[0];
 
   const [visible, { on, off }] = useToggle(false);
 
@@ -103,12 +106,13 @@ function SinglePicker({ label, fullWidth, initialDate, ...props }: Props) {
           {/* Doing this to access the string during onSubmit */}
           <Form.Input
             slim={props.slim}
-            placeholder="Select a day"
+            placeholder={props.placeholder ?? 'Select a Day'}
             name={props.name}
             value={dateString}
             onChange={() => dateString}
             onClick={on}
             register={props.register}
+            disabled={props.disabled}
           />
 
           <div className="cursor-pointer absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
@@ -127,7 +131,7 @@ function SinglePicker({ label, fullWidth, initialDate, ...props }: Props) {
               />
             </svg>
 
-            {value && (
+            {value && !props.disabled && (
               <svg
                 onClick={handleResetClick}
                 className="w-4 h-4 text-red-500"

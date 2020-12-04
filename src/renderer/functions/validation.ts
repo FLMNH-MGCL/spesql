@@ -133,7 +133,7 @@ export function validateOtherCatalogNumber(value: string) {
 // TODO: implement me?
 // export function validateRecordNumber(value: string) {}
 
-export function validatePronoun(value: string) {
+export function validateProperNoun(value: string) {
   if (!value || value.length < 1) {
     return true;
   }
@@ -160,7 +160,7 @@ export function validateLowerCase(value: string) {
   return true;
 }
 
-// ALL OF THESE USE validatePronoun
+// ALL OF THESE USE validateProperNoun
 // export function validateOrder(value: string) {}
 // export function validateSuperFamily(value: string) {}
 // export function validateFamily(value: string) {}
@@ -691,7 +691,7 @@ export function determineAndRunFieldValidator(field: string, value: any) {
     case 'tribe':
     case 'genus':
     case 'subgenus':
-      return validatePronoun(value);
+      return validateProperNoun(value);
 
     case 'specificEpithet':
       return validateLowerCase(value);
@@ -703,7 +703,7 @@ export function determineAndRunFieldValidator(field: string, value: any) {
     case 'otherCollectors':
       return validateListField(value);
     case 'identifiedBy':
-      return validatePronoun(value);
+      return validateProperNoun(value);
     case 'dateIdentified':
       return validateDateField(value);
     case 'verbatimDate':
@@ -735,7 +735,7 @@ export function determineAndRunFieldValidator(field: string, value: any) {
     case 'county':
     case 'municipality':
     case 'locality':
-      return validatePronoun(value); // FIXME: maybe not??
+      return validateProperNoun(value); // FIXME: maybe not??
     case 'elevationInMeters':
       return true;
     case 'decimalLatitude':

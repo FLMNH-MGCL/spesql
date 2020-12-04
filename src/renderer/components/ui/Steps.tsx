@@ -14,7 +14,7 @@ export default function Steps({ steps, current }: Props) {
     if (steps === 0) {
       throw new Error('Divide by Zero error in Steps Component!');
     } else {
-      return current / steps;
+      return Math.ceil((current / steps) * 100);
     }
   }
 
@@ -24,11 +24,10 @@ export default function Steps({ steps, current }: Props) {
 
   return (
     <ProgressBar percent={percent}>
-      {Array.from({ length: steps }, () => (
-        <Step>
+      {Array.from({ length: steps }, (_, key) => (
+        <Step key={key}>
           {({ accomplished, index }) => (
             <div
-              key={index}
               className={`indexedStep ${accomplished ? 'accomplished' : null}`}
             >
               {index + 1}

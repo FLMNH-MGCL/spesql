@@ -23,32 +23,40 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
 
   function handleSubmit(values: Values) {}
 
-  function handlePagination(direction: 'back' | 'forward') {}
+  function handlePagination(direction: 'back' | 'forward') {
+    // TODO: add checks?
+    if (direction === 'forward') {
+      changePage(page + 1);
+    } else {
+      changePage(page - 1);
+    }
+  }
 
   return (
     <React.Fragment>
       <Modal open={open} onClose={onClose} size="large">
-        <Modal.Content title="Insert Query">
+        <Modal.Content title="Insert Single Record">
           <div className="py-3">
-            <Steps steps={7} current={page} />
+            <Steps steps={8} current={page} />
           </div>
 
           <SingleInsertForm
             page={page}
-            changePage={handlePagination}
+            // changePage={handlePagination}
             onSubmit={handleSubmit}
           />
         </Modal.Content>
 
         <Modal.Footer>
-          {page === 7 && (
+          {page === 8 && (
             <Button.Group>
               <Button onClick={onClose}>Cancel</Button>
+              <Button onClick={() => handlePagination('back')}>Back</Button>
               <Button variant="primary">Confirm</Button>
             </Button.Group>
           )}
 
-          {page !== 7 && (
+          {page !== 8 && (
             <Button.Group>
               <Button onClick={onClose}>Cancel</Button>
               <Button

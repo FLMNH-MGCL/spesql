@@ -11,12 +11,15 @@ import createFormComponent from '../utils/createFormComponent';
 import Radio from './Radio';
 import clsx from 'clsx';
 import Select from './Select';
+import TextArea from './TextArea';
 
 const FormInput = createFormComponent(Input);
 
 const FormRadio = createFormComponent(Radio);
 
 const FormSelect = createFormComponent(Select);
+
+const FormTextArea = createFormComponent(TextArea);
 
 // function FormSelect() {}
 
@@ -71,6 +74,7 @@ export default function Form<T = Values>({
 }
 
 Form.Input = FormInput;
+Form.Area = FormTextArea;
 Form.Select = FormSelect;
 Form.Radio = FormRadio;
 Form.Group = FormGroup;

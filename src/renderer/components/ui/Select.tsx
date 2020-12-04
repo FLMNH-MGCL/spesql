@@ -77,6 +77,7 @@ type UISelectProps = {
   disabled?: boolean;
   onSelect(item?: SelectOption): void;
   calculateSelected(item: SelectOption): boolean;
+  placeholder?: string;
 };
 
 function UISelect({
@@ -88,6 +89,7 @@ function UISelect({
   calculateSelected,
   disabled,
   errors,
+  placeholder,
 }: UISelectProps) {
   const [visible, { toggle, off }] = useToggle(false);
 
@@ -127,12 +129,12 @@ function UISelect({
                     })}
                   </React.Fragment>
                 ) : (
-                  <p className="text-gray-400">Select</p>
+                  <p className="text-gray-400">{placeholder ?? 'Select'}</p>
                 )
               ) : display ? (
                 <p>{display.label}</p>
               ) : (
-                <p className="text-gray-400">Select</p>
+                <p className="text-gray-400">{placeholder ?? 'Select'}</p>
               )}
             </div>
             <span className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -290,6 +292,7 @@ export default forwardRef<HTMLSelectElement, Props>(
 
     function handleSelection(item?: SelectOption) {
       if (!item) {
+        updateControlled && updateControlled(undefined);
         setSelected('');
         setDisplay(undefined);
         return;
@@ -375,6 +378,7 @@ export default forwardRef<HTMLSelectElement, Props>(
             options={options}
             disabled={props.disabled}
             calculateSelected={calculateSelected}
+            placeholder={props.placeholder}
           />
         </div>
       </label>

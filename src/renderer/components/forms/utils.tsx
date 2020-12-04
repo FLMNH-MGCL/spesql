@@ -15,7 +15,7 @@ import {
   validateLowerCase,
   validateOtherCatalogNumber,
   validatePreparations,
-  validatePronoun,
+  validateProperNoun,
   validateSamplingProtocol,
   validateSex,
   validateTubeSize,
@@ -86,7 +86,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="order_"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -94,7 +94,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="superfamily"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -102,7 +102,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="family"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -110,7 +110,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="subfamily"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -118,7 +118,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="tribe"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -126,7 +126,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="genus"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -134,7 +134,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="subgenus"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -150,7 +150,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="infraspecificEpithet"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }} // FIXME: ?? pronoun or lowercase
         defaultValue={currentValue}
       />
     ),
@@ -167,7 +167,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="recordedBy"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -183,7 +183,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="identifiedBy"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -282,6 +282,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         register={{ validate: validateSamplingProtocol }}
         options={samplingProtocolControl}
         defaultValue={currentValue}
+        multiple
       />
     ),
     country: null,
@@ -291,7 +292,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="municipality"
-        register={{ validate: validatePronoun }}
+        register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -299,7 +300,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="locality"
-        register={{ validate: validatePronoun }}
+        // register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -320,7 +321,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="verbatimLatitude"
-        // register={{ validate: validatePronoun }}
+        // register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),
@@ -328,7 +329,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="verbatimLongitude"
-        // register={{ validate: validatePronoun }}
+        // register={{ validate: validateProperNoun }}
         defaultValue={currentValue}
       />
     ),

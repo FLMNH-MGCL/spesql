@@ -1,3 +1,6 @@
+import { countries } from '../../assets/countries';
+import { SelectOption } from '../ui/Select';
+
 export const conditionCountOptions = Array.from({ length: 15 }, (_, index) => {
   return { label: String(index), value: index };
 });
@@ -212,3 +215,21 @@ export const accessRoles = [
   { label: 'Manager', value: 'manager' },
   { label: 'Admin', value: 'admin' },
 ];
+
+export const dateDays: SelectOption[] = Array.from(
+  { length: 31 },
+  (_, index) => {
+    return { label: String(index + 1), value: index + 1 };
+  }
+);
+
+export const dateMonths: SelectOption[] = Array.from(
+  { length: 12 },
+  (_, index) => {
+    return { label: String(index + 1), value: index + 1 };
+  }
+);
+
+export const countryControl = countries.map((country) => {
+  return { label: country.name, value: country.name };
+});

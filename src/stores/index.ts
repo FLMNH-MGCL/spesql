@@ -4,6 +4,7 @@ import { Specimen } from '../renderer/types';
 type User = {
   id: string;
   username: string;
+  fullName: string;
   accessRole: string;
 };
 
@@ -97,7 +98,12 @@ type SpesqlSession = {
   // actions
   toggleLoading(newLoading?: boolean): void;
   setSelectedSpecimen(specimen: Specimen | null): void;
-  login(id: string, username: string, accessRole: string): void;
+  login(
+    id: string,
+    fullName: string,
+    username: string,
+    accessRole: string
+  ): void;
   logout(): void;
 };
 
@@ -121,10 +127,10 @@ export const useStore = create<SpesqlSession>((set) => ({
       prefersSound: newVal ?? !state.prefersSound,
     })),
 
-  login: (id: string, username: string, accessRole: string) =>
+  login: (id: string, fullName: string, username: string, accessRole: string) =>
     set((state) => ({
       ...state,
-      user: { id, username, accessRole },
+      user: { id, fullName, username, accessRole },
       expiredSession: false,
     })),
 

@@ -41,9 +41,9 @@ export default function CreateVerifySessionModal() {
 
     if (loginResponse.status === 200) {
       if (user) {
-        const { id, username, accessRole } = user;
+        const { id, fullName, username, accessRole } = user;
         // login will also close the modal since I loaded it shallowly
-        login(id, username, accessRole);
+        login(id, fullName, username, accessRole);
       } else {
         throw new Error('Expired session with NULL user? Bug!');
       }

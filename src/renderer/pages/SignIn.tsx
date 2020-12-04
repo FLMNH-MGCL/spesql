@@ -65,9 +65,9 @@ export default function SignIn() {
       });
 
       setTimeout(() => {
-        const { id, accessRole } = loginResponse.data;
+        const { id, fullName, accessRole } = loginResponse.data;
 
-        login(id, username, accessRole);
+        login(id, fullName, username, accessRole);
         navigate('/home');
       }, 500);
     } else if (loginResponse.status === 401) {
@@ -103,8 +103,8 @@ export default function SignIn() {
         });
 
       if (res.data) {
-        const { id, username, accessRole } = res.data;
-        login(id, username, accessRole);
+        const { id, fullName, username, accessRole } = res.data;
+        login(id, fullName, username, accessRole);
         navigate('/home');
       }
     }

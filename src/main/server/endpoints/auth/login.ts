@@ -27,6 +27,7 @@ export default function login(req: Request, res: Response) {
           const id = target.id;
           const hashedPassword = target.password;
           const accessRole = target.role;
+          const fullName = target.name;
 
           bcrypt.compare(password, hashedPassword, (error, same) => {
             if (!same && !error) {
@@ -41,7 +42,7 @@ export default function login(req: Request, res: Response) {
                 if (error) {
                   res.status(500).send(error);
                 } else {
-                  res.status(200).send({ username, id, accessRole });
+                  res.status(200).send({ fullName, username, id, accessRole });
                 }
               });
             }
