@@ -24,7 +24,7 @@ function CSVParser({ onFileUpload }: UploadProps) {
   const { notify } = useNotify();
 
   const [isReset, setReset] = useState(false);
-  const updateInsertLog = useStore((state) => state.updateInsertLog);
+  const updateBulkInsertLog = useStore((state) => state.updateBulkInsertLog);
 
   function handleOnFileLoad(data: any) {
     console.log(data);
@@ -71,7 +71,7 @@ function CSVParser({ onFileUpload }: UploadProps) {
 
     // FIXME: I do not know the structure of an error like this,
     // if it ever happens and is reported to me I will update this section to match
-    updateInsertLog([
+    updateBulkInsertLog([
       {
         index: 0,
         errors: [
@@ -163,7 +163,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
   const [loading, { on, off }] = useToggle(false);
 
-  const updateInsertLog = useStore((state) => state.updateInsertLog);
+  const updateBulkInsertLog = useStore((state) => state.updateBulkInsertLog);
 
   const { expiredSession, expireSession } = useStore(
     (state) => ({
@@ -313,7 +313,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           'There were one or more errors that occurred during this request that prevented it from being submitted. Please review the appropriate logs.',
         level: 'error',
       });
-      updateInsertLog(allErrors);
+      updateBulkInsertLog(allErrors);
       off();
     } else {
       const serverErrors = await insertRows(insertionValues);
@@ -325,7 +325,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
             'Some or all of the insertions emitted errors. Please review the appropriate logs.',
           level: 'warning',
         });
-        updateInsertLog(serverErrors);
+        updateBulkInsertLog(serverErrors);
       } else {
         notify(
           {
@@ -358,7 +358,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           'There were one or more errors that occurred during this request that prevented it from being submitted. Please review the appropriate logs.',
         level: 'error',
       });
-      updateInsertLog(allErrors);
+      updateBulkInsertLog(allErrors);
       off();
     } else {
       const serverErrors = await insertRows(insertionValues);
@@ -370,7 +370,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
             'Some or all of the insertions emitted errors. Please review the appropriate logs.',
           level: 'warning',
         });
-        updateInsertLog(serverErrors);
+        updateBulkInsertLog(serverErrors);
       } else {
         notify({
           title: 'Insertions Complete',
@@ -444,7 +444,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           </Button.Group>
 
           <div className="flex space-x-2 flex-1">
-            <CreateLogModal initialTab={2} watch="insert" />
+            <CreateLogModal initialTab={2} watch="bulkInsert" />
             <CreateHelpModal variant="insert" />
           </div>
         </Modal.Footer>

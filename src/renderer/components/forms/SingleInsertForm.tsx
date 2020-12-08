@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import shallow from 'zustand/shallow';
-import { useStore } from '../../../stores';
+import { LoggingError, useStore } from '../../../stores';
 import {
   validateBooleanField,
   validateBox,
@@ -29,6 +29,8 @@ import {
   validateSex,
   validateTableSelection,
   validateTubeSize,
+  validateName,
+  validateNameListField,
 } from '../../functions/validation';
 import Datepicker from '../ui/Datepicker';
 import Form, { Values } from '../ui/Form';
@@ -49,8 +51,10 @@ import {
   tubeSizeControl,
 } from '../utils/constants';
 import { fetchTables } from './utils';
-import { Checkmark } from 'react-checkmark';
+// import { Checkmark } from 'react-checkmark';
 import Text from '../ui/Text';
+import { useNotify } from '../utils/context';
+import Checkmark from '../ui/Checkmark';
 
 type FormPart = {
   page: number;
@@ -160,18 +164,21 @@ function Classification({ page }: FormPart) {
         <Form.Input
           name="order_"
           label="order_"
+          placeholder="Lepidoptera"
           register={{ validate: validateProperNoun }}
           fullWidth
         />
         <Form.Input
           name="superfamily"
           label="superfamily"
+          placeholder="Papilionoidea"
           register={{ validate: validateProperNoun }}
           fullWidth
         />
         <Form.Input
           name="family"
           label="family"
+          placeholder="Pieridae"
           register={{ validate: validateProperNoun }}
           fullWidth
         />
@@ -181,12 +188,14 @@ function Classification({ page }: FormPart) {
         <Form.Input
           name="subfamily"
           label="subfamily"
+          placeholder="Pierinae"
           register={{ validate: validateProperNoun }}
           fullWidth
         />
         <Form.Input
           name="tribe"
           label="tribe"
+          placeholder="Tribe"
           register={{ validate: validateProperNoun }}
           fullWidth
         />
@@ -203,6 +212,7 @@ function Classification({ page }: FormPart) {
         <Form.Input
           name="subgenus"
           label="subgenus"
+          placeholder="Aucolias"
           register={{ validate: validateProperNoun }}
           fullWidth
         />
@@ -216,6 +226,7 @@ function Classification({ page }: FormPart) {
         <Form.Input
           name="infraspecificEpithet"
           label="infraspecificEpithet"
+          placeholder="pallida"
           register={{ validate: validateLowerCase }} // FIXME: ?? pronoun or lowercase
           fullWidth
         />
@@ -248,14 +259,14 @@ function RecordLevelInformation({ page }: FormPart) {
             label="recordedBy"
             name="recordedBy"
             placeholder="Frodo Baggins"
-            register={{ validate: validateProperNoun }}
+            register={{ validate: validateName }}
             fullWidth
           />
           <Form.Input
             label="identifiedBy"
             name="identifiedBy"
             placeholder="Aragorn Telcontar"
-            register={{ validate: validateProperNoun }}
+            register={{ validate: validateName }}
             fullWidth
           />
         </Form.Group>
@@ -265,7 +276,7 @@ function RecordLevelInformation({ page }: FormPart) {
             label="otherCollectors"
             name="otherCollectors"
             placeholder="Gamgee, Samwise | Meriadoc Brandybuck | Peregrin Took"
-            register={{ validate: validateListField }}
+            register={{ validate: validateNameListField }}
             fullWidth
           />
         </Form.Group>
@@ -698,7 +709,7 @@ function ConfirmationPage({ page }: FormPart) {
       <div className="py-12">
         {/* this library has an invalid prop type >:( so an error is in the console */}
         {/* @ts-ignore */}
-        <Checkmark size="large" />
+        <Checkmark />
       </div>
     </div>
   );
@@ -709,9 +720,55 @@ type Props = {
   onSubmit(values: Values): void;
 };
 
+function FormErrorHandler() {
+  const { errors } = useFormContext();
+
+  const { notify } = useNotify();
+
+  const updateSingleInsertLog = useStore(
+    (state) => state.updateSingleInsertLog
+  );
+
+  useEffect(() => {
+    if (!errors || errors === {} || !Object.keys(errors).length) {
+      return;
+    }
+
+    notify(
+      {
+        title: 'Validation Errors',
+        message:
+          'There were some errors present in the form, please check the corresponding error log and correct the invalid entries',
+        level: 'error',
+      },
+      'error'
+    );
+
+    // console.log(errors);
+    let insertErrors = Object.keys(errors).map((field) => {
+      const { message } = errors[field];
+
+      return {
+        field,
+        message,
+      } as LoggingError;
+    });
+
+    updateSingleInsertLog(insertErrors);
+  }, [errors]);
+
+  return null;
+}
+
 export default function SingleInsertForm({ page, onSubmit }: Props) {
   return (
-    <Form onSubmit={onSubmit} className="pb-2">
+    <Form
+      id="single-insert"
+      mode="onChange"
+      onSubmit={onSubmit}
+      className="pb-2"
+    >
+      <FormErrorHandler />
       <Cataloging page={page} />
       <Classification page={page} />
       <RecordLevelInformation page={page} />

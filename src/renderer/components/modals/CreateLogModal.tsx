@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import shallow from 'zustand/shallow';
-import { useStore } from '../../../stores';
+import { LoggingError, useStore } from '../../../stores';
 // import CopyButton from '../buttons/CopyButton';
 import WarningButton from '../buttons/WarningButton';
 import Button from '../ui/Button';
@@ -17,14 +17,41 @@ import clsx from 'clsx';
 // const tabPages = ['select', 'count', 'insert', 'update', 'delete', 'global'];
 
 type LogProps = {
-  // TODO: create type for errors
-  // TODO: remove ?
   errors?: Logs;
+  logName: keyof Omit<Logs, 'bulkInsert'>;
 };
 
-function Log({ errors }: LogProps) {
-  const disabled = !errors || !errors.insert || !errors.insert.length;
-  // const clearErrors = useStore((state) => state.clearErrors);
+function Log({ errors, logName }: LogProps) {
+  const disabled = !errors || !errors[logName] || !errors[logName].length;
+  const clearErrors = useStore((state) => state.clearErrors);
+
+  function renderLog() {
+    if (!errors || !errors[logName] || !errors[logName].length)
+      return <p>No errors exist in the log</p>;
+
+    return errors[logName].map((error: LoggingError, i: number) => {
+      const { index, code, field, message } = error;
+
+      const leftSide =
+        field && code
+          ? `${field}, CODE: ${code} - `
+          : field && !code
+          ? field + ' - '
+          : !field && code
+          ? code + ' - '
+          : 'ERROR: ';
+
+      return (
+        <div className="py-2 w-full" key={i}>
+          <div>
+            <div className="flex space-x-2">
+              <Text>{`${leftSide}${message}`}</Text>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  }
 
   return (
     <div className="-mb-6">
@@ -35,8 +62,7 @@ function Log({ errors }: LogProps) {
             'p-2 flex flex-col items-center justify-center'
           )}
         >
-          {/* {renderLog()} */}
-          <p>No errors exist in the log</p>
+          {renderLog()}
         </div>
       </div>
 
@@ -44,31 +70,35 @@ function Log({ errors }: LogProps) {
         <Button
           disabled={disabled}
           variant="warning"
-          // onClick={() => clearErrors('')}
+          onClick={() => clearErrors(logName)}
         >
           Clear
         </Button>
         <CopyButton
           disabled={disabled}
-          value={JSON.stringify(errors?.insert, null, 2) ?? ''}
+          value={JSON.stringify(errors?.bulkInsert, null, 2) ?? ''}
         />
       </div>
     </div>
   );
 }
 
-function InsertErrorLog({ errors }: LogProps) {
-  const disabled = !errors || !errors.insert || !errors.insert.length;
+type BulkLogProps = {
+  errors?: Logs;
+  logName: keyof Logs;
+};
+function InsertErrorLog({ errors }: BulkLogProps) {
+  const disabled = !errors || !errors.bulkInsert || !errors.bulkInsert.length;
 
   const clearErrors = useStore((state) => state.clearErrors);
 
   function renderLog() {
-    if (!errors || !errors.insert || !errors.insert.length)
+    if (!errors || !errors.bulkInsert || !errors.bulkInsert.length)
       return <p>No errors exist in the log</p>;
 
-    const { insert } = errors;
+    const { bulkInsert } = errors;
 
-    return insert.map((error) => {
+    return bulkInsert.map((error) => {
       const csvRow = error.index + 2;
 
       return (
@@ -108,13 +138,13 @@ function InsertErrorLog({ errors }: LogProps) {
         <Button
           disabled={disabled}
           variant="warning"
-          onClick={() => clearErrors('insert')}
+          onClick={() => clearErrors('batchInsert')}
         >
           Clear
         </Button>
         <CopyButton
           disabled={disabled}
-          value={JSON.stringify(errors?.insert, null, 2) ?? ''}
+          value={JSON.stringify(errors?.bulkInsert, null, 2) ?? ''}
         />
       </div>
     </div>
@@ -123,6 +153,7 @@ function InsertErrorLog({ errors }: LogProps) {
 
 type Props = {
   initialTab?: number;
+  variant?: 'batch' | 'single';
   fullWidth?: boolean;
   watch?: keyof Logs;
 };
@@ -131,6 +162,7 @@ export default function CreateLogModal({
   initialTab,
   fullWidth,
   watch,
+  variant = 'batch',
 }: Props) {
   const [open, { on, off }] = useToggle(false);
   const [tab, setTab] = useState(initialTab ?? 0);
@@ -150,26 +182,31 @@ export default function CreateLogModal({
   }
 
   function renderTab() {
+    // console.log('LOG TAB:', tab);
     switch (tab) {
       // select errors
       case 0:
-        return <Log errors={errors} />;
+        return <Log errors={errors} logName="select" />;
 
       // count errors
       case 1:
-        return <Log errors={errors} />;
+        return <Log errors={errors} logName="count" />;
 
       // insert errors
       case 2:
-        return <InsertErrorLog errors={errors} />;
+        return variant === 'batch' ? (
+          <InsertErrorLog errors={errors} logName="bulkInsert" />
+        ) : (
+          <Log errors={errors} logName="singleInsert" />
+        );
 
       // update errors
-      case 3:
-        return <Log errors={errors} />;
+      case 3: // TODO:
+        return <Log errors={errors} logName="update" />;
 
       // delete errors
       case 4:
-        return <Log errors={errors} />;
+        return <Log errors={errors} logName="delete" />;
 
       default:
         return null;

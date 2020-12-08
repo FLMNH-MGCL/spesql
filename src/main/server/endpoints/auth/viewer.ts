@@ -12,7 +12,8 @@ export default function viewer(req: Request, res: Response) {
       ['id', userId],
       (error, data) => {
         if (error) {
-          res.status(500).send('Server error');
+          console.log(error);
+          res.status(500).send(error);
         } else if (data && data.length === 1) {
           const { name, username, id, role } = data[0];
 

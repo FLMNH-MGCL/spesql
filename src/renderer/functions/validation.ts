@@ -96,6 +96,23 @@ export function validateConditionSelection(table: string) {
   return true;
 }
 
+export function validateName(name: string) {
+  if (!name || !name.length) {
+    return true;
+  }
+
+  let properNounPattern = /(\b[A-Z](?!\s))/g;
+  let namePattern = /^[a-zA-Z]+,? [a-zA-Z]+ ?[a-zA-Z]+$/;
+
+  let nameRegex = new RegExp(namePattern);
+
+  if (name.split(' ').length !== name.match(properNounPattern)?.length) {
+    return 'Capitalize the first letters';
+  }
+
+  return nameRegex.test(name) ? true : 'Invalid name formatting';
+}
+
 export function validateBooleanField(value: string) {
   if (!value || value === '') {
     return true;
@@ -119,7 +136,7 @@ export function validateCatalogNumber(value: string) {
 }
 
 export function validateOtherCatalogNumber(value: string) {
-  let pattern = new RegExp('^MGCL_[0-9]{6,8}');
+  let pattern = new RegExp(/^MGCL_[0-9]{6,8}$/g);
 
   if (!value || value.length < 1) {
     return true;
@@ -174,7 +191,6 @@ export function validateLowerCase(value: string) {
 // export function validateInfraSpecificEpithet(value: string) {}
 
 export function validateIndentificationQualifier(values: string[] | string) {
-  console.log(values);
   if (Array.isArray(values)) {
     if (!values || values.length < 1) {
       return true;
@@ -455,11 +471,11 @@ export function validateFreezer(value: string) {
   }
 
   /* prettier-ignore */
-  const pattern = new RegExp("Kawahara\d\d")
+  const pattern = new RegExp(/Kawahara\d\d/g)
 
   const matches = pattern.test(value);
 
-  return matches ?? 'Invalid: must match Kawahara##';
+  return matches ? true : 'Must match Kawahara##';
 }
 
 export function validateRack(value: string) {
@@ -524,15 +540,47 @@ export function validateListField(list: string) {
   return true;
 }
 
+export function validateNameListField(list: string) {
+  if (!list || list.length < 1) {
+    return true;
+  }
+
+  const splitList = list.split('|');
+
+  // if there are less than 2 items in the split list, that means theres just one,
+  // so if there are more commas that means the user is not formatting the list
+  // correctly
+  if (splitList.length < 2 && (list.match(/,/g) || []).length > 1) {
+    return "It seems you're not using | as the separator";
+  }
+
+  for (let i = 0; i < splitList.length; i++) {
+    const name = splitList[i].trim();
+
+    if (!name || !name.length) {
+      return 'Detected empty name in list';
+    }
+
+    const isValidName = validateName(name);
+
+    // true when valid, string when invalid
+    if (typeof isValidName === 'string') {
+      return isValidName;
+    }
+  }
+
+  return true;
+}
+
 export function validateDateField(date: string) {
-  let pattern = new RegExp('^d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$');
+  let pattern = new RegExp(/^d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/g);
 
   if (!date || date.length < 1) {
     return true;
   }
 
   if (!pattern.test(date)) {
-    return 'Invalid date: yyyy-mm-dd';
+    return 'Invalid date: YYYY-MM-DD';
   }
 
   return true;

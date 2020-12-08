@@ -31,10 +31,11 @@ type TableConfig = {
 export type LoggingError = {
   index?: number; // refers to the line number in the CSV
   code?: string | number;
+  field?: string;
   message: string;
 };
 
-export type InsertError = {
+export type BulkInsertError = {
   index: number;
   errors: { field: string; message: string | boolean }[];
 };
@@ -43,7 +44,8 @@ export type Logs = {
   select: LoggingError[];
   count: LoggingError[];
   update: LoggingError[];
-  insert: InsertError[];
+  bulkInsert: BulkInsertError[];
+  singleInsert: LoggingError[];
   delete: LoggingError[];
   global: LoggingError[];
 };
@@ -62,7 +64,8 @@ const defaultLogs = {
   select: [],
   count: [],
   update: [],
-  insert: [],
+  bulkInsert: [],
+  singleInsert: [],
   delete: [],
   global: [],
 };
@@ -92,7 +95,8 @@ type SpesqlSession = {
   updateSelectLog(newLog: LoggingError[]): void;
   updateCountLog(newLog: LoggingError[]): void;
   updateUpdateLog(newLog: LoggingError[]): void;
-  updateInsertLog(newLog: InsertError[]): void;
+  updateSingleInsertLog(newLog: LoggingError[]): void;
+  updateBulkInsertLog(newLog: BulkInsertError[]): void;
   updateDeleteLog(newLog: LoggingError[]): void;
 
   // actions
@@ -212,12 +216,21 @@ export const useStore = create<SpesqlSession>((set) => ({
       },
     }));
   },
-  updateInsertLog: (newLog: InsertError[]) => {
+  updateSingleInsertLog: (newLog: LoggingError[]) => {
     set((state) => ({
       ...state,
       errors: {
         ...state.errors,
-        insert: newLog,
+        singleInsert: newLog,
+      },
+    }));
+  },
+  updateBulkInsertLog: (newLog: BulkInsertError[]) => {
+    set((state) => ({
+      ...state,
+      errors: {
+        ...state.errors,
+        bulkInsert: newLog,
       },
     }));
   },

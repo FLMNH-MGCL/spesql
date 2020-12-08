@@ -21,7 +21,9 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
     onClose();
   });
 
-  function handleSubmit(values: Values) {}
+  function handleSubmit(values: Values) {
+    console.log(values);
+  }
 
   function handlePagination(direction: 'back' | 'forward') {
     // TODO: add checks?
@@ -52,7 +54,9 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
             <Button.Group>
               <Button onClick={onClose}>Cancel</Button>
               <Button onClick={() => handlePagination('back')}>Back</Button>
-              <Button variant="primary">Confirm</Button>
+              <Button variant="primary" type="submit" form="single-insert">
+                Confirm
+              </Button>
             </Button.Group>
           )}
 
@@ -75,7 +79,11 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
           )}
 
           <div className="flex space-x-2 flex-1">
-            <CreateLogModal initialTab={2} />
+            <CreateLogModal
+              initialTab={2}
+              variant="single"
+              watch="singleInsert"
+            />
             <CreateHelpModal variant="single-insert" />
           </div>
         </Modal.Footer>
