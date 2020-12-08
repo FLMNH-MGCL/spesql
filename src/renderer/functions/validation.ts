@@ -14,6 +14,7 @@ import {
 
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
 import { Specimen } from '../types';
+import { standardizeName } from './util';
 
 // TODO: ADD DOCUMENTATION
 
@@ -105,6 +106,8 @@ export function validateName(name: string) {
   let namePattern = /^[a-zA-Z]+,? [a-zA-Z]+ ?[a-zA-Z]+$/;
 
   let nameRegex = new RegExp(namePattern);
+
+  console.log('name:', name, '\nstored as:', standardizeName(name));
 
   if (name.split(' ').length !== name.match(properNounPattern)?.length) {
     return 'Capitalize the first letters';

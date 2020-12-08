@@ -613,7 +613,7 @@ function Locality({ page }: FormPart) {
             label="georeferencedBy"
             name="georeferencedBy"
             placeholder="Dúrin, Gimli | Tom Bombadil | Arwen Evenstar"
-            register={{ validate: validateListField }} // TODO: own validator?
+            register={{ validate: validateNameListField }}
             fullWidth
           />
         </Form.Group>
