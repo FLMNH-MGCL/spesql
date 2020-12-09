@@ -112,7 +112,10 @@ export default function () {
       return display;
     } else if (filterByFields === 'all') {
       return display.filter((specimen) =>
-        JSON.stringify(specimen).toLowerCase().includes(filter.toLowerCase())
+        Object.values(specimen)
+          .toString()
+          .toLowerCase()
+          .includes(filter.toLowerCase())
       );
     } else {
       return display.filter((specimen) => {

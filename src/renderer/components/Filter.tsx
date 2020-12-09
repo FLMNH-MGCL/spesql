@@ -43,7 +43,7 @@ export function FilterSearch({ disabled }: { disabled?: boolean }) {
       value={filter}
       onChange={handleChange}
       disabled={disabled}
-      placeholder="Search"
+      placeholder="Filter"
     />
   );
 }
