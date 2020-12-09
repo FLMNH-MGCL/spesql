@@ -3,7 +3,7 @@ import { Table, Column, AutoSizer } from 'react-virtualized';
 import useWindowDimensions from './utils/useWindowDimensions';
 import { SortableContainer } from 'react-sortable-hoc';
 import _ from 'lodash';
-import { FilterToggle, FilterSearch } from './Filter';
+import { FilterSearch } from './Filter';
 import ClearQueryButton from './buttons/ClearQueryButton';
 import RefreshQueryButton from './buttons/RefreshQueryButton';
 import CreateHelpModal from './modals/CreateHelpModal';
@@ -12,13 +12,14 @@ import { useStore } from '../../stores';
 import shallow from 'zustand/shallow';
 import Spinner from './ui/Spinner';
 import CreateLogModal from './modals/CreateLogModal';
-import { Specimen } from '../types';
+import { Specimen, SpecimenFields } from '../types';
 import Heading from './ui/Heading';
 import Text from './ui/Text';
 import serverImage from '../assets/svg/data_processing_two.svg';
 import ShowQueryButton from './buttons/ShowQueryButton';
 
 import 'react-virtualized/styles.css';
+import CreateFilterFieldModal from './modals/CreateFilterFieldModal';
 
 const SortableTable = SortableContainer(Table);
 
@@ -52,7 +53,7 @@ function TableFooter({ disableInteractables, count }: FooterProps) {
   return (
     <div className="h-16 bg-gray-50 flex items-center justify-between px-4">
       <div className="flex space-x-2">
-        <FilterToggle disabled={disableInteractables} />
+        <CreateFilterFieldModal disabled={disableInteractables} />
         <ClearQueryButton disabled={disableInteractables} />
         <FilterSearch disabled={disableInteractables} />
         <RefreshQueryButton disabled={disableInteractables} />
@@ -84,6 +85,8 @@ export default function () {
     selectedSpecimen,
     setSelectedSpecimen,
     loading,
+    filter,
+    filterByFields,
   } = useStore(
     (state) => ({
       headers: state.tableConfig.headers,
@@ -94,15 +97,51 @@ export default function () {
       selectedSpecimen: state.selectedSpecimen,
       setSelectedSpecimen: state.setSelectedSpecimen,
       loading: state.loading,
+      filter: state.queryData.filter,
+      filterByFields: state.queryData.filterByFields,
     }),
     shallow
   );
 
-  let display = sortingDirection
-    ? _.orderBy(data, [sortingDirection.column], [sortingDirection.direction])
-    : data;
+  let display = getDisplay();
 
   const toggleLoading = useStore((state) => state.toggleLoading);
+
+  function filterDisplay(display: Partial<SpecimenFields>[]) {
+    if (filter === '') {
+      return display;
+    } else if (filterByFields === 'all') {
+      return display.filter((specimen) =>
+        JSON.stringify(specimen).toLowerCase().includes(filter.toLowerCase())
+      );
+    } else {
+      return display.filter((specimen) => {
+        let compounded = true;
+
+        filterByFields.forEach((field) => {
+          if (
+            specimen[field] &&
+            !specimen[field]
+              ?.toString()
+              .toLowerCase()
+              .includes(filter.toLowerCase())
+          ) {
+            compounded = false;
+          }
+        });
+
+        return compounded;
+      });
+    }
+  }
+
+  function getDisplay() {
+    let display = sortingDirection
+      ? _.orderBy(data, [sortingDirection.column], [sortingDirection.direction])
+      : data;
+
+    return filterDisplay(display);
+  }
 
   function handleRowClick({ rowData }: any) {
     if (selectedSpecimen?.id === rowData?.id) {
@@ -261,7 +300,7 @@ export default function () {
         </AutoSizer>
       </div>
       <TableFooter
-        disableInteractables={!display || !display.length}
+        disableInteractables={!data || !data.length}
         count={display.length}
       />
     </React.Fragment>

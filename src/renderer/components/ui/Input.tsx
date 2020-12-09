@@ -27,7 +27,7 @@ export default forwardRef<HTMLInputElement, Props>(
         )}
       >
         {label}
-        <div className="mt-1 relative">
+        <div className={clsx('relative', label && 'mt-1')}>
           {icon && (
             <div
               className={clsx(

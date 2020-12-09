@@ -8,8 +8,9 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import useKeyboard from '../utils/useKeyboard';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PropsOf } from '../../types';
+import { isArray } from 'lodash';
 
-type Props = {
+type SinglePickerProps = {
   label?: string;
   name?: string;
   futureOnly?: boolean;
@@ -22,7 +23,12 @@ type Props = {
 
 // TODO: handle initial date for BOTH variants
 
-function SinglePicker({ label, fullWidth, initialDate, ...props }: Props) {
+function SinglePicker({
+  label,
+  fullWidth,
+  initialDate,
+  ...props
+}: SinglePickerProps) {
   const [value, setValue] = useState<Date>();
   const [dateString, setDateString] = useState(getDateString());
 
@@ -157,7 +163,16 @@ function SinglePicker({ label, fullWidth, initialDate, ...props }: Props) {
 
 type Range = { from?: Date; to?: Date };
 
-function RangedPicker({ label, fullWidth, ...props }: Props) {
+type RangedPickerProps = Omit<SinglePickerProps, 'initalDate'> & {
+  initialDate?: Range;
+};
+
+function RangedPicker({
+  label,
+  fullWidth,
+  initialDate,
+  ...props
+}: RangedPickerProps) {
   const [range, setRange] = useState<Range>(getInitialState());
   const [rangeString, setRangeString] = useState(getDateString());
 
@@ -172,6 +187,28 @@ function RangedPicker({ label, fullWidth, ...props }: Props) {
       to: undefined,
     };
   }
+
+  function setInitialState() {
+    if (initialDate) {
+      if (!isArray(initialDate)) {
+        throw new Error(
+          'Invalid date passed into Datepicker (must be array with two Dates)'
+        );
+      } else {
+        try {
+          setRange(initialDate);
+        } catch {
+          throw new Error(
+            `Attempted to parse invalid date in DatePicker: ${initialDate}`
+          );
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    setInitialState();
+  }, []);
 
   function getDateString() {
     if (!to && !from) {
@@ -286,8 +323,11 @@ function RangedPicker({ label, fullWidth, ...props }: Props) {
   );
 }
 
+type Props = SinglePickerProps | RangedPickerProps;
+
 export default function Datepicker({ ranged, ...props }: Props) {
   if (ranged) {
+    // @ts-ignore: I know there are type issues with initial date
     return <RangedPicker {...props} />;
   } else {
     return <SinglePicker {...props} />;

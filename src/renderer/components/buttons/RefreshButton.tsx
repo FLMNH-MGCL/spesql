@@ -1,9 +1,14 @@
 import React from 'react';
 import Button from '../ui/Button';
 
-export default function RefreshButton() {
+type Props = {
+  disabled?: boolean;
+  onClick?(): void;
+};
+
+export default function RefreshButton({ disabled, onClick }: Props) {
   return (
-    <Button variant="outline" rounded>
+    <Button variant="outline" rounded disabled={disabled} onClick={onClick}>
       <svg
         className="w-5 h-5"
         fill="none"

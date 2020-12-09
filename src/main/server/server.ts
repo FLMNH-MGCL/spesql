@@ -40,6 +40,7 @@ import { queriablesStats } from './endpoints/sql/utils/queriablesStats';
 import getTableLogs from './endpoints/sql/admin/getTableLogs';
 import logUpdate from './endpoints/sql/utils/logUpdate';
 import logDelete from './endpoints/sql/utils/logDelete';
+import { sendStatusToWindow } from '..';
 // import { win } from '..';
 
 require('dotenv').config();
@@ -97,6 +98,10 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
         console.log(err);
         // tell react what's up
         // win?.webContents.send('NO CONNECTION');
+        sendStatusToWindow({
+          type: 'error',
+          message: 'Failed to connected to the Database. Please check the VPN',
+        });
       }
     });
   }

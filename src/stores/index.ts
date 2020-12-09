@@ -10,15 +10,21 @@ type User = {
 
 type QueryConfig = {
   queryString: string;
+  filter: string;
+  filterByFields: (keyof Specimen)[] | 'all';
   table: string;
   data: Specimen[];
   setData(data: Specimen[]): void;
   setTable(table: string): void;
   setCurrentQuery(query: string): void;
+  setFilter(filter: string): void;
+  setFilterByFields(fields: (keyof Specimen)[] | 'all'): void;
 };
 
 const defaultQueryConfig = {
   queryString: '',
+  filter: '',
+  filterByFields: 'all' as (keyof Specimen)[] | 'all',
   data: [],
   table: '',
 };
@@ -158,6 +164,16 @@ export const useStore = create<SpesqlSession>((set) => ({
       set((state) => ({
         ...state,
         queryData: { ...state.queryData, queryString: query },
+      })),
+    setFilter: (filter: string) =>
+      set((state) => ({
+        ...state,
+        queryData: { ...state.queryData, filter },
+      })),
+    setFilterByFields: (fields: (keyof Specimen)[] | 'all') =>
+      set((state) => ({
+        ...state,
+        queryData: { ...state.queryData, filterByFields: fields },
       })),
   },
   tableConfig: {

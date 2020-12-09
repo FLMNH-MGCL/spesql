@@ -92,7 +92,7 @@ export type LoggingInformation = {
 };
 
 // UPDATING
-function sendStatusToWindow(information: LoggingInformation) {
+export function sendStatusToWindow(information: LoggingInformation) {
   if (win) {
     win.webContents.send('message', information);
   }

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { isArray } from 'lodash';
+import React, { useEffect, useState } from 'react';
 import {
   DragDropContext,
   Droppable,
@@ -9,35 +10,34 @@ import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 import DroppableList from '../DroppableList';
 import { headerOptions } from '../utils/constants';
-import { useNotify } from '../utils/context';
 
-// FIXME: figure out droppable warnings!!
-// ex: Invariant failed: Draggable[id: recordEnteredBy]: Unable to find drag handle
-// they are not breaking functionality, but I want to figure out the cause
-
-// TODO: add reset?
-export default function HeaderConfigurationForm() {
-  const { tableConfig, updateTableHeaders } = useStore(
+export default function FilterFieldForm() {
+  const { filterByFields, setFilterByFields } = useStore(
     (state) => ({
-      tableConfig: state.tableConfig,
-      updateTableHeaders: state.tableConfig.updateTableHeaders,
+      filterByFields: state.queryData.filterByFields,
+      setFilterByFields: state.queryData.setFilterByFields,
     }),
     shallow
   );
 
-  const { notify } = useNotify();
+  const [filters, setAvailableFilters] = useState<string[]>(getFilters());
 
-  const [availableHeaders, setAvailableHeaders] = useState(
-    headerOptions.filter((header) => !tableConfig.headers.includes(header))
-  );
+  // console.log('AVAILABLE:', filters);
+  // console.log('USING:', fieldsAsArray());
 
-  function reorder(list: string[], source: number, destination: number) {
-    const result = Array.from(list);
-    const [removed] = result.splice(source, 1);
-    result.splice(destination, 0, removed);
-
-    return result;
+  function getFilters() {
+    if (filterByFields === 'all') {
+      return headerOptions;
+    } else {
+      return headerOptions.filter(
+        (header) => !filterByFields.includes(header as any)
+      );
+    }
   }
+
+  useEffect(() => {
+    setAvailableFilters(getFilters());
+  }, [filterByFields]);
 
   /**
    * Moves an item from one list to another list.
@@ -61,6 +61,22 @@ export default function HeaderConfigurationForm() {
     return result;
   }
 
+  function reorder(list: string[], source: number, destination: number) {
+    const result = Array.from(list);
+    const [removed] = result.splice(source, 1);
+    result.splice(destination, 0, removed);
+
+    return result;
+  }
+
+  function fieldsAsArray() {
+    if (isArray(filterByFields)) {
+      return filterByFields;
+    } else {
+      return [];
+    }
+  }
+
   function handleOnDragEnd(result: DropResult) {
     if (!result.destination) {
       return;
@@ -72,50 +88,32 @@ export default function HeaderConfigurationForm() {
       console.log('moving WITHIN lists...');
 
       const items = reorder(
-        source.droppableId === 'selectedHeaders'
-          ? tableConfig.headers
-          : availableHeaders,
+        source.droppableId === 'selectedHeaders' ? fieldsAsArray() : filters,
         source.index,
         destination.index
       );
 
       if (source.droppableId === 'selectedHeaders') {
-        updateTableHeaders(items);
-      } else {
-        setAvailableHeaders(items);
+        setFilterByFields(items as any);
       }
     } else {
       console.log('moving ACROSS lists...');
       const result = move(
-        source.droppableId === 'selectedHeaders'
-          ? tableConfig.headers
-          : availableHeaders,
+        source.droppableId === 'selectedHeaders' ? fieldsAsArray() : filters,
         destination.droppableId === 'selectedHeaders'
-          ? tableConfig.headers
-          : availableHeaders,
+          ? fieldsAsArray()
+          : filters,
         source,
         destination
       );
 
-      if (result.selectedHeaders.length > 8) {
-        notify({
-          title: 'Usage Error',
-          message: 'You may only select 8 headers for the table',
-          level: 'error',
-        });
-      } else {
-        updateTableHeaders(result.selectedHeaders);
-        setAvailableHeaders(result.availableHeaders);
-      }
-
-      // console.log('selected items update:', result.selectedHeaders);
-      // console.log('available items update:', result.availableHeaders);
+      setFilterByFields(result.selectedHeaders);
     }
   }
 
   return (
     <div className="flex justify-between">
-      {/* active items */}
+      {/* selected items */}
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="selectedHeaders">
           {(provided, snapshot) => (
@@ -123,24 +121,23 @@ export default function HeaderConfigurationForm() {
               heading="Selected"
               snapshot={snapshot}
               provided={provided}
-              items={tableConfig.headers}
+              items={fieldsAsArray()}
             />
           )}
         </Droppable>
 
+        {/* available items */}
         <Droppable droppableId="availableHeaders">
           {(provided, snapshot) => (
             <DroppableList
               heading="Available"
               snapshot={snapshot}
               provided={provided}
-              items={availableHeaders}
+              items={filters}
             />
           )}
         </Droppable>
       </DragDropContext>
-
-      {/* available items */}
     </div>
   );
 }

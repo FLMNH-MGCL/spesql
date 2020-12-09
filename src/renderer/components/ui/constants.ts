@@ -110,6 +110,12 @@ export const BUTTONS = {
       'text-red-700 hover:text-red-500 focus:border-red-300 focus:shadow-outline',
     disabled: 'bg-gray-100',
   },
+  activated: {
+    base: 'bg-white border-green-300',
+    active:
+      'bg-white text-green-700 hover:text-green-500 focus:border-blue-300 focus:shadow-outline',
+    disabled: 'bg-gray-100',
+  },
 };
 
 export const BADGE_COLORS = {

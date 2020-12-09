@@ -20,6 +20,7 @@ import crosswalk from './assets/sounds/Crosswalk.mp3';
 import { useStore } from '../stores';
 import Documentation from './pages/Documentation';
 import Notification from './components/ui/Notification';
+import { ipcRenderer } from 'electron';
 
 function HomeStack() {
   return (
@@ -64,6 +65,16 @@ export default function App() {
       // autoDismiss: 1000, DEBUG
     });
   }
+
+  ipcRenderer.on('message', function (_event, information) {
+    const { type, message } = information;
+
+    notify({
+      title: 'System Notification',
+      message: message,
+      level: type === 'logging' ? 'warning' : 'error',
+    });
+  });
 
   return (
     <MemoryRouter initialEntries={['/home']}>
