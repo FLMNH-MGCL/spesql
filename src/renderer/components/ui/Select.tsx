@@ -249,8 +249,8 @@ export default forwardRef<HTMLSelectElement, Props>(
 
         items.forEach((item) => {
           if (item) {
-            setDisplay([...display, item]);
-            setSelected([...selected, item.value]);
+            setDisplay(display ? [...display, item] : [item]);
+            setSelected(selected ? [...selected, item.value] : [item.value]);
           }
         });
       } else if (
@@ -265,8 +265,8 @@ export default forwardRef<HTMLSelectElement, Props>(
 
         items.forEach((item) => {
           if (item) {
-            setDisplay([...display, item]);
-            setSelected([...selected, item.value]);
+            setDisplay(display ? [...display, item] : [item]);
+            setSelected(selected ? [...selected, item.value] : [item.value]);
           }
         });
       } else if (props.defaultValue !== undefined) {
@@ -278,8 +278,6 @@ export default forwardRef<HTMLSelectElement, Props>(
         }
       } else if (props.value !== undefined) {
         const item = options.find((el) => el.value === props.value);
-
-        // console.log(item);
 
         if (item) {
           setDisplay(item);

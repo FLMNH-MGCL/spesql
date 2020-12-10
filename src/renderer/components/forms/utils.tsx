@@ -2,20 +2,30 @@ import React from 'react';
 import axios from 'axios';
 import { BACKEND_URL } from '../../types';
 import {
+  validateBooleanField,
+  validateBox,
   validateCatalogNumber,
   validateCollectedDay,
   validateCollectedMonth,
   validateCollectedYear,
+  validateCountry,
   validateDateField,
   validateDisposition,
+  validateElevation,
+  validateFreezer,
   validateGeodeticDatum,
   validateIndentificationQualifier,
+  validateLatitude,
   validateLifeStage,
   validateListField,
+  validateLongitude,
   validateLowerCase,
+  validateName,
+  validateNameListField,
   validateOtherCatalogNumber,
   validatePreparations,
   validateProperNoun,
+  validateRack,
   validateSamplingProtocol,
   validateSex,
   validateTubeSize,
@@ -23,6 +33,7 @@ import {
 import Form from '../ui/Form';
 import {
   BooleanField,
+  countryControl,
   dispositionControl,
   geodeticDatumControl,
   identificationQualifierControl,
@@ -52,13 +63,44 @@ export async function fetchTables(setTables: any) {
   return undefined;
 }
 
-export function getFormElementForField(key: string, currentValue: any) {
-  // console.log(key, currentValue);
+export function fixNull(value: string | number | null) {
+  if (value === null) {
+    return '';
+  } else return value;
+}
 
+export function stringListToArray(
+  value?: string
+): string[] | string | undefined {
+  console.log(value);
+  if (!value || !value.length) {
+    return [];
+  }
+
+  let valuesOnly = value.match(/[^|]+/gm);
+
+  if (valuesOnly) {
+    valuesOnly = valuesOnly
+      .filter((match) => match.trim() !== '')
+      .map((match) => match.trim());
+    console.log(valuesOnly);
+
+    return valuesOnly;
+  } else {
+    return value;
+  }
+}
+
+export function getFormElementForField(key: string, currentValue: any) {
   // TODO: complete missing fields
-  // TODO: convert some fields to appropriate form element
+  // TODO: null values
+
+  // if (currentValue === null) {
+  //   console.log(key);
+  // }
+
   const formElementForField = {
-    catalogNumber: (
+    catalogNumber: () => (
       <Form.Input
         slim
         name="catalogNumber"
@@ -66,7 +108,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    otherCatalogNumber: (
+    otherCatalogNumber: () => (
       <Form.Input
         slim
         name="otherCatalogNumber"
@@ -74,7 +116,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    recordNumber: (
+    recordNumber: () => (
       <Form.Input
         slim
         name="recordNumber"
@@ -82,7 +124,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    order_: (
+    order_: () => (
       <Form.Input
         slim
         name="order_"
@@ -90,7 +132,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    superfamily: (
+    superfamily: () => (
       <Form.Input
         slim
         name="superfamily"
@@ -98,7 +140,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    family: (
+    family: () => (
       <Form.Input
         slim
         name="family"
@@ -106,7 +148,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    subfamily: (
+    subfamily: () => (
       <Form.Input
         slim
         name="subfamily"
@@ -114,7 +156,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    tribe: (
+    tribe: () => (
       <Form.Input
         slim
         name="tribe"
@@ -122,7 +164,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    genus: (
+    genus: () => (
       <Form.Input
         slim
         name="genus"
@@ -130,7 +172,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    subgenus: (
+    subgenus: () => (
       <Form.Input
         slim
         name="subgenus"
@@ -138,7 +180,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    specificEpithet: (
+    specificEpithet: () => (
       <Form.Input
         slim
         name="specificEpithet"
@@ -146,7 +188,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    infraspecificEpithet: (
+    infraspecificEpithet: () => (
       <Form.Input
         slim
         name="infraspecificEpithet"
@@ -154,7 +196,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    identificationQualifier: (
+    identificationQualifier: () => (
       <Form.Select
         slim
         name="identificationQualifier"
@@ -163,7 +205,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    recordedBy: (
+    recordedBy: () => (
       <Form.Input
         slim
         name="recordedBy"
@@ -171,7 +213,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    otherCollectors: (
+    otherCollectors: () => (
       <Form.Input
         slim
         name="otherCollectors"
@@ -179,7 +221,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    identifiedBy: (
+    identifiedBy: () => (
       <Form.Input
         slim
         name="identifiedBy"
@@ -188,7 +230,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       />
     ),
     // TODO: make a date input
-    dateIdentified: (
+    dateIdentified: () => (
       <Datepicker
         slim
         name="dateIdentified"
@@ -196,10 +238,10 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    verbatimDate: (
+    verbatimDate: () => (
       <Form.Input slim name="verbatimDate" defaultValue={currentValue} />
     ),
-    collectedYear: (
+    collectedYear: () => (
       <Form.Input
         slim
         name="collectedYear"
@@ -207,7 +249,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    collectedMonth: (
+    collectedMonth: () => (
       <Form.Input
         slim
         name="collectedMonth"
@@ -215,7 +257,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    collectedDay: (
+    collectedDay: () => (
       <Form.Input
         slim
         name="collectedDay"
@@ -223,7 +265,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    dateEntered: (
+    dateEntered: () => (
       <Datepicker
         slim
         name="dateEntered"
@@ -231,7 +273,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    sex: (
+    sex: () => (
       <Form.Select
         slim
         name="sex"
@@ -240,7 +282,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    lifeStage: (
+    lifeStage: () => (
       <Form.Select
         slim
         name="lifeStage"
@@ -249,7 +291,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    habitat: (
+    habitat: () => (
       <Form.Input
         slim
         name="habitat"
@@ -258,7 +300,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       />
     ),
     // TODO: make form area
-    occurrenceRemarks: (
+    occurrenceRemarks: () => (
       <Form.Input
         slim
         name="occurrenceRemarks"
@@ -267,7 +309,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       />
     ),
     // TODO: make form area
-    molecularOccurrenceRemarks: (
+    molecularOccurrenceRemarks: () => (
       <Form.Input
         slim
         name="molecularOccurrenceRemarks"
@@ -275,20 +317,41 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    samplingProtocol: (
+    samplingProtocol: () => (
       <Form.Select
         slim
         name="samplingProtocol"
         register={{ validate: validateSamplingProtocol }}
         options={samplingProtocolControl}
-        defaultValue={currentValue}
+        defaultValue={stringListToArray(currentValue)}
         multiple
       />
     ),
-    country: null,
-    stateProvince: null,
-    county: null,
-    municipality: (
+    country: () => (
+      <Form.Select
+        slim
+        name="country"
+        register={{ validate: validateCountry }}
+        options={countryControl}
+        defaultValue={currentValue}
+      />
+    ),
+    stateProvince: () => (
+      <Form.Input
+        slim
+        name="stateProvince"
+        defaultValue={currentValue}
+        register={{ validate: validateProperNoun }}
+      />
+    ),
+    county: () => (
+      <Form.Input
+        slim
+        name="county"
+        register={{ validate: validateProperNoun }}
+      />
+    ),
+    municipality: () => (
       <Form.Input
         slim
         name="municipality"
@@ -296,7 +359,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    locality: (
+    locality: () => (
       <Form.Input
         slim
         name="locality"
@@ -304,10 +367,31 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    elevationInMeters: null, // TODO:
-    decimalLatitude: null,
-    decimalLongitude: null,
-    geodeticDatum: (
+    elevationInMeters: () => (
+      <Form.Input
+        slim
+        name="elevationInMeters"
+        register={{ validate: validateElevation }}
+        defaultValue={currentValue}
+      />
+    ), // TODO:
+    decimalLatitude: () => (
+      <Form.Input
+        slim
+        name="decimalLatitude"
+        register={{ validate: validateLatitude }}
+        defaultValue={currentValue}
+      />
+    ),
+    decimalLongitude: () => (
+      <Form.Input
+        slim
+        name="decimalLongitude"
+        register={{ validate: validateLongitude }}
+        defaultValue={currentValue}
+      />
+    ),
+    geodeticDatum: () => (
       <Form.Select
         slim
         name="geodeticDatum"
@@ -316,8 +400,15 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    coordinateUncertainty: null,
-    verbatimLatitude: (
+    coordinateUncertainty: () => (
+      <Form.Input
+        slim
+        name="coordinateUncertainty"
+        register={{ validate: validateElevation }} // TODO: own validator?
+        defaultValue={currentValue}
+      />
+    ),
+    verbatimLatitude: () => (
       <Form.Input
         slim
         name="verbatimLatitude"
@@ -325,7 +416,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    verbatimLongitude: (
+    verbatimLongitude: () => (
       <Form.Input
         slim
         name="verbatimLongitude"
@@ -333,8 +424,15 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    georeferencedBy: null,
-    disposition: (
+    georeferencedBy: () => (
+      <Form.Input
+        slim
+        name="georeferencedBy"
+        register={{ validate: validateNameListField }}
+        defaultValue={stringListToArray(currentValue)}
+      />
+    ),
+    disposition: () => (
       <Form.Select
         slim
         name="disposition"
@@ -343,10 +441,32 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    isLoaned: null,
-    loanInstitution: null,
-    loaneeName: null,
-    loanDate: (
+    isLoaned: () => (
+      <Form.Select
+        slim
+        name="isLoaned"
+        defaultValue={currentValue}
+        register={{ validate: validateBooleanField }}
+        options={BooleanField}
+      />
+    ),
+    loanInstitution: () => (
+      <Form.Input
+        slim
+        name="loanInstitution"
+        register={{ validate: validateProperNoun }}
+        defaultValue={currentValue}
+      />
+    ),
+    loaneeName: () => (
+      <Form.Input
+        slim
+        name="loaneeName"
+        register={{ validate: validateName }}
+        defaultValue={currentValue}
+      />
+    ),
+    loanDate: () => (
       <Datepicker
         slim
         name="loanDate"
@@ -354,7 +474,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    loanReturnDate: (
+    loanReturnDate: () => (
       <Datepicker
         slim
         name="loanReturnDate"
@@ -362,7 +482,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    preparations: (
+    preparations: () => (
       <Form.Select
         slim
         name="preparations"
@@ -371,10 +491,31 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    freezer: null,
-    rack: null,
-    box: null,
-    tubeSize: (
+    freezer: () => (
+      <Form.Input
+        slim
+        name="freezer"
+        register={{ validate: validateFreezer }}
+        defaultValue={currentValue}
+      />
+    ),
+    rack: () => (
+      <Form.Input
+        slim
+        name="rack"
+        register={{ validate: validateRack }}
+        defaultValue={currentValue}
+      />
+    ),
+    box: () => (
+      <Form.Input
+        slim
+        name="box"
+        register={{ validate: validateBox }}
+        defaultValue={currentValue}
+      />
+    ),
+    tubeSize: () => (
       <Form.Select
         slim
         name="tubeSize"
@@ -383,35 +524,47 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
-    associatedSequences: null,
-    associatedReferences: null,
-    withholdData: (
+    associatedSequences: () => (
+      <Form.Area name="associatedSequences" defaultValue={currentValue} />
+    ),
+    associatedReferences: () => (
+      <Form.Area name="associatedReferences" defaultValue={currentValue} />
+    ),
+    withholdData: () => (
       <Form.Select
         slim
         name="withholdData"
-        // register={{ validate: validateYe }}
+        register={{ validate: validateBooleanField }}
         options={BooleanField}
         defaultValue={currentValue}
       />
     ),
-    reared: (
+    reared: () => (
       <Form.Select
         slim
         name="reared"
-        // register={{ validate: validateYe }}
+        register={{ validate: validateBooleanField }}
         options={BooleanField}
         defaultValue={currentValue}
       />
     ),
-    recordEnteredBy: null,
-    modifiedInfo: null,
-    fieldNotes: null,
+    recordEnteredBy: () => (
+      <Form.Input
+        name="recordEnteredBy"
+        value={fixNull(currentValue)}
+        disabled
+      />
+    ),
+    modifiedInfo: () => null,
+    fieldNotes: () => (
+      <Form.Area name="fieldNotes" defaultValue={currentValue} />
+    ),
   };
 
   // @ts-ignore
-  let element = formElementForField[key];
+  let fn = formElementForField[key];
 
-  // console.log(element);
-
-  return element ?? null;
+  return fn ? fn() : null;
 }
+
+// SELECT * FROM molecularLab WHERE samplingProtocol = 'LightLED|LightUV'

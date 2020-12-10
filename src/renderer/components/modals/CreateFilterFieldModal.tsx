@@ -39,7 +39,7 @@ export default function CreateFilterFieldModal({ disabled }: Props) {
         </Modal.Content>
         <Modal.Footer>
           <Button.Group>
-            <RefreshButton onClick={reset} />
+            <RefreshButton onClick={reset} disabled={!hasFiltered} />
             <Button onClick={off}>Close</Button>
           </Button.Group>
         </Modal.Footer>

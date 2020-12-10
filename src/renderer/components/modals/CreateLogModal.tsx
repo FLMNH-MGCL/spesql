@@ -30,7 +30,9 @@ function Log({ errors, logName }: LogProps) {
       return <p>No errors exist in the log</p>;
 
     return errors[logName].map((error: LoggingError, i: number) => {
-      const { index, code, field, message } = error;
+      const { code, field, message } = error;
+
+      // TODO: maybe use clsx for this, might be cleaner solution
 
       const leftSide =
         field && code
@@ -76,7 +78,7 @@ function Log({ errors, logName }: LogProps) {
         </Button>
         <CopyButton
           disabled={disabled}
-          value={JSON.stringify(errors?.bulkInsert, null, 2) ?? ''}
+          value={(errors && JSON.stringify(errors[logName], null, 2)) ?? ''}
         />
       </div>
     </div>
