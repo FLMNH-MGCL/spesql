@@ -97,6 +97,7 @@ export function validateConditionSelection(table: string) {
   return true;
 }
 
+// TODO: change formatting to FIRST MIDDLE LAST
 export function validateName(name: string) {
   if (!name || !name.length) {
     return true;
@@ -367,7 +368,7 @@ export function validateCountry(value: string) {
 }
 
 // TODO: other locality data
-
+// TODO: change to multiple
 export function validatePreparations(value: string) {
   if (!value) {
     return true;
@@ -456,6 +457,7 @@ export function validateGeodeticDatum(value: string) {
   return true;
 }
 
+// TODO: change to multiple
 export function validateDisposition(value: string) {
   if (!value || !value.length) {
     return true;
@@ -477,6 +479,8 @@ export function validateFreezer(value: string) {
   const pattern = new RegExp(/Kawahara\d\d/g)
 
   const matches = pattern.test(value);
+
+  // TODO: GRR pattern
 
   return matches ? true : 'Must match Kawahara##';
 }

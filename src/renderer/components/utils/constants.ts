@@ -1,3 +1,4 @@
+import { GoogleChartType } from '../../types';
 import { countries } from '../../assets/countries';
 import { SelectOption } from '../ui/Select';
 
@@ -108,10 +109,10 @@ export const sexControl = [
 
 export const preparationsControl = [
   { label: 'Wing Voucher', value: 'Wing Voucher' },
-  { label: 'Molecular Collection', value: 'Molecular Collection' },
+  { label: 'Molecular Collection', value: 'Molecular Collection' }, //
   { label: 'Pinned Collection', value: 'Pinned Collection' },
   { label: 'Larval Collection', value: 'Larval Collection' },
-  { label: 'Genetic Resources', value: 'Genetic Resources' },
+  { label: 'Genetic Resources', value: 'Genetic Resources' }, // cryo
 ];
 
 export const tubeSizeControl = [
@@ -143,10 +144,29 @@ export const samplingProtocolControl = [
 ];
 
 export const dispositionControl = [
-  { label: 'Present', value: 'Present' },
-  { label: 'Missing', value: 'Missing' },
-  { label: 'Sample Used Up', value: 'Sample Used Up' },
-  { label: 'On Loan', value: 'On Loan' },
+  { label: 'Voucher Present', value: 'Voucher Present' },
+  { label: 'Molecular Present', value: 'Molecular Present' },
+  { label: 'Pinned Present', value: 'Pinned Present' },
+  { label: 'Larval Present', value: 'Larval Present' },
+  { label: 'GRR Present', value: 'GRR Present' },
+
+  { label: 'Voucher Missing', value: 'Voucher Missing' },
+  { label: 'Molecular Missing', value: 'Molecular Missing' },
+  { label: 'Pinned Missing', value: 'Pinned Missing' },
+  { label: 'Larval Missing', value: 'Larval Missing' },
+  { label: 'GRR Missing', value: 'GRR Missing' },
+
+  { label: 'Voucher Used Up', value: 'Voucher Used Up' },
+  { label: 'Molecular Used Up', value: 'Molecular Used Up' },
+  // { label: 'Pinned Used Up', value: 'Pinned Used Up' },
+  // { label: 'Larval Used Up', value: 'Larval Used Up' },
+  { label: 'GRR Used Up', value: 'GRR Used Up' },
+
+  { label: 'Voucher On Loan', value: 'Voucher On Loan' },
+  { label: 'Molecular On Loan', value: 'Molecular On Loan' },
+  { label: 'Pinned On Loan', value: 'Pinned On Loan' },
+  { label: 'Larval On Loan', value: 'Larval On Loan' },
+  { label: 'GRR On Loan', value: 'GRR On Loan' },
 ];
 
 export const geodeticDatumControl = [
@@ -182,3 +202,44 @@ export const dateMonths: SelectOption[] = Array.from(
 export const countryControl = countries.map((country) => {
   return { label: country.name, value: country.name };
 });
+
+export const charts = [
+  { label: 'AnnotationChart', value: 'AnnotationChart' },
+  { label: 'AreaChart', value: 'AreaChart' },
+  { label: 'BarChart', value: 'BarChart' },
+  { label: 'BubbleChart', value: 'BubbleChart' },
+  { label: 'Calendar', value: 'Calendar' },
+  { label: 'CandlestickChart', value: 'CandlestickChart' },
+  { label: 'ColumnChart', value: 'ColumnChart' },
+  { label: 'ComboChart', value: 'ComboChart' },
+  { label: 'DiffChart', value: 'DiffChart' },
+  { label: 'DonutChart', value: 'DonutChart' },
+  { label: 'Gantt', value: 'Gantt' },
+  { label: 'Gauge', value: 'Gauge' },
+  { label: 'GeoChart', value: 'GeoChart' },
+  { label: 'Histogram', value: 'Histogram' },
+  { label: 'LineChart', value: 'LineChart' },
+  { label: 'Line', value: 'Line' },
+  { label: 'Bar', value: 'Bar' },
+  { label: 'Map', value: 'Map' },
+  { label: 'OrgChart', value: 'OrgChart' },
+  { label: 'PieChart', value: 'PieChart' },
+  { label: 'Sankey', value: 'Sankey' },
+  { label: 'ScatterChart', value: 'ScatterChart' },
+  { label: 'SteppedAreaChart', value: 'SteppedAreaChart' },
+  { label: 'Table', value: 'Table' },
+  { label: 'Timeline', value: 'Timeline' },
+  { label: 'TreeMap', value: 'TreeMap' },
+  { label: 'WaterfallChart', value: 'WaterfallChart' },
+  { label: 'WordTree', value: 'WordTree' },
+];
+
+export const aggregates = [
+  { label: 'AVG', value: 'AVG' },
+  { label: 'COUNT', value: 'COUNT' },
+  { label: 'MAX', value: 'MAX' },
+  { label: 'MIN', value: 'MIN' },
+  { label: 'STD', value: 'STD' },
+  { label: 'STDEV', value: 'STDEV' },
+  { label: 'VARIANCE', value: 'VARIANCE' },
+];

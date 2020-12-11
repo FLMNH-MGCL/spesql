@@ -111,7 +111,7 @@ export type NotificationContent = {
 };
 
 // TODO: see above @isSpecimen
-const SpecimenValidator: Specimen = {
+export const SpecimenValidator: Specimen = {
   id: 0,
   catalogNumber: '', // MGCL-123456
   otherCatalogNumber: '', // LEP123456
@@ -179,3 +179,37 @@ export type TableStats = {
   rows: number;
   size: number;
 };
+
+export type GoogleChartType =
+  | 'AnnotationChart'
+  | 'AreaChart'
+  | 'BarChart'
+  | 'BubbleChart'
+  | 'Calendar'
+  | 'CandlestickChart'
+  | 'ColumnChart'
+  | 'ComboChart'
+  | 'DiffChart'
+  | 'DonutChart'
+  | 'Gantt'
+  | 'Gauge'
+  | 'GeoChart'
+  | 'Histogram'
+  | 'LineChart'
+  | 'Line'
+  | 'Bar'
+  | 'Map'
+  | 'OrgChart'
+  | 'PieChart'
+  | 'Sankey'
+  | 'ScatterChart'
+  | 'SteppedAreaChart'
+  | 'Table'
+  | 'Timeline'
+  | 'TreeMap'
+  | 'WaterfallChart'
+  | 'WordTree';
+
+export type SankeyData = [string, string, number][];
+
+// TODO: add others

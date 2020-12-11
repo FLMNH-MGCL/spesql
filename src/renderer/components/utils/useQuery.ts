@@ -8,7 +8,7 @@ import useExpiredSession from './useExpiredSession';
 import axios from 'axios';
 import { CountQueryReturn } from '../modals/CreateCountModal';
 import { User } from '../UsersTable';
-import { queriablesStats } from '../../../main/server/endpoints/sql/utils/queriablesStats';
+// import { queriablesStats } from '../../../main/server/endpoints/sql/utils/queriablesStats';
 
 export default function useQuery() {
   const { notify } = useNotify();
@@ -18,6 +18,7 @@ export default function useQuery() {
     setData,
     setTable,
     setCurrentQuery,
+    setAvailableFields,
     selectedSpecimen,
     setSelectedSpecimen,
     toggleLoading,
@@ -28,6 +29,7 @@ export default function useQuery() {
       setData: state.queryData.setData,
       setTable: state.queryData.setTable,
       setCurrentQuery: state.queryData.setCurrentQuery,
+      setAvailableFields: state.chartConfig.setAvailableFields,
       selectedSpecimen: state.selectedSpecimen,
       setSelectedSpecimen: state.setSelectedSpecimen,
       toggleLoading: state.toggleLoading,
@@ -309,6 +311,12 @@ export default function useQuery() {
             setData(specimen);
             setTable(databaseTable);
             setCurrentQuery(query);
+
+            if (columns.length === 1 && columns[0] === '*') {
+              setAvailableFields('*');
+            } else {
+              setAvailableFields(columns);
+            }
           }
         } else if (selectResponse.status === 401) {
           expireSession();

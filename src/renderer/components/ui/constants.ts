@@ -101,19 +101,19 @@ export const BUTTONS = {
   outline: {
     base: 'bg-white border-gray-300',
     active:
-      'bg-white text-gray-700 hover:text-gray-500 focus:border-blue-300 focus:shadow-outline',
+      'bg-white text-gray-700 hover:text-gray-500 focus:border-blue-300 focus:shadow-outline shadow',
     disabled: 'bg-gray-100',
   },
   danger_outline: {
     base: 'border-red-300',
     active:
-      'text-red-700 hover:text-red-500 focus:border-red-300 focus:shadow-outline',
+      'text-red-700 hover:text-red-500 focus:border-red-300 focus:shadow-outline shadow',
     disabled: 'bg-gray-100',
   },
   activated: {
     base: 'bg-white border-green-300',
     active:
-      'bg-white text-green-700 hover:text-green-500 focus:border-blue-300 focus:shadow-outline',
+      'bg-white text-green-700 hover:text-green-500 focus:border-blue-300 focus:shadow-outline shadow',
     disabled: 'bg-gray-100',
   },
 };

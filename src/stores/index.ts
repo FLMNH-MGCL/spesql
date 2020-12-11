@@ -1,79 +1,21 @@
 import create from 'zustand';
-import { Specimen } from '../renderer/types';
+import { GoogleChartType, Specimen } from '../renderer/types';
+import { defaultQueryConfig, QueryConfig } from './query';
+import {
+  BulkInsertError,
+  defaultLogs,
+  defaultTableConfig,
+  LoggingError,
+  Logs,
+  TableConfig,
+} from './table';
+import { ChartConfig, defaultChartConfig } from './visualization';
 
-type User = {
+export type User = {
   id: string;
   username: string;
   fullName: string;
   accessRole: string;
-};
-
-type QueryConfig = {
-  queryString: string;
-  filter: string;
-  filterByFields: (keyof Specimen)[] | 'all';
-  table: string;
-  data: Specimen[];
-  setData(data: Specimen[]): void;
-  setTable(table: string): void;
-  setCurrentQuery(query: string): void;
-  setFilter(filter: string): void;
-  setFilterByFields(fields: (keyof Specimen)[] | 'all'): void;
-};
-
-const defaultQueryConfig = {
-  queryString: '',
-  filter: '',
-  filterByFields: 'all' as (keyof Specimen)[] | 'all',
-  data: [],
-  table: '',
-};
-
-type TableConfig = {
-  headers: string[];
-  updateTableHeaders(newHeaders: string[]): void;
-};
-
-export type LoggingError = {
-  index?: number; // refers to the line number in the CSV
-  code?: string | number;
-  field?: string;
-  message: string;
-};
-
-export type BulkInsertError = {
-  index: number;
-  errors: { field: string; message: string | boolean }[];
-};
-
-export type Logs = {
-  select: LoggingError[];
-  count: LoggingError[];
-  update: LoggingError[];
-  bulkInsert: BulkInsertError[];
-  singleInsert: LoggingError[];
-  delete: LoggingError[];
-  global: LoggingError[];
-};
-
-const defaultTableConfig = {
-  headers: [
-    'catalogNumber',
-    'otherCatalogNumber',
-    'order_',
-    'genus',
-    'specificEpithet',
-  ],
-};
-
-const defaultLogs = {
-  select: [],
-  count: [],
-  update: [],
-  bulkInsert: [],
-  singleInsert: [],
-  delete: [],
-  global: [],
 };
 
 // TODO: change naming scheme for some of these fields, they don't make sense
@@ -89,6 +31,7 @@ type SpesqlSession = {
   // query config
   queryData: QueryConfig;
   tableConfig: TableConfig;
+  chartConfig: ChartConfig;
 
   selectedSpecimen: Specimen | null;
 
@@ -182,6 +125,20 @@ export const useStore = create<SpesqlSession>((set) => ({
       set((state) => ({
         ...state,
         tableConfig: { ...state.tableConfig, headers: newHeaders },
+      })),
+  },
+
+  chartConfig: {
+    ...(defaultChartConfig as ChartConfig),
+    setAvailableFields: (fields: string[] | '*') =>
+      set((state) => ({
+        ...state,
+        chartConfig: { ...state.chartConfig, availableFields: fields },
+      })),
+    setChartType: (newChart: GoogleChartType) =>
+      set((state) => ({
+        ...state,
+        chartConfig: { ...state.chartConfig, chartType: newChart },
       })),
   },
 

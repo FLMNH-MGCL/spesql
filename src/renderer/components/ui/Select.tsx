@@ -341,6 +341,10 @@ export default forwardRef<HTMLSelectElement, Props>(
 
     // console.log('SELECT COMP', selected);
 
+    function fakeChange() {
+      return selected;
+    }
+
     return (
       <label
         className={clsx(
@@ -354,7 +358,7 @@ export default forwardRef<HTMLSelectElement, Props>(
           <select
             value={selected}
             className="hidden"
-            onChange={() => selected}
+            onChange={props.onChange ?? fakeChange}
             multiple={multiple}
             ref={ref}
             {...props}

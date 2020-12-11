@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import shallow from 'zustand/shallow';
-import { LoggingError, useStore } from '../../../stores';
+import { useStore } from '../../../stores';
 import {
   validateBooleanField,
   validateBox,
@@ -18,7 +18,6 @@ import {
   validateIndentificationQualifier,
   validateLatitude,
   validateLifeStage,
-  validateListField,
   validateLongitude,
   validateLowerCase,
   validateOtherCatalogNumber,
@@ -55,6 +54,7 @@ import { fetchTables } from './utils';
 import Text from '../ui/Text';
 import { useNotify } from '../utils/context';
 import Checkmark from '../ui/Checkmark';
+import { LoggingError } from '../../../stores/table';
 
 type FormPart = {
   page: number;
@@ -372,19 +372,21 @@ function RecordLevelInformation({ page }: FormPart) {
             fullWidth
           />
           <Form.Select
-            label="disposition"
-            name="disposition"
-            placeholder="Present"
-            register={{ validate: validateDisposition }}
-            options={dispositionControl}
+            label="preparations"
+            name="preparations"
+            placeholder="Molecular"
+            register={{ validate: validatePreparations }}
+            options={preparationsControl}
+            multiple
             fullWidth
           />
           <Form.Select
-            label="preparations"
-            name="preparations"
-            placeholder="Wing Voucher"
-            register={{ validate: validatePreparations }}
-            options={preparationsControl}
+            label="disposition"
+            name="disposition"
+            placeholder="Molecular Present"
+            register={{ validate: validateDisposition }}
+            options={dispositionControl}
+            multiple
             fullWidth
           />
         </Form.Group>
