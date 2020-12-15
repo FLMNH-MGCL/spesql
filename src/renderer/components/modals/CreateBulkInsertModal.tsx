@@ -316,6 +316,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       updateBulkInsertLog(allErrors);
       off();
     } else {
+      console.log(insertionValues);
       const serverErrors = await insertRows(insertionValues);
 
       if (serverErrors.length) {

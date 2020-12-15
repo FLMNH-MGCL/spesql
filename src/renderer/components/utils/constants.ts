@@ -76,7 +76,13 @@ export const operators = [
   { label: '>', value: '>' },
   { label: '<=', value: '<=' },
   { label: '>=', value: '>=' },
+  { label: 'IS NOT NULL', value: 'IS NOT NULL' },
+  { label: 'IS NULL', value: 'IS NULL' },
+  { label: 'LIKE', value: 'LIKE' },
+  { label: 'BETWEEN', value: 'BETWEEN' },
+  { label: 'NOT BETWEEN', value: 'NOT BETWEEN' },
   { label: 'REGEXP', value: 'REGEXP' },
+  { label: 'NOT REGEXP', value: 'NOT REGEXP' },
 ];
 
 export const BooleanField = [
@@ -158,8 +164,6 @@ export const dispositionControl = [
 
   { label: 'Voucher Used Up', value: 'Voucher Used Up' },
   { label: 'Molecular Used Up', value: 'Molecular Used Up' },
-  // { label: 'Pinned Used Up', value: 'Pinned Used Up' },
-  // { label: 'Larval Used Up', value: 'Larval Used Up' },
   { label: 'GRR Used Up', value: 'GRR Used Up' },
 
   { label: 'Voucher On Loan', value: 'Voucher On Loan' },

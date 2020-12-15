@@ -16,6 +16,7 @@ import {
 } from '../utils/constants';
 import numberParser from 'number-to-words';
 import Text from '../ui/Text';
+import { values } from 'lodash';
 
 type ConditionalFormProps = {
   advanced: boolean;
@@ -26,12 +27,22 @@ type ConditionalFormProps = {
   }[];
 };
 
+export const specialOperators = [
+  'IS NOT NULL',
+  'IS NULL',
+  'LIKE',
+  'BETWEEN',
+  'NOT BETWEEN',
+  'REGEXP',
+  'NOT REGEXP',
+];
+
 export default function ConditionalForm({
   advanced,
   min,
   fieldsOverride,
 }: ConditionalFormProps) {
-  const { getValues, watch } = useFormContext();
+  const { getValues, watch, setValue } = useFormContext();
 
   const [conditionCount, setConditionCount] = useState(min ?? 0);
 
@@ -44,10 +55,24 @@ export default function ConditionalForm({
   watch();
 
   // TODO: type validator as function
-  function setValidator(validator: any) {
+  function setValidator(validator: any, operator?: string) {
     if (!advanced) {
+      if (operator && specialOperators.includes(operator)) {
+        return NeutralValidator;
+      }
       return validator;
     } else return NeutralValidator;
+  }
+
+  function disableValue(condition: string) {
+    return ['IS NOT NULL', 'IS NULL', 'BETWEEN', 'NOT BETWEEN'].includes(
+      condition
+    );
+  }
+
+  function update(name: string, value: any) {
+    console.log(name, value);
+    setValue(name, value);
   }
 
   return (
@@ -85,40 +110,72 @@ export default function ConditionalForm({
                 `conditionalOperator_${numberInEnglish}`
               ];
 
+              // console.log(conditionalOperator);
+              // console.log(conditionalOperator?.indexOf('BETWEEN'));
+
+              // TODO: render based on operator, too
+
               return (
-                <Form.Group flex key={index}>
-                  <Form.Select
-                    name={`conditionalField_${numberInEnglish}`}
-                    label="Field"
-                    disabled={advanced}
-                    fullWidth
-                    options={fieldsOverride ?? fieldOptions}
-                    register={{
-                      validate: setValidator(validateFieldSelection),
-                    }}
-                  />
-                  <Form.Select
-                    name={`conditionalOperator_${numberInEnglish}`}
-                    label="Operator"
-                    disabled={advanced}
-                    options={operators}
-                    fullWidth
-                    register={{
-                      validate: setValidator(validateOperator),
-                    }}
-                  />
-                  <Form.Input
-                    name={`conditionalValue_${numberInEnglish}`}
-                    label="Value"
-                    disabled={advanced}
-                    fullWidth
-                    register={{
-                      validate: setValidator((value: any) =>
-                        validateConditionalValue(value, conditionalFieldVal)
-                      ),
-                    }}
-                  />
-                </Form.Group>
+                <div key={index}>
+                  <Form.Group flex>
+                    <Form.Select
+                      name={`conditionalField_${numberInEnglish}`}
+                      label="Field"
+                      disabled={advanced}
+                      fullWidth
+                      options={fieldsOverride ?? fieldOptions}
+                      register={{
+                        validate: setValidator(validateFieldSelection),
+                      }}
+                    />
+                    <Form.Select
+                      name={`conditionalOperator_${numberInEnglish}`}
+                      label="Operator"
+                      disabled={advanced}
+                      options={operators}
+                      fullWidth
+                      register={{
+                        validate: setValidator(validateOperator),
+                      }}
+                      updateControlled={(value) =>
+                        update(`conditionalOperator_${numberInEnglish}`, value)
+                      }
+                    />
+                    <Form.Input
+                      name={`conditionalValue_${numberInEnglish}`}
+                      label="Value"
+                      disabled={advanced || disableValue(conditionalOperator)}
+                      fullWidth
+                      register={{
+                        validate: setValidator(
+                          (value: any) =>
+                            validateConditionalValue(
+                              value,
+                              conditionalFieldVal
+                            ),
+                          conditionalOperator
+                        ),
+                      }}
+                    />
+                  </Form.Group>
+
+                  {conditionalOperator?.indexOf('BETWEEN') >= 0 && (
+                    <Form.Group flex>
+                      <Form.Input
+                        name={`conditionalValue_${numberInEnglish}_from`}
+                        label="Left Bound"
+                        disabled={advanced}
+                        fullWidth
+                      />
+                      <Form.Input
+                        name={`conditionalValue_${numberInEnglish}_to`}
+                        label="Right Bound"
+                        disabled={advanced}
+                        fullWidth
+                      />
+                    </Form.Group>
+                  )}
+                </div>
               );
             })}
         </div>

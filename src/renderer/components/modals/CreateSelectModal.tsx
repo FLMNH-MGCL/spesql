@@ -11,6 +11,7 @@ import { buildSelectQuery } from '../../functions/builder';
 import shallow from 'zustand/shallow';
 import CreateHelpModal from './CreateHelpModal';
 import useQuery from '../utils/useQuery';
+import clsx from 'clsx';
 
 type Props = {
   open: boolean;
@@ -27,6 +28,42 @@ export default function CreateSelectModal({ open, onClose }: Props) {
   useKeyboard('Escape', () => {
     onClose();
   });
+
+  function parseConditional(values: Values, current: string) {
+    const conditional = {
+      field: values[`conditionalField_${current}`],
+      operator: values[`conditionalOperator_${current}`],
+      value: values[`conditionalValue_${current}`],
+    };
+
+    const { field, operator, value } = conditional;
+
+    /**
+ * 'IS NOT NULL',
+  'IS NULL',
+  'LIKE',
+  'BETWEEN',
+  'NOT BETWEEN',
+  'REGEXP',
+  'NOT REGEXP',
+ */
+
+    if (operator === 'BETWEEN' || operator === 'NOT BETWEEN') {
+      const newValue = clsx(
+        values[`conditionalValue_${current}_from`],
+        'AND',
+        values[`conditionalValue_${current}_to`]
+      );
+
+      return {
+        field,
+        operator,
+        value: newValue,
+      };
+    } else {
+      return conditional;
+    }
+  }
 
   async function handleSubmit(values: Values) {
     toggleLoading(true);
@@ -51,11 +88,13 @@ export default function CreateSelectModal({ open, onClose }: Props) {
       for (let i = 0; i < numConditions; i++) {
         const current = numberParser.toWords(i);
 
-        conditionals.push({
-          field: values[`conditionalField_${current}`],
-          operator: values[`conditionalOperator_${current}`],
-          value: values[`conditionalValue_${current}`],
-        });
+        conditionals.push(parseConditional(values, current));
+
+        // conditionals.push({
+        //   field: values[`conditionalField_${current}`],
+        //   operator: values[`conditionalOperator_${current}`],
+        //   value: values[`conditionalValue_${current}`],
+        // });
       }
 
       const { queryString, queryArray } = buildSelectQuery(

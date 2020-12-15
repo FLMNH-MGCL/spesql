@@ -6,6 +6,8 @@ Fields that do not have any generalized, restricted formatting will have relaxed
 
 Note: Some fields are automatically generated/determined, these fields should <b>not</b> be included in the CSV for batch insertions. An example is `recordEnteredBy`, the credentials of the logged in user will be applied for this information.
 
+To see available countries, please refer to the [Countries](##Countries) section at the end of this file.
+
 ## Available Specimen Fields:
 
 (click to view formatting information)
@@ -329,11 +331,8 @@ Identification qualifier for the specimen. Case sensitive, and must match one (o
 The primary collector's name, should only be one name pair. The general format is:
 
 ```
-  Last,First
   First Last
 ```
-
-Either is accepted, however please make note of how the order changes when using a comma. The resulting value stored in the database will be of the format `Last,First`. Please do not enter a value if this is unknown, instead of iterations of `Unknown Unknown`
 
 ##### Passing Examples
 
@@ -350,29 +349,28 @@ Either is accepted, however please make note of how the order changes when using
 
 ### otherCollectors <section id='##otherCollectors'/>
 
-The names of the collectors other than the primary collector, may be multiple names. The general format is:
+The names of the collectors other than the primary collector, may be multiple names.
+
+This follows the standard, name list format:
 
 ```
-  Last,First
-  Last1,First1 | Last2,First2
-  Last1,First1|Last2,First2
-
   First Last
-  First1 Last1 | First2 Last2
-  First1 Last1|First2 Last2
+  First Last | First2 Last2
+  First Last|First2 Last2
 ```
 
 Please note: I am using numbers to indicate different names, however numbers are not allowed in this field.
-
-The list separator must be the pipe character '|'. Either list format/naming order is accepted, however please make note of how the order changes when using a comma. The resulting value stored in the database will be of the format `Last,First|Last,First|Last,First`
+The list separator must be the pipe character '|'.
 
 ##### Passing Examples
 
-`Leopold,Aaron` `Aaron Leopold` `Leopold,Aaron | Doe,Jane` `Leopold,Aaron|Doe,Jane`
+`Brad Millen | Kristina Yamamoto | Janet Fang`
 
 ##### Failing Examples
 
-`Leopold` `leopold,aaron` `Leopold,aaron | doe,Jane` `Leopold,Aaron, Doe,Jane`
+`Millen,Brad | Yamamoto,Kristina | Fang,Janet`
+`Millen,Brad, Yamamoto,Kristina, Fang,Janet`
+
 <br/><br/>
 
 ### identifiedBy <section id='##identifiedBy'/>
@@ -382,27 +380,26 @@ The name(s) of who identified the specimen, may be multiple names.
 </br>
 <b>Darwin Core:</b> A list (concatenated and separated) of names of people, groups, or organizations who assigned the Taxon to the subject.
 
-The general format is:
+This follows the standard, name list format:
 
 ```
-  Last,First
-  Last1,First1 | Last2,First2
-  Last1,First1|Last2,First2
-
   First Last
-  First1 Last1 | First2 Last2
-  First1 Last1|First2 Last2
+  First Last | First2 Last2
+  First Last|First2 Last2
 ```
 
-Either is accepted, however please make note of how the order changes when using a comma. The resulting value stored in the database will be of the format `Last,First`. Please do not enter a value if this is unknown, instead of iterations of `Unknown Unknown`
+Please note: I am using numbers to indicate different names, however numbers are not allowed in this field.
+The list separator must be the pipe character '|'.
 
 ##### Passing Examples
 
-`Leopold,Aaron` `Aaron Leopold` `Leopold,Aaron | Doe,Jane` `Leopold,Aaron|Doe,Jane`
+`Brad Millen | Kristina Yamamoto | Janet Fang`
 
 ##### Failing Examples
 
-`Leopold` `leopold,aaron` `Leopold,aaron | doe,Jane` `Leopold,Aaron, Doe,Jane`
+`Millen,Brad | Yamamoto,Kristina | Fang,Janet`
+`Millen,Brad, Yamamoto,Kristina, Fang,Janet`
+
 <br/><br/>
 
 ### dateIdentified <section id='##dateIdentified'/>
@@ -551,7 +548,7 @@ The format of the list follows previous field formatting, in that it must be del
 
 Country of the collection. Must be in the list of accepted countries, matching exactly (case sensitive).
 
-You may find the list here: `https://github.com/FLMNH-MGCL/spesql/blob/typescript-rewrite/src/renderer/assets/countries.ts`. This list is a TypeScript array of Country objects, containing a `name` and `code` field like so:
+You may find the list here: `https://github.com/FLMNH-MGCL/spesql/blob/typescript-rewrite/src/renderer/assets/countries.ts`, or you may them at this end of this file. This list is a TypeScript array of Country objects, containing a `name` and `code` field like so:
 
 ```typescript
 // generalized structure of a country object
@@ -709,32 +706,52 @@ The longitude as written on the label (if present). No generalized formatting, a
 </br>
 <b>Darwin Core:</b> A list (concatenated and separated) of names of people, groups, or organizations who determined the georeference (spatial representation) for the Location.
 
-This follows the standard, list format:
+This follows the standard, name list format:
 
 ```
-  Last,First
-  Last1,First1 | Last2,First2
-  Last1,First1|Last2,First2
-
   First Last
-  First1 Last1 | First2 Last2
-  First1 Last1|First2 Last2
+  First Last | First2 Last2
+  First Last|First2 Last2
 ```
 
 ##### Passing Examples
 
 `Brad Millen | Kristina Yamamoto | Janet Fang`
-`Millen,Brad | Yamamoto,Kristina | Fang,Janet`
 
 ##### Failing Examples
+
+`Millen,Brad | Yamamoto,Kristina | Fang,Janet`
+`Millen,Brad, Yamamoto,Kristina, Fang,Janet`
 
 <br/><br/>
 
 ### disposition <section id='##disposition'/>
 
-The disposition (current state) of the specimen as it is currently in the collection. Must match one (only one) of the control values (case sensitive):
+The disposition (current state) of the specimen as it is currently in the collection. May be a list, where each item matches a control value exactly (case sensitive):
 
-`Present` `Missing` `Sample Used Up` `On Loan`
+`Voucher Present`
+`Molecular Present`
+`Pinned Present`
+`Larval Present`
+`GRR Present`
+
+`Voucher Missing`
+`Molecular Missing`
+`Pinned Missing`
+`Larval Missing`
+`GRR Missing`
+
+`Voucher Used Up`
+`Molecular Used Up`
+`GRR Used Up`
+
+`Voucher On Loan`
+`Molecular On Loan`
+`Pinned On Loan`
+`Larval On Loan`
+`GRR On Loan`
+
+The format of the list follows previous field formatting, in that it must be delimited using the pipe '|' character.
 
 <br/><br/>
 
@@ -796,12 +813,27 @@ May not preceed reasonable floor thresholds (e.g. less than 1990)
 
 ### preparations <section id='##preparations'/>
 
-The preparations of the specimen. Must match one of the control values (case sensitive)
+The preparations of the specimen. May be a list, where each item matches a control value exactly (case sensitive):
 
 `Wing Voucher` `Molecular Collection` `Pinned Collection` `Larval Collection` `Genetic Collection`
 
+The format of the list follows previous field formatting, in that it must be delimited using the pipe '|' character.
+
 </br>
 <b>Darwin Core:</b> A preparation or preservation method for a specimen.
+
+##### Passing Examples
+
+`Wing Voucher`
+`Wing Voucher | Molecular Collection`
+`Wing Voucher|Molecular Collection`
+
+##### Failing Examples
+
+`wing voucher`
+`Wing Voucher|`
+`Wing Voucher, Molecular Collection`
+`Wing Voucher,Molecular Collection`
 
 <br/><br/>
 
@@ -812,15 +844,19 @@ The freezer the specimen is stored in (if applicable). The general format is as 
 ```
   'Kawahara' followed by two digits:
   Kawahara##
+
+  OR
+
+  GRR
 ```
 
 ##### Passing Examples
 
-`Kawahara05` `Kawahara11`
+`Kawahara05` `Kawahara11` `GRR`
 
 ##### Failing Examples
 
-`kawahara 5` `karahara30` `Kawahara119`
+`kawahara 5` `karahara30` `Kawahara119` `grr` `Grr`
 
 <br/><br/>
 
@@ -831,12 +867,18 @@ The rack on/in which the specimen is stored. The general format is:
 ```
   1-3 characters long.
   No punctuation.
-  Alphanumeric
+  No numbers, only characters
 ```
+
+Numbers in a rack field indicate a box value, and should be parsed into the appropriate field (box)
 
 ##### Passing Examples
 
-`B32`
+`B` `BB` `AA`
+
+##### Failing Examples
+
+`B32` `AA2`
 
 <br/><br/>
 
@@ -931,3 +973,251 @@ This field is available for logging and querying.
 Notes from field, other notes about specimen. There is no specified formatting to follow
 
 <br/><br/>
+
+## Countries
+
+| Country Name                                 | Country Code |
+| -------------------------------------------- | ------------ |
+| Afghanistan                                  | AF           |
+| Åland Islands                                | AX           |
+| Albania                                      | AL           |
+| Algeria                                      | DZ           |
+| American Samoa                               | AS           |
+| AndorrA                                      | AD           |
+| Angola                                       | AO           |
+| Anguilla                                     | AI           |
+| Antarctica                                   | AQ           |
+| Antigua and Barbuda                          | AG           |
+| Argentina                                    | AR           |
+| Armenia                                      | AM           |
+| Aruba                                        | AW           |
+| Australia                                    | AU           |
+| Austria                                      | AT           |
+| Azerbaijan                                   | AZ           |
+| Bahamas                                      | BS           |
+| Bahrain                                      | BH           |
+| Bangladesh                                   | BD           |
+| Barbados                                     | BB           |
+| Belarus                                      | BY           |
+| Belgium                                      | BE           |
+| Belize                                       | BZ           |
+| Benin                                        | BJ           |
+| Bermuda                                      | BM           |
+| Bhutan                                       | BT           |
+| Bolivia                                      | BO           |
+| Bosnia and Herzegovina                       | BA           |
+| Botswana                                     | BW           |
+| Bouvet Island                                | BV           |
+| Brazil                                       | BR           |
+| British Indian Ocean Territory               | IO           |
+| Brunei Darussalam                            | BN           |
+| Bulgaria                                     | BG           |
+| Burkina Faso                                 | BF           |
+| Burundi                                      | BI           |
+| Cambodia                                     | KH           |
+| Cameroon                                     | CM           |
+| Canada                                       | CA           |
+| Cape Verde                                   | CV           |
+| Cayman Islands                               | KY           |
+| Central African Republic                     | CF           |
+| Chad                                         | TD           |
+| Chile                                        | CL           |
+| China                                        | CN           |
+| Christmas Island                             | CX           |
+| Cocos (Keeling) Islands                      | CC           |
+| Colombia                                     | CO           |
+| Comoros                                      | KM           |
+| Congo                                        | CG           |
+| Congo, The Democratic Republic of the        | CD           |
+| Cook Islands                                 | CK           |
+| Costa Rica                                   | CR           |
+| Cote D'Ivoire                                | CI           |
+| Croatia                                      | HR           |
+| Cuba                                         | CU           |
+| Cyprus                                       | CY           |
+| Czech Republic                               | CZ           |
+| Denmark                                      | DK           |
+| Djibouti                                     | DJ           |
+| Dominica                                     | DM           |
+| Dominican Republic                           | DO           |
+| Ecuador                                      | EC           |
+| Egypt                                        | EG           |
+| El Salvador                                  | SV           |
+| Equatorial Guinea                            | GQ           |
+| Eritrea                                      | ER           |
+| Estonia                                      | EE           |
+| Ethiopia                                     | ET           |
+| Falkland Islands (Malvinas)                  | FK           |
+| Faroe Islands                                | FO           |
+| Fiji                                         | FJ           |
+| Finland                                      | FI           |
+| France                                       | FR           |
+| French Guiana                                | GF           |
+| French Polynesia                             | PF           |
+| French Southern Territories                  | TF           |
+| Gabon                                        | GA           |
+| Gambia                                       | GM           |
+| Georgia                                      | GE           |
+| Germany                                      | DE           |
+| Ghana                                        | GH           |
+| Gibraltar                                    | GI           |
+| Greece                                       | GR           |
+| Greenland                                    | GL           |
+| Grenada                                      | GD           |
+| Guadeloupe                                   | GP           |
+| Guam                                         | GU           |
+| Guatemala                                    | GT           |
+| Guernsey                                     | GG           |
+| Guinea                                       | GN           |
+| Guinea-Bissau                                | GW           |
+| Guyana                                       | GY           |
+| Haiti                                        | HT           |
+| Heard Island and Mcdonald Islands            | HM           |
+| Holy See (Vatican City State)                | VA           |
+| Honduras                                     | HN           |
+| Hong Kong                                    | HK           |
+| Hungary                                      | HU           |
+| Iceland                                      | IS           |
+| India                                        | IN           |
+| Indonesia                                    | ID           |
+| Iran, Islamic Republic Of                    | IR           |
+| Iraq                                         | IQ           |
+| Ireland                                      | IE           |
+| Isle of Man                                  | IM           |
+| Israel                                       | IL           |
+| Italy                                        | IT           |
+| Jamaica                                      | JM           |
+| Japan                                        | JP           |
+| Jersey                                       | JE           |
+| Jordan                                       | JO           |
+| Kazakhstan                                   | KZ           |
+| Kenya                                        | KE           |
+| Kiribati                                     | KI           |
+| Korea, Democratic People'S Republic of       | KP           |
+| Korea, Republic of                           | KR           |
+| Kuwait                                       | KW           |
+| Kyrgyzstan                                   | KG           |
+| Lao People’s Democratic Republic             | LA           |
+| Latvia                                       | LV           |
+| Lebanon                                      | LB           |
+| Lesotho                                      | LS           |
+| Liberia                                      | LR           |
+| Libyan Arab Jamahiriya                       | LY           |
+| Liechtenstein                                | LI           |
+| Lithuania                                    | LT           |
+| Luxembourg                                   | LU           |
+| Macao                                        | MO           |
+| Macedonia, The Former Yugoslav Republic of   | MK           |
+| Madagascar                                   | MG           |
+| Malawi                                       | MW           |
+| Malaysia                                     | MY           |
+| Maldives                                     | MV           |
+| Mali                                         | ML           |
+| Malta                                        | MT           |
+| Marshall Islands                             | MH           |
+| Martinique                                   | MQ           |
+| Mauritania                                   | MR           |
+| Mauritius                                    | MU           |
+| Mayotte                                      | YT           |
+| Mexico                                       | MX           |
+| Micronesia, Federated States of              | FM           |
+| Moldova, Republic of                         | MD           |
+| Monaco                                       | MC           |
+| Mongolia                                     | MN           |
+| Montserrat                                   | MS           |
+| Morocco                                      | MA           |
+| Mozambique                                   | MZ           |
+| Myanmar                                      | MM           |
+| Namibia                                      | NA           |
+| Nauru                                        | NR           |
+| Nepal                                        | NP           |
+| Netherlands                                  | NL           |
+| Netherlands Antilles                         | AN           |
+| New Caledonia                                | NC           |
+| New Zealand                                  | NZ           |
+| Nicaragua                                    | NI           |
+| Niger                                        | NE           |
+| Nigeria                                      | NG           |
+| Niue                                         | NU           |
+| Norfolk Island                               | NF           |
+| Northern Mariana Islands                     | MP           |
+| Norway                                       | NO           |
+| Oman                                         | OM           |
+| Pakistan                                     | PK           |
+| Palau                                        | PW           |
+| Palestinian Territory, Occupied              | PS           |
+| Panama                                       | PA           |
+| Papua New Guinea                             | PG           |
+| Paraguay                                     | PY           |
+| Peru                                         | PE           |
+| Philippines                                  | PH           |
+| Pitcairn                                     | PN           |
+| Poland                                       | PL           |
+| Portugal                                     | PT           |
+| Puerto Rico                                  | PR           |
+| Qatar                                        | QA           |
+| Reunion                                      | RE           |
+| Romania                                      | RO           |
+| Russian Federation                           | RU           |
+| RWANDA                                       | RW           |
+| Saint Helena                                 | SH           |
+| Saint Kitts and Nevis                        | KN           |
+| Saint Lucia                                  | LC           |
+| Saint Pierre and Miquelon                    | PM           |
+| Saint Vincent and the Grenadines             | VC           |
+| Samoa                                        | WS           |
+| San Marino                                   | SM           |
+| Sao Tome and Principe                        | ST           |
+| Saudi Arabia                                 | SA           |
+| Senegal                                      | SN           |
+| Serbia and Montenegro                        | CS           |
+| Seychelles                                   | SC           |
+| Sierra Leone                                 | SL           |
+| Singapore                                    | SG           |
+| Slovakia                                     | SK           |
+| Slovenia                                     | SI           |
+| Solomon Islands                              | SB           |
+| Somalia                                      | SO           |
+| South Africa                                 | ZA           |
+| South Georgia and the South Sandwich Islands | GS           |
+| Spain                                        | ES           |
+| Sri Lanka                                    | LK           |
+| Sudan                                        | SD           |
+| Suriname                                     | SR           |
+| Svalbard and Jan Mayen                       | SJ           |
+| Swaziland                                    | SZ           |
+| Sweden                                       | SE           |
+| Switzerland                                  | CH           |
+| Syrian Arab Republic                         | SY           |
+| Taiwan, Province of China                    | TW           |
+| Tajikistan                                   | TJ           |
+| Tanzania, United Republic of                 | TZ           |
+| Thailand                                     | TH           |
+| Timor-Leste                                  | TL           |
+| Togo                                         | TG           |
+| Tokelau                                      | TK           |
+| Tonga                                        | TO           |
+| Trinidad and Tobago                          | TT           |
+| Tunisia                                      | TN           |
+| Turkey                                       | TR           |
+| Turkmenistan                                 | TM           |
+| Turks and Caicos Islands                     | TC           |
+| Tuvalu                                       | TV           |
+| Uganda                                       | UG           |
+| Ukraine                                      | UA           |
+| United Arab Emirates                         | AE           |
+| United Kingdom                               | GB           |
+| United States                                | US           |
+| United States Minor Outlying Islands         | UM           |
+| Uruguay                                      | UY           |
+| Uzbekistan                                   | UZ           |
+| Vanuatu                                      | VU           |
+| Venezuela                                    | VE           |
+| Vietnam                                      | VN           |
+| Virgin Islands, British                      | VG           |
+| Virgin Islands, U.S.                         | VI           |
+| Wallis and Futuna                            | WF           |
+| Western Sahara                               | EH           |
+| Yemen                                        | YE           |
+| Zambia                                       | ZM           |
+| Zimbabwe                                     | ZW           |

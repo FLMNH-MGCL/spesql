@@ -55,7 +55,7 @@ export default function SelectQueryForm({ onSubmit }: Props) {
   }, [expiredSession]);
 
   return (
-    <Form onSubmit={onSubmit} id="select-form">
+    <Form onSubmit={onSubmit} id="select-form" mode="onChange">
       <Form.Group flex>
         <Form.Radio
           name="advanced-check"

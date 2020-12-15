@@ -14,7 +14,7 @@ import {
 
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
 import { Specimen } from '../types';
-import { standardizeName } from './util';
+import { SelectOption } from '../components/ui/Select';
 
 // TODO: ADD DOCUMENTATION
 
@@ -97,6 +97,17 @@ export function validateConditionSelection(table: string) {
   return true;
 }
 
+export function validateControlList(items: any[], control: SelectOption[]) {
+  for (let i = 0; i < items.length; i++) {
+    const currentValue = items[i];
+    if (!control.some((el) => el.value === currentValue)) {
+      return `${currentValue} is not an accepted input`;
+    }
+  }
+
+  return true;
+}
+
 // TODO: change formatting to FIRST MIDDLE LAST
 export function validateName(name: string) {
   if (!name || !name.length) {
@@ -104,11 +115,12 @@ export function validateName(name: string) {
   }
 
   let properNounPattern = /(\b[A-Z](?!\s))/g;
-  let namePattern = /^[a-zA-Z]+,? [a-zA-Z]+ ?[a-zA-Z]+$/;
+  let namePattern = /^[a-zA-Z]+ [a-zA-Z]+ ?[a-zA-Z]+$/;
 
   let nameRegex = new RegExp(namePattern);
 
-  console.log('name:', name, '\nstored as:', standardizeName(name));
+  // console.log('name:', name, '\nstored as:', standardizeName(name));
+  // console.log('name:', name, 'passed?:', nameRegex.test(name));
 
   if (name.split(' ').length !== name.match(properNounPattern)?.length) {
     return 'Capitalize the first letters';
@@ -368,17 +380,22 @@ export function validateCountry(value: string) {
 }
 
 // TODO: other locality data
-// TODO: change to multiple
-export function validatePreparations(value: string) {
-  if (!value) {
+export function validatePreparations(value: string[] | string) {
+  if (!value || !value.length) {
     return true;
   }
 
-  if (!preparationsControl.some((el) => el.value === value)) {
-    return `${value} is not an accepted input`;
-  }
+  if (Array.isArray(value)) {
+    return validateControlList(value, preparationsControl);
+  } else {
+    const splitList = value.split('|');
 
-  return true;
+    if (splitList.length < 2 && (value.match(/,/g) || []).length >= 1) {
+      return "It seems you're not using | as the separator";
+    }
+
+    return validateControlList(splitList, preparationsControl);
+  }
 }
 
 export function validateTubeSize(value: string) {
@@ -475,6 +492,12 @@ export function validateFreezer(value: string) {
     return true;
   }
 
+  if (value === 'GRR') {
+    return true;
+  } else if (value.toLowerCase() === 'grr') {
+    return 'Must match GRR exactly';
+  }
+
   /* prettier-ignore */
   const pattern = new RegExp(/Kawahara\d\d/g)
 
@@ -482,7 +505,7 @@ export function validateFreezer(value: string) {
 
   // TODO: GRR pattern
 
-  return matches ? true : 'Must match Kawahara##';
+  return matches ? true : 'Must match Kawahara## or GRR';
 }
 
 export function validateRack(value: string) {
@@ -492,6 +515,10 @@ export function validateRack(value: string) {
 
   if (value && value.length > 3) {
     return 'Must be 1-3 characters long';
+  }
+
+  if (/\d/.test(value)) {
+    return 'Racks may not have numbers (see box)';
   }
 
   return true;
@@ -661,12 +688,30 @@ export function validateSpecimen(specimen: any) {
   return errors;
 }
 
+export function getSpecimenDefaults(specimen: Specimen) {
+  let corrected = specimen;
+
+  Object.keys(specimen).forEach((key) => {
+    //@ts-ignore
+    if (specimen[key] === '') {
+      //@ts-ignore
+      corrected[key] = null;
+    }
+  });
+
+  return corrected;
+}
+
 // TODO:
 // some fields are correct as input, but incorrect for storage. for example,
 // measurements! we only store in meters, but we allow the input of ft or miles.
 // this function will correct these fields and return the updated specimen
 export function fixPartiallyCorrect(partiallyCorrect: Specimen) {
   // const updatedElevation = ...
+
+  let slightlyMoreCorrect = getSpecimenDefaults(partiallyCorrect);
+  // console.log(slightlyMoreCorrect);
+
   let {
     elevationInMeters,
     collectedYear,
@@ -718,7 +763,7 @@ export function fixPartiallyCorrect(partiallyCorrect: Specimen) {
   }
 
   return {
-    ...partiallyCorrect,
+    ...slightlyMoreCorrect,
     elevationInMeters,
     collectedYear,
     collectedMonth,

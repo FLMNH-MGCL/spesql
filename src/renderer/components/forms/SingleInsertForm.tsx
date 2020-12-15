@@ -398,6 +398,7 @@ function RecordLevelInformation({ page }: FormPart) {
             placeholder="N"
             register={{ validate: validateBooleanField }}
             options={BooleanField}
+            className="min-w-24"
           />
           <Form.Select
             label="reared"
@@ -405,6 +406,7 @@ function RecordLevelInformation({ page }: FormPart) {
             placeholder="Y"
             register={{ validate: validateBooleanField }}
             options={BooleanField}
+            className="min-w-24"
           />
           <Form.Select
             label="tubeSize"
@@ -427,7 +429,7 @@ function RecordLevelInformation({ page }: FormPart) {
           <Form.Input
             label="rack"
             name="rack"
-            placeholder="B32"
+            placeholder="BB"
             register={{ validate: validateRack }}
           />
           <Form.Input

@@ -11,9 +11,6 @@ export function resetSelectedSpecimen(
 ) {
   const updatedSpecimen = data.find((specimen) => specimen.id === previous?.id);
 
-  console.log('PREV', previous);
-  console.log('UPDATED', updatedSpecimen);
-
   setSelectedSpecimen(null);
 
   if (updatedSpecimen) {

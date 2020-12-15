@@ -6,32 +6,56 @@ import {
   specialCaseEmpties,
 } from './validation';
 
-// TODO: type me plz
+// TODO: alter all builders to account for new operators added!!
+
 export function buildSelectQuery(table: string, conditionals?: any[]) {
   let queryString = clsx(
     'SELECT ?? FROM',
     table,
     conditionals?.length && 'WHERE'
   );
+
   let queryArray: any[] = [];
 
   conditionals?.forEach((conditional, index) => {
-    queryString = clsx(
-      queryString,
-      '??',
-      conditional.operator,
-      '?',
-      index !== conditionals.length - 1 && 'AND'
-    );
+    const { field, operator, value } = conditional;
 
-    queryArray.push(conditional.field);
-    queryArray.push(conditional.value);
+    if (operator.indexOf('BETWEEN') >= 0) {
+      queryString = clsx(
+        queryString,
+        '??',
+        operator,
+        value,
+        index !== conditionals.length - 1 && 'AND'
+      );
+
+      queryArray.push(field);
+    } else if (['IS NULL', 'IS NOT NULL'].includes(operator)) {
+      queryString = clsx(
+        queryString,
+        '??',
+        operator,
+        index !== conditionals.length - 1 && 'AND'
+      );
+
+      queryArray.push(field);
+    } else {
+      queryString = clsx(
+        queryString,
+        '??',
+        operator,
+        '?',
+        index !== conditionals.length - 1 && 'AND'
+      );
+
+      queryArray.push(field);
+      queryArray.push(value);
+    }
   });
 
   return { queryString, queryArray };
 }
 
-// TODO: type me plz
 export function buildCountQuery(
   table: string,
   fields: string[],
