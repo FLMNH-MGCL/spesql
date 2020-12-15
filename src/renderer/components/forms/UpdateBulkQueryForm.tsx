@@ -84,6 +84,8 @@ function SetForm({ advanced }: SetFormProps) {
                     validate: setValidator(validateFieldSelection),
                   }}
                 />
+
+                {/* TODO: filter out new operators that don't work with this structure of update */}
                 <Form.Select
                   name={`setOperator_${numberInEnglish}`}
                   label="Operator"

@@ -115,5 +115,8 @@
     "renderer": {
       "webpackConfig": "webpack.renderer.additions.js"
     }
+  },
+  "resolutions": {
+    "ini": "^1.3.6"
   }
 }
