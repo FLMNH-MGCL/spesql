@@ -1,8 +1,8 @@
 module.exports = {
   title: 'SpeSQL',
   tagline: 'Documentation for the ',
-  url: 'https://flmnh-mgcl.github.io/spesql/',
-  baseUrl: '/',
+  url: 'https://flmnh-mgcl.github.io',
+  baseUrl: '/spesql/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logo.png',
