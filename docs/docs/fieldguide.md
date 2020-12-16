@@ -1,4 +1,13 @@
-# Database Field Guide
+---
+id: fieldguide
+title: Field Guide
+---
+
+## About
+
+This section serves as an aide to be used when attempting to insert new or update existing data. SpeSQL will catch any violation of the rules outlined below, however it is important to familiarize yourself with the structure of the data as to best expedite future workflows.
+
+## Notes
 
 Fields denoted with (\*) are required and may not be left blank. Those not denoted with this may be assumed to allow empty values, disregarding the specified formatting for these cases where the data for the field is not present.
 
@@ -6,9 +15,9 @@ Fields that do not have any generalized, restricted formatting will have relaxed
 
 Note: Some fields are automatically generated/determined, these fields should <b>not</b> be included in the CSV for batch insertions. An example is `recordEnteredBy`, the credentials of the logged in user will be applied for this information.
 
-To see available countries, please refer to the [Countries](##Countries) section at the end of this file.
+To see available countries, please refer to the [Countries](#Countries) section at the end of this file.
 
-## Available Specimen Fields:
+## Available Specimen Fields
 
 (click to view formatting information)
 
@@ -321,7 +330,7 @@ Identification qualifier for the specimen. Case sensitive, and must match one (o
 `sensu stricto`
 `sensu lato`
 
-</br>
+<br/>
 <b>Darwin Core:</b> A brief phrase or a standard term ("cf.", "aff.") to express the determiner's doubts about the Identification.
 
 <br/><br/>
@@ -377,7 +386,7 @@ The list separator must be the pipe character '|'.
 
 The name(s) of who identified the specimen, may be multiple names.
 
-</br>
+<br/>
 <b>Darwin Core:</b> A list (concatenated and separated) of names of people, groups, or organizations who assigned the Taxon to the subject.
 
 This follows the standard, name list format:
@@ -406,7 +415,7 @@ The list separator must be the pipe character '|'.
 
 The date in which the specimen was identified.
 
-</br>
+<br/>
 <b>Darwin Core:</b> The date on which the subject was determined as representing the Taxon.
 
 This follows the general date format:
@@ -470,7 +479,7 @@ The sex of the specimen. Must match the <b>_first letter_</b> of one of the cont
 
 `Male` `Female` `Gynandromorph`
 
-</br>
+<br/>
 <b>Darwin Core:</b> The sex of the biological individual(s) represented in the Occurrence.
 
 ##### Passing Examples
@@ -489,14 +498,14 @@ The life stage the specimen is in. Must match one (only one) of the control valu
 
 `egg` `larva` `pupa` `adult`
 
-</br>
+<br/>
 <b>Darwin Core:</b> The age class or life stage of the biological individual(s) at the time the Occurrence was recorded.
 
 <br/><br/>
 
 ### habitat <section id='##habitat'/>
 
-</br>
+<br/>
 <b>Darwin Core:</b> A category or description of the habitat in which the Event occurred.
 
 There are no generalized formatting schemas for this field
@@ -511,7 +520,7 @@ There are no generalized formatting schemas for this field
 
 Remarks from the collector. Not generalized formatting schemas for this field
 
-</br>
+<br/>
 <b>Darwin Core:</b> Comments or notes about the Occurrence.
 
 <br/><br/>
@@ -530,7 +539,7 @@ The protocol in which the specimen was sampled. May be a list, where each item m
 
 The format of the list follows previous field formatting, in that it must be delimited using the pipe '|' character.
 
-</br>
+<br/>
 <b>Darwin Core:</b> The name of, reference to, or description of the method or protocol used during an Event.
 
 ##### Passing Examples
@@ -599,7 +608,7 @@ The Municipality of the collected specimen. Follows traditional proper noun form
   No random capitalization.
 ```
 
-</br>
+<br/>
 <b>Darwin Core:</b> The full, unabbreviated name of the next smaller administrative region than county (city, municipality, etc.) in which the Location occurs. Do not use this term for a nearby named place that does not contain the actual location.
 
 Darwin Core Recommendation: Recommended best practice is to use a controlled vocabulary such as the Getty Thesaurus of Geographic Names.
@@ -614,7 +623,7 @@ Darwin Core Recommendation: Recommended best practice is to use a controlled voc
 
 The Locality data of the collected specimen. No generalized formatting in place.
 
-</br>
+<br/>
 <b>Darwin Core:</b> The specific description of the place. Less specific geographic information can be provided in other geographic terms. This term may contain information modified from the original to correct perceived errors or standardize the description.
 
 ##### General Example
@@ -665,7 +674,7 @@ The coordinate system used. Must match one (only one) of the control values (cas
 
 `EPSG:4326` `WGS84` `NAD27` `Campo Inchauspe` `European 1950` `Clarke 1866` `Unknown`
 
-</br>
+<br/>
 <b>Darwin Core:</b> The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
 
 <br/><br/>
@@ -676,7 +685,7 @@ The value indicating the uncertainty of the recorded coordinates at which the sp
 
 `m` for meters, `mi` for miles, `ft` for feet
 
-</br>
+<br/>
 <b>Darwin Core:</b> The horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location. Leave the value empty if the uncertainty is unknown, cannot be estimated, or is not applicable (because there are no coordinates). Zero is not a valid value for this term.
 
 ##### Passing Examples
@@ -703,7 +712,7 @@ The longitude as written on the label (if present). No generalized formatting, a
 
 ### georeferencedBy <section id='##georeferencedBy'/>
 
-</br>
+<br/>
 <b>Darwin Core:</b> A list (concatenated and separated) of names of people, groups, or organizations who determined the georeference (spatial representation) for the Location.
 
 This follows the standard, name list format:
@@ -819,7 +828,7 @@ The preparations of the specimen. May be a list, where each item matches a contr
 
 The format of the list follows previous field formatting, in that it must be delimited using the pipe '|' character.
 
-</br>
+<br/>
 <b>Darwin Core:</b> A preparation or preservation method for a specimen.
 
 ##### Passing Examples
@@ -974,7 +983,7 @@ Notes from field, other notes about specimen. There is no specified formatting t
 
 <br/><br/>
 
-## Countries
+## Countries <section id='Countries'/>
 
 | Country Name                                 | Country Code |
 | -------------------------------------------- | ------------ |

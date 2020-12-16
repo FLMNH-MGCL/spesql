@@ -8,7 +8,6 @@ module.exports = {
   favicon: 'img/logo.png',
   organizationName: 'FLMNH-MGCL', // Usually your GitHub org/user name.
   projectName: 'spesql', // Usually your repo name.
-  plugins: ['docusaurus-tailwindcss-loader'],
   themeConfig: {
     navbar: {
       title: 'SpeSQL',
@@ -49,13 +48,13 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Style Guide',
+              label: 'Installation',
               to: 'docs/',
             },
-            {
-              label: 'Second Doc',
-              to: 'docs/doc2/',
-            },
+            // {
+            //   label: 'Second Doc',
+            //   to: 'docs/doc2/',
+            // },
           ],
         },
         {
@@ -98,15 +97,6 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

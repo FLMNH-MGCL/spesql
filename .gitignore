@@ -21,6 +21,7 @@ public/server/config/config.js
 build/
 /dist
 dist/
+build
 
 # misc
 .DS_Store

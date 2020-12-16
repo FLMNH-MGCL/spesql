@@ -1,0 +1,4 @@
+---
+id: sankeychart
+title: Sankey
+---

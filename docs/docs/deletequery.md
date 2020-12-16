@@ -1,0 +1,4 @@
+---
+id: deletequery
+title: Delete
+---
