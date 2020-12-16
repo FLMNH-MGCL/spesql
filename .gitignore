@@ -17,8 +17,6 @@ public/server/config/config.js
 /coverage
 
 # production
-/build
-build/
 /dist
 dist/
 
