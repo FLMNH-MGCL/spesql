@@ -1,0 +1,39 @@
+{
+  "name": "spesqldocs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear"
+  },
+  "dependencies": {
+    "@docusaurus/core": "2.0.0-alpha.69",
+    "@docusaurus/preset-classic": "2.0.0-alpha.69",
+    "@docusaurus/theme-search-algolia": "^2.0.0-alpha.69",
+    "@mdx-js/react": "^1.6.21",
+    "clsx": "^1.1.1",
+    "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",
+    "postcss": "^7.0.34",
+    "postcss-import": "^12.0.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
