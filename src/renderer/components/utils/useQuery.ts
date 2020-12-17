@@ -2,12 +2,13 @@ import { useMemo } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 import { resetSelectedSpecimen } from '../../functions/util';
-import { BACKEND_URL } from '../../types';
+import { BACKEND_URL, Specimen } from '../../types';
 import { useNotify } from './context';
 import useExpiredSession from './useExpiredSession';
 import axios from 'axios';
 import { CountQueryReturn } from '../modals/CreateCountModal';
 import { User } from '../UsersTable';
+import insert from '../../../main/server/endpoints/sql/insert';
 // import { queriablesStats } from '../../../main/server/endpoints/sql/utils/queriablesStats';
 
 export default function useQuery() {
@@ -186,6 +187,40 @@ export default function useQuery() {
           });
 
           return undefined;
+        }
+      },
+
+      async insert(table: string, values: Specimen) {
+        const insertResponse = await axios
+          .post(BACKEND_URL + '/api/insert/single', {
+            values,
+            table,
+          })
+          .catch((error) => error.response);
+
+        if (insertResponse.status === 201) {
+        } else if (insertResponse.status === 401) {
+          // session expired
+          expireSession();
+
+          await awaitReauth();
+          await queries.insert(table, values);
+        } else {
+          notify(
+            {
+              title: 'Server Error',
+              message:
+                'Please check the corresponding log for more information',
+              level: 'error',
+            },
+            'error'
+          );
+          // TODO: log errors
+          // const { code, sqlMessage } = insertResponse.data;
+          // serverErrors.push({
+          //   index: i,
+          //   errors: [{ field: code, message: sqlMessage }],
+          // });
         }
       },
 

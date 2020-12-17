@@ -1,6 +1,6 @@
 module.exports = {
   title: 'SpeSQL',
-  tagline: 'Documentation for the ',
+  tagline: 'Software for Managing FLMNH Collection Data',
   url: 'https://flmnh-mgcl.github.io',
   baseUrl: '/spesql/',
   onBrokenLinks: 'throw',
@@ -77,10 +77,6 @@ module.exports = {
         {
           title: 'More',
           items: [
-            {
-              label: 'Blog',
-              to: 'blog',
-            },
             {
               label: 'GitHub',
               href: 'https://github.com/facebook/docusaurus',

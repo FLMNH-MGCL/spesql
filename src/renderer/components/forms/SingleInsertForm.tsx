@@ -95,13 +95,7 @@ function Cataloging({ page }: FormPart) {
         Cataloging
       </Heading>
       <Form.Group flex>
-        <Form.Input
-          name="queryType"
-          disabled
-          value="INSERT"
-          label="Query Type"
-          fullWidth
-        />
+        <Form.Input disabled value="INSERT" label="Query Type" fullWidth />
 
         <Form.Select
           name="databaseTable"
@@ -275,7 +269,7 @@ function RecordLevelInformation({ page }: FormPart) {
           <Form.Area
             label="otherCollectors"
             name="otherCollectors"
-            placeholder="Gamgee, Samwise | Meriadoc Brandybuck | Peregrin Took"
+            placeholder="Samwise Gamgee | Meriadoc Brandybuck | Peregrin Took"
             register={{ validate: validateNameListField }}
             fullWidth
           />
@@ -616,7 +610,7 @@ function Locality({ page }: FormPart) {
           <Form.Input
             label="georeferencedBy"
             name="georeferencedBy"
-            placeholder="Dúrin, Gimli | Tom Bombadil | Arwen Evenstar"
+            placeholder="Gimli Dúrin | Tom Bombadil | Arwen Evenstar"
             register={{ validate: validateNameListField }}
             fullWidth
           />

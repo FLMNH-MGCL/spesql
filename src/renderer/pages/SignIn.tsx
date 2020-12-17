@@ -200,9 +200,11 @@ export default function SignIn() {
                 }
               />
               <CircleButton
-                onClick={() => navigate('/documentation')}
+                onClick={() =>
+                  open('https://flmnh-mgcl.github.io/spesql/docs/')
+                }
                 icon={
-                  <div title="Documentation">
+                  <div title="View Documentation">
                     <svg
                       className="w-6 h-6"
                       fill="none"

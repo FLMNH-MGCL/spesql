@@ -11,9 +11,7 @@ import {
   validUnits,
   dispositionControl,
 } from '../components/utils/constants';
-
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
-import { Specimen } from '../types';
 import { SelectOption } from '../components/ui/Select';
 
 // TODO: ADD DOCUMENTATION
@@ -114,19 +112,21 @@ export function validateName(name: string) {
     return true;
   }
 
-  let properNounPattern = /(\b[A-Z](?!\s))/g;
-  let namePattern = /^[a-zA-Z]+ [a-zA-Z]+ ?[a-zA-Z]+$/;
+  const isProperNoun = validateProperNoun(name);
 
-  let nameRegex = new RegExp(namePattern);
+  if (isProperNoun === true) {
+    const names = name.split(' ');
 
-  // console.log('name:', name, '\nstored as:', standardizeName(name));
-  // console.log('name:', name, 'passed?:', nameRegex.test(name));
-
-  if (name.split(' ').length !== name.match(properNounPattern)?.length) {
-    return 'Capitalize the first letters';
+    if (names.length < 2) {
+      return 'Please provide at least first and last names';
+    } else if (name.indexOf(',') >= 0) {
+      return 'Invalid name, detected comma';
+    } else {
+      return true;
+    }
+  } else {
+    return isProperNoun;
   }
-
-  return nameRegex.test(name) ? true : 'Invalid name formatting';
 }
 
 export function validateBooleanField(value: string) {
@@ -171,13 +171,16 @@ export function validateProperNoun(value: string) {
     return true;
   }
 
-  const firstLetter = value[0];
+  const parts = value.split(' ');
+  const pattern = new RegExp(/(\b[a-z](?!\s))/g);
 
-  if (firstLetter !== firstLetter.toUpperCase()) {
-    return 'Capitalize the first letter';
+  if (parts.length > 1) {
+    return pattern.test(value)
+      ? 'Capitalize the first letter for each word'
+      : true;
+  } else {
+    return pattern.test(value + ' ') ? 'Capitalize the first letter' : true;
   }
-
-  return true;
 }
 
 export function validateLowerCase(value: string) {
@@ -474,17 +477,22 @@ export function validateGeodeticDatum(value: string) {
   return true;
 }
 
-// TODO: change to multiple
 export function validateDisposition(value: string) {
   if (!value || !value.length) {
     return true;
   }
 
-  if (!dispositionControl.some((el) => el.value === value)) {
-    return `${value} is not an accepted input`;
-  }
+  if (Array.isArray(value)) {
+    return validateControlList(value, dispositionControl);
+  } else {
+    const splitList = value.split('|');
 
-  return true;
+    if (splitList.length < 2 && (value.match(/,/g) || []).length >= 1) {
+      return "It seems you're not using | as the separator";
+    }
+
+    return validateControlList(splitList, preparationsControl);
+  }
 }
 
 export function validateFreezer(value: string) {
@@ -686,92 +694,6 @@ export function validateSpecimen(specimen: any) {
   }
 
   return errors;
-}
-
-export function getSpecimenDefaults(specimen: Specimen) {
-  let corrected = specimen;
-
-  Object.keys(specimen).forEach((key) => {
-    //@ts-ignore
-    if (specimen[key] === '') {
-      //@ts-ignore
-      corrected[key] = null;
-    }
-  });
-
-  return corrected;
-}
-
-// TODO:
-// some fields are correct as input, but incorrect for storage. for example,
-// measurements! we only store in meters, but we allow the input of ft or miles.
-// this function will correct these fields and return the updated specimen
-export function fixPartiallyCorrect(partiallyCorrect: Specimen) {
-  // const updatedElevation = ...
-
-  let slightlyMoreCorrect = getSpecimenDefaults(partiallyCorrect);
-  // console.log(slightlyMoreCorrect);
-
-  let {
-    elevationInMeters,
-    collectedYear,
-    collectedMonth,
-    collectedDay,
-    dateEntered,
-    decimalLatitude,
-    decimalLongitude,
-  } = partiallyCorrect as any;
-
-  const elevationQuantity = partiallyCorrect.elevationInMeters
-    ? new Qty(partiallyCorrect.elevationInMeters)
-    : null;
-
-  if (elevationQuantity) {
-    elevationInMeters = elevationQuantity.to('m').toString();
-  }
-
-  if (!collectedYear) {
-    collectedYear = null;
-  } else {
-    collectedYear = parseInt(collectedYear, 10); // needs to be number
-  }
-
-  if (!collectedMonth) {
-    collectedMonth = null;
-  } else {
-    collectedMonth = parseInt(collectedMonth, 10); // needs to be number
-  }
-
-  if (!collectedDay) {
-    collectedDay = null;
-  } else {
-    collectedDay = parseInt(collectedDay, 10); // needs to be number
-  }
-
-  // TODO: date??
-
-  if (!decimalLatitude) {
-    decimalLatitude = null;
-  } else {
-    decimalLatitude = parseFloat(decimalLatitude);
-  }
-
-  if (!decimalLongitude) {
-    decimalLongitude = null;
-  } else {
-    decimalLongitude = parseFloat(decimalLongitude);
-  }
-
-  return {
-    ...slightlyMoreCorrect,
-    elevationInMeters,
-    collectedYear,
-    collectedMonth,
-    collectedDay,
-    dateEntered,
-    decimalLatitude,
-    decimalLongitude,
-  } as Specimen;
 }
 
 // TODO: types need changing?? value might be string or number or string[]

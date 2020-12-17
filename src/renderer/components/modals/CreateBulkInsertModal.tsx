@@ -7,16 +7,14 @@ import { CSVReader, readString } from 'react-papaparse';
 import { BACKEND_URL, isSpecimen, Specimen, SpecimenFields } from '../../types';
 import { useNotify } from '../utils/context';
 import CreateHelpModal from './CreateHelpModal';
-import {
-  fixPartiallyCorrect,
-  validateSpecimen,
-} from '../../functions/validation';
+import { fixPartiallyCorrect } from '../../functions/util';
 import { useStore } from '../../../stores';
 import axios from 'axios';
 import useToggle from '../utils/useToggle';
 import shallow from 'zustand/shallow';
 import { sleep } from '../../functions/util';
 import Select, { SelectOption } from '../ui/Select';
+import { validateSpecimen } from '../../functions/validation';
 
 // TODO: add typings in this file
 

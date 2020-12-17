@@ -186,10 +186,15 @@ export default function () {
       </div>
       <div className="bg-gray-50 h-16 flex items-center px-4 justify-between">
         <div className="flex flex-row space-x-2 items-center">
-          <EditSpecimen onClick={on} disabled={!selectedSpecimen || editing} />
+          <EditSpecimen
+            onClick={on}
+            disabled={!selectedSpecimen || editing || !hasQueried}
+          />
           <CreateConfirmModal
             disabled={!selectedSpecimen}
-            trigger={<DeleteButton disabled={!selectedSpecimen} />}
+            trigger={
+              <DeleteButton disabled={!selectedSpecimen || !hasQueried} />
+            }
             details="This action cannot be undone"
             onConfirm={() => handleDelete(selectedSpecimen?.id)}
           />

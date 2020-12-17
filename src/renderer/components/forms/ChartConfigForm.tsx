@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 import { SpecimenValidator } from '../../types';
@@ -47,8 +47,6 @@ function AggregateForm({ fields, updateSelection }: AggregateProps) {
 }
 
 function SanekeyChartForm({ keys }: ChartConfigProps) {
-  // const { getValues, setValue } = useFormContext();
-
   const [selected, setSelected] = useState<[string, string, string]>([
     '',
     '',
@@ -71,6 +69,10 @@ function SanekeyChartForm({ keys }: ChartConfigProps) {
     setSelected(newSelected);
     setOptions(getOptions(newSelected));
   }
+
+  useEffect(() => {
+    setOptions(getOptions(selected));
+  }, [keys]);
 
   return (
     <React.Fragment>

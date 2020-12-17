@@ -6,7 +6,7 @@ A portal for interacting with a remote MySQL database, written in TypeScript (Re
 
 ### About This Project
 
-This project is intended for use by the McGuire Center of Lepidoptera and Biodiversity (MGCL) at the Florida Museum of Natural History (FLMNH). As such, by default, the application is only compatible with institutions having identical, MySQL database schemes. It is possible to adapt this software to another isntitution's requirements, however the more closely structured to MGCL's configuration the more seamless the conversion. For more information regarding the structures neccessary for adopting this software,
+This project is intended for use by the McGuire Center of Lepidoptera and Biodiversity (MGCL) at the Florida Museum of Natural History (FLMNH). As such, by default, the application is only compatible with institutions having identical, MySQL database schemes. It is possible to adapt this software to another institution's requirements, however the more closely structured to MGCL's configuration the more seamless the conversion. For more information regarding the structures neccessary for adopting this software,
 please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly. See the Database Schema section for more information, as well.
 
 ### Installation
@@ -15,9 +15,11 @@ Please <a href="https://github.com/FLMNH-MGCL/spesql/releases" target='_blank'>s
 
 If you do not have these credentials or lost these credentials, please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly for eligibility. If you are an employee and need additional assistance, please refer to the instructional videos or contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly, as well.
 
+For more information about installation and usage, please read through the (soon to be) official documentation: [flmnh-mgcl.github.io/spesql/docs/](https://flmnh-mgcl.github.io/spesql/docs/).
+
 ### Database Schema
 
-The main database schema that the client assumes is based off of [Darwin Core](https://dwc.tdwg.org/terms/) principles.
+The main database schema that the client assumes is largely structured from [Darwin Core](https://dwc.tdwg.org/terms/) principles.
 
 ### Contact / Issue Reporting
 

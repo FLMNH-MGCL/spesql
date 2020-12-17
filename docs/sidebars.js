@@ -31,7 +31,14 @@ module.exports = {
         {
           type: 'category',
           label: 'Visualization Page',
-          items: ['visualizationlayout'],
+          items: [
+            'visualizationlayout',
+            {
+              type: 'category',
+              label: 'Charts',
+              items: ['sankeychart'],
+            },
+          ],
         },
       ],
     },

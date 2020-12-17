@@ -6,14 +6,15 @@ slug: /
 
 ## Installation
 
-(NOTE: PLEASE FOLLOW DEV INSTRUCTION (after this paragraph) UNTIL ANNOUNCEMENT ON `#database` SLACK)...You can find all available releases on the GitHub repository for SpeSQL, which will come bundled with most of the requirements for getting it up and running. Please select the most recent release to date [here](https://github.com/FLMNH-MGCL/spesql/releases), download and run the installer, and continue on to the next section.
+(NOTE: PLEASE FOLLOW DEV INSTRUCTION (after this paragraph) UNTIL ANNOUNCEMENT ON `#database` SLACK)...You can find all available releases on the GitHub repository for SpeSQL, which will come bundled with most of the requirements for getting it up and running.
+
+Please select and download the most recent release to date [here](https://github.com/FLMNH-MGCL/spesql/releases) and run the installer. Once installed, please follow the instructions to download and configure the [UF VPN](https://net-services.ufl.edu/provided-services/vpn/clients/). At this point, you may continue on to the next section.
 
 If you are attempting to use a development build (not using a prepackaged release), please ensure you have these prerequisites installed on your machine:
 
 - [Git](https://git-scm.com/downloads)
 - [Node](https://nodejs.org/)
 - [Yarn](https://classic.yarnpkg.com/en/docs/install/)
-- [UF VPN](https://net-services.ufl.edu/provided-services/vpn/clients/)
 
 Open a terminal emulator of your choice and enter the following:
 

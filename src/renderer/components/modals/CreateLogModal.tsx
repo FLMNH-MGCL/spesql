@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import shallow from 'zustand/shallow';
-import { LoggingError, useStore } from '../../../stores';
+import { useStore } from '../../../stores';
 // import CopyButton from '../buttons/CopyButton';
 import WarningButton from '../buttons/WarningButton';
 import Button from '../ui/Button';
@@ -8,11 +8,11 @@ import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
-import { Logs } from '../../../stores/index';
 import Heading from '../ui/Heading';
 import Text from '../ui/Text';
 import CopyButton from '../buttons/CopyButton';
 import clsx from 'clsx';
+import { BulkInsertError, LoggingError, Logs } from '../../../stores/table';
 
 // const tabPages = ['select', 'count', 'insert', 'update', 'delete', 'global'];
 
@@ -100,7 +100,7 @@ function InsertErrorLog({ errors }: BulkLogProps) {
 
     const { bulkInsert } = errors;
 
-    return bulkInsert.map((error) => {
+    return bulkInsert.map((error: BulkInsertError) => {
       const csvRow = error.index + 2;
 
       return (
@@ -140,7 +140,7 @@ function InsertErrorLog({ errors }: BulkLogProps) {
         <Button
           disabled={disabled}
           variant="warning"
-          onClick={() => clearErrors('batchInsert')}
+          onClick={() => clearErrors('bulkInsert')}
         >
           Clear
         </Button>

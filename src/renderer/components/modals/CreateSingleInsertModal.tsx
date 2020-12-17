@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { arrayFieldsToString, getSpecimenDefaults } from '../../functions/util';
+import { Specimen } from '../../types';
 import SingleInsertForm from '../forms/SingleInsertForm';
 import Button from '../ui/Button';
 import { Values } from '../ui/Form';
@@ -7,6 +9,8 @@ import Steps from '../ui/Steps';
 import useKeyboard from '../utils/useKeyboard';
 import CreateHelpModal from './CreateHelpModal';
 import CreateLogModal from './CreateLogModal';
+import axios from 'axios';
+import useQuery from '../utils/useQuery';
 
 type Props = {
   open: boolean;
@@ -15,14 +19,26 @@ type Props = {
 
 // TODO: will need this to be paginated, multistep form
 export default function CreateSingleInsertModal({ open, onClose }: Props) {
+  const { insert } = useQuery();
   const [page, changePage] = useState(0);
 
   useKeyboard('Escape', () => {
     onClose();
   });
 
-  function handleSubmit(values: Values) {
+  async function handleSubmit(values: Values) {
     console.log(values);
+
+    const { databaseTable } = values;
+
+    delete values.databaseTable;
+
+    const correctedArrays = arrayFieldsToString(values as Specimen);
+    const correctedNulls = getSpecimenDefaults(correctedArrays);
+
+    console.log(correctedNulls);
+
+    // await insert(databaseTable, correctedNulls);
   }
 
   function handlePagination(direction: 'back' | 'forward') {

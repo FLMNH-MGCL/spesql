@@ -18,7 +18,6 @@ import useSound from 'use-sound';
 import bulb from './assets/sounds/Bulb.mp3';
 import crosswalk from './assets/sounds/Crosswalk.mp3';
 import { useStore } from '../stores';
-import Documentation from './pages/Documentation';
 import Notification from './components/ui/Notification';
 import { ipcRenderer } from 'electron';
 
@@ -86,7 +85,6 @@ export default function App() {
               <Route path="/shhhhh/secret/admin" element={<Admin />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/settings" element={<Settings />} />
-              <Route path="/documentation" element={<Documentation />} />
               <Route path="*" element={<Lost />} />
             </Routes>
           </Layout>
