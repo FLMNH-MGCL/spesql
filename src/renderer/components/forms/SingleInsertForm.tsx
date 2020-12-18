@@ -55,6 +55,7 @@ import Text from '../ui/Text';
 import { useNotify } from '../utils/context';
 import Checkmark from '../ui/Checkmark';
 import { LoggingError } from '../../../stores/table';
+import Input from '../ui/Input';
 
 type FormPart = {
   page: number;
@@ -95,7 +96,7 @@ function Cataloging({ page }: FormPart) {
         Cataloging
       </Heading>
       <Form.Group flex>
-        <Form.Input disabled value="INSERT" label="Query Type" fullWidth />
+        <Input disabled value="INSERT" label="Query Type" fullWidth />
 
         <Form.Select
           name="databaseTable"

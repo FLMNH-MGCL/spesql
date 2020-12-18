@@ -1,5 +1,6 @@
 import { Specimen } from '../types';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
+import { validUnits } from '../components/utils/constants';
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -104,7 +105,7 @@ export function fixPartiallyCorrect(partiallyCorrect: Specimen) {
   } = partiallyCorrect as any;
 
   const elevationQuantity = partiallyCorrect.elevationInMeters
-    ? new Qty(partiallyCorrect.elevationInMeters)
+    ? Qty.parse(partiallyCorrect.elevationInMeters)
     : null;
 
   if (elevationQuantity) {

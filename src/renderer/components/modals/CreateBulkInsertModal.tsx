@@ -15,6 +15,8 @@ import shallow from 'zustand/shallow';
 import { sleep } from '../../functions/util';
 import Select, { SelectOption } from '../ui/Select';
 import { validateSpecimen } from '../../functions/validation';
+import Radio from '../ui/Radio';
+import { ProgressBar } from 'react-step-progress-bar';
 
 // TODO: add typings in this file
 
@@ -158,8 +160,10 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const [rawData, setRawFile] = useState<any>();
   const [databaseTable, setDatabaseTable] = useState();
   const [tables, setTables] = useState<SelectOption[]>([]);
+  const [override, setOverride] = useToggle(false);
 
   const [loading, { on, off }] = useToggle(false);
+  const [progress, setProgress] = useState(0);
 
   const updateBulkInsertLog = useStore((state) => state.updateBulkInsertLog);
 
@@ -233,6 +237,11 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     return '';
   }
 
+  function handleProgressUpdate(index: number, length: number) {
+    const percent = (index + 1 / length) * 100;
+    setProgress(percent);
+  }
+
   function parseUploadRows() {
     let allErrors = [];
     let insertionValues = [];
@@ -241,7 +250,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       const specimenErrors = validateSpecimen(currentSpecimen);
 
       if (specimenErrors && specimenErrors.length) {
-        console.log('ERROR OCCURRED:', currentSpecimen);
+        // console.log('ERROR OCCURRED:', currentSpecimen);
         allErrors.push({ index: i, errors: specimenErrors });
       } else {
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
@@ -259,7 +268,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       const specimenErrors = validateSpecimen(currentSpecimen);
 
       if (specimenErrors && specimenErrors.length) {
-        console.log('ERROR OCCURRED:', currentSpecimen);
+        // console.log('ERROR OCCURRED:', currentSpecimen);
         allErrors.push({ index: i, errors: specimenErrors });
       } else {
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
@@ -284,6 +293,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         // session expired
         expireSession();
 
+        // dont update percent, since we decremement anyways
         await awaitReauth().then(() => {
           i -= 1;
         });
@@ -293,6 +303,12 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           index: i,
           errors: [{ field: code, message: sqlMessage }],
         });
+
+        // failed, but still need to update
+        handleProgressUpdate(i, insertionValues.length);
+      } else {
+        // passed
+        handleProgressUpdate(i, insertionValues.length);
       }
     }
 
@@ -312,10 +328,16 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         level: 'error',
       });
       updateBulkInsertLog(allErrors);
-      off();
-    } else {
-      console.log(insertionValues);
-      const serverErrors = await insertRows(insertionValues);
+    }
+
+    if (override || !allErrors.length) {
+      const insertions = allErrors.length
+        ? insertionValues.filter((_, index) => {
+            return allErrors.some((_, i) => i !== index);
+          })
+        : insertionValues;
+
+      const serverErrors = await insertRows(insertions);
 
       if (serverErrors.length) {
         notify({
@@ -324,6 +346,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
             'Some or all of the insertions emitted errors. Please review the appropriate logs.',
           level: 'warning',
         });
+        // TODO: append not overwrite
         updateBulkInsertLog(serverErrors);
       } else {
         notify(
@@ -335,8 +358,9 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           'success'
         );
       }
-      off();
     }
+
+    off();
   }
 
   async function handlePasteSubmit() {
@@ -358,9 +382,17 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         level: 'error',
       });
       updateBulkInsertLog(allErrors);
-      off();
-    } else {
-      const serverErrors = await insertRows(insertionValues);
+    }
+
+    // TODO: check me please
+    if (override || !allErrors.length) {
+      const insertions = allErrors.length
+        ? insertionValues.filter((_, index) => {
+            return allErrors.some((_, i) => i !== index);
+          })
+        : insertionValues;
+
+      const serverErrors = await insertRows(insertions);
 
       if (serverErrors.length) {
         notify({
@@ -379,6 +411,8 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       }
       off();
     }
+
+    off();
   }
 
   async function handleSubmit() {
@@ -423,6 +457,19 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
             {tab === 1 && (
               <PasteUpload onFileUpload={(data: any) => setPasteData(data)} />
+            )}
+
+            <Radio
+              className="pt-4"
+              checked={override}
+              label="Insert passing entries, skip invalid"
+              onChange={setOverride.toggle}
+            />
+
+            {progress > 0 && (
+              <div className="pt-4">
+                <ProgressBar percent={progress} />
+              </div>
             )}
           </div>
         </Modal.Content>

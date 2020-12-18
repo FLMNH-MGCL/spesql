@@ -90,6 +90,11 @@
   --ifm-footer-background-color: #272822;
 }
 
+.navbar__inner {
+  max-width: var(--ifm-container-width);
+  margin: 0 auto;
+}
+
 html[data-theme='dark'] {
   --ifm-color-primary: #2c9981;
   --ifm-color-primary-dark: #1ccaff;

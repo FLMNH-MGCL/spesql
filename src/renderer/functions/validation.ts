@@ -107,6 +107,7 @@ export function validateControlList(items: any[], control: SelectOption[]) {
 }
 
 // TODO: change formatting to FIRST MIDDLE LAST
+// TODO: change validation, make exceptions for names such as Rio de Grande
 export function validateName(name: string) {
   if (!name || !name.length) {
     return true;
@@ -418,19 +419,17 @@ export function validateElevation(value: string) {
     return true;
   }
 
-  try {
-    const qty = new Qty(value);
+  const qty = Qty.parse(value);
 
-    if (qty.isUnitless()) {
-      return 'You must provide a unit';
-    } else if (!validUnits.includes(qty.units())) {
-      return `Unit must be: ${validUnits.toString()}`;
-    }
-
-    return true;
-  } catch {
-    return 'Invalid elevation input';
+  if (!qty) {
+    return 'Invalid elevation, unexpected value(s)';
+  } else if (qty.isUnitless()) {
+    return 'You must provide a unit';
+  } else if (!validUnits.includes(qty.units())) {
+    return `Unit must be: ${validUnits.toString()}`;
   }
+
+  return true;
 }
 
 export function validateLatitude(value: string) {
@@ -491,7 +490,7 @@ export function validateDisposition(value: string) {
       return "It seems you're not using | as the separator";
     }
 
-    return validateControlList(splitList, preparationsControl);
+    return validateControlList(splitList, dispositionControl);
   }
 }
 
@@ -522,6 +521,7 @@ export function validateRack(value: string) {
   }
 
   if (value && value.length > 3) {
+    console.log(value);
     return 'Must be 1-3 characters long';
   }
 
@@ -757,7 +757,8 @@ export function determineAndRunFieldValidator(field: string, value: any) {
     case 'county':
     case 'municipality':
     case 'locality':
-      return validateProperNoun(value); // FIXME: maybe not??
+      // return validateProperNoun(value); // FIXME: maybe not??
+      return true; // FIXME: maybe not??
     case 'elevationInMeters':
       return true;
     case 'decimalLatitude':

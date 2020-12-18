@@ -13,7 +13,8 @@ export default forwardRef<HTMLInputElement, Props>(
       <div
         className={clsx(
           'flex items-center ',
-          stacked && 'flex-col justify-center space-y-1'
+          stacked && 'flex-col justify-center space-y-1',
+          className
         )}
       >
         <input

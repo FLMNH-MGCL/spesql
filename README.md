@@ -21,6 +21,10 @@ For more information about installation and usage, please read through the (soon
 
 The main database schema that the client assumes is largely structured from [Darwin Core](https://dwc.tdwg.org/terms/) principles.
 
+### Known Issues / Bugs
+
+Please refer to issues labeled with [`bug`](https://github.com/FLMNH-MGCL/spesql/issues?q=is%3Aissue+is%3Aopen+label%3Abug) to view the current list of issues that may or may not affect your usage of spesql.
+
 ### Contact / Issue Reporting
 
 <a href='http://www.aaronbleopold.com' target="_blank">Aaron Leopold</a> developed this software. If there are any questions regarding the usage of the application, please contact him via email (aaronleopold1221@gmail.com). Additionally, if you are an employee of the FLMNH, refer to the recorded instructional videos (check `#database` in the Slack workspace) for more in-depth demonstrations. For issues relating to software bugs, glitches or unexpected errors, please submit a <a href='https://github.com/FLMNH-MGCL/Database-App/issues/new' target="_blank">GitHub issue</a>. Be sure to describe in

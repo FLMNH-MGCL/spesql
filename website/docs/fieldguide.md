@@ -345,11 +345,12 @@ The primary collector's name, should only be one name pair. The general format i
 
 ##### Passing Examples
 
-`Leopold,Aaron` `Aaron Leopold` `Leopold,Unknown` `Unknown Leopold`
+`Aaron Leopold` `Leopold,Unknown` `Unknown Leopold`
 
 ##### Failing Examples
 
 `Leopold,aaron`
+`Leopold,Aaron`
 `aaron leopold`
 `Aaron`
 `Unknown Unknown`

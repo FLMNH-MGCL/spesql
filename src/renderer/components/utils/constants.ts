@@ -207,6 +207,8 @@ export const countryControl = countries.map((country) => {
   return { label: country.name, value: country.name };
 });
 
+// https://www.cia.gov/library/publications/the-world-factbook/fields/302.html
+
 export const charts = [
   { label: 'AnnotationChart', value: 'AnnotationChart' },
   { label: 'AreaChart', value: 'AreaChart' },
