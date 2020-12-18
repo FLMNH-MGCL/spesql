@@ -238,7 +238,24 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   }
 
   function handleProgressUpdate(index: number, length: number) {
-    const percent = (index + 1 / length) * 100;
+    let percent = (index + 1 / length) * 100;
+
+    if (percent > 100) {
+      // SHOULD NEVER HAPPEN
+      console.log(
+        'PERCENT WENT OVER 100!?...',
+        'index + 1:',
+        index,
+        '|',
+        'length:',
+        length,
+        '|',
+        'percent:',
+        percent
+      );
+      percent = 100;
+    }
+
     setProgress(percent);
   }
 
@@ -289,11 +306,12 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         })
         .catch((error) => error.response);
 
+      handleProgressUpdate(i, insertionValues.length);
+
       if (insertResponse.status === 401) {
         // session expired
         expireSession();
 
-        // dont update percent, since we decremement anyways
         await awaitReauth().then(() => {
           i -= 1;
         });
@@ -303,12 +321,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           index: i,
           errors: [{ field: code, message: sqlMessage }],
         });
-
-        // failed, but still need to update
-        handleProgressUpdate(i, insertionValues.length);
-      } else {
-        // passed
-        handleProgressUpdate(i, insertionValues.length);
       }
     }
 
