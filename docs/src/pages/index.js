@@ -9,31 +9,43 @@ import styles from './styles.module.css';
 const features = [
   {
     title: 'Easy to Use',
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    imageUrl: 'img/remotework.svg',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        SpeSQL was designed in a way to be easily installed and used by
+        researchers unfamiliar with SQL syntax.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    title: 'Customizable Queries',
+    imageUrl: 'img/customizable.svg',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        SpeSQL supports both basic and advanced variants for issuing all the
+        fundamendal CRUD database operations (create, read, update and delete).
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    title: 'Designed for Researchers',
+    imageUrl: 'img/science.svg',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        SpeSQL was thought of by and developed for the researchers at the
+        McGuire Center for Lepidoptera and Biodiversity, at the Florida Museum
+        of Natural History.
+      </>
+    ),
+  },
+
+  {
+    title: 'Completely Open Source',
+    imageUrl: 'img/opencc.svg',
+    description: (
+      <>
+        SpeSQL was developed using TypeScript React and is publically hosted on
+        a GitHub repository.
       </>
     ),
   },
@@ -42,7 +54,7 @@ const features = [
 function Feature({ imageUrl, title, description }) {
   const imgUrl = useBaseUrl(imageUrl);
   return (
-    <div className={clsx('col col--4', styles.feature)}>
+    <div className={clsx('col col--6 padding-vert--lg', styles.feature)}>
       {imgUrl && (
         <div className="text--center">
           <img className={styles.featureImage} src={imgUrl} alt={title} />
@@ -59,10 +71,10 @@ function Home() {
   const { siteConfig = {} } = context;
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
+      title="Welcome"
       description="Description will go into a meta tag in <head />"
     >
-      <header className={clsx('hero hero--primary', styles.heroBanner)}>
+      <header className={clsx('hero', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>

@@ -9,6 +9,10 @@ module.exports = {
   organizationName: 'FLMNH-MGCL', // Usually your GitHub org/user name.
   projectName: 'spesql', // Usually your repo name.
   themeConfig: {
+    prism: {
+      theme: require('prism-react-renderer/themes/github'),
+      darkTheme: require('./src/plugins/prism_themes/monokai'),
+    },
     navbar: {
       title: 'SpeSQL',
       logo: {
@@ -23,9 +27,18 @@ module.exports = {
           position: 'left',
         },
         {
-          href: 'https://github.com/FLMNH-MGCL/spesql',
-          label: 'GitHub',
+          href: 'https://github.com/FLMNH-MGCL/spesql/releases/latest',
           position: 'right',
+          className: 'header-download-link header-icon-link',
+          'aria-label': 'Download',
+          title: 'Download',
+        },
+        {
+          href: 'https://github.com/FLMNH-MGCL/spesql',
+          position: 'right',
+          className: 'header-github-link header-icon-link',
+          'aria-label': 'GitHub repository',
+          title: 'GitHub repository',
         },
       ],
     },
@@ -48,9 +61,11 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Installation',
+              label: 'Getting Started',
               to: 'docs/',
             },
+            { label: 'Usage', to: '/docs/homelayout' },
+            { label: 'Additional Guides', to: '/docs/fieldguide' },
             // {
             //   label: 'Second Doc',
             //   to: 'docs/doc2/',
@@ -61,16 +76,8 @@ module.exports = {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
               label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              href: 'https://twitter.com/KawaharaLab',
             },
           ],
         },
@@ -79,7 +86,7 @@ module.exports = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/FLMNH-MGCL/spesql',
             },
           ],
         },

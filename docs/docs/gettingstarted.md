@@ -6,7 +6,9 @@ slug: /
 
 ## Installation
 
-(NOTE: PLEASE FOLLOW DEV INSTRUCTION (after this paragraph) UNTIL ANNOUNCEMENT ON `#database` SLACK)...You can find all available releases on the GitHub repository for SpeSQL, which will come bundled with most of the requirements for getting it up and running.
+`Note:` Please follow the development build instructions until further anouncement of otherwise in the `#database` slack channel.
+
+You can find all available releases on the GitHub repository for SpeSQL, which will come bundled with most of the requirements for getting it up and running.
 
 Please select and download the most recent release to date [here](https://github.com/FLMNH-MGCL/spesql/releases) and run the installer. Once installed, please follow the instructions to download and configure the [UF VPN](https://net-services.ufl.edu/provided-services/vpn/clients/). At this point, you may continue on to the next section.
 
