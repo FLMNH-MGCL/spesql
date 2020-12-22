@@ -98,10 +98,10 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
         console.log(err);
         // tell react what's up
         // win?.webContents.send('NO CONNECTION');
-        sendStatusToWindow({
-          type: 'error',
-          message: 'Failed to connected to the Database. Please check the VPN',
-        });
+        // sendStatusToWindow({
+        //   type: 'error',
+        //   message: 'Failed to connected to the Database. Please check the VPN',
+        // });
       }
     });
   }

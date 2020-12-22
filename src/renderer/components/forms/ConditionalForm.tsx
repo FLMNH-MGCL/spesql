@@ -17,6 +17,7 @@ import {
 import numberParser from 'number-to-words';
 import Text from '../ui/Text';
 import { values } from 'lodash';
+import Label from '../ui/Label';
 
 type ConditionalFormProps = {
   advanced: boolean;
@@ -45,6 +46,8 @@ export default function ConditionalForm({
   const { getValues, watch, setValue } = useFormContext();
 
   const [conditionCount, setConditionCount] = useState(min ?? 0);
+
+  const [conditionalJoiner, setConditionalJoiner] = useState('AND');
 
   const conditionalCounts = min
     ? conditionCountOptions.filter((el) => el.value >= min)
@@ -78,6 +81,38 @@ export default function ConditionalForm({
   return (
     <React.Fragment>
       <Heading className="pt-3 pb-1">Conditions</Heading>
+
+      <Label className="pt-2">Conditional Joiner:</Label>
+      <Form.Group flex>
+        <Form.Radio
+          name="andJoin"
+          label="AND"
+          disabled={advanced || !conditionCount}
+          checked={
+            !advanced && conditionCount && conditionalJoiner === 'AND'
+              ? true
+              : false
+          }
+          onChange={() =>
+            setConditionalJoiner(conditionalJoiner === 'OR' ? 'AND' : 'AND')
+          }
+        />
+
+        <Form.Radio
+          name="orJoin"
+          label="OR"
+          disabled={advanced || !conditionCount}
+          value={conditionalJoiner}
+          checked={
+            !advanced && conditionCount && conditionalJoiner === 'OR'
+              ? true
+              : false
+          }
+          onChange={() =>
+            setConditionalJoiner(conditionalJoiner === 'AND' ? 'OR' : 'OR')
+          }
+        />
+      </Form.Group>
 
       <Form.Group flex>
         <Form.Select
