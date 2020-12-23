@@ -29,10 +29,13 @@ export default function Code({
   theme = 'dark',
 }: Props) {
   const text = codeString ?? children;
-  const styles = {
-    borderRadius: rounded ? '.375rem' : 0,
-    backgroundColor: theme === 'light' && '#F9FAFB',
-  };
+  const styles =
+    theme === 'light'
+      ? {
+          borderRadius: rounded ? '.375rem' : 0,
+          backgroundColor: '#F9FAFB',
+        }
+      : { borderRadius: rounded ? '.375rem' : 0 };
 
   return (
     <SyntaxHighlighter

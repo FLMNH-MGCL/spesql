@@ -249,6 +249,15 @@ export default function SelectHelpModal() {
             </Text>
 
             <Text>
+              There is a toggle between AND and OR in the conditional section of
+              the query builder forms, this is where you are able to select how
+              your conditions are grouped together. The selection applies for
+              all conditions, however, so if you were to select AND then all the
+              conditions would be AND'ed together. Please see the advanced query
+              builder section for more controlled conditional manipulation.
+            </Text>
+
+            <Text>
               Lets say I wanted to get the ID of specimen that have NULL in
               samplingProtocol and LEP1234569 in catalogNumber. The query for
               this would be using AND instead of OR, as I need both to be true.

@@ -16,7 +16,8 @@ import { ipcRenderer } from 'electron';
 import Layout from './components/Layout';
 import Header from './components/Header';
 import ErrorBoundary from './components/ErrorBoundary';
-import Spinner from './components/ui/Spinner';
+import HomeLayoutPlaceholder from './components/placeholders/HomeLayoutPlaceholder';
+import SigninPlaceholder from './components/placeholders/SigninPlaceholder';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const Lost = React.lazy(() => import('./pages/Lost'));
@@ -29,7 +30,7 @@ function HomeStack() {
     <React.Fragment>
       <Header />
       <CreateVerifySessionModal />
-      <React.Suspense fallback={<div>...LOADING</div>}>
+      <React.Suspense fallback={<HomeLayoutPlaceholder />}>
         <Routes>
           <AuthRoute path="/" element={<Home />} />
           <AuthRoute path="/visualization" element={<Visualization />} />
@@ -84,17 +85,38 @@ export default function App() {
     <MemoryRouter initialEntries={['/home']}>
       <ErrorBoundary>
         <NotificationContext.Provider value={{ notify }}>
-          <React.Suspense fallback={<Spinner />}>
-            <Layout>
-              <Routes>
-                <Route path="/home/*" element={<HomeStack />} />
-                <Route path="/shhhhh/secret/admin" element={<Admin />} />
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="*" element={<Lost />} />
-              </Routes>
-            </Layout>
-          </React.Suspense>
+          {/* <React.Suspense fallback={<LayoutPlaceholder />}> */}
+          <Layout>
+            <Routes>
+              <Route path="/home/*" element={<HomeStack />} />
+              <Route
+                path="/shhhhh/secret/admin"
+                element={
+                  <React.Suspense fallback={<div>LOADING ADMIN</div>}>
+                    <Admin />
+                  </React.Suspense>
+                }
+              />
+              <Route
+                path="/signin"
+                element={
+                  <React.Suspense fallback={<SigninPlaceholder />}>
+                    <SignIn />
+                  </React.Suspense>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <React.Suspense fallback={<div>LOADING SETTINGS</div>}>
+                    <Settings />
+                  </React.Suspense>
+                }
+              />
+              <Route path="*" element={<Lost />} />
+            </Routes>
+          </Layout>
+          {/* </React.Suspense> */}
         </NotificationContext.Provider>
       </ErrorBoundary>
       {/* @ts-ignore */}

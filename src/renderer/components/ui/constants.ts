@@ -45,7 +45,9 @@ export const SPINNER_SIZES = {
 };
 
 export const TEXT_SIZES = {
-  sm: '',
+  tiny: 'text-xs',
+  xs: 'text-sm',
+  sm: 'text-md',
   md: 'text-lg',
   lg: '',
   xl: '',

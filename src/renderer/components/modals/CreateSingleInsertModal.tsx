@@ -100,7 +100,7 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
               variant="single"
               watch="singleInsert"
             />
-            <CreateHelpModal variant="single-insert" />
+            <CreateHelpModal variant="insert" />
           </div>
         </Modal.Footer>
       </Modal>

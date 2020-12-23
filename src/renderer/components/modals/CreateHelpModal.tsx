@@ -3,8 +3,12 @@ import HelpButton from '../buttons/HelpButton';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import useToggle from '../utils/useToggle';
+import AdvancedQueryBuilderHelpModal from './help/AdvancedQueryBuilderHelpModal';
+import CountHelpModal from './help/CountHelpModal';
 import GlobalHelpModal from './help/GlobalHelpModal';
+import InsertHelpModal from './help/InsertHelpModal';
 import SelectHelpModal from './help/SelectHelpModal';
+import UpdateHelpModal from './help/UpdateHelpModal';
 
 type HelpModalProps = {
   variant:
@@ -35,21 +39,19 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
       }
 
       case 'count': {
-        return <SelectHelpModal />;
+        return <CountHelpModal />;
       }
 
       case 'update': {
-        return <SelectHelpModal />;
+        return <UpdateHelpModal />;
       }
 
-      // case 'single-update': {}
-
       case 'insert': {
-        return <SelectHelpModal />;
+        return <InsertHelpModal />;
       }
 
       case 'queryBuilder': {
-        return <SelectHelpModal />;
+        return <AdvancedQueryBuilderHelpModal />;
       }
 
       case 'admin-user': {
@@ -57,10 +59,6 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
       }
 
       case 'admin-table': {
-        return <SelectHelpModal />;
-      }
-
-      case 'single-insert': {
         return <SelectHelpModal />;
       }
 
