@@ -5,7 +5,6 @@ import {
   AutoSizer,
   Column,
   Table as VTable,
-  TableRowProps,
   TableProps as VTableProps,
 } from 'react-virtualized';
 import useWindowDimensions from '../utils/useWindowDimensions';
@@ -43,7 +42,7 @@ function VirtualTable({
   ...props
 }: TableProps) {
   const { width } = useWindowDimensions();
-  const [sortingDirection, setSortingDirection] = useState<SortingConfig>();
+  const [sortingDirection] = useState<SortingConfig>();
 
   // TODO: this implementation won't hold after sorting
   function getRowStyle({ index }: { index: number }) {
@@ -183,13 +182,9 @@ function VirtualTable({
 
 function BasicTable({
   data,
-  activeIndex,
   headerClassName,
   headers,
-  loading,
-  sortable,
   containerClassname,
-  ...props
 }: TableProps) {
   function getHeaders() {
     return Array.from(headers).map((header) => {

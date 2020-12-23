@@ -5,12 +5,10 @@ import url from 'url';
 import { app, BrowserWindow, Menu, Event } from 'electron';
 import is from 'electron-is';
 import { autoUpdater } from 'electron-updater';
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-} from 'electron-devtools-installer';
+
 import './server/server';
 
-console.log(process.env.ELECTRON_WEBPACK_APP_SECRET_KEY);
+// console.log(process.env.ELECTRON_WEBPACK_APP_SECRET_KEY);
 
 app.commandLine.appendSwitch('ignore-certificate-errors');
 
@@ -19,9 +17,17 @@ console.log(path.resolve(__dirname, 'flmnhLogo.png'));
 export let win: BrowserWindow | null = null;
 
 app.on('ready', () => {
-  installExtension(REACT_DEVELOPER_TOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log('An error occurred: ', err));
+  if (is.dev()) {
+    const {
+      default: installExtension,
+      REACT_DEVELOPER_TOOLS,
+    } = require('electron-devtools-installer');
+    installExtension(REACT_DEVELOPER_TOOLS)
+      .then((name: any) => console.log(`Added Extension:  ${name}`))
+      .catch((err: any) =>
+        console.log('Failed to install React Developer Tools: ', err)
+      );
+  }
 
   const customMenu: any = Menu.getApplicationMenu()?.items.map((item: any) => {
     if (item.role === 'filemenu') {

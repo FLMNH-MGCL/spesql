@@ -16,7 +16,9 @@ export default function CreateEditTableModal({ table }: Props) {
 
   const { updateTable } = useQuery();
 
-  function handleEdit(values: Values) {}
+  function handleEdit(_values: Values) {}
+
+  console.log(updateTable, handleEdit);
 
   return (
     <React.Fragment>

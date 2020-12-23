@@ -14,7 +14,9 @@ export default function CreateDeleteTableModal({ table }: Props) {
 
   const { deleteTable } = useQuery();
 
-  function handleDelete() {}
+  console.log(table, deleteTable);
+
+  // function handleDelete() {}
 
   return (
     <React.Fragment>

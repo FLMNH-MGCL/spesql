@@ -7,50 +7,48 @@ import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
-import { Logs } from '../../../stores/index';
-import CopyButton from '../buttons/CopyButton';
-import clsx from 'clsx';
+import { Logs } from '../../../stores/table';
 
 // TODO: make this ADMIN SPECIFIC
 
-type LogProps = {
-  errors?: Logs;
-};
+// type LogProps = {
+//   errors?: Logs;
+// };
 
-function Log({ errors }: LogProps) {
-  const disabled = !errors || !errors.insert || !errors.insert.length;
-  // const clearErrors = useStore((state) => state.clearErrors);
+// function Log({ errors }: LogProps) {
+//   const disabled = !errors || !errors.insert || !errors.insert.length;
+//   // const clearErrors = useStore((state) => state.clearErrors);
 
-  return (
-    <div className="-mb-6">
-      <div className="mt-4 h-56 bg-gray-100 rounded-md overflow-scroll">
-        <div
-          className={clsx(
-            disabled && 'h-full',
-            'p-2 flex flex-col items-center justify-center'
-          )}
-        >
-          {/* {renderLog()} */}
-          <p>No errors exist in the log</p>
-        </div>
-      </div>
+//   return (
+//     <div className="-mb-6">
+//       <div className="mt-4 h-56 bg-gray-100 rounded-md overflow-scroll">
+//         <div
+//           className={clsx(
+//             disabled && 'h-full',
+//             'p-2 flex flex-col items-center justify-center'
+//           )}
+//         >
+//           {/* {renderLog()} */}
+//           <p>No errors exist in the log</p>
+//         </div>
+//       </div>
 
-      <div className="mt-3 flex space-x-2 items-center justify-end">
-        <Button
-          disabled={disabled}
-          variant="warning"
-          // onClick={() => clearErrors('')}
-        >
-          Clear
-        </Button>
-        <CopyButton
-          disabled={disabled}
-          value={JSON.stringify(errors?.insert, null, 2) ?? ''}
-        />
-      </div>
-    </div>
-  );
-}
+//       <div className="mt-3 flex space-x-2 items-center justify-end">
+//         <Button
+//           disabled={disabled}
+//           variant="warning"
+//           // onClick={() => clearErrors('')}
+//         >
+//           Clear
+//         </Button>
+//         <CopyButton
+//           disabled={disabled}
+//           value={JSON.stringify(errors?.insert, null, 2) ?? ''}
+//         />
+//       </div>
+//     </div>
+//   );
+// }
 
 type Props = {
   initialTab?: number;
@@ -84,10 +82,12 @@ export default function CreateAdminLogModal({
     switch (tab) {
       // User Operations
       case 0:
-        return <Log errors={errors} />;
+        // return <Log errors={errors} />;
+        return <div>TODO</div>;
       // table operations
       case 1:
-        return <Log errors={errors} />;
+        // return <Log errors={errors} />;
+        return <div>TODO</div>;
 
       default:
         return null;

@@ -36,7 +36,8 @@ export default function CreateSelectModal({ open, onClose }: Props) {
       value: values[`conditionalValue_${current}`],
     };
 
-    const { field, operator, value } = conditional;
+    // value can be destructed too
+    const { field, operator } = conditional;
 
     /**
  * 'IS NOT NULL',

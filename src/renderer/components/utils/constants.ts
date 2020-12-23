@@ -1,4 +1,3 @@
-import { GoogleChartType } from '../../types';
 import { countries } from '../../assets/countries';
 import { SelectOption } from '../ui/Select';
 

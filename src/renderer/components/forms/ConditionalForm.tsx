@@ -16,7 +16,6 @@ import {
 } from '../utils/constants';
 import numberParser from 'number-to-words';
 import Text from '../ui/Text';
-import { values } from 'lodash';
 import Label from '../ui/Label';
 
 type ConditionalFormProps = {

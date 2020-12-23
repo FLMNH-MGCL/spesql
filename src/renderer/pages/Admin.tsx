@@ -7,7 +7,6 @@ import Heading from '../components/ui/Heading';
 import TableCard from '../components/TableCard';
 import { TableStats } from '../types';
 import useQuery from '../components/utils/useQuery';
-import Badge from '../components/ui/Badge';
 import CreateCreateTableModal from '../components/modals/CreateCreateTableModal';
 
 function AdminHeader({ username }: { username?: string }) {

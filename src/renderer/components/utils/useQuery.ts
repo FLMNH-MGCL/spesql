@@ -8,7 +8,6 @@ import useExpiredSession from './useExpiredSession';
 import axios from 'axios';
 import { CountQueryReturn } from '../modals/CreateCountModal';
 import { User } from '../UsersTable';
-import insert from '../../../main/server/endpoints/sql/insert';
 // import { queriablesStats } from '../../../main/server/endpoints/sql/utils/queriablesStats';
 
 export default function useQuery() {
@@ -431,7 +430,7 @@ export default function useQuery() {
           return undefined;
         }
       },
-      async updateTable(table: string, updates: any) {},
+      async updateTable(_table: string, _updates: any) {},
     }),
     [query, selectedSpecimen]
   );

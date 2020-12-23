@@ -13,11 +13,11 @@ type ChartConfigProps = {
   keys: string[];
 };
 
-function validateStringConstraint(value: any) {
+function validateStringConstraint(_value: any) {
   return true;
 }
 
-function validateNumberConstraint(value: any) {}
+// function validateNumberConstraint(_value: any) {}
 
 type AggregateProps = {
   fields: SelectOption[];

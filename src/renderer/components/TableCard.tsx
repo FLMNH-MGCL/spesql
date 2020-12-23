@@ -2,7 +2,6 @@ import React from 'react';
 import { TableStats } from '../types';
 import CreateDeleteTableModal from './modals/CreateDeleteTableModal';
 import CreateEditTableModal from './modals/CreateEditTableModal';
-import Button from './ui/Button';
 import Heading from './ui/Heading';
 
 import numeral from 'numeral';

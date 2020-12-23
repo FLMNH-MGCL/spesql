@@ -1,6 +1,5 @@
 import { Specimen } from '../types';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
-import { validUnits } from '../components/utils/constants';
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

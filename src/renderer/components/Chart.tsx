@@ -3,14 +3,14 @@ import { Chart as GChart } from 'react-google-charts';
 import { useStore } from '../../stores';
 import Spinner from './ui/Spinner';
 
-function ChartError(props: any) {
-  console.log(props);
+// function ChartError(props: any) {
+//   console.log(props);
 
-  return <div>fff</div>;
-}
+//   return <div>fff</div>;
+// }
 
 export default function Chart() {
-  const allData = useStore((state) => state.queryData.data);
+  // const allData = useStore((state) => state.queryData.data);
 
   const { chartType, options } = useStore((state) => state.chartConfig);
 

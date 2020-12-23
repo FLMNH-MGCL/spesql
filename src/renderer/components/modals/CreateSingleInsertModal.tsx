@@ -9,7 +9,6 @@ import Steps from '../ui/Steps';
 import useKeyboard from '../utils/useKeyboard';
 import CreateHelpModal from './CreateHelpModal';
 import CreateLogModal from './CreateLogModal';
-import axios from 'axios';
 import useQuery from '../utils/useQuery';
 
 type Props = {
@@ -17,10 +16,11 @@ type Props = {
   onClose(): void;
 };
 
-// TODO: will need this to be paginated, multistep form
 export default function CreateSingleInsertModal({ open, onClose }: Props) {
   const { insert } = useQuery();
   const [page, changePage] = useState(0);
+
+  console.log(insert);
 
   useKeyboard('Escape', () => {
     onClose();
@@ -30,13 +30,14 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
     console.log(values);
 
     const { databaseTable } = values;
+    console.log(databaseTable);
 
     delete values.databaseTable;
 
     const correctedArrays = arrayFieldsToString(values as Specimen);
     const correctedNulls = getSpecimenDefaults(correctedArrays);
 
-    console.log(correctedNulls);
+    console.log(correctedNulls, 'TODO UNCOMMENT');
 
     // await insert(databaseTable, correctedNulls);
   }
@@ -104,8 +105,6 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
           </div>
         </Modal.Footer>
       </Modal>
-
-      {/* <Dropdown.Item text="Select" onClick={on} /> */}
     </React.Fragment>
   );
 }

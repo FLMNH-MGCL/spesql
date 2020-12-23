@@ -40,8 +40,6 @@ import { queriablesStats } from './endpoints/sql/utils/queriablesStats';
 import getTableLogs from './endpoints/sql/admin/getTableLogs';
 import logUpdate from './endpoints/sql/utils/logUpdate';
 import logDelete from './endpoints/sql/utils/logDelete';
-import { sendStatusToWindow } from '..';
-// import { win } from '..';
 
 require('dotenv').config();
 
