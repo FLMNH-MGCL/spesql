@@ -239,6 +239,8 @@ export default forwardRef<HTMLSelectElement, Props>(
     const [display, setDisplay] = useState<SelectOption | SelectOption[]>();
     const [selected, setSelected] = useState<string | string[]>();
 
+    const id = Math.random().toString().substr(2, 10);
+
     useEffect(() => {
       // TODO: test me!
       if (multiple && props.value !== undefined && Array.isArray(props.value)) {
@@ -249,6 +251,7 @@ export default forwardRef<HTMLSelectElement, Props>(
 
         items.forEach((item) => {
           if (item) {
+            // @ts-ignore: this will work i promise
             setDisplay(display ? [...display, item] : [item]);
             setSelected(selected ? [...selected, item.value] : [item.value]);
           }
@@ -265,6 +268,7 @@ export default forwardRef<HTMLSelectElement, Props>(
 
         items.forEach((item) => {
           if (item) {
+            // @ts-ignore: this will work i promise
             setDisplay(display ? [...display, item] : [item]);
             setSelected(selected ? [...selected, item.value] : [item.value]);
           }
@@ -286,7 +290,13 @@ export default forwardRef<HTMLSelectElement, Props>(
       }
     }, []);
 
-    // TODO: create hook to handle display every selected change
+    // I don't love this solution at all, but ref is being forwarded so can't use it
+    useEffect(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.dispatchEvent(new Event('change'));
+      }
+    }, [selected]);
 
     function handleSelection(item?: SelectOption) {
       if (!item) {
@@ -356,6 +366,7 @@ export default forwardRef<HTMLSelectElement, Props>(
         {label}
         <div className="mt-1 relative">
           <select
+            id={id}
             value={selected}
             className="hidden"
             onChange={props.onChange ?? fakeChange}

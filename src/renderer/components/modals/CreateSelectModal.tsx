@@ -135,7 +135,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
           </Button.Group>
 
           <div className="flex space-x-2 flex-1">
-            <CreateLogModal initialTab={0} />
+            <CreateLogModal initialTab={0} watch="select" />
             <CreateHelpModal variant="select" />
           </div>
         </Modal.Footer>

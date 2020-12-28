@@ -30,7 +30,7 @@ function Log({ errors, logName }: LogProps) {
       return <p>No errors exist in the log</p>;
 
     return errors[logName].map((error: LoggingError, i: number) => {
-      const { code, field, message } = error;
+      const { code, field, message, sql } = error;
 
       // TODO: maybe use clsx for this, might be cleaner solution
 
@@ -46,6 +46,7 @@ function Log({ errors, logName }: LogProps) {
       return (
         <div className="py-2 w-full" key={i}>
           <div>
+            {sql && <Heading>Attempted Query: {sql}</Heading>}
             <div className="flex space-x-2">
               <Text>{`${leftSide}${message}`}</Text>
             </div>
@@ -176,7 +177,7 @@ export default function CreateLogModal({
   // TODO:
   function calculateHasDanger() {
     // console.log(watchErrors, errors[watchErrors]);
-    if (errors && errors[watchErrors].length) {
+    if (errors && errors[watchErrors]?.length) {
       return true;
     }
 

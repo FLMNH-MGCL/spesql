@@ -8,6 +8,7 @@ import useExpiredSession from './useExpiredSession';
 import axios from 'axios';
 import { CountQueryReturn } from '../modals/CreateCountModal';
 import { User } from '../UsersTable';
+import useLogError from './useLogError';
 // import { queriablesStats } from '../../../main/server/endpoints/sql/utils/queriablesStats';
 
 export default function useQuery() {
@@ -40,6 +41,8 @@ export default function useQuery() {
 
   const [, { expireSession, awaitReauth }] = useExpiredSession();
 
+  const { logSqlError } = useLogError();
+
   const queries = useMemo(
     () => ({
       async count(
@@ -67,10 +70,21 @@ export default function useQuery() {
 
           await awaitReauth();
           queries.count(query, columns, conditions, setState);
+        } else if (countResponse.status === 403) {
+          notify({
+            title: 'SQL Error',
+            message: 'Invalid count query format',
+            level: 'error',
+          });
         } else {
-          // TODO: interpret status
-          // const error = selectResponse.data;
-          notify({ title: 'TODO', message: 'TODO', level: 'error' });
+          notify({
+            title: 'Server Error',
+            message:
+              'Could not process Count query, please check the corresponding logs',
+            level: 'error',
+          });
+
+          logSqlError(countResponse.data, 'count');
         }
       },
       async createUser(newUser: Partial<User>) {
@@ -133,6 +147,8 @@ export default function useQuery() {
             level: 'error',
           });
 
+          logSqlError(deleteResponse.data, 'delete');
+
           return undefined;
         }
       },
@@ -155,6 +171,9 @@ export default function useQuery() {
             message: 'Please notify Aaron of this bug',
             level: 'error',
           });
+
+          // TODO: log
+          // logSqlError(deleteResponse.data, 'delete');
 
           return false;
         }
@@ -185,6 +204,8 @@ export default function useQuery() {
             level: 'error',
           });
 
+          // TODO: logSqlError(deleteResponse.data, 'delete');
+
           return undefined;
         }
       },
@@ -214,12 +235,8 @@ export default function useQuery() {
             },
             'error'
           );
-          // TODO: log errors
-          // const { code, sqlMessage } = insertResponse.data;
-          // serverErrors.push({
-          //   index: i,
-          //   errors: [{ field: code, message: sqlMessage }],
-          // });
+
+          logSqlError(insertResponse.data, 'singleInsert');
         }
       },
 
@@ -276,6 +293,15 @@ export default function useQuery() {
           await queries.logUpdate(query, specimen, table, catalogNumber);
         } else {
           // TODO: notify of error
+          notify(
+            {
+              title: 'Could not delete',
+              message:
+                'Please check the corresponding log for more information',
+              level: 'error',
+            },
+            'error'
+          );
         }
       },
 
@@ -364,9 +390,14 @@ export default function useQuery() {
             callback
           );
         } else {
-          // TODO: interpret status
-          // const error = selectResponse.data;
-          notify({ title: 'TODO', message: 'TODO', level: 'error' });
+          notify({
+            title: 'Server Error',
+            message:
+              'Could not process Select query, please check the corresponding logs',
+            level: 'error',
+          });
+
+          logSqlError(selectResponse.data, 'select');
         }
 
         toggleLoading(false);

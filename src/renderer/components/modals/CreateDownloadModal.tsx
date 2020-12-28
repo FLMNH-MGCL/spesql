@@ -34,7 +34,7 @@ export default function CreateDownloadModal({
           <Text>{description ?? 'To download press the Confirm button'}</Text>
 
           <div className="py-2">
-            {data.length && <Text>{`Total Size: ${data.length}`}</Text>}
+            {data.length && <Text>{`Total Size (rows): ${data.length}`}</Text>}
             {data.length && <Text>{`Default Separator: '\\t'`}</Text>}
           </div>
         </Modal.Content>

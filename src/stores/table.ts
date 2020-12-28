@@ -6,6 +6,7 @@ export type TableConfig = {
 export type LoggingError = {
   index?: number; // refers to the line number in the CSV
   code?: string | number;
+  sql?: string;
   field?: string;
   message: string;
 };

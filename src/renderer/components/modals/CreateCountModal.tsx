@@ -55,7 +55,7 @@ export default function CreateCountModal({ open, onClose }: Props) {
       distinct,
     } = values;
 
-    if (!distinct && fields.length > 1) {
+    if (!distinct && fields?.length > 1) {
       notify({
         title: 'Query Syntax',
         message:
@@ -163,7 +163,7 @@ export default function CreateCountModal({ open, onClose }: Props) {
           />
 
           <div className="flex space-x-2 flex-1">
-            <CreateLogModal initialTab={1} />
+            <CreateLogModal initialTab={1} watch="count" />
             <CreateHelpModal variant="count" />
           </div>
         </Modal.Footer>

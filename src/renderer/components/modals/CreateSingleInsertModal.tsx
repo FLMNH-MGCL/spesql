@@ -20,7 +20,7 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
   const { insert } = useQuery();
   const [page, changePage] = useState(0);
 
-  console.log(insert);
+  // console.log(insert);
 
   useKeyboard('Escape', () => {
     onClose();

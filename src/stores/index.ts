@@ -1,4 +1,4 @@
-import create from 'zustand';
+import create, { PartialState } from 'zustand';
 import { GoogleChartType, Specimen } from '../renderer/types';
 import { defaultQueryConfig, QueryConfig } from './query';
 import {
@@ -17,6 +17,22 @@ export type User = {
   fullName: string;
   accessRole: string;
 };
+
+function resetLog(
+  logName: string,
+  set: (
+    partial: PartialState<SpesqlSession>,
+    replace?: boolean | undefined
+  ) => void
+) {
+  set((state) => ({
+    ...state,
+    errors: {
+      ...state.errors,
+      [logName]: null,
+    },
+  }));
+}
 
 // TODO: change naming scheme for some of these fields, they don't make sense
 type SpesqlSession = {
@@ -163,11 +179,12 @@ export const useStore = create<SpesqlSession>((set) => ({
   },
 
   updateSelectLog: (newLog: LoggingError[]) => {
+    // resetLog('select', set);
     set((state) => ({
       ...state,
       errors: {
         ...state.errors,
-        select: newLog,
+        select: newLog.map((el) => el),
       },
     }));
   },
