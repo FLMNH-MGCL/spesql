@@ -9,7 +9,6 @@ import CreateVerifySessionModal from './components/modals/CreateVerifySessionMod
 import useSound from 'use-sound';
 import bulb from './assets/sounds/Bulb.mp3';
 import crosswalk from './assets/sounds/Crosswalk.mp3';
-import { useStore } from '../stores';
 import Notification from './components/ui/Notification';
 import { ipcRenderer } from 'electron';
 
@@ -18,6 +17,7 @@ import Header from './components/Header';
 import ErrorBoundary from './components/ErrorBoundary';
 import HomeLayoutPlaceholder from './components/placeholders/HomeLayoutPlaceholder';
 import SigninPlaceholder from './components/placeholders/SigninPlaceholder';
+import { usePersistedStore } from '../stores/persisted';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const Lost = React.lazy(() => import('./pages/Lost'));
@@ -44,7 +44,8 @@ export default function App() {
   const [playError] = useSound(bulb);
   const [playSuccess] = useSound(crosswalk);
 
-  const prefersSound = useStore((state) => state.prefersSound);
+  const prefersSound = usePersistedStore((state) => state.prefersSound);
+  // const prefersSound = useStore((state) => state.prefersSound);
 
   const notificationSystem = createRef();
 

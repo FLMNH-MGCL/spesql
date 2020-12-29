@@ -24,7 +24,7 @@ export default forwardRef<HTMLInputElement, Props>(
           type="checkbox"
           className={clsx(
             props.disabled ? 'bg-gray-100' : 'cursor-pointer',
-            'form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out cursor-pointer'
+            'rounded form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out cursor-pointer'
           )}
           {...props}
         />

@@ -2,6 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const uicolors = require('@tailwindcss/ui/colors');
 
 module.exports = {
+  darkMode: 'class',
   theme: {
     colors: {
       ...uicolors,
@@ -60,5 +61,11 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/ui')],
+  // plugins: [require('@tailwindcss/ui')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
+  purge: ['./src/**/*.{js,jsx,ts,tsx}'],
 };

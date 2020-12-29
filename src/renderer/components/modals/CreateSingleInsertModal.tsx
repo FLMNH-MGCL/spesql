@@ -9,7 +9,7 @@ import Steps from '../ui/Steps';
 import useKeyboard from '../utils/useKeyboard';
 import CreateHelpModal from './CreateHelpModal';
 import CreateLogModal from './CreateLogModal';
-import useQuery from '../utils/useQuery';
+// import useQuery from '../utils/useQuery';
 
 type Props = {
   open: boolean;
@@ -17,7 +17,7 @@ type Props = {
 };
 
 export default function CreateSingleInsertModal({ open, onClose }: Props) {
-  const { insert } = useQuery();
+  // const { insert } = useQuery();
   const [page, changePage] = useState(0);
 
   // console.log(insert);

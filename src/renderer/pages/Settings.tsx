@@ -8,8 +8,8 @@ import CreateUpdateConfigModal from '../components/modals/CreateUpdateConfigModa
 import { BACKEND_URL } from '../types';
 import Radio from '../components/ui/Radio';
 import Heading from '../components/ui/Heading';
-import { useStore } from '../../stores';
 import shallow from 'zustand/shallow';
+import { usePersistedStore } from '../../stores/persisted';
 
 // use the component in your app!
 
@@ -19,10 +19,17 @@ export default function Settings() {
   const [config, setConfig] = useState<MySqlCredentials | {}>({});
   const [newConfig, setNewConfig] = useState<MySqlCredentials | {}>({});
 
-  const { toggleSoundPreference, prefersSound } = useStore(
+  const {
+    toggleSoundPreference,
+    prefersSound,
+    theme,
+    toggleTheme,
+  } = usePersistedStore(
     (state) => ({
       toggleSoundPreference: state.toggleSoundPreference,
       prefersSound: state.prefersSound,
+      theme: state.theme,
+      toggleTheme: state.toggleTheme,
     }),
     shallow
   );
@@ -99,14 +106,22 @@ export default function Settings() {
       </div>
 
       <div className="h-screen flex items-center">
-        <div className="mx-auto w-full max-w-lg py-8 px-10 bg-white shadow rounded-lg">
+        <div className="mx-auto w-full max-w-lg py-8 px-10 bg-white dark:bg-black shadow rounded-lg">
           <Heading className="pb-2.5">Settings</Heading>
 
-          <Radio
-            label="Mute Notifications"
-            onChange={() => toggleSoundPreference()}
-            checked={!prefersSound}
-          />
+          <div className="flex flex-row space-x-4 items-center">
+            <Radio
+              label="Mute Notifications"
+              onChange={() => toggleSoundPreference()}
+              checked={!prefersSound}
+            />
+
+            <Radio
+              label="Dark Theme"
+              onChange={() => toggleTheme()}
+              checked={theme === 'dark'}
+            />
+          </div>
 
           <label className="mt-4 block text-sm font-medium leading-5 text-gray-700 pb-3">
             MySQL Access Credentials

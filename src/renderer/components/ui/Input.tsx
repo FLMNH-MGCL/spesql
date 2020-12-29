@@ -43,18 +43,22 @@ export default forwardRef<HTMLInputElement, Props>(
             className={clsx(
               slim ? 'py-1' : 'py-2',
               errors &&
-                'border border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red',
-              errors ??
-                'border  border-gray-300 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300',
+                !props.disabled &&
+                'border border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red-300 focus:shadow-outline-red',
+              !errors &&
+                'border  border-gray-300 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:ring-blue-300 focus:border-blue-300',
               'appearance-none block w-full px-3 rounded-md transition duration-150 ease-in-out text-sm leading-5',
               props.disabled && 'bg-gray-100',
               icon && 'pl-10'
+
+              // 'border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm'
             )}
             ref={ref}
+            type={props.type ?? 'text'}
             {...props}
           />
         </div>
-        {errors && (
+        {errors && !props.disabled && (
           <p className="mt-2 text-sm text-red-600">* {errors.message}</p>
         )}
       </label>
