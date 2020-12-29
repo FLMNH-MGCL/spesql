@@ -77,10 +77,11 @@ export const BUTTONS = {
     disabled: 'bg-blue-400',
   },
   default: {
-    base: 'border-gray-300',
+    base: 'border-gray-300 dark:border-dark-600',
     active:
-      'bg-white text-gray-700 hover:text-gray-500 focus:border-blue-300 focus:shadow-outline',
-    disabled: 'bg-gray-100',
+      'dark:bg-dark-400 dark:text-dark-200 bg-white text-gray-700 hover:text-gray-500 focus:border-blue-300 focus:shadow-outline',
+    disabled:
+      'bg-gray-100 dark:bg-dark-600 dark:text-dark-300 dark:border-dark-700',
   },
   danger: {
     base: 'border-transparent text-white',
@@ -101,10 +102,11 @@ export const BUTTONS = {
     disabled: 'bg-gray-100',
   },
   outline: {
-    base: 'bg-white border-gray-300',
+    base: 'bg-white dark:bg-dark-400 border-gray-300 dark:border-dark-600',
     active:
-      'bg-white text-gray-700 hover:text-gray-500 focus:border-blue-300 focus:shadow-outline shadow',
-    disabled: 'bg-gray-100',
+      'bg-white dark:bg-dark-400 text-gray-700 dark:text-dark-200 dark:border-dark-600 hover:text-gray-500 focus:border-blue-300 focus:shadow-outline shadow',
+    disabled:
+      'bg-gray-100 dark:bg-dark-600 dark:text-dark-300 dark:border-dark-700',
   },
   danger_outline: {
     base: 'border-red-300',

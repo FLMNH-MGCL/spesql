@@ -14,7 +14,7 @@ export default function WarningButton({ danger, onClick }: Props) {
       onClick={onClick}
     >
       <svg
-        className="w-5 h-5"
+        className="w-5 h-5 dark:text-dark-200"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

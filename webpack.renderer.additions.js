@@ -1,14 +1,11 @@
 const webpack = require('webpack');
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (config) => {
   config.module.rules.find((rule) => {
     if (rule && rule.test && rule.test.test('.css')) {
       rule.use = [
         'style-loader',
-        // {
-        //   loader: MiniCssExtractPlugin.loader,
-        // },
+
         {
           loader: 'css-loader',
           options: {

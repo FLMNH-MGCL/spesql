@@ -18,12 +18,12 @@ export default function () {
     <div>
       <div className="flex justify-center items-center space-x-4 mx-4 h-minus-header">
         {/* left half */}
-        <div className="bg-white rounded-md shadow-around-lg w-3/4 h-main">
+        <div className="bg-white dark:bg-dark-800 rounded-md shadow-around-lg w-3/4 h-main">
           <VirtualizedTable />
         </div>
 
         {/* right half */}
-        <div className="bg-white rounded-md shadow-around-lg w-1/4 h-main">
+        <div className="bg-white dark:bg-dark-800 rounded-md shadow-around-lg w-1/4 h-main">
           <SpecimenView />
         </div>
       </div>

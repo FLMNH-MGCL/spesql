@@ -35,19 +35,26 @@ export default function QueryMenu({ disableCrud }: Props) {
       >
         <Dropdown.Header text="Query Menu" />
 
-        <Dropdown.Item
-          text="Select"
-          onClick={() => setCurrentModal('select')}
-        />
-        <Dropdown.Item text="Count" onClick={() => setCurrentModal('count')} />
-        <Dropdown.Item
-          text="Update"
-          onClick={disableCrud ? undefined : () => setCurrentModal('update')}
-        />
-        <Dropdown.Item
-          text="Advanced"
-          onClick={disableCrud ? undefined : () => setCurrentModal('advanced')}
-        />
+        <Dropdown.Section>
+          <Dropdown.Item
+            text="Select"
+            onClick={() => setCurrentModal('select')}
+          />
+          <Dropdown.Item
+            text="Count"
+            onClick={() => setCurrentModal('count')}
+          />
+          <Dropdown.Item
+            text="Update"
+            onClick={disableCrud ? undefined : () => setCurrentModal('update')}
+          />
+          <Dropdown.Item
+            text="Advanced"
+            onClick={
+              disableCrud ? undefined : () => setCurrentModal('advanced')
+            }
+          />
+        </Dropdown.Section>
       </Dropdown>
       <CreateSelectModal
         open={currentModal === 'select'}

@@ -20,6 +20,7 @@ import ShowQueryButton from './buttons/ShowQueryButton';
 
 import 'react-virtualized/styles.css';
 import CreateFilterFieldModal from './modals/CreateFilterFieldModal';
+import { usePersistedStore } from '../../stores/persisted';
 
 const SortableTable = SortableContainer(Table);
 
@@ -51,7 +52,7 @@ type FooterProps = {
 
 function TableFooter({ disableInteractables, count }: FooterProps) {
   return (
-    <div className="h-16 bg-gray-50 flex items-center justify-between px-4">
+    <div className="h-16 bg-gray-50 dark:bg-dark-600 flex items-center justify-between px-4">
       <div className="flex space-x-2">
         <CreateFilterFieldModal disabled={disableInteractables} />
         <ClearQueryButton disabled={disableInteractables} />
@@ -102,6 +103,8 @@ export default function () {
     }),
     shallow
   );
+
+  const theme = usePersistedStore((state) => state.theme, shallow);
 
   let display = getDisplay();
 
@@ -229,7 +232,9 @@ export default function () {
   function getRowStyle({ index }: { index: number }) {
     // -1 is the header row
     if (index === -1) {
-      return { backgroundColor: '#f7fafc' };
+      return {
+        backgroundColor: theme === 'dark' ? '#2D2D2D' : '#f7fafc',
+      };
     } else if (!selectedSpecimen) {
       return {
         cursor: 'pointer',
@@ -293,8 +298,8 @@ export default function () {
               onHeaderClick={handleHeaderClick}
               onRowsRendered={() => toggleLoading(false)}
               rowStyle={getRowStyle}
-              headerClassName="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600  tracking-wider cursor-pointer focus:outline-none"
-              rowClassName=""
+              rowClassName="dark:bg-dark-500 dark:text-dark-200 border-gray-200 dark:border-dark-400"
+              headerClassName="px-6 py-3 bg-gray-50 dark:bg-dark-600 text-left text-xs leading-4 font-medium text-gray-600 dark:text-dark-200 tracking-wider cursor-pointer focus:outline-none"
               gridClassName="whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
             >
               {getColumns()}

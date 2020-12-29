@@ -20,7 +20,7 @@ export default function DownloadButton({
 export const DOWNLOAD_ICONS = {
   default: (
     <svg
-      className="w-5 h-5"
+      className="w-5 h-5 dark:text-dark-200"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -36,7 +36,7 @@ export const DOWNLOAD_ICONS = {
   ),
   folder: (
     <svg
-      className="w-5 h-5"
+      className="w-5 h-5 dark:text-dark-200"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -52,7 +52,7 @@ export const DOWNLOAD_ICONS = {
   ),
   document: (
     <svg
-      className="w-5 h-5"
+      className="w-5 h-5 dark:text-dark-200"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ export const DOWNLOAD_ICONS = {
   ),
   cloud: (
     <svg
-      className="w-5 h-5"
+      className="w-5 h-5 dark:text-dark-200"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"

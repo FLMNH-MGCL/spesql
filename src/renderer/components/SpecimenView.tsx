@@ -184,7 +184,7 @@ export default function () {
           </div>
         )}
       </div>
-      <div className="bg-gray-50 h-16 flex items-center px-4 justify-between">
+      <div className="bg-gray-50 dark:bg-dark-600 h-16 flex items-center px-4 justify-between">
         <div className="flex flex-row space-x-2 items-center">
           <EditSpecimen
             onClick={on}

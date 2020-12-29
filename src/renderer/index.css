@@ -44,9 +44,10 @@ form {
 
 .ReactVirtualized__Table__headerRow {
   --bg-opacity: 1;
-  background-color: #f9fafb !important;
-  background-color: rgba(249, 250, 251, var(--bg-opacity)) !important;
+  /* background-color: #f9fafb !important; */
+  /* background-color: rgba(249, 250, 251, var(--bg-opacity)) !important; */
   text-transform: none !important;
+  border: none;
 }
 
 .ReactVirtualized__Table__headerTruncatedText {
@@ -75,16 +76,15 @@ form {
 
   /* divide-y divide-gray-200 */
   border-top-width: 1px;
-  border-color: #edf2f7;
+  /* border-color: #edf2f7; */
 }
 :focus {
   outline: none;
 }
-.ReactVirtualized__Grid__innerScrollContainer {
-  /* divide-y divide-gray-200 */
+/* .ReactVirtualized__Grid__innerScrollContainer {
   border-top-width: 1px;
   border-color: #edf2f7;
-}
+} */
 
 /* .notification-tr {
   border-radius: 0.5rem !important;

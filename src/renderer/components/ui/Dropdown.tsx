@@ -38,7 +38,7 @@ type HeaderProps = {
 
 function Header({ text }: HeaderProps) {
   return (
-    <div className="px-4 py-3">
+    <div className="px-4 py-3 bg-gray-50">
       <p className="text-sm leading-5 font-medium text-gray-900 truncate">
         {text}
       </p>
@@ -105,7 +105,7 @@ export default function Dropdown({
               />
             ) : (
               <button
-                className="rounded-md px-4 py-2 inline-flex justify-center items-center w-full border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
+                className="rounded-md px-4 py-2 inline-flex justify-center items-center w-full border border-gray-300 dark:border-dark-600 bg-white dark:bg-dark-400 dark:shadow-lg text-sm leading-5 font-medium text-gray-700 dark:text-dark-200 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
                 onClick={toggle}
               >
                 {labelIconPosition === 'left' && labelIcon && labelIcon}
@@ -145,14 +145,14 @@ export default function Dropdown({
               )}
             >
               <div
-                className="rounded-md bg-white shadow-xs"
+                className="rounded-md bg-white overflow-hidden shadow-around-lg"
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="options-menu"
               >
-                <div className="border-t border-gray-100"></div>
-                <div className="py-1">{children}</div>
-                <div className="border-t border-gray-100"></div>
+                {/* <div className="border-t border-gray-100"></div> */}
+                <div className="pb-1">{children}</div>
+                {/* <div className="border-t border-gray-100"></div> */}
               </div>
             </motion.div>
           )}

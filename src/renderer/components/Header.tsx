@@ -19,7 +19,7 @@ export default function Header() {
   );
 
   return (
-    <div className="w-full flex bg-white h-16 px-4 shadow justify-between items-center">
+    <div className="w-full flex bg-white dark:bg-dark-500 h-16 px-4 shadow justify-between items-center">
       {/* query interactions */}
       <div className="flex items-center space-x-4">
         <QueryMenu disableCrud={disableCrud} />

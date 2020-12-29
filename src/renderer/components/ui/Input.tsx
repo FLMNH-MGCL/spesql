@@ -23,7 +23,7 @@ export default forwardRef<HTMLInputElement, Props>(
         className={clsx(
           className,
           fullWidth && 'flex-1',
-          'block text-sm font-medium leading-5 text-gray-700'
+          'block text-sm font-medium leading-5 text-gray-700 dark:text-dark-200'
         )}
       >
         {label}
@@ -46,12 +46,10 @@ export default forwardRef<HTMLInputElement, Props>(
                 !props.disabled &&
                 'border border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red-300 focus:shadow-outline-red',
               !errors &&
-                'border  border-gray-300 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:ring-blue-300 focus:border-blue-300',
+                'border border-gray-300 dark:border-dark-400 placeholder-gray-400 dark:placeholder-dark-300 focus:outline-none focus:shadow-outline-blue focus:ring-blue-300 focus:border-blue-300',
               'appearance-none block w-full px-3 rounded-md transition duration-150 ease-in-out text-sm leading-5',
-              props.disabled && 'bg-gray-100',
+              props.disabled ? 'bg-gray-100' : 'bg-white dark:bg-dark-500',
               icon && 'pl-10'
-
-              // 'border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm'
             )}
             ref={ref}
             type={props.type ?? 'text'}
@@ -69,7 +67,7 @@ export default forwardRef<HTMLInputElement, Props>(
 export const INPUT_ICONS = {
   password: (
     <svg
-      className="h-5 w-5 text-gray-400"
+      className="h-5 w-5 text-gray-400 dark:text-dark-200"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -86,7 +84,7 @@ export const INPUT_ICONS = {
 
   passwordVisible: (
     <svg
-      className="h-5 w-5 text-gray-400"
+      className="h-5 w-5 text-gray-400 dark:text-dark-200"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -102,7 +100,7 @@ export const INPUT_ICONS = {
   ),
   user: (
     <svg
-      className="h-5 w-5 text-gray-400"
+      className="h-5 w-5 text-gray-400 dark:text-dark-200"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -119,7 +117,7 @@ export const INPUT_ICONS = {
 
   atMention: (
     <svg
-      className="h-5 w-5 text-gray-400"
+      className="h-5 w-5 text-gray-400 dark:text-dark-200"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -136,7 +134,7 @@ export const INPUT_ICONS = {
 
   search: (
     <svg
-      className="h-5 w-5 text-gray-400"
+      className="h-5 w-5 text-gray-400 dark:text-dark-200"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"

@@ -115,7 +115,7 @@ export default function SignIn() {
   return (
     <div className="h-screen flex items-center">
       <div className="mx-auto w-full max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-dark-700 py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <div className="flex justify-center pb-4">
             <img
               className="object-scale-down max-h-24 shadow rounded-sm"
@@ -142,7 +142,9 @@ export default function SignIn() {
             />
 
             <div className="mt-6 flex text-sm leading-5">
-              <p className="font-medium mr-1">Don't have an account?</p>
+              <p className="font-medium mr-1 dark:text-dark-200">
+                Don't have an account?
+              </p>
               <a
                 href="mailto:kawahara@flmnh.ufl.edu"
                 target="_blank"

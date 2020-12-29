@@ -26,7 +26,7 @@ export default function CopyButton({ title, value, disabled }: CopyProps) {
         disabled
         icon={
           <svg
-            className="w-5 h-5"
+            className="w-5 h-5 dark:text-dark-200"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -49,7 +49,7 @@ export default function CopyButton({ title, value, disabled }: CopyProps) {
       <CircleButton
         icon={
           <svg
-            className="w-5 h-5"
+            className="w-5 h-5 dark:text-dark-200"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
