@@ -106,7 +106,7 @@ export default function Settings() {
       </div>
 
       <div className="h-screen flex items-center">
-        <div className="mx-auto w-full max-w-lg py-8 px-10 bg-white dark:bg-black shadow rounded-lg">
+        <div className="mx-auto w-full max-w-lg py-8 px-10 bg-white dark:bg-dark-700   shadow rounded-lg">
           <Heading className="pb-2.5">Settings</Heading>
 
           <div className="flex flex-row space-x-4 items-center">
@@ -123,11 +123,16 @@ export default function Settings() {
             />
           </div>
 
-          <label className="mt-4 block text-sm font-medium leading-5 text-gray-700 pb-3">
+          <label className="mt-4 block text-sm font-medium leading-5 text-gray-700  dark:text-dark-200 pb-3">
             MySQL Access Credentials
           </label>
-          <div className="bg-gray-100 rounded-lg py-2 px-3">
-            <ReactJson src={config ?? {}} collapsed name="credentials" />
+          <div className="bg-gray-100 dark:bg-dark-twilight rounded-lg p-3">
+            <ReactJson
+              theme={localStorage.theme === 'dark' ? 'twilight' : 'rjv-default'}
+              src={config ?? {}}
+              collapsed
+              name="credentials"
+            />
           </div>
           <div className="flex pt-6 justify-end">
             <CreateUpdateConfigModal setJson={setNewConfig} />

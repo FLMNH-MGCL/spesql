@@ -14,14 +14,12 @@ import numberParser from 'number-to-words';
 import { SelectOption } from '../ui/Select';
 import {
   conditionCountOptions,
-  fieldOptions,
   operators,
+  updateFieldOptions,
 } from '../utils/constants';
 import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
 import useExpiredSession from '../utils/useExpiredSession';
-
-const updateFieldOptions = fieldOptions.filter((el) => el.value !== '*');
 
 type SetFormProps = {
   advanced: boolean;

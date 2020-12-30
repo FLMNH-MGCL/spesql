@@ -28,7 +28,7 @@ function Tab({ text, fullWidth, onClick, active }: TabProps) {
       className={clsx(
         fullWidth && 'flex-1',
         !active && 'border-b-2 border-transparent hover:border-gray-300',
-        'space-y-1 leading-6 font-medium text-gray-900  hover:text-gray-700 focus:outline-none focus:text-gray-700 '
+        'space-y-1 leading-6 font-medium text-gray-900 dark:text-dark-200 hover:text-gray-700 focus:outline-none focus:text-gray-700 '
       )}
       onClick={onClick}
     >

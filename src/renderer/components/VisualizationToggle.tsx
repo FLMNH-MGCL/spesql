@@ -15,7 +15,7 @@ export default function VisualizationToggle() {
   }
 
   return (
-    <div className="flex space-x-2 items-center">
+    <div className="flex space-x-2 items-center dark:text-dark-200">
       <p>Table</p>
       <Switch
         enabled={location.pathname === '/home/visualization'}

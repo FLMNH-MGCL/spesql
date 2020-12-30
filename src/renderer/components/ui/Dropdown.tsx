@@ -15,7 +15,7 @@ function Item({ text, onClick }: ItemProps) {
   return (
     <div
       onClick={onClick}
-      className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+      className="block px-4 py-2 text-sm leading-5 text-gray-700 dark:text-dark-200 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
     >
       {text}
     </div>
@@ -25,9 +25,9 @@ function Item({ text, onClick }: ItemProps) {
 function Section({ children }: { children: React.ReactNode }) {
   return (
     <React.Fragment>
-      <div className="border-t border-gray-100"></div>
+      <div className="border-t border-gray-100 dark:border-dark-400"></div>
       <div className="py-1">{children}</div>
-      <div className="border-t border-gray-100"></div>
+      <div className="border-t border-gray-100 dark:border-dark-400"></div>
     </React.Fragment>
   );
 }
@@ -38,8 +38,8 @@ type HeaderProps = {
 
 function Header({ text }: HeaderProps) {
   return (
-    <div className="px-4 py-3 bg-gray-50">
-      <p className="text-sm leading-5 font-medium text-gray-900 truncate">
+    <div className="px-4 py-3 bg-gray-50 dark:bg-dark-700">
+      <p className="text-sm leading-5 font-medium text-gray-900 dark:text-dark-200 truncate">
         {text}
       </p>
     </div>
@@ -145,7 +145,7 @@ export default function Dropdown({
               )}
             >
               <div
-                className="rounded-md bg-white overflow-hidden shadow-around-lg"
+                className="rounded-md bg-white dark:bg-dark-600 overflow-hidden shadow-around-lg"
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="options-menu"

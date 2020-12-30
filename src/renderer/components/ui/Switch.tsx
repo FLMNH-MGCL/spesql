@@ -17,14 +17,14 @@ export default function Switch({ enabled, onToggle }: Props) {
       <span
         aria-hidden="true"
         className={clsx(
-          enabled ? 'bg-indigo-600' : 'bg-gray-200 ',
+          enabled ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-dark-300',
           'absolute h-4 w-9 mx-auto rounded-full transition-colors ease-in-out duration-200'
         )}
       ></span>
       <span
         aria-hidden="true"
         className={clsx(
-          'absolute left-0 inline-block h-5 w-5 border border-gray-200 rounded-full bg-white shadow transform group-focus:shadow-outline group-focus:border-blue-300 transition-transform ease-in-out duration-200',
+          'absolute left-0 inline-block h-5 w-5 border border-gray-200 dark:border-dark-500 rounded-full bg-white dark:bg-dark-400 shadow transform group-focus:shadow-outline group-focus:border-blue-300 transition-transform ease-in-out duration-200',
           !enabled && 'translate-x-0',
           enabled && 'translate-x-5'
         )}

@@ -194,7 +194,7 @@ function BasicTable({
           key={header}
           className={
             headerClassName ??
-            'px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600 tracking-wider focus:outline-none'
+            'px-6 py-3 bg-gray-50 dark:bg-dark-500 text-left text-xs leading-4 font-medium text-gray-600 dark:text-dark-200 tracking-wider focus:outline-none'
           }
         >
           {header}
@@ -205,22 +205,22 @@ function BasicTable({
   return (
     <div
       className={clsx(
-        'min-h-16 bg-white rounded-md shadow-around-lg',
+        'min-h-16 bg-white dark:bg-dark-600 rounded-md overflow-hidden shadow-around-lg',
         containerClassname
       )}
     >
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-dark-400">
+        <thead className="bg-gray-50 dark:bg-dark-500">
           <tr>{getHeaders()}</tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white dark:bg-dark-400 divide-y divide-gray-200 dark:divide-dark-400">
           {data?.map((obj: any, i: number) => {
             return (
               <tr key={`tr-${i}`}>
                 {headers.map((header: string) => (
                   <td
                     key={`${header}-${i}`}
-                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-dark-200"
                   >
                     {obj[header]}
                   </td>
@@ -230,7 +230,7 @@ function BasicTable({
           })}
         </tbody>
       </table>
-      <div className="h-4 bg-gray-50"></div>
+      <div className="h-4 bg-gray-50 dark:bg-dark-500"></div>
     </div>
   );
 }

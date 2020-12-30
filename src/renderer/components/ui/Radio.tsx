@@ -23,15 +23,15 @@ export default forwardRef<HTMLInputElement, Props>(
           disabled={props.disabled}
           type="checkbox"
           className={clsx(
-            props.disabled ? 'bg-gray-100' : 'cursor-pointer',
-            'rounded form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out cursor-pointer'
+            props.disabled ? 'bg-gray-100 dark:bg-dark-400' : 'cursor-pointer',
+            'rounded form-checkbox dark:bg-dark-300 h-4 w-4 text-indigo-600 transition duration-150 ease-in-out cursor-pointer'
           )}
           {...props}
         />
         <label
           className={clsx(
             !props.disabled && 'cursor-pointer',
-            'ml-2 block text-sm leading-5 text-gray-900'
+            'ml-2 block text-sm leading-5 text-gray-900 dark:text-dark-200'
           )}
           // @ts-ignore: this will work
           onClick={props.onChange}

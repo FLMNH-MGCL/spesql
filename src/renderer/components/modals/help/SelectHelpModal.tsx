@@ -22,7 +22,7 @@ export default function SelectHelpModal() {
         <div className="py-4 flex flex-col space-y-4">
           <Text>The basic structure of a SELECT statement is as follows:</Text>
 
-          <Code language="sql" theme="light" rounded>
+          <Code language="sql" rounded>
             SELECT col_name, col_name_2, col_name_3 FROM table_name;
           </Code>
 
@@ -47,7 +47,7 @@ export default function SelectHelpModal() {
             represent the entire table, then the shorthand would be as follows:
           </Text>
 
-          <Code language="sql" theme="light" rounded>
+          <Code language="sql" rounded>
             SELECT * FROM table_name;
           </Code>
 
@@ -65,11 +65,11 @@ export default function SelectHelpModal() {
             general format is as follows:
           </Text>
 
-          <Code language="sql" theme="light" rounded>
+          <Code language="sql" rounded>
             SELECT * FROM table_name WHERE col_name_2 = 'Some Value';
           </Code>
 
-          <p className="text-sm">
+          <p className="text-sm dark:text-dark-200">
             There are many SQL operators other than 'equal to' used in the
             example, so be sure to reference{' '}
             <a
@@ -93,13 +93,13 @@ export default function SelectHelpModal() {
             with most possible syntax combinations would be as follows:
           </Text>
 
-          <Code language="sql" theme="light" rounded>
+          <Code language="sql" rounded>
             {String(
               'SELECT [DISTINCT|ALL ] { * | [fieldExpression [AS newName]} FROM tableName [alias] [WHERE condition][GROUP BY fieldName(s)]  [HAVING condition] ORDER BY fieldName(s)'
             )}
           </Code>
 
-          <p className="text-sm">
+          <p className="text-sm dark:text-dark-200">
             To overview a full breakdown of each part of this SQL statement,
             refer to{' '}
             <a
@@ -153,7 +153,7 @@ export default function SelectHelpModal() {
               could use would be:
             </Text>
 
-            <Code language="sql" theme="light" rounded>
+            <Code language="sql" rounded>
               SELECT * FROM myTable WHERE samplingProtocol IS NULL;
             </Code>
 
@@ -184,7 +184,7 @@ export default function SelectHelpModal() {
                 narrow the returned table, which would look something like this:
               </Text>
 
-              <Code language="sql" theme="light" rounded>
+              <Code language="sql" rounded>
                 SELECT id FROM myTable WHERE samplingProtocol IS NULL;
               </Code>
 
@@ -209,7 +209,7 @@ export default function SelectHelpModal() {
             using the OR operator:
           </Text>
 
-          <Code language="sql" theme="light" rounded>
+          <Code language="sql" rounded>
             SELECT catalogNumber FROM myTable WHERE samplingProtocol = 'LightMV'
             OR samplingProtocol = 'LightUV';
           </Code>
@@ -264,7 +264,7 @@ export default function SelectHelpModal() {
               The query would be:
             </Text>
 
-            <Code language="sql" theme="light" rounded>
+            <Code language="sql" rounded>
               SELECT id FROM myTable WHERE samplingProtocol IS NULL AND
               catalogNumber = 'LEP1234569';
             </Code>
@@ -284,7 +284,7 @@ export default function SelectHelpModal() {
         </div>
 
         <Heading className="pt-3">For Additional Help</Heading>
-        <p className="text-sm">
+        <p className="text-sm dark:text-dark-200">
           Or for more usage-centered help, please refer to the official{' '}
           <a
             className="text-blue-500"

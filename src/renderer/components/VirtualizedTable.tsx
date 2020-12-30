@@ -65,7 +65,7 @@ function TableFooter({ disableInteractables, count }: FooterProps) {
 
       <div className="flex space-x-2">
         {count > 0 && (
-          <Text className="self-center px-1">{`Count: ${count}`}</Text>
+          <Text className="self-center px-1 dark:text-dark-200">{`Count: ${count}`}</Text>
         )}
         <CreateLogModal />
         <CreateHelpModal variant="global" />
@@ -244,7 +244,7 @@ export default function () {
     // styles for actively selected row
     else if (display[index]?.id === selectedSpecimen?.id) {
       return {
-        backgroundColor: '#f7fafc',
+        backgroundColor: theme === 'dark' ? '#2D2D2D' : '#f7fafc',
         boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
         cursor: 'pointer',
       };

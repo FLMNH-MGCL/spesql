@@ -11,10 +11,10 @@ type ContentProps = {
 
 function ModalContent({ title, children }: ContentProps) {
   return (
-    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-t-md">
+    <div className="bg-white  dark:bg-dark-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-t-md">
       <div className="mt-3 sm:mt-0">
         {typeof title === 'string' ? (
-          <h3 className="text-lg leading-6 font-medium text-gray-900">
+          <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-dark-200">
             {title}
           </h3>
         ) : (
@@ -29,7 +29,7 @@ function ModalContent({ title, children }: ContentProps) {
 
 function ModalFooter({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse sticky rounded-b-md">
+    <div className="bg-gray-50 dark:bg-dark-600 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse sticky rounded-b-md">
       {children}
     </div>
   );

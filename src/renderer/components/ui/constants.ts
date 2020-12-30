@@ -8,11 +8,11 @@ export enum COLORS {
 
 export const TEXT = {
   label: {
-    base: 'text-sm font-medium leading-5 text-gray-700',
+    base: 'text-sm font-medium leading-5 text-gray-700 dark:text-dark-200',
     error: 'text-sm font-medium leading-5 text-red-700',
   },
   subtext: {
-    base: '',
+    base: 'dark:text-dark-200',
     error: '',
   },
 };
@@ -55,9 +55,10 @@ export const TEXT_SIZES = {
 };
 
 export const HEADINGS = {
-  h1: 'font-extrabold text-gray-900 leading-none tracking-tight',
-  h2: 'font-bold text-gray-900 leading-none tracking-tight',
-  h3: 'leading-6 font-medium text-gray-900',
+  h1:
+    'font-extrabold text-gray-900 dark:text-dark-200 leading-none tracking-tight',
+  h2: 'font-bold text-gray-900 dark:text-dark-200 leading-none tracking-tight',
+  h3: 'leading-6 font-medium text-gray-900 dark:text-dark-200',
   h4: '',
   h5: '',
 };

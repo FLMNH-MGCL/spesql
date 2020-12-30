@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
 // import { useNotify } from '../utils/context';
@@ -6,12 +6,12 @@ import useKeyboard from '../utils/useKeyboard';
 import Button from '../ui/Button';
 import CreateLogModal from './CreateLogModal';
 import CreateHelpModal from './CreateHelpModal';
-import Heading from '../ui/Heading';
-import Text from '../ui/Text';
 import QueryBuilder from '../QueryBuilder';
 import { formatQuery } from 'react-querybuilder';
 
-import coderConstruction from '../../assets/svg/coder_two.svg';
+import { queryBuilderFields } from '../utils/constants';
+import Label from '../ui/Label';
+import Code from '../ui/Code';
 
 // IDEAS
 // https://reactjsexample.com/drag-and-drop-sortable-component-for-nested-data-and-hierarchies/
@@ -29,16 +29,7 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
   // interact with global state in this modal
   // const [loading, { on, off }] = useToggle(false);
 
-  const fields = [
-    { name: 'firstName', label: 'First Name' },
-    { name: 'lastName', label: 'Last Name' },
-    { name: 'age', label: 'Age' },
-    { name: 'address', label: 'Address' },
-    { name: 'phone', label: 'Phone' },
-    { name: 'email', label: 'Email' },
-    { name: 'twitter', label: 'Twitter' },
-    { name: 'isDev', label: 'Is a Developer?', defaultValue: false },
-  ];
+  const [codeString, setCodeString] = useState<string>('');
 
   useKeyboard('Escape', () => {
     onClose();
@@ -50,21 +41,38 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
   }
 
   function logQuery(query: any) {
-    console.log(formatQuery(query, 'sql'));
+    const formatted = formatQuery(query, 'sql');
+
+    if (typeof formatted === 'string') {
+      setCodeString(formatted);
+    } else {
+      const { sql, params } = formatted;
+
+      console.log('what is this:', params);
+      setCodeString(sql);
+    }
+  }
+
+  function getInputType(field: string, _operator: string): string {
+    return (
+      queryBuilderFields.find((el) => el.name === field)?.inputType ?? 'text'
+    );
   }
 
   return (
     <React.Fragment>
       <Modal open={open} onClose={onClose} size="almostMassive">
         <Modal.Content title="Query Builder">
-          <Heading centered className="mb-3">
-            This isn't available yet
-          </Heading>
-          <img src={coderConstruction} />
-          <Text centered className="mt-4">
-            But I'm working really hard to make it perfect! (and really cool!)
-          </Text>
-          <QueryBuilder fields={fields} onQueryChange={logQuery} />;
+          <QueryBuilder
+            fields={queryBuilderFields}
+            onQueryChange={logQuery}
+            getInputType={getInputType}
+          />
+
+          <div className="my-3 bg-gray-50 dark:bg-dark-400 rounded-md p-3">
+            <Label>Query Conditional Statement:</Label>
+            <Code language="sql" rounded codeString={codeString} />
+          </div>
         </Modal.Content>
 
         <Modal.Footer>

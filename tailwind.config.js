@@ -3,6 +3,12 @@ const uicolors = require('@tailwindcss/ui/colors');
 
 module.exports = {
   darkMode: 'class',
+  variants: {
+    extend: {
+      margin: ['first'],
+      padding: ['first'],
+    },
+  },
   theme: {
     colors: {
       ...uicolors,
@@ -15,6 +21,8 @@ module.exports = {
         400: '#3d3d3d',
         300: '#b2b2b2',
         200: 'rgb(223,223,223)',
+        twilight: 'rgb(30, 30, 30)',
+        stacking: 'rgba(25,25,25,0.2)',
       },
     },
     extend: {

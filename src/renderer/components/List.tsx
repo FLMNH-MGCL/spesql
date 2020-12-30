@@ -22,12 +22,14 @@ function Item({ fullWidth, img, label, value, editable }: ItemProps) {
         {editable ? (
           getFormElementForField(label, value)
         ) : (
-          <span className="text-sm leading-5 font-medium text-gray-900">
+          <span className="text-sm leading-5 font-medium text-gray-900 dark:text-dark-200">
             {value}
           </span>
         )}
 
-        <span className="text-sm leading-5 text-gray-500">{label}</span>
+        <span className="text-sm leading-5 text-gray-500 dark:text-dark-300">
+          {label}
+        </span>
       </div>
     </li>
   );
@@ -52,12 +54,18 @@ export default function List({ children, onEditSubmit, formId }: ListProps) {
   if (onEditSubmit && formId) {
     return (
       <Form id={formId} onSubmit={onEditSubmit}>
-        <ul className="divide-y divide-gray-200">{children}</ul>
+        <ul className="divide-y divide-gray-200 dark:divide-dark-400">
+          {children}
+        </ul>
       </Form>
     );
   }
 
-  return <ul className="divide-y divide-gray-200">{children}</ul>;
+  return (
+    <ul className="divide-y divide-gray-200 dark:divide-dark-400">
+      {children}
+    </ul>
+  );
 }
 
 List.Item = Item;

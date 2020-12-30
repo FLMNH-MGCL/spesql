@@ -91,11 +91,104 @@ export const BooleanField = [
 
 export const validUnits = ['m', 'ft', 'mi'];
 
-export const fieldOptions = [
+export const fieldOptions: SelectOption[] = [
   { label: 'All', value: '*' },
   ...headerOptions.map((header) => {
     return { label: header, value: header };
   }),
+];
+
+export const updateFieldOptions = fieldOptions.filter((el) => el.value !== '*');
+
+export const queryBuilderFields = [
+  { name: 'id', label: 'id', inputType: 'number' },
+  { name: 'catalogNumber', label: 'catalogNumber', inputType: 'text' },
+  {
+    name: 'otherCatalogNumber',
+    label: 'otherCatalogNumber',
+    inputType: 'text',
+  },
+  { name: 'order_', label: 'order_', inputType: 'text' },
+  { name: 'genus', label: 'genus', inputType: 'text' },
+  { name: 'specificEpithet', label: 'specificEpithet', inputType: 'text' },
+  { name: 'recordNumber', label: 'recordNumber', inputType: 'text' },
+  { name: 'superfamily', label: 'superfamily', inputType: 'text' },
+  { name: 'family', label: 'family', inputType: 'text' },
+  { name: 'subfamily', label: 'subfamily', inputType: 'text' },
+  { name: 'tribe', label: 'tribe', inputType: 'text' },
+  { name: 'subgenus', label: 'subgenus', inputType: 'text' },
+  {
+    name: 'infraspecificEpithet',
+    label: 'infraspecificEpithet',
+    inputType: 'text',
+  },
+  {
+    name: 'identificationQualifier',
+    label: 'identificationQualifier',
+    inputType: 'text',
+  },
+  { name: 'recordedBy', label: 'recordedBy', inputType: 'text' },
+  { name: 'otherCollectors', label: 'otherCollectors', inputType: 'text' },
+  { name: 'identifiedBy', label: 'identifiedBy', inputType: 'text' },
+  { name: 'dateIdentified', label: 'dateIdentified', inputType: 'text' },
+  { name: 'verbatimDate', label: 'verbatimDate', inputType: 'text' },
+  { name: 'collectedYear', label: 'collectedYear', inputType: 'text' },
+  { name: 'collectedMonth', label: 'collectedMonth', inputType: 'text' },
+  { name: 'collectedDay', label: 'collectedDay', inputType: 'text' },
+  { name: 'dateEntered', label: 'dateEntered', inputType: 'text' },
+  { name: 'sex', label: 'sex', inputType: 'text' },
+  { name: 'lifeStage', label: 'lifeStage', inputType: 'text' },
+  { name: 'habitat', label: 'habitat', inputType: 'text' },
+  { name: 'occurrenceRemarks', label: 'occurrenceRemarks', inputType: 'text' },
+  {
+    name: 'molecularOccurrenceRemarks',
+    label: 'molecularOccurrenceRemarks',
+    inputType: 'text',
+  },
+  { name: 'samplingProtocol', label: 'samplingProtocol', inputType: 'text' },
+  { name: 'country', label: 'country', inputType: 'text' },
+  { name: 'stateProvince', label: 'stateProvince', inputType: 'text' },
+  { name: 'county', label: 'county', inputType: 'text' },
+  { name: 'municipality', label: 'municipality', inputType: 'text' },
+  { name: 'locality', label: 'locality', inputType: 'text' },
+  { name: 'elevationInMeters', label: 'elevationInMeters', inputType: 'text' },
+  { name: 'decimalLatitude', label: 'decimalLatitude', inputType: 'text' },
+  { name: 'decimalLongitude', label: 'decimalLongitude', inputType: 'text' },
+  { name: 'geodeticDatum', label: 'geodeticDatum', inputType: 'text' },
+  {
+    name: 'coordinateUncertainty',
+    label: 'coordinateUncertainty',
+    inputType: 'text',
+  },
+  { name: 'verbatimLatitude', label: 'verbatimLatitude', inputType: 'text' },
+  { name: 'verbatimLongitude', label: 'verbatimLongitude', inputType: 'text' },
+  { name: 'georeferencedBy', label: 'georeferencedBy', inputType: 'text' },
+  { name: 'disposition', label: 'disposition', inputType: 'text' },
+  { name: 'isLoaned', label: 'isLoaned', inputType: 'text' },
+  { name: 'loanInstitution', label: 'loanInstitution', inputType: 'text' },
+  { name: 'loaneeName', label: 'loaneeName', inputType: 'text' },
+  { name: 'loanDate', label: 'loanDate', inputType: 'text' },
+  { name: 'loanReturnDate', label: 'loanReturnDate', inputType: 'text' },
+  { name: 'preparations', label: 'preparations', inputType: 'text' },
+  { name: 'freezer', label: 'freezer', inputType: 'text' },
+  { name: 'rack', label: 'rack', inputType: 'text' },
+  { name: 'box', label: 'box', inputType: 'text' },
+  { name: 'tubeSize', label: 'tubeSize', inputType: 'text' },
+  {
+    name: 'associatedSequences',
+    label: 'associatedSequences',
+    inputType: 'text',
+  },
+  {
+    name: 'associatedReferences',
+    label: 'associatedReferences',
+    inputType: 'text',
+  },
+  { name: 'withholdData', label: 'withholdData', inputType: 'text' },
+  { name: 'reared', label: 'reared', inputType: 'text' },
+  { name: 'recordEnteredBy', label: 'recordEnteredBy', inputType: 'text' },
+  { name: 'modifiedInfo', label: 'modifiedInfo', inputType: 'text' },
+  { name: 'fieldNotes', label: 'fieldNotes', inputType: 'text' },
 ];
 
 export const identificationQualifierControl = [

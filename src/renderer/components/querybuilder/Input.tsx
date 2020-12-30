@@ -8,15 +8,23 @@ export type Props = {
   slim?: boolean;
   icon?: keyof typeof INPUT_ICONS;
   iconClick?(): void;
+  onChange(value: any): void;
 } & React.ComponentProps<'input'>;
 
 export default forwardRef<HTMLInputElement, Props>(
-  ({ label, className, fullWidth, slim, iconClick, ...props }, ref) => {
+  (
+    { label, className, fullWidth, slim, iconClick, onChange, ...props },
+    ref
+  ) => {
     // @ts-ignore: this will work I promise
     const errors = props.errors && props.name && props.errors[props.name];
     const icon = props.icon ? INPUT_ICONS[props.icon] : null;
 
-    // console.log(errors);
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+      const text = e.currentTarget.value;
+
+      onChange(text);
+    }
 
     return (
       <label
@@ -55,6 +63,7 @@ export default forwardRef<HTMLInputElement, Props>(
             )}
             ref={ref}
             type={props.type ?? 'text'}
+            onChange={handleChange}
             {...props}
           />
         </div>

@@ -26,7 +26,7 @@ export default function Code({
   children,
   rounded,
   language = 'typescript',
-  theme = 'dark',
+  theme = localStorage.theme ?? 'dark',
 }: Props) {
   const text = codeString ?? children;
   const styles =

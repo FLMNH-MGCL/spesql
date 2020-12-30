@@ -128,7 +128,7 @@ export default function ConditionalForm({
         />
       </Form.Group>
 
-      <div className="z-0 bg-gray-50 rounded-lg w-full p-3">
+      <div className="z-0 bg-gray-50 dark:bg-dark-600 dark:text-dark-300 rounded-lg w-full p-3">
         <div className="">
           {conditionCount > 0 &&
             Array.from({ length: conditionCount }).map((_, index) => {

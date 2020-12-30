@@ -25,7 +25,7 @@ export default function Text({
     <p
       className={clsx(
         `text-${size}`,
-        textStyle,
+        textStyle.base,
         centered && 'text-center',
         className
       )}

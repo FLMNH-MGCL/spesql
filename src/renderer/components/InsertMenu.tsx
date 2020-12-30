@@ -31,14 +31,16 @@ export default function InsertMenu({ disableCrud }: Props) {
         }
       >
         <Dropdown.Header text="Insert Menu" />
-        <Dropdown.Item
-          text="Bulk Insert"
-          onClick={disableCrud ? undefined : () => setCurrentModal('bulk')}
-        />
-        <Dropdown.Item
-          text="Single Insert"
-          onClick={disableCrud ? undefined : () => setCurrentModal('single')}
-        />
+        <Dropdown.Section>
+          <Dropdown.Item
+            text="Bulk Insert"
+            onClick={disableCrud ? undefined : () => setCurrentModal('bulk')}
+          />
+          <Dropdown.Item
+            text="Single Insert"
+            onClick={disableCrud ? undefined : () => setCurrentModal('single')}
+          />
+        </Dropdown.Section>
       </Dropdown>
 
       <CreateBulkInsertModal
