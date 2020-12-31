@@ -12,6 +12,8 @@ import CreateDownloadModal from './modals/CreateDownloadModal';
 import CreateConfirmModal from './modals/CreateConfirmModal';
 import Button from './ui/Button';
 import _ from 'lodash';
+import { usePersistedStore } from '../../stores/persisted';
+import { TABLE_CLASSES } from './ui/constants';
 
 const headerStrings = [
   'catalogNumber',
@@ -116,6 +118,8 @@ export default function TableLog({ table }: { table: string }) {
   const { notify } = useNotify();
   const { getTableLogs } = useQuery();
   const { height, width } = useWindowDimensions();
+
+  const theme = usePersistedStore((state) => state.theme);
 
   const customHeight = height > 700 ? 700 : height - 100;
 
@@ -287,8 +291,22 @@ export default function TableLog({ table }: { table: string }) {
 
   async function handleClearLogs() {}
 
+  function getRowStyle({ index }: { index: number }) {
+    // -1 is the header row
+    if (index === -1) {
+      return {
+        backgroundColor: theme === 'dark' ? '#2D2D2D' : '#f7fafc',
+      };
+    }
+
+    // default styles for all rows
+    return {
+      cursor: 'pointer',
+    };
+  }
+
   return (
-    <div className="bg-white rounded-md shadow-around-lg w-full mt-4 mb-2">
+    <div className="bg-white dark:bg-dark-500 overflow-hidden rounded-md shadow-around-lg w-full mt-4 mb-2">
       <div
         className="w-full align-middle overflow-x-auto overflow-hidden"
         style={{ height: customHeight }}
@@ -303,9 +321,11 @@ export default function TableLog({ table }: { table: string }) {
               headerHeight={60}
               rowCount={display.length}
               rowGetter={({ index }) => display[index]}
+              rowStyle={getRowStyle}
               onHeaderClick={handleHeaderClick}
-              headerClassName="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600  tracking-wider cursor-pointer focus:outline-none"
-              gridClassName="whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
+              rowClassName={TABLE_CLASSES.row}
+              headerClassName={TABLE_CLASSES.headerRow}
+              gridClassName={TABLE_CLASSES.grid}
               rowRenderer={(props) =>
                 rowRenderer({
                   ...props,
@@ -318,7 +338,7 @@ export default function TableLog({ table }: { table: string }) {
           )}
         </AutoSizer>
       </div>
-      <nav className="bg-gray-50 px-4 py-3 flex items-center justify-between sm:px-6 border-t border-cool-gray-100">
+      <nav className={TABLE_CLASSES.footer}>
         <RefreshButton />
 
         <Button.Group>

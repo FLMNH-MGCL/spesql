@@ -123,7 +123,7 @@ export default function CreateCountModal({ open, onClose }: Props) {
           <CountQueryForm onSubmit={runQuery} />
 
           <Divider text="Results" />
-          <div className="relative bg-gray-50 rounded-lg w-full p-3 mt-3 min-h-32">
+          <div className="relative bg-gray-50 dark:bg-dark-600 rounded-lg w-full p-3 mt-3 min-h-32">
             {!loading && (
               <Statistic value={queryReturn?.numTuples} unit="specimen" />
             )}
@@ -131,7 +131,7 @@ export default function CreateCountModal({ open, onClose }: Props) {
             <Spinner active={loading} />
 
             {showQuery && (
-              <p className="order-2 mt-2 text-xs leading-6 font-medium text-gray-700 text-center">
+              <p className="order-2 mt-2 text-xs leading-6 font-medium text-gray-700 dark:text-dark-300 text-center">
                 {queryReturn?.queryString}
               </p>
             )}

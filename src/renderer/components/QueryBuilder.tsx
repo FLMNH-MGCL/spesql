@@ -28,13 +28,13 @@ import TextArea from './querybuilder/TextArea';
 //   // })
 // }
 
-// function convertCombinatorSelectorOptions(
-//   options: { name: string; label: string }[]
-// ) {
-//   return options.map(({ name, label }) => {
-//     return { label, value: name };
-//   });
-// }
+export function convertCombinatorSelectorOptions(
+  options: { name: string; label: string }[]
+) {
+  return options.map(({ name, label }) => {
+    return { label, value: name };
+  });
+}
 
 export function convertToQBCombinatorOptions(
   options: { value: any; label: string }[]

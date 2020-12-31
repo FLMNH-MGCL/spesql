@@ -3,20 +3,19 @@ import { TableStats } from '../types';
 import CreateDeleteTableModal from './modals/CreateDeleteTableModal';
 import CreateEditTableModal from './modals/CreateEditTableModal';
 import Heading from './ui/Heading';
-
 import numeral from 'numeral';
 import CreateTableLogModal from './modals/CreateTableLogModal';
 
 export default function TableCard({ table_name, rows, size }: TableStats) {
   return (
-    <div className="bg-white overflow-hidden shadow rounded-lg w-1/3 flex-shrink-0">
+    <div className="bg-white dark:bg-dark-400 overflow-hidden shadow rounded-lg w-1/3 flex-shrink-0">
       <Heading className="pl-5 pt-3 pb-1">{table_name}</Heading>
 
       <div className="px-5 py-1">
         <div className="flex items-center">
           <div className="flex-shrink-0">
             <svg
-              className="w-6 h-6 text-gray-400"
+              className="w-6 h-6 text-gray-400 dark:text-dark-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -32,18 +31,20 @@ export default function TableCard({ table_name, rows, size }: TableStats) {
           </div>
           <div className="ml-5 w-0 flex-1">
             <dl>
-              <dt className="text-sm font-medium text-gray-500 truncate">
+              <dt className="text-sm font-medium text-gray-500 dark:text-dark-200 truncate">
                 Number of Entries
               </dt>
               <dd>
-                <div className="text-md font-medium text-gray-800">{rows}</div>
+                <div className="text-md font-medium text-gray-800 dark:text-dark-200">
+                  {rows}
+                </div>
               </dd>
             </dl>
           </div>
 
           <div className="flex-shrink-0">
             <svg
-              className="w-6 h-6 text-gray-400"
+              className="w-6 h-6 text-gray-400 dark:text-dark-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -59,11 +60,11 @@ export default function TableCard({ table_name, rows, size }: TableStats) {
           </div>
           <div className="ml-5 w-0 flex-1">
             <dl>
-              <dt className="text-sm font-medium text-gray-500 truncate">
+              <dt className="text-sm font-medium text-gray-600 dark:text-dark-200 truncate">
                 Disk Size
               </dt>
               <dd>
-                <div className="text-md font-medium text-gray-800">
+                <div className="text-md font-medium text-gray-800 dark:text-dark-200">
                   {numeral(size).format('0.00b')}
                 </div>
               </dd>
@@ -71,7 +72,7 @@ export default function TableCard({ table_name, rows, size }: TableStats) {
           </div>
         </div>
       </div>
-      <div className="flex justify-between bg-gray-50 px-5 py-3 mt-1">
+      <div className="flex justify-between bg-gray-50 dark:bg-dark-500 px-5 py-3 mt-1">
         <CreateTableLogModal table={table_name} />
 
         <div className="flex space-x-2 items-center">

@@ -52,19 +52,21 @@ export default function UserMenu() {
       rounded
     >
       <Dropdown.Header text={`Hello, @${username}`} />
-      {accessRole === 'admin' && (
-        <Dropdown.Item
-          text="Admin Portal"
-          onClick={() => navigate('/shhhhh/secret/admin')}
-        />
-      )}
+      <Dropdown.Section>
+        {accessRole === 'admin' && (
+          <Dropdown.Item
+            text="Admin Portal"
+            onClick={() => navigate('/shhhhh/secret/admin')}
+          />
+        )}
 
-      <Dropdown.Item text="Settings" onClick={() => navigate('/settings')} />
-      <CreateConfirmModal
-        details="This action will require you to log back in to continue usage"
-        trigger={<Dropdown.Item text="Logout" />}
-        onConfirm={handleLogout}
-      />
+        <Dropdown.Item text="Settings" onClick={() => navigate('/settings')} />
+        <CreateConfirmModal
+          details="This action will require you to log back in to continue usage"
+          trigger={<Dropdown.Item text="Logout" />}
+          onConfirm={handleLogout}
+        />
+      </Dropdown.Section>
     </Dropdown>
   );
 }

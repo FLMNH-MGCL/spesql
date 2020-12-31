@@ -12,6 +12,8 @@ import CreateDeleteUserModal from './modals/CreateDeleteUserModal';
 import CreateHelpModal from './modals/CreateHelpModal';
 import CreateCreateUserModal from './modals/CreateCreateUserModal';
 import CreateAdminLogModal from './modals/CreateAdminLogModal';
+import { usePersistedStore } from '../../stores/persisted';
+import { TABLE_CLASSES } from './ui/constants';
 
 export type User = {
   id: number;
@@ -118,6 +120,8 @@ export default function UsersTable() {
   const [editing, setEditing] = useState<number>();
   const [deleting, setDeleting] = useState<number>();
   const [loading, { on, off }] = useToggle(false);
+
+  const theme = usePersistedStore((state) => state.theme);
 
   let display = users
     ? sortingDirection
@@ -262,6 +266,20 @@ export default function UsersTable() {
     return columns;
   }
 
+  function getRowStyle({ index }: { index: number }) {
+    // -1 is the header row
+    if (index === -1) {
+      return {
+        backgroundColor: theme === 'dark' ? '#2D2D2D' : '#f7fafc',
+      };
+    }
+
+    // default styles for all rows
+    return {
+      cursor: 'pointer',
+    };
+  }
+
   return (
     <React.Fragment>
       {editing && users && (
@@ -294,9 +312,11 @@ export default function UsersTable() {
               headerHeight={60}
               rowCount={display.length}
               rowGetter={({ index }) => display[index]}
+              rowStyle={getRowStyle}
               onHeaderClick={handleHeaderClick}
-              headerClassName="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-600  tracking-wider cursor-pointer focus:outline-none"
-              gridClassName="whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
+              rowClassName={TABLE_CLASSES.row}
+              headerClassName={TABLE_CLASSES.headerRow}
+              gridClassName={TABLE_CLASSES.grid}
               rowRenderer={(props) =>
                 rowRenderer({
                   ...props,
@@ -310,7 +330,7 @@ export default function UsersTable() {
           )}
         </AutoSizer>
       </div>
-      <nav className="bg-gray-50 px-4 py-3 flex items-center justify-between sm:px-6 border-t border-cool-gray-100">
+      <nav className={TABLE_CLASSES.footer}>
         <div className="flex space-x-2 items-center">
           <CreateCreateUserModal refresh={getUsers} />
         </div>

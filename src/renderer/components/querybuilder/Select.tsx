@@ -203,11 +203,11 @@ export default forwardRef<HTMLSelectElement, Props>(
       }
     }, []);
 
-    // I don't love this solution at all, but ref is being forwarded so can't use it
+    // FIXME: not working... I don't love this solution at all, but ref is being forwarded so can't use it
     useEffect(() => {
       const element = document.getElementById(id);
       if (element) {
-        console.log('found element');
+        // console.log('found element');
         element.dispatchEvent(new Event('change'));
       }
     }, [selected]);

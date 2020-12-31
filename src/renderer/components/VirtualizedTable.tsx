@@ -21,6 +21,7 @@ import ShowQueryButton from './buttons/ShowQueryButton';
 import 'react-virtualized/styles.css';
 import CreateFilterFieldModal from './modals/CreateFilterFieldModal';
 import { usePersistedStore } from '../../stores/persisted';
+import { TABLE_CLASSES } from './ui/constants';
 
 const SortableTable = SortableContainer(Table);
 
@@ -52,7 +53,7 @@ type FooterProps = {
 
 function TableFooter({ disableInteractables, count }: FooterProps) {
   return (
-    <div className="h-16 bg-gray-50 dark:bg-dark-600 flex items-center justify-between px-4">
+    <div className={TABLE_CLASSES.footerFixed}>
       <div className="flex space-x-2">
         <CreateFilterFieldModal disabled={disableInteractables} />
         <ClearQueryButton disabled={disableInteractables} />
@@ -298,9 +299,9 @@ export default function () {
               onHeaderClick={handleHeaderClick}
               onRowsRendered={() => toggleLoading(false)}
               rowStyle={getRowStyle}
-              rowClassName="dark:bg-dark-500 dark:text-dark-200 border-gray-200 dark:border-dark-400"
-              headerClassName="px-6 py-3 bg-gray-50 dark:bg-dark-600 text-left text-xs leading-4 font-medium text-gray-600 dark:text-dark-200 tracking-wider cursor-pointer focus:outline-none"
-              gridClassName="whitespace-no-wrap text-sm leading-5 font-medium text-gray-900"
+              rowClassName={TABLE_CLASSES.row}
+              headerClassName={TABLE_CLASSES.headerRow}
+              gridClassName={TABLE_CLASSES.grid}
             >
               {getColumns()}
             </SortableTable>

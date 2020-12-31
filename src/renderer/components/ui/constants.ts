@@ -133,3 +133,15 @@ export const BUTTON_GAPS = {
   md: 'space-y-3 sm:space-y-0 sm:space-x-3',
   lg: 'space-y-6 sm:space-y-0 sm:space-x-6',
 };
+
+export const TABLE_CLASSES = {
+  headerRow:
+    'px-6 py-3 bg-gray-50 dark:bg-dark-600 text-left text-xs leading-4 font-medium text-gray-600  dark:text-dark-200 tracking-wider cursor-pointer focus:outline-none',
+  row:
+    'dark:bg-dark-500 dark:text-dark-200 border-gray-200 dark:border-dark-400',
+  grid: 'whitespace-no-wrap text-sm leading-5 font-medium text-gray-900',
+  footer:
+    'bg-gray-50 dark:bg-dark-600 px-4 py-3 flex items-center justify-between sm:px-6 border-t border-cool-gray-100  dark:border-dark-400',
+  footerFixed:
+    'h-16 bg-gray-50 dark:bg-dark-600 flex items-center justify-between px-4',
+};

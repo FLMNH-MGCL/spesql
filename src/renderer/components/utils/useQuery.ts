@@ -342,6 +342,7 @@ export default function useQuery() {
         toggleLoading(false);
       },
 
+      // TODO: fix columns/databaseTable/etc for advanced query stuff
       async select(
         query: string,
         columns: any[],
@@ -372,7 +373,7 @@ export default function useQuery() {
             setTable(databaseTable);
             setCurrentQuery(query);
 
-            if (columns.length === 1 && columns[0] === '*') {
+            if (columns?.length === 1 && columns[0] === '*') {
               setAvailableFields('*');
             } else {
               setAvailableFields(columns);

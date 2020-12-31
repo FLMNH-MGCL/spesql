@@ -299,9 +299,12 @@ export default forwardRef<HTMLSelectElement, Props>(
 
     // I don't love this solution at all, but ref is being forwarded so can't use it
     useEffect(() => {
+      // console.log('changed!');
       const element = document.getElementById(id);
       if (element) {
+        // console.log('found element', element);
         element.dispatchEvent(new Event('change'));
+        // console.log('dispatched:', ret);
       }
     }, [selected]);
 
@@ -317,6 +320,7 @@ export default forwardRef<HTMLSelectElement, Props>(
         if (!display || !selected) {
           setDisplay([item]);
           setSelected([item.value]);
+          updateControlled && updateControlled([item.value]);
         } else if (Array.isArray(display) && Array.isArray(selected)) {
           const existing = display.find(
             (el: SelectOption) => el.value === item.value
@@ -328,9 +332,14 @@ export default forwardRef<HTMLSelectElement, Props>(
             );
 
             setSelected(selected.filter((el: string) => el !== item.value));
+            updateControlled &&
+              updateControlled(
+                selected.filter((el: string) => el !== item.value)
+              );
           } else {
             setDisplay([...display, item]);
             setSelected([...selected, item.value]);
+            updateControlled && updateControlled([...selected, item.value]);
           }
         }
       } else {
@@ -359,6 +368,7 @@ export default forwardRef<HTMLSelectElement, Props>(
     // console.log('SELECT COMP', selected);
 
     function fakeChange() {
+      console.log('change:', selected);
       return selected;
     }
 

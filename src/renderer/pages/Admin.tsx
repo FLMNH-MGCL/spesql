@@ -11,7 +11,7 @@ import CreateCreateTableModal from '../components/modals/CreateCreateTableModal'
 
 function AdminHeader({ username }: { username?: string }) {
   return (
-    <div className="w-full flex h-16 items-center px-4 mb-4 bg-white shadow">
+    <div className="w-full flex h-16 items-center px-4 mb-4 bg-white dark:bg-dark-500 shadow">
       <BackButton to="/home" />
       <Heading className="flex-1" centered>
         Welcome, @{username}
@@ -63,7 +63,7 @@ export default function Admin() {
         </div>
 
         <Heading className="pb-3">Users</Heading>
-        <div className="bg-white rounded-md shadow-around-lg w-full flex-1 mb-16">
+        <div className="bg-white dark:bg-dark-500 rounded-md overflow-hidden shadow-around-lg w-full flex-1 mb-16">
           <UsersTable />
         </div>
       </div>
