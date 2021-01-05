@@ -1,34 +1,44 @@
+import clsx from 'clsx';
 import { Request, Response } from 'express';
 import { connection } from '../../server';
+import mysql from 'mysql';
 
 // TODO: I can use nested arrays for bulk inserts, should this go in here?
 export default function bulkInsert(req: Request, res: Response) {
-  const { table, values } = req.body;
+  const { table, columns, values } = req.body;
 
-  console.log(table, values);
   // res.send(...values);
   // return;
 
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
-  } else if (!table || !values || !values.length) {
+  } else if (
+    !table ||
+    !values ||
+    !values.length ||
+    !columns ||
+    !columns.length
+  ) {
     res
       .status(400)
-      .send('You must provide a table and valid entries to insert');
+      .send(
+        'You must provide a table, values and column list to make a bulk insert'
+      );
   } else {
-    connection.query(
-      'INSERT INTO ?? VALUES ?',
-      [table, ...values],
-      (error, data) => {
-        if (error) {
-          console.log(error);
-          res.status(503).send(error);
-        } else {
-          console.log(data);
-          res.status(201).send(data);
-        }
-      }
+    const prefix = clsx(
+      'INSERT INTO',
+      table + `(${mysql.format('??', [columns])})`
     );
+
+    connection.query(prefix + ' VALUES ?', [values], (error, data) => {
+      if (error) {
+        console.log(error);
+        res.status(503).send(error);
+      } else {
+        console.log(data);
+        res.status(201).send(data);
+      }
+    });
   }
 }
 

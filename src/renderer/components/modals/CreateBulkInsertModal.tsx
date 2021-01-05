@@ -7,7 +7,7 @@ import { CSVReader, readString } from 'react-papaparse';
 import { BACKEND_URL, isSpecimen, Specimen, SpecimenFields } from '../../types';
 import { useNotify } from '../utils/context';
 import CreateHelpModal from './CreateHelpModal';
-import { fixPartiallyCorrect } from '../../functions/util';
+import { fixPartiallyCorrect, specimenToArray } from '../../functions/util';
 import { useStore } from '../../../stores';
 import axios from 'axios';
 import useToggle from '../utils/useToggle';
@@ -17,6 +17,7 @@ import Select, { SelectOption } from '../ui/Select';
 import { validateSpecimen } from '../../functions/validation';
 import Radio from '../ui/Radio';
 import { ProgressBar } from 'react-step-progress-bar';
+import mysql from 'mysql';
 
 // TODO: add typings in this file
 
@@ -237,8 +238,12 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     return '';
   }
 
-  function handleProgressUpdate(index: number, length: number) {
-    let percent = (index + 1 / length) * 100;
+  async function handleProgressUpdate(index: number, length: number) {
+    if (index === 0) {
+      return;
+    }
+
+    let percent = ((index + 1) / length) * 100;
 
     if (percent > 100) {
       // SHOULD NEVER HAPPEN
@@ -253,6 +258,10 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         'percent:',
         percent
       );
+
+      console.log('index / length:', (index + 1) / length);
+      console.log('(index / length) * 100:', (index + 1) / length);
+
       percent = 100;
     }
 
@@ -296,6 +305,27 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   }
 
   async function insertRows(insertionValues: Partial<SpecimenFields>[]) {
+    // const values = insertionValues.map((specimen) => specimenToArray(specimen));
+
+    // console.log(
+    //   mysql.format('INSERT INTO ??(?) VALUES ?', [
+    //     databaseTable,
+    //     Object.keys(insertionValues[0]),
+    //     values,
+    //   ])
+    // );
+
+    // const insertResponse = await axios
+    //   .post(BACKEND_URL + '/api/insert/bulk', {
+    //     values: values,
+    //     table: databaseTable,
+    //     columns: Object.keys(insertionValues[0]),
+    //   })
+    //   .catch((error) => error.response);
+
+    // console.log(insertResponse);
+
+    // return [];
     let serverErrors = [];
     for (let i = 0; i < insertionValues.length; i++) {
       const currentValue = insertionValues[i];
@@ -306,7 +336,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         })
         .catch((error) => error.response);
 
-      handleProgressUpdate(i, insertionValues.length);
+      await handleProgressUpdate(i, insertionValues.length);
 
       if (insertResponse.status === 401) {
         // session expired

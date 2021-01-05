@@ -169,3 +169,7 @@ export function toProperNoun(noun: string) {
       .trim();
   }
 }
+
+export function specimenToArray(specimen: Specimen) {
+  return Object.values(specimen);
+}
