@@ -142,8 +142,8 @@ function PasteUpload({ onFileUpload }: UploadProps) {
       }
       rows={4}
       placeholder="Be sure to include the CSV header row"
-      className="flex w-full justify-center px-6 mx-auto pt-5 pb-6 border border-gray-400 rounded-md h-full "
-    ></textarea>
+      className="flex w-full justify-center px-6 mx-auto pt-5 pb-6 border border-gray-400 dark:border-dark-400 placeholder-gray-400 dark:placeholder-dark-300 rounded-md h-full dark:bg-dark-400"
+    />
   );
 }
 

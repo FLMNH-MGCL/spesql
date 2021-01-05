@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../../stores';
 import {
-  NeutralValidator,
   validateFieldSelection,
   validateTableSelection,
 } from '../../../functions/validation';
@@ -48,15 +47,6 @@ export default function SelectForm({ onChange }: Props) {
   return (
     <div>
       <Form.Group flex>
-        <Form.Input
-          name="queryType"
-          disabled
-          value="SELECT"
-          // onChange={onChange}
-          label="Query Type"
-          fullWidth
-        />
-
         <Form.Select
           name="fields"
           label="Fields"

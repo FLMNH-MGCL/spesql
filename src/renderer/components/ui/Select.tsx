@@ -113,8 +113,8 @@ function UISelect({
                 'border  border-gray-300 dark:border-dark-400 placeholder-gray-400 dark:placeholder-dark-300 focus:outline-none focus:shadow-outline-blue focus:border-blue-300',
               'appearance-none block w-full text-left pl-3 pr-10 px-3 rounded-md transition duration-150 ease-in-out text-sm leading-5',
               disabled
-                ? 'bg-gray-100 dark:bg-dark-400'
-                : 'bg-white dark:bg-dark-500'
+                ? 'bg-gray-100 dark:bg-dark-500'
+                : 'bg-white dark:bg-dark-400'
             )}
           >
             <div className="flex items-center space-x-3">
@@ -303,7 +303,7 @@ export default forwardRef<HTMLSelectElement, Props>(
       const element = document.getElementById(id);
       if (element) {
         // console.log('found element', element);
-        element.dispatchEvent(new Event('change'));
+        element.dispatchEvent(new Event('change', { bubbles: true }));
         // console.log('dispatched:', ret);
       }
     }, [selected]);
@@ -368,7 +368,7 @@ export default forwardRef<HTMLSelectElement, Props>(
     // console.log('SELECT COMP', selected);
 
     function fakeChange() {
-      console.log('change:', selected);
+      // console.log('change:', selected);
       return selected;
     }
 

@@ -49,8 +49,8 @@ export default forwardRef<HTMLInputElement, Props>(
                 'border border-gray-300 dark:border-dark-400 placeholder-gray-400 dark:placeholder-dark-300 focus:outline-none focus:shadow-outline-blue focus:ring-blue-300 focus:border-blue-300',
               'appearance-none block w-full px-3 rounded-md transition duration-150 ease-in-out text-sm leading-5',
               props.disabled
-                ? 'bg-gray-100 dark:bg-dark-400'
-                : 'bg-white dark:bg-dark-500',
+                ? 'bg-gray-100 dark:bg-dark-500'
+                : 'bg-white dark:bg-dark-400',
               icon && 'pl-10'
             )}
             ref={ref}

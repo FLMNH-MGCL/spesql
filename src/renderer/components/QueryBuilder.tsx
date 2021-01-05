@@ -57,7 +57,7 @@ function AddRuleButton({
   rules,
   level,
 }: ActionWithRulesProps) {
-  console.log(rules, level);
+  // console.log(rules, level);
   return <Button onClick={handleOnClick}>{title}</Button>;
 }
 

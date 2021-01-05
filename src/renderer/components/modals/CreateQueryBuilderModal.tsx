@@ -17,6 +17,8 @@ import SelectForm from '../querybuilder/forms/SelectForm';
 import clsx from 'clsx';
 import Heading from '../ui/Heading';
 import Divider from '../ui/Divider';
+import UpdateForm from '../querybuilder/forms/UpdateForm';
+import mysql from 'mysql';
 
 // IDEAS
 // https://reactjsexample.com/drag-and-drop-sortable-component-for-nested-data-and-hierarchies/
@@ -28,6 +30,7 @@ type BasicQueryClause = {
   fields: string[];
   databaseTable: string;
   distinct: boolean;
+  sets?: Set[];
 };
 
 const defaultClause = {
@@ -35,11 +38,17 @@ const defaultClause = {
   fields: [],
   databaseTable: '',
   distinct: false,
+  sets: undefined,
 };
 
 type Props = {
   open: boolean;
   onClose(): void;
+};
+
+export type Set = {
+  field?: string;
+  value?: any;
 };
 
 export default function CreateQueryBuilderModal({ open, onClose }: Props) {
@@ -52,7 +61,9 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     defaultClause
   );
 
-  const { queryType } = queryClause;
+  // const [sets, updateSets] = useState<Set[]>([]);
+
+  const { queryType, sets } = queryClause;
 
   function handleClose() {
     setQueryClause(defaultClause);
@@ -103,11 +114,42 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     setQueryPrefix(prefix);
   }
 
+  function buildCountStatement() {
+    const { fields, databaseTable, distinct } = queryClause;
+
+    let fieldString = fields ? fields?.toString().replace(',', ', ') : '';
+    fieldString =
+      fields?.length > 1 || distinct ? 'DISTINCT ' + fieldString : fieldString;
+
+    const prefix = clsx(`SELECT COUNT(${fieldString}) FROM`, databaseTable);
+
+    setQueryPrefix(prefix);
+  }
+
+  function buildUpdateStatement() {
+    const { databaseTable } = queryClause;
+
+    let prefix = clsx('UPDATE', databaseTable, 'SET ?');
+
+    let updates: any = {};
+    sets?.forEach((set) => {
+      // prefix = clsx(prefix);
+      if (set.field) {
+        updates[set.field] = set.value;
+      }
+    });
+
+    console.log(updates);
+    setQueryPrefix(mysql.format(prefix, updates));
+  }
+
   function buildQueryStatement(qType: string) {
     if (qType === 'select') {
       buildSelectStatement();
     } else if (qType === 'count') {
+      buildCountStatement();
     } else if (qType === 'update') {
+      buildUpdateStatement();
     }
   }
 
@@ -126,16 +168,20 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
   function renderQueryForm() {
     if (!queryType) {
       return null;
-    } else if (queryType === 'select') {
-      return <SelectForm onChange={handleControlledChange} />;
-    } else if (queryType === 'count') {
-      return null;
-    } else if (queryType === 'update') {
-      return null;
-    } else {
-      throw new Error(
-        `Invalid query type in Query Builder Component: ${queryType}`
-      );
+    }
+
+    switch (queryType) {
+      case 'select':
+      case 'count':
+        return <SelectForm onChange={handleControlledChange} />;
+      case 'update':
+        return (
+          <UpdateForm onChange={handleControlledChange} sets={sets ?? []} />
+        );
+      default:
+        throw new Error(
+          `Invalid query type in Query Builder Component: ${queryType}`
+        );
     }
   }
 
@@ -143,7 +189,10 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     <React.Fragment>
       <Modal open={open} onClose={handleClose} size="almostMassive">
         <Modal.Content title="Query Builder">
-          <Text className="py-2">TODO: describe me</Text>
+          <Text className="py-2">
+            This modal allows for more complex query statements to be made by
+            allowing for more control over the conditional statements.
+          </Text>
 
           <Select
             className="py-3"
@@ -199,8 +248,10 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
             <Button onClick={onClose}>Cancel</Button>
 
             <Button
-              onClick={onClose} // TODO: CHANGE ME
+              // onClick={onClose} // TODO: CHANGE ME
               variant="primary"
+              type={queryType === 'update' ? 'submit' : 'button'}
+              form={queryType === 'update' ? 'update-bulk-form' : undefined}
             >
               Confirm
             </Button>

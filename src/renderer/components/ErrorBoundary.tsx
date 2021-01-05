@@ -4,6 +4,7 @@ import CopyButton from './buttons/CopyButton';
 import Button from './ui/Button';
 import Heading from './ui/Heading';
 import Text from './ui/Text';
+import TextArea from './ui/TextArea';
 import useToggle from './utils/useToggle';
 
 // TODO: type my things plz
@@ -11,7 +12,7 @@ import useToggle from './utils/useToggle';
 function TopLevelErrorBoundary({ error }: { error?: Error }) {
   const [loading, { on }] = useToggle(false);
   return (
-    <div className="h-screen flex justify-center">
+    <div className="h-screen flex justify-center  dark:bg-dark-900">
       <div className="flex flex-col text-center space-y-4 mt-4">
         <Heading size="massive" tag="h2">
           Uh oh! Something went wrong!
@@ -25,17 +26,14 @@ function TopLevelErrorBoundary({ error }: { error?: Error }) {
           send it on over to Aaron to see what happened!
         </Text>
 
-        <textarea
-          rows={4}
-          className="bg-gray-100 border border-gray-100 rounded-md p-2"
-        >
+        <TextArea rows={4}>
           {error &&
             JSON.stringify({
               error: error.name,
               message: error.message,
               stack: error.stack,
             })}
-        </textarea>
+        </TextArea>
 
         <div className="flex items-center justify-center space-x-4">
           <CopyButton
