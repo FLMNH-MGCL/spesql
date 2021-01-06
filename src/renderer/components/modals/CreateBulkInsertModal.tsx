@@ -18,6 +18,7 @@ import { validateSpecimen } from '../../functions/validation';
 import Radio from '../ui/Radio';
 import { ProgressBar } from 'react-step-progress-bar';
 import mysql from 'mysql';
+import Text from '../ui/Text';
 
 // TODO: add typings in this file
 
@@ -92,8 +93,7 @@ function CSVParser({ onFileUpload }: UploadProps) {
     onFileUpload(data);
 
     setReset(true);
-
-    setTimeout(() => setReset(false), 200);
+    setReset(false);
   }
 
   // documentation for styling the CSV reader https://github.com/Bunlong/react-papaparse/wiki/CSVReader-(Drag-to-Upload)-Style
@@ -161,9 +161,9 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const [rawData, setRawFile] = useState<any>();
   const [databaseTable, setDatabaseTable] = useState();
   const [tables, setTables] = useState<SelectOption[]>([]);
-  const [override, setOverride] = useToggle(false);
 
   const [loading, { on, off }] = useToggle(false);
+  const [rowByRow, setInsertMethod] = useToggle(true);
   const [progress, setProgress] = useState(0);
 
   const updateBulkInsertLog = useStore((state) => state.updateBulkInsertLog);
@@ -245,24 +245,11 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
     let percent = ((index + 1) / length) * 100;
 
-    if (percent > 100) {
+    if (Math.floor(percent) > 100) {
       // SHOULD NEVER HAPPEN
-      console.log(
-        'PERCENT WENT OVER 100!?...',
-        'index + 1:',
-        index,
-        '|',
-        'length:',
-        length,
-        '|',
-        'percent:',
-        percent
+      throw new Error(
+        `An invalid percentage value was somehow generated in the insertion process: index: ${index}, length: ${length}, percentage: ${percent}`
       );
-
-      console.log('index / length:', (index + 1) / length);
-      console.log('(index / length) * 100:', (index + 1) / length);
-
-      percent = 100;
     }
 
     setProgress(percent);
@@ -304,28 +291,37 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     return { allErrors, insertionValues };
   }
 
+  async function bulkInsert(insertionValues: Partial<SpecimenFields>[]) {
+    let errors = [];
+    const values = insertionValues.map((specimen) => specimenToArray(specimen));
+
+    const insertResponse = await axios
+      .post(BACKEND_URL + '/api/insert/bulk', {
+        values: values,
+        table: databaseTable,
+        columns: Object.keys(insertionValues[0]),
+      })
+      .catch((error) => error.response);
+
+    console.log(insertResponse);
+
+    if (insertResponse.status === 401) {
+      // session expired
+      expireSession();
+
+      await awaitReauth();
+    } else if (insertResponse.status !== 201) {
+      const { code, sqlMessage, index } = insertResponse.data;
+      errors.push({
+        index,
+        errors: [{ field: code, message: sqlMessage }],
+      });
+    }
+
+    return errors;
+  }
+
   async function insertRows(insertionValues: Partial<SpecimenFields>[]) {
-    // const values = insertionValues.map((specimen) => specimenToArray(specimen));
-
-    // console.log(
-    //   mysql.format('INSERT INTO ??(?) VALUES ?', [
-    //     databaseTable,
-    //     Object.keys(insertionValues[0]),
-    //     values,
-    //   ])
-    // );
-
-    // const insertResponse = await axios
-    //   .post(BACKEND_URL + '/api/insert/bulk', {
-    //     values: values,
-    //     table: databaseTable,
-    //     columns: Object.keys(insertionValues[0]),
-    //   })
-    //   .catch((error) => error.response);
-
-    // console.log(insertResponse);
-
-    // return [];
     let serverErrors = [];
     for (let i = 0; i < insertionValues.length; i++) {
       const currentValue = insertionValues[i];
@@ -364,42 +360,43 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
     if (allErrors.length) {
       notify({
-        title: 'Insert Errors',
+        title: 'Validation Errors',
         message:
-          'There were one or more errors that occurred during this request that prevented it from being submitted. Please review the appropriate logs.',
+          'Validation errors present. These rows will be skipped, however please review the appropriate logs.',
         level: 'error',
       });
       updateBulkInsertLog(allErrors);
     }
 
-    if (override || !allErrors.length) {
-      const insertions = allErrors.length
-        ? insertionValues.filter((_, index) => {
-            return allErrors.some((_, i) => i !== index);
-          })
-        : insertionValues;
+    const insertions = allErrors.length
+      ? insertionValues.filter((_, index) => {
+          return allErrors.some((_, i) => i !== index);
+        })
+      : insertionValues;
 
-      const serverErrors = await insertRows(insertions);
+    const serverErrors = rowByRow
+      ? await insertRows(insertions)
+      : await bulkInsert(insertions);
 
-      if (serverErrors.length) {
-        notify({
-          title: 'Server Errors Occurred',
-          message:
-            'Some or all of the insertions emitted errors. Please review the appropriate logs.',
-          level: 'warning',
-        });
-        // TODO: append not overwrite
-        updateBulkInsertLog(serverErrors);
-      } else {
-        notify(
-          {
-            title: 'Insertions Complete',
-            message: 'No errors detected',
-            level: 'success',
-          },
-          'success'
-        );
-      }
+    // TODO: handle server errors differently
+    if (serverErrors.length) {
+      notify({
+        title: 'Server Errors Occurred',
+        message:
+          'Some or all of the insertions emitted errors. Please review the appropriate logs.',
+        level: 'warning',
+      });
+      // TODO: append not overwrite
+      updateBulkInsertLog(serverErrors);
+    } else {
+      notify(
+        {
+          title: 'Insertions Complete',
+          message: 'No errors detected',
+          level: 'success',
+        },
+        'success'
+      );
     }
 
     off();
@@ -427,7 +424,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     }
 
     // TODO: check me please
-    if (override || !allErrors.length) {
+    if (rowByRow || !allErrors.length) {
       const insertions = allErrors.length
         ? insertionValues.filter((_, index) => {
             return allErrors.some((_, i) => i !== index);
@@ -483,7 +480,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
             onChange={setTab}
           />
 
-          <div className="py-8">
+          <div className="pt-8 pb-2">
             <Select
               className="pb-3 -mt-3"
               options={tables}
@@ -503,10 +500,22 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
             <Radio
               className="pt-4"
-              checked={override}
-              label="Insert passing entries, skip invalid"
-              onChange={setOverride.toggle}
+              checked={rowByRow}
+              label="Insert row-by-row"
+              onChange={setInsertMethod.on}
             />
+            <Text>This is slower overall, but will skip failing rows</Text>
+
+            <Radio
+              className="pt-2"
+              checked={!rowByRow}
+              label="Insert all at once"
+              onChange={setInsertMethod.off}
+            />
+            <Text>
+              This is much quicker overall, but the entire query will fail if
+              one entry is invalid
+            </Text>
 
             {progress > 0 && (
               <div className="pt-4">

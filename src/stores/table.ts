@@ -11,6 +11,7 @@ export type LoggingError = {
   message: string;
 };
 
+// TODO: this needs to be changed, server errors should be handled differently
 export type BulkInsertError = {
   index: number;
   errors: { field: string; message: string | boolean }[];

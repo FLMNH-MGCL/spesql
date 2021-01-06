@@ -521,7 +521,7 @@ export function validateRack(value: string) {
   }
 
   if (value && value.length > 3) {
-    console.log(value);
+    // console.log(value);
     return 'Must be 1-3 characters long';
   }
 
