@@ -8,6 +8,15 @@ module.exports = {
   favicon: 'img/logo.png',
   organizationName: 'FLMNH-MGCL', // Usually your GitHub org/user name.
   projectName: 'spesql', // Usually your repo name.
+  plugins: [
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: true,
+        indexBlog: false,
+      },
+    ],
+  ],
   themeConfig: {
     prism: {
       theme: require('prism-react-renderer/themes/github'),
@@ -42,18 +51,19 @@ module.exports = {
         },
       ],
     },
-    algolia: {
-      apiKey: 'YOUR_API_KEY',
-      indexName: 'YOUR_INDEX_NAME',
 
-      // Optional: see doc section bellow
-      contextualSearch: true,
+    // algolia: {
+    //   apiKey: 'YOUR_API_KEY',
+    //   indexName: 'YOUR_INDEX_NAME',
 
-      // Optional: Algolia search parameters
-      searchParameters: {},
+    //   // Optional: see doc section bellow
+    //   contextualSearch: true,
 
-      //... other Algolia params
-    },
+    //   // Optional: Algolia search parameters
+    //   searchParameters: {},
+
+    //   //... other Algolia params
+    // },
     footer: {
       style: 'dark',
       links: [
@@ -106,6 +116,6 @@ module.exports = {
         },
       },
     ],
-    ['@docusaurus/theme-search-algolia', {}],
+    // ['@docusaurus/theme-search-algolia', {}],
   ],
 };
