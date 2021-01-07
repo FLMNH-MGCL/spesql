@@ -17,7 +17,6 @@ import Select, { SelectOption } from '../ui/Select';
 import { validateSpecimen } from '../../functions/validation';
 import Radio from '../ui/Radio';
 import { ProgressBar } from 'react-step-progress-bar';
-import mysql from 'mysql';
 import Text from '../ui/Text';
 
 // TODO: add typings in this file
@@ -358,16 +357,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
     const { allErrors, insertionValues } = parseUploadRows();
 
-    if (allErrors.length) {
-      notify({
-        title: 'Validation Errors',
-        message:
-          'Validation errors present. These rows will be skipped, however please review the appropriate logs.',
-        level: 'error',
-      });
-      updateBulkInsertLog(allErrors);
-    }
-
     const insertions = allErrors.length
       ? insertionValues.filter((_, index) => {
           return allErrors.some((_, i) => i !== index);
@@ -378,16 +367,30 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       ? await insertRows(insertions)
       : await bulkInsert(insertions);
 
-    // TODO: handle server errors differently
-    if (serverErrors.length) {
+    if (serverErrors.length && allErrors.length) {
+      notify({
+        title: 'Client & Server Errors',
+        message:
+          'There was a combination of validation errors and SQL errors, please review the appropriate logs.',
+        level: 'error',
+      });
+      updateBulkInsertLog([...serverErrors, ...allErrors]);
+    } else if (serverErrors.length) {
       notify({
         title: 'Server Errors Occurred',
         message:
           'Some or all of the insertions emitted errors. Please review the appropriate logs.',
+        level: 'error',
+      });
+      updateBulkInsertLog(serverErrors);
+    } else if (allErrors.length) {
+      notify({
+        title: 'Validation Errors',
+        message:
+          'The insertion is completed, however validation errors were present. These rows were skipped, however please review the appropriate logs',
         level: 'warning',
       });
-      // TODO: append not overwrite
-      updateBulkInsertLog(serverErrors);
+      updateBulkInsertLog(allErrors);
     } else {
       notify(
         {
@@ -402,6 +405,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     off();
   }
 
+  // TODO: fix me
   async function handlePasteSubmit() {
     const readingConfig = { header: true };
 

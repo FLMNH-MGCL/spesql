@@ -5,7 +5,7 @@ import login from './endpoints/auth/login';
 import logout from './endpoints/auth/logout';
 import select from './endpoints/sql/select';
 import insert from './endpoints/sql/insert';
-import update from './endpoints/sql/update';
+import update, { advancedUpdate } from './endpoints/sql/update';
 import deleteQuery from './endpoints/sql/delete';
 import bulkInsert from './endpoints/sql/bulkInsert';
 import getConfig from './endpoints/getConfig';
@@ -22,6 +22,7 @@ import {
   validateUpdateQuery,
   validateDeleteQuery,
   validateInsertQuery,
+  validateAdvancedUpdateQuery,
 } from './middleware/validation';
 import mysql, { Pool } from 'mysql';
 import { homedir } from 'os';
@@ -128,6 +129,13 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
     managerRoute,
     validateUpdateQuery,
     update
+  );
+  app.post(
+    '/api/update/advanced',
+    validateSession,
+    managerRoute,
+    validateAdvancedUpdateQuery,
+    advancedUpdate
   );
   app.post(
     '/api/insert/single',

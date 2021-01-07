@@ -19,7 +19,7 @@ type Props = {
 };
 
 export default function CreateSelectModal({ open, onClose }: Props) {
-  const { select } = useQuery();
+  const { select, advancedSelect } = useQuery();
 
   const toggleLoading = useStore((state) => state.toggleLoading);
 
@@ -77,6 +77,10 @@ export default function CreateSelectModal({ open, onClose }: Props) {
 
     if (advancedQuery) {
       query = advancedQuery;
+
+      if (query) {
+        await advancedSelect(query, databaseTable, onClose);
+      }
     } else {
       const numConditions = parseInt(conditionalCount, 10);
       let conditionals = [];
@@ -90,12 +94,6 @@ export default function CreateSelectModal({ open, onClose }: Props) {
         const current = numberParser.toWords(i);
 
         conditionals.push(parseConditional(values, current));
-
-        // conditionals.push({
-        //   field: values[`conditionalField_${current}`],
-        //   operator: values[`conditionalOperator_${current}`],
-        //   value: values[`conditionalValue_${current}`],
-        // });
       }
 
       const { queryString, queryArray } = buildSelectQuery(
@@ -105,11 +103,11 @@ export default function CreateSelectModal({ open, onClose }: Props) {
 
       query = queryString;
       conditions = queryArray;
+
+      if (!query) return;
+
+      await select(query, columns, conditions, databaseTable, onClose);
     }
-
-    if (!query) return;
-
-    await select(query, columns, conditions, databaseTable, onClose);
 
     toggleLoading(false);
   }

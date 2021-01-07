@@ -19,6 +19,12 @@ import Heading from '../ui/Heading';
 import Divider from '../ui/Divider';
 import UpdateForm from '../querybuilder/forms/UpdateForm';
 import mysql from 'mysql';
+import { useNotify } from '../utils/context';
+import numberParser from 'number-to-words';
+import { determineAndRunFieldValidator } from '../../functions/validation';
+import useQuery from '../utils/useQuery';
+import { useStore } from '../../../stores';
+import shallow from 'zustand/shallow';
 
 // IDEAS
 // https://reactjsexample.com/drag-and-drop-sortable-component-for-nested-data-and-hierarchies/
@@ -52,11 +58,14 @@ export type Set = {
 };
 
 export default function CreateQueryBuilderModal({ open, onClose }: Props) {
+  const { notify } = useNotify();
+  const { advancedUpdate, logUpdate, advancedSelect } = useQuery();
+
+  const toggleLoading = useStore((state) => state.toggleLoading);
+  const loading = useStore((state) => state.loading, shallow);
+
   const [codeString, setCodeString] = useState<string>('');
   const [queryPrefix, setQueryPrefix] = useState<string>('');
-  // const [fields, setFields] = useState<string[]>();
-  // const [databaseTable, setDatabaseTable] = useState<string>();
-  // const [distinct, setDistinct] = useState<boolean>(false);
   const [queryClause, setQueryClause] = useState<BasicQueryClause>(
     defaultClause
   );
@@ -161,6 +170,95 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     setQueryClause({ ...queryClause, queryType: qType });
   }
 
+  async function handleUpdateSubmit(values: Values) {
+    console.log(values);
+
+    // double check validation
+    // this should not pick up any errors, as validation is ran on submit...
+    // TODO: should I remove this double checking??
+    const { setCount } = values;
+
+    if (setCount < 1) {
+      notify({
+        title: 'Invalid Set Statements',
+        message: 'You must specify at least one set statement',
+        level: 'error',
+      });
+
+      return;
+    }
+
+    let updates: any = {};
+
+    for (let i = 0; i < setCount; i++) {
+      const current = numberParser.toWords(i);
+
+      const field = values[`setField_${current}`];
+      const value = values[`setValue_${current}`];
+
+      updates[field] = value;
+
+      const isValid = determineAndRunFieldValidator(field, value);
+      if (!isValid || typeof isValid === 'string') {
+        notify({
+          title: 'Validation Error',
+          message:
+            typeof isValid === 'string'
+              ? isValid
+              : `Validation error for ${field}, with value ${value}`,
+          level: 'error',
+        });
+        return;
+      }
+    }
+
+    // all is good! conditionals might be broken but that is okay send to server still
+    const queryString = clsx(queryPrefix, 'WHERE', codeString);
+    console.log('SENDING QUERY TO SERVER:', queryString);
+
+    const updateRet = await advancedUpdate(queryString);
+
+    if (updateRet) {
+      await logUpdate(updateRet, updates, queryClause.databaseTable, null);
+    }
+  }
+
+  async function handleSelectQuery() {
+    toggleLoading(true);
+    const queryString = clsx(queryPrefix, 'WHERE', codeString);
+
+    if (queryString) {
+      await advancedSelect(queryString, queryClause.databaseTable, onClose);
+    }
+    toggleLoading(false);
+  }
+
+  async function handleCountQuery() {
+    toggleLoading(true);
+    const queryString = clsx(queryPrefix, 'WHERE', codeString);
+
+    // if (queryString) {
+    //   await advancedSelect(queryString, queryClause.databaseTable, onClose);
+    // }
+    toggleLoading(false);
+  }
+
+  function handleSendQuery() {
+    switch (queryType) {
+      case 'select': {
+        handleSelectQuery();
+        break;
+      }
+      case 'count': {
+        handleCountQuery();
+        break;
+      }
+      default: {
+        return;
+      }
+    }
+  }
+
   useEffect(() => {
     buildQueryStatement(queryClause.queryType);
   }, [queryClause]);
@@ -176,7 +274,11 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
         return <SelectForm onChange={handleControlledChange} />;
       case 'update':
         return (
-          <UpdateForm onChange={handleControlledChange} sets={sets ?? []} />
+          <UpdateForm
+            onChange={handleControlledChange}
+            sets={sets ?? []}
+            onSubmit={handleUpdateSubmit}
+          />
         );
       default:
         throw new Error(
@@ -248,10 +350,11 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
             <Button onClick={onClose}>Cancel</Button>
 
             <Button
-              // onClick={onClose} // TODO: CHANGE ME
+              onClick={handleSendQuery}
               variant="primary"
               type={queryType === 'update' ? 'submit' : 'button'}
               form={queryType === 'update' ? 'update-bulk-form' : undefined}
+              loading={loading}
             >
               Confirm
             </Button>

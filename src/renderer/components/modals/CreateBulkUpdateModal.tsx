@@ -56,6 +56,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
     return conditionals;
   }
 
+  // TODO: hard code '=' for operator, or just remove it
   function parseSets(count: any, values: Values) {
     const numSets = parseInt(count, 10);
 

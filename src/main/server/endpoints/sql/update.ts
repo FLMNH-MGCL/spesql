@@ -29,3 +29,22 @@ export default function update(req: Request, res: Response) {
     });
   }
 }
+
+export function advancedUpdate(req: Request, res: Response) {
+  const { query } = req.body;
+
+  if (!connection) {
+    res.status(502).send('Connection to the MySQL database was lost');
+  } else if (!query) {
+    res.status(400).send('Missing required body parameters: query');
+  } else {
+    connection.query(query, (error, data) => {
+      if (error) {
+        console.log(error);
+        res.status(503).send(error);
+      } else {
+        res.send({ result: data, query });
+      }
+    });
+  }
+}

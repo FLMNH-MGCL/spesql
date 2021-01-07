@@ -43,8 +43,45 @@ export default function useQuery() {
 
   const { logSqlError } = useLogError();
 
+  // TODO: handle 403 error codes!!
   const queries = useMemo(
     () => ({
+      async advancedUpdate(query: string): Promise<string | undefined> {
+        const updateResponse = await axios
+          .post(BACKEND_URL + '/api/update/advanced', {
+            query,
+          })
+          .catch((error) => error.response);
+
+        if (updateResponse.status === 200 && updateResponse.data) {
+          const { message } = updateResponse.data.result;
+          const queryString = updateResponse.data.query;
+
+          notify({
+            title: 'Update Successful',
+            message,
+            level: 'success',
+          });
+
+          await queries.refresh();
+
+          return queryString;
+        } else if (updateResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          return await queries.advancedUpdate(query);
+        } else {
+          notify({
+            title: 'Update Failed',
+            message: 'An unknown error occurred',
+            level: 'error',
+          });
+
+          return undefined;
+        }
+      },
+
       async count(
         query: string,
         columns: any[],
@@ -342,7 +379,6 @@ export default function useQuery() {
         toggleLoading(false);
       },
 
-      // TODO: fix columns/databaseTable/etc for advanced query stuff
       async select(
         query: string,
         columns: any[],
@@ -390,6 +426,54 @@ export default function useQuery() {
             databaseTable,
             callback
           );
+        } else {
+          notify({
+            title: 'Server Error',
+            message:
+              'Could not process Select query, please check the corresponding logs',
+            level: 'error',
+          });
+
+          logSqlError(selectResponse.data, 'select');
+        }
+
+        toggleLoading(false);
+      },
+
+      async advancedSelect(
+        query: string,
+        databaseTable: string,
+        callback?: () => void
+      ) {
+        const selectResponse = await axios
+          .post(BACKEND_URL + '/api/select', {
+            query,
+          })
+          .catch((error) => error.response);
+
+        if (selectResponse.status === 200 && selectResponse.data) {
+          const { specimen, query } = selectResponse.data;
+
+          if (!specimen.length) {
+            notify({
+              title: 'Empty Return',
+              message: 'Query yielded no data',
+              level: 'warning',
+            });
+          } else {
+            callback && callback();
+            setData(specimen);
+            setTable(databaseTable);
+            setCurrentQuery(query);
+
+            // TODO: add util to calc this
+            setAvailableFields('*');
+          }
+        } else if (selectResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          await queries.advancedSelect(query, databaseTable, callback);
         } else {
           notify({
             title: 'Server Error',

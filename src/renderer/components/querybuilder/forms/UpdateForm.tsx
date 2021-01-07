@@ -22,9 +22,10 @@ import { Set } from '../../modals/CreateQueryBuilderModal';
 type Props = {
   sets: Set[];
   onChange(field: string, value: any): void;
+  onSubmit(values: Values): void;
 };
 
-function SetForm({ sets, onChange }: Props) {
+function SetForm({ sets, onChange }: Omit<Props, 'onSubmit'>) {
   const { getValues, watch } = useFormContext();
   const setCountOptions = conditionCountOptions.filter((el) => el.value !== 0);
 
@@ -40,10 +41,6 @@ function SetForm({ sets, onChange }: Props) {
       target[field as keyof Set] = newVal;
       newSets.splice(index, 1, target);
     }
-
-    // console.log(index, field, newVal);
-
-    // console.log(newSets);
 
     onChange('sets', newSets);
   }
@@ -110,7 +107,7 @@ function SetForm({ sets, onChange }: Props) {
   );
 }
 
-export default function UpdateForm({ onChange, sets }: Props) {
+export default function UpdateForm({ onChange, onSubmit, sets }: Props) {
   const [tables, setTables] = useState<SelectOption[]>([]);
 
   const { expireSession, expiredSession } = useStore(
@@ -138,9 +135,9 @@ export default function UpdateForm({ onChange, sets }: Props) {
     init();
   }, [expiredSession]);
 
-  function handleChange(values: Values) {
-    console.log(values);
-  }
+  // function handleChange(values: Values) {
+  //   console.log(values);
+  // }
 
   return (
     <div>
@@ -156,8 +153,8 @@ export default function UpdateForm({ onChange, sets }: Props) {
       </Form.Group>
 
       <Form
-        mode="onChange"
-        onSubmit={handleChange}
+        mode="all"
+        onSubmit={onSubmit}
         id="update-bulk-form"
         className="my-3"
       >

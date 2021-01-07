@@ -82,10 +82,24 @@ export async function validateInsertQuery(
     res.status(502).send('Connection to the MySQL database was lost');
   } else {
     const userId = req.session!.userId;
-    connection.query(`SELECT role FROM users WHERE id='${userId}'`);
+    connection.query(
+      `SELECT role FROM users WHERE id='${userId}'`,
+      (error, data) => {
+        if (error) {
+          res.status(500).send(error);
+        } else {
+          console.log('data:', data);
+          if (data.length) {
+            next();
+          } else {
+            res.sendStatus(403);
+          }
+        }
+      }
+    );
   }
 
-  next();
+  // next();
 }
 
 // TODO
@@ -106,6 +120,37 @@ export async function validateInsertQuery(
  * @param {NextFunction} next: the function in queue, will only get called on successful validation
  */
 export async function validateUpdateQuery(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (!connection) {
+    res.status(502).send('Connection to the MySQL database was lost');
+  } else {
+    const userId = req.session!.userId;
+    connection.query(`SELECT role FROM users WHERE id='${userId}'`);
+  }
+  next();
+}
+
+// TODO
+/**
+ * Middleware function to validate an update query.
+ *
+ * The following restrictions apply to update:
+ *  1. query string was passed to through the request
+ *  2. query is in fact an update query
+ *  3. query MUST contain a narrowing condition, this will help avoid accidental, bulk
+ *    updates
+ *
+ * Middleware before this function would have checked the access role of the
+ * requester, and therefore there is no further check required
+ *
+ * @param {Request} req: the request context sent to the server
+ * @param {Response} res: the response context
+ * @param {NextFunction} next: the function in queue, will only get called on successful validation
+ */
+export async function validateAdvancedUpdateQuery(
   req: Request,
   res: Response,
   next: NextFunction

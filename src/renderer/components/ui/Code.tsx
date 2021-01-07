@@ -16,6 +16,7 @@ type StringProps = {
 
 type Props = MutuallyExclusive<ChildProps, StringProps> & {
   rounded?: boolean;
+  slim?: boolean;
   // TODO: type me
   language?: string;
   theme?: 'light' | 'dark';
@@ -25,6 +26,7 @@ export default function Code({
   codeString,
   children,
   rounded,
+  slim,
   language = 'typescript',
   theme = localStorage.theme ?? 'dark',
 }: Props) {
@@ -34,8 +36,12 @@ export default function Code({
       ? {
           borderRadius: rounded ? '.375rem' : 0,
           backgroundColor: '#F9FAFB',
+          padding: slim ? '.25rem' : '1em',
         }
-      : { borderRadius: rounded ? '.375rem' : 0 };
+      : {
+          borderRadius: rounded ? '.375rem' : 0,
+          padding: slim ? '.25rem' : '1em',
+        };
 
   return (
     <SyntaxHighlighter

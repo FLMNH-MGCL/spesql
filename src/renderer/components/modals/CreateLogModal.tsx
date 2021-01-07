@@ -58,7 +58,7 @@ function Log({ errors, logName }: LogProps) {
 
   return (
     <div className="-mb-6">
-      <div className="mt-4 h-56 bg-gray-100 rounded-md overflow-scroll">
+      <div className="mt-4 h-56 bg-gray-100  dark:bg-dark-500 dark:text-dark-200 rounded-md overflow-scroll">
         <div
           className={clsx(
             disabled && 'h-full',
@@ -126,7 +126,7 @@ function InsertErrorLog({ errors }: BulkLogProps) {
 
   return (
     <div className="-mb-6">
-      <div className="mt-4 h-56 bg-gray-100 rounded-md overflow-scroll">
+      <div className="mt-4 h-56 bg-gray-100 dark:bg-dark-500 dark:text-dark-200 rounded-md overflow-scroll">
         <div
           className={clsx(
             disabled && 'h-full',
