@@ -241,6 +241,7 @@ export const samplingProtocolControl = [
   { label: 'Trap', value: 'Trap' },
 ];
 
+// TODO: add control
 export const dispositionControl = [
   { label: 'Voucher Present', value: 'Voucher Present' },
   { label: 'Molecular Present', value: 'Molecular Present' },

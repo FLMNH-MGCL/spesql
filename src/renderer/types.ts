@@ -1,10 +1,13 @@
 type StringOrNull = string | null;
 
+// TODO: otherIdentifier AND projectNumber
 export type SpecimenFields = {
   id: number;
-  catalogNumber: string; // MGCL-123456
-  otherCatalogNumber: string; // LEP123456
+  catalogNumber: string;
+  otherCatalogNumber: string;
   recordNumber: StringOrNull;
+  // otherIdentifier: StringOrNull;
+  // projectNumber: StringOrNull;
   order_: StringOrNull;
   superfamily: StringOrNull;
   family: StringOrNull;
@@ -15,7 +18,7 @@ export type SpecimenFields = {
   specificEpithet: StringOrNull;
   infraspecificEpithet: StringOrNull;
   identificationQualifier: StringOrNull;
-  recordedBy: StringOrNull; // First Last | First Last
+  recordedBy: StringOrNull;
   otherCollectors: StringOrNull;
   identifiedBy: StringOrNull;
   dateIdentified: StringOrNull;

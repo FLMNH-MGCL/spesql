@@ -1,4 +1,4 @@
-import { Specimen } from '../types';
+import { Specimen, SpecimenFields } from '../types';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
 
 export function sleep(ms: number) {
@@ -170,6 +170,7 @@ export function toProperNoun(noun: string) {
   }
 }
 
+// TODO: fix the bug with this!!!
 export function specimenToArray(specimen: Specimen) {
-  return Object.values(specimen);
+  return Object.values(specimen as SpecimenFields);
 }

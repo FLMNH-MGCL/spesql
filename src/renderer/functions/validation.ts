@@ -143,7 +143,7 @@ export function validateBooleanField(value: string) {
 export function validateCatalogNumber(value: string) {
   let pattern = new RegExp('^LEP[0-9]{5,7}');
 
-  if (value === '') {
+  if (!value || !value.length) {
     return 'catalogNumber is required';
   } else if (!pattern.test(value)) {
     return 'Invald format: LEP followed by 5-7 digits';
@@ -679,6 +679,13 @@ function isNumeric(n: string) {
 // TODO: call all above validators, return an array of errors
 export function validateSpecimen(specimen: any) {
   let errors = [];
+
+  if (!specimen.catalogNumber) {
+    errors.push({
+      field: 'catalogNumber',
+      message: 'catalogNumber is required',
+    });
+  }
 
   const specimenKeys = Object.keys(specimen);
 

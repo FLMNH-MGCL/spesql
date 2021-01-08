@@ -265,6 +265,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         // console.log('ERROR OCCURRED:', currentSpecimen);
         allErrors.push({ index: i, errors: specimenErrors });
       } else {
+        // console.log(fixPartiallyCorrect(currentSpecimen));
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
       }
     }
@@ -283,6 +284,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         // console.log('ERROR OCCURRED:', currentSpecimen);
         allErrors.push({ index: i, errors: specimenErrors });
       } else {
+        // console.log(fixPartiallyCorrect(currentSpecimen));
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
       }
     }
@@ -291,6 +293,21 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   }
 
   async function bulkInsert(insertionValues: Partial<SpecimenFields>[]) {
+    // let firstKeySet = Object.values(insertionValues[0] as SpecimenFields);
+    // let firstArray = specimenToArray(insertionValues[0] as SpecimenFields);
+
+    // console.log('BASE ARRAY:', firstArray);
+
+    // insertionValues.forEach((specimen, index) => {
+    //   const arr = specimenToArray(specimen as SpecimenFields);
+
+    //   if (arr.length !== firstArray.length) {
+    //     console.log('ERROR @', index);
+    //     console.log('DIFFERENT LENGTH:', arr);
+    //   }
+    // });
+    // return [];
+
     let errors = [];
     const values = insertionValues.map((specimen) => specimenToArray(specimen));
 
