@@ -25,6 +25,8 @@ import { determineAndRunFieldValidator } from '../../functions/validation';
 import useQuery from '../utils/useQuery';
 import { useStore } from '../../../stores';
 import shallow from 'zustand/shallow';
+import Statistic from '../ui/Statistic';
+import Spinner from '../ui/Spinner';
 
 // IDEAS
 // https://reactjsexample.com/drag-and-drop-sortable-component-for-nested-data-and-hierarchies/
@@ -59,10 +61,17 @@ export type Set = {
 
 export default function CreateQueryBuilderModal({ open, onClose }: Props) {
   const { notify } = useNotify();
-  const { advancedUpdate, logUpdate, advancedSelect } = useQuery();
+  const {
+    advancedUpdate,
+    logUpdate,
+    advancedSelect,
+    advancedCount,
+  } = useQuery();
 
   const toggleLoading = useStore((state) => state.toggleLoading);
   const loading = useStore((state) => state.loading, shallow);
+
+  const [countReturn, setCountReturn] = useState<number>();
 
   const [codeString, setCodeString] = useState<string>('');
   const [queryPrefix, setQueryPrefix] = useState<string>('');
@@ -237,9 +246,10 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     toggleLoading(true);
     const queryString = clsx(queryPrefix, 'WHERE', codeString);
 
-    // if (queryString) {
-    //   await advancedSelect(queryString, queryClause.databaseTable, onClose);
-    // }
+    if (queryString) {
+      await advancedCount(queryString, setCountReturn);
+    }
+
     toggleLoading(false);
   }
 
@@ -262,6 +272,12 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
   useEffect(() => {
     buildQueryStatement(queryClause.queryType);
   }, [queryClause]);
+
+  useEffect(() => {
+    if (countReturn !== undefined) {
+      setCountReturn(undefined);
+    }
+  }, [queryClause.queryType]);
 
   function renderQueryForm() {
     if (!queryType) {
@@ -300,7 +316,7 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
             className="py-3"
             name="queryType"
             label="Query Type"
-            placeholder="Select a query type"
+            placeholder="Select a query type to render a corresponding form"
             options={[
               { label: 'Select', name: 'select' },
               { label: 'Count', name: 'count' },
@@ -335,7 +351,7 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
 
           <Divider text="Output" />
 
-          <div className="my-3 bg-gray-50 dark:bg-dark-400 rounded-md p-3 mt-8">
+          <div className="my-3 bg-gray-50 dark:bg-dark-400 rounded-md p-3 mt-8 mb-8">
             <Label>Resulting Query:</Label>
             <Code
               language="sql"
@@ -343,6 +359,17 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
               codeString={clsx(queryPrefix, 'WHERE', codeString)}
             />
           </div>
+
+          {queryType === 'count' && (
+            <React.Fragment>
+              <Divider text="Results" />
+              <div className="relative bg-gray-50 dark:bg-dark-600 rounded-lg w-full p-3 mt-8 min-h-32">
+                {!loading && <Statistic value={countReturn} unit="specimen" />}
+
+                <Spinner active={loading} />
+              </div>
+            </React.Fragment>
+          )}
         </Modal.Content>
 
         <Modal.Footer>

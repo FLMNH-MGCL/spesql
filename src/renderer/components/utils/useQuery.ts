@@ -124,6 +124,44 @@ export default function useQuery() {
           logSqlError(countResponse.data, 'count');
         }
       },
+
+      async advancedCount(
+        query: string,
+        setState: React.Dispatch<React.SetStateAction<number | undefined>>
+      ) {
+        const countResponse = await axios
+          .post(BACKEND_URL + '/api/count', {
+            query,
+          })
+          .catch((error) => error.response);
+
+        if (countResponse.status === 200 && countResponse.data) {
+          const { count } = countResponse.data;
+
+          setState(count);
+        } else if (countResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          queries.advancedCount(query, setState);
+        } else if (countResponse.status === 403) {
+          notify({
+            title: 'SQL Error',
+            message: 'Invalid count query format',
+            level: 'error',
+          });
+        } else {
+          notify({
+            title: 'Server Error',
+            message:
+              'Could not process Count query, please check the corresponding logs',
+            level: 'error',
+          });
+
+          logSqlError(countResponse.data, 'count');
+        }
+      },
+
       async createUser(newUser: Partial<User>) {
         const creationResponse = await axios
           .post(BACKEND_URL + '/api/admin/user/create', { newUser })

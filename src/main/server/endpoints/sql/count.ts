@@ -3,8 +3,6 @@ import { connection } from '../../server';
 import mysql from 'mysql';
 
 export default function count(req: Request, res: Response) {
-  // it is no longer required to check for valid queries in the select
-  // function, as this is handled by the middleware validator
   const template: string = req.body.query;
   const { columns, conditions } = req.body;
 
@@ -30,7 +28,7 @@ export default function count(req: Request, res: Response) {
         if (error) {
           res.status(503).send(error);
         } else {
-          const ret = { count: data, query };
+          const ret = { count: data[0][Object.keys(data[0])[0]], query };
           res.send(ret);
         }
       });
