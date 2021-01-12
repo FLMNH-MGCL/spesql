@@ -6,8 +6,8 @@ export type SpecimenFields = {
   catalogNumber: string;
   otherCatalogNumber: string;
   recordNumber: StringOrNull;
-  // otherIdentifier: StringOrNull;
-  // projectNumber: StringOrNull;
+  otherIdentifier: StringOrNull;
+  projectNumber: StringOrNull;
   order_: StringOrNull;
   superfamily: StringOrNull;
   family: StringOrNull;
@@ -116,8 +116,10 @@ export type NotificationContent = {
 // TODO: see above @isSpecimen
 export const SpecimenValidator: Specimen = {
   id: 0,
-  catalogNumber: '', // MGCL-123456
-  otherCatalogNumber: '', // LEP123456
+  catalogNumber: '',
+  otherCatalogNumber: '',
+  otherIdentifier: null,
+  projectNumber: null,
   recordNumber: null,
   order_: null,
   superfamily: null,
@@ -129,7 +131,7 @@ export const SpecimenValidator: Specimen = {
   specificEpithet: null,
   infraspecificEpithet: null,
   identificationQualifier: null,
-  recordedBy: null, // First Last | First Last
+  recordedBy: null,
   otherCollectors: null,
   identifiedBy: null,
   dateIdentified: null,

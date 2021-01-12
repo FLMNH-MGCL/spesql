@@ -1,38 +1,96 @@
 import React from 'react';
-import EditUserForm from '../forms/EditUserForm';
+import UserInfoForm from '../forms/UserInfoForm';
 import Button from '../ui/Button';
 import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
+import Text from '../ui/Text';
 import { User } from '../UsersTable';
+import { useNotify } from '../utils/context';
 import useKeyboard from '../utils/useKeyboard';
+import useQuery from '../utils/useQuery';
 
 type Props = {
   open: boolean;
   onClose(): void;
   user: User;
+  refresh(): void;
 };
 
 // TODO: will need this to be paginated, multistep form
-export default function CreateEditUserModal({ user, open, onClose }: Props) {
+export default function CreateEditUserModal({
+  user,
+  open,
+  onClose,
+  refresh,
+}: Props) {
+  const { notify } = useNotify();
+
+  const { editUser } = useQuery();
+
   useKeyboard('Escape', () => {
     onClose();
   });
 
-  function handleEdit(values: Values) {
-    console.log(values);
+  async function handleSubmit(values: Values) {
+    // toggle();
+
+    const { fullName, username, password, role } = values;
+
+    let updatedUser: any = {};
+
+    if (fullName !== user.name) {
+      updatedUser.name = fullName;
+    }
+
+    if (username !== user.username) {
+      updatedUser.username = username;
+    }
+
+    if (role && role !== user.role) {
+      updatedUser.role = role;
+    }
+
+    console.log(updatedUser);
+
+    if (!Object.keys(updatedUser).length && (!password || !password.length)) {
+      notify({
+        title: 'No Changes Detected',
+        message: 'You must change at least one field to issue an update',
+        level: 'error',
+      });
+
+      return;
+    }
+
+    const ret = await editUser(updatedUser, user.id, password);
+
+    if (ret) {
+      const { status, data } = ret;
+      console.log(status, data);
+    } else {
+      refresh();
+      onClose();
+    }
+
+    // toggle();
   }
 
   return (
     <React.Fragment>
       <Modal open={open} onClose={onClose} size="small">
         <Modal.Content title={`Editing @${user.username}`}>
-          <EditUserForm user={user} onSubmit={handleEdit} />
+          <Text className="pb-2">
+            Please note: only altered fields will be updated. If you wish to
+            change the password, please keep in mind it can not be retrieved
+            again if forgotten.
+          </Text>
+          <UserInfoForm userInfo={user} onSubmit={handleSubmit} />
         </Modal.Content>
 
         <Modal.Footer>
           <Button.Group>
             <Button onClick={onClose}>Cancel</Button>
-            <Button variant="primary" type="submit" form="edit-user-form">
+            <Button variant="primary" type="submit" form="user-info-form">
               Confirm
             </Button>
           </Button.Group>

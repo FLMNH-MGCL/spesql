@@ -145,9 +145,19 @@ This is a Collector's record number. There is no specified, mandatory formatting
 
 This is a new field and has not had any formatting guidelines generated yet.
 
+```
+25 character limit
+alphanumeric
+```
+
 ### projectNumber
 
 This is a new field and has not had any formatting guidelines generated yet.
+
+```
+25 character limit
+alphanumeric
+```
 
 ### order\_ <section id='##order\_'/>
 
@@ -760,6 +770,8 @@ The disposition (current state) of the specimen as it is currently in the collec
 `Pinned On Loan`
 `Larval On Loan`
 `GRR On Loan`
+
+`Voucher Absent`
 
 The format of the list follows previous field formatting, in that it must be delimited using the pipe '|' character.
 

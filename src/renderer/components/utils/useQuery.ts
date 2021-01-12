@@ -194,6 +194,42 @@ export default function useQuery() {
         return;
       },
 
+      async editUser(newUser: Partial<User>, id: number, newPassword?: string) {
+        const editResponse = await axios
+          .post(BACKEND_URL + '/api/admin/user/edit', {
+            newUser,
+            id,
+            newPassword,
+          })
+          .catch((error) => error.response);
+
+        if (editResponse.status === 201) {
+          notify({
+            title: 'Success',
+            message: `Edited user @${newUser.username}`,
+            level: 'success',
+          });
+        } else if (editResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          await queries.editUser(newUser, id, newPassword);
+        } else {
+          notify({
+            title: 'Error Occurred',
+            message: 'Please check the logs',
+            level: 'error',
+          });
+
+          return {
+            status: editResponse.status,
+            data: editResponse.data,
+          };
+        }
+
+        return;
+      },
+
       async deleteSpecimen(
         id: number,
         table: string

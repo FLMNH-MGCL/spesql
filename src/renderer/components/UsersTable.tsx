@@ -287,6 +287,7 @@ export default function UsersTable() {
           open={editing !== undefined}
           user={users.find((user) => user.id === editing)!}
           onClose={() => setEditing(undefined)}
+          refresh={() => getUsers()}
         />
       )}
 

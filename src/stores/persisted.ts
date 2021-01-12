@@ -11,8 +11,6 @@ type UserPreferences = {
   toggleTheme(newTheme?: Theme): void;
 };
 
-console.log((localStorage.theme as Theme) ?? 'light');
-
 export const usePersistedStore = create<UserPreferences>(
   persist(
     (set, get) => ({

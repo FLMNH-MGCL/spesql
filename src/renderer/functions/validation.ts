@@ -494,7 +494,9 @@ export function validateDisposition(value: string) {
   }
 }
 
+// FIXME: this will short circuit true validation until data is resolved by researchers, there is conflict regarding how it should be formatted.
 export function validateFreezer(value: string) {
+  return true;
   if (!value || !value.length) {
     return true;
   }
@@ -510,12 +512,12 @@ export function validateFreezer(value: string) {
 
   const matches = pattern.test(value);
 
-  // TODO: GRR pattern
-
   return matches ? true : 'Must match Kawahara## or GRR';
 }
 
+// FIXME: this will short circuit true validation until data is resolved by researchers, there is conflict regarding how it should be formatted.
 export function validateRack(value: string) {
+  return true;
   if (!value || !value.length) {
     return true;
   }

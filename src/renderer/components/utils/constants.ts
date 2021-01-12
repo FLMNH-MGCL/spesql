@@ -9,6 +9,8 @@ export const headerOptions = [
   'id',
   'catalogNumber',
   'otherCatalogNumber',
+  'otherIdentifier',
+  'projectNumber',
   'order_',
   'genus',
   'specificEpithet',
@@ -108,6 +110,8 @@ export const queryBuilderFields = [
     label: 'otherCatalogNumber',
     inputType: 'text',
   },
+  { name: 'otherIdentifier', label: 'otherIdentifier', inputType: 'text' },
+  { name: 'projectNumber', label: 'projectNumber', inputType: 'text' },
   { name: 'order_', label: 'order_', inputType: 'text' },
   { name: 'genus', label: 'genus', inputType: 'text' },
   { name: 'specificEpithet', label: 'specificEpithet', inputType: 'text' },
@@ -241,7 +245,6 @@ export const samplingProtocolControl = [
   { label: 'Trap', value: 'Trap' },
 ];
 
-// TODO: add control
 export const dispositionControl = [
   { label: 'Voucher Present', value: 'Voucher Present' },
   { label: 'Molecular Present', value: 'Molecular Present' },
@@ -264,6 +267,8 @@ export const dispositionControl = [
   { label: 'Pinned On Loan', value: 'Pinned On Loan' },
   { label: 'Larval On Loan', value: 'Larval On Loan' },
   { label: 'GRR On Loan', value: 'GRR On Loan' },
+
+  { label: 'Voucher Absent', value: 'Voucher Absent' },
 ];
 
 export const geodeticDatumControl = [

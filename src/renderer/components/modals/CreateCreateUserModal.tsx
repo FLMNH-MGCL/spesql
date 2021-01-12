@@ -1,6 +1,6 @@
 import React from 'react';
 import CircleButton from '../buttons/CircleButton';
-import CreateUserForm from '../forms/CreateUserForm';
+import UserInfoForm from '../forms/UserInfoForm';
 import Button from '../ui/Button';
 import { Values } from '../ui/Form';
 import Modal from '../ui/Modal';
@@ -47,14 +47,14 @@ export default function CreateCreateUserModal({ refresh }: Props) {
     <React.Fragment>
       <Modal open={open} onClose={off}>
         <Modal.Content title="Create User">
-          <CreateUserForm onSubmit={handleSubmit} />
+          <UserInfoForm onSubmit={handleSubmit} />
         </Modal.Content>
         <Modal.Footer>
           <Button.Group>
             <Button onClick={off}>Cancel</Button>
             <Button
               type="submit"
-              form="create-user-form"
+              form="user-info-form"
               variant="primary"
               loading={loading}
             >

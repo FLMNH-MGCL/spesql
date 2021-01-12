@@ -152,6 +152,7 @@ type Props = {
   onClose(): void;
 };
 
+// TODO: readd the toggle to not submit with validation errors
 export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const { notify } = useNotify();
 

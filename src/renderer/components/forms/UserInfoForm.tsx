@@ -8,9 +8,11 @@ import useToggle from '../utils/useToggle';
 import axios from 'axios';
 import { BACKEND_URL } from '../../types';
 import { useNotify } from '../utils/context';
+import { User } from '../UsersTable';
 
 type Props = {
   onSubmit(values: Values): void;
+  userInfo?: User;
 };
 
 function PasswordField() {
@@ -70,13 +72,14 @@ function PasswordField() {
   );
 }
 
-export default function CreateUserForm({ onSubmit }: Props) {
+export default function UserInfoForm({ onSubmit, userInfo }: Props) {
   return (
-    <Form onSubmit={onSubmit} id="create-user-form">
+    <Form onSubmit={onSubmit} id="user-info-form">
       <Form.Group flex>
         <Form.Input
           name="fullName"
           placeholder="First Last"
+          defaultValue={userInfo?.name}
           label="Full Name"
           fullWidth
           icon="user"
@@ -85,6 +88,7 @@ export default function CreateUserForm({ onSubmit }: Props) {
         <Form.Input
           name="username"
           placeholder="Username"
+          defaultValue={userInfo?.username}
           label="Username"
           fullWidth
           icon="atMention"
@@ -97,6 +101,7 @@ export default function CreateUserForm({ onSubmit }: Props) {
         <Form.Select
           name="role"
           placeholder="Access Role"
+          defaultValue={userInfo?.role}
           label="Access Role"
           options={accessRoles}
         />
