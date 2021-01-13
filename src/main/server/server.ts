@@ -42,6 +42,10 @@ import getTableLogs from './endpoints/sql/admin/getTableLogs';
 import logUpdate from './endpoints/sql/utils/logUpdate';
 import logDelete from './endpoints/sql/utils/logDelete';
 import editUser from './endpoints/sql/admin/editUser';
+import checkConnection from './endpoints/sql/utils/checkConnection';
+import createTable from './endpoints/sql/admin/createTable';
+import editTable from './endpoints/sql/admin/editTable';
+import deleteTable from './endpoints/sql/admin/deleteTable';
 
 require('dotenv').config();
 
@@ -108,6 +112,7 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
 
   // GLOBAL / GUEST ROUTES
   app.get('/api/viewer', viewer);
+  app.get('/api/check-connection', checkConnection);
 
   app.get('/api/config/get', getConfig);
   app.post('/api/config/update', updateConfig);
@@ -192,6 +197,9 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
     generatePassword
   );
   app.post('/api/admin/table/logs', validateSession, adminRoute, getTableLogs);
+  app.post('/api/admin/table/create', validateSession, adminRoute, createTable);
+  app.post('/api/admin/table/edit', validateSession, adminRoute, editTable);
+  app.post('/api/admin/table/delete', validateSession, adminRoute, deleteTable);
   // END ADMIN ROUTES
 
   app.listen(PORT, () => {

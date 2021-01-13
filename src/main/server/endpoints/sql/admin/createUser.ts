@@ -5,6 +5,7 @@ import { connection } from '../../../server';
 // TODO
 export default function createUser(req: Request, res: Response) {
   if (!connection) {
+    res.status(502).send('Connection to the MySQL database was lost');
   } else {
     const { newUser } = req.body;
 

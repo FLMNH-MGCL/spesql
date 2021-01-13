@@ -6,12 +6,13 @@ export function queriablesStats(_req: Request, res: Response) {
     res.status(500).send('Lost connection with database');
   } else {
     const queryString = `
-    SELECT
-      table_name,
-      table_rows as 'rows',
-      round(((data_length + index_length)), 2) 'size'
-    FROM information_schema.TABLES
-    WHERE table_name in (SELECT tbl_name FROM interactables);`;
+SELECT
+  table_name,
+  table_rows as 'rows',
+  round(((data_length + index_length)), 2) 'size'
+FROM information_schema.TABLES
+WHERE table_schema not in ('information_schema', 'mysql', 'performance_schema')
+AND table_name not in ('users', 'logs');`;
 
     connection.query(queryString, (error, data) => {
       if (error) {

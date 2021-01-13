@@ -53,12 +53,12 @@ export default function Admin() {
             Tables {tableStats && <span>({tableStats.length})</span>}
           </Heading>
           <span className="flex pl-3">
-            <CreateCreateTableModal />
+            <CreateCreateTableModal refresh={getStats} />
           </span>
         </div>
         <div className="flex space-x-3 flex-nowrap overflow-x-auto pt-3 pb-6">
           {tableStats?.map((props) => (
-            <TableCard key={props.table_name} {...props} />
+            <TableCard key={props.table_name} {...props} refresh={getStats} />
           ))}
         </div>
 

@@ -13,9 +13,8 @@ export default function EditTableForm({ table, onSubmit }: Props) {
     <Form onSubmit={onSubmit} id="edit-table-form">
       <Form.Group flex>
         <Form.Input
-          name="tableName"
-          value={table}
-          onChange={() => {}}
+          name="newName"
+          defaultValue={table}
           label="Table Name"
           fullWidth
         />

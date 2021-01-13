@@ -6,7 +6,16 @@ import Heading from './ui/Heading';
 import numeral from 'numeral';
 import CreateTableLogModal from './modals/CreateTableLogModal';
 
-export default function TableCard({ table_name, rows, size }: TableStats) {
+type Props = {
+  refresh(): void;
+};
+
+export default function TableCard({
+  table_name,
+  rows,
+  size,
+  refresh,
+}: TableStats & Props) {
   return (
     <div className="bg-white dark:bg-dark-400 overflow-hidden shadow rounded-lg w-1/3 flex-shrink-0">
       <Heading className="pl-5 pt-3 pb-1">{table_name}</Heading>
@@ -76,8 +85,8 @@ export default function TableCard({ table_name, rows, size }: TableStats) {
         <CreateTableLogModal table={table_name} />
 
         <div className="flex space-x-2 items-center">
-          <CreateEditTableModal table={table_name} />
-          <CreateDeleteTableModal table={table_name} />
+          <CreateEditTableModal table={table_name} refresh={refresh} />
+          <CreateDeleteTableModal table={table_name} refresh={refresh} />
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
-import React, { createRef } from 'react';
+import React, { createRef, useEffect } from 'react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import AuthRoute from './components/AuthRoute';
 import NotificationSystem from 'react-notification-system';
-import { NotificationContent } from './types';
+import { BACKEND_URL, NotificationContent } from './types';
 import { NotificationContext } from './components/utils/context';
 import Admin from './pages/Admin';
 import CreateVerifySessionModal from './components/modals/CreateVerifySessionModal';
@@ -18,6 +18,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import HomeLayoutPlaceholder from './components/placeholders/HomeLayoutPlaceholder';
 import SigninPlaceholder from './components/placeholders/SigninPlaceholder';
 import { usePersistedStore } from '../stores/persisted';
+import axios from 'axios';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const Lost = React.lazy(() => import('./pages/Lost'));
@@ -81,6 +82,22 @@ export default function App() {
       level: type === 'logging' ? 'warning' : 'error',
     });
   });
+
+  useEffect(() => {
+    async function checkConnection() {
+      const res = await axios.get(BACKEND_URL + '/api/check-connection');
+      if (res.status !== 200) {
+        notify({
+          title: 'Connection Error',
+          message:
+            'Could not establish a connection with the database, please check internet and VPN connections',
+          level: 'error',
+        });
+      }
+    }
+
+    checkConnection();
+  }, []);
 
   return (
     <MemoryRouter initialEntries={['/home']}>

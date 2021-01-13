@@ -20,6 +20,7 @@ type Props = MutuallyExclusive<ChildProps, StringProps> & {
   // TODO: type me
   language?: string;
   theme?: 'light' | 'dark';
+  maxHeight?: string;
 };
 
 export default function Code({
@@ -29,9 +30,10 @@ export default function Code({
   slim,
   language = 'typescript',
   theme = localStorage.theme ?? 'dark',
+  maxHeight,
 }: Props) {
   const text = codeString ?? children;
-  const styles =
+  let styles: any =
     theme === 'light'
       ? {
           borderRadius: rounded ? '.375rem' : 0,
@@ -42,6 +44,10 @@ export default function Code({
           borderRadius: rounded ? '.375rem' : 0,
           padding: slim ? '.25rem' : '1em',
         };
+
+  if (maxHeight) {
+    styles.maxHeight = maxHeight;
+  }
 
   return (
     <SyntaxHighlighter

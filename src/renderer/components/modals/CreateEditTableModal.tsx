@@ -9,16 +9,31 @@ import Text from '../ui/Text';
 
 type Props = {
   table: string;
+  refresh(): void;
 };
 
-export default function CreateEditTableModal({ table }: Props) {
+export default function CreateEditTableModal({ table, refresh }: Props) {
   const [open, { on, off }] = useToggle(false);
 
   const { updateTable } = useQuery();
 
-  function handleEdit(_values: Values) {}
+  async function handleEdit(values: Values) {
+    const { newName } = values;
 
-  console.log(updateTable, handleEdit);
+    // TODO: notify
+    if (!newName || !newName.length) {
+      return;
+    } else if (newName === table) {
+      return;
+    }
+
+    const res = await updateTable(table, newName);
+
+    if (res && res.status === 201) {
+      refresh();
+      off();
+    }
+  }
 
   return (
     <React.Fragment>
@@ -34,7 +49,9 @@ export default function CreateEditTableModal({ table }: Props) {
         <Modal.Footer>
           <Button.Group>
             <Button onClick={off}>Close</Button>
-            <Button variant="primary">Submit</Button>
+            <Button variant="primary" type="submit" form="edit-table-form">
+              Submit
+            </Button>
           </Button.Group>
         </Modal.Footer>
       </Modal>

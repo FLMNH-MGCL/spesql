@@ -9,6 +9,7 @@ import axios from 'axios';
 import { CountQueryReturn } from '../modals/CreateCountModal';
 import { User } from '../UsersTable';
 import useLogError from './useLogError';
+import createTable from '../../../main/server/endpoints/sql/admin/createTable';
 // import { queriablesStats } from '../../../main/server/endpoints/sql/utils/queriablesStats';
 
 export default function useQuery() {
@@ -230,6 +231,43 @@ export default function useQuery() {
         return;
       },
 
+      async createTable(tableName: string) {
+        const creationResponse = await axios
+          .post(BACKEND_URL + '/api/admin/table/create', { tableName })
+          .catch((error) => error.response);
+
+        if (creationResponse.status === 201) {
+          notify({
+            title: 'Success',
+            message: `Created table ${tableName}`,
+            level: 'success',
+          });
+
+          return {
+            status: creationResponse.status,
+            data: creationResponse.data,
+          };
+        } else if (creationResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          await queries.createTable(tableName);
+        } else {
+          notify({
+            title: 'Error Occurred',
+            message: 'Please check the logs',
+            level: 'error',
+          });
+
+          return {
+            status: creationResponse.status,
+            data: creationResponse.data,
+          };
+        }
+
+        return;
+      },
+
       async deleteSpecimen(
         id: number,
         table: string
@@ -290,8 +328,33 @@ export default function useQuery() {
         }
       },
 
-      async deleteTable() {
-        // TODO: make me please
+      async deleteTable(tableName: string): Promise<any> {
+        const deletionResponse = await axios
+          .post(BACKEND_URL + '/api/admin/table/delete', { tableName })
+          .catch((error) => error.response);
+
+        if (deletionResponse.status === 201) {
+          notify({
+            title: 'Sucess',
+            message: `${tableName} is now in the void`,
+            level: 'success',
+          });
+
+          return deletionResponse;
+        } else if (deletionResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          return await queries.deleteTable(tableName);
+        } else {
+          notify({
+            title: 'Unknown Error',
+            message: 'Please notify Aaron of this bug',
+            level: 'error',
+          });
+
+          return deletionResponse;
+        }
       },
 
       async getTableLogs(table: string): Promise<any | undefined> {
@@ -620,7 +683,32 @@ export default function useQuery() {
           return undefined;
         }
       },
-      async updateTable(_table: string, _updates: any) {},
+      async updateTable(tableName: string, newName: string): Promise<any> {
+        const updateResponse = await axios
+          .post(BACKEND_URL + '/api/admin/table/edit', { tableName, newName })
+          .catch((error) => error.response);
+
+        if (updateResponse.status === 201) {
+          notify({
+            title: 'Update Successful',
+            message: 'Updated table name',
+            level: 'success',
+          });
+        } else if (updateResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          return await queries.updateTable(tableName, newName);
+        } else {
+          notify({
+            title: 'Update Failed',
+            message: 'An unknown error occurred',
+            level: 'error',
+          });
+        }
+
+        return updateResponse;
+      },
     }),
     [query, selectedSpecimen]
   );

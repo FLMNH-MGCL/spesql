@@ -2,6 +2,7 @@ import React from 'react';
 import { useStore } from '../../../stores';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
+import Text from '../ui/Text';
 import { User } from '../UsersTable';
 import { useNotify } from '../utils/context';
 import useKeyboard from '../utils/useKeyboard';
@@ -54,7 +55,7 @@ export default function CreateDeleteUserModal({
     <React.Fragment>
       <Modal open={open} onClose={onClose} size="tiny">
         <Modal.Content title="Are you sure?">
-          Deleting the user @{user.username} cannot be undone
+          <Text>Deleting the user @{user.username} cannot be undone</Text>
         </Modal.Content>
 
         <Modal.Footer>

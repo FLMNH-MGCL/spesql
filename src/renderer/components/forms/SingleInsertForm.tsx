@@ -30,6 +30,7 @@ import {
   validateTubeSize,
   validateName,
   validateNameListField,
+  validateListField,
 } from '../../functions/validation';
 import Datepicker from '../ui/Datepicker';
 import Form, { Values } from '../ui/Form';
@@ -141,8 +142,19 @@ function Cataloging({ page }: FormPart) {
       </Form.Group>
 
       <Form.Group flex>
-        <Form.Input name="projectNumber" label="projectNumber" fullWidth />
-        <Form.Input name="otherIdentifier" label="otherIdentifier" fullWidth />
+        <Form.Input
+          name="projectNumber"
+          label="projectNumber"
+          placeholder="AC-18-078 | CLDZ:2262"
+          register={{ validate: validateListField }}
+          fullWidth
+        />
+        <Form.Input
+          name="otherIdentifier"
+          label="otherIdentifier"
+          placeholder="BOM00001"
+          fullWidth
+        />
       </Form.Group>
     </div>
   );

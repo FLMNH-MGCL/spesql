@@ -14,6 +14,7 @@ import CreateCreateUserModal from './modals/CreateCreateUserModal';
 import CreateAdminLogModal from './modals/CreateAdminLogModal';
 import { usePersistedStore } from '../../stores/persisted';
 import { TABLE_CLASSES } from './ui/constants';
+import RefreshButton from './buttons/RefreshButton';
 
 export type User = {
   id: number;
@@ -133,7 +134,6 @@ export default function UsersTable() {
       : users
     : [];
 
-  // console.log(editing);
   async function getUsers() {
     on();
     const response = await axios
@@ -141,7 +141,6 @@ export default function UsersTable() {
       .catch((error) => error.response);
 
     if (response.status !== 200) {
-      // notify
       off();
       return;
     }
@@ -334,6 +333,7 @@ export default function UsersTable() {
       <nav className={TABLE_CLASSES.footer}>
         <div className="flex space-x-2 items-center">
           <CreateCreateUserModal refresh={getUsers} />
+          <RefreshButton onClick={() => getUsers()} />
         </div>
         <div className="flex space-x-2 items-center">
           {/* TODO: create ADMIN log modal */}
