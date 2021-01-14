@@ -19,8 +19,6 @@ AND table_name not in ('users', 'logs');`;
         // TODO: what should this be
         res.status(503).send(error);
       } else {
-        console.log(data);
-
         res.send(data);
       }
     });

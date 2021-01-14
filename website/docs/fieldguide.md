@@ -143,7 +143,7 @@ This is a Collector's record number. There is no specified, mandatory formatting
 
 ### otherIdentifier
 
-This is a new field and has not had any formatting guidelines generated yet.
+Any other identifiers assigned to this specimen.
 
 ```
 25 character limit
@@ -152,12 +152,32 @@ alphanumeric
 
 ### projectNumber
 
-This is a new field and has not had any formatting guidelines generated yet.
+Other numbers/identifiers relating to a specific project that was assigned to this specimen. This may be one or more values and follows the standard, list format:
 
 ```
-25 character limit
+  identifier
+  identifier | identifier2
+  identifier | identifier2 | identifier3
+```
+
+The list separator must be the pipe character '|'.
+
+Additionally, it follows the following format:
+
+```
+50 character limit
 alphanumeric
 ```
+
+##### Passing Examples
+
+`AC-18-078`
+`AC-18-078 | CLDZ:2262`
+
+##### Failing Examples
+
+`AC-18-078 ; CLDZ:2262`
+`AC-18-078, CLDZ:2262`
 
 ### order\_ <section id='##order\_'/>
 

@@ -54,9 +54,9 @@ type Props = {} & QueryBuilderProps;
 function AddRuleButton({
   title,
   handleOnClick,
-  rules,
-  level,
-}: ActionWithRulesProps) {
+}: // rules,
+// level,
+ActionWithRulesProps) {
   // console.log(rules, level);
   return <Button onClick={handleOnClick}>{title}</Button>;
 }

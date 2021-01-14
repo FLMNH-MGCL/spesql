@@ -88,9 +88,9 @@ export function validateTableSelection(table: string) {
   return true;
 }
 
-// TODO
-export function validateConditionSelection(table: string) {
-  console.log(table);
+// TODO:
+export function validateConditionSelection(_table: string) {
+  // console.log(table);
 
   return true;
 }

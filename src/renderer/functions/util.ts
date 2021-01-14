@@ -1,6 +1,5 @@
 import { Specimen, SpecimenFields } from '../types';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
-import { LoggingError } from '../../stores/logging';
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -174,17 +173,4 @@ export function toProperNoun(noun: string) {
 // TODO: fix the bug with this!!!
 export function specimenToArray(specimen: Specimen) {
   return Object.values(specimen as SpecimenFields);
-}
-
-export function loggingErrorToString(error: LoggingError) {
-  const { code, sql, field, fieldValue, catalogNumber, message } = error;
-
-  const leftSide =
-    field && code
-      ? `${field}, CODE: ${code} - `
-      : field && !code
-      ? field + ' - '
-      : !field && code
-      ? code + ' - '
-      : 'ERROR: ';
 }

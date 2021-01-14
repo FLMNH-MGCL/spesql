@@ -9,8 +9,6 @@ import axios from 'axios';
 import { CountQueryReturn } from '../modals/CreateCountModal';
 import { User } from '../UsersTable';
 import useLogError from './useLogError';
-import createTable from '../../../main/server/endpoints/sql/admin/createTable';
-// import { queriablesStats } from '../../../main/server/endpoints/sql/utils/queriablesStats';
 
 export default function useQuery() {
   const { notify } = useNotify();
