@@ -18,6 +18,7 @@ import { validateSpecimen } from '../../functions/validation';
 import Radio from '../ui/Radio';
 import { ProgressBar } from 'react-step-progress-bar';
 import Text from '../ui/Text';
+import { BulkInsertError } from '../../../stores/logging';
 
 // TODO: add typings in this file
 
@@ -264,7 +265,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
       if (specimenErrors && specimenErrors.length) {
         // console.log('ERROR OCCURRED:', currentSpecimen);
-        allErrors.push({ index: i, errors: specimenErrors });
+        allErrors.push({ index: i, row: i + 2, errors: specimenErrors });
       } else {
         // console.log(fixPartiallyCorrect(currentSpecimen));
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
@@ -275,15 +276,15 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   }
 
   function parsePasteRows(result: any[]) {
-    let allErrors = [];
+    let allErrors: BulkInsertError[] = [];
     let insertionValues = [];
     for (let i = 0; i < result.length; i++) {
       const currentSpecimen = result[i] as Specimen;
       const specimenErrors = validateSpecimen(currentSpecimen);
 
       if (specimenErrors && specimenErrors.length) {
-        // console.log('ERROR OCCURRED:', currentSpecimen);
-        allErrors.push({ index: i, errors: specimenErrors });
+        // console.log('ERROR OCCURRED:'+, currentSpecimen);
+        allErrors.push({ index: i, row: i + 2, errors: specimenErrors });
       } else {
         // console.log(fixPartiallyCorrect(currentSpecimen));
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
@@ -294,21 +295,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   }
 
   async function bulkInsert(insertionValues: Partial<SpecimenFields>[]) {
-    // let firstKeySet = Object.values(insertionValues[0] as SpecimenFields);
-    // let firstArray = specimenToArray(insertionValues[0] as SpecimenFields);
-
-    // console.log('BASE ARRAY:', firstArray);
-
-    // insertionValues.forEach((specimen, index) => {
-    //   const arr = specimenToArray(specimen as SpecimenFields);
-
-    //   if (arr.length !== firstArray.length) {
-    //     console.log('ERROR @', index);
-    //     console.log('DIFFERENT LENGTH:', arr);
-    //   }
-    // });
-    // return [];
-
     let errors = [];
     const values = insertionValues.map((specimen) => specimenToArray(specimen));
 
@@ -374,6 +360,8 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     on();
 
     const { allErrors, insertionValues } = parseUploadRows();
+
+    console.log(allErrors);
 
     const insertions = allErrors.length
       ? insertionValues.filter((_, index) => {

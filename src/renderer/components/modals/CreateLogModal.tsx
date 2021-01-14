@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
-// import CopyButton from '../buttons/CopyButton';
 import WarningButton from '../buttons/WarningButton';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
-import Heading from '../ui/Heading';
-import Text from '../ui/Text';
 import CopyButton from '../buttons/CopyButton';
-import clsx from 'clsx';
-import { BulkInsertError, LoggingError, Logs } from '../../../stores/table';
-
-// const tabPages = ['select', 'count', 'insert', 'update', 'delete', 'global'];
+import { BulkInsertError, LoggingError, Logs } from '../../../stores/logging';
+import Code from '../ui/Code';
+import Input from '../ui/Input';
 
 type LogProps = {
   errors?: Logs;
@@ -25,51 +21,63 @@ function Log({ errors, logName }: LogProps) {
   const disabled = !errors || !errors[logName] || !errors[logName].length;
   const clearErrors = useStore((state) => state.clearErrors);
 
-  function renderLog() {
-    if (!errors || !errors[logName] || !errors[logName].length)
-      return <p>No errors exist in the log</p>;
+  const [filter, setFilter] = useState<string>('');
+  const [logString, setLogString] = useState<string>('');
 
-    return errors[logName].map((error: LoggingError, i: number) => {
-      const { code, field, message, sql } = error;
-
-      // TODO: maybe use clsx for this, might be cleaner solution
-
-      const leftSide =
-        field && code
-          ? `${field}, CODE: ${code} - `
-          : field && !code
-          ? field + ' - '
-          : !field && code
-          ? code + ' - '
-          : 'ERROR: ';
-
-      return (
-        <div className="py-2 w-full" key={i}>
-          <div>
-            {sql && <Heading>Attempted Query: {sql}</Heading>}
-            <div className="flex space-x-2">
-              <Text>{`${leftSide}${message}`}</Text>
-            </div>
-          </div>
-        </div>
-      );
-    });
+  function filterLog(log: LoggingError[]) {
+    return log.filter((values) =>
+      Object.values(values)
+        .toString()
+        .toLowerCase()
+        .includes(filter.toLowerCase())
+    );
   }
+
+  function generateLogString() {
+    if (!errors || !errors[logName] || !errors[logName].length) return;
+
+    const log = errors[logName];
+
+    const filteredLog = filter ? filterLog(log) : log;
+
+    const logStr = JSON.stringify(filteredLog, null, 3);
+
+    setLogString(logStr);
+  }
+
+  useEffect(() => generateLogString());
 
   return (
     <div className="-mb-6">
-      <div className="mt-4 h-56 bg-gray-100  dark:bg-dark-500 dark:text-dark-200 rounded-md overflow-scroll">
-        <div
-          className={clsx(
-            disabled && 'h-full',
-            'p-2 flex flex-col items-center justify-center'
-          )}
-        >
-          {renderLog()}
-        </div>
+      <div className="mt-4">
+        {disabled ? (
+          <div className="flex items-center justify-center h-64 bg-gray-100  dark:bg-dark-500 dark:text-dark-200 rounded-md ">
+            <p>No errors exist in the log</p>
+          </div>
+        ) : (
+          <Code
+            rounded
+            maxHeight="16rem"
+            language="json"
+            codeString={logString}
+          />
+        )}
       </div>
 
-      <div className="mt-3 flex space-x-2 items-center justify-end">
+      <div className="mt-3 flex space-x-2 items-center justify-between">
+        <div className="flex items-center space-x-3 w-1/2">
+          <Input
+            fullWidth
+            value={filter}
+            onChange={(e) => setFilter(e.currentTarget.value)}
+            placeholder="Filter error log"
+            disabled={disabled}
+          />
+          <CopyButton
+            disabled={disabled}
+            value={JSON.stringify(errors?.bulkInsert, null, 2) ?? ''}
+          />
+        </div>
         <Button
           disabled={disabled}
           variant="warning"
@@ -77,10 +85,6 @@ function Log({ errors, logName }: LogProps) {
         >
           Clear
         </Button>
-        <CopyButton
-          disabled={disabled}
-          value={(errors && JSON.stringify(errors[logName], null, 2)) ?? ''}
-        />
       </div>
     </div>
   );
@@ -90,54 +94,80 @@ type BulkLogProps = {
   errors?: Logs;
   logName: keyof Logs;
 };
+
 function InsertErrorLog({ errors }: BulkLogProps) {
   const disabled = !errors || !errors.bulkInsert || !errors.bulkInsert.length;
 
   const clearErrors = useStore((state) => state.clearErrors);
 
-  function renderLog() {
-    if (!errors || !errors.bulkInsert || !errors.bulkInsert.length)
-      return <p>No errors exist in the log</p>;
+  const [filter, setFilter] = useState<string>('');
+  const [logString, setLogString] = useState<string>('');
+
+  function filterLog(log: BulkInsertError[]) {
+    let newLog: any = [];
+
+    log.forEach((val) => {
+      const { errors, index, row } = val;
+      let nestedErrors = errors.filter((error) =>
+        Object.values(error)
+          .toString()
+          .toLowerCase()
+          .includes(filter.toLowerCase())
+      );
+
+      if (nestedErrors.length) {
+        newLog.push({ index, row, errors: nestedErrors });
+      }
+    });
+
+    return newLog;
+  }
+
+  function generateLogString() {
+    if (!errors || !errors.bulkInsert || !errors.bulkInsert.length) return;
 
     const { bulkInsert } = errors;
 
-    return bulkInsert.map((error: BulkInsertError) => {
-      const csvRow = error.index + 2;
+    const filteredLog = filter ? filterLog(bulkInsert) : bulkInsert;
 
-      return (
-        <div className="py-2 w-full" key={csvRow}>
-          <Heading>Error(s) @ Row {csvRow}:</Heading>
-          <div>
-            {error.errors.map(({ field, message }) => {
-              return (
-                <div className="flex space-x-2" key={field + message}>
-                  <Text>{`  - ${field}:`}</Text>
-                  <Text>
-                    {typeof message !== 'boolean' ? message : 'INVALID'}
-                  </Text>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    });
+    const log = JSON.stringify(filteredLog, null, 3);
+
+    setLogString(log);
   }
+
+  useEffect(() => generateLogString());
 
   return (
     <div className="-mb-6">
-      <div className="mt-4 h-56 bg-gray-100 dark:bg-dark-500 dark:text-dark-200 rounded-md overflow-scroll">
-        <div
-          className={clsx(
-            disabled && 'h-full',
-            'p-2 flex flex-col items-center justify-center'
-          )}
-        >
-          {renderLog()}
-        </div>
+      <div className="mt-4">
+        {!errors || !errors.bulkInsert || !errors.bulkInsert.length ? (
+          <div className="flex items-center justify-center h-64 bg-gray-100  dark:bg-dark-500 dark:text-dark-200 rounded-md ">
+            <p>No errors exist in the log</p>
+          </div>
+        ) : (
+          <Code
+            rounded
+            maxHeight="16rem"
+            language="json"
+            codeString={logString}
+          />
+        )}
       </div>
 
-      <div className="mt-3 flex space-x-2 items-center justify-end">
+      <div className="mt-3 flex space-x-2 items-center justify-between">
+        <div className="flex items-center space-x-3 w-1/2">
+          <Input
+            fullWidth
+            value={filter}
+            onChange={(e) => setFilter(e.currentTarget.value)}
+            placeholder="Filter error log"
+            disabled={disabled}
+          />
+          <CopyButton
+            disabled={disabled}
+            value={JSON.stringify(errors?.bulkInsert, null, 2) ?? ''}
+          />
+        </div>
         <Button
           disabled={disabled}
           variant="warning"
@@ -145,10 +175,6 @@ function InsertErrorLog({ errors }: BulkLogProps) {
         >
           Clear
         </Button>
-        <CopyButton
-          disabled={disabled}
-          value={JSON.stringify(errors?.bulkInsert, null, 2) ?? ''}
-        />
       </div>
     </div>
   );
@@ -174,6 +200,12 @@ export default function CreateLogModal({
 
   const errors = useStore((state) => state.errors, shallow);
 
+  useEffect(() => {
+    if (initialTab !== undefined && initialTab !== tab) {
+      setTab(initialTab);
+    }
+  }, [initialTab]);
+
   // TODO:
   function calculateHasDanger() {
     // console.log(watchErrors, errors[watchErrors]);
@@ -185,7 +217,6 @@ export default function CreateLogModal({
   }
 
   function renderTab() {
-    // console.log('LOG TAB:', tab);
     switch (tab) {
       // select errors
       case 0:

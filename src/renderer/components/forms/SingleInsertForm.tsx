@@ -55,7 +55,7 @@ import { fetchTables } from './utils';
 import Text from '../ui/Text';
 import { useNotify } from '../utils/context';
 import Checkmark from '../ui/Checkmark';
-import { LoggingError } from '../../../stores/table';
+import { LoggingError } from '../../../stores/logging';
 import Input from '../ui/Input';
 
 type FormPart = {

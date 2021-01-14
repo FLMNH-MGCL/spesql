@@ -7,7 +7,7 @@ import Modal from '../ui/Modal';
 import Tabs from '../ui/Tabs';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
-import { Logs } from '../../../stores/table';
+import { Logs } from '../../../stores/logging';
 
 // TODO: make this ADMIN SPECIFIC
 

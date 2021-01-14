@@ -1,14 +1,7 @@
 import create from 'zustand';
 import { GoogleChartType, Specimen } from '../renderer/types';
 import { defaultQueryConfig, QueryConfig } from './query';
-import {
-  BulkInsertError,
-  defaultLogs,
-  defaultTableConfig,
-  LoggingError,
-  Logs,
-  TableConfig,
-} from './table';
+import { BulkInsertError, defaultLogs, LoggingError, Logs } from './logging';
 import { ChartConfig, defaultChartConfig } from './visualization';
 
 export type User = {
@@ -16,6 +9,21 @@ export type User = {
   username: string;
   fullName: string;
   accessRole: string;
+};
+
+export type TableConfig = {
+  headers: string[];
+  updateTableHeaders(newHeaders: string[]): void;
+};
+
+export const defaultTableConfig = {
+  headers: [
+    'catalogNumber',
+    'otherCatalogNumber',
+    'order_',
+    'genus',
+    'specificEpithet',
+  ],
 };
 
 // function resetLog(

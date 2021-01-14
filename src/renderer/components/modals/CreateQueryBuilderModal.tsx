@@ -59,6 +59,11 @@ export type Set = {
   value?: any;
 };
 
+type LogModalConfig = {
+  initialTab: number;
+  watch: 'select' | 'count' | 'update';
+};
+
 export default function CreateQueryBuilderModal({ open, onClose }: Props) {
   const { notify } = useNotify();
   const {
@@ -78,6 +83,12 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
   const [queryClause, setQueryClause] = useState<BasicQueryClause>(
     defaultClause
   );
+
+  // const [helpTab, setHelpTab] = useState<number>(0);
+  const [logModalConfig, setLogModalConfig] = useState<LogModalConfig>({
+    initialTab: 0,
+    watch: 'select',
+  });
 
   // const [sets, updateSets] = useState<Set[]>([]);
 
@@ -269,6 +280,17 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     }
   }
 
+  function getLogTab() {
+    switch (queryType) {
+      case 'count':
+        return 1;
+      case 'update':
+        return 3;
+      default:
+        return 0;
+    }
+  }
+
   useEffect(() => {
     buildQueryStatement(queryClause.queryType);
   }, [queryClause]);
@@ -277,6 +299,11 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     if (countReturn !== undefined) {
       setCountReturn(undefined);
     }
+
+    setLogModalConfig({
+      initialTab: getLogTab(),
+      watch: queryClause.queryType as any,
+    });
   }, [queryClause.queryType]);
 
   function renderQueryForm() {
@@ -388,7 +415,10 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
           </Button.Group>
 
           <div className="flex space-x-2 flex-1">
-            <CreateLogModal initialTab={0} />
+            <CreateLogModal
+              initialTab={logModalConfig.initialTab}
+              watch={logModalConfig.watch}
+            />
             <CreateHelpModal variant="queryBuilder" />
           </div>
         </Modal.Footer>

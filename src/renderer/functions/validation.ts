@@ -74,7 +74,7 @@ export function validateConditionalValue(condition: string, field: string) {
 
 // TODO: add ignore when REGEX
 export function validateSetValue(condition: string, field: string) {
-  console.log(field);
+  // console.log(field);
 
   return determineAndRunFieldValidator(field, condition);
 }
@@ -518,8 +518,9 @@ export function validateFreezer(value: string) {
 }
 
 // FIXME: this will short circuit true validation until data is resolved by researchers, there is conflict regarding how it should be formatted.
+// TODO: I have removed the short circuit for now
 export function validateRack(value: string) {
-  return true;
+  // return true;
   if (!value || !value.length) {
     return true;
   }
@@ -700,7 +701,12 @@ export function validateSpecimen(specimen: any) {
     if (ret === true || ret === undefined) {
       continue;
     } else {
-      errors.push({ field, message: ret });
+      errors.push({
+        field,
+        message: ret,
+        fieldValue: specimen[field] as any,
+        catalogNumber: specimen.catalogNumber as string,
+      });
     }
   }
 
