@@ -1,7 +1,4 @@
 import React from 'react';
-import Button from '../ui/Button';
-import { Values } from '../ui/Form';
-import Modal from '../ui/Modal';
 import { useNotify } from '../utils/context';
 import useKeyboard from '../utils/useKeyboard';
 import CreateLogModal from './CreateLogModal';
@@ -11,6 +8,7 @@ import UpdateBulkQueryForm from '../forms/UpdateBulkQueryForm';
 import CreateHelpModal from './CreateHelpModal';
 import useToggle from '../utils/useToggle';
 import useQuery from '../utils/useQuery';
+import { Button, FormSubmitValues, Modal } from '@flmnh-mgcl/ui';
 
 type Props = {
   open: boolean;
@@ -28,7 +26,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
     onClose();
   });
 
-  function parseConditions(count: any, values: Values) {
+  function parseConditions(count: any, values: FormSubmitValues) {
     const numConditions = parseInt(count, 10);
 
     if (numConditions < 1) {
@@ -57,7 +55,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
   }
 
   // TODO: hard code '=' for operator, or just remove it
-  function parseSets(count: any, values: Values) {
+  function parseSets(count: any, values: FormSubmitValues) {
     const numSets = parseInt(count, 10);
 
     if (numSets < 1) {
@@ -85,7 +83,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
     return sets;
   }
 
-  async function handleSubmit(values: Values) {
+  async function handleSubmit(values: FormSubmitValues) {
     on();
 
     const { advancedQuery, setCount, conditionalCount, databaseTable } = values;

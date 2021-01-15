@@ -1,5 +1,5 @@
+import { Spinner } from '@flmnh-mgcl/ui';
 import React from 'react';
-import Spinner from '../ui/Spinner';
 import Block from './Block';
 import TextBar from './TextBar';
 

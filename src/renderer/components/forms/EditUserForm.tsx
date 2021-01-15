@@ -1,13 +1,10 @@
+import { Form, FormSubmitValues } from '@flmnh-mgcl/ui';
 import React from 'react';
-
-import Form, { Values } from '../ui/Form';
-
-// import { useStore } from '../../../stores';
 import { User } from '../UsersTable';
 
 type Props = {
   user: User;
-  onSubmit(values: Values): void;
+  onSubmit(values: FormSubmitValues): void;
 };
 
 // TODO

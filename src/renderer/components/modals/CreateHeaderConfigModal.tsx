@@ -1,9 +1,7 @@
+import { Button, Modal, Text } from '@flmnh-mgcl/ui';
 import React from 'react';
 import HeaderConfigButton from '../buttons/HeaderConfigButton';
 import HeaderConfigurationForm from '../forms/HeaderConfigurationForm';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
-import Text from '../ui/Text';
 import useToggle from '../utils/useToggle';
 import CreateHelpModal from './CreateHelpModal';
 

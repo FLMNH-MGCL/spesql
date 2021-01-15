@@ -1,11 +1,13 @@
+import {
+  Code,
+  Divider,
+  Heading,
+  Label,
+  Modal,
+  Table,
+  Text,
+} from '@flmnh-mgcl/ui';
 import React from 'react';
-import Code from '../../ui/Code';
-import Divider from '../../ui/Divider';
-import Heading from '../../ui/Heading';
-import Label from '../../ui/Label';
-import Modal from '../../ui/Modal';
-import Table from '../../ui/Table';
-import Text from '../../ui/Text';
 
 export default function SelectHelpModal() {
   return (

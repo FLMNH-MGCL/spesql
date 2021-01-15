@@ -1,6 +1,6 @@
+import { Button } from '@flmnh-mgcl/ui';
 import React from 'react';
 import { useStore } from '../../../stores';
-import Button from '../ui/Button';
 
 type Props = {
   disabled?: boolean;

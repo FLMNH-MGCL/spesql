@@ -1,5 +1,5 @@
+import { Button } from '@flmnh-mgcl/ui';
 import React from 'react';
-import Button from '../ui/Button';
 import useQuery from '../utils/useQuery';
 
 export default function RefreshQueryButton({

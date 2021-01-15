@@ -1,3 +1,5 @@
+export type Values = Record<string, any>;
+
 type StringOrNull = string | null;
 
 // TODO: otherIdentifier AND projectNumber

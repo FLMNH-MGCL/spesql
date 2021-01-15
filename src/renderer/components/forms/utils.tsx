@@ -30,7 +30,6 @@ import {
   validateSex,
   validateTubeSize,
 } from '../../functions/validation';
-import Form from '../ui/Form';
 import {
   BooleanField,
   countryControl,
@@ -43,7 +42,7 @@ import {
   sexControl,
   tubeSizeControl,
 } from '../utils/constants';
-import Datepicker from '../ui/Datepicker';
+import { Datepicker, Form } from '@flmnh-mgcl/ui';
 
 export async function fetchTables(setTables: any) {
   const res = await axios

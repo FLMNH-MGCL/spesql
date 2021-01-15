@@ -1,11 +1,14 @@
+import {
+  Badge,
+  Button,
+  Code,
+  Form,
+  FormSubmitValues,
+  Label,
+  Modal,
+  Text,
+} from '@flmnh-mgcl/ui';
 import React from 'react';
-import Badge from '../ui/Badge';
-import Button from '../ui/Button';
-import Code from '../ui/Code';
-import Form, { Values } from '../ui/Form';
-import Label from '../ui/Label';
-import Modal from '../ui/Modal';
-import Text from '../ui/Text';
 import useQuery from '../utils/useQuery';
 import useToggle from '../utils/useToggle';
 
@@ -85,7 +88,7 @@ export default function CreateCreateTableModal({
 
   const { createTable } = useQuery();
 
-  async function handleSubmit(values: Values) {
+  async function handleSubmit(values: FormSubmitValues) {
     console.log(values);
 
     const res = await createTable(values.tableName);

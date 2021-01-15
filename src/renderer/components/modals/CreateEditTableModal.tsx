@@ -1,11 +1,8 @@
 import React from 'react';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
 import useQuery from '../utils/useQuery';
 import useToggle from '../utils/useToggle';
 import EditTableForm from '../forms/EditTableForm';
-import { Values } from '../ui/Form';
-import Text from '../ui/Text';
+import { Button, FormSubmitValues, Modal, Text } from '@flmnh-mgcl/ui';
 
 type Props = {
   table: string;
@@ -17,7 +14,7 @@ export default function CreateEditTableModal({ table, refresh }: Props) {
 
   const { updateTable } = useQuery();
 
-  async function handleEdit(values: Values) {
+  async function handleEdit(values: FormSubmitValues) {
     const { newName } = values;
 
     // TODO: notify

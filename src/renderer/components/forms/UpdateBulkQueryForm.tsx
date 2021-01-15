@@ -8,10 +8,7 @@ import {
   validateTableSelection,
   validateSetValue,
 } from '../../functions/validation';
-import Form, { Values } from '../ui/Form';
-import Heading from '../ui/Heading';
 import numberParser from 'number-to-words';
-import { SelectOption } from '../ui/Select';
 import {
   conditionCountOptions,
   operators,
@@ -20,6 +17,7 @@ import {
 import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
 import useExpiredSession from '../utils/useExpiredSession';
+import { Form, FormSubmitValues, Heading, SelectOption } from '@flmnh-mgcl/ui';
 
 type SetFormProps = {
   advanced: boolean;
@@ -115,7 +113,7 @@ function SetForm({ advanced }: SetFormProps) {
 }
 
 type Props = {
-  onSubmit(values: Values): void;
+  onSubmit(values: FormSubmitValues): void;
 };
 
 export default function UpdateBulkQueryForm({ onSubmit }: Props) {

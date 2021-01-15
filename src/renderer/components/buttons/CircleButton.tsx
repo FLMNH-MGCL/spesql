@@ -1,11 +1,9 @@
+import { Button, Spinner } from '@flmnh-mgcl/ui';
 import React from 'react';
 import { PropsOf } from '../../types';
-import Button from '../ui/Button';
-import Spinner from '../ui/Spinner';
 
 type Props = {
   icon: React.ReactNode;
-  // onClick?(): void;
   loading?: boolean;
 } & PropsOf<'button'>;
 

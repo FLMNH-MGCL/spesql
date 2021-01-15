@@ -1,8 +1,6 @@
+import { Button, Modal, Text } from '@flmnh-mgcl/ui';
 import React from 'react';
 import { useStore } from '../../../stores';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
-import Text from '../ui/Text';
 import { User } from '../UsersTable';
 import { useNotify } from '../utils/context';
 import useKeyboard from '../utils/useKeyboard';

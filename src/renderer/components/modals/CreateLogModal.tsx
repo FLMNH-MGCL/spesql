@@ -2,15 +2,12 @@ import React, { useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 import WarningButton from '../buttons/WarningButton';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
-import Tabs from '../ui/Tabs';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
 import CopyButton from '../buttons/CopyButton';
 import { BulkInsertError, LoggingError, Logs } from '../../../stores/logging';
-import Code from '../ui/Code';
-import Input from '../ui/Input';
+import { Button, Code, Modal, Tabs } from '@flmnh-mgcl/ui';
+import Input from '../querybuilder/Input';
 
 type LogProps = {
   errors?: Logs;
@@ -69,7 +66,7 @@ function Log({ errors, logName }: LogProps) {
           <Input
             fullWidth
             value={filter}
-            onChange={(e) => setFilter(e.currentTarget.value)}
+            onChange={(e: any) => setFilter(e.currentTarget.value)}
             placeholder="Filter error log"
             disabled={disabled}
           />
@@ -159,7 +156,7 @@ function InsertErrorLog({ errors }: BulkLogProps) {
           <Input
             fullWidth
             value={filter}
-            onChange={(e) => setFilter(e.currentTarget.value)}
+            onChange={(e: any) => setFilter(e.currentTarget.value)}
             placeholder="Filter error log"
             disabled={disabled}
           />

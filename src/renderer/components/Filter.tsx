@@ -1,7 +1,7 @@
 import React from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../stores';
-import Input from './ui/Input';
+import { Input } from '@flmnh-mgcl/ui';
 
 export function FilterSearch({ disabled }: { disabled?: boolean }) {
   const { filter, setFilter } = useStore(

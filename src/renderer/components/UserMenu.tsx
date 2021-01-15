@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../stores';
 import CreateConfirmModal from './modals/CreateConfirmModal';
-import Dropdown from './ui/Dropdown';
+import { Dropdown } from '@flmnh-mgcl/ui';
 import axios from 'axios';
 import { BACKEND_URL } from '../types';
 

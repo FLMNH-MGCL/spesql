@@ -1,6 +1,6 @@
+import { Button } from '@flmnh-mgcl/ui';
 import React from 'react';
 import { PropsOf } from '../../types';
-import Button from '../ui/Button';
 import CircleButton from './CircleButton';
 
 type Props = {

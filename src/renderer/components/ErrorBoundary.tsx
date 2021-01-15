@@ -1,10 +1,7 @@
 import React from 'react';
 import errorBoundary from '../assets/svg/error_boundary.svg';
 import CopyButton from './buttons/CopyButton';
-import Button from './ui/Button';
-import Heading from './ui/Heading';
-import Text from './ui/Text';
-import TextArea from './ui/TextArea';
+import { Button, Heading, Text, TextArea } from '@flmnh-mgcl/ui';
 import useToggle from './utils/useToggle';
 
 // TODO: type my things plz

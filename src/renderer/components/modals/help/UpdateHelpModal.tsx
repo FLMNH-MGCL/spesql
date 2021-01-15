@@ -1,10 +1,5 @@
+import { Code, Heading, Label, Modal, Table, Text } from '@flmnh-mgcl/ui';
 import React from 'react';
-import Code from '../../ui/Code';
-import Heading from '../../ui/Heading';
-import Label from '../../ui/Label';
-import Modal from '../../ui/Modal';
-import Table from '../../ui/Table';
-import Text from '../../ui/Text';
 
 export default function UpdateHelpModal() {
   return (
@@ -23,7 +18,7 @@ export default function UpdateHelpModal() {
             One of the basic formats of a SQL UPDATE statement is as follows:
           </Text>
 
-          <Code theme="light" language="sql" rounded>
+          <Code language="sql" rounded>
             UPDATE table_name SET column_name = 'new_value' [WHERE condition];
           </Code>
 
@@ -117,7 +112,7 @@ export default function UpdateHelpModal() {
             The query to make the target updates would look something like this:
           </Text>
 
-          <Code theme="light" language="sql" rounded>
+          <Code language="sql" rounded>
             UPDATE myTable SET identificationQualifier = 'cool' WHERE
             identificationQualifier = 'cf';
           </Code>

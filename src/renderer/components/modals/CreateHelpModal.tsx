@@ -1,7 +1,6 @@
+import { Button, Modal } from '@flmnh-mgcl/ui';
 import React from 'react';
 import HelpButton from '../buttons/HelpButton';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
 import useToggle from '../utils/useToggle';
 import AdvancedQueryBuilderHelpModal from './help/AdvancedQueryBuilderHelpModal';
 import CountHelpModal from './help/CountHelpModal';

@@ -1,5 +1,5 @@
+import { Modal } from '@flmnh-mgcl/ui';
 import React from 'react';
-import Modal from '../../ui/Modal';
 
 export default function AdvancedQueryBuilderHelpModal() {
   return (

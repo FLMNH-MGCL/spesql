@@ -1,10 +1,8 @@
+import { Button, Modal, Text } from '@flmnh-mgcl/ui';
 import React from 'react';
 import { useStore } from '../../../stores';
 import RefreshButton from '../buttons/RefreshButton';
 import FilterFieldForm from '../forms/FilterFieldForm';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
-import Text from '../ui/Text';
 import useToggle from '../utils/useToggle';
 
 type Props = {

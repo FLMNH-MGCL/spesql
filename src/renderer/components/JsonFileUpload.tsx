@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import Text from './ui/Text';
+import { Text } from '@flmnh-mgcl/ui';
 import { useNotify } from './utils/context';
 
 type Props = {

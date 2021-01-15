@@ -6,18 +6,18 @@ import EditSpecimen, {
   ConfirmEditButton,
   CancelEditButton,
 } from './buttons/EditSpecimen';
-import Heading from './ui/Heading';
 import useToggle from './utils/useToggle';
 import emptyDataIcon from '../assets/svg/empty_data_waiting.svg';
 import selectItemIconTest from '../assets/svg/specimen.svg';
 import { Specimen } from '../types';
 import List from './List';
-import Radio from './ui/Radio';
-import { Values } from './ui/Form';
+import { Values } from '../types';
 import CreateConfirmModal from './modals/CreateConfirmModal';
 import { useNotify } from './utils/context';
 import { buildSingleUpdateQuery } from '../functions/builder';
 import useQuery from './utils/useQuery';
+
+import { Heading, Radio } from '@flmnh-mgcl/ui';
 
 // TODO: remove ? where needed
 type OverviewProps = {

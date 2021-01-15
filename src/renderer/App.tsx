@@ -4,12 +4,10 @@ import AuthRoute from './components/AuthRoute';
 import NotificationSystem from 'react-notification-system';
 import { BACKEND_URL, NotificationContent } from './types';
 import { NotificationContext } from './components/utils/context';
-import Admin from './pages/Admin';
 import CreateVerifySessionModal from './components/modals/CreateVerifySessionModal';
 import useSound from 'use-sound';
 import bulb from './assets/sounds/Bulb.mp3';
 import crosswalk from './assets/sounds/Crosswalk.mp3';
-import Notification from './components/ui/Notification';
 import { ipcRenderer } from 'electron';
 
 import Layout from './components/Layout';
@@ -19,9 +17,11 @@ import HomeLayoutPlaceholder from './components/placeholders/HomeLayoutPlacehold
 import SigninPlaceholder from './components/placeholders/SigninPlaceholder';
 import { usePersistedStore } from '../stores/persisted';
 import axios from 'axios';
+import { Notification } from '@flmnh-mgcl/ui';
 
 const Home = React.lazy(() => import('./pages/Home'));
 const Lost = React.lazy(() => import('./pages/Lost'));
+const Admin = React.lazy(() => import('./pages/Admin'));
 const Settings = React.lazy(() => import('./pages/Settings'));
 const SignIn = React.lazy(() => import('./pages/SignIn'));
 const Visualization = React.lazy(() => import('./pages/Visualization'));

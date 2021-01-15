@@ -7,16 +7,13 @@ import {
   validateFieldSelection,
   validateOperator,
 } from '../../functions/validation';
-import Form from '../ui/Form';
-import Heading from '../ui/Heading';
 import {
   conditionCountOptions,
   fieldOptions,
   operators,
 } from '../utils/constants';
 import numberParser from 'number-to-words';
-import Text from '../ui/Text';
-import Label from '../ui/Label';
+import { Form, Heading, Label, Text } from '@flmnh-mgcl/ui';
 
 type ConditionalFormProps = {
   advanced: boolean;

@@ -1,13 +1,10 @@
 import React from 'react';
 import { useStore } from '../../../stores';
 import { BACKEND_URL } from '../../types';
-import Form, { Values } from '../ui/Form';
-import Modal from '../ui/Modal';
-import Text from '../ui/Text';
 import axios from 'axios';
 import { useNotify } from '../utils/context';
 import shallow from 'zustand/shallow';
-import Button from '../ui/Button';
+import { Button, Form, FormSubmitValues, Modal, Text } from '@flmnh-mgcl/ui';
 
 export default function CreateVerifySessionModal() {
   const { notify } = useNotify();
@@ -21,7 +18,7 @@ export default function CreateVerifySessionModal() {
     shallow
   );
 
-  async function handleSumbit(values: Values) {
+  async function handleSumbit(values: FormSubmitValues) {
     if (!values) {
       return 'This form is required';
     }

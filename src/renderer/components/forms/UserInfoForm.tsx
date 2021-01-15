@@ -1,17 +1,15 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import Button from '../ui/Button';
-
-import Form, { Values } from '../ui/Form';
 import { accessRoles } from '../utils/constants';
 import useToggle from '../utils/useToggle';
 import axios from 'axios';
 import { BACKEND_URL } from '../../types';
 import { useNotify } from '../utils/context';
 import { User } from '../UsersTable';
+import { Button, Form, FormSubmitValues } from '@flmnh-mgcl/ui';
 
 type Props = {
-  onSubmit(values: Values): void;
+  onSubmit(values: FormSubmitValues): void;
   userInfo?: User;
 };
 

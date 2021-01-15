@@ -4,8 +4,7 @@ import {
   DroppableProvided,
   DroppableStateSnapshot,
 } from 'react-beautiful-dnd';
-import Badge from './ui/Badge';
-import Heading from './ui/Heading';
+import { Badge, Heading } from '@flmnh-mgcl/ui';
 
 type DroppableListProps = {
   heading: string;

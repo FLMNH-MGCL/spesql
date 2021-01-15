@@ -5,16 +5,16 @@ import useWindowDimensions from './utils/useWindowDimensions';
 import { SortingConfig } from './VirtualizedTable';
 import _ from 'lodash';
 import useToggle from './utils/useToggle';
-import Spinner from './ui/Spinner';
-import Badge from './ui/Badge';
 import CreateEditUserModal from './modals/CreateEditUserModal';
 import CreateDeleteUserModal from './modals/CreateDeleteUserModal';
 import CreateHelpModal from './modals/CreateHelpModal';
 import CreateCreateUserModal from './modals/CreateCreateUserModal';
 import CreateAdminLogModal from './modals/CreateAdminLogModal';
 import { usePersistedStore } from '../../stores/persisted';
-import { TABLE_CLASSES } from './ui/constants';
 import RefreshButton from './buttons/RefreshButton';
+import { BACKEND_URL } from '../types';
+import { Badge, Spinner } from '@flmnh-mgcl/ui';
+import { TABLE_CLASSES } from '@flmnh-mgcl/ui/lib/components/constants';
 
 export type User = {
   id: number;
@@ -137,7 +137,7 @@ export default function UsersTable() {
   async function getUsers() {
     on();
     const response = await axios
-      .get('/api/admin/users')
+      .get(BACKEND_URL + '/api/admin/users')
       .catch((error) => error.response);
 
     if (response.status !== 200) {

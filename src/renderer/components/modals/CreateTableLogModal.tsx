@@ -1,7 +1,6 @@
+import { Button, Modal } from '@flmnh-mgcl/ui';
 import React from 'react';
 import TableLog from '../TableLog';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
 import useToggle from '../utils/useToggle';
 
 export default function CreateTableLogModal({ table }: { table: string }) {

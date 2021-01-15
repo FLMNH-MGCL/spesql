@@ -7,10 +7,6 @@ import {
   validateTableSelection,
 } from '../../../functions/validation';
 import { fetchTables } from '../../forms/utils';
-
-import Form, { Values } from '../../ui/Form';
-import Heading from '../../ui/Heading';
-import { SelectOption } from '../../ui/Select';
 import {
   conditionCountOptions,
   updateFieldOptions,
@@ -18,11 +14,12 @@ import {
 import numberParser from 'number-to-words';
 import { useFormContext } from 'react-hook-form';
 import { Set } from '../../modals/CreateQueryBuilderModal';
+import { Form, FormSubmitValues, Heading, SelectOption } from '@flmnh-mgcl/ui';
 
 type Props = {
   sets: Set[];
   onChange(field: string, value: any): void;
-  onSubmit(values: Values): void;
+  onSubmit(values: FormSubmitValues): void;
 };
 
 function SetForm({ sets, onChange }: Omit<Props, 'onSubmit'>) {

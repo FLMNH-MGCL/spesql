@@ -1,9 +1,7 @@
+import { Button, FormSubmitValues, Modal } from '@flmnh-mgcl/ui';
 import React from 'react';
 import CircleButton from '../buttons/CircleButton';
 import UserInfoForm from '../forms/UserInfoForm';
-import Button from '../ui/Button';
-import { Values } from '../ui/Form';
-import Modal from '../ui/Modal';
 import useQuery from '../utils/useQuery';
 import useToggle from '../utils/useToggle';
 
@@ -17,7 +15,7 @@ export default function CreateCreateUserModal({ refresh }: Props) {
 
   const { createUser } = useQuery();
 
-  async function handleSubmit(values: Values) {
+  async function handleSubmit(values: FormSubmitValues) {
     toggle();
 
     const { fullName, username, password, role } = values;

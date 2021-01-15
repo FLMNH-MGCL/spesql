@@ -1,7 +1,4 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
-import Tabs from '../ui/Tabs';
 import CreateLogModal from './CreateLogModal';
 import { CSVReader, readString } from 'react-papaparse';
 import { BACKEND_URL, isSpecimen, Specimen, SpecimenFields } from '../../types';
@@ -13,12 +10,18 @@ import axios from 'axios';
 import useToggle from '../utils/useToggle';
 import shallow from 'zustand/shallow';
 import { sleep } from '../../functions/util';
-import Select, { SelectOption } from '../ui/Select';
 import { validateSpecimen } from '../../functions/validation';
-import Radio from '../ui/Radio';
 import { ProgressBar } from 'react-step-progress-bar';
-import Text from '../ui/Text';
 import { BulkInsertError } from '../../../stores/logging';
+import {
+  Button,
+  Modal,
+  Radio,
+  Select,
+  SelectOption,
+  Tabs,
+  Text,
+} from '@flmnh-mgcl/ui';
 
 // TODO: add typings in this file
 
@@ -492,6 +495,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
           <div className="pt-8 pb-2">
             <Select
+              name=""
               className="pb-3 -mt-3"
               options={tables}
               value={databaseTable}
@@ -500,6 +504,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
                 setDatabaseTable(newVal);
               }}
             />
+
             {tab === 0 && (
               <CSVParser onFileUpload={(data: any) => setRawFile(data)} />
             )}

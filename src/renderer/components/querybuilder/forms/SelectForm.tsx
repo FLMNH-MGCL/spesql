@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { Form, SelectOption } from '@flmnh-mgcl/ui';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../../stores';
 import {
@@ -8,8 +8,6 @@ import {
 } from '../../../functions/validation';
 import { fetchTables } from '../../forms/utils';
 
-import Form from '../../ui/Form';
-import { SelectOption } from '../../ui/Select';
 import { fieldOptions } from '../../utils/constants';
 
 type Props = {

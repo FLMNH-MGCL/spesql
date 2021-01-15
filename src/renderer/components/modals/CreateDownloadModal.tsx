@@ -1,10 +1,8 @@
 import React from 'react';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
 import useToggle from '../utils/useToggle';
 import { CSVLink } from 'react-csv';
 import DownloadButton, { DOWNLOAD_ICONS } from '../buttons/DownloadButton';
-import Text from '../ui/Text';
+import { Button, Modal, Text } from '@flmnh-mgcl/ui';
 
 type Props = {
   variant?: keyof typeof DOWNLOAD_ICONS;

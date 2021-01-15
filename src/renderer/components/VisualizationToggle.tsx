@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Switch from './ui/Switch';
+import { Switch } from '@flmnh-mgcl/ui';
 
 export default function VisualizationToggle() {
   const location = useLocation();

@@ -1,9 +1,9 @@
+import { Form, FormSubmitValues } from '@flmnh-mgcl/ui';
 import React from 'react';
-import Form, { Values } from '../ui/Form';
 
 type Props = {
   table: string;
-  onSubmit(values: Values): void;
+  onSubmit(values: FormSubmitValues): void;
 };
 
 // TODO

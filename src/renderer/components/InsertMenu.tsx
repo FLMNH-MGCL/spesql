@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CreateBulkInsertModal from './modals/CreateBulkInsertModal';
 import CreateSingleInsertModal from './modals/CreateSingleInsertModal';
-import Dropdown from './ui/Dropdown';
+import { Dropdown } from '@flmnh-mgcl/ui';
 
 type Props = {
   disableCrud: boolean;

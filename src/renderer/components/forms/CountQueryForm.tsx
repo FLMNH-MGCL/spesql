@@ -1,21 +1,18 @@
+import { Form, FormSubmitValues, SelectOption } from '@flmnh-mgcl/ui';
 import React, { useEffect, useState } from 'react';
-// import shallow from 'zustand/shallow';
-// import { useStore } from '../../../stores';
 import {
   NeutralValidator,
   validateAdvancedCountQuery,
   validateFieldSelection,
   validateTableSelection,
 } from '../../functions/validation';
-import Form, { Values } from '../ui/Form';
-import { SelectOption } from '../ui/Select';
 import { fieldOptions } from '../utils/constants';
 import useExpiredSession from '../utils/useExpiredSession';
 import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
 
 type Props = {
-  onSubmit(values: Values): void;
+  onSubmit(values: FormSubmitValues): void;
 };
 
 export default function CountQueryForm({ onSubmit }: Props) {

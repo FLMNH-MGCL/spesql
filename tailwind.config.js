@@ -79,7 +79,6 @@ module.exports = {
       },
     },
   },
-  // plugins: [require('@tailwindcss/ui')],
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),

@@ -1,11 +1,8 @@
+import { Button, FormSubmitValues, Modal, Steps } from '@flmnh-mgcl/ui';
 import React, { useState } from 'react';
 import { arrayFieldsToString, getSpecimenDefaults } from '../../functions/util';
 import { Specimen } from '../../types';
 import SingleInsertForm from '../forms/SingleInsertForm';
-import Button from '../ui/Button';
-import { Values } from '../ui/Form';
-import Modal from '../ui/Modal';
-import Steps from '../ui/Steps';
 import useKeyboard from '../utils/useKeyboard';
 import CreateHelpModal from './CreateHelpModal';
 import CreateLogModal from './CreateLogModal';
@@ -26,11 +23,8 @@ export default function CreateSingleInsertModal({ open, onClose }: Props) {
     onClose();
   });
 
-  async function handleSubmit(values: Values) {
-    console.log(values);
-
-    const { databaseTable } = values;
-    console.log(databaseTable);
+  async function handleSubmit(values: FormSubmitValues) {
+    // const { databaseTable } = values;
 
     delete values.databaseTable;
 

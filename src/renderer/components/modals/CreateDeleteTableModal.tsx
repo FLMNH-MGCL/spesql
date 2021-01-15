@@ -1,8 +1,6 @@
+import { Button, Modal, Text } from '@flmnh-mgcl/ui';
 import React from 'react';
 import DeleteButton from '../buttons/DeleteButton';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
-import Text from '../ui/Text';
 import useQuery from '../utils/useQuery';
 import useToggle from '../utils/useToggle';
 

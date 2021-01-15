@@ -10,10 +10,10 @@ import {
   QueryBuilderProps,
   ValueEditorProps,
 } from 'react-querybuilder';
-import Button from './ui/Button';
 import Select from './querybuilder/Select';
 import Input from './querybuilder/Input';
 import TextArea from './querybuilder/TextArea';
+import { Button } from '@flmnh-mgcl/ui';
 
 /**
  * NOTE: QueryBuilder is a custom component wrapper around the QueryBuilder from

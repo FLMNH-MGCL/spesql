@@ -1,9 +1,6 @@
+import { Badge, Button, Code, Modal } from '@flmnh-mgcl/ui';
 import React from 'react';
 import { useStore } from '../../../stores';
-import Badge from '../ui/Badge';
-import Button from '../ui/Button';
-import Code from '../ui/Code';
-import Modal from '../ui/Modal';
 import useToggle from '../utils/useToggle';
 import CopyButton from './CopyButton';
 

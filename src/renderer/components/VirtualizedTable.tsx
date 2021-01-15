@@ -10,18 +10,15 @@ import CreateHelpModal from './modals/CreateHelpModal';
 import CreateHeaderConfigModal from './modals/CreateHeaderConfigModal';
 import { useStore } from '../../stores';
 import shallow from 'zustand/shallow';
-import Spinner from './ui/Spinner';
 import CreateLogModal from './modals/CreateLogModal';
 import { Specimen, SpecimenFields } from '../types';
-import Heading from './ui/Heading';
-import Text from './ui/Text';
 import serverImage from '../assets/svg/data_processing_two.svg';
 import ShowQueryButton from './buttons/ShowQueryButton';
-
 import 'react-virtualized/styles.css';
 import CreateFilterFieldModal from './modals/CreateFilterFieldModal';
 import { usePersistedStore } from '../../stores/persisted';
-import { TABLE_CLASSES } from './ui/constants';
+import { Spinner, Heading, Text } from '@flmnh-mgcl/ui';
+import { TABLE_CLASSES } from '@flmnh-mgcl/ui/lib/components/constants';
 
 const SortableTable = SortableContainer(Table);
 

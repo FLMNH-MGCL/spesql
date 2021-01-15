@@ -1,5 +1,5 @@
+import { Button } from '@flmnh-mgcl/ui';
 import React from 'react';
-import Button from '../ui/Button';
 
 type Props = {
   danger?: boolean;

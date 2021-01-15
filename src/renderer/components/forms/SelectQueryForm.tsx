@@ -5,17 +5,15 @@ import {
   validateFieldSelection,
   validateTableSelection,
 } from '../../functions/validation';
-import Form, { Values } from '../ui/Form';
-
 import { fieldOptions } from '../utils/constants';
 import { useStore } from '../../../stores';
-import { SelectOption } from '../ui/Select';
 import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
 import shallow from 'zustand/shallow';
+import { Form, FormSubmitValues, SelectOption } from '@flmnh-mgcl/ui';
 
 type Props = {
-  onSubmit(values: Values): void;
+  onSubmit(values: FormSubmitValues): void;
 };
 
 export default function SelectQueryForm({ onSubmit }: Props) {

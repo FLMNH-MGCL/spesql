@@ -3,11 +3,11 @@ import { useStore } from '../../stores';
 import shallow from 'zustand/shallow';
 import BackButton from '../components/buttons/BackButton';
 import UsersTable from '../components/UsersTable';
-import Heading from '../components/ui/Heading';
 import TableCard from '../components/TableCard';
 import { TableStats } from '../types';
 import useQuery from '../components/utils/useQuery';
 import CreateCreateTableModal from '../components/modals/CreateCreateTableModal';
+import { Heading } from '@flmnh-mgcl/ui';
 
 function AdminHeader({ username }: { username?: string }) {
   return (

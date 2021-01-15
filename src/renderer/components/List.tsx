@@ -1,7 +1,8 @@
 import React from 'react';
-import Form, { Values } from './ui/Form';
+import { Form } from '@flmnh-mgcl/ui';
 import { getFormElementForField } from './forms/utils';
 import clsx from 'clsx';
+import { Values } from '../types';
 
 // TODO: fix types
 

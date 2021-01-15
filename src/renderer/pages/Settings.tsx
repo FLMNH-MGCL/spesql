@@ -6,10 +6,9 @@ import { MySqlCredentials } from '../../main/server/types';
 import { useNotify } from '../components/utils/context';
 import CreateUpdateConfigModal from '../components/modals/CreateUpdateConfigModal';
 import { BACKEND_URL } from '../types';
-import Radio from '../components/ui/Radio';
-import Heading from '../components/ui/Heading';
 import shallow from 'zustand/shallow';
 import { usePersistedStore } from '../../stores/persisted';
+import { Heading, Radio } from '@flmnh-mgcl/ui';
 
 // use the component in your app!
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AutoSizer, Column, Table, TableRowProps } from 'react-virtualized';
 import RefreshButton from './buttons/RefreshButton';
-import Spinner from './ui/Spinner';
 import { useNotify } from './utils/context';
 import useQuery from './utils/useQuery';
 import useToggle from './utils/useToggle';
@@ -10,10 +9,10 @@ import { SortingConfig } from './VirtualizedTable';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import CreateDownloadModal from './modals/CreateDownloadModal';
 import CreateConfirmModal from './modals/CreateConfirmModal';
-import Button from './ui/Button';
 import _ from 'lodash';
 import { usePersistedStore } from '../../stores/persisted';
-import { TABLE_CLASSES } from './ui/constants';
+import { Spinner, Button } from '@flmnh-mgcl/ui';
+import { TABLE_CLASSES } from '@flmnh-mgcl/ui/lib/components/constants';
 
 const headerStrings = [
   'catalogNumber',

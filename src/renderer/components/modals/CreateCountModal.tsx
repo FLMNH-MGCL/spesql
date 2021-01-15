@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
 import CountQueryForm from '../forms/CountQueryForm';
-import Button from '../ui/Button';
-import Divider from '../ui/Divider';
-import { Values } from '../ui/Form';
-import Modal from '../ui/Modal';
-import Statistic from '../ui/Statistic';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
 import CreateHelpModal from './CreateHelpModal';
@@ -12,9 +7,16 @@ import CreateLogModal from './CreateLogModal';
 import numberParser from 'number-to-words';
 import { buildCountQuery } from '../../functions/builder';
 import { useNotify } from '../utils/context';
-import Radio from '../ui/Radio';
-import Spinner from '../ui/Spinner';
 import useQuery from '../utils/useQuery';
+import {
+  Button,
+  Divider,
+  FormSubmitValues,
+  Modal,
+  Radio,
+  Spinner,
+  Statistic,
+} from '@flmnh-mgcl/ui';
 
 type Props = {
   open: boolean;
@@ -44,7 +46,7 @@ export default function CreateCountModal({ open, onClose }: Props) {
     onClose();
   });
 
-  async function runQuery(values: Values) {
+  async function runQuery(values: FormSubmitValues) {
     on();
 
     const {

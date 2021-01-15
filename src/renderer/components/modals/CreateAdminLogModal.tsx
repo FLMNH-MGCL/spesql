@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 import WarningButton from '../buttons/WarningButton';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
-import Tabs from '../ui/Tabs';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
 import { Logs } from '../../../stores/logging';
+import { Button, Modal, Tabs } from '@flmnh-mgcl/ui';
 
 // TODO: make this ADMIN SPECIFIC
 

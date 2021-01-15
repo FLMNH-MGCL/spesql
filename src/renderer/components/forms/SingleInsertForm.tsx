@@ -32,10 +32,6 @@ import {
   validateNameListField,
   validateListField,
 } from '../../functions/validation';
-import Datepicker from '../ui/Datepicker';
-import Form, { Values } from '../ui/Form';
-import Heading from '../ui/Heading';
-import { SelectOption } from '../ui/Select';
 import {
   BooleanField,
   countryControl,
@@ -52,11 +48,17 @@ import {
 } from '../utils/constants';
 import { fetchTables } from './utils';
 // import { Checkmark } from 'react-checkmark';
-import Text from '../ui/Text';
 import { useNotify } from '../utils/context';
-import Checkmark from '../ui/Checkmark';
 import { LoggingError } from '../../../stores/logging';
-import Input from '../ui/Input';
+import {
+  Datepicker,
+  Form,
+  FormSubmitValues,
+  Heading,
+  SelectOption,
+  Text,
+} from '@flmnh-mgcl/ui';
+import Input from '../querybuilder/Input';
 
 type FormPart = {
   page: number;
@@ -97,7 +99,13 @@ function Cataloging({ page }: FormPart) {
         Cataloging
       </Heading>
       <Form.Group flex>
-        <Input disabled value="INSERT" label="Query Type" fullWidth />
+        <Input
+          onChange={() => {}}
+          disabled
+          value="INSERT"
+          label="Query Type"
+          fullWidth
+        />
 
         <Form.Select
           name="databaseTable"
@@ -728,7 +736,7 @@ function ConfirmationPage({ page }: FormPart) {
 
 type Props = {
   page: number;
-  onSubmit(values: Values): void;
+  onSubmit(values: FormSubmitValues): void;
 };
 
 function FormErrorHandler() {

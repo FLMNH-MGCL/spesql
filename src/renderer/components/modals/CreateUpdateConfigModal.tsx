@@ -1,8 +1,7 @@
+import { Button, Modal } from '@flmnh-mgcl/ui';
 import React, { useState } from 'react';
 import { MySqlCredentials } from '../../../main/server/types';
 import JsonFileUpload from '../JsonFileUpload';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
 import { useNotify } from '../utils/context';
 import useToggle from '../utils/useToggle';
 

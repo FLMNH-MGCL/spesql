@@ -1,9 +1,5 @@
 import React from 'react';
-import Code from '../../ui/Code';
-import Heading from '../../ui/Heading';
-import Modal from '../../ui/Modal';
-import Table from '../../ui/Table';
-import Text from '../../ui/Text';
+import { Code, Heading, Modal, Table, Text } from '@flmnh-mgcl/ui';
 
 export default function CountHelpModal() {
   return (
@@ -22,7 +18,7 @@ export default function CountHelpModal() {
             function is as follows:
           </Text>
 
-          <Code language="sql" theme="light" rounded>
+          <Code language="sql" rounded>
             SELECT COUNT(col_name) FROM table_name;
           </Code>
 
@@ -43,7 +39,7 @@ export default function CountHelpModal() {
             combinations of the fields in the aggregate.
           </Text>
 
-          <Code language="sql" theme="light" rounded>
+          <Code language="sql" rounded>
             SELECT COUNT(DISTINCT col_name, col_name_2) FROM table_name;
           </Code>
 
@@ -76,7 +72,7 @@ export default function CountHelpModal() {
             aggregate function, the query and resulting return value would be:
           </Text>
 
-          <Code language="sql" theme="light" rounded>
+          <Code language="sql" rounded>
             SELECT COUNT(DISTINCT genus, specificEpithet) FROM table_name;
           </Code>
 

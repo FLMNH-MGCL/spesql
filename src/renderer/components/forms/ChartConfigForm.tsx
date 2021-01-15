@@ -1,12 +1,15 @@
+import {
+  Code,
+  Form,
+  FormSubmitValues,
+  Heading,
+  SelectOption,
+  Text,
+} from '@flmnh-mgcl/ui';
 import React, { useCallback, useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 import { SpecimenValidator } from '../../types';
-import Code from '../ui/Code';
-import Form, { Values } from '../ui/Form';
-import Heading from '../ui/Heading';
-import { SelectOption } from '../ui/Select';
-import Text from '../ui/Text';
 import { aggregates, charts } from '../utils/constants';
 
 type ChartConfigProps = {
@@ -218,7 +221,7 @@ export default function ChartConfigForm() {
   const selectableFields =
     availableFields === '*' ? Object.keys(SpecimenValidator) : availableFields;
 
-  function onSubmit(values: Values) {
+  function onSubmit(values: FormSubmitValues) {
     console.log(values);
   }
 

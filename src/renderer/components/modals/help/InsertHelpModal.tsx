@@ -1,7 +1,5 @@
 import React from 'react';
-import Heading from '../../ui/Heading';
-import Modal from '../../ui/Modal';
-import Text from '../../ui/Text';
+import { Heading, Modal, Text } from '@flmnh-mgcl/ui';
 
 export default function InsertHelpModal() {
   return (

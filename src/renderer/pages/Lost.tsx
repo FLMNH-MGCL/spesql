@@ -1,8 +1,6 @@
+import { Button, Heading, Text } from '@flmnh-mgcl/ui';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../components/ui/Button';
-import Heading from '../components/ui/Heading';
-import Text from '../components/ui/Text';
 
 import fourohfour from '../assets/svg/fourohfour.svg';
 

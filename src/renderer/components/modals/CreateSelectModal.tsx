@@ -1,8 +1,5 @@
 import React from 'react';
 import SelectQueryForm from '../forms/SelectQueryForm';
-import Button from '../ui/Button';
-import { Values } from '../ui/Form';
-import Modal from '../ui/Modal';
 import useKeyboard from '../utils/useKeyboard';
 import { useStore } from '../../../stores';
 import CreateLogModal from './CreateLogModal';
@@ -12,6 +9,7 @@ import shallow from 'zustand/shallow';
 import CreateHelpModal from './CreateHelpModal';
 import useQuery from '../utils/useQuery';
 import clsx from 'clsx';
+import { Button, FormSubmitValues, Modal } from '@flmnh-mgcl/ui';
 
 type Props = {
   open: boolean;
@@ -29,7 +27,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
     onClose();
   });
 
-  function parseConditional(values: Values, current: string) {
+  function parseConditional(values: FormSubmitValues, current: string) {
     const conditional = {
       field: values[`conditionalField_${current}`],
       operator: values[`conditionalOperator_${current}`],
@@ -66,7 +64,7 @@ export default function CreateSelectModal({ open, onClose }: Props) {
     }
   }
 
-  async function handleSubmit(values: Values) {
+  async function handleSubmit(values: FormSubmitValues) {
     toggleLoading(true);
 
     const { advancedQuery, conditionalCount, databaseTable, fields } = values;

@@ -1,6 +1,5 @@
+import { Button, Modal } from '@flmnh-mgcl/ui';
 import React from 'react';
-import Button from '../ui/Button';
-import Modal from '../ui/Modal';
 import useToggle from '../utils/useToggle';
 
 type Props = {

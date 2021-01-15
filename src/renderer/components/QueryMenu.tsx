@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import CreateCountModal from './modals/CreateCountModal';
 import CreateSelectModal from './modals/CreateSelectModal';
 import CreateBulkUpdateModal from './modals/CreateBulkUpdateModal';
-import Dropdown from './ui/Dropdown';
+import { Dropdown } from '@flmnh-mgcl/ui';
 import CreateQueryBuilderModal from './modals/CreateQueryBuilderModal';
 
 type Props = {

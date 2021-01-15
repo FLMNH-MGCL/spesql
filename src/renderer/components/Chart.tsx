@@ -1,7 +1,7 @@
 import React from 'react';
 import { Chart as GChart } from 'react-google-charts';
 import { useStore } from '../../stores';
-import Spinner from './ui/Spinner';
+import { Spinner } from '@flmnh-mgcl/ui';
 
 // function ChartError(props: any) {
 //   console.log(props);

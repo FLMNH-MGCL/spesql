@@ -2,7 +2,7 @@ import React from 'react';
 import { TableStats } from '../types';
 import CreateDeleteTableModal from './modals/CreateDeleteTableModal';
 import CreateEditTableModal from './modals/CreateEditTableModal';
-import Heading from './ui/Heading';
+import { Heading } from '@flmnh-mgcl/ui';
 import numeral from 'numeral';
 import CreateTableLogModal from './modals/CreateTableLogModal';
 

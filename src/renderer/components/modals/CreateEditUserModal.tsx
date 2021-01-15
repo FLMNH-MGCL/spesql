@@ -1,9 +1,6 @@
+import { Button, FormSubmitValues, Modal, Text } from '@flmnh-mgcl/ui';
 import React from 'react';
 import UserInfoForm from '../forms/UserInfoForm';
-import Button from '../ui/Button';
-import { Values } from '../ui/Form';
-import Modal from '../ui/Modal';
-import Text from '../ui/Text';
 import { User } from '../UsersTable';
 import { useNotify } from '../utils/context';
 import useKeyboard from '../utils/useKeyboard';
@@ -31,7 +28,7 @@ export default function CreateEditUserModal({
     onClose();
   });
 
-  async function handleSubmit(values: Values) {
+  async function handleSubmit(values: FormSubmitValues) {
     // toggle();
 
     const { fullName, username, password, role } = values;

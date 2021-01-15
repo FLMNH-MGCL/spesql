@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Values } from '../ui/Form';
-import Modal from '../ui/Modal';
 // import { useNotify } from '../utils/context';
 import useKeyboard from '../utils/useKeyboard';
-import Button from '../ui/Button';
 import CreateLogModal from './CreateLogModal';
 import CreateHelpModal from './CreateHelpModal';
 import QueryBuilder from '../QueryBuilder';
 import { formatQuery } from 'react-querybuilder';
 import { queryBuilderFields } from '../utils/constants';
-import Label from '../ui/Label';
-import Code from '../ui/Code';
-import Text from '../ui/Text';
 import Select from '../querybuilder/Select';
 import SelectForm from '../querybuilder/forms/SelectForm';
 import clsx from 'clsx';
-import Heading from '../ui/Heading';
-import Divider from '../ui/Divider';
 import UpdateForm from '../querybuilder/forms/UpdateForm';
 import mysql from 'mysql';
 import { useNotify } from '../utils/context';
@@ -25,8 +17,18 @@ import { determineAndRunFieldValidator } from '../../functions/validation';
 import useQuery from '../utils/useQuery';
 import { useStore } from '../../../stores';
 import shallow from 'zustand/shallow';
-import Statistic from '../ui/Statistic';
-import Spinner from '../ui/Spinner';
+import {
+  Button,
+  Code,
+  Divider,
+  FormSubmitValues,
+  Heading,
+  Label,
+  Modal,
+  Spinner,
+  Statistic,
+  Text,
+} from '@flmnh-mgcl/ui';
 
 // IDEAS
 // https://reactjsexample.com/drag-and-drop-sortable-component-for-nested-data-and-hierarchies/
@@ -190,7 +192,7 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     setQueryClause({ ...queryClause, queryType: qType });
   }
 
-  async function handleUpdateSubmit(values: Values) {
+  async function handleUpdateSubmit(values: FormSubmitValues) {
     console.log(values);
 
     // double check validation
