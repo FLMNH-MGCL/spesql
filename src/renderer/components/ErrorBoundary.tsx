@@ -23,13 +23,14 @@ function TopLevelErrorBoundary({ error }: { error?: Error }) {
           send it on over to Aaron to see what happened!
         </Text>
 
-        <TextArea rows={4}>
+        <TextArea rows={4} form="" name="" id="">
           {error &&
             JSON.stringify({
               error: error.name,
               message: error.message,
               stack: error.stack,
             })}
+          ff
         </TextArea>
 
         <div className="flex items-center justify-center space-x-4">

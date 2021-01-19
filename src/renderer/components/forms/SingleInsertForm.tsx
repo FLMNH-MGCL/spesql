@@ -47,7 +47,6 @@ import {
   tubeSizeControl,
 } from '../utils/constants';
 import { fetchTables } from './utils';
-// import { Checkmark } from 'react-checkmark';
 import { useNotify } from '../utils/context';
 import { LoggingError } from '../../../stores/logging';
 import {
@@ -57,6 +56,7 @@ import {
   Heading,
   SelectOption,
   Text,
+  Checkmark,
 } from '@flmnh-mgcl/ui';
 import Input from '../querybuilder/Input';
 

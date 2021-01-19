@@ -1,5 +1,5 @@
+import { SelectOption } from '@flmnh-mgcl/ui';
 import { countries } from '../../assets/countries';
-import { SelectOption } from '../ui/Select';
 
 export const conditionCountOptions = Array.from({ length: 15 }, (_, index) => {
   return { label: String(index), value: index };

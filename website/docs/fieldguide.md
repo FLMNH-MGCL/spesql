@@ -19,70 +19,6 @@ To see available countries, please refer to the [Countries](#Countries) section 
 
 ## Available Specimen Fields
 
-(click to view formatting information)
-
-- [catalogNumber](###catalogNumber)
-- [otherCatalogNumber](###otherCatalogNumber)
-- [recordNumber](###recordNumber)
-- [otherIdentifier](###otherIdentifier)
-- [projectNumber](###projectNumber)
-- [order\_](###order_)
-- [superfamily](###superfamily)
-- [family](###family)
-- [subfamily](###subfamily)
-- [tribe](###tribe)
-- [genus](###genus)
-- [subgenus](###subgenus)
-- [specificEpithet](###specificEpithet)
-- [infraspecificEpithet](###infraspecificEpithet)
-- [identificationQualifier](###identificationQualifier)
-- [recordedBy](###recordedBy)
-- [otherCollectors](###otherCollectors)
-- [identifiedBy](###identifiedBy)
-- [dateIdentified](###dateIdentified)
-- [verbatimDate](###verbatimDate)
-- [collectedYear](###collectedYear)
-- [collectedMonth](###collectedMonth)
-- [collectedDay](###collectedDay)
-- [dateEntered](###dateEntered)
-- [sex](###sex)
-- [lifeStage](###lifeStage)
-- [habitat](###habitat)
-- [occurrenceRemarks](###occurrenceRemarks)
-- [molecularOccurrenceRemarks](###molecularOccurrenceRemarks)
-- [samplingProtocol](###samplingProtocol)
-- [country](###country)
-- [stateProvince](###stateProvince)
-- [county](###county)
-- [municipality](###municipality)
-- [locality](###locality)
-- [elevationInMeters](###elevationInMeters)
-- [decimalLatitude](###decimalLatitude)
-- [decimalLongitude](###decimalLongitude)
-- [geodeticDatum](###geodeticDatum)
-- [coordinateUncertainty](###coordinateUncertainty)
-- [verbatimLatitude](###verbatimLatitude)
-- [verbatimLongitude](###verbatimLongitude)
-- [georeferencedBy](###georeferencedBy)
-- [disposition](###disposition)
-- [isLoaned](###isLoaned)
-- [loanInstitution](###loanInstitution)
-- [loaneeName](###loaneeName)
-- [loanDate](###loanDate)
-- [loanReturnDate](###loanReturnDate)
-- [preparations](###preparations)
-- [freezer](###freezer)
-- [rack](###rack)
-- [box](###box)
-- [tubeSize](###tubeSize)
-- [associatedSequences](###associatedSequences)
-- [associatedReferences](###associatedReferences)
-- [withholdData](###withholdData)
-- [reared](###reared)
-- [recordEnteredBy](###recordEnteredBy)
-- [modifiedInfo](###modifiedInfo)
-- [fieldNotes](###fieldNotes)
-
 ### catalogNumber \* <section id='##catalogNumber'/>
 
 This is the LEP number. The general format is:
@@ -141,7 +77,7 @@ This is a Collector's record number. There is no specified, mandatory formatting
 
 `LK45`
 
-### otherIdentifier
+### otherIdentifier <section id='##otherIdentifier'/>
 
 Any other identifiers assigned to this specimen.
 
@@ -150,7 +86,7 @@ Any other identifiers assigned to this specimen.
 alphanumeric
 ```
 
-### projectNumber
+### projectNumber <section id='##projectNumber'/>
 
 Other numbers/identifiers relating to a specific project that was assigned to this specimen. This may be one or more values and follows the standard, list format:
 

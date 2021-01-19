@@ -9,7 +9,6 @@ import useSound from 'use-sound';
 import bulb from './assets/sounds/Bulb.mp3';
 import crosswalk from './assets/sounds/Crosswalk.mp3';
 import { ipcRenderer } from 'electron';
-
 import Layout from './components/Layout';
 import Header from './components/Header';
 import ErrorBoundary from './components/ErrorBoundary';

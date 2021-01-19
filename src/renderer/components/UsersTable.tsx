@@ -226,7 +226,7 @@ export default function UsersTable() {
     }
 
     return (
-      <div key={dataKey} className="flex space-x-2 items-center">
+      <div key={dataKey} className="flex space-x-2 items-center select-none">
         <p>{dataKey}</p>
         {icon}
       </div>
