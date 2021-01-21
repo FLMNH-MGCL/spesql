@@ -12,7 +12,7 @@ import {
   dispositionControl,
 } from '../components/utils/constants';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
-import { SelectOption } from '../components/ui/Select';
+import { SelectOption } from '@flmnh-mgcl/ui';
 
 // TODO: ADD DOCUMENTATION
 

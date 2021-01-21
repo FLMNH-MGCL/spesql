@@ -8,6 +8,7 @@ import GlobalHelpModal from './help/GlobalHelpModal';
 import InsertHelpModal from './help/InsertHelpModal';
 import SelectHelpModal from './help/SelectHelpModal';
 import UpdateHelpModal from './help/UpdateHelpModal';
+import UserTableModal from './help/UserTableModal';
 
 type HelpModalProps = {
   variant:
@@ -19,17 +20,16 @@ type HelpModalProps = {
     | 'insert'
     | 'single-insert'
     | 'queryBuilder'
-    | 'admin-user'
-    | 'admin-table';
+    | 'admin-user-table';
   float?: 'left' | 'right';
 };
 
 export default function CreateHelpModal({ variant, float }: HelpModalProps) {
   const [open, { on, off }] = useToggle(false);
-  //TODO:
   function determineModalToRender() {
     switch (variant) {
       case 'global': {
+        // TODO:
         return <GlobalHelpModal />;
       }
 
@@ -53,12 +53,8 @@ export default function CreateHelpModal({ variant, float }: HelpModalProps) {
         return <AdvancedQueryBuilderHelpModal />;
       }
 
-      case 'admin-user': {
-        return <SelectHelpModal />;
-      }
-
-      case 'admin-table': {
-        return <SelectHelpModal />;
+      case 'admin-user-table': {
+        return <UserTableModal />;
       }
 
       default: {

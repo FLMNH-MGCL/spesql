@@ -1,5 +1,5 @@
+import { FormSubmitValues } from '@flmnh-mgcl/ui';
 import clsx from 'clsx';
-import { Values } from '../components/ui/Form';
 import { SpecimenFields } from '../types';
 import {
   determineAndRunFieldValidator,
@@ -135,7 +135,7 @@ export function buildUpdateQuery(
 
 export function buildSingleUpdateQuery(
   table: string,
-  values: Values,
+  values: FormSubmitValues,
   selectedSpecimen: Partial<SpecimenFields>
 ) {
   let query = clsx('UPDATE', table, 'SET ? WHERE ?? = ?');
