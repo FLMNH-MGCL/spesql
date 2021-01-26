@@ -39,7 +39,18 @@ export default function ConditionalForm({
   min,
   fieldsOverride,
 }: ConditionalFormProps) {
-  const { getValues, watch, setValue } = useFormContext();
+  const form = useFormContext();
+
+  // FIXME: omg... this threw me for a major loop! I spent a few hours trying to debug
+  // this, and when I restarted my computer to it magically started working again...
+  // I am leaving this check in here in case this ever happens again, but essentially
+  // what was happening was the context was null, meaning it could not pick up the form
+  // values from context and therefore the destructuring threw an error.
+  if (!form) {
+    throw new Error('Error in ConditionalForm.tsx: missing form context!!');
+  }
+
+  const { getValues, watch, setValue } = form;
 
   const [conditionCount, setConditionCount] = useState(min ?? 0);
 
@@ -53,7 +64,6 @@ export default function ConditionalForm({
   // picks up new fields on the conditional count changes
   watch();
 
-  // TODO: type validator as function
   function setValidator(validator: any, operator?: string) {
     if (!advanced) {
       if (operator && specialOperators.includes(operator)) {

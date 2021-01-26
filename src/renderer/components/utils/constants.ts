@@ -269,6 +269,8 @@ export const dispositionControl = [
   { label: 'GRR On Loan', value: 'GRR On Loan' },
 
   { label: 'Voucher Absent', value: 'Voucher Absent' },
+
+  { label: 'MGCL papered', value: 'MGCL papered' },
 ];
 
 export const geodeticDatumControl = [

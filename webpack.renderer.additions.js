@@ -28,7 +28,7 @@ module.exports = (config) => {
   // Remove browser aliases so that we always get node.js versions of modules:
   config.resolve.aliasFields = [];
 
-  config.externals = ['react', 'react-dom'];
+  config.externals = ['react', 'react-dom', 'react-hook-form'];
 
   config.plugins = [
     ...config.plugins,

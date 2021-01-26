@@ -6,8 +6,10 @@ import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
 import CopyButton from '../buttons/CopyButton';
 import { BulkInsertError, LoggingError, Logs } from '../../../stores/logging';
-import { Button, Code, Modal, Tabs } from '@flmnh-mgcl/ui';
-import Input from '../querybuilder/Input';
+import { Button, Code, Modal, Tabs, Input } from '@flmnh-mgcl/ui';
+// import JsonListRenderer from '../JsonListRenderer';
+
+// TODO: Fix performance issues with rendering LARGE error log strings!!!
 
 type LogProps = {
   errors?: Logs;
@@ -142,12 +144,18 @@ function InsertErrorLog({ errors }: BulkLogProps) {
             <p>No errors exist in the log</p>
           </div>
         ) : (
+          // <div className="h-64 rounded-md overflow-scroll">
+          //   <JsonListRenderer />
+          // </div>
           <Code
             rounded
             maxHeight="16rem"
             language="json"
             codeString={logString}
           />
+          // <div className="h-64 rounded-md overflow-scroll">
+          //   <JsonListRenderer list={filterLog(errors.bulkInsert)} />
+          // </div>
         )}
       </div>
 
@@ -156,7 +164,7 @@ function InsertErrorLog({ errors }: BulkLogProps) {
           <Input
             fullWidth
             value={filter}
-            onChange={(e: any) => setFilter(e.currentTarget.value)}
+            onChange={(e: any) => setFilter(e.currentTarget?.value)}
             placeholder="Filter error log"
             disabled={disabled}
           />

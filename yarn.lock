@@ -979,6 +979,29 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.4.tgz#19bf0f5af19149111c40d98bb0cf82119f5d9eeb"
   integrity sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==
 
+"@flmnh-mgcl/ui@../ui":
+  version "1.0.11"
+  dependencies:
+    "@tailwindcss/aspect-ratio" "^0.2.0"
+    "@tailwindcss/forms" "^0.2.1"
+    "@tailwindcss/postcss7-compat" "^2.0.2"
+    "@tailwindcss/typography" "^0.3.1"
+    "@tailwindcss/ui" "^0.6.2"
+    autoprefixer "^9"
+    clsx "^1.1.1"
+    framer-motion "^2.4.1"
+    lodash "^4.17.20"
+    postcss "^7"
+    react "^16.13.1"
+    react-day-picker "^7.4.8"
+    react-dom "^16.13.1"
+    react-hook-form "^6.9.5"
+    react-sortable-hoc "^1.11.0"
+    react-step-progress-bar "^1.0.3"
+    react-syntax-highlighter "^15.4.3"
+    react-virtualized "^9.22.2"
+    tailwindcss "npm:@tailwindcss/postcss7-compat"
+
 "@flmnh-mgcl/ui@^1.0.11":
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/@flmnh-mgcl/ui/-/ui-1.0.11.tgz#7b5cd4f02bae542208fc8644cd060bb39eedfa16"
