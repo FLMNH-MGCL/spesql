@@ -92,8 +92,8 @@ Other numbers/identifiers relating to a specific project that was assigned to th
 
 ```
   identifier
-  identifier | identifier2
-  identifier | identifier2 | identifier3
+  identifier|identifier2
+  identifier|identifier2|identifier3
 ```
 
 The list separator must be the pipe character '|'.
@@ -108,10 +108,11 @@ alphanumeric
 ##### Passing Examples
 
 `AC-18-078`
-`AC-18-078 | CLDZ:2262`
+`AC-18-078|CLDZ:2262`
 
 ##### Failing Examples
 
+`AC-18-078 | CLDZ:2262`
 `AC-18-078 ; CLDZ:2262`
 `AC-18-078, CLDZ:2262`
 
@@ -331,7 +332,7 @@ This follows the standard, name list format:
 
 ```
   First Last
-  First Last | First2 Last2
+  First Last|First2 Last2
   First Last|First2 Last2
 ```
 
@@ -340,11 +341,11 @@ The list separator must be the pipe character '|'.
 
 ##### Passing Examples
 
-`Brad Millen | Kristina Yamamoto | Janet Fang`
+`Brad Millen|Kristina Yamamoto|Janet Fang`
 
 ##### Failing Examples
 
-`Millen,Brad | Yamamoto,Kristina | Fang,Janet`
+`Millen,Brad|Yamamoto,Kristina|Fang,Janet`
 `Millen,Brad, Yamamoto,Kristina, Fang,Janet`
 
 <br/><br/>
@@ -360,7 +361,7 @@ This follows the standard, name list format:
 
 ```
   First Last
-  First Last | First2 Last2
+  First Last|First2 Last2
   First Last|First2 Last2
 ```
 
@@ -369,7 +370,7 @@ The list separator must be the pipe character '|'.
 
 ##### Passing Examples
 
-`Brad Millen | Kristina Yamamoto | Janet Fang`
+`Brad Millen|Kristina Yamamoto|Janet Fang`
 
 ##### Failing Examples
 
@@ -515,9 +516,8 @@ The format of the list follows previous field formatting, in that it must be del
 
 ##### Failing Examples
 
-`UV Light` `LightUV,LightLED`
+`UV Light` `LightUV,LightLED` `LightUV | LightLED`
 
-`example`
 <br/><br/>
 
 ### country <section id='##country'/>
@@ -686,13 +686,13 @@ This follows the standard, name list format:
 
 ```
   First Last
-  First Last | First2 Last2
+  First Last|First2 Last2
   First Last|First2 Last2
 ```
 
 ##### Passing Examples
 
-`Brad Millen | Kristina Yamamoto | Janet Fang`
+`Brad Millen|Kristina Yamamoto|Janet Fang`
 
 ##### Failing Examples
 
@@ -803,7 +803,7 @@ The format of the list follows previous field formatting, in that it must be del
 ##### Passing Examples
 
 `Wing Voucher`
-`Wing Voucher | Molecular Collection`
+`Wing Voucher|Molecular Collection`
 `Wing Voucher|Molecular Collection`
 
 ##### Failing Examples
@@ -887,7 +887,7 @@ Note: This field is too complex to validate programmatically, so please refer to
 
 ##### General Example
 
-`http://www.sciencemag.org/cgi/content/abstract/322/5899/261, Christopher J. Conroy, Jennifer L. Neuwald. 2008. Phylogeographic study of the California vole, Microtus californicus Journal of Mammalogy, 89(3):755-767., Steven R. Hoofer and Ronald A. Van Den Bussche. 2001. Phylogenetic Relationships of Plecotine Bats and Allies Based on Mitochondrial Ribosomal Sequences. Journal of Mammalogy 82(1):131-137. | Walker, Faith M., Jeffrey T. Foster, Kevin P. Drees, Carol L. Chambers. 2014. Spotted bat (Euderma maculatum) microsatellite discovery using illumina sequencing. Conservation Genetics Resources.`
+`http://www.sciencemag.org/cgi/content/abstract/322/5899/261, Christopher J. Conroy, Jennifer L. Neuwald. 2008. Phylogeographic study of the California vole, Microtus californicus Journal of Mammalogy, 89(3):755-767., Steven R. Hoofer and Ronald A. Van Den Bussche. 2001. Phylogenetic Relationships of Plecotine Bats and Allies Based on Mitochondrial Ribosomal Sequences. Journal of Mammalogy 82(1):131-137.|Walker, Faith M., Jeffrey T. Foster, Kevin P. Drees, Carol L. Chambers. 2014. Spotted bat (Euderma maculatum) microsatellite discovery using illumina sequencing. Conservation Genetics Resources.`
 
 <br/><br/>
 
@@ -900,15 +900,16 @@ The general format follows the standard list format, and is as follows:
 ```
 link
 linkOne|linkTwo
-linkOne | linkTwo
+linkOne|linkTwo
 ```
 
 ##### Passing Examples
 
-`http://www.ncbi.nlm.nih.gov/nuccore/U34853.1 | http://www.ncbi.nlm.nih.gov/nuccore/GU328060 | http://www.ncbi.nlm.nih.gov/nuccore/AF326093`
+`http://www.ncbi.nlm.nih.gov/nuccore/U34853.1|http://www.ncbi.nlm.nih.gov/nuccore/GU328060|http://www.ncbi.nlm.nih.gov/nuccore/AF326093`
 
 ##### Failing Examples
 
+`http://www.ncbi.nlm.nih.gov/nuccore/U34853.1 | http://www.ncbi.nlm.nih.gov/nuccore/GU328060 | http://www.ncbi.nlm.nih.gov/nuccore/AF326093`
 `http://www.ncbi.nlm.nih.gov/nuccore/U34853.1, http://www.ncbi.nlm.nih.gov/nuccore/GU328060, http://www.ncbi.nlm.nih.gov/nuccore/AF326093`
 <br/><br/>
 

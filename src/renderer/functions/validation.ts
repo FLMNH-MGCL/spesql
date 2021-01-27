@@ -90,16 +90,26 @@ export function validateTableSelection(table: string) {
 
 // TODO:
 export function validateConditionSelection(_table: string) {
-  // console.log(table);
-
   return true;
 }
 
 export function validateControlList(items: any[], control: SelectOption[]) {
   for (let i = 0; i < items.length; i++) {
     const currentValue = items[i];
-    if (!control.some((el) => el.value === currentValue)) {
-      return `${currentValue} is not an accepted input`;
+
+    let matchedWhitespace = false;
+
+    const hasMatch = control.some((el) => {
+      if (el.value === currentValue.trim()) {
+        matchedWhitespace = true;
+      }
+
+      return el.value === currentValue;
+    });
+    if (!hasMatch) {
+      return matchedWhitespace
+        ? 'Item(s) have extra whitespace between separator(s)'
+        : `${currentValue} is not an accepted input`;
     }
   }
 

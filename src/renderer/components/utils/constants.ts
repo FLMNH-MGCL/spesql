@@ -201,6 +201,8 @@ export const identificationQualifierControl = [
   { label: 'near', value: 'near' },
   { label: 'sensu stricto', value: 'sensu stricto' },
   { label: 'sensu lato', value: 'sensu lato' },
+  { label: 'New Genus', value: 'New Genus' },
+  { label: 'New Species', value: 'New Species' },
 ];
 
 export const sexControl = [
