@@ -433,6 +433,8 @@ export function validateElevation(value: string) {
 
   const qty = Qty.parse(value);
 
+  console.log(qty);
+
   if (!qty) {
     return 'Invalid elevation, unexpected value(s)';
   } else if (qty.isUnitless()) {
@@ -807,7 +809,7 @@ export function determineAndRunFieldValidator(field: string, value: any) {
       // return validateProperNoun(value); // FIXME: maybe not??
       return true; // FIXME: maybe not??
     case 'elevationInMeters':
-      return true;
+      return validateElevation(value);
     case 'decimalLatitude':
       return true;
     case 'decimalLongitude':

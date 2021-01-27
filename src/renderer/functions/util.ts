@@ -107,7 +107,9 @@ export function fixPartiallyCorrect(partiallyCorrect: Specimen) {
     ? Qty.parse(partiallyCorrect.elevationInMeters)
     : null;
 
-  if (elevationQuantity) {
+  // console.log(partiallyCorrect.elevationInMeters, '->', elevationQuantity);
+
+  if (elevationQuantity && !elevationQuantity.isUnitless()) {
     elevationInMeters = elevationQuantity.to('m').toString();
   }
 

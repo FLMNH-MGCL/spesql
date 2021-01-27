@@ -262,6 +262,9 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     let insertionValues = [];
     for (let i = 0; i < rawData.length; i++) {
       const currentSpecimen = rawData[i].data as Specimen;
+
+      console.log(currentSpecimen);
+
       const specimenErrors = validateSpecimen(currentSpecimen);
 
       if (specimenErrors && specimenErrors.length) {
