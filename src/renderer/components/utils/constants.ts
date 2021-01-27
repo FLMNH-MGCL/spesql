@@ -272,7 +272,7 @@ export const dispositionControl = [
 
   { label: 'Voucher Absent', value: 'Voucher Absent' },
 
-  { label: 'MGCL papered', value: 'MGCL papered' },
+  { label: 'MGCL Papered', value: 'MGCL Papered' },
 ];
 
 export const geodeticDatumControl = [

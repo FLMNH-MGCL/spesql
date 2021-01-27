@@ -296,6 +296,8 @@ Identification qualifier for the specimen. Case sensitive, and must match one (o
 `near`
 `sensu stricto`
 `sensu lato`
+`New Genus`
+`New Species`
 
 <br/>
 <b>Darwin Core:</b> A brief phrase or a standard term ("cf.", "aff.") to express the determiner's doubts about the Identification.
@@ -728,6 +730,8 @@ The disposition (current state) of the specimen as it is currently in the collec
 `GRR On Loan`
 
 `Voucher Absent`
+
+`MGCL Papered`
 
 The format of the list follows previous field formatting, in that it must be delimited using the pipe '|' character.
 
