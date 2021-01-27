@@ -1002,31 +1002,6 @@
     react-virtualized "^9.22.2"
     tailwindcss "npm:@tailwindcss/postcss7-compat"
 
-"@flmnh-mgcl/ui@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@flmnh-mgcl/ui/-/ui-1.0.11.tgz#7b5cd4f02bae542208fc8644cd060bb39eedfa16"
-  integrity sha512-rzSRrnctmQYTASLUNCPoK5z8ozfu3oF1uCmjmFgduBAKjRAEbl0kkcbJ1UQ5PtCHtstCH1Vmo1Vs4zPd/VTL0A==
-  dependencies:
-    "@tailwindcss/aspect-ratio" "^0.2.0"
-    "@tailwindcss/forms" "^0.2.1"
-    "@tailwindcss/postcss7-compat" "^2.0.2"
-    "@tailwindcss/typography" "^0.3.1"
-    "@tailwindcss/ui" "^0.6.2"
-    autoprefixer "^9"
-    clsx "^1.1.1"
-    framer-motion "^2.4.1"
-    lodash "^4.17.20"
-    postcss "^7"
-    react "^16.13.1"
-    react-day-picker "^7.4.8"
-    react-dom "^16.13.1"
-    react-hook-form "^6.9.5"
-    react-sortable-hoc "^1.11.0"
-    react-step-progress-bar "^1.0.3"
-    react-syntax-highlighter "^15.4.3"
-    react-virtualized "^9.22.2"
-    tailwindcss "npm:@tailwindcss/postcss7-compat"
-
 "@fullhuman/postcss-purgecss@^3.0.0":
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/@fullhuman/postcss-purgecss/-/postcss-purgecss-3.1.3.tgz#47af7b87c9bfb3de4bc94a38f875b928fffdf339"
@@ -5231,6 +5206,11 @@ immediate@~3.0.5:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
   integrity sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
+
+immer@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-8.0.1.tgz#9c73db683e2b3975c424fb0572af5889877ae656"
+  integrity sha512-aqXhGP7//Gui2+UrEtvxZxSquQVXTpZ7KDxfCcKAF3Vysvw0CViVaW9RZ1j1xlIYqaaaipBoqdqeibkc18PNvA==
 
 import-cwd@^2.0.0:
   version "2.1.0"
