@@ -23,8 +23,6 @@ import {
   Text,
 } from '@flmnh-mgcl/ui';
 
-// TODO: add typings in this file
-
 function CSVParser({ onFileUpload }: UploadProps) {
   const { notify } = useNotify();
 
@@ -32,7 +30,7 @@ function CSVParser({ onFileUpload }: UploadProps) {
   const updateBulkInsertLog = useStore((state) => state.updateBulkInsertLog);
 
   function handleOnFileLoad(data: any) {
-    console.log(data);
+    // console.log(data);
     if (!data || !data.length) {
       notify({
         title: 'Upload Error',
@@ -359,23 +357,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     return serverErrors;
   }
 
-  async function handleUploadSubmit() {
-    on();
-
-    const { allErrors, insertionValues } = parseUploadRows();
-
-    console.log(allErrors);
-
-    const insertions = allErrors.length
-      ? insertionValues.filter((_, index) => {
-          return allErrors.some((_, i) => i !== index);
-        })
-      : insertionValues;
-
-    const serverErrors = rowByRow
-      ? await insertRows(insertions)
-      : await bulkInsert(insertions);
-
+  function interpret(allErrors: any, serverErrors: any) {
     if (serverErrors.length && allErrors.length) {
       notify({
         title: 'Client & Server Errors',
@@ -410,6 +392,34 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         'success'
       );
     }
+  }
+
+  async function handleUploadSubmit() {
+    on();
+
+    const { allErrors, insertionValues } = parseUploadRows();
+
+    const insertions = allErrors.length
+      ? insertionValues.filter((_, index) => {
+          return allErrors.some((_, i) => i !== index);
+        })
+      : insertionValues;
+
+    if (!insertions || !insertions.length) {
+      notify({
+        title: 'Could not complete query',
+        message: 'All rows contained validation errors',
+        level: 'error',
+      });
+
+      updateBulkInsertLog(allErrors);
+    } else {
+      const serverErrors = rowByRow
+        ? await insertRows(insertions)
+        : await bulkInsert(insertions);
+
+      interpret(allErrors, serverErrors);
+    }
 
     off();
   }
@@ -424,44 +434,26 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
     const { allErrors, insertionValues } = parsePasteRows(results.data);
 
-    console.log(allErrors, insertionValues);
+    const insertions = allErrors.length
+      ? insertionValues.filter((_, index) => {
+          return allErrors.some((_, i) => i !== index);
+        })
+      : insertionValues;
 
-    if (allErrors.length) {
+    if (!insertions || !insertions.length) {
       notify({
-        title: 'Insert Errors',
-        message:
-          'There were one or more errors that occurred during this request that prevented it from being submitted. Please review the appropriate logs.',
+        title: 'Could not complete query',
+        message: 'All rows contained validation errors',
         level: 'error',
       });
+
       updateBulkInsertLog(allErrors);
-    }
+    } else {
+      const serverErrors = rowByRow
+        ? await insertRows(insertions)
+        : await bulkInsert(insertions);
 
-    // TODO: check me please
-    if (rowByRow || !allErrors.length) {
-      const insertions = allErrors.length
-        ? insertionValues.filter((_, index) => {
-            return allErrors.some((_, i) => i !== index);
-          })
-        : insertionValues;
-
-      const serverErrors = await insertRows(insertions);
-
-      if (serverErrors.length) {
-        notify({
-          title: 'Server Errors Occurred',
-          message:
-            'Some or all of the insertions emitted errors. Please review the appropriate logs.',
-          level: 'warning',
-        });
-        updateBulkInsertLog(serverErrors);
-      } else {
-        notify({
-          title: 'Insertions Complete',
-          message: 'No errors detected',
-          level: 'success',
-        });
-      }
-      off();
+      interpret(allErrors, serverErrors);
     }
 
     off();

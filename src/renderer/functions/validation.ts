@@ -676,6 +676,22 @@ export function validateStringDateRange(
   return true;
 }
 
+export function validateFixedLengthField(
+  fieldName: string,
+  value: string,
+  maxLength: number
+) {
+  if (!value || !value.length) {
+    return true;
+  }
+
+  if (value.length > maxLength) {
+    return `${fieldName} cannot be longer than ${maxLength} characters`;
+  } else {
+    return true;
+  }
+}
+
 function isNumeric(n: string) {
   const parsed = parseFloat(n);
   return !isNaN(parsed) && isFinite(parsed);
@@ -723,6 +739,10 @@ export function determineAndRunFieldValidator(field: string, value: any) {
       return validateOtherCatalogNumber(value);
     case 'recordNumber':
       return true;
+    case 'projectNumber':
+      return validateListField(value);
+    case 'otherIdentifier':
+      return validateFixedLengthField('otherIdentifier', value, 25);
     case 'order_':
     case 'superfamily':
     case 'family':

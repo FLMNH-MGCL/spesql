@@ -6,10 +6,11 @@ import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
 import CopyButton from '../buttons/CopyButton';
 import { BulkInsertError, LoggingError, Logs } from '../../../stores/logging';
-import { Button, Code, Modal, Tabs, Input } from '@flmnh-mgcl/ui';
-// import JsonListRenderer from '../JsonListRenderer';
-
-// TODO: Fix performance issues with rendering LARGE error log strings!!!
+import { Button, Modal, Tabs, Input } from '@flmnh-mgcl/ui';
+import {
+  BulkInsertLogRenderer,
+  GeneralErrorLogRenderer,
+} from '../ErrorRenderers';
 
 type LogProps = {
   errors?: Logs;
@@ -18,10 +19,10 @@ type LogProps = {
 
 function Log({ errors, logName }: LogProps) {
   const disabled = !errors || !errors[logName] || !errors[logName].length;
+
   const clearErrors = useStore((state) => state.clearErrors);
 
   const [filter, setFilter] = useState<string>('');
-  const [logString, setLogString] = useState<string>('');
 
   function filterLog(log: LoggingError[]) {
     return log.filter((values) =>
@@ -32,34 +33,19 @@ function Log({ errors, logName }: LogProps) {
     );
   }
 
-  function generateLogString() {
-    if (!errors || !errors[logName] || !errors[logName].length) return;
-
-    const log = errors[logName];
-
-    const filteredLog = filter ? filterLog(log) : log;
-
-    const logStr = JSON.stringify(filteredLog, null, 3);
-
-    setLogString(logStr);
-  }
-
-  useEffect(() => generateLogString());
+  useEffect(() => {}, [filter]);
 
   return (
     <div className="-mb-6">
       <div className="mt-4">
-        {disabled ? (
+        {!errors || !errors[logName] || !errors[logName].length ? (
           <div className="flex items-center justify-center h-64 bg-gray-100  dark:bg-dark-500 dark:text-dark-200 rounded-md ">
             <p>No errors exist in the log</p>
           </div>
         ) : (
-          <Code
-            rounded
-            maxHeight="16rem"
-            language="json"
-            codeString={logString}
-          />
+          <div className="h-64 rounded-md bg-gray-100 dark:bg-dark-600 shadow">
+            <GeneralErrorLogRenderer list={filterLog(errors[logName])} />
+          </div>
         )}
       </div>
 
@@ -100,7 +86,6 @@ function InsertErrorLog({ errors }: BulkLogProps) {
   const clearErrors = useStore((state) => state.clearErrors);
 
   const [filter, setFilter] = useState<string>('');
-  const [logString, setLogString] = useState<string>('');
 
   function filterLog(log: BulkInsertError[]) {
     let newLog: any = [];
@@ -122,19 +107,7 @@ function InsertErrorLog({ errors }: BulkLogProps) {
     return newLog;
   }
 
-  function generateLogString() {
-    if (!errors || !errors.bulkInsert || !errors.bulkInsert.length) return;
-
-    const { bulkInsert } = errors;
-
-    const filteredLog = filter ? filterLog(bulkInsert) : bulkInsert;
-
-    const log = JSON.stringify(filteredLog, null, 3);
-
-    setLogString(log);
-  }
-
-  useEffect(() => generateLogString());
+  useEffect(() => {}, [filter]);
 
   return (
     <div className="-mb-6">
@@ -144,18 +117,9 @@ function InsertErrorLog({ errors }: BulkLogProps) {
             <p>No errors exist in the log</p>
           </div>
         ) : (
-          // <div className="h-64 rounded-md overflow-scroll">
-          //   <JsonListRenderer />
-          // </div>
-          <Code
-            rounded
-            maxHeight="16rem"
-            language="json"
-            codeString={logString}
-          />
-          // <div className="h-64 rounded-md overflow-scroll">
-          //   <JsonListRenderer list={filterLog(errors.bulkInsert)} />
-          // </div>
+          <div className="h-64 rounded-md bg-gray-100 dark:bg-dark-600 shadow">
+            <BulkInsertLogRenderer list={filterLog(errors.bulkInsert)} />
+          </div>
         )}
       </div>
 
