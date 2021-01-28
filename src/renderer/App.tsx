@@ -97,7 +97,6 @@ export default function App() {
 
     checkConnection();
   }, []);
-
   return (
     <MemoryRouter initialEntries={['/home']}>
       <ErrorBoundary>

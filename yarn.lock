@@ -979,8 +979,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.4.tgz#19bf0f5af19149111c40d98bb0cf82119f5d9eeb"
   integrity sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==
 
-"@flmnh-mgcl/ui@../ui":
-  version "1.0.11"
+"@flmnh-mgcl/ui@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@flmnh-mgcl/ui/-/ui-1.0.12.tgz#20d11b4bc31aa738cbebe632e7e4ddda90185926"
+  integrity sha512-6aQ1cU6S6V2shmgZ/Fi06NsWywfLPvJhha7EoW6hYLs+3WJ5MR2TQyay/atykIlxth1vw8rxdyaO5TglA7epTQ==
   dependencies:
     "@tailwindcss/aspect-ratio" "^0.2.0"
     "@tailwindcss/forms" "^0.2.1"

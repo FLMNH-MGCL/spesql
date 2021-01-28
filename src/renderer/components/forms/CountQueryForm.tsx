@@ -81,6 +81,7 @@ export default function CountQueryForm({ onSubmit }: Props) {
           fullWidth
           multiple
           options={fieldOptions}
+          searchable
           register={{ validate: setValidator(validateFieldSelection) }}
         />
 
@@ -90,6 +91,7 @@ export default function CountQueryForm({ onSubmit }: Props) {
           disabled={advanced}
           fullWidth
           options={tables}
+          searchable
           register={{ validate: setValidator(validateTableSelection) }}
         />
       </Form.Group>

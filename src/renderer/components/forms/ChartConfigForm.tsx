@@ -2,7 +2,6 @@ import {
   Code,
   Form,
   FormSubmitValues,
-  Heading,
   SelectOption,
   Text,
 } from '@flmnh-mgcl/ui';
@@ -211,15 +210,16 @@ export default function ChartConfigForm() {
     shallow
   );
 
-  const hasQueried = useStore(
-    (state) => !!state.queryData.queryString,
-    shallow
-  );
+  console.log(availableFields);
+
+  // const hasQueried = useStore(
+  //   (state) => !!state.queryData.queryString,
+  //   shallow
+  // );
 
   const setChartType = useStore((state) => state.chartConfig.setChartType);
 
-  const selectableFields =
-    availableFields === '*' ? Object.keys(SpecimenValidator) : availableFields;
+  const selectableFields = Object.keys(SpecimenValidator);
 
   function onSubmit(values: FormSubmitValues) {
     console.log(values);
@@ -230,14 +230,14 @@ export default function ChartConfigForm() {
     [chartType, selectableFields]
   );
 
-  if (!hasQueried) {
-    return (
-      <div className="p-2 h-full w-full flex flex-col items-center justify-center">
-        <Heading>No data detected</Heading>
-        <Text>Please run a Select query to get started</Text>
-      </div>
-    );
-  }
+  // if (!hasQueried) {
+  //   return (
+  //     <div className="p-2 h-full w-full flex flex-col items-center justify-center">
+  //       <Heading>No data detected</Heading>
+  //       <Text>Please run a Select query to get started</Text>
+  //     </div>
+  //   );
+  // }
 
   return (
     <Form

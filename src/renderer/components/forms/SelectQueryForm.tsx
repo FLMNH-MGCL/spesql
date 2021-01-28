@@ -91,6 +91,7 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           fullWidth
           multiple
           options={fieldOptions}
+          searchable
           register={{ validate: setValidator(validateFieldSelection) }}
         />
 
@@ -100,15 +101,8 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           disabled={advanced}
           fullWidth
           options={tables}
+          searchable
           register={{ validate: setValidator(validateTableSelection) }}
-        />
-      </Form.Group>
-
-      <Form.Group>
-        <Form.Radio
-          name="distinct"
-          label="Distinct (i.e. tuples with differing combinations of values)"
-          disabled={advanced}
         />
       </Form.Group>
 

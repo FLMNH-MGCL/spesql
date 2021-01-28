@@ -112,6 +112,7 @@ function Cataloging({ page }: FormPart) {
           label="Table"
           fullWidth
           options={tables}
+          searchable
           register={{ validate: validateTableSelection }}
         />
       </Form.Group>

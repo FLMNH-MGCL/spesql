@@ -31,7 +31,7 @@ function EmptyTableArt() {
   return (
     <div className="absolute bottom-0 inset-0 flex flex-col items-center justify-center pointer-events-none">
       <img
-        className="object-scale-down h-96 mt-6 offset-table-header -ml-20"
+        className="object-scale-down h-64 md:h-80 mt-6 offset-table-header -ml-20"
         src={serverImage}
       />
       <Heading tag="h3" className="mt-3 text-center ">

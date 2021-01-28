@@ -1080,7 +1080,7 @@ Notes from field, other notes about specimen. There is no specified formatting t
 | Korea, Republic of                           | KR           |
 | Kuwait                                       | KW           |
 | Kyrgyzstan                                   | KG           |
-| Lao People’s Democratic Republic             | LA           |
+| Lao People's Democratic Republic             | LA           |
 | Latvia                                       | LV           |
 | Lebanon                                      | LB           |
 | Lesotho                                      | LS           |

@@ -2,9 +2,13 @@ import React, { useEffect } from 'react';
 import Chart from '../components/Chart';
 import ChartSidebar from '../components/ChartSidebar';
 import { useNotify } from '../components/utils/context';
+import useToggle from '../components/utils/useToggle';
 
 export default function Visualization() {
   const { notify } = useNotify();
+
+  const [fullScreen, { toggle }] = useToggle(false);
+
   useEffect(() => {
     notify({
       title: 'Warning',
@@ -27,10 +31,10 @@ export default function Visualization() {
     <React.Fragment>
       <div className="flex justify-center items-center space-x-4 mx-4 h-minus-header">
         {/* left half */}
-        <Chart />
+        <Chart fullScreen={fullScreen} toggle={toggle} />
 
         {/* right half */}
-        <ChartSidebar />
+        <ChartSidebar fullScreen={fullScreen} />
       </div>
     </React.Fragment>
   );

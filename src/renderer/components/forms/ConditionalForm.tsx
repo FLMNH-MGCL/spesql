@@ -128,6 +128,7 @@ export default function ConditionalForm({
           disabled={advanced}
           fullWidth
           options={conditionalCounts}
+          searchable
           updateControlled={(newVal: any) => {
             setConditionCount(newVal);
           }}
@@ -165,6 +166,7 @@ export default function ConditionalForm({
                       disabled={advanced}
                       fullWidth
                       options={fieldsOverride ?? fieldOptions}
+                      searchable
                       register={{
                         validate: setValidator(validateFieldSelection),
                       }}

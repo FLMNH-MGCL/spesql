@@ -162,6 +162,7 @@ export function validateCatalogNumber(value: string) {
   return true;
 }
 
+// FLMNH-MGCL [6digits] TODO: add me
 export function validateOtherCatalogNumber(value: string) {
   let pattern = new RegExp(/^MGCL_[0-9]{6,8}$/g);
 
@@ -806,7 +807,6 @@ export function determineAndRunFieldValidator(field: string, value: any) {
     case 'county':
     case 'municipality':
     case 'locality':
-      // return validateProperNoun(value); // FIXME: maybe not??
       return true; // FIXME: maybe not??
     case 'elevationInMeters':
       return validateElevation(value);
