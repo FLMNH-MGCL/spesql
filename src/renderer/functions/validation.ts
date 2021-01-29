@@ -164,12 +164,13 @@ export function validateCatalogNumber(value: string) {
 
 // FLMNH-MGCL [6digits] TODO: add me
 export function validateOtherCatalogNumber(value: string) {
-  let pattern = new RegExp(/^MGCL_[0-9]{6,8}$/g);
+  let flmnhPattern = new RegExp(/^FLMNH-MGCL [0-9]{6,8}$/g);
+  let mgclPattern = new RegExp(/^MGCL_[0-9]{6,8}$/g);
 
   if (!value || value.length < 1) {
     return true;
-  } else if (!pattern.test(value)) {
-    return 'Invald format: MGCL_ followed by 6-8 digits';
+  } else if (!mgclPattern.test(value) && !flmnhPattern.test(value)) {
+    return 'Invald format: MGCL_ or FLMNH-MGCL followed by 6-8 digits';
   }
 
   return true;
