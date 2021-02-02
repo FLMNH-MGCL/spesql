@@ -42,6 +42,7 @@ function AggregateForm({ fields, updateSelection }: AggregateProps) {
         register={{ validate: validateStringConstraint }}
         options={fields}
         updateControlled={updateSelection}
+        searchable
         fullWidth
       />
     </Form.Group>
@@ -90,6 +91,7 @@ function SanekeyChartForm({ keys }: ChartConfigProps) {
           label="Field One"
           register={{ validate: validateStringConstraint }}
           options={options}
+          searchable
           updateControlled={(newVal) => handleChange(0, newVal)}
           fullWidth
         />
@@ -98,6 +100,7 @@ function SanekeyChartForm({ keys }: ChartConfigProps) {
           label="Field Two"
           register={{ validate: validateStringConstraint }}
           options={options}
+          searchable
           updateControlled={(newVal) => handleChange(1, newVal)}
           fullWidth
         />
@@ -253,6 +256,7 @@ export default function ChartConfigForm() {
           options={charts}
           value={chartType}
           updateControlled={(newChart) => setChartType(newChart)}
+          searchable
           fullWidth
         />
       </Form.Group>

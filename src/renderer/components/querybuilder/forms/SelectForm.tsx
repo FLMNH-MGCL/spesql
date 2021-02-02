@@ -52,6 +52,7 @@ export default function SelectForm({ onChange }: Props) {
           fullWidth
           options={fieldOptions}
           register={{ validate: validateFieldSelection }}
+          searchable
           updateControlled={(newVal) => onChange('fields', newVal)}
         />
 
@@ -60,6 +61,7 @@ export default function SelectForm({ onChange }: Props) {
           label="Table"
           fullWidth
           options={tables}
+          searchable
           register={{ validate: validateTableSelection }}
           updateControlled={(newVal) => onChange('databaseTable', newVal)}
         />

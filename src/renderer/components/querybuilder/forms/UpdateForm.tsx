@@ -55,6 +55,7 @@ function SetForm({ sets, onChange }: Omit<Props, 'onSubmit'>) {
           value={setCount}
           fullWidth
           options={setCountOptions}
+          searchable
           updateControlled={(newVal: any) => {
             updateSetCount(newVal);
           }}
@@ -75,6 +76,7 @@ function SetForm({ sets, onChange }: Omit<Props, 'onSubmit'>) {
                   label="Field"
                   fullWidth
                   options={updateFieldOptions}
+                  searchable
                   register={{
                     validate: validateFieldSelection,
                   }}
@@ -144,6 +146,7 @@ export default function UpdateForm({ onChange, onSubmit, sets }: Props) {
           label="Table"
           fullWidth
           options={tables}
+          searchable
           register={{ validate: validateTableSelection }}
           updateControlled={(newVal) => onChange('databaseTable', newVal)}
         />

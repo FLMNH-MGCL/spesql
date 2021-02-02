@@ -201,6 +201,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         name="identificationQualifier"
         register={{ validate: validateIndentificationQualifier }}
         options={identificationQualifierControl}
+        searchable
         defaultValue={currentValue}
       />
     ),
@@ -287,6 +288,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         name="lifeStage"
         register={{ validate: validateLifeStage }}
         options={lifeStageControl}
+        searchable
         defaultValue={currentValue}
       />
     ),
@@ -323,6 +325,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         register={{ validate: validateSamplingProtocol }}
         options={samplingProtocolControl}
         defaultValue={stringListToArray(currentValue)}
+        searchable
         multiple
       />
     ),
@@ -396,6 +399,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         name="geodeticDatum"
         register={{ validate: validateGeodeticDatum }}
         options={geodeticDatumControl}
+        searchable
         defaultValue={currentValue}
       />
     ),
@@ -487,6 +491,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         name="preparations"
         register={{ validate: validatePreparations }}
         options={preparationsControl}
+        searchable
         defaultValue={currentValue}
       />
     ),
@@ -520,6 +525,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         name="tubeSize"
         register={{ validate: validateTubeSize }}
         options={tubeSizeControl}
+        searchable
         defaultValue={currentValue}
       />
     ),

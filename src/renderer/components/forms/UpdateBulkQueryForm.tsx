@@ -49,6 +49,7 @@ function SetForm({ advanced }: SetFormProps) {
           value={setCount}
           disabled={advanced}
           fullWidth
+          searchable
           options={setCountOptions}
           updateControlled={(newVal: any) => {
             updateSetCount(newVal);
@@ -76,6 +77,7 @@ function SetForm({ advanced }: SetFormProps) {
                   disabled={advanced}
                   fullWidth
                   options={updateFieldOptions}
+                  searchable
                   register={{
                     validate: setValidator(validateFieldSelection),
                   }}
@@ -88,6 +90,7 @@ function SetForm({ advanced }: SetFormProps) {
                   disabled={advanced}
                   options={operators}
                   fullWidth
+                  searchable
                   register={{
                     validate: setValidator(validateOperator),
                   }}
@@ -183,6 +186,7 @@ export default function UpdateBulkQueryForm({ onSubmit }: Props) {
           label="Table"
           disabled={advanced}
           fullWidth
+          searchable
           options={tables}
           register={{ validate: setValidator(validateTableSelection) }}
         />

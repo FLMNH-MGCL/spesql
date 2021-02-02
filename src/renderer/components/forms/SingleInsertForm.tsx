@@ -269,6 +269,7 @@ function RecordLevelInformation({ page }: FormPart) {
             placeholder="aff"
             register={{ validate: validateIndentificationQualifier }}
             options={identificationQualifierControl}
+            searchable
             fullWidth
           />
           <Form.Input
@@ -332,6 +333,7 @@ function RecordLevelInformation({ page }: FormPart) {
             label="collectedMonth"
             register={{ validate: validateCollectedMonth }}
             options={dateMonths}
+            searchable
             fullWidth
             placeholder={today.getMonth().toString()}
           />
@@ -340,6 +342,7 @@ function RecordLevelInformation({ page }: FormPart) {
             label="collectedDay"
             register={{ validate: validateCollectedDay }}
             options={dateDays}
+            searchable
             fullWidth
             placeholder={today.getDay().toString()}
           />
@@ -367,6 +370,7 @@ function RecordLevelInformation({ page }: FormPart) {
             placeholder="larva"
             register={{ validate: validateLifeStage }}
             options={lifeStageControl}
+            searchable
             fullWidth
           />
           <Form.Input
@@ -384,6 +388,7 @@ function RecordLevelInformation({ page }: FormPart) {
             placeholder="LightUV|LightLED"
             register={{ validate: validateSamplingProtocol }}
             options={samplingProtocolControl}
+            searchable
             multiple
             fullWidth
           />
@@ -393,6 +398,7 @@ function RecordLevelInformation({ page }: FormPart) {
             placeholder="Molecular"
             register={{ validate: validatePreparations }}
             options={preparationsControl}
+            searchable
             multiple
             fullWidth
           />
@@ -402,6 +408,7 @@ function RecordLevelInformation({ page }: FormPart) {
             placeholder="Molecular Present"
             register={{ validate: validateDisposition }}
             options={dispositionControl}
+            searchable
             multiple
             fullWidth
           />
@@ -430,6 +437,7 @@ function RecordLevelInformation({ page }: FormPart) {
             placeholder="microcentrifuge"
             register={{ validate: validateTubeSize }}
             options={tubeSizeControl}
+            searchable
             fullWidth
           />
         </Form.Group>
@@ -530,6 +538,7 @@ function Locality({ page }: FormPart) {
             placeholder="United States"
             register={{ validate: validateCountry }}
             options={countryControl}
+            searchable
             fullWidth
           />
           <Form.Input
@@ -587,6 +596,7 @@ function Locality({ page }: FormPart) {
             name="geodeticDatum"
             register={{ validate: validateGeodeticDatum }}
             options={geodeticDatumControl}
+            searchable
             fullWidth
           />
         </Form.Group>
