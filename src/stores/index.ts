@@ -1,8 +1,7 @@
 import create from 'zustand';
-import { GoogleChartType, Specimen } from '../renderer/types';
+import { Specimen } from '../renderer/types';
 import { defaultQueryConfig, QueryConfig } from './query';
 import { BulkInsertError, defaultLogs, LoggingError, Logs } from './logging';
-import { ChartConfig, defaultChartConfig } from './visualization';
 
 export type User = {
   id: string;
@@ -55,7 +54,6 @@ type SpesqlSession = {
   // query config
   queryData: QueryConfig;
   tableConfig: TableConfig;
-  chartConfig: ChartConfig;
 
   selectedSpecimen: Specimen | null;
 
@@ -149,20 +147,6 @@ export const useStore = create<SpesqlSession>((set) => ({
       set((state) => ({
         ...state,
         tableConfig: { ...state.tableConfig, headers: newHeaders },
-      })),
-  },
-
-  chartConfig: {
-    ...(defaultChartConfig as ChartConfig),
-    setAvailableFields: (fields: string[] | '*') =>
-      set((state) => ({
-        ...state,
-        chartConfig: { ...state.chartConfig, availableFields: fields },
-      })),
-    setChartType: (newChart: GoogleChartType) =>
-      set((state) => ({
-        ...state,
-        chartConfig: { ...state.chartConfig, chartType: newChart },
       })),
   },
 

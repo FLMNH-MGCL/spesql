@@ -9,6 +9,7 @@ import axios from 'axios';
 import { CountQueryReturn } from '../modals/CreateCountModal';
 import { User } from '../UsersTable';
 import useLogError from './useLogError';
+import { useChartStore } from '../../../stores/chart';
 
 export default function useQuery() {
   const { notify } = useNotify();
@@ -18,7 +19,6 @@ export default function useQuery() {
     setData,
     setTable,
     setCurrentQuery,
-    setAvailableFields,
     selectedSpecimen,
     setSelectedSpecimen,
     toggleLoading,
@@ -29,13 +29,16 @@ export default function useQuery() {
       setData: state.queryData.setData,
       setTable: state.queryData.setTable,
       setCurrentQuery: state.queryData.setCurrentQuery,
-      setAvailableFields: state.chartConfig.setAvailableFields,
       selectedSpecimen: state.selectedSpecimen,
       setSelectedSpecimen: state.setSelectedSpecimen,
       toggleLoading: state.toggleLoading,
       username: state.user?.username,
     }),
     shallow
+  );
+
+  const setAvailableFields = useChartStore(
+    (state) => state.config.setAvailableFields
   );
 
   const [, { expireSession, awaitReauth }] = useExpiredSession();
@@ -512,6 +515,43 @@ export default function useQuery() {
         }
 
         toggleLoading(false);
+      },
+
+      async runChartQuery(query: string): Promise<any> {
+        const selectResponse = await axios
+          .post(BACKEND_URL + '/api/select', {
+            query,
+          })
+          .catch((error) => error.response);
+
+        if (selectResponse.status === 200 && selectResponse.data) {
+          const { specimen } = selectResponse.data;
+
+          if (!specimen.length) {
+            notify({
+              title: 'Empty Return',
+              message: 'Query yielded no data',
+              level: 'warning',
+            });
+          } else {
+            return specimen;
+          }
+        } else if (selectResponse.status === 401) {
+          expireSession();
+
+          await awaitReauth();
+          return await queries.runChartQuery(query);
+        } else {
+          notify({
+            title: 'Server Error',
+            message:
+              'Could not process query, please check the corresponding logs',
+            level: 'error',
+          });
+
+          // TODO: MAKE ME
+          // logSqlError(selectResponse.data, 'select');
+        }
       },
 
       async select(

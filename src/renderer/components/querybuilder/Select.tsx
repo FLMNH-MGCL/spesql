@@ -43,6 +43,7 @@ type UISelectProps = {
   errors: any; // TODO: type me
   display?: NameLabelPair;
   options: NameLabelPair[];
+  searchable?: boolean;
   disabled?: boolean;
   onSelect(item?: NameLabelPair): void;
   calculateSelected(item: NameLabelPair): boolean;
@@ -53,6 +54,7 @@ function UISelect({
   display,
   options,
   onSelect,
+  searchable,
   calculateSelected,
   disabled,
   errors,
@@ -60,9 +62,43 @@ function UISelect({
 }: UISelectProps) {
   const [visible, { toggle, off }] = useToggle(false);
 
+  const [filter, setFilter] = useState('');
+
   useKeyboard('Escape', () => {
     off();
   });
+
+  function renderOptions() {
+    const filteredOptions = options.filter((option) => {
+      if (!filter) {
+        return true;
+      }
+
+      return option.name.toLowerCase().includes(filter.toLowerCase());
+    });
+
+    if (!filteredOptions || !filteredOptions.length) {
+      return (
+        <div className="bg-white dark:bg-dark-500 text-gray-900 dark:text-dark-200 cursor-pointer select-none relative py-2 px-3">
+          No matching options
+        </div>
+      );
+    } else {
+      return filteredOptions.map((option) => {
+        return (
+          <SelectItem
+            key={option.label}
+            selected={calculateSelected(option)}
+            label={option.label}
+            onSelect={() => {
+              onSelect(option);
+              off();
+            }}
+          />
+        );
+      });
+    }
+  }
 
   return (
     <OutsideClickHandler onOutsideClick={off}>
@@ -136,19 +172,20 @@ function UISelect({
               className="absolute mt-1 w-full rounded-md bg-white shadow-lg z-50"
             >
               <ul className="bg-white dark:bg-dark-400 max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5">
-                {options.map((option) => {
-                  return (
-                    <SelectItem
-                      key={option.label}
-                      selected={calculateSelected(option)}
-                      label={option.label}
-                      onSelect={() => {
-                        onSelect(option);
-                        off();
-                      }}
+                {searchable && (
+                  <li
+                    id="listbox-item-0"
+                    className="bg-white dark:bg-dark-500 text-gray-900 dark:text-dark-200 cursor-pointer select-none relative py-2  hover:bg-gray-50 dark:hover:bg-dark-700 border-b border-gray-100 dark:border-dark-400"
+                  >
+                    <input
+                      className="pl-3 bg-transparent w-full "
+                      value={filter}
+                      onChange={(e) => setFilter(e.currentTarget.value)}
+                      placeholder="Filter Options"
                     />
-                  );
-                })}
+                  </li>
+                )}
+                {renderOptions()}
               </ul>
             </motion.div>
           )}
@@ -165,12 +202,16 @@ function UISelect({
 export type Props = {
   label?: string;
   fullWidth?: boolean;
+  searchable?: boolean;
   options: NameLabelPair[];
   onChange(value: any): void;
 } & React.ComponentProps<'select'>;
 
 export default forwardRef<HTMLSelectElement, Props>(
-  ({ label, className, fullWidth, options, onChange, ...props }, ref) => {
+  (
+    { label, className, fullWidth, options, onChange, searchable, ...props },
+    ref
+  ) => {
     // @ts-ignore: this will work I promise
     const errors = props.errors && props.name && props.errors[props.name];
 
@@ -271,6 +312,7 @@ export default forwardRef<HTMLSelectElement, Props>(
             errors={errors}
             display={display}
             onSelect={handleSelection}
+            searchable={searchable}
             options={options}
             disabled={props.disabled}
             calculateSelected={calculateSelected}

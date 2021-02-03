@@ -690,6 +690,10 @@ export function validateStringDateRange(
   return true;
 }
 
+export function validateStringConstraint(_value: any) {
+  return true;
+}
+
 export function validateFixedLengthField(
   fieldName: string,
   value: string,

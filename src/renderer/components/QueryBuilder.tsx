@@ -151,6 +151,7 @@ function FieldSelectorSelect({
       options={options}
       onChange={handleOnChange}
       fullWidth
+      searchable
     />
   );
 }
