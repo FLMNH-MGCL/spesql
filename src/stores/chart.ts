@@ -6,6 +6,9 @@ type ChartData = {
   data: any[];
   setData(newData: any[]): void;
 
+  currentQuery: string;
+  setCurrentQuery(queryString: string): void;
+
   config: ChartConfig;
 };
 
@@ -16,6 +19,15 @@ export const useChartStore = create<ChartData>((set, _get) => ({
     set((state) => ({
       ...state,
       data: newData,
+    }));
+  },
+
+  currentQuery: '',
+
+  setCurrentQuery: function (queryString: string) {
+    set((state) => ({
+      ...state,
+      currentQuery: queryString,
     }));
   },
 

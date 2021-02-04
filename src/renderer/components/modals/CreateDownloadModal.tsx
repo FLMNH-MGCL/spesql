@@ -10,6 +10,7 @@ type Props = {
   title?: string;
   description?: string;
   data: any[];
+  separator?: string;
 };
 
 export default function CreateDownloadModal({
@@ -18,6 +19,7 @@ export default function CreateDownloadModal({
   title,
   description,
   data,
+  separator = '\t',
 }: Props) {
   const [open, { on, off }] = useToggle(false);
 
@@ -32,14 +34,16 @@ export default function CreateDownloadModal({
           <Text>{description ?? 'To download press the Confirm button'}</Text>
 
           <div className="py-2">
-            {data.length && <Text>{`Total Size (rows): ${data.length}`}</Text>}
-            {data.length && <Text>{`Default Separator: '\\t'`}</Text>}
+            {!!data.length && (
+              <Text>{`Total Size (rows): ${data.length}`}</Text>
+            )}
+            {!!data.length && <Text>{`Separator: ${separator}`}</Text>}
           </div>
         </Modal.Content>
         <Modal.Footer>
           <Button.Group>
             <Button onClick={off}>Cancel</Button>
-            <CSVLink data={data ?? []} target="_blank" separator={'\t'}>
+            <CSVLink data={data ?? []} target="_blank" separator={separator}>
               <Button variant="primary" onClick={onDownload}>
                 Confirm
               </Button>

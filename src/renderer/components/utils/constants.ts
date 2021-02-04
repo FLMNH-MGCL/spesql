@@ -5,6 +5,13 @@ export const conditionCountOptions = Array.from({ length: 15 }, (_, index) => {
   return { label: String(index), value: index };
 });
 
+export const numericalSetCountOptions = Array.from(
+  { length: 15 },
+  (_, index) => {
+    return { label: String(index + 2), value: index + 2 };
+  }
+);
+
 export const headerOptions = [
   'id',
   'catalogNumber',
@@ -312,7 +319,6 @@ export const countryControl = countries.map((country) => {
 // https://www.cia.gov/library/publications/the-world-factbook/fields/302.html
 
 export const charts = [
-  { label: 'AnnotationChart', value: 'AnnotationChart' },
   { label: 'AreaChart', value: 'AreaChart' },
   { label: 'BarChart', value: 'BarChart' },
   { label: 'BubbleChart', value: 'BubbleChart' },

@@ -96,7 +96,17 @@ export function SankeyInfoSheet() {
 
       <Code rounded>[string, string, number]</Code>
 
-      <Text>TODO: more information here</Text>
+      <Text className="py-2">
+        A sankey diagram is a visualization used to depict a flow from one set
+        of values to another. The things being connected are called nodes and
+        the connections are called links.
+      </Text>
+
+      <Text className="py-2">
+        Sankeys are best used when you want to show a many-to-many mapping
+        between two domains (e.g., universities and majors) or multiple paths
+        through a set of stages
+      </Text>
     </React.Fragment>
   );
 }

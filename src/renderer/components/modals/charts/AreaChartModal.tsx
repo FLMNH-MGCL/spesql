@@ -10,17 +10,18 @@ import {
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useChartStore } from '../../../../stores/chart';
+import AreaChartForm from '../../forms/charts/AreaChartForm';
 import ConditionalForm from '../../forms/charts/ConditionalForm';
-import SankeyForm from '../../forms/charts/SankeyForm';
 import TableSelect from '../../TableSelect';
 import useQuery from '../../utils/useQuery';
 import useToggle from '../../utils/useToggle';
 
-export default function SankeyModal() {
+export default function AreaChartModal() {
   const [open, { on, off }] = useToggle(false);
   const { runChartQuery } = useQuery();
 
   const setData = useChartStore((state) => state.setData);
+  const setCurrentQuery = useChartStore((state) => state.setCurrentQuery);
 
   const [databaseTable, setDatabaseTable] = useState('');
   const [hasConditionals, { toggle }] = useToggle(false);
@@ -28,25 +29,58 @@ export default function SankeyModal() {
   const [queryPrefix, setQueryPrefix] = useState<string>('');
   const [groupByClause, setGroupByClause] = useState('');
 
-  function handleFormChange(fields: string[], aggregate: any) {
-    setQueryPrefix(
-      clsx(
-        'SELECT',
-        fields.slice(0, 2).toString().trim(),
-        aggregate ? `,${aggregate}(${fields[2]})` : ',' + fields[2]
-      ).replace(/\s*,\s*/g, ', ')
-    );
+  function handleSetChange(sets: any[]) {
+    if (!sets || !sets.length) return;
 
-    if (aggregate) {
-      setGroupByClause(
-        clsx('GROUP BY', fields.slice(0, 2).toString().trim()).replace(
-          /\s*,\s*/g,
-          ', '
-        )
-      );
-    } else if (!aggregate && groupByClause) {
-      setGroupByClause('');
+    let cols = clsx('SELECT', sets[0].field);
+
+    // let groups = [];
+
+    for (let i = 1; i < sets.length; i++) {
+      const { aggregate, field } = sets[i];
+
+      cols = clsx(cols, aggregate ? `,${aggregate}(${field})` : ',' + field);
     }
+
+    setQueryPrefix(cols.replace(/\s*,\s*/g, ', '));
+
+    let nonAggregatedFields = [
+      sets[0],
+      ...sets.filter((set) => !set.aggregate),
+    ];
+
+    let grouping = 'GROUP BY';
+
+    for (let i = 1; i < nonAggregatedFields.length; i++) {
+      const { field } = nonAggregatedFields[i];
+
+      grouping = clsx(
+        grouping,
+        field,
+        i !== nonAggregatedFields.length - 1 && ','
+      );
+    }
+
+    setGroupByClause(grouping.replace(/\s*,\s*/g, ', '));
+
+    // setQueryPrefix(
+    //   clsx(
+    //     'SELECT',
+    //     fields.slice(0, 2).toString().trim(),
+    //     aggregate ? `,${aggregate}(${fields[2]})` : ',' + fields[2]
+    //   ).replace(/\s*,\s*/g, ', ')
+    // );
+
+    // if (aggregate) {
+    //   setGroupByClause(
+    //     clsx('GROUP BY', fields.slice(0, 2).toString().trim()).replace(
+    //       /\s*,\s*/g,
+    //       ', '
+    //     )
+    //   );
+    // } else if (!aggregate && groupByClause) {
+    //   setGroupByClause('');
+    // }
   }
 
   async function runQuery() {
@@ -72,6 +106,8 @@ export default function SankeyModal() {
 
       setData(convertedData);
 
+      setCurrentQuery(queryString);
+
       off();
     }
   }
@@ -86,14 +122,14 @@ export default function SankeyModal() {
   return (
     <React.Fragment>
       <Modal open={open} onClose={handleClose} size="almostMassive">
-        <Modal.Content title="Sankey Chart Configuration">
+        <Modal.Content title="Area Chart Configuration">
           <TableSelect
             value={databaseTable}
             onChange={setDatabaseTable}
             className="pb-3"
           />
 
-          <SankeyForm onChange={handleFormChange} />
+          <AreaChartForm onChange={handleSetChange} />
 
           <Form.Group>
             <Radio
@@ -136,11 +172,6 @@ export default function SankeyModal() {
               Confirm
             </Button>
           </Button.Group>
-
-          {/* <div className="flex space-x-2 flex-1">
-            <CreateLogModal initialTab={1} watch="count" />
-            <CreateHelpModal variant="count" />
-          </div> */}
         </Modal.Footer>
       </Modal>
 

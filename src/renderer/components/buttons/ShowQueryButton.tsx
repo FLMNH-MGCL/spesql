@@ -1,17 +1,25 @@
 import { Badge, Button, Code, Modal } from '@flmnh-mgcl/ui';
 import React from 'react';
 import { useStore } from '../../../stores';
+import { useChartStore } from '../../../stores/chart';
 import useToggle from '../utils/useToggle';
 import CopyButton from './CopyButton';
 
 type Props = {
   disabled?: boolean;
+  variant?: 'chart' | 'table';
 };
 
-export default function ShowQueryButton({ disabled }: Props) {
+export default function ShowQueryButton({
+  disabled,
+  variant = 'table',
+}: Props) {
   const [visible, { on, off }] = useToggle(false);
 
-  const queryString = useStore((state) => state.queryData.queryString);
+  const queryString =
+    variant === 'table'
+      ? useStore((state) => state.queryData.queryString)
+      : useChartStore((state) => state.currentQuery);
 
   if (disabled) {
     return null;

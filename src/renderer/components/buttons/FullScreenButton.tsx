@@ -9,6 +9,7 @@ type Props = {
 export default function FullScreenButton({ fullScreen, toggle }: Props) {
   return (
     <CircleButton
+      title={fullScreen ? 'Minimize' : 'Maximize'}
       icon={
         fullScreen ? (
           <svg

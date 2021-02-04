@@ -188,7 +188,6 @@ export type TableStats = {
 };
 
 export type GoogleChartType =
-  | 'AnnotationChart'
   | 'AreaChart'
   | 'BarChart'
   | 'BubbleChart'

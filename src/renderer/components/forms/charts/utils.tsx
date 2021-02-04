@@ -2,14 +2,13 @@ import React from 'react';
 import { Text } from '@flmnh-mgcl/ui';
 import { SankeyInfoSheet } from './SankeyForm';
 import SankeyModal from '../../modals/charts/SankeyModal';
+import { AreaChartInfoSheet } from './AreaChartForm';
+import AreaChartModal from '../../modals/charts/AreaChartModal';
 
 export function getChartInfoSheet(chartType: string) {
   switch (chartType) {
-    case 'AnnotationChart': {
-      return <div></div>;
-    }
     case 'AreaChart': {
-      return <div></div>;
+      return <AreaChartInfoSheet />;
     }
     case 'BarChart': {
       return <div></div>;
@@ -97,11 +96,8 @@ export function getChartInfoSheet(chartType: string) {
 
 export function getChartModal(chartType: string) {
   switch (chartType) {
-    case 'AnnotationChart': {
-      return <div></div>;
-    }
     case 'AreaChart': {
-      return <div></div>;
+      return <AreaChartModal />;
     }
     case 'BarChart': {
       return <div></div>;

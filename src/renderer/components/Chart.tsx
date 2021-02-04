@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Chart as GChart } from 'react-google-charts';
 import { Button, Heading, Spinner, TABLE_CLASSES } from '@flmnh-mgcl/ui';
 import FullScreenButton from './buttons/FullScreenButton';
@@ -7,6 +7,8 @@ import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 import { useChartStore } from '../../stores/chart';
 import shallow from 'zustand/shallow';
 import statsImage from '../assets/svg/stats.svg';
+import CreateDownloadModal from './modals/CreateDownloadModal';
+import ShowQueryButton from './buttons/ShowQueryButton';
 
 // function ChartError(props: any) {
 //   console.log(props);
@@ -33,6 +35,8 @@ type Props = {
 export default function Chart({ fullScreen, toggle }: Props) {
   const data = useChartStore((state) => state.data, shallow);
 
+  const chartRef = useRef<any>();
+
   const [key, setKey] = useState(true);
   const controls = useAnimation();
 
@@ -55,15 +59,18 @@ export default function Chart({ fullScreen, toggle }: Props) {
     setTimeout(() => setKey((previousKey) => !previousKey), 251);
   }, [fullScreen]);
 
-  // controls.start("hidden")
-
-  console.log(data);
+  useEffect(() => {
+    console.log(chartRef?.current);
+    console.log(chartRef?.current?.chart);
+  }, [data]);
 
   const { chartType, options } = useChartStore((state) => state.config);
   const setData = useChartStore((state) => state.setData);
+  const setCurrentQuery = useChartStore((state) => state.setCurrentQuery);
 
   function onClear() {
     setData([]);
+    setCurrentQuery('');
   }
 
   return (
@@ -78,6 +85,7 @@ export default function Chart({ fullScreen, toggle }: Props) {
         <div className="flex-1 p-2  w-full">
           {data && !!data.length && (
             <GChart
+              ref={chartRef}
               key={Number(key)}
               height="100%"
               width="100%"
@@ -103,7 +111,7 @@ export default function Chart({ fullScreen, toggle }: Props) {
           {!data || (!data.length && <EmptyTableArt />)}
         </div>
         <nav className={TABLE_CLASSES.footer}>
-          <div>
+          <Button.Group>
             <Button
               variant="danger"
               disabled={!data || !data.length}
@@ -111,7 +119,16 @@ export default function Chart({ fullScreen, toggle }: Props) {
             >
               Clear Chart
             </Button>
-          </div>
+
+            <CreateDownloadModal
+              variant="default"
+              data={data ?? []}
+              disableDownload={!data || !data.length}
+              separator=","
+            />
+
+            <ShowQueryButton variant="chart" />
+          </Button.Group>
           <div>
             <FullScreenButton fullScreen={fullScreen} toggle={toggle} />
           </div>
