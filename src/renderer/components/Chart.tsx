@@ -16,6 +16,16 @@ import ShowQueryButton from './buttons/ShowQueryButton';
 //   return <div>fff</div>;
 // }
 
+/**
+ * explorer: { 
+            actions: ['dragToZoom', 'rightClickToReset'],
+            axis: 'horizontal',
+            keepInBounds: true,
+            maxZoomIn: 4.0},
+
+                      
+ */
+
 function EmptyTableArt() {
   return (
     <div className="absolute bottom-0 inset-0 flex flex-col items-center justify-center pointer-events-none">
@@ -93,6 +103,7 @@ export default function Chart({ fullScreen, toggle }: Props) {
               loader={<Spinner active={true} />}
               options={options}
               data={data}
+
               // errorElement={<ChartError />}
               // chartEvents={[
               //   {

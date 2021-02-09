@@ -196,7 +196,11 @@ export default function useQuery() {
         return;
       },
 
-      async editUser(newUser: Partial<User>, id: number, newPassword?: string) {
+      async editUser(
+        newUser: Partial<User>,
+        id: number,
+        newPassword?: string
+      ): Promise<any> {
         const editResponse = await axios
           .post(BACKEND_URL + '/api/admin/user/edit', {
             newUser,
@@ -215,7 +219,7 @@ export default function useQuery() {
           expireSession();
 
           await awaitReauth();
-          await queries.editUser(newUser, id, newPassword);
+          return await queries.editUser(newUser, id, newPassword);
         } else {
           notify({
             title: 'Error Occurred',
@@ -232,7 +236,7 @@ export default function useQuery() {
         return;
       },
 
-      async createTable(tableName: string) {
+      async createTable(tableName: string): Promise<any> {
         const creationResponse = await axios
           .post(BACKEND_URL + '/api/admin/table/create', { tableName })
           .catch((error) => error.response);
@@ -252,7 +256,7 @@ export default function useQuery() {
           expireSession();
 
           await awaitReauth();
-          await queries.createTable(tableName);
+          return await queries.createTable(tableName);
         } else {
           notify({
             title: 'Error Occurred',
@@ -260,13 +264,13 @@ export default function useQuery() {
             level: 'error',
           });
 
+          console.log(creationResponse);
+
           return {
             status: creationResponse.status,
             data: creationResponse.data,
           };
         }
-
-        return;
       },
 
       async deleteSpecimen(

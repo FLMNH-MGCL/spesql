@@ -4,6 +4,7 @@ import UserInfoForm from '../forms/UserInfoForm';
 import { User } from '../UsersTable';
 import { useNotify } from '../utils/context';
 import useKeyboard from '../utils/useKeyboard';
+import useLogError from '../utils/useLogError';
 import useQuery from '../utils/useQuery';
 
 type Props = {
@@ -23,6 +24,8 @@ export default function CreateEditUserModal({
   const { notify } = useNotify();
 
   const { editUser } = useQuery();
+
+  const { logAdminUserError } = useLogError();
 
   useKeyboard('Escape', () => {
     onClose();
@@ -47,8 +50,6 @@ export default function CreateEditUserModal({
       updatedUser.role = role;
     }
 
-    console.log(updatedUser);
-
     if (!Object.keys(updatedUser).length && (!password || !password.length)) {
       notify({
         title: 'No Changes Detected',
@@ -63,7 +64,9 @@ export default function CreateEditUserModal({
 
     if (ret) {
       const { status, data } = ret;
-      console.log(status, data);
+      if (status !== 201) {
+        logAdminUserError({ status, data: data.err });
+      }
     } else {
       refresh();
       onClose();

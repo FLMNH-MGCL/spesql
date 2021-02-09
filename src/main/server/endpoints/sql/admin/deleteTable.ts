@@ -12,8 +12,9 @@ export default function deleteTable(req: Request, res: Response) {
     } else {
       connection.query(`DROP TABLE ${tableName}`, (err, data) => {
         if (err) {
-          res.status(500).send(err);
+          res.status(503).json({ err: err });
         } else {
+          console.log('sucessfully deleted table');
           res.status(201).send(data);
         }
       });

@@ -336,7 +336,6 @@ export default function UsersTable() {
           <RefreshButton onClick={() => getUsers()} />
         </div>
         <div className="flex space-x-2 items-center">
-          {/* TODO: create ADMIN log modal */}
           <CreateAdminLogModal />
           <CreateHelpModal variant="admin-user-table" />
         </div>

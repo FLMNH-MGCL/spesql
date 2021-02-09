@@ -16,8 +16,9 @@ export default function editTable(req: Request, res: Response) {
       const query = clsx('ALTER TABLE', tableName, 'RENAME TO', newName);
       connection.query(query, (err, data) => {
         if (err) {
-          res.status(500).send(err);
+          res.status(503).json({ err: err });
         } else {
+          console.log('sucessfully altered table');
           res.status(201).send(data);
         }
       });

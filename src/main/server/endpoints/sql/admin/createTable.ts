@@ -5,7 +5,7 @@ function getCreationString(name: string) {
   return `CREATE TABLE \`${name}\` (
     \`id\` int(11) NOT NULL AUTO_INCREMENT,
     \`catalogNumber\` varchar(20) NOT NULL,
-    \`otherCatalogNumber\` varchar(20) DEFAULT NULL,
+    \`otherCatalogNumber\` varchar(25) DEFAULT NULL,
     \`recordNumber\` varchar(20) DEFAULT NULL,
     \`order_\` varchar(40) DEFAULT NULL,
     \`superfamily\` varchar(40) DEFAULT NULL,
@@ -43,7 +43,7 @@ function getCreationString(name: string) {
     \`verbatimLatitude\` varchar(20) DEFAULT NULL,
     \`verbatimLongitude\` varchar(20) DEFAULT NULL,
     \`georeferencedBy\` text,
-    \`disposition\` varchar(25) DEFAULT NULL,
+    \`disposition\` varchar(50) DEFAULT NULL,
     \`isLoaned\` char(1) DEFAULT NULL,
     \`loanInstitution\` varchar(50) DEFAULT NULL,
     \`loaneeName\` varchar(50) DEFAULT NULL,
@@ -83,8 +83,10 @@ export default function createTable(req: Request, res: Response) {
 
       connection.query(creationString, (err, data) => {
         if (err) {
-          res.status(500).send(err);
+          res.status(503);
+          res.json({ err: err });
         } else {
+          console.log('sucessfully created table');
           res.status(201).send(data);
         }
       });

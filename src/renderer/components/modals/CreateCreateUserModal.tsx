@@ -2,6 +2,7 @@ import { Button, FormSubmitValues, Modal } from '@flmnh-mgcl/ui';
 import React from 'react';
 import CircleButton from '../buttons/CircleButton';
 import UserInfoForm from '../forms/UserInfoForm';
+import useLogError from '../utils/useLogError';
 import useQuery from '../utils/useQuery';
 import useToggle from '../utils/useToggle';
 
@@ -14,6 +15,8 @@ export default function CreateCreateUserModal({ refresh }: Props) {
   const [loading, { toggle }] = useToggle(false);
 
   const { createUser } = useQuery();
+
+  const { logAdminUserError } = useLogError();
 
   async function handleSubmit(values: FormSubmitValues) {
     toggle();
@@ -32,7 +35,10 @@ export default function CreateCreateUserModal({ refresh }: Props) {
     // TODO:
     if (ret) {
       const { status, data } = ret;
-      console.log(status, data);
+
+      if (status !== 201) {
+        logAdminUserError({ status, data: data.err });
+      }
     } else {
       refresh();
       off();

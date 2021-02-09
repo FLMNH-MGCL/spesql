@@ -1,75 +1,93 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
-import { useStore } from '../../../stores';
 import WarningButton from '../buttons/WarningButton';
 import useKeyboard from '../utils/useKeyboard';
 import useToggle from '../utils/useToggle';
-import { Logs } from '../../../stores/logging';
-import { Button, Modal, Tabs } from '@flmnh-mgcl/ui';
+import { Button, Input, Modal, Tabs } from '@flmnh-mgcl/ui';
+import {
+  AdminErrors,
+  AdminUserError,
+  useAdminStore,
+} from '../../../stores/admin';
+import { AdminErrorLogRenderer } from '../ErrorRenderers';
+import CopyButton from '../buttons/CopyButton';
 
-// TODO: make this ADMIN SPECIFIC
+type AdminLogProps = {
+  errors?: AdminErrors;
+  logName: keyof AdminErrors;
+};
 
-// type LogProps = {
-//   errors?: Logs;
-// };
+function AdminErrorLog({ errors, logName }: AdminLogProps) {
+  const disabled = !errors || !errors[logName] || !errors[logName]?.length;
+  const clearErrors = useAdminStore((state) => state.clearErrors);
 
-// function Log({ errors }: LogProps) {
-//   const disabled = !errors || !errors.insert || !errors.insert.length;
-//   // const clearErrors = useStore((state) => state.clearErrors);
+  const [filter, setFilter] = useState<string>('');
 
-//   return (
-//     <div className="-mb-6">
-//       <div className="mt-4 h-56 bg-gray-100 rounded-md overflow-scroll">
-//         <div
-//           className={clsx(
-//             disabled && 'h-full',
-//             'p-2 flex flex-col items-center justify-center'
-//           )}
-//         >
-//           {/* {renderLog()} */}
-//           <p>No errors exist in the log</p>
-//         </div>
-//       </div>
+  function filterLog(log: AdminUserError[]) {
+    return log.filter((values) =>
+      Object.values(values)
+        .toString()
+        .toLowerCase()
+        .includes(filter.toLowerCase())
+    );
+  }
 
-//       <div className="mt-3 flex space-x-2 items-center justify-end">
-//         <Button
-//           disabled={disabled}
-//           variant="warning"
-//           // onClick={() => clearErrors('')}
-//         >
-//           Clear
-//         </Button>
-//         <CopyButton
-//           disabled={disabled}
-//           value={JSON.stringify(errors?.insert, null, 2) ?? ''}
-//         />
-//       </div>
-//     </div>
-//   );
-// }
+  useEffect(() => {}, [filter]);
+
+  return (
+    <div className="-mb-6">
+      <div className="mt-4">
+        {!errors || !errors[logName] || !errors[logName]?.length ? (
+          <div className="flex items-center justify-center h-64 bg-gray-100  dark:bg-dark-500 dark:text-dark-200 rounded-md shadow-sm">
+            <p>No errors exist in the log</p>
+          </div>
+        ) : (
+          <div className="h-64 rounded-md bg-gray-100 dark:bg-dark-600 shadow-sm">
+            <AdminErrorLogRenderer list={filterLog(errors[logName])} />
+          </div>
+        )}
+      </div>
+
+      <div className="mt-3 flex space-x-2 items-center justify-between">
+        <div className="flex items-center space-x-3 w-1/2">
+          <Input
+            fullWidth
+            value={filter}
+            onChange={(e: any) => setFilter(e.currentTarget.value)}
+            placeholder="Filter error log"
+            disabled={disabled}
+          />
+          <CopyButton
+            disabled={disabled}
+            value={JSON.stringify(errors ? errors[logName] : {}, null, 2) ?? ''}
+          />
+        </div>
+        <Button
+          disabled={disabled}
+          variant="warning"
+          onClick={() => clearErrors(logName)}
+        >
+          Clear
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 type Props = {
   initialTab?: number;
   fullWidth?: boolean;
-  watch?: keyof Logs;
 };
 
-export default function CreateAdminLogModal({
-  initialTab,
-  fullWidth,
-  watch,
-}: Props) {
+export default function CreateAdminLogModal({ initialTab, fullWidth }: Props) {
   const [open, { on, off }] = useToggle(false);
   const [tab, setTab] = useState(initialTab ?? 0);
 
-  const watchErrors: keyof Logs = watch ?? 'global';
-
-  const errors = useStore((state) => state.errors, shallow);
+  const errors = useAdminStore((state) => state.adminErrors, shallow);
 
   // TODO:
   function calculateHasDanger() {
-    // console.log(watchErrors, errors[watchErrors]);
-    if (errors && errors[watchErrors].length) {
+    if (errors && (errors.tableErrors?.length || errors.userErrors?.length)) {
       return true;
     }
 
@@ -81,11 +99,11 @@ export default function CreateAdminLogModal({
       // User Operations
       case 0:
         // return <Log errors={errors} />;
-        return <div>TODO</div>;
+        return <AdminErrorLog errors={errors} logName="userErrors" />;
       // table operations
       case 1:
         // return <Log errors={errors} />;
-        return <div>TODO</div>;
+        return <AdminErrorLog errors={errors} logName="tableErrors" />;
 
       default:
         return null;

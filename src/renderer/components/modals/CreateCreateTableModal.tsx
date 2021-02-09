@@ -9,13 +9,14 @@ import {
   Text,
 } from '@flmnh-mgcl/ui';
 import React from 'react';
+import useLogError from '../utils/useLogError';
 import useQuery from '../utils/useQuery';
 import useToggle from '../utils/useToggle';
 
 const tableCreationString = `CREATE TABLE \`table_name\` (
   \`id\` int(11) NOT NULL AUTO_INCREMENT,
   \`catalogNumber\` varchar(20) NOT NULL,
-  \`otherCatalogNumber\` varchar(20) DEFAULT NULL,
+  \`otherCatalogNumber\` varchar(25) DEFAULT NULL,
   \`recordNumber\` varchar(20) DEFAULT NULL,
   \`order_\` varchar(40) DEFAULT NULL,
   \`superfamily\` varchar(40) DEFAULT NULL,
@@ -53,7 +54,7 @@ const tableCreationString = `CREATE TABLE \`table_name\` (
   \`verbatimLatitude\` varchar(20) DEFAULT NULL,
   \`verbatimLongitude\` varchar(20) DEFAULT NULL,
   \`georeferencedBy\` text,
-  \`disposition\` varchar(25) DEFAULT NULL,
+  \`disposition\` varchar(50) DEFAULT NULL,
   \`isLoaned\` char(1) DEFAULT NULL,
   \`loanInstitution\` varchar(50) DEFAULT NULL,
   \`loaneeName\` varchar(50) DEFAULT NULL,
@@ -87,15 +88,23 @@ export default function CreateCreateTableModal({
   const [open, { on, off }] = useToggle(false);
 
   const { createTable } = useQuery();
+  const { logAdminTableError } = useLogError();
 
   async function handleSubmit(values: FormSubmitValues) {
     console.log(values);
 
     const res = await createTable(values.tableName);
 
-    console.log(res);
-    if (res && res.status === 201) {
-      refresh();
+    if (res) {
+      if (res?.status !== 201) {
+        const { status, data } = res;
+        logAdminTableError({ status, data: data.err });
+      } else {
+        refresh();
+        off();
+      }
+    } else {
+      // TODO: implement me
     }
   }
 

@@ -7,6 +7,7 @@ import {
   List,
   ListRowProps,
 } from 'react-virtualized';
+import { AdminTableError, AdminUserError } from '../../stores/admin';
 import { BulkInsertError, LoggingError } from '../../stores/logging';
 
 export function BulkInsertLogRenderer({ list }: { list: BulkInsertError[] }) {
@@ -180,6 +181,91 @@ export function GeneralErrorLogRenderer({ list }: { list: LoggingError[] }) {
               <div className="flex space-x-3">
                 <Label>catalogNumber:</Label>
                 <Text>{catalogNumber}</Text>
+              </div>
+            )}
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  function rowRenderer({ index, key, parent, style }: ListRowProps) {
+    const error = list[index];
+
+    return (
+      <CellMeasurer
+        cache={cache}
+        columnIndex={0}
+        key={key}
+        parent={parent}
+        rowIndex={index}
+      >
+        {({ registerChild }) => (
+          // @ts-ignore
+          <div ref={registerChild} style={style} className="p-2 w-full">
+            {renderError(error)}
+          </div>
+        )}
+      </CellMeasurer>
+    );
+  }
+
+  return (
+    <AutoSizer>
+      {({ height, width }) => (
+        <List
+          width={width}
+          height={height}
+          rowGetter={({ index }: any) => list[index]}
+          rowCount={list.length}
+          deferredMeasurementCache={cache}
+          rowHeight={cache.rowHeight}
+          rowRenderer={rowRenderer}
+          headerHeight={20}
+        />
+      )}
+    </AutoSizer>
+  );
+}
+
+export function AdminErrorLogRenderer({
+  list,
+}: {
+  list: AdminUserError[] | AdminTableError[];
+}) {
+  const cache = new CellMeasurerCache({
+    defaultHeight: 100,
+    fixedWidth: true,
+  });
+
+  function renderError(error: AdminUserError) {
+    const { serverStatus, code, message } = error;
+
+    const heading = 'Server Error';
+
+    return (
+      <React.Fragment>
+        <Heading>{heading}</Heading>
+        <div className="ml-4 flex flex-col space-y-3">
+          <div
+            className="pl-2 border-l border-gray-500 dark:border-dark-200"
+            key={code}
+          >
+            <div className="flex space-x-3">
+              <Label>Server Status Returned:</Label>
+              <Text>{serverStatus}</Text>
+            </div>
+            {code && (
+              <div className="flex space-x-3">
+                <Label>Code:</Label>
+                <Text>{code}</Text>
+              </div>
+            )}
+
+            {message && (
+              <div className="flex space-x-3">
+                <Label>Message:</Label>
+                <Text>{message}</Text>
               </div>
             )}
           </div>

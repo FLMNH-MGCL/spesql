@@ -3,6 +3,7 @@ import useQuery from '../utils/useQuery';
 import useToggle from '../utils/useToggle';
 import EditTableForm from '../forms/EditTableForm';
 import { Button, FormSubmitValues, Modal, Text } from '@flmnh-mgcl/ui';
+import useLogError from '../utils/useLogError';
 
 type Props = {
   table: string;
@@ -13,6 +14,7 @@ export default function CreateEditTableModal({ table, refresh }: Props) {
   const [open, { on, off }] = useToggle(false);
 
   const { updateTable } = useQuery();
+  const { logAdminTableError } = useLogError();
 
   async function handleEdit(values: FormSubmitValues) {
     const { newName } = values;
@@ -26,9 +28,18 @@ export default function CreateEditTableModal({ table, refresh }: Props) {
 
     const res = await updateTable(table, newName);
 
-    if (res && res.status === 201) {
-      refresh();
-      off();
+    if (res) {
+      if (res.status !== 201) {
+        const { status, data } = res;
+        if (status !== 201) {
+          logAdminTableError({ status, data: data.err });
+        }
+      } else {
+        refresh();
+        off();
+      }
+    } else {
+      // TODO: implement me
     }
   }
 

@@ -1,6 +1,32 @@
 import create from 'zustand';
 import { GoogleChartType } from '../renderer/types';
-import { ChartConfig, defaultChartConfig } from './visualization';
+import { ChartWrapperOptions } from 'react-google-charts/dist/types';
+
+// export type ChartDataStructure = '';
+
+export type ChartConfig = {
+  chartType: GoogleChartType;
+  data: any[];
+  availableFields: string[] | '*';
+
+  setAvailableFields(fields: string[] | '*'): void;
+  setChartType(newChart: GoogleChartType): void;
+} & Pick<ChartWrapperOptions, 'options'>;
+
+const defaultControls = {
+  explorer: {
+    actions: ['dragToZoom', 'rightClickToReset'],
+    axis: 'horizontal',
+    maxZoomIn: 10,
+  },
+};
+
+export const defaultChartConfig: Partial<ChartConfig> = {
+  chartType: 'Sankey',
+  data: [],
+  options: { ...defaultControls },
+  availableFields: [],
+};
 
 type ChartData = {
   data: any[];
