@@ -144,7 +144,7 @@ export default function SankeyModal() {
         </Modal.Footer>
       </Modal>
 
-      <Button onClick={on}>Configuration</Button>
+      <Button onClick={on}>Configure Query</Button>
     </React.Fragment>
   );
 }

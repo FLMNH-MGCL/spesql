@@ -321,6 +321,7 @@ export const countryControl = countries.map((country) => {
 export const charts = [
   { label: 'AreaChart', value: 'AreaChart' },
   { label: 'BarChart', value: 'BarChart' },
+  { label: 'Bar', value: 'Bar' },
   { label: 'BubbleChart', value: 'BubbleChart' },
   { label: 'Calendar', value: 'Calendar' },
   { label: 'CandlestickChart', value: 'CandlestickChart' },
@@ -334,7 +335,6 @@ export const charts = [
   { label: 'Histogram', value: 'Histogram' },
   { label: 'LineChart', value: 'LineChart' },
   { label: 'Line', value: 'Line' },
-  { label: 'Bar', value: 'Bar' },
   { label: 'Map', value: 'Map' },
   { label: 'OrgChart', value: 'OrgChart' },
   { label: 'PieChart', value: 'PieChart' },
@@ -348,6 +348,29 @@ export const charts = [
   { label: 'WordTree', value: 'WordTree' },
 ];
 
+export const DEFAULT_CHART_COLORS = [
+  '#3366CC',
+  '#DC3912',
+  '#FF9900',
+  '#109618',
+  '#990099',
+  '#3B3EAC',
+  '#0099C6',
+  '#DD4477',
+  '#66AA00',
+  '#B82E2E',
+  '#316395',
+  '#994499',
+  '#22AA99',
+  '#AAAA11',
+  '#6633CC',
+  '#E67300',
+  '#8B0707',
+  '#329262',
+  '#5574A6',
+  '#3B3EAC',
+];
+
 export const aggregates = [
   { label: 'AVG', value: 'AVG' },
   { label: 'COUNT', value: 'COUNT' },
@@ -356,4 +379,10 @@ export const aggregates = [
   { label: 'STD', value: 'STD' },
   { label: 'STDEV', value: 'STDEV' },
   { label: 'VARIANCE', value: 'VARIANCE' },
+];
+
+export const legendOptions = [
+  { label: 'None', value: 'none' },
+  // { label: 'Left', value: 'left' },
+  { label: 'Right', value: 'right' },
 ];

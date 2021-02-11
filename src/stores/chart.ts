@@ -1,6 +1,7 @@
 import create from 'zustand';
-import { GoogleChartType } from '../renderer/types';
+import { ChartOptions, GoogleChartType } from '../renderer/types';
 import { ChartWrapperOptions } from 'react-google-charts/dist/types';
+import { DEFAULT_CHART_COLORS } from '../renderer/components/utils/constants';
 
 // export type ChartDataStructure = '';
 
@@ -11,6 +12,7 @@ export type ChartConfig = {
 
   setAvailableFields(fields: string[] | '*'): void;
   setChartType(newChart: GoogleChartType): void;
+  setOptions(options: ChartOptions): void;
 } & Pick<ChartWrapperOptions, 'options'>;
 
 const defaultControls = {
@@ -19,12 +21,13 @@ const defaultControls = {
     axis: 'horizontal',
     maxZoomIn: 10,
   },
+  colors: DEFAULT_CHART_COLORS,
 };
 
 export const defaultChartConfig: Partial<ChartConfig> = {
   chartType: 'Sankey',
   data: [],
-  options: { ...defaultControls },
+  options: { ...defaultControls, legend: 'right' },
   availableFields: [],
 };
 
@@ -69,5 +72,17 @@ export const useChartStore = create<ChartData>((set, _get) => ({
         ...state,
         config: { ...state.config, chartType: newChart },
       })),
+    setOptions: function (options) {
+      set((state) => ({
+        ...state,
+        config: {
+          ...state.config,
+          options: {
+            ...state.config.options,
+            ...options,
+          },
+        },
+      }));
+    },
   },
 }));

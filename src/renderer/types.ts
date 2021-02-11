@@ -1,3 +1,5 @@
+import { GoogleChartTicks } from 'react-google-charts/dist/types';
+
 export type Values = Record<string, any>;
 
 type StringOrNull = string | null;
@@ -217,5 +219,38 @@ export type GoogleChartType =
   | 'WordTree';
 
 export type SankeyData = [string, string, number][];
+
+export type ChartOptions = Partial<{
+  width: number;
+  height: number;
+  is3D: boolean;
+  title: string;
+  backgroundColor: string;
+  hAxis?: {
+    minValue?: any;
+    maxValue?: any;
+    ticks?: GoogleChartTicks;
+    title?: string;
+    viewWindow?: {
+      max?: any;
+      min?: any;
+    };
+    [otherOptionKey: string]: any;
+  };
+  vAxis?: {
+    minValue?: any;
+    maxValue?: any;
+    ticks?: GoogleChartTicks;
+    title?: string;
+    viewWindow?: {
+      max?: any;
+      min?: any;
+    };
+    [otherOptionKey: string]: any;
+  };
+  legend: any;
+  colors: string[];
+  [otherOptionKey: string]: any;
+}>;
 
 // TODO: add others

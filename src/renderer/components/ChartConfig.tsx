@@ -18,7 +18,7 @@ export default function ChartConfigForm() {
 
   return (
     <div className="flex flex-col h-main">
-      <div className="flex-1 p-2">
+      <div className="flex-1 p-3">
         <Select
           label="Chart Type"
           name="chartType"

@@ -15,6 +15,7 @@ import { ProgressBar } from 'react-step-progress-bar';
 import { BulkInsertError } from '../../../stores/logging';
 import {
   Button,
+  Divider,
   Modal,
   Radio,
   Select,
@@ -22,6 +23,7 @@ import {
   Tabs,
   Text,
 } from '@flmnh-mgcl/ui';
+import { CSVLink } from 'react-csv';
 
 function CSVParser({ onFileUpload }: UploadProps) {
   const { notify } = useNotify();
@@ -154,7 +156,6 @@ type Props = {
   onClose(): void;
 };
 
-// TODO: readd the toggle to not submit with validation errors
 export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const { notify } = useNotify();
 
@@ -166,6 +167,12 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
   const [loading, { on, off }] = useToggle(false);
   const [rowByRow, setInsertMethod] = useToggle(true);
+
+  const [downloadFailures, setDownloadMethods] = useToggle(false);
+  const [failures, setFailures] = useState<any[]>();
+  const failureRef = useRef(failures);
+  const csvRef = useRef<any>();
+
   const [progress, setProgress] = useState(0);
 
   const updateBulkInsertLog = useStore((state) => state.updateBulkInsertLog);
@@ -211,7 +218,9 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     };
   }, [expiredSession]);
 
-  // console.log(data, rawData);
+  useEffect(() => {
+    failureRef.current = failures;
+  }, [failures]);
 
   // look into xlsx package:
   // https://stackoverflow.com/questions/46909260/reading-excel-file-in-reactjs
@@ -260,20 +269,28 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   function parseUploadRows() {
     let allErrors = [];
     let insertionValues = [];
+    let newCsv = [];
+
     for (let i = 0; i < rawData.length; i++) {
       const currentSpecimen = rawData[i].data as Specimen;
-
-      console.log(currentSpecimen);
 
       const specimenErrors = validateSpecimen(currentSpecimen);
 
       if (specimenErrors && specimenErrors.length) {
         // console.log('ERROR OCCURRED:', currentSpecimen);
         allErrors.push({ index: i, row: i + 2, errors: specimenErrors });
+
+        if (downloadFailures) {
+          newCsv.push(currentSpecimen);
+        }
       } else {
         // console.log(fixPartiallyCorrect(currentSpecimen));
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
       }
+    }
+
+    if (downloadFailures) {
+      setFailures(newCsv);
     }
 
     return { allErrors, insertionValues };
@@ -282,6 +299,8 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   function parsePasteRows(result: any[]) {
     let allErrors: BulkInsertError[] = [];
     let insertionValues = [];
+    let newCsv = [];
+
     for (let i = 0; i < result.length; i++) {
       const currentSpecimen = result[i] as Specimen;
       const specimenErrors = validateSpecimen(currentSpecimen);
@@ -289,10 +308,18 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       if (specimenErrors && specimenErrors.length) {
         // console.log('ERROR OCCURRED:'+, currentSpecimen);
         allErrors.push({ index: i, row: i + 2, errors: specimenErrors });
+
+        if (downloadFailures) {
+          newCsv.push(currentSpecimen);
+        }
       } else {
         // console.log(fixPartiallyCorrect(currentSpecimen));
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
       }
+    }
+
+    if (downloadFailures) {
+      setFailures(newCsv);
     }
 
     return { allErrors, insertionValues };
@@ -309,8 +336,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         columns: Object.keys(insertionValues[0]),
       })
       .catch((error) => error.response);
-
-    console.log(insertResponse);
 
     if (insertResponse.status === 401) {
       // session expired
@@ -427,7 +452,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     off();
   }
 
-  // TODO: fix me
   async function handlePasteSubmit() {
     const readingConfig = { header: true };
 
@@ -462,6 +486,16 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     off();
   }
 
+  function downloadFailedRows() {
+    console.log('here');
+    if (!failureRef.current || !failureRef.current.length) {
+      console.log('FAILED:', failureRef.current);
+      return;
+    }
+
+    csvRef.current?.link.click();
+  }
+
   async function handleSubmit() {
     if (!databaseTable) {
       notify({
@@ -470,15 +504,27 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
         level: 'error',
       });
     } else if (rawData && rawData.length > 0) {
-      handleUploadSubmit();
+      await handleUploadSubmit();
     } else if (pasteData) {
-      handlePasteSubmit();
+      await handlePasteSubmit();
+    }
+
+    if (downloadFailures) {
+      console.log('downloading...');
+      downloadFailedRows();
     }
   }
 
   return (
     <React.Fragment>
-      {/* I do not want you to be able to close this while it is loading */}
+      <CSVLink
+        data={failureRef.current ?? []}
+        filename="failures.csv"
+        className="hidden"
+        ref={csvRef}
+        target="_blank"
+      />
+
       <Modal open={loading ? true : open} size="medium" onClose={onClose}>
         <Modal.Content title="Bulk Insert Query">
           <Tabs
@@ -512,6 +558,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
               className="pt-4"
               checked={rowByRow}
               label="Insert row-by-row"
+              disabled={loading}
               onChange={setInsertMethod.on}
             />
             <Text>This is slower overall, but will skip failing rows</Text>
@@ -520,11 +567,26 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
               className="pt-2"
               checked={!rowByRow}
               label="Insert all at once"
+              disabled={loading}
               onChange={setInsertMethod.off}
             />
-            <Text>
+            <Text className="pb-3">
               This is much quicker overall, but the entire query will fail if
               one entry is invalid
+            </Text>
+
+            <Divider />
+
+            <Radio
+              className="pt-3"
+              checked={downloadFailures}
+              label="Download Failures on Insertion"
+              disabled={loading}
+              onChange={setDownloadMethods.toggle}
+            />
+            <Text>
+              On successful insertion, any rows which failed client-side
+              validation will be added to a new CSV and automatically downloaded
             </Text>
 
             {progress > 0 && (

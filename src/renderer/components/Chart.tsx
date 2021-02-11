@@ -9,6 +9,7 @@ import shallow from 'zustand/shallow';
 import statsImage from '../assets/svg/stats.svg';
 import CreateDownloadModal from './modals/CreateDownloadModal';
 import ShowQueryButton from './buttons/ShowQueryButton';
+import EditChartOptionsModal from './modals/charts/EditChartOptionsModal';
 
 // function ChartError(props: any) {
 //   console.log(props);
@@ -74,9 +75,16 @@ export default function Chart({ fullScreen, toggle }: Props) {
     console.log(chartRef?.current?.chart);
   }, [data]);
 
-  const { chartType, options } = useChartStore((state) => state.config);
+  const { chartType, options } = useChartStore(
+    (state) => state.config,
+    shallow
+  );
   const setData = useChartStore((state) => state.setData);
   const setCurrentQuery = useChartStore((state) => state.setCurrentQuery);
+
+  useEffect(() => {
+    setKey((previousKey) => !previousKey);
+  }, [options]);
 
   function onClear() {
     setData([]);
@@ -92,7 +100,7 @@ export default function Chart({ fullScreen, toggle }: Props) {
         animate={controls}
         initial={{ width: fullScreen ? '100%' : '75%' }}
       >
-        <div className="flex-1 p-2  w-full">
+        <div className="flex-1 p-2 w-full h-full">
           {data && !!data.length && (
             <GChart
               ref={chartRef}
@@ -140,7 +148,8 @@ export default function Chart({ fullScreen, toggle }: Props) {
 
             <ShowQueryButton variant="chart" />
           </Button.Group>
-          <div>
+          <div className="flex space-x-2">
+            <EditChartOptionsModal />
             <FullScreenButton fullScreen={fullScreen} toggle={toggle} />
           </div>
         </nav>

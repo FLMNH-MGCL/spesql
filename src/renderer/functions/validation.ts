@@ -435,8 +435,6 @@ export function validateElevation(value: string) {
 
   const qty = Qty.parse(value);
 
-  console.log(qty);
-
   if (!qty) {
     return 'Invalid elevation, unexpected value(s)';
   } else if (qty.isUnitless()) {

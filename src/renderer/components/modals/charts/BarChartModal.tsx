@@ -3,6 +3,7 @@ import {
   Code,
   Divider,
   Form,
+  // Input,
   Label,
   Modal,
   Radio,
@@ -10,13 +11,13 @@ import {
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useChartStore } from '../../../../stores/chart';
-import AreaChartForm from '../../forms/charts/AreaChartForm';
+import BarChartForm from '../../forms/charts/BarChartForm';
 import ConditionalForm from '../../forms/charts/ConditionalForm';
 import TableSelect from '../../TableSelect';
 import useQuery from '../../utils/useQuery';
 import useToggle from '../../utils/useToggle';
 
-export default function AreaChartModal() {
+export default function BarChartModal() {
   const [open, { on, off }] = useToggle(false);
   const { runChartQuery } = useQuery();
 
@@ -28,13 +29,12 @@ export default function AreaChartModal() {
   const [conditionalString, setConditionalString] = useState<string>('');
   const [queryPrefix, setQueryPrefix] = useState<string>('');
   const [groupByClause, setGroupByClause] = useState('');
+  // const [hasOuterSelect, outSelectMethods] = useToggle(false);
 
   function handleSetChange(sets: any[]) {
     if (!sets || !sets.length) return;
 
     let cols = clsx('SELECT', sets[0].field);
-
-    // let groups = [];
 
     for (let i = 1; i < sets.length; i++) {
       const { aggregate, field } = sets[i];
@@ -100,23 +100,38 @@ export default function AreaChartModal() {
     off();
   }
 
+  function handleConditionalToggle() {
+    if (hasConditionals) {
+      setConditionalString('');
+    }
+
+    toggle();
+  }
+
+  // function handleOuterSelectToggle() {
+  //   if (hasOuterSelect) {
+  //   }
+
+  //   outSelectMethods.toggle();
+  // }
+
   return (
     <React.Fragment>
       <Modal open={open} onClose={handleClose} size="almostMassive">
-        <Modal.Content title="Area Chart Configuration">
+        <Modal.Content title="Bar Chart Configuration">
           <TableSelect
             value={databaseTable}
             onChange={setDatabaseTable}
             className="pb-3"
           />
 
-          <AreaChartForm onChange={handleSetChange} />
+          <BarChartForm onChange={handleSetChange} />
 
           <Form.Group>
             <Radio
               label="Configure Conditionals"
               checked={hasConditionals}
-              onChange={toggle}
+              onChange={handleConditionalToggle}
             />
           </Form.Group>
 
@@ -126,6 +141,25 @@ export default function AreaChartModal() {
               setCodeString={setConditionalString}
             />
           )}
+
+          {/* <Form.Group>
+            <Radio
+              label="Configure Outer Select"
+              checked={hasOuterSelect}
+              onChange={handleOuterSelectToggle}
+            />
+          </Form.Group>
+
+          {hasOuterSelect && (
+            <Form.Group flex>
+              <Input
+                name=""
+                label="Outer Select Statement"
+                placeholder="specificEpithet, Custom Named Field, etc"
+                fullWidth
+              />
+            </Form.Group>
+          )} */}
 
           <Divider className="pt-4" />
 

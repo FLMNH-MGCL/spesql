@@ -13,7 +13,7 @@ type Props = {
   onChange(sets: any[]): void;
 };
 
-export default function AreaChartForm({ onChange }: Props) {
+export default function BarChartForm({ onChange }: Props) {
   const [selections, setSelections] = useState<NFieldSelection[]>([{}, {}]);
 
   const [numFields, setNumFields] = useState(2);
@@ -94,11 +94,11 @@ export default function AreaChartForm({ onChange }: Props) {
   );
 }
 
-export function AreaChartInfoSheet() {
+export function BarChartInfoSheet() {
   return (
     <React.Fragment>
       <Text className="py-1">
-        Area Charts require a minimum of two columns in the structure of:
+        Bar Charts require a minimum of two columns in the structure of:
       </Text>
 
       <Code rounded>[any, number, ... , number]</Code>
@@ -108,10 +108,7 @@ export function AreaChartInfoSheet() {
         be numerical.
       </Text>
 
-      <Text className="py-2">
-        Area Charts are similar to Line Charts, with the areas underneath the
-        lines automatically shaded in the appropriate colors per line.
-      </Text>
+      <Text className="py-2">Bar Charts ....</Text>
     </React.Fragment>
   );
 }

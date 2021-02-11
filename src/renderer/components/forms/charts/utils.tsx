@@ -4,6 +4,8 @@ import { SankeyInfoSheet } from './SankeyForm';
 import SankeyModal from '../../modals/charts/SankeyModal';
 import { AreaChartInfoSheet } from './AreaChartForm';
 import AreaChartModal from '../../modals/charts/AreaChartModal';
+import BarChartModal from '../../modals/charts/BarChartModal';
+import { BarChartInfoSheet } from './BarChartForm';
 
 export function getChartInfoSheet(chartType: string) {
   switch (chartType) {
@@ -11,7 +13,7 @@ export function getChartInfoSheet(chartType: string) {
       return <AreaChartInfoSheet />;
     }
     case 'BarChart': {
-      return <div></div>;
+      return <BarChartInfoSheet />;
     }
     case 'BubbleChart': {
       return <div></div>;
@@ -50,9 +52,6 @@ export function getChartInfoSheet(chartType: string) {
       return <div></div>;
     }
     case 'Line': {
-      return <div></div>;
-    }
-    case 'Bar': {
       return <div></div>;
     }
     case 'Map': {
@@ -100,7 +99,7 @@ export function getChartModal(chartType: string) {
       return <AreaChartModal />;
     }
     case 'BarChart': {
-      return <div></div>;
+      return <BarChartModal />;
     }
     case 'BubbleChart': {
       return <div></div>;
@@ -139,9 +138,6 @@ export function getChartModal(chartType: string) {
       return <div></div>;
     }
     case 'Line': {
-      return <div></div>;
-    }
-    case 'Bar': {
       return <div></div>;
     }
     case 'Map': {
