@@ -14,9 +14,9 @@ export default function deleteUser(req: Request, res: Response) {
     connection.query(
       'DELETE FROM ?? WHERE id = ?',
       ['users', id],
-      (error, data) => {
-        if (error) {
-          res.status(503).send(error);
+      (err, data) => {
+        if (err) {
+          res.status(503).json({ err: err });
         } else {
           res.status(200).send(data);
         }

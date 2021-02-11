@@ -43,7 +43,7 @@ export default function useQuery() {
 
   const [, { expireSession, awaitReauth }] = useExpiredSession();
 
-  const { logSqlError } = useLogError();
+  const { logSqlError, logAdminUserError, logAdminTableError } = useLogError();
 
   // TODO: handle 403 error codes!!
   const queries = useMemo(
@@ -322,30 +322,30 @@ export default function useQuery() {
         } else {
           notify({
             title: 'Unknown Error',
-            message: 'Please notify Aaron of this bug',
+            message: 'Please check the appropriate logs',
             level: 'error',
           });
+          const { status, data } = deleteResponse;
 
-          // TODO: log
-          // logSqlError(deleteResponse.data, 'delete');
+          logAdminUserError({ status, data: data.err });
 
           return false;
         }
       },
 
-      async deleteTable(tableName: string): Promise<any> {
+      async deleteTable(tableName: string): Promise<boolean> {
         const deletionResponse = await axios
           .post(BACKEND_URL + '/api/admin/table/delete', { tableName })
           .catch((error) => error.response);
 
-        if (deletionResponse.status === 201) {
+        if (deletionResponse.status === 200) {
           notify({
             title: 'Sucess',
             message: `${tableName} is now in the void`,
             level: 'success',
           });
 
-          return deletionResponse;
+          return true;
         } else if (deletionResponse.status === 401) {
           expireSession();
 
@@ -354,11 +354,14 @@ export default function useQuery() {
         } else {
           notify({
             title: 'Unknown Error',
-            message: 'Please notify Aaron of this bug',
+            message: 'Please check the appropriate logs',
             level: 'error',
           });
+          const { status, data } = deletionResponse;
 
-          return deletionResponse;
+          logAdminTableError({ status, data: data.err });
+
+          return false;
         }
       },
 

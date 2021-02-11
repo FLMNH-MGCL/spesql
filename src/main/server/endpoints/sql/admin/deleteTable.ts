@@ -14,8 +14,7 @@ export default function deleteTable(req: Request, res: Response) {
         if (err) {
           res.status(503).json({ err: err });
         } else {
-          console.log('sucessfully deleted table');
-          res.status(201).send(data);
+          res.status(200).send(data);
         }
       });
     }

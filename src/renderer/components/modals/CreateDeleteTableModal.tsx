@@ -15,10 +15,9 @@ export default function CreateDeleteTableModal({ table, refresh }: Props) {
   const { deleteTable } = useQuery();
 
   async function handleDelete() {
-    const res = await deleteTable(table);
-    console.log(res);
+    const deleted = await deleteTable(table);
 
-    if (res && res.status === 201) {
+    if (deleted) {
       refresh();
       off();
     }

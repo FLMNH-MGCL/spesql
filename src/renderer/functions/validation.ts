@@ -164,7 +164,7 @@ export function validateCatalogNumber(value: string) {
 
 // FLMNH-MGCL [6digits] TODO: add me
 export function validateOtherCatalogNumber(value: string) {
-  let flmnhPattern = new RegExp(/^FLMNH-MGCL [0-9]{6,8}$/g);
+  let flmnhPattern = new RegExp(/^FLMNH-MGCL [0-9]{4,8}$/g);
   let mgclPattern = new RegExp(/^MGCL_[0-9]{6,8}$/g);
 
   if (!value || value.length < 1) {
