@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CreateBulkInsertModal from './modals/CreateBulkInsertModal';
 import CreateSingleInsertModal from './modals/CreateSingleInsertModal';
 import { Dropdown } from '@flmnh-mgcl/ui';
+import { useLocation } from 'react-router-dom';
 
 type Props = {
   disableCrud: boolean;
@@ -9,10 +10,14 @@ type Props = {
 
 export default function InsertMenu({ disableCrud }: Props) {
   const [currentModal, setCurrentModal] = useState<string>();
+  const location = useLocation().pathname;
+  const notHome = location !== '/home';
+
   return (
     <React.Fragment>
       <Dropdown
         label="Insert"
+        disabled={notHome}
         labelIcon={
           <svg
             className="w-4 h-4 mr-2"

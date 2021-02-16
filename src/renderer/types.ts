@@ -205,7 +205,6 @@ export type GoogleChartType =
   | 'Histogram'
   | 'LineChart'
   | 'Line'
-  | 'Bar'
   | 'Map'
   | 'OrgChart'
   | 'PieChart'

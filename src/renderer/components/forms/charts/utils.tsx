@@ -1,5 +1,4 @@
 import React from 'react';
-import { Text } from '@flmnh-mgcl/ui';
 import { SankeyInfoSheet } from './SankeyForm';
 import SankeyModal from '../../modals/charts/SankeyModal';
 import { AreaChartInfoSheet } from './AreaChartForm';
@@ -88,7 +87,7 @@ export function getChartInfoSheet(chartType: string) {
       return <div></div>;
     }
     default: {
-      return <Text>Select a Chart Type to get started</Text>;
+      return null;
     }
   }
 }
@@ -174,7 +173,7 @@ export function getChartModal(chartType: string) {
       return <div></div>;
     }
     default: {
-      return <Text>Select a Chart Type to get started</Text>;
+      return null;
     }
   }
 }

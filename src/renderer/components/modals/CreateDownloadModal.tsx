@@ -3,6 +3,7 @@ import useToggle from '../utils/useToggle';
 import { CSVLink } from 'react-csv';
 import DownloadButton, { DOWNLOAD_ICONS } from '../buttons/DownloadButton';
 import { Button, Modal, Text } from '@flmnh-mgcl/ui';
+import { useLocation } from 'react-router-dom';
 
 type Props = {
   variant?: keyof typeof DOWNLOAD_ICONS;
@@ -22,6 +23,8 @@ export default function CreateDownloadModal({
   separator = '\t',
 }: Props) {
   const [open, { on, off }] = useToggle(false);
+  const location = useLocation().pathname;
+  const notHome = location !== '/home';
 
   function onDownload() {
     off();
@@ -55,11 +58,11 @@ export default function CreateDownloadModal({
       {variant ? (
         <DownloadButton
           onClick={on}
-          disabled={disableDownload}
+          disabled={disableDownload || notHome}
           variant={variant}
         />
       ) : (
-        <Button onClick={on} disabled={disableDownload}>
+        <Button onClick={on} disabled={disableDownload || notHome}>
           <svg
             className="w-4 h-4 mr-2 dark:text-dark-200"
             fill="none"

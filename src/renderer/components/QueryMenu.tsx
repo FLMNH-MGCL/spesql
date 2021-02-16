@@ -4,6 +4,7 @@ import CreateSelectModal from './modals/CreateSelectModal';
 import CreateBulkUpdateModal from './modals/CreateBulkUpdateModal';
 import { Dropdown } from '@flmnh-mgcl/ui';
 import CreateQueryBuilderModal from './modals/CreateQueryBuilderModal';
+import { useLocation } from 'react-router-dom';
 
 type Props = {
   disableCrud: boolean;
@@ -12,10 +13,14 @@ type Props = {
 export default function QueryMenu({ disableCrud }: Props) {
   const [currentModal, setCurrentModal] = useState<string>();
 
+  const location = useLocation().pathname;
+  const notHome = location !== '/home';
+
   return (
     <React.Fragment>
       <Dropdown
         label="Query"
+        disabled={notHome}
         labelIcon={
           <svg
             className="w-4 h-4 mr-2"

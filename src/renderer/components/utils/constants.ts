@@ -321,7 +321,6 @@ export const countryControl = countries.map((country) => {
 export const charts = [
   { label: 'AreaChart', value: 'AreaChart' },
   { label: 'BarChart', value: 'BarChart' },
-  { label: 'Bar', value: 'Bar' },
   { label: 'BubbleChart', value: 'BubbleChart' },
   { label: 'Calendar', value: 'Calendar' },
   { label: 'CandlestickChart', value: 'CandlestickChart' },
@@ -383,6 +382,21 @@ export const aggregates = [
 
 export const legendOptions = [
   { label: 'None', value: 'none' },
-  // { label: 'Left', value: 'left' },
+  { label: 'Left', value: 'left' },
   { label: 'Right', value: 'right' },
+  { label: 'Bottom', value: 'bottom' },
+  { label: 'Top', value: 'top' },
+  { label: 'In', value: 'in' },
+];
+
+export const chartOrientation = [
+  { label: 'Horizontal', value: 'horizontal' },
+  { label: 'Vertical', value: 'vertical' },
+];
+
+export const trendLineTypes = [
+  { label: 'Auto', value: '' },
+  { label: 'Linear', value: 'linear' },
+  { label: 'Polynomial', value: 'polynomial' },
+  { label: 'Exponential', value: 'exponential' },
 ];

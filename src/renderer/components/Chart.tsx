@@ -9,7 +9,8 @@ import shallow from 'zustand/shallow';
 import statsImage from '../assets/svg/stats.svg';
 import CreateDownloadModal from './modals/CreateDownloadModal';
 import ShowQueryButton from './buttons/ShowQueryButton';
-import EditChartOptionsModal from './modals/charts/EditChartOptionsModal';
+import EditBroadChart from './modals/charts/configs/EditBroadChart';
+import { getConfigModal } from './modals/charts/utils';
 
 // function ChartError(props: any) {
 //   console.log(props);
@@ -101,6 +102,22 @@ export default function Chart({ fullScreen, toggle }: Props) {
         initial={{ width: fullScreen ? '100%' : '75%' }}
       >
         <div className="flex-1 p-2 w-full h-full">
+          {/* <GChart
+            ref={chartRef}
+            key={Number(key)}
+            height="100%"
+            width="100%"
+            chartType={chartType}
+            loader={<Spinner active={true} />}
+            options={options}
+            data={[
+              ['Year', 'Sales', 'Expenses', 'Profit'],
+              ['2014', 1000, 400, 200],
+              ['2015', 1170, 460, 250],
+              ['2016', 660, 1120, 300],
+              ['2017', 1030, 540, 350],
+            ]}
+          /> */}
           {data && !!data.length && (
             <GChart
               ref={chartRef}
@@ -111,19 +128,6 @@ export default function Chart({ fullScreen, toggle }: Props) {
               loader={<Spinner active={true} />}
               options={options}
               data={data}
-
-              // errorElement={<ChartError />}
-              // chartEvents={[
-              //   {
-              //     eventName: 'error',
-              //     callback: (props: any) =>
-              //       console.log(
-              //         'CALLBACK',
-              //         props,
-              //         props.eventArgs[0].container?.innerText
-              //       ),
-              //   },
-              // ]}
             />
           )}
 
@@ -149,7 +153,7 @@ export default function Chart({ fullScreen, toggle }: Props) {
             <ShowQueryButton variant="chart" />
           </Button.Group>
           <div className="flex space-x-2">
-            <EditChartOptionsModal />
+            {getConfigModal(chartType)}
             <FullScreenButton fullScreen={fullScreen} toggle={toggle} />
           </div>
         </nav>

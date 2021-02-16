@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { ColorResult, SketchPicker } from 'react-color';
@@ -58,9 +59,14 @@ function ColorPicker({ defaultColor, index, onChange }: Props) {
 type SProps = {
   defaultColor: string;
   onChange(newColor: string): void;
+  width?: string;
 };
 
-export function SingleColorPicker({ defaultColor, onChange }: SProps) {
+export function SingleColorPicker({
+  defaultColor,
+  onChange,
+  width = '1/6',
+}: SProps) {
   const [open, { toggle, off }] = useToggle(false);
   const [color, setColor] = useState(defaultColor);
 
@@ -71,7 +77,12 @@ export function SingleColorPicker({ defaultColor, onChange }: SProps) {
   }
 
   return (
-    <div className="w-1/6 flex flex-col items-center cursor-pointer relative">
+    <div
+      className={clsx(
+        `w-${width}`,
+        'flex flex-col items-center cursor-pointer relative'
+      )}
+    >
       <span
         className="p-1 w-full flex rounded-md bg-gray-100 dark:bg-dark-400"
         onClick={toggle}

@@ -31,7 +31,7 @@ export default function ChartConfigForm() {
 
         {getInfoSheet()}
       </div>
-      <nav className={TABLE_CLASSES.footer}>
+      <nav className={TABLE_CLASSES.footerFixed}>
         <div></div>
         <div>{getModal()}</div>
       </nav>

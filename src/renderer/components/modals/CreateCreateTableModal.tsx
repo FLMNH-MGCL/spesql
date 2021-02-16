@@ -27,7 +27,7 @@ const tableCreationString = `CREATE TABLE \`table_name\` (
   \`subgenus\` varchar(40) DEFAULT NULL,
   \`specificEpithet\` varchar(40) DEFAULT NULL,
   \`infraspecificEpithet\` varchar(30) DEFAULT NULL,
-  \`identificationQualifier\` varchar(10) DEFAULT NULL,
+  \`identificationQualifier\` varchar(25) DEFAULT NULL,
   \`recordedBy\` varchar(255) DEFAULT NULL,
   \`identifiedBy\` varchar(255) DEFAULT NULL,
   \`dateIdentified\` varchar(10) DEFAULT NULL,
