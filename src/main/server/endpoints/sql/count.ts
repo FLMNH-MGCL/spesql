@@ -4,13 +4,13 @@ import mysql from 'mysql';
 
 export default function count(req: Request, res: Response) {
   const template: string = req.body.query;
-  const { columns, conditions } = req.body;
+  const { conditions } = req.body;
 
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
   } else {
-    if (columns || conditions) {
-      const query = mysql.format(template, [columns, ...conditions]);
+    if (conditions) {
+      const query = mysql.format(template, conditions);
       console.log(query);
       connection.query(query, (error, data) => {
         if (error) {

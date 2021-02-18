@@ -71,10 +71,10 @@ export default function Chart({ fullScreen, toggle }: Props) {
     setTimeout(() => setKey((previousKey) => !previousKey), 251);
   }, [fullScreen]);
 
-  useEffect(() => {
-    console.log(chartRef?.current);
-    console.log(chartRef?.current?.chart);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log(chartRef?.current);
+  //   console.log(chartRef?.current?.chart);
+  // }, [data]);
 
   const { chartType, options } = useChartStore(
     (state) => state.config,
@@ -85,7 +85,7 @@ export default function Chart({ fullScreen, toggle }: Props) {
 
   useEffect(() => {
     setKey((previousKey) => !previousKey);
-  }, [options]);
+  }, [options, data]);
 
   function onClear() {
     setData([]);

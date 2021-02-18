@@ -8,15 +8,16 @@ import {
   Modal,
   Radio,
 } from '@flmnh-mgcl/ui';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import CircleButton from '../../../buttons/CircleButton';
 import useToggle from '../../../utils/useToggle';
 import ChartColorPicker, { SingleColorPicker } from '../../../ChartColorPicker';
-import { useChartStore } from '../../../../../stores/chart';
+import { defaultChartConfig, useChartStore } from '../../../../../stores/chart';
 import shallow from 'zustand/shallow';
 import { chartOrientation, legendOptions } from '../../../utils/constants';
 import TrendlineForm from '../../../forms/charts/TrendlineForm';
 import { canHaveTrends } from '../utils';
+import RefreshButton from '../../../buttons/RefreshButton';
 
 /**
  *     options: Partial<{
@@ -65,9 +66,13 @@ export default function EditBroadChart() {
   const [numTrends, setNumTrends] = useState(1);
   const [trends, setTrends] = useState<any[]>([{}]);
 
-  const defaultColors = useChartStore((state) => state.config.options.colors);
+  const defaultColors = useChartStore(
+    (state) => state.config.options.colors,
+    shallow
+  );
   const defaultBgColor = useChartStore(
-    (state) => state.config.options.backgroundColor
+    (state) => state.config.options.backgroundColor,
+    shallow
   );
 
   const { title, is3D, legend, chartType } = useChartStore(
@@ -80,7 +85,7 @@ export default function EditBroadChart() {
     shallow
   );
 
-  const options = useChartStore((state) => state.config.options);
+  const options = useChartStore((state) => state.config.options, shallow);
 
   const defaultXAxisColor = options.hAxis?.titleTextStyle?.color ?? '#000';
   const defaultVAxisColor = options.vAxis?.titleTextStyle?.color ?? '#000';
@@ -157,6 +162,19 @@ export default function EditBroadChart() {
     off();
   }
 
+  // FIXME: does not work
+  const resetConfig = useCallback(() => {
+    setOptions(defaultChartConfig);
+    setColors(defaultColors);
+    setHasTrends(false);
+    setNumTrends(1);
+    setTrends([{}]);
+    setBgColor(defaultBgColor ?? '#fff');
+    setInnerBgColor(options.chartArea?.backgroundColor ?? '#fff');
+    setXAxisColor(defaultXAxisColor);
+    setVAxisColor(defaultVAxisColor);
+  }, []);
+
   function percentStringToNumber(percent: string) {
     try {
       return parseInt(percent);
@@ -164,8 +182,6 @@ export default function EditBroadChart() {
       return 80;
     }
   }
-
-  console.log(trends);
 
   return (
     <React.Fragment>
@@ -242,13 +258,13 @@ export default function EditBroadChart() {
                 name="vTitle"
                 label="Y-Axis Title"
                 fullWidth
-                defaultValue={options.hAxis?.title}
+                defaultValue={options.vAxis?.title}
               />
               <Form.Input
                 name="vFontSize"
                 label="Font Size"
                 fullWidth
-                defaultValue={options.hAxis?.titleTextStyle?.fontSize ?? 10}
+                defaultValue={options.vAxis?.titleTextStyle?.fontSize ?? 10}
                 type="number"
               />
               <div>
@@ -263,13 +279,13 @@ export default function EditBroadChart() {
                 name="vBold"
                 label="Bold Y-Axis"
                 stacked
-                defaultChecked={options.hAxis?.titleTextStyle?.bold ?? false}
+                defaultChecked={options.vAxis?.titleTextStyle?.bold ?? false}
               />
               <Form.Radio
                 name="vItalic"
                 label="Italic Y-Axis"
                 stacked
-                defaultChecked={options.hAxis?.titleTextStyle?.italic ?? false}
+                defaultChecked={options.vAxis?.titleTextStyle?.italic ?? false}
               />
             </div>
 
@@ -340,6 +356,10 @@ export default function EditBroadChart() {
               Confirm
             </Button>
           </Button.Group>
+
+          <div className="flex justify-start items-center flex-1">
+            <RefreshButton onClick={resetConfig} type="reset" form="options" />
+          </div>
         </Modal.Footer>
       </Modal>
 

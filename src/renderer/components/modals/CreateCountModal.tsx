@@ -82,6 +82,8 @@ export default function CreateCountModal({ open, onClose }: Props) {
       let conditionals = [];
       columns = fields;
 
+      console.log(values);
+
       for (let i = 0; i < numConditions; i++) {
         const current = numberParser.toWords(i);
 

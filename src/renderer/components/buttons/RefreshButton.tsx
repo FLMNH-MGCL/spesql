@@ -1,14 +1,19 @@
-import { Button } from '@flmnh-mgcl/ui';
+import { Button, ButtonProps } from '@flmnh-mgcl/ui';
 import React from 'react';
 
-type Props = {
-  disabled?: boolean;
-  onClick?(): void;
-};
-
-export default function RefreshButton({ disabled, onClick }: Props) {
+export default function RefreshButton({
+  disabled,
+  onClick,
+  ...props
+}: ButtonProps) {
   return (
-    <Button variant="outline" rounded disabled={disabled} onClick={onClick}>
+    <Button
+      variant="outline"
+      rounded
+      disabled={disabled}
+      onClick={onClick}
+      {...props}
+    >
       <svg
         className="w-5 h-5 dark:text-dark-200"
         fill="none"
