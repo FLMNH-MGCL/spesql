@@ -3,7 +3,6 @@ import {
   Divider,
   Form,
   FormSubmitValues,
-  Heading,
   Label,
   Modal,
   Radio,
@@ -12,12 +11,13 @@ import React, { useCallback, useState } from 'react';
 import CircleButton from '../../../buttons/CircleButton';
 import useToggle from '../../../utils/useToggle';
 import ChartColorPicker, { SingleColorPicker } from '../../../ChartColorPicker';
-import { defaultChartConfig, useChartStore } from '../../../../../stores/chart';
+import { useChartStore } from '../../../../../stores/chart';
 import shallow from 'zustand/shallow';
 import { chartOrientation, legendOptions } from '../../../utils/constants';
 import TrendlineForm from '../../../forms/charts/TrendlineForm';
 import { canHaveTrends } from '../utils';
 import RefreshButton from '../../../buttons/RefreshButton';
+import { defaultChartConfig } from '../../../../../stores/chartDefaults';
 
 /**
  *     options: Partial<{

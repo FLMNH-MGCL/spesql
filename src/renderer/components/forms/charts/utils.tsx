@@ -5,6 +5,7 @@ import { AreaChartInfoSheet } from './AreaChartForm';
 import AreaChartModal from '../../modals/charts/AreaChartModal';
 import BarChartModal from '../../modals/charts/BarChartModal';
 import { BarChartInfoSheet } from './BarChartForm';
+import { BubbleChartInfoSheet } from './BubbleChartForm';
 
 export function getChartInfoSheet(chartType: string) {
   switch (chartType) {
@@ -15,76 +16,67 @@ export function getChartInfoSheet(chartType: string) {
       return <BarChartInfoSheet />;
     }
     case 'BubbleChart': {
-      return <div></div>;
-    }
-    case 'Calendar': {
-      return <div></div>;
-    }
-    case 'CandlestickChart': {
-      return <div></div>;
-    }
-    case 'ColumnChart': {
-      return <div></div>;
+      return <BubbleChartInfoSheet />;
     }
     case 'ComboChart': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'DiffChart': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'DonutChart': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'Gantt': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'Gauge': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'GeoChart': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'Histogram': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'LineChart': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'Line': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'Map': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'OrgChart': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'PieChart': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'Sankey': {
       return <SankeyInfoSheet />;
     }
     case 'ScatterChart': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'SteppedAreaChart': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'Table': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'Timeline': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'TreeMap': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'WaterfallChart': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     case 'WordTree': {
-      return <div></div>;
+      return <div>This chart type isn't supported yet! Stay tuned!</div>;
     }
     default: {
       return null;
@@ -101,15 +93,6 @@ export function getChartModal(chartType: string) {
       return <BarChartModal />;
     }
     case 'BubbleChart': {
-      return <div></div>;
-    }
-    case 'Calendar': {
-      return <div></div>;
-    }
-    case 'CandlestickChart': {
-      return <div></div>;
-    }
-    case 'ColumnChart': {
       return <div></div>;
     }
     case 'ComboChart': {

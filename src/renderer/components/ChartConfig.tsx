@@ -4,6 +4,7 @@ import shallow from 'zustand/shallow';
 import { charts } from './utils/constants';
 import { getChartInfoSheet, getChartModal } from './forms/charts/utils';
 import { useChartStore } from '../../stores/chart';
+import AdvancedQueryModal from './modals/charts/AdvancedQueryModal';
 
 export default function ChartConfigForm() {
   const { chartType } = useChartStore((state) => state.config, shallow);
@@ -32,7 +33,7 @@ export default function ChartConfigForm() {
         {getInfoSheet()}
       </div>
       <nav className={TABLE_CLASSES.footerFixed}>
-        <div></div>
+        <div>{chartType && <AdvancedQueryModal />}</div>
         <div>{getModal()}</div>
       </nav>
     </div>
