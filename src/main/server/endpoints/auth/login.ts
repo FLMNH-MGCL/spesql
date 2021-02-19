@@ -40,55 +40,42 @@ export default function login(req: Request, res: Response) {
               req.session!.save((error) => {
                 if (error) {
                   res.status(500).send(error);
-                } else {
-                  connection!.getConnection(function (err, innerConnection) {
-                    if (err) {
-                      res.status(500).send(error);
-                    } else {
-                      if (accessRole === 'admin') {
-                        innerConnection.changeUser(
-                          {
-                            user: process.env
-                              .ELECTRON_WEBPACK_APP_DB_ADMIN_USER!,
-                            password: process.env
-                              .ELECTRON_WEBPACK_APP_DB_ADMIN_PASS!,
-                          },
-                          function (error) {
-                            if (error) {
-                              res.status(500).send(error);
-                            } else {
-                              console.log('switched to admin account...');
-                              res
-                                .status(200)
-                                .send({ fullName, username, id, accessRole });
-                            }
-                          }
-                        );
-                      } else if (accessRole === 'manager') {
-                        innerConnection.changeUser(
-                          {
-                            user: process.env.ELECTRON_WEBPACK_APP_DB_MGR_USER!,
-                            password: process.env
-                              .ELECTRON_WEBPACK_APP_DB_MGR_PASS!,
-                          },
-                          function (error) {
-                            if (error) {
-                              res.status(500).send(error);
-                            } else {
-                              console.log('switched to manager account...');
-                              res
-                                .status(200)
-                                .send({ fullName, username, id, accessRole });
-                            }
-                          }
-                        );
+                } else if (accessRole === 'admin') {
+                  connection!.changeUser(
+                    {
+                      user: process.env.ELECTRON_WEBPACK_APP_DB_ADMIN_USER!,
+                      password: process.env.ELECTRON_WEBPACK_APP_DB_ADMIN_PASS!,
+                    },
+                    function (error) {
+                      if (error) {
+                        res.status(500).send(error);
                       } else {
+                        console.log('switched to admin account...');
                         res
                           .status(200)
                           .send({ fullName, username, id, accessRole });
                       }
                     }
-                  });
+                  );
+                } else if (accessRole === 'manager') {
+                  connection!.changeUser(
+                    {
+                      user: process.env.ELECTRON_WEBPACK_APP_DB_MGR_USER!,
+                      password: process.env.ELECTRON_WEBPACK_APP_DB_MGR_PASS!,
+                    },
+                    function (error) {
+                      if (error) {
+                        res.status(500).send(error);
+                      } else {
+                        console.log('switched to manager account...');
+                        res
+                          .status(200)
+                          .send({ fullName, username, id, accessRole });
+                      }
+                    }
+                  );
+                } else {
+                  res.status(200).send({ fullName, username, id, accessRole });
                 }
               });
             }

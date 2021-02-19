@@ -23,7 +23,7 @@ import {
   validateInsertQuery,
   validateAdvancedUpdateQuery,
 } from './middleware/validation';
-import mysql, { Pool } from 'mysql';
+import mysql, { Connection } from 'mysql';
 import { homedir } from 'os';
 import path from 'path';
 import createUser from './endpoints/sql/admin/createUser';
@@ -49,7 +49,7 @@ const PORT = process.env.PORT || 5000;
 export const CONFIG_DIR = path.join(homedir(), '.spesql');
 export const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 
-export let connection: Pool | null = null;
+export let connection: Connection | null = null;
 
 async function bootstrap() {
   const app: Application = express();
@@ -85,7 +85,7 @@ async function bootstrap() {
     })
   );
 
-  connection = mysql.createPool({
+  connection = mysql.createConnection({
     host: process.env.ELECTRON_WEBPACK_APP_DB_HOST!,
     port: parseInt(process.env.ELECTRON_WEBPACK_APP_DB_PORT!),
     user: process.env.ELECTRON_WEBPACK_APP_DB_GUEST_USER!,
@@ -94,19 +94,27 @@ async function bootstrap() {
     connectTimeout: 10000,
   });
 
-  connection.getConnection(function (err, connection) {
-    if (connection) {
-      console.log('Connected to MySQL Server');
-    } else if (err) {
+  connection.connect(function (err) {
+    if (err) {
       console.log(err);
-      // tell react what's up
-      // win?.webContents.send('NO CONNECTION');
-      // sendStatusToWindow({
-      //   type: 'error',
-      //   message: 'Failed to connected to the Database. Please check the VPN',
-      // });
+    } else {
+      console.log('Connected to MySQL Server');
     }
   });
+
+  // connection.getConnection(function (err, connection) {
+  //   if (connection) {
+  //     console.log('Connected to MySQL Server');
+  //   } else if (err) {
+  //     console.log(err);
+  //     // tell react what's up
+  //     // win?.webContents.send('NO CONNECTION');
+  //     // sendStatusToWindow({
+  //     //   type: 'error',
+  //     //   message: 'Failed to connected to the Database. Please check the VPN',
+  //     // });
+  //   }
+  // });
 
   // GLOBAL / GUEST ROUTES
   app.get('/api/viewer', viewer);
