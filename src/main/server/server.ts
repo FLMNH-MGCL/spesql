@@ -8,7 +8,6 @@ import insert from './endpoints/sql/insert';
 import update, { advancedUpdate } from './endpoints/sql/update';
 import deleteQuery from './endpoints/sql/delete';
 import bulkInsert from './endpoints/sql/bulkInsert';
-import getConfig from './endpoints/getConfig';
 import {
   adminRoute,
   managerRoute,
@@ -27,9 +26,6 @@ import {
 import mysql, { Pool } from 'mysql';
 import { homedir } from 'os';
 import path from 'path';
-import fs from 'fs';
-import { MySqlCredentials } from './types';
-import updateConfig from './endpoints/updateConfig';
 import createUser from './endpoints/sql/admin/createUser';
 import { getQueriables } from './endpoints/sql/utils/queriables';
 import viewer from './endpoints/auth/viewer';
@@ -115,9 +111,6 @@ async function bootstrap() {
   // GLOBAL / GUEST ROUTES
   app.get('/api/viewer', viewer);
   app.get('/api/check-connection', checkConnection);
-
-  app.get('/api/config/get', getConfig);
-  app.post('/api/config/update', updateConfig);
 
   app.post('/api/login', login);
   app.post('/api/logout', logout);
