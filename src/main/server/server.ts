@@ -55,7 +55,7 @@ export const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 
 export let connection: Pool | null = null;
 
-async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
+async function bootstrap(mysqlCredentials: Partial<MySqlCredentials> | null) {
   const app: Application = express();
 
   const corsOptions = {
@@ -92,6 +92,8 @@ async function bootstrap(mysqlCredentials: MySqlCredentials | null) {
   if (mysqlCredentials) {
     connection = mysql.createPool({
       ...mysqlCredentials,
+      host: process.env.ELECTRON_WEBPACK_APP_DB_HOST!,
+      port: parseInt(process.env.ELECTRON_WEBPACK_APP_DB_PORT!),
       connectTimeout: 10000,
     });
 
@@ -211,6 +213,6 @@ fs.readFile(CONFIG_FILE, (err, data) => {
   if (err) {
     bootstrap(null);
   } else {
-    bootstrap(JSON.parse(data.toString()) as MySqlCredentials);
+    bootstrap(JSON.parse(data.toString()) as Partial<MySqlCredentials>);
   }
 });
