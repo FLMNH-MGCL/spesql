@@ -1,14 +1,46 @@
 import { Request, Response } from 'express';
+import { connection } from '../../server';
 
 export default function logout(req: Request, res: Response) {
+  let connectionError: any = null;
+  let sessionError: any = null;
+
+  if (!connection) {
+    connectionError = 'Could not establish connection with the Database!';
+  } else {
+    connection.getConnection(function (error, innerConnection) {
+      if (error) {
+        connectionError = error;
+      } else {
+        innerConnection.changeUser(
+          {
+            user: process.env.ELECTRON_WEBPACK_APP_DB_GUEST_USER!,
+            password: process.env.ELECTRON_WEBPACK_APP_DB_GUEST_PASS!,
+          },
+          function (err) {
+            if (err) {
+              connectionError = err;
+            } else {
+              console.log('restored default user priviledge...');
+            }
+          }
+        );
+      }
+    });
+  }
+
   req.session?.destroy((error) => {
     if (error) {
-      console.log(error);
-      res.sendStatus(500);
+      res.status(500);
+      sessionError = error;
+    } else {
+      res.clearCookie(process.env.ELECTRON_WEBPACK_APP_SESSION_NAME!);
     }
 
-    res.clearCookie(process.env.ELECTRON_WEBPACK_APP_SESSION_NAME!);
-
-    res.sendStatus(200);
+    if (sessionError || connectionError) {
+      res.status(500).send({ sessionError, connectionError });
+    } else {
+      res.sendStatus(200);
+    }
   });
 }

@@ -55,7 +55,7 @@ export const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 
 export let connection: Pool | null = null;
 
-async function bootstrap(mysqlCredentials: Partial<MySqlCredentials> | null) {
+async function bootstrap() {
   const app: Application = express();
 
   const corsOptions = {
@@ -89,28 +89,28 @@ async function bootstrap(mysqlCredentials: Partial<MySqlCredentials> | null) {
     })
   );
 
-  if (mysqlCredentials) {
-    connection = mysql.createPool({
-      ...mysqlCredentials,
-      host: process.env.ELECTRON_WEBPACK_APP_DB_HOST!,
-      port: parseInt(process.env.ELECTRON_WEBPACK_APP_DB_PORT!),
-      connectTimeout: 10000,
-    });
+  connection = mysql.createPool({
+    host: process.env.ELECTRON_WEBPACK_APP_DB_HOST!,
+    port: parseInt(process.env.ELECTRON_WEBPACK_APP_DB_PORT!),
+    user: process.env.ELECTRON_WEBPACK_APP_DB_GUEST_USER!,
+    password: process.env.ELECTRON_WEBPACK_APP_DB_GUEST_PASS!,
+    database: process.env.ELECTRON_WEBPACK_APP_DB_DEFAULT_TABLE!,
+    connectTimeout: 10000,
+  });
 
-    connection.getConnection(function (err, connection) {
-      if (connection) {
-        console.log('Connected to MySQL Server');
-      } else if (err) {
-        console.log(err);
-        // tell react what's up
-        // win?.webContents.send('NO CONNECTION');
-        // sendStatusToWindow({
-        //   type: 'error',
-        //   message: 'Failed to connected to the Database. Please check the VPN',
-        // });
-      }
-    });
-  }
+  connection.getConnection(function (err, connection) {
+    if (connection) {
+      console.log('Connected to MySQL Server');
+    } else if (err) {
+      console.log(err);
+      // tell react what's up
+      // win?.webContents.send('NO CONNECTION');
+      // sendStatusToWindow({
+      //   type: 'error',
+      //   message: 'Failed to connected to the Database. Please check the VPN',
+      // });
+    }
+  });
 
   // GLOBAL / GUEST ROUTES
   app.get('/api/viewer', viewer);
@@ -209,10 +209,12 @@ async function bootstrap(mysqlCredentials: Partial<MySqlCredentials> | null) {
   });
 }
 
-fs.readFile(CONFIG_FILE, (err, data) => {
-  if (err) {
-    bootstrap(null);
-  } else {
-    bootstrap(JSON.parse(data.toString()) as Partial<MySqlCredentials>);
-  }
-});
+bootstrap();
+
+// fs.readFile(CONFIG_FILE, (err, data) => {
+//   if (err) {
+//     bootstrap(null);
+//   } else {
+//     bootstrap(JSON.parse(data.toString()) as Partial<MySqlCredentials>);
+//   }
+// });
