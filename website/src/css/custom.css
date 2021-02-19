@@ -33,6 +33,39 @@
   --ifm-hero-text-color: var(--ifm-color-white);
 } */
 
+.shadow {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.round {
+  border-radius: 0.375rem;
+}
+
+.round-full {
+  border-radius: 9999px;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.object-scale-down {
+  object-fit: scale-down;
+}
+
+.space-r {
+  margin-right: 0.5rem;
+}
+
+.space-l {
+  margin-left: 0.5rem;
+}
+
 :root {
   --ifm-color-primary: #278b76;
   --ifm-color-primary-dark: #1f6d5c;

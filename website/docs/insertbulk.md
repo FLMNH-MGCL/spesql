@@ -9,7 +9,8 @@ In SpeSQL you won't actually be handling any of the SQL insert statements, rathe
 
 <img
 src={require('./assets/bulkinsert.png').default}
-alt="Example banner"
+alt="Bulk Insert"
+class="shadow round"
 />
 
 <br/>
@@ -29,11 +30,16 @@ This method takes a considerable amount of time to process and insert
 
 This is the 'true' bulk insert option; validation is run on all of the rows, and valid entries are added to a singluar insert query. The major benefit of this method is the time it takes to process and insert the data. One consideration is that since this is a singular query, if one of the entries throws a server-side error the entire query will fail.
 
+### Download Failures
+
+If selected, any rows that fail validation will be downloaded to their own CSV document. This is a utility added so that you may automically separate the rows that were uploaded from those that were not.
+
 ## CSV Paste
 
 <img
 src={require('./assets/bulkinsertpaste.png').default}
-alt="Example banner"
+alt="Bulk Insert Paste"
+class="shadow round"
 />
 
 <br/>

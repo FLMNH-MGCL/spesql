@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Editor from 'react-simple-code-editor';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-sql.min.js';

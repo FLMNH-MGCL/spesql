@@ -8,6 +8,7 @@ Update queries are those which update tuples in the database given a set of chan
 <img
 src={require('./assets/bulkupdate.png').default}
 alt="Single Update Form"
+class="shadow round"
 />
 
 <br/>

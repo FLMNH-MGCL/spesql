@@ -75,10 +75,10 @@ export default function EditBroadChart() {
     shallow
   );
 
-  const { title, is3D, legend, chartType } = useChartStore(
+  const { title, legend, chartType } = useChartStore(
     (state) => ({
       title: state.config.options.title,
-      is3D: state.config.options.is3D,
+      // is3D: state.config.options.is3D,
       legend: state.config.options.legend,
       chartType: state.config.chartType,
     }),

@@ -10,7 +10,6 @@ module.exports = {
           label: 'Home Page',
           items: [
             'homelayout',
-            'header',
             'specimentable',
             'specimenview',
             {
@@ -20,10 +19,8 @@ module.exports = {
                 'selectquery',
                 'countquery',
                 'updatebulk',
-                'updatesingle',
                 'insertbulk',
                 'insertsingle',
-                'deletequery',
               ],
             },
           ],

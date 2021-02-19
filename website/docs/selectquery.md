@@ -8,6 +8,7 @@ Select queries are those which retrieve data from one or more tables in the data
 <img
 src={require('./assets/selectquery.png').default}
 alt="Select Query Form"
+class="shadow round"
 />
 
 ## SQL Syntax Basics

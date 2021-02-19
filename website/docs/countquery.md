@@ -10,6 +10,7 @@ Please note: All select queries have their size displayed at the table footer, t
 <img
 src={require('./assets/countquery.png').default}
 alt="Count Query Form"
+class="shadow round"
 />
 
 ## SQL Syntax Basics

@@ -9,24 +9,7 @@ import shallow from 'zustand/shallow';
 import statsImage from '../assets/svg/stats.svg';
 import CreateDownloadModal from './modals/CreateDownloadModal';
 import ShowQueryButton from './buttons/ShowQueryButton';
-import EditBroadChart from './modals/charts/configs/EditBroadChart';
 import { getConfigModal } from './modals/charts/utils';
-
-// function ChartError(props: any) {
-//   console.log(props);
-
-//   return <div>fff</div>;
-// }
-
-/**
- * explorer: { 
-            actions: ['dragToZoom', 'rightClickToReset'],
-            axis: 'horizontal',
-            keepInBounds: true,
-            maxZoomIn: 4.0},
-
-                      
- */
 
 function EmptyTableArt() {
   return (

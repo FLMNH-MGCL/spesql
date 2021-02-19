@@ -10,6 +10,7 @@ In SpeSQL you won't actually be handling any of the SQL insert statements, rathe
 <img
 src={require('./assets/singleinsert.png').default}
 alt="Example banner"
+class="shadow round"
 />
 
 <br/>
