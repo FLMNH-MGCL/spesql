@@ -21,13 +21,17 @@ export default function DroppableList({
   snapshot: DroppableStateSnapshot;
 } & DroppableListProps) {
   const getListStyle = (isDraggingOver: boolean) => ({
-    background: isDraggingOver ? '#68d391' : '#f9fafb',
+    background: isDraggingOver
+      ? '#68d391'
+      : localStorage.theme === 'dark'
+      ? 'rgb(50,50,50)'
+      : '#f9fafb',
     width: 250,
   });
 
   return (
     <div>
-      <Heading>{heading}</Heading>
+      <Heading className="mb-2">{heading}</Heading>
       <div
         {...provided.droppableProps}
         ref={provided.innerRef}

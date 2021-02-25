@@ -51,19 +51,6 @@ module.exports = {
         },
       ],
     },
-
-    // algolia: {
-    //   apiKey: 'YOUR_API_KEY',
-    //   indexName: 'YOUR_INDEX_NAME',
-
-    //   // Optional: see doc section bellow
-    //   contextualSearch: true,
-
-    //   // Optional: Algolia search parameters
-    //   searchParameters: {},
-
-    //   //... other Algolia params
-    // },
     footer: {
       style: 'dark',
       links: [
@@ -76,10 +63,6 @@ module.exports = {
             },
             { label: 'Usage', to: '/docs/homelayout' },
             { label: 'Additional Guides', to: '/docs/fieldguide' },
-            // {
-            //   label: 'Second Doc',
-            //   to: 'docs/doc2/',
-            // },
           ],
         },
         {
@@ -101,7 +84,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} FLMNH-MGCL (Documentation Built with Docusaurus).`,
     },
   },
   presets: [
@@ -116,6 +99,5 @@ module.exports = {
         },
       },
     ],
-    // ['@docusaurus/theme-search-algolia', {}],
   ],
 };

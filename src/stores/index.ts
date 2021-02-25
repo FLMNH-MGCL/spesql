@@ -25,22 +25,6 @@ export const defaultTableConfig = {
   ],
 };
 
-// function resetLog(
-//   logName: string,
-//   set: (
-//     partial: PartialState<SpesqlSession>,
-//     replace?: boolean | undefined
-//   ) => void
-// ) {
-//   set((state) => ({
-//     ...state,
-//     errors: {
-//       ...state.errors,
-//       [logName]: null,
-//     },
-//   }));
-// }
-
 // TODO: change naming scheme for some of these fields, they don't make sense
 type SpesqlSession = {
   user?: User | null;
