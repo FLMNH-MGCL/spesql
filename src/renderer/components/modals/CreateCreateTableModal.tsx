@@ -37,7 +37,7 @@ const tableCreationString = `CREATE TABLE \`table_name\` (
   \`collectedDay\` varchar(2) DEFAULT NULL,
   \`sex\` char(1) DEFAULT NULL,
   \`lifeStage\` varchar(40) DEFAULT NULL,
-  \`habitat\` varchar(40) DEFAULT NULL,
+  \`habitat\` varchar(50) DEFAULT NULL,
   \`occurrenceRemarks\` text,
   \`molecularOccurrenceRemarks\` text,
   \`samplingProtocol\` varchar(20) DEFAULT NULL,
