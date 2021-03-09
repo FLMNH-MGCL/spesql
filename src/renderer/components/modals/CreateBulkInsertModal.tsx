@@ -24,6 +24,7 @@ import {
   Text,
 } from '@flmnh-mgcl/ui';
 import { CSVLink } from 'react-csv';
+import ExcelReader from '../ExcelReader';
 
 function CSVParser({ onFileUpload }: UploadProps) {
   const { notify } = useNotify();
@@ -32,7 +33,7 @@ function CSVParser({ onFileUpload }: UploadProps) {
   const updateBulkInsertLog = useStore((state) => state.updateBulkInsertLog);
 
   function handleOnFileLoad(data: any) {
-    // console.log(data);
+    console.log(data);
     if (!data || !data.length) {
       notify({
         title: 'Upload Error',
@@ -109,6 +110,7 @@ function CSVParser({ onFileUpload }: UploadProps) {
       onRemoveFile={handleRemoveFile}
       addRemoveButton
       isReset={isReset}
+      accept=".csv"
     >
       <div className="text-center">
         <svg
@@ -126,11 +128,8 @@ function CSVParser({ onFileUpload }: UploadProps) {
           />
         </svg>
         <p className="mt-1 text-sm text-gray-600 dark:text-dark-300">
-          Click or drag and drop to upload a file
+          Click or drag and drop to upload a CSV file
         </p>
-        <p className="mt-1 text-xs text-gray-500 dark:text-dark-200">
-          CSV files only (don't worry, I'm working on XLSX)
-        </p>{' '}
       </div>
     </CSVReader>
   );
@@ -172,6 +171,8 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   const [failures, setFailures] = useState<any[]>();
   const failureRef = useRef(failures);
   const csvRef = useRef<any>();
+
+  const [useCsv, useCsvMethods] = useToggle(true);
 
   const [progress, setProgress] = useState(0);
 
@@ -537,7 +538,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
           <div className="pt-8 pb-2">
             <Select
               name=""
-              className="pb-3 -mt-3"
+              className="-mt-3"
               options={tables}
               value={databaseTable}
               label="Select a Table"
@@ -546,8 +547,22 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
               }}
             />
 
-            {tab === 0 && (
+            <div className="flex space-x-2 py-2">
+              <Radio label="CSV" checked={useCsv} onChange={useCsvMethods.on} />
+
+              <Radio
+                label="XLSX"
+                checked={!useCsv}
+                onChange={useCsvMethods.off}
+              />
+            </div>
+
+            {tab === 0 && useCsv && (
               <CSVParser onFileUpload={(data: any) => setRawFile(data)} />
+            )}
+
+            {tab === 0 && !useCsv && (
+              <ExcelReader onFileUpload={(data: any) => setRawFile(data)} />
             )}
 
             {tab === 1 && (
