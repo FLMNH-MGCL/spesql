@@ -79,6 +79,29 @@ export default function useLogError() {
         update([error]);
       }
     },
+
+    logError(data: any, logName: keyof typeof errors) {
+      const logs = errorsRef.current[logName];
+      let error: any = {};
+      try {
+        const { code, message } = data;
+        error = { code, message };
+      } catch {
+        error = {
+          code: 'CLIENTERR',
+          message: 'Error during the logging process of previous error!',
+        };
+      }
+
+      const update = updaters[logName as keyof typeof updaters];
+      if (logs && logs.length) {
+        let newErrrors = [error, ...logs];
+        update(newErrrors);
+      } else {
+        update([error]);
+      }
+    },
+
     logAdminUserError(responseData: any) {
       const logs = adminErrorsRef.current?.userErrors;
       let error: any = {};

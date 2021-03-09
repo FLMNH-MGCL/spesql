@@ -155,13 +155,24 @@ export async function validateAdvancedUpdateQuery(
   res: Response,
   next: NextFunction
 ) {
+  const query: string = req.body.query;
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
+  } else if (!query) {
+    res.status(400).send('No query detected');
+  } else if (!query.toLowerCase().startsWith('update')) {
+    res
+      .status(403)
+      .send('Only Update queries may be issued from this endpoint');
+  } else if (!query.toLowerCase().includes('where')) {
+    res.status(403).send('You must use conditional updates');
+  } else if (query.toLowerCase().includes('*')) {
+    res.status(403).send('You may not use wildcards');
   } else {
     const userId = req.session!.userId;
     connection.query(`SELECT role FROM users WHERE id='${userId}'`);
+    next();
   }
-  next();
 }
 
 // TODO
@@ -186,11 +197,23 @@ export async function validateDeleteQuery(
   res: Response,
   next: NextFunction
 ) {
+  const query: string = req.body.query;
+
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
+  } else if (!query) {
+    res.status(400).send('No query detected');
+  } else if (!query.toLowerCase().startsWith('delete')) {
+    res
+      .status(403)
+      .send('Only Delete queries may be issued from this endpoint');
+  } else if (!query.toLowerCase().includes('where')) {
+    res.status(403).send('You must use conditional deletions');
+  } else if (query.toLowerCase().includes('*')) {
+    res.status(403).send('You may not use wildcards');
   } else {
     const userId = req.session!.userId;
     connection.query(`SELECT role FROM users WHERE id='${userId}'`);
+    next();
   }
-  next();
 }

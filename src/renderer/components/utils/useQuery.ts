@@ -43,7 +43,12 @@ export default function useQuery() {
 
   const [, { expireSession, awaitReauth }] = useExpiredSession();
 
-  const { logSqlError, logAdminUserError, logAdminTableError } = useLogError();
+  const {
+    logSqlError,
+    logAdminUserError,
+    logAdminTableError,
+    logError,
+  } = useLogError();
 
   // TODO: handle 403 error codes!!
   const queries = useMemo(
@@ -73,6 +78,14 @@ export default function useQuery() {
 
           await awaitReauth();
           return await queries.advancedUpdate(query);
+        } else if (updateResponse.status === 403) {
+          notify({
+            title: 'Forbidden Error',
+            message: updateResponse.data,
+            level: 'error',
+          });
+
+          return undefined;
         } else {
           notify({
             title: 'Update Failed',
@@ -115,6 +128,15 @@ export default function useQuery() {
             message: 'Invalid count query format',
             level: 'error',
           });
+
+          if (typeof countResponse.data === 'string') {
+            logError(
+              { code: countResponse.status, message: countResponse.data },
+              'count'
+            );
+          } else {
+            logSqlError(countResponse.data, 'count');
+          }
         } else {
           notify({
             title: 'Server Error',

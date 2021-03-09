@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   NeutralValidator,
-  validateAdvancedSelectQuery,
   validateFieldSelection,
   validateTableSelection,
 } from '../../functions/validation';
@@ -11,6 +10,7 @@ import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
 import shallow from 'zustand/shallow';
 import { Form, FormSubmitValues, SelectOption } from '@flmnh-mgcl/ui';
+import CodeEditor from '../CodeEditor';
 
 type Props = {
   onSubmit(values: FormSubmitValues): void;
@@ -18,6 +18,9 @@ type Props = {
 
 export default function SelectQueryForm({ onSubmit }: Props) {
   const [advanced, setAdvanced] = useState(false);
+
+  const [code, setCode] = useState('');
+
   const [tables, setTables] = useState<SelectOption[]>([]);
 
   const { expireSession, expiredSession } = useStore(
@@ -54,23 +57,22 @@ export default function SelectQueryForm({ onSubmit }: Props) {
 
   return (
     <Form onSubmit={onSubmit} id="select-form" mode="onChange">
-      <Form.Group flex>
+      <Form.Group>
         <Form.Radio
           name="advanced-check"
           checked={advanced}
           onChange={() => setAdvanced(!advanced)}
           label="Advanced Query"
         />
-
+      </Form.Group>
+      <Form.Group>
+        <CodeEditor code={code} setCode={setCode} disabled={!advanced} small />
+        {/* hidden input to capture the input on submit */}
         <Form.Input
+          className="hidden"
           name="advancedQuery"
+          value={code}
           disabled={!advanced}
-          register={
-            advanced
-              ? { validate: validateAdvancedSelectQuery }
-              : NeutralValidator
-          }
-          fullWidth
         />
       </Form.Group>
 

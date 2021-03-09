@@ -2,10 +2,10 @@ import { Form, FormSubmitValues, SelectOption } from '@flmnh-mgcl/ui';
 import React, { useEffect, useState } from 'react';
 import {
   NeutralValidator,
-  validateAdvancedCountQuery,
   validateFieldSelection,
   validateTableSelection,
 } from '../../functions/validation';
+import CodeEditor from '../CodeEditor';
 import { fieldOptions } from '../utils/constants';
 import useExpiredSession from '../utils/useExpiredSession';
 import ConditionalForm from './ConditionalForm';
@@ -18,6 +18,7 @@ type Props = {
 export default function CountQueryForm({ onSubmit }: Props) {
   const [advanced, setAdvanced] = useState(false);
   const [tables, setTables] = useState<SelectOption[]>([]);
+  const [code, setCode] = useState('');
 
   const [expiredSession, { expireSession }] = useExpiredSession();
 
@@ -57,12 +58,16 @@ export default function CountQueryForm({ onSubmit }: Props) {
           onChange={() => setAdvanced(!advanced)}
           label="Advanced Query"
         />
+      </Form.Group>
 
+      <Form.Group>
+        <CodeEditor code={code} setCode={setCode} disabled={!advanced} small />
+        {/* hidden input to capture the input on submit */}
         <Form.Input
+          className="hidden"
           name="advancedQuery"
+          value={code}
           disabled={!advanced}
-          register={{ validate: validateAdvancedCountQuery }}
-          fullWidth
         />
       </Form.Group>
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import {
   NeutralValidator,
-  validateAdvancedUpdateQuery,
   validateFieldSelection,
   validateOperator,
   validateTableSelection,
@@ -18,6 +17,7 @@ import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
 import useExpiredSession from '../utils/useExpiredSession';
 import { Form, FormSubmitValues, Heading, SelectOption } from '@flmnh-mgcl/ui';
+import CodeEditor from '../CodeEditor';
 
 type SetFormProps = {
   advanced: boolean;
@@ -122,6 +122,7 @@ type Props = {
 export default function UpdateBulkQueryForm({ onSubmit }: Props) {
   const [advanced, setAdvanced] = useState(false);
   const [tables, setTables] = useState<SelectOption[]>([]);
+  const [code, setCode] = useState('');
 
   const [expiredSession, { expireSession }] = useExpiredSession();
 
@@ -161,14 +162,16 @@ export default function UpdateBulkQueryForm({ onSubmit }: Props) {
           onChange={() => setAdvanced(!advanced)}
           label="Advanced Query"
         />
+      </Form.Group>
 
+      <Form.Group>
+        <CodeEditor code={code} setCode={setCode} disabled={!advanced} small />
+        {/* hidden input to capture the input on submit */}
         <Form.Input
+          className="hidden"
           name="advancedQuery"
+          value={code}
           disabled={!advanced}
-          register={{
-            validate: advanced ? validateAdvancedUpdateQuery : NeutralValidator,
-          }}
-          fullWidth
         />
       </Form.Group>
 

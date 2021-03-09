@@ -20,7 +20,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
 
   const [loading, { on, off }] = useToggle(false);
 
-  const { update, logUpdate } = useQuery();
+  const { update, advancedUpdate, logUpdate } = useQuery();
 
   useKeyboard('Escape', () => {
     onClose();
@@ -93,6 +93,14 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
 
     if (advancedQuery) {
       query = advancedQuery;
+
+      const queryStringRet = await advancedUpdate(query);
+
+      if (queryStringRet) {
+        await logUpdate(queryStringRet, null, databaseTable, null);
+      }
+
+      off();
     } else {
       const conditionals = parseConditions(conditionalCount, values);
 
