@@ -11,11 +11,13 @@ please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/conta
 
 ### Installation
 
-Please <a href="https://github.com/FLMNH-MGCL/spesql/releases" target='_blank'>select and download</a> a release for your platform (i.e. Linux, MacOS, Windows) and proceed with the traditional installation procedure for your platform. On initial launch, you will need to go to the settings page and enter your access credentials in the form to create the configuration file. Once entered and updated in the filesystem (click 'Create' or 'Update'), ensure your VPN is enabled and restart the application. It is now ready for use.
+Please <a href="https://github.com/FLMNH-MGCL/spesql/releases" target='_blank'>select and download</a> a release for your platform (i.e. Linux, MacOS, Windows) and proceed with the traditional installation procedure for your platform.
 
 If you do not have these credentials or lost these credentials, please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly for eligibility. If you are an employee and need additional assistance, please refer to the instructional videos or contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly, as well.
 
-For more information about installation and usage, please read through the (soon to be) official documentation: [flmnh-mgcl.github.io/spesql/docs/](https://flmnh-mgcl.github.io/spesql/docs/).
+### Startup & Usage
+
+Ensure your UF VPN is enabled/connected and simply launch the application. For detailed information about usage, please read through the official documentation: [flmnh-mgcl.github.io/spesql/docs/](https://flmnh-mgcl.github.io/spesql/docs/). This will walk you through all the available features/functions in the software.
 
 ### Database Schema
 
