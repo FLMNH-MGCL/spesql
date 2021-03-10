@@ -16,9 +16,13 @@ class="shadow round"
 <br/>
 <br/>
 
+### File Types
+
+`.csv` and `.xlsx` files are supported. Only one file per upload. If you are uploading an `.xlsx` file be sure there is only one sheet in the document.
+
 ### Table & File Selection
 
-All that is required to run an insert query is to select the target destination (the table in the database to insert into) and then the CSV file containing the entries to insert. In the File Upload method, you simply drag and drop your desired CSV file to load it in.
+All that is required to run an insert query is to select the target destination (the table in the database to insert into) and then the CSV/XLSX file containing the entries to insert. In the File Upload method, you simply drag and drop your desired CSV file to load it in.
 
 ### Row-by-Row
 

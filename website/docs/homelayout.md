@@ -3,12 +3,14 @@ id: homelayout
 title: Layout
 ---
 
+SpeSQL's design is continually changed throughout development as features get added, however the homepage will remain somewhat constant structurely.
+
 <img
 src={require('./assets/homelayout.png').default}
 alt="Example banner"
 />
 
-SpeSQL's design is continually changed throughout development as features get added, however the homepage will remain to be comprised of 3 major parts:
+The homepage is comprised of 3 major parts:
 
 ## Header
 
@@ -28,25 +30,25 @@ class="shadow round"
 The Header has the following dropdown menus with corresponding internal options:
 
 - General Query Menu
-  - Select Query Builder
-  - Count Query Builder
-  - Update Query Builder
-  - Advanced Query Builder
+  - [Select Query Builder](/docs/selectquery)
+  - [Count Query Builder](/docs/countquery)
+  - [Update Query Builder](/docs/updatebulk)
+  - [Advanced Query Builder](/docs/advancedbuilder)
 - Insert Menu
-  - Bulk Insert Form
-  - Single Insert Form
+  - [Bulk Insert Form](/docs/insertbulk)
+  - [Single Insert Form](/docs/insertsingle)
 - User Menu
   - Log Out
-  - Navigate to Settings
+  - Navigate to [Settings](/docs/settingspage)
   - Navigate to Admin Panel
 
 ### Download
 
-This allows you to download the resulting query data as a CSV file. It will be disabled until data becomes available.
+This allows you to download the resulting query data as a CSV file. It will be disabled until data becomes available (i.e. a `select` query is loaded).
 
 ### View Toggle
 
-The toggle to the right of the Download button toggles between the Homepage and the Visualization page. The Visualization page is under active development, focusing on providing Summary Statistics Visualizations to SpeSQL.
+The toggle to the right of the Download button toggles between the Homepage and the Visualization page. The Visualization page is under active development, focusing on providing Summary Statistics Visualizations.
 
 ## Specimen Table
 

@@ -17,77 +17,76 @@ export default function ExcelReader({ onFileUpload }: Props) {
 
   const [hasError, setHasError] = useState(false);
 
-  function handleOnFileLoad(data: any) {
-    if (!data || !data.length) {
-      notify({
-        title: 'Upload Error',
-        message:
-          'No entries were found in the uploaded file. Please remove the selected file',
-        level: 'error',
-      });
-    }
-  }
-
   async function attemptLoad(filePath: string) {
     console.log(filePath);
     const workSheetsFromFile = await xlsx.parse(filePath);
 
-    // FIXME: check for no sheets
-    // FIXME: handle multiple sheets? or cap to one?
-
-    let data = workSheetsFromFile[0].data;
-    let fields = data[0];
-    data.shift();
-
-    const csv = jsonToCSV({
-      fields,
-      data,
-    });
-
-    const parsed: any = await readString(csv, { header: true });
-
-    console.log(parsed);
-
-    if (!parsed || !parsed.data || !parsed.data.length) {
+    if (!workSheetsFromFile || !workSheetsFromFile.length) {
       notify({
         title: 'Upload Error',
         message:
-          'No entries were found in the uploaded file. Please remove the selected file',
+          'No worksheets could be extracted from the uploaded .xslx file',
         level: 'error',
       });
+
+      setHasError(true);
+    } else if (workSheetsFromFile.length > 1) {
+      notify({
+        title: 'Upload Error',
+        message:
+          'Multiple sheets detected: please merge .xlsx sheets together before uploading',
+        level: 'error',
+      });
+
+      setHasError(true);
     } else {
-      const invalidFields = isSpecimen(parsed.data[0]);
+      let data = workSheetsFromFile[0].data;
+      let fields = data[0];
+      data.shift();
 
-      if (invalidFields.length > 0) {
-        let message = 'Entries were found that are not valid specimen: ';
+      const csv = jsonToCSV({
+        fields,
+        data,
+      });
 
-        invalidFields.forEach((field, index) => {
-          if (index != invalidFields.length - 1) {
-            message += field + ', ';
-          } else {
-            message += field + '... ';
-          }
-        });
+      const parsed: any = await readString(csv, { header: true });
 
-        message += 'Please remove the selected file.';
+      // console.log(parsed);
 
+      if (!parsed || !parsed.data || !parsed.data.length) {
         notify({
           title: 'Upload Error',
-          message,
+          message:
+            'No entries were found in the uploaded file. Please remove the selected file',
           level: 'error',
         });
       } else {
-        onFileUpload(parsed.data);
-        setLoaded.on();
+        const invalidFields = isSpecimen(parsed.data[0]);
+
+        if (invalidFields.length > 0) {
+          let message = 'Entries were found that are not valid specimen: ';
+
+          invalidFields.forEach((field, index) => {
+            if (index != invalidFields.length - 1) {
+              message += field + ', ';
+            } else {
+              message += field + '... ';
+            }
+          });
+
+          message += 'Please remove the selected file.';
+
+          notify({
+            title: 'Upload Error',
+            message,
+            level: 'error',
+          });
+        } else {
+          onFileUpload(parsed.data);
+          setLoaded.on();
+        }
       }
     }
-
-    /*
-      workSheetsFromFile -> {
-        name: string;
-        data: unknown[][];
-      }[]
-    */
 
     off();
   }
@@ -104,16 +103,29 @@ export default function ExcelReader({ onFileUpload }: Props) {
     }
 
     if (!acceptedFiles.length) {
+      notify({
+        title: 'Upload Error',
+        message: 'No valid files were detected on upload attempt',
+        level: 'error',
+      });
+
       setHasError(true);
       off();
-      return;
     } else if (acceptedFiles.length > 1) {
-      // TODO: notify
+      notify({
+        title: 'Upload Error',
+        message: 'Cannot handle multiple files at once',
+        level: 'error',
+      });
+
       setHasError(true);
       off();
-      return;
     } else if (!acceptedFiles[0].path) {
-      // TODO: notify
+      notify({
+        title: 'Upload Error',
+        message: 'Failed to extract absolute path of uploaded file',
+        level: 'error',
+      });
       setHasError(true);
       off();
     } else {
@@ -140,6 +152,7 @@ export default function ExcelReader({ onFileUpload }: Props) {
         justifyContent: 'center',
         padding: '20px',
         cursor: 'pointer',
+        // maunually styling div as the other library does to match exact
       }}
     >
       <input {...getInputProps()} />

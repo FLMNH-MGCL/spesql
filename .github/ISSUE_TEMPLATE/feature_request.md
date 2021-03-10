@@ -1,11 +1,13 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Suggest an idea or change for this project
 title: ''
-labels: ''
+labels: 'enhancement'
 assignees: ''
-
 ---
+
+**Is this a NEW feature request or an UPDATE feature request?**
+[NEW / UPDATE]
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]

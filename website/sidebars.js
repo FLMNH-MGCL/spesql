@@ -21,6 +21,7 @@ module.exports = {
                 'updatebulk',
                 'insertbulk',
                 'insertsingle',
+                'advancedbuilder',
               ],
             },
           ],
