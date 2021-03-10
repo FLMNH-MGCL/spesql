@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { connection } from '../../server';
 
 export default function viewer(req: Request, res: Response) {
+  // @ts-ignore: type error here is invalid
   const userId = req.session?.userId;
 
   if (!userId || !connection) {

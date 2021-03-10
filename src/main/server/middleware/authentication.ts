@@ -13,6 +13,7 @@ export function validateSession(
   res: Response,
   next: NextFunction
 ) {
+  // @ts-ignore: type error here is invalid
   if (req.session?.userId === undefined) {
     console.log(req.session);
     res.status(401).send('The session has expired');
@@ -29,6 +30,7 @@ export function validateSession(
  * @param {NextFunction} next: the function in queue, will only get called on successful validation
  */
 export function adminRoute(req: Request, res: Response, next: NextFunction) {
+  // @ts-ignore: type error here is invalid
   const userId = req.session!.userId;
   // const username = req.body.username;
   // const password = req.body.password;
@@ -70,6 +72,7 @@ export function adminRoute(req: Request, res: Response, next: NextFunction) {
  * @param {NextFunction} next: the function in queue, will only get called on successful validation
  */
 export function managerRoute(req: Request, res: Response, next: NextFunction) {
+  // @ts-ignore: type error here is invalid
   const userId = req.session!.userId;
   // const username = req.body.username;
   // const password = req.body.password;

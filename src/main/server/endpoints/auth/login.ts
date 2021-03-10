@@ -36,6 +36,7 @@ export default function login(req: Request, res: Response) {
               // console.log(error);
               res.status(401).send(error);
             } else {
+              // @ts-ignore: type error here is invalid
               req.session!.userId = id;
               req.session!.save((error) => {
                 if (error) {

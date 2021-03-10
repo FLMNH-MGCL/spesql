@@ -81,6 +81,7 @@ export async function validateInsertQuery(
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
   } else {
+    // @ts-ignore: type error here is invalid
     const userId = req.session!.userId;
     connection.query(
       `SELECT role FROM users WHERE id='${userId}'`,
@@ -127,6 +128,7 @@ export async function validateUpdateQuery(
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
   } else {
+    // @ts-ignore: type error here is invalid
     const userId = req.session!.userId;
     connection.query(`SELECT role FROM users WHERE id='${userId}'`);
   }
@@ -169,6 +171,7 @@ export async function validateAdvancedUpdateQuery(
   } else if (query.toLowerCase().includes('*')) {
     res.status(403).send('You may not use wildcards');
   } else {
+    // @ts-ignore: type error here is invalid
     const userId = req.session!.userId;
     connection.query(`SELECT role FROM users WHERE id='${userId}'`);
     next();
@@ -212,6 +215,7 @@ export async function validateDeleteQuery(
   } else if (query.toLowerCase().includes('*')) {
     res.status(403).send('You may not use wildcards');
   } else {
+    // @ts-ignore: type error here is invalid
     const userId = req.session!.userId;
     connection.query(`SELECT role FROM users WHERE id='${userId}'`);
     next();
