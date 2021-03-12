@@ -547,6 +547,7 @@ export default function useQuery() {
       },
 
       async runChartQuery(query: string): Promise<any> {
+        console.log(query);
         const selectResponse = await axios
           .post(BACKEND_URL + '/api/select', {
             query,
