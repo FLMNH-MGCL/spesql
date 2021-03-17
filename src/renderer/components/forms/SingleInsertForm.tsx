@@ -31,6 +31,10 @@ import {
   validateName,
   validateNameListField,
   validateListField,
+  validateFamily,
+  validateSubFamily,
+  validateSuperFamily,
+  validateTribe,
 } from '../../functions/validation';
 import {
   BooleanField,
@@ -188,14 +192,14 @@ function Classification({ page }: FormPart) {
           name="superfamily"
           label="superfamily"
           placeholder="Papilionoidea"
-          register={{ validate: validateProperNoun }}
+          register={{ validate: validateSuperFamily }}
           fullWidth
         />
         <Form.Input
           name="family"
           label="family"
           placeholder="Pieridae"
-          register={{ validate: validateProperNoun }}
+          register={{ validate: validateFamily }}
           fullWidth
         />
       </Form.Group>
@@ -205,14 +209,14 @@ function Classification({ page }: FormPart) {
           name="subfamily"
           label="subfamily"
           placeholder="Pierinae"
-          register={{ validate: validateProperNoun }}
+          register={{ validate: validateSubFamily }}
           fullWidth
         />
         <Form.Input
           name="tribe"
           label="tribe"
           placeholder="Tribe"
-          register={{ validate: validateProperNoun }}
+          register={{ validate: validateTribe }}
           fullWidth
         />
         <Form.Input

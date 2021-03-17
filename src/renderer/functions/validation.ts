@@ -213,10 +213,78 @@ export function validateLowerCase(value: string) {
 
 // ALL OF THESE USE validateProperNoun
 // export function validateOrder(value: string) {}
-// export function validateSuperFamily(value: string) {}
-// export function validateFamily(value: string) {}
-// export function validateSubFamily(value: string) {}
-// export function validateTribe(value: string) {}
+export function validateSuperFamily(value: string) {
+  if (!value || !value.length) {
+    return true;
+  }
+
+  let validProperNoun = validateProperNoun(value);
+
+  // returns either true or a string error message
+  if (validProperNoun !== true) {
+    return validProperNoun;
+  }
+
+  // -oidea or -acea
+  let pattern = new RegExp(/.*(?:oidea$|acea$)/g);
+
+  return pattern.test(value) ? true : 'Invalid suffix (-oidea or -acea)';
+}
+
+export function validateFamily(value: string) {
+  if (!value || !value.length) {
+    return true;
+  }
+
+  let validProperNoun = validateProperNoun(value);
+
+  // returns either true or a string error message
+  if (validProperNoun !== true) {
+    return validProperNoun;
+  }
+
+  // -aceae or -idae
+  let pattern = new RegExp(/.*(?:aceae$|idae$)/g);
+
+  return pattern.test(value) ? true : 'Invalid suffix (-aceae or -idae)';
+}
+
+export function validateSubFamily(value: string) {
+  if (!value || !value.length) {
+    return true;
+  }
+
+  let validProperNoun = validateProperNoun(value);
+
+  // returns either true or a string error message
+  if (validProperNoun !== true) {
+    return validProperNoun;
+  }
+
+  // -oideae or -inae
+  let pattern = new RegExp(/.*(?:oideae$|inae$)/g);
+
+  return pattern.test(value) ? true : 'Invalid suffix (-oideae or -inae)';
+}
+
+export function validateTribe(value: string) {
+  if (!value || !value.length) {
+    return true;
+  }
+
+  let validProperNoun = validateProperNoun(value);
+
+  // returns either true or a string error message
+  if (validProperNoun !== true) {
+    return validProperNoun;
+  }
+
+  // -eae or -ini
+  let pattern = new RegExp(/.*(?:eae$|ini$)/g);
+
+  return pattern.test(value) ? true : 'Invalid suffix (-eae or -ini)';
+}
+
 // export function validateGenus(value: string) {}
 // export function validateSubGenus(value: string) {}
 
@@ -736,7 +804,7 @@ export function validateSpecimen(specimen: any) {
       errors.push({
         field,
         message: ret,
-        fieldValue: specimen[field] as any,
+        fieldValue: specimen[field],
         catalogNumber: specimen.catalogNumber as string,
       });
     }
@@ -747,6 +815,7 @@ export function validateSpecimen(specimen: any) {
 
 // TODO: types need changing?? value might be string or number or string[]
 // TODO: don't call validators for REGEXP operator!!
+// FIXME: lint error --> Reduce the number of non-empty switch cases from 53 to at most 30.
 export function determineAndRunFieldValidator(field: string, value: any) {
   switch (field) {
     case 'catalogNumber':
@@ -761,9 +830,13 @@ export function determineAndRunFieldValidator(field: string, value: any) {
       return validateFixedLengthField('otherIdentifier', value, 25);
     case 'order_':
     case 'superfamily':
+      return validateSuperFamily(value);
     case 'family':
+      return validateFamily(value);
     case 'subfamily':
+      return validateSubFamily(value);
     case 'tribe':
+      return validateTribe(value);
     case 'genus':
     case 'subgenus':
       return validateProperNoun(value);
