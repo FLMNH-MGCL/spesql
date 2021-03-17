@@ -176,6 +176,19 @@ export function validateOtherCatalogNumber(value: string) {
   return true;
 }
 
+export function validateOtherIdentifier(value: string) {
+  let maxLength = 25;
+  if (!value || !value.length) {
+    return true;
+  }
+
+  if (value.length > maxLength) {
+    return `otherIdentifier cannot be longer than ${maxLength} characters`;
+  } else {
+    return true;
+  }
+}
+
 // export function validateProjectNumber(value: string) {}
 
 // TODO: implement me?
@@ -813,133 +826,154 @@ export function validateSpecimen(specimen: any) {
   return errors;
 }
 
+function alwaysTrue(value?: any) {
+  return true;
+}
+
+// FIXME: TODO: make me
+const validators = {
+  catalogNumber: validateCatalogNumber,
+  otherCatalogNumber: validateOtherCatalogNumber,
+  recordNumber: alwaysTrue,
+  projectNumber: validateListField,
+  otherIdentifier: validateOtherIdentifier,
+};
+
 // TODO: types need changing?? value might be string or number or string[]
 // TODO: don't call validators for REGEXP operator!!
 // FIXME: lint error --> Reduce the number of non-empty switch cases from 53 to at most 30.
 export function determineAndRunFieldValidator(field: string, value: any) {
-  switch (field) {
-    case 'catalogNumber':
-      return validateCatalogNumber(value);
-    case 'otherCatalogNumber':
-      return validateOtherCatalogNumber(value);
-    case 'recordNumber':
-      return true;
-    case 'projectNumber':
-      return validateListField(value);
-    case 'otherIdentifier':
-      return validateFixedLengthField('otherIdentifier', value, 25);
-    case 'order_':
-    case 'superfamily':
-      return validateSuperFamily(value);
-    case 'family':
-      return validateFamily(value);
-    case 'subfamily':
-      return validateSubFamily(value);
-    case 'tribe':
-      return validateTribe(value);
-    case 'genus':
-    case 'subgenus':
-      return validateProperNoun(value);
+  const validator = validators[field as keyof typeof validators] ?? null;
 
-    case 'specificEpithet':
-      return validateLowerCase(value);
-    case 'infraspecificEpithet':
-      return true;
-    case 'identificationQualifier':
-      return validateIndentificationQualifier(value);
-    case 'recordedBy':
-    case 'otherCollectors':
-      return validateListField(value);
-    case 'identifiedBy':
-      return validateProperNoun(value);
-    case 'dateIdentified':
-      return validateDateField(value);
-    case 'verbatimDate':
-      return true;
-    case 'collectedYear':
-      return validateCollectedYear(value);
-    case 'collectedMonth':
-      return validateCollectedMonth(value);
-    case 'collectedDay':
-      return validateCollectedDay(value);
-    case 'dateEntered':
-      return validateDateField(value);
-    case 'sex':
-      return validateSex(value);
-    case 'lifeStage':
-      return validateLifeStage(value);
-    case 'habitat':
-      return validateHabitat(value);
-
-    case 'occurrenceRemarks':
-    case 'molecularOccurrenceRemarks':
-      return true;
-
-    case 'samplingProtocol':
-      return validateSamplingProtocol(value);
-    case 'country':
-      return validateCountry(value);
-    case 'stateProvince':
-    case 'county':
-    case 'municipality':
-    case 'locality':
-      return true; // FIXME: maybe not??
-    case 'elevationInMeters':
-      return validateElevation(value);
-    case 'decimalLatitude':
-      return true;
-    case 'decimalLongitude':
-      return true;
-    case 'geodeticDatum':
-      return validateGeodeticDatum(value);
-    case 'coordinateUncertainty':
-      return true;
-    case 'verbatimLatitude':
-      return true;
-    case 'verbatimLongitude':
-      return true;
-    case 'georeferencedBy':
-      return true;
-    case 'disposition':
-      return validateDisposition(value);
-    case 'isLoaned':
-      return true;
-    case 'loanInstitution':
-      return true;
-    case 'loaneeName':
-      return true;
-    case 'loanDate':
-      return true;
-    case 'loanReturnDate':
-      return true;
-    case 'preparations':
-      return validatePreparations(value);
-    case 'freezer':
-      return validateFreezer(value);
-    case 'rack':
-      return validateRack(value);
-    case 'box':
-      return validateBox(value);
-    case 'tubeSize':
-      return validateTubeSize(value);
-    case 'associatedSequences':
-      return true;
-    case 'associatedReferences':
-      return true;
-    case 'withholdData':
-    case 'reared':
-      return validateBooleanField(value);
-    case 'recordEnteredBy':
-      return true;
-    case 'modifiedInfo':
-      return true;
-    case 'fieldNotes':
-      return true;
-    default:
-      // I believe react-hook-form does some wierd async process here, and so I cannot throw this
-      // error and have my boundary pick it up! TODO:
-      // so for now, it just fails the validation
-      // throw new Error('Invalid field was selected as a conditional!');
-      return false;
+  if (!validator) {
+    return false;
   }
+
+  return validator(value);
+
+  // switch (field) {
+  //   case 'catalogNumber':
+  //     return validateCatalogNumber(value);
+  //   case 'otherCatalogNumber':
+  //     return validateOtherCatalogNumber(value);
+  //   case 'recordNumber':
+  //     return true;
+  //   case 'projectNumber':
+  //     return validateListField(value);
+  //   case 'otherIdentifier':
+  //     return validateFixedLengthField('otherIdentifier', value, 25);
+  //   case 'order_':
+  //   case 'superfamily':
+  //     return validateSuperFamily(value);
+  //   case 'family':
+  //     return validateFamily(value);
+  //   case 'subfamily':
+  //     return validateSubFamily(value);
+  //   case 'tribe':
+  //     return validateTribe(value);
+  //   case 'genus':
+  //   case 'subgenus':
+  //     return validateProperNoun(value);
+
+  //   case 'specificEpithet':
+  //     return validateLowerCase(value);
+  //   case 'infraspecificEpithet':
+  //     return true;
+  //   case 'identificationQualifier':
+  //     return validateIndentificationQualifier(value);
+  //   case 'recordedBy':
+  //   case 'otherCollectors':
+  //     return validateListField(value);
+  //   case 'identifiedBy':
+  //     return validateProperNoun(value);
+  //   case 'dateIdentified':
+  //     return validateDateField(value);
+  //   case 'verbatimDate':
+  //     return true;
+  //   case 'collectedYear':
+  //     return validateCollectedYear(value);
+  //   case 'collectedMonth':
+  //     return validateCollectedMonth(value);
+  //   case 'collectedDay':
+  //     return validateCollectedDay(value);
+  //   case 'dateEntered':
+  //     return validateDateField(value);
+  //   case 'sex':
+  //     return validateSex(value);
+  //   case 'lifeStage':
+  //     return validateLifeStage(value);
+  //   case 'habitat':
+  //     return validateHabitat(value);
+
+  //   case 'occurrenceRemarks':
+  //   case 'molecularOccurrenceRemarks':
+  //     return true;
+
+  //   case 'samplingProtocol':
+  //     return validateSamplingProtocol(value);
+  //   case 'country':
+  //     return validateCountry(value);
+  //   case 'stateProvince':
+  //   case 'county':
+  //   case 'municipality':
+  //   case 'locality':
+  //     return true; // FIXME: maybe not??
+  //   case 'elevationInMeters':
+  //     return validateElevation(value);
+  //   case 'decimalLatitude':
+  //     return true;
+  //   case 'decimalLongitude':
+  //     return true;
+  //   case 'geodeticDatum':
+  //     return validateGeodeticDatum(value);
+  //   case 'coordinateUncertainty':
+  //     return true;
+  //   case 'verbatimLatitude':
+  //     return true;
+  //   case 'verbatimLongitude':
+  //     return true;
+  //   case 'georeferencedBy':
+  //     return true;
+  //   case 'disposition':
+  //     return validateDisposition(value);
+  //   case 'isLoaned':
+  //     return true;
+  //   case 'loanInstitution':
+  //     return true;
+  //   case 'loaneeName':
+  //     return true;
+  //   case 'loanDate':
+  //     return true;
+  //   case 'loanReturnDate':
+  //     return true;
+  //   case 'preparations':
+  //     return validatePreparations(value);
+  //   case 'freezer':
+  //     return validateFreezer(value);
+  //   case 'rack':
+  //     return validateRack(value);
+  //   case 'box':
+  //     return validateBox(value);
+  //   case 'tubeSize':
+  //     return validateTubeSize(value);
+  //   case 'associatedSequences':
+  //     return true;
+  //   case 'associatedReferences':
+  //     return true;
+  //   case 'withholdData':
+  //   case 'reared':
+  //     return validateBooleanField(value);
+  //   case 'recordEnteredBy':
+  //     return true;
+  //   case 'modifiedInfo':
+  //     return true;
+  //   case 'fieldNotes':
+  //     return true;
+  //   default:
+  //     // I believe react-hook-form does some wierd async process here, and so I cannot throw this
+  //     // error and have my boundary pick it up! TODO:
+  //     // so for now, it just fails the validation
+  //     // throw new Error('Invalid field was selected as a conditional!');
+  //     return false;
+  // }
 }

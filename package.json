@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@flmnh-mgcl/ui": "^1.0.18",
+    "@flmnh-mgcl/ui": "^1.0.20",
     "@flmnh-mgcl/ui-tailwind-config": "^1.0.1",
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.2.1",
