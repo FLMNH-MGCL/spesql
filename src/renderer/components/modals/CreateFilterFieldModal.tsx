@@ -25,7 +25,7 @@ export default function CreateFilterFieldModal({ disabled }: Props) {
   }
 
   return (
-    <React.Fragment>
+    <div>
       <Modal open={open} onClose={off}>
         <Modal.Content title="Filter Search">
           <Text className="pb-3">
@@ -65,6 +65,6 @@ export default function CreateFilterFieldModal({ disabled }: Props) {
           />
         </svg>
       </Button>
-    </React.Fragment>
+    </div>
   );
 }

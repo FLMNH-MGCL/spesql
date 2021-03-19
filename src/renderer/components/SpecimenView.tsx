@@ -17,7 +17,11 @@ import { useNotify } from './utils/context';
 import { buildSingleUpdateQuery } from '../functions/builder';
 import useQuery from './utils/useQuery';
 
-import { Heading, Radio } from '@flmnh-mgcl/ui';
+import { FormSubmitValues, Heading, Radio } from '@flmnh-mgcl/ui';
+import useWindowDimensions from './utils/useWindowDimensions';
+import Resizable from './Resizable';
+import CreateRecordButton from './buttons/CreateRecordButton';
+import InsertNewRecord from './forms/InsertNewRecord';
 
 // TODO: remove ? where needed
 type OverviewProps = {
@@ -66,7 +70,7 @@ function SpecimenOverview({
 export default function () {
   const { notify } = useNotify();
 
-  const [editing, { on, off }] = useToggle(false);
+  // const [editing, { on, off }] = useToggle(false);
   const [showMissing, missingToggles] = useToggle(false);
   const [loading, loadingToggles] = useToggle(false);
 
@@ -86,10 +90,32 @@ export default function () {
     shallow
   );
 
+  const {
+    isInsertingRecord,
+    isEditingRecord,
+    setIsInsertingRecord,
+    setIsEditingRecord,
+  } = useStore(
+    (state) => ({
+      user: state.user,
+      isInsertingRecord: state.isInsertingRecord,
+      isEditingRecord: state.isEditingRecord,
+      setIsInsertingRecord: state.setIsInsertingRecord,
+      setIsEditingRecord: state.setIsEditingRecord,
+    }),
+    shallow
+  );
+
+  const { width } = useWindowDimensions();
+
   const { update, deleteSpecimen, logUpdate, logDelete } = useQuery();
 
   function cancelEdit() {
-    off();
+    setIsEditingRecord(false);
+  }
+
+  function cancelInsert() {
+    setIsInsertingRecord(false);
   }
 
   async function commitEdit(values: Values) {
@@ -126,7 +152,16 @@ export default function () {
     }
 
     loadingToggles.off();
-    off();
+    setIsEditingRecord(false);
+  }
+
+  async function commitInsert(values: FormSubmitValues) {
+    loadingToggles.on();
+
+    console.log(values);
+
+    loadingToggles.off();
+    setIsInsertingRecord(false);
   }
 
   async function handleDelete(id?: number) {
@@ -153,72 +188,129 @@ export default function () {
     }
   }
 
-  return (
-    <React.Fragment>
-      <div className="table-height overflow-auto px-4 pt-4">
-        {!hasQueried ? (
-          <div className="flex items-center justify-center h-full">
-            <div>
-              <img className="object-scale-down h-48" src={emptyDataIcon} />
-            </div>
-          </div>
-        ) : selectedSpecimen ? (
-          <SpecimenOverview
-            editing={editing}
-            specimen={selectedSpecimen}
-            showEmpty={showMissing}
-            onCommitEdit={commitEdit}
-            onCancelEdit={cancelEdit}
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <div>
-              <img
-                className="object-scale-down h-48"
-                src={selectItemIconTest}
-              />
-              <Heading tag="h3" className="mt-3 text-center">
-                Select a specimen to view more
-              </Heading>
-            </div>
-          </div>
-        )}
+  const HasNotQueried = () => (
+    <div className="flex items-center justify-center h-full select-none">
+      <div>
+        <img
+          className="object-scale-down h-48 select-none"
+          src={emptyDataIcon}
+        />
       </div>
-      <div className="bg-gray-50 dark:bg-dark-600 h-16 flex items-center px-4 justify-between">
-        <div className="flex flex-row space-x-2 items-center">
-          <EditSpecimen
-            onClick={on}
-            disabled={!selectedSpecimen || editing || !hasQueried}
-          />
-          <CreateConfirmModal
-            disabled={!selectedSpecimen}
-            trigger={
-              <DeleteButton disabled={!selectedSpecimen || !hasQueried} />
-            }
-            details="This action cannot be undone"
-            onConfirm={() => handleDelete(selectedSpecimen?.id)}
-          />
+    </div>
+  );
 
-          <Radio
-            disabled={!hasQueried}
-            checked={!hasQueried ? false : showMissing}
-            onChange={missingToggles.toggle}
-            stacked
-            label="Show Missing"
+  const SelectSpecimenPrompt = () => (
+    <div className="flex items-center justify-center h-full select-none">
+      <div>
+        <img
+          className="object-scale-down h-48 select-none"
+          src={selectItemIconTest}
+        />
+        <Heading tag="h3" className="mt-3 text-center">
+          Select a specimen to view more
+        </Heading>
+      </div>
+    </div>
+  );
+
+  const ShowOverview = () => (
+    <SpecimenOverview
+      editing={isEditingRecord}
+      specimen={selectedSpecimen!}
+      showEmpty={showMissing}
+      onCommitEdit={commitEdit}
+      onCancelEdit={cancelEdit}
+    />
+  );
+
+  const InsertRecordFooter = () => (
+    <div className="flex flex-row space-x-2 items-center">
+      <div className="space-x-2 items-center">
+        <CancelEditButton onClick={cancelInsert} loading={loading} />
+        <ConfirmEditButton
+          type="submit"
+          form="new-record-form"
+          loading={loading}
+        />
+      </div>
+    </div>
+  );
+
+  const SelectedSpecimenFooter = () => (
+    <React.Fragment>
+      <div className="flex flex-row space-x-2 items-center">
+        <EditSpecimen
+          onClick={() => setIsEditingRecord(true)}
+          disabled={!selectedSpecimen || isEditingRecord || !hasQueried}
+        />
+        <CreateConfirmModal
+          disabled={!selectedSpecimen}
+          trigger={<DeleteButton disabled={!selectedSpecimen || !hasQueried} />}
+          details="This action cannot be undone"
+          onConfirm={() => handleDelete(selectedSpecimen?.id)}
+        />
+
+        <Radio
+          disabled={!hasQueried}
+          checked={!hasQueried ? false : showMissing}
+          onChange={missingToggles.toggle}
+          stacked
+          label="Show Missing"
+        />
+      </div>
+
+      {isEditingRecord && (
+        <div className="space-x-2 items-center">
+          <CancelEditButton onClick={cancelEdit} loading={loading} />
+          <ConfirmEditButton
+            type="submit"
+            form="inline-update-form"
+            loading={loading}
           />
         </div>
-
-        {editing && (
-          <div className="space-x-2 items-center">
-            <CancelEditButton onClick={cancelEdit} loading={loading} />
-            <ConfirmEditButton
-              type="submit"
-              form="inline-update-form"
-              loading={loading}
-            />
-          </div>
-        )}
-      </div>
+      )}
     </React.Fragment>
+  );
+
+  function renderBody() {
+    if (isInsertingRecord) {
+      return <InsertNewRecord onSubmit={commitInsert} />;
+    } else if (!hasQueried) {
+      return <HasNotQueried />;
+    } else if (selectedSpecimen) {
+      return <ShowOverview />;
+    } else {
+      return <SelectSpecimenPrompt />;
+    }
+  }
+
+  function renderFooter() {
+    if (isInsertingRecord) {
+      return <InsertRecordFooter />;
+    } else if (selectedSpecimen) {
+      return <SelectedSpecimenFooter />;
+    } else {
+      return <CreateRecordButton />;
+    }
+  }
+
+  return (
+    <div className="h-full overflow-hidden bg-white dark:bg-dark-800 shadow-around-lg rounded-md">
+      <Resizable defaultWidth={width * 0.25} leftConstraint={100} dragTo="left">
+        <div className="flex flex-col h-full">
+          <div className="flex-1 h-full px-3 py-1 overflow-y-scroll">
+            {renderBody()}
+          </div>
+
+          {/* FOOTER */}
+          <div className="bg-gray-50 dark:bg-dark-600 h-16 flex items-center px-4 justify-between">
+            {/* if inserting then render insert form, else if I had a selected specimen, render selected footer, 
+            and if I am currently editing show the confirm and cancel buttons. otherwise, just render the insert
+            new record button */}
+            {renderFooter()}
+          </div>
+        </div>
+      </Resizable>
+    </div>
   );
 }

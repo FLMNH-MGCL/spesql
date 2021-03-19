@@ -32,6 +32,12 @@ type SpesqlSession = {
   expiredSession: boolean;
   expireSession(): void;
 
+  isInsertingRecord: boolean;
+  setIsInsertingRecord(isInserting: boolean): void;
+
+  isEditingRecord: boolean;
+  setIsEditingRecord(isEditing: boolean): void;
+
   prefersSound: boolean;
   toggleSoundPreference(newVal?: boolean): void;
 
@@ -76,6 +82,22 @@ export const useStore = create<SpesqlSession>((set) => ({
       ...state,
       expiredSession: true,
     })),
+
+  isInsertingRecord: false,
+  setIsInsertingRecord: function (isInserting) {
+    set((state) => ({
+      ...state,
+      isInsertingRecord: isInserting,
+    }));
+  },
+
+  isEditingRecord: false,
+  setIsEditingRecord: function (isEditing) {
+    set((state) => ({
+      ...state,
+      isEditingRecord: isEditing,
+    }));
+  },
 
   // TODO: should i add a queue for functions to be rerun on expired session?
 
