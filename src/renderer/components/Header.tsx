@@ -27,6 +27,7 @@ export default function Header() {
         <CreateDownloadModal data={data} disableDownload={disableDownload} />
         <VisualizationToggle />
       </div>
+
       {/* user interactions */}
       <div>
         <UserMenu />

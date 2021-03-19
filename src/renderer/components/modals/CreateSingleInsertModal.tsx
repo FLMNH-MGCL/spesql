@@ -6,7 +6,6 @@ import SingleInsertForm from '../forms/SingleInsertForm';
 import useKeyboard from '../utils/useKeyboard';
 import CreateHelpModal from './CreateHelpModal';
 import CreateLogModal from './CreateLogModal';
-// import useQuery from '../utils/useQuery';
 
 type Props = {
   open: boolean;

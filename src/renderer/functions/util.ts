@@ -176,3 +176,7 @@ export function toProperNoun(noun: string) {
 export function specimenToArray(specimen: Specimen) {
   return Object.values(specimen as SpecimenFields);
 }
+
+export function defined(value: any) {
+  return value !== undefined && value !== null;
+}

@@ -64,6 +64,24 @@ import {
 } from '@flmnh-mgcl/ui';
 import Input from '../querybuilder/Input';
 
+// function grabSession(id: string) {
+//   const restoredSessionString = sessionStorage.getItem(id);
+
+//   if (restoredSessionString) {
+//     return JSON.parse(restoredSessionString);
+//   } else {
+//     return null;
+//   }
+// }
+
+// function grabSessionValue(field: string, session: any) {
+//   if (session && session[field] && !!session[field]) {
+//     return session[field];
+//   } else {
+//     return undefined;
+//   }
+// }
+
 type FormPart = {
   page: number;
 };
@@ -114,6 +132,7 @@ function Cataloging({ page }: FormPart) {
         <Form.Select
           name="databaseTable"
           label="Table"
+          // defaultValue={val}
           fullWidth
           options={tables}
           searchable
@@ -755,7 +774,9 @@ type Props = {
 };
 
 function FormErrorHandler() {
-  const { errors } = useFormContext();
+  const { errors, watch, setValue } = useFormContext();
+
+  useFormPersist('single-insert-form', { watch, setValue });
 
   const { notify } = useNotify();
 
@@ -797,10 +818,11 @@ function FormErrorHandler() {
 export default function SingleInsertForm({ page, onSubmit }: Props) {
   return (
     <Form
-      id="single-insert"
+      id="single-insert-form"
       mode="onChange"
       onSubmit={onSubmit}
       className="pb-2"
+      // defaultValues={defaultValues}
     >
       <FormErrorHandler />
       <Cataloging page={page} />

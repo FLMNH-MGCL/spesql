@@ -1,10 +1,8 @@
 import React from 'react';
-import { useFormContext, ValidationRules } from 'react-hook-form';
-
-// this file is not my original work:  github.com/kesne
+import { useFormContext } from 'react-hook-form';
 
 type FormProps<T extends {}> = Omit<T, 'ref' | 'errors' | 'error'> & {
-  register?: ValidationRules;
+  register?: any;
   assignOnChange?: (
     something: Record<string, string>
   ) => Record<string, string>;

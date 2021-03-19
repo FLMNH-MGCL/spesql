@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@flmnh-mgcl/ui": "^1.0.20",
+    "@flmnh-mgcl/ui": "../ui",
     "@flmnh-mgcl/ui-tailwind-config": "^1.0.1",
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.2.1",
@@ -115,6 +115,7 @@
     "file-loader": "^6.1.0",
     "jquery": "^3.5.1",
     "postcss-loader": "^3.0.0",
+    "react-hook-form-persist": "^2.0.0",
     "style-loader": "^1.2.1",
     "ts-node-dev": "^1.0.0-pre.65",
     "typescript": "^3.9.7",
