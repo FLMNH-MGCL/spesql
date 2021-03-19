@@ -6,7 +6,7 @@ export default function SigninPlaceholder() {
   return (
     <div className="h-screen flex items-center">
       <div className="mx-auto w-full max-w-md ">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 min-h-92 flex flex-col space-y-8 mt-12">
+        <div className="bg-white dark:bg-dark-700 py-8 px-4 shadow sm:rounded-lg sm:px-10 min-h-92 flex flex-col space-y-8 mt-12">
           <div className="flex justify-center py-4">
             <Block size="lg" />
           </div>

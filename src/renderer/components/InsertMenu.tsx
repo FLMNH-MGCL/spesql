@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import CreateBulkInsertModal from './modals/CreateBulkInsertModal';
-import CreateSingleInsertModal from './modals/CreateSingleInsertModal';
 import { Dropdown } from '@flmnh-mgcl/ui';
 import { useLocation } from 'react-router-dom';
 
@@ -41,19 +40,11 @@ export default function InsertMenu({ disableCrud }: Props) {
             text="Bulk Insert"
             onClick={disableCrud ? undefined : () => setCurrentModal('bulk')}
           />
-          <Dropdown.Item
-            text="Single Insert"
-            onClick={disableCrud ? undefined : () => setCurrentModal('single')}
-          />
         </Dropdown.Section>
       </Dropdown>
 
       <CreateBulkInsertModal
         open={disableCrud ? false : currentModal === 'bulk'}
-        onClose={() => setCurrentModal(undefined)}
-      />
-      <CreateSingleInsertModal
-        open={disableCrud ? false : currentModal === 'single'}
         onClose={() => setCurrentModal(undefined)}
       />
     </React.Fragment>
