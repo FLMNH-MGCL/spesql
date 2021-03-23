@@ -22,6 +22,7 @@ import useWindowDimensions from './utils/useWindowDimensions';
 import Resizable from './Resizable';
 import CreateRecordButton from './buttons/CreateRecordButton';
 import InsertNewRecord from './forms/InsertNewRecord';
+import { arrayFieldsToString, getSpecimenDefaults } from '../functions/util';
 
 // TODO: remove ? where needed
 type OverviewProps = {
@@ -74,7 +75,7 @@ export default function () {
   const [showMissing, missingToggles] = useToggle(false);
   const [loading, loadingToggles] = useToggle(false);
 
-  const table = useStore((state) => state.queryData.table);
+  const table = useStore((state) => state.queryData.table, shallow);
 
   const { hasQueried } = useStore((state) => ({
     hasQueried:
@@ -108,7 +109,7 @@ export default function () {
 
   const { width } = useWindowDimensions();
 
-  const { update, deleteSpecimen, logUpdate, logDelete } = useQuery();
+  const { update, deleteSpecimen, logUpdate, logDelete, insert } = useQuery();
 
   function cancelEdit() {
     setIsEditingRecord(false);
@@ -125,6 +126,17 @@ export default function () {
 
     loadingToggles.on();
 
+    const correctedSpecimen = getSpecimenDefaults(selectedSpecimen);
+
+    const updatedFieldArray = arrayFieldsToString(values as Specimen);
+    const correctedUpdates = getSpecimenDefaults(updatedFieldArray);
+
+    console.log('RAW VALUES (AS SPECIMEN):', values as Specimen);
+    console.log('RAW VALUES (AS ARRAY):', updatedFieldArray);
+    console.log('CORRECTED NULLS ON UPDATES:', correctedUpdates);
+
+    console.log('\nCORRECTED NULLS ON SELECTED:', correctedSpecimen);
+
     const { errors, updates, query, logUpdates } = buildSingleUpdateQuery(
       databaseTable,
       values,
@@ -139,29 +151,53 @@ export default function () {
       });
 
       // TODO: write to log
+
+      // console.log(errors);
+    } else if (!updates || !Object.keys(updates).length) {
+      notify({
+        title: 'Update Failed',
+        message: 'No changes were detected in the form',
+        level: 'warning',
+      });
     } else {
       const conditions = ['id', selectedSpecimen.id];
 
-      const storedCatalogNumber = selectedSpecimen.catalogNumber;
+      const storedCatalogNumber = selectedSpecimen.catalogNumber ?? null;
 
       const queryString = await update(query, conditions, updates);
 
       if (queryString) {
-        await logUpdate(queryString, logUpdates, table, storedCatalogNumber!);
+        await logUpdate(queryString, logUpdates, table, storedCatalogNumber);
+        setIsEditingRecord(false);
+      } else {
+        notify({
+          title: 'Update Failed',
+          message: 'Please check the corresponding logs',
+          level: 'error',
+        });
       }
     }
 
     loadingToggles.off();
-    setIsEditingRecord(false);
   }
 
   async function commitInsert(values: FormSubmitValues) {
     loadingToggles.on();
 
-    console.log(values);
+    const targetTable = values.databaseTable;
+
+    delete values.databaseTable;
+
+    const correctedArrays = arrayFieldsToString(values as Specimen);
+    const correctedNulls = getSpecimenDefaults(correctedArrays);
+
+    const inserted = await insert(targetTable, correctedNulls);
+
+    if (inserted) {
+      setIsInsertingRecord(false);
+    }
 
     loadingToggles.off();
-    setIsInsertingRecord(false);
   }
 
   async function handleDelete(id?: number) {
@@ -174,7 +210,6 @@ export default function () {
       });
       return;
     } else {
-      // TODO: recieve errors ??
       const queryString = await deleteSpecimen(id, table);
 
       if (queryString) {

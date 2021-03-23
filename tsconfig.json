@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["dom", "esnext", "es2017.object"],
+    "lib": ["dom", "esnext", "es2017.object", "es2018.regexp"],
     "outDir": "./lib",
     "downlevelIteration": true,
     "strict": true,

@@ -1,6 +1,6 @@
 import { FormSubmitValues } from '@flmnh-mgcl/ui';
 import clsx from 'clsx';
-import { SpecimenFields } from '../types';
+import { Specimen, SpecimenFields } from '../types';
 import {
   determineAndRunFieldValidator,
   specialCaseEmpties,
@@ -127,58 +127,31 @@ export function buildUpdateQuery(
   return { queryString, conditionalPairs, updates };
 }
 
-// export function buildSingleUpdateQuery(table: string) {
-//   let queryString = clsx('UPDATE', table, 'SET ? WHERE ?? = ?');
-
-//   return { queryString };
-// }
-
 export function buildSingleUpdateQuery(
   table: string,
-  values: FormSubmitValues,
-  selectedSpecimen: Partial<SpecimenFields>
+  updatedSpecimen: Partial<SpecimenFields>,
+  currentSpecimen: Partial<SpecimenFields>
 ) {
   let query = clsx('UPDATE', table, 'SET ? WHERE ?? = ?');
 
-  let errors: any[] = [];
-  let logUpdates: any[] = [];
   let updates: any = {};
+  let logUpdates: any[] = [];
+  let errors: any[] = [];
 
-  // console.log(values);
+  Object.keys(updatedSpecimen).forEach((key) => {
+    const _key = key as keyof SpecimenFields;
+    if (updatedSpecimen[_key] !== currentSpecimen[_key]) {
+      const valid = determineAndRunFieldValidator(key, updatedSpecimen[_key]);
 
-  // TODO: try and break me please
-  Object.keys(values).forEach((key) => {
-    if (selectedSpecimen[key as keyof SpecimenFields] !== values[key]) {
-      const error = determineAndRunFieldValidator(key, values[key]);
-
-      if (error !== true) {
-        errors.push({ field: key, message: error });
-      } else if (key in specialCaseEmpties) {
-        // IF the value[key] is empty (null, undefined, ''), and if it doesn't match its
-        // special case empty value (e.g. if it needs to be null or undefined but is '', or vice-versa)
-        // then it should not be updated
-        if (
-          !values[key] &&
-          specialCaseEmpties[key as keyof typeof specialCaseEmpties] !==
-            values[key]
-        ) {
-          // therefore, I do nothing with it
-        } else {
-          // update the field
-          updates[key] = values[key];
-          logUpdates.push({
-            [key]: {
-              old: selectedSpecimen[key as keyof SpecimenFields],
-              new: values[key],
-            },
-          });
-        }
+      // valid: string | boolean
+      if (!valid || valid !== true) {
+        errors.push({ field: _key, message: valid });
       } else {
-        updates[key] = values[key];
+        updates[_key] = updatedSpecimen[_key];
         logUpdates.push({
-          [key]: {
-            old: selectedSpecimen[key as keyof SpecimenFields],
-            new: values[key],
+          [_key]: {
+            old: currentSpecimen[_key],
+            new: updatedSpecimen[_key],
           },
         });
       }

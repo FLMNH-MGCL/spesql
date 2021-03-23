@@ -1,4 +1,4 @@
-import { Specimen, SpecimenFields } from '../types';
+import { Specimen, SpecimenFields, SpecimenValidator } from '../types';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
 import { User } from '../../stores';
 
@@ -73,11 +73,26 @@ export function arrayFieldsToString(partiallyCorrect: Specimen) {
 export function getSpecimenDefaults(specimen: Specimen) {
   let corrected = specimen;
 
-  Object.keys(specimen).forEach((key) => {
-    //@ts-ignore
-    if (specimen[key] === '') {
-      //@ts-ignore
-      corrected[key] = null;
+  let keys = Object.keys(specimen);
+
+  let templateSpecimen = SpecimenValidator;
+  // I do not want to validate ID, it should not exist in the form values
+  delete templateSpecimen.id;
+
+  if (keys.length < Object.keys(templateSpecimen).length) {
+    // When null values in the single update form are hidden,
+    // this condition gets met
+    keys = Object.keys(SpecimenValidator);
+  }
+
+  keys.forEach((key) => {
+    // I do not want to alter id in any way
+    if (key !== 'id') {
+      // @ts-ignore
+      if (specimen[key] === undefined || specimen[key] === '') {
+        // @ts-ignore
+        corrected[key] = null;
+      }
     }
   });
 

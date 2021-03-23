@@ -299,6 +299,8 @@ export default function useQuery() {
         id: number,
         table: string
       ): Promise<any | undefined> {
+        console.log(id, table);
+
         const deleteResponse = await axios.post(BACKEND_URL + '/api/delete', {
           id,
           table,
@@ -308,9 +310,7 @@ export default function useQuery() {
           setSelectedSpecimen(null);
           queries.refresh();
 
-          const { query } = deleteResponse.data;
-
-          return query;
+          return deleteResponse.data?.query;
         } else if (deleteResponse.status === 401) {
           expireSession();
 
@@ -414,7 +414,7 @@ export default function useQuery() {
         }
       },
 
-      async insert(table: string, values: Specimen) {
+      async insert(table: string, values: Specimen): Promise<boolean> {
         const insertResponse = await axios
           .post(BACKEND_URL + '/api/insert/single', {
             values,
@@ -423,12 +423,19 @@ export default function useQuery() {
           .catch((error) => error.response);
 
         if (insertResponse.status === 201) {
+          notify({
+            title: 'Inserted New Record',
+            message: 'Sucessfully insert the new specimen into the database',
+            level: 'success',
+          });
+
+          return true;
         } else if (insertResponse.status === 401) {
           // session expired
           expireSession();
 
           await awaitReauth();
-          await queries.insert(table, values);
+          return await queries.insert(table, values);
         } else {
           notify(
             {
@@ -441,6 +448,8 @@ export default function useQuery() {
           );
 
           logSqlError(insertResponse.data, 'singleInsert');
+
+          return false;
         }
       },
 
@@ -668,8 +677,24 @@ export default function useQuery() {
           } else {
             callback && callback();
             setData(specimen);
-            setTable(databaseTable);
             setCurrentQuery(query);
+
+            let pattern = /^.* from (?<first>[a-zA-z_-]+)/i;
+
+            const table = query.match(pattern)?.groups?.first;
+
+            console.log(table, query, query.match(pattern));
+
+            if (table) {
+              setTable(table);
+            } else {
+              notify({
+                title: 'Could not extract table',
+                message:
+                  'The table targeted in your advanced query could not be determined. Please issue a bug report!',
+                level: 'warning',
+              });
+            }
 
             // TODO: add util to calc this
             setAvailableFields('*');

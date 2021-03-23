@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Chart as GChart } from 'react-google-charts';
 import { Button, Heading, Spinner, TABLE_CLASSES } from '@flmnh-mgcl/ui';
 import FullScreenButton from './buttons/FullScreenButton';
-import clsx from 'clsx';
 import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 import { useChartStore } from '../../stores/chart';
 import shallow from 'zustand/shallow';
