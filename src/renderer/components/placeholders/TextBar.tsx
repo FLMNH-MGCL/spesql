@@ -10,7 +10,7 @@ export default function TextBar({ width = 24, height = 4, fullWidth }: Props) {
         className={clsx(
           fullWidth ? 'w-full flex-1' : `w-${width}`,
           `h-${height}`,
-          'rounded bg-gray-400'
+          'rounded bg-gray-400 dark:bg-dark-400'
         )}
       ></div>
     </div>

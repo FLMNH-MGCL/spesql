@@ -1,4 +1,4 @@
-import { Button, Modal } from '@flmnh-mgcl/ui';
+import { Button, Modal, Text } from '@flmnh-mgcl/ui';
 import React from 'react';
 import useToggle from '../utils/useToggle';
 
@@ -20,7 +20,9 @@ export default function CreateConfirmModal({
   return (
     <React.Fragment>
       <Modal open={open} onClose={off} size="tiny">
-        <Modal.Content title="Are you sure?">{details}</Modal.Content>
+        <Modal.Content title="Are you sure?">
+          <Text>{details}</Text>
+        </Modal.Content>
         <Modal.Footer>
           <Button.Group>
             <Button onClick={off}>Cancel</Button>

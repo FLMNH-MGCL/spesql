@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Chart as GChart } from 'react-google-charts';
 import { Button, Heading, Spinner, TABLE_CLASSES } from '@flmnh-mgcl/ui';
 import FullScreenButton from './buttons/FullScreenButton';
-import clsx from 'clsx';
 import { AnimatePresence, motion, useAnimation } from 'framer-motion';
 import { useChartStore } from '../../stores/chart';
 import shallow from 'zustand/shallow';
@@ -73,9 +72,7 @@ export default function Chart({ fullScreen, toggle }: Props) {
   return (
     <AnimatePresence>
       <motion.div
-        className={clsx(
-          'flex flex-col relative shadow-around-lg bg-white dark:bg-dark-800 rounded-md shadow-around-lg  h-main'
-        )}
+        className="flex flex-col relative shadow-around-lg bg-white dark:bg-dark-800 rounded-md shadow-around-lg h-full flex-1 overflow-hidden"
         animate={controls}
         initial={{ width: fullScreen ? '100%' : '75%' }}
       >

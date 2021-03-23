@@ -29,7 +29,7 @@ export default function Visualization() {
 
   return (
     <React.Fragment>
-      <div className="flex justify-center items-center space-x-4 mx-4 h-minus-header">
+      <div className="flex justify-center items-center space-x-4 p-4 h-minus-header">
         {/* left half */}
         <Chart fullScreen={fullScreen} toggle={toggle} />
 

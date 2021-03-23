@@ -258,3 +258,7 @@ pre[class*='language-'] {
 .token.italic {
   font-style: italic;
 }
+
+.cursor-col-resize {
+  cursor: col-resize;
+}

@@ -200,24 +200,15 @@ export async function validateDeleteQuery(
   res: Response,
   next: NextFunction
 ) {
-  const query: string = req.body.query;
+  const { id, table } = req.body;
 
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
-  } else if (!query) {
-    res.status(400).send('No query detected');
-  } else if (!query.toLowerCase().startsWith('delete')) {
-    res
-      .status(403)
-      .send('Only Delete queries may be issued from this endpoint');
-  } else if (!query.toLowerCase().includes('where')) {
-    res.status(403).send('You must use conditional deletions');
-  } else if (query.toLowerCase().includes('*')) {
-    res.status(403).send('You may not use wildcards');
+  } else if (!id) {
+    res.status(400).send('ID of tuple to delete is required.');
+  } else if (!table) {
+    res.status(400).send('table target tuple is located is required');
   } else {
-    // @ts-ignore: type error here is invalid
-    const userId = req.session!.userId;
-    connection.query(`SELECT role FROM users WHERE id='${userId}'`);
     next();
   }
 }

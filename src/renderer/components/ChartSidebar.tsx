@@ -28,7 +28,7 @@ export default function ChartSidebar({ fullScreen }: Props) {
   return (
     <AnimatePresence>
       <motion.div
-        className="shadow-around-lg bg-white dark:bg-dark-800 rounded-md shadow-around-lg w-1/4 h-main"
+        className="h-full overflow-hidden shadow-around-lg bg-white dark:bg-dark-800 rounded-md shadow-around-lg w-1/4"
         animate={controls}
       >
         <ChartConfig />

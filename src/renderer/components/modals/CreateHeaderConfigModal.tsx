@@ -13,7 +13,7 @@ export default function CreateHeaderConfigModal({ disabled }: Props) {
   const [open, { on, off }] = useToggle(false);
 
   return (
-    <React.Fragment>
+    <div>
       <Modal open={open} onClose={off} size="medium">
         <Modal.Content title="Table Header Configuration">
           <Text className="pb-3">
@@ -32,6 +32,6 @@ export default function CreateHeaderConfigModal({ disabled }: Props) {
       </Modal>
 
       <HeaderConfigButton onClick={on} disabled={disabled} />
-    </React.Fragment>
+    </div>
   );
 }

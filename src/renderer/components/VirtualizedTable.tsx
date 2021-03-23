@@ -53,9 +53,9 @@ function TableFooter({ disableInteractables, count }: FooterProps) {
     <div className={TABLE_CLASSES.footerFixed}>
       <div className="flex space-x-2">
         <CreateFilterFieldModal disabled={disableInteractables} />
-        <ClearQueryButton disabled={disableInteractables} />
         <FilterSearch disabled={disableInteractables} />
         <RefreshQueryButton disabled={disableInteractables} />
+        <ClearQueryButton disabled={disableInteractables} />
         <CreateHeaderConfigModal disabled={disableInteractables} />
 
         <ShowQueryButton disabled={disableInteractables} />
@@ -86,6 +86,8 @@ export default function () {
     loading,
     filter,
     filterByFields,
+    isInserting,
+    isEditing,
   } = useStore(
     (state) => ({
       headers: state.tableConfig.headers,
@@ -98,6 +100,8 @@ export default function () {
       loading: state.loading,
       filter: state.queryData.filter,
       filterByFields: state.queryData.filterByFields,
+      isInserting: state.isInsertingRecord,
+      isEditing: state.isEditingRecord,
     }),
     shallow
   );
@@ -148,6 +152,9 @@ export default function () {
   }
 
   function handleRowClick({ rowData }: any) {
+    if (isEditing || isInserting) {
+      return;
+    }
     if (selectedSpecimen?.id === rowData?.id) {
       setSelectedSpecimen(null);
     } else {

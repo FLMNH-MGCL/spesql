@@ -18,7 +18,7 @@ export default function ChartConfigForm() {
   const getModal = useCallback(() => getChartModal(chartType), [chartType]);
 
   return (
-    <div className="flex flex-col h-main">
+    <div className="flex flex-col h-full">
       <div className="flex-1 p-3">
         <Select
           label="Chart Type"

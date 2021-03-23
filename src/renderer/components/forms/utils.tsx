@@ -12,6 +12,7 @@ import {
   validateDateField,
   validateDisposition,
   validateElevation,
+  validateFamily,
   validateFreezer,
   validateGeodeticDatum,
   validateIndentificationQualifier,
@@ -28,6 +29,9 @@ import {
   validateRack,
   validateSamplingProtocol,
   validateSex,
+  validateSubFamily,
+  validateSuperFamily,
+  validateTribe,
   validateTubeSize,
 } from '../../functions/validation';
 import {
@@ -123,6 +127,12 @@ export function getFormElementForField(key: string, currentValue: any) {
         defaultValue={currentValue}
       />
     ),
+    projectNumber: () => (
+      <Form.Input slim name="projectNumber" defaultValue={currentValue} />
+    ),
+    otherIdentifier: () => (
+      <Form.Input slim name="otherIdentifier" defaultValue={currentValue} />
+    ),
     order_: () => (
       <Form.Input
         slim
@@ -135,7 +145,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="superfamily"
-        register={{ validate: validateProperNoun }}
+        register={{ validate: validateSuperFamily }}
         defaultValue={currentValue}
       />
     ),
@@ -143,7 +153,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="family"
-        register={{ validate: validateProperNoun }}
+        register={{ validate: validateFamily }}
         defaultValue={currentValue}
       />
     ),
@@ -151,7 +161,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="subfamily"
-        register={{ validate: validateProperNoun }}
+        register={{ validate: validateSubFamily }}
         defaultValue={currentValue}
       />
     ),
@@ -159,7 +169,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="tribe"
-        register={{ validate: validateProperNoun }}
+        register={{ validate: validateTribe }}
         defaultValue={currentValue}
       />
     ),

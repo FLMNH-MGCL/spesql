@@ -1,4 +1,12 @@
-import clsx from 'clsx';
+import {
+  Datepicker,
+  Form,
+  FormSubmitValues,
+  Heading,
+  Input,
+  SelectOption,
+  Text,
+} from '@flmnh-mgcl/ui';
 import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import shallow from 'zustand/shallow';
@@ -13,28 +21,28 @@ import {
   validateCountry,
   validateDisposition,
   validateElevation,
+  validateFamily,
   validateFreezer,
   validateGeodeticDatum,
   validateIndentificationQualifier,
   validateLatitude,
   validateLifeStage,
+  validateListField,
   validateLongitude,
   validateLowerCase,
+  validateName,
+  validateNameListField,
   validateOtherCatalogNumber,
   validatePreparations,
   validateProperNoun,
   validateRack,
   validateSamplingProtocol,
   validateSex,
-  validateTableSelection,
-  validateTubeSize,
-  validateName,
-  validateNameListField,
-  validateListField,
-  validateFamily,
   validateSubFamily,
   validateSuperFamily,
+  validateTableSelection,
   validateTribe,
+  validateTubeSize,
 } from '../../functions/validation';
 import {
   BooleanField,
@@ -51,42 +59,8 @@ import {
   tubeSizeControl,
 } from '../utils/constants';
 import { fetchTables } from './utils';
-import { useNotify } from '../utils/context';
-import { LoggingError } from '../../../stores/logging';
-import {
-  Datepicker,
-  Form,
-  FormSubmitValues,
-  Heading,
-  SelectOption,
-  Text,
-  Checkmark,
-} from '@flmnh-mgcl/ui';
-import Input from '../querybuilder/Input';
 
-// function grabSession(id: string) {
-//   const restoredSessionString = sessionStorage.getItem(id);
-
-//   if (restoredSessionString) {
-//     return JSON.parse(restoredSessionString);
-//   } else {
-//     return null;
-//   }
-// }
-
-// function grabSessionValue(field: string, session: any) {
-//   if (session && session[field] && !!session[field]) {
-//     return session[field];
-//   } else {
-//     return undefined;
-//   }
-// }
-
-type FormPart = {
-  page: number;
-};
-
-function Cataloging({ page }: FormPart) {
+function Cataloging() {
   const [tables, setTables] = useState<SelectOption[]>([]);
 
   const { expireSession, expiredSession, fullName } = useStore(
@@ -116,16 +90,15 @@ function Cataloging({ page }: FormPart) {
   }, [expiredSession]);
 
   return (
-    <div className={clsx(page !== 0 && 'hidden')}>
-      <Heading centered className="py-2">
-        Cataloging
-      </Heading>
+    <div className="select-none">
+      <Heading className="py-2">Cataloging</Heading>
       <Form.Group flex>
         <Input
           onChange={() => {}}
           disabled
           value="INSERT"
           label="Query Type"
+          className="select-none"
           fullWidth
         />
 
@@ -168,6 +141,7 @@ function Cataloging({ page }: FormPart) {
           name="recordEnteredBy"
           label="recordEnteredBy"
           fullWidth
+          className="select-none"
           value={fullName}
           disabled
         />
@@ -192,12 +166,10 @@ function Cataloging({ page }: FormPart) {
   );
 }
 
-function Classification({ page }: FormPart) {
+function Classification() {
   return (
-    <div className={clsx(page !== 1 && 'hidden')}>
-      <Heading centered className="py-2">
-        Classifications
-      </Heading>
+    <div className="select-none">
+      <Heading className="py-2">Classifications</Heading>
 
       <Form.Group flex>
         <Form.Input
@@ -214,6 +186,9 @@ function Classification({ page }: FormPart) {
           register={{ validate: validateSuperFamily }}
           fullWidth
         />
+      </Form.Group>
+
+      <Form.Group flex>
         <Form.Input
           name="family"
           label="family"
@@ -221,9 +196,6 @@ function Classification({ page }: FormPart) {
           register={{ validate: validateFamily }}
           fullWidth
         />
-      </Form.Group>
-
-      <Form.Group flex>
         <Form.Input
           name="subfamily"
           label="subfamily"
@@ -231,6 +203,9 @@ function Classification({ page }: FormPart) {
           register={{ validate: validateSubFamily }}
           fullWidth
         />
+      </Form.Group>
+
+      <Form.Group flex>
         <Form.Input
           name="tribe"
           label="tribe"
@@ -262,6 +237,9 @@ function Classification({ page }: FormPart) {
           register={{ validate: validateLowerCase }}
           fullWidth
         />
+      </Form.Group>
+
+      <Form.Group flex>
         <Form.Input
           name="infraspecificEpithet"
           label="infraspecificEpithet"
@@ -274,16 +252,14 @@ function Classification({ page }: FormPart) {
   );
 }
 
-function RecordLevelInformation({ page }: FormPart) {
+function RecordLevelInformation() {
   const today = new Date();
 
   return (
-    <React.Fragment>
+    <div className="select-none">
       {/* PART 1 */}
-      <div className={clsx(page !== 2 && 'hidden')}>
-        <Heading centered className="py-2">
-          Record Information
-        </Heading>
+      <div>
+        <Heading className="py-2">Record Information</Heading>
 
         <Form.Group flex>
           <Form.Select
@@ -295,6 +271,9 @@ function RecordLevelInformation({ page }: FormPart) {
             searchable
             fullWidth
           />
+        </Form.Group>
+
+        <Form.Group flex>
           <Form.Input
             label="recordedBy"
             name="recordedBy"
@@ -336,6 +315,9 @@ function RecordLevelInformation({ page }: FormPart) {
             disabled
             fullWidth
           />
+        </Form.Group>
+
+        <Form.Group flex>
           <Form.Input
             name="verbatimDate"
             label="verbatimDate"
@@ -373,10 +355,8 @@ function RecordLevelInformation({ page }: FormPart) {
       </div>
 
       {/* PART 2 */}
-      <div className={clsx(page !== 3 && 'hidden')}>
-        <Heading centered className="py-2">
-          Record Information
-        </Heading>
+      <div>
+        <Heading className="py-2">Record Information</Heading>
 
         <Form.Group flex>
           <Form.Select
@@ -396,6 +376,9 @@ function RecordLevelInformation({ page }: FormPart) {
             searchable
             fullWidth
           />
+        </Form.Group>
+
+        <Form.Group flex>
           <Form.Input
             label="habitat"
             name="habitat"
@@ -415,6 +398,9 @@ function RecordLevelInformation({ page }: FormPart) {
             multiple
             fullWidth
           />
+        </Form.Group>
+
+        <Form.Group flex>
           <Form.Select
             label="preparations"
             name="preparations"
@@ -473,30 +459,33 @@ function RecordLevelInformation({ page }: FormPart) {
             register={{ validate: validateFreezer }}
             fullWidth
           />
+        </Form.Group>
+
+        <Form.Group flex>
           <Form.Input
             label="rack"
             name="rack"
             placeholder="BB"
             register={{ validate: validateRack }}
+            fullWidth
           />
           <Form.Input
             label="box"
             name="box"
             placeholder="25"
             register={{ validate: validateBox }}
+            fullWidth
           />
         </Form.Group>
       </div>
-    </React.Fragment>
+    </div>
   );
 }
 
-function TextResponses({ page }: FormPart) {
+function TextResponses() {
   return (
-    <div className={clsx(page !== 4 && 'hidden')}>
-      <Heading centered className="py-2">
-        Text Entries
-      </Heading>
+    <div className="select-none">
+      <Heading className="py-2">Text Entries</Heading>
 
       <Form.Group flex>
         <Form.Area
@@ -506,7 +495,9 @@ function TextResponses({ page }: FormPart) {
           fullWidth
           rows={4}
         />
+      </Form.Group>
 
+      <Form.Group flex>
         <Form.Area
           label="molecularOccurrenceRemarks"
           name="molecularOccurrenceRemarks"
@@ -524,7 +515,9 @@ function TextResponses({ page }: FormPart) {
           fullWidth
           rows={4}
         />
+      </Form.Group>
 
+      <Form.Group flex>
         <Form.Area
           label="associatedReferences"
           name="associatedReferences"
@@ -546,13 +539,11 @@ function TextResponses({ page }: FormPart) {
   );
 }
 
-function Locality({ page }: FormPart) {
+function Locality() {
   return (
-    <React.Fragment>
-      <div className={clsx(page !== 5 && 'hidden')}>
-        <Heading centered className="py-2">
-          Locality
-        </Heading>
+    <div className="select-none">
+      <div>
+        <Heading className="py-2">Locality</Heading>
 
         <Form.Group flex>
           <Form.Select
@@ -614,6 +605,9 @@ function Locality({ page }: FormPart) {
             register={{ validate: validateLongitude }}
             fullWidth
           />
+        </Form.Group>
+
+        <Form.Group flex>
           <Form.Select
             label="geodeticDatum"
             name="geodeticDatum"
@@ -625,11 +619,8 @@ function Locality({ page }: FormPart) {
         </Form.Group>
       </div>
 
-      {/* PAGE 2 */}
-      <div className={clsx(page !== 6 && 'hidden')}>
-        <Heading centered className="py-2">
-          Locality
-        </Heading>
+      <div>
+        <Heading className="py-2">Locality</Heading>
 
         <Form.Group flex>
           <Form.Input
@@ -671,11 +662,11 @@ function Locality({ page }: FormPart) {
           />
         </Form.Group>
       </div>
-    </React.Fragment>
+    </div>
   );
 }
 
-function LoanInfo({ page }: FormPart) {
+function LoanInfo() {
   const { getValues, watch, setValue } = useFormContext();
 
   const today = new Date();
@@ -696,10 +687,8 @@ function LoanInfo({ page }: FormPart) {
   }
 
   return (
-    <div className={clsx(page !== 7 && 'hidden')}>
-      <Heading centered className="py-2">
-        Loan Information
-      </Heading>
+    <div className="select-none">
+      <Heading className="py-2">Loan Information</Heading>
 
       <Form.Group flex>
         <Form.Select
@@ -712,10 +701,13 @@ function LoanInfo({ page }: FormPart) {
           options={BooleanField}
           fullWidth
         />
+      </Form.Group>
+
+      <Form.Group flex>
         <Form.Input
           label="loanInstitution"
           name="loanInstitution"
-          placeholder="TODO"
+          placeholder="McGuire Center for Lepidoptera"
           register={{ validate: validateProperNoun }}
           fullWidth
           disabled={!isLoaned || isLoaned === 'N'}
@@ -731,6 +723,9 @@ function LoanInfo({ page }: FormPart) {
           fullWidth
           disabled={!isLoaned || isLoaned === 'N'}
         />
+      </Form.Group>
+
+      <Form.Group flex>
         <Datepicker
           name="loanDate"
           label="loanDate"
@@ -750,88 +745,25 @@ function LoanInfo({ page }: FormPart) {
   );
 }
 
-function ConfirmationPage({ page }: FormPart) {
-  return (
-    <div className={clsx(page !== 8 && 'hidden')}>
-      <div className="pt-1 pb-3">
-        <Heading centered>All Done!</Heading>
-        <Text centered>
-          If any errors occur please check the logs and correct the form
-        </Text>
-      </div>
-      <div className="py-12">
-        {/* this library has an invalid prop type >:( so an error is in the console */}
-        {/* @ts-ignore */}
-        <Checkmark />
-      </div>
-    </div>
-  );
-}
-
-type Props = {
-  page: number;
+export default function InsertNewRecord({
+  onSubmit,
+}: {
   onSubmit(values: FormSubmitValues): void;
-};
-
-function FormErrorHandler() {
-  const { errors, watch, setValue } = useFormContext();
-
-  useFormPersist('single-insert-form', { watch, setValue });
-
-  const { notify } = useNotify();
-
-  const updateSingleInsertLog = useStore(
-    (state) => state.updateSingleInsertLog
-  );
-
-  useEffect(() => {
-    if (!errors || errors === {} || !Object.keys(errors).length) {
-      return;
-    }
-
-    notify(
-      {
-        title: 'Validation Errors',
-        message:
-          'There were some errors present in the form, please check the corresponding error log and correct the invalid entries',
-        level: 'error',
-      },
-      'error'
-    );
-
-    // console.log(errors);
-    let insertErrors = Object.keys(errors).map((field) => {
-      const { message } = errors[field];
-
-      return {
-        field,
-        message,
-      } as LoggingError;
-    });
-
-    updateSingleInsertLog(insertErrors);
-  }, [errors]);
-
-  return null;
-}
-
-export default function SingleInsertForm({ page, onSubmit }: Props) {
+}) {
   return (
-    <Form
-      id="single-insert-form"
-      mode="onChange"
-      onSubmit={onSubmit}
-      className="pb-2"
-      // defaultValues={defaultValues}
-    >
-      <FormErrorHandler />
-      <Cataloging page={page} />
-      <Classification page={page} />
-      <RecordLevelInformation page={page} />
-      <TextResponses page={page} />
-      <Locality page={page} />
-      <LoanInfo page={page} />
-      <ConfirmationPage page={page} />
+    <Form id="new-record-form" onSubmit={onSubmit} mode="onChange">
+      <Heading className="py-2">Insert New Record</Heading>
+      <Text className="pb-2" size="xs">
+        Plese enter all of the applicable values for the new record in the form
+        below. Once you are done, you may hit the Checkmark to run the insert
+        query for the new record.
+      </Text>
+      <Cataloging />
+      <Classification />
+      <RecordLevelInformation />
+      <TextResponses />
+      <Locality />
+      <LoanInfo />
     </Form>
   );
 }

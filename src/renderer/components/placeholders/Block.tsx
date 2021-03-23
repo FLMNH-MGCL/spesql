@@ -23,7 +23,7 @@ export default function Block({ size = 'md', circle }: Props) {
         className={clsx(
           blockSize,
           circle ? 'rounded-full' : 'rounded',
-          'bg-gray-400'
+          'bg-gray-400 dark:bg-dark-500'
         )}
       ></div>
     </div>

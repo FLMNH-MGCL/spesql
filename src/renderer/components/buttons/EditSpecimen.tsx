@@ -16,6 +16,7 @@ export function ConfirmEditButton({
 }: Props) {
   return (
     <CircleButton
+      title="Submit"
       type={type}
       loading={loading}
       disabled={loading}
@@ -47,6 +48,7 @@ type CancelProps = {
 export function CancelEditButton({ onClick, loading }: CancelProps) {
   return (
     <CircleButton
+      title="Cancel"
       onClick={onClick}
       loading={loading}
       disabled={loading}
