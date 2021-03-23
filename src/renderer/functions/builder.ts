@@ -1,10 +1,6 @@
-import { FormSubmitValues } from '@flmnh-mgcl/ui';
 import clsx from 'clsx';
-import { Specimen, SpecimenFields } from '../types';
-import {
-  determineAndRunFieldValidator,
-  specialCaseEmpties,
-} from './validation';
+import { SpecimenFields } from '../types';
+import { determineAndRunFieldValidator } from './validation';
 
 // TODO: alter all builders to account for new operators added!!
 
