@@ -84,7 +84,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} FLMNH-MGCL (Documentation Built with Docusaurus).`,
+      copyright: `Copyright © ${new Date().getFullYear()} FLMNH-MGCL.`,
     },
   },
   presets: [

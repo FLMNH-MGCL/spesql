@@ -6,7 +6,7 @@ title: Layout
 SpeSQL's design is continually changed throughout development as features get added, however the homepage will remain somewhat constant structurely.
 
 <img
-src={require('./assets/homelayout.png').default}
+src={require('./assets/homelayout.gif').default}
 alt="Example banner"
 />
 
@@ -65,7 +65,7 @@ class="shadow round"
 The Specimen View will render a list of all existing / non-NULL fields of a on the selection of a tuple in the Specimen Table. By default, the list excludes fields which are NULL. As with the table, this list is a scrolling list. An example of the Specimen View when populated with a selection would be:
 
 <img
-src={require('./assets/sview.png').default}
+src={require('./assets/specimenview.gif').default}
 alt="Example banner"
 class="shadow round"
 />

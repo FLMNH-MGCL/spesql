@@ -18,9 +18,9 @@ class="shadow round"
 
 The Single Insert Form requires you to manually enter all of the available data for a single entry, and then attempts to insert it into the target table. The process is rather similar to transcription.
 
-### Pagination
+### Form Structure
 
-The insertion form for a single entry is split up into 7 pages, with a confirmation page at the end. The pages are grouped as closely together as possible, grouping based on relevant information. The pages are as follows:
+The insertion form for a single entry is split up into 6 major sections, grouping based on relevant information, as follows:
 
 - Cataloging
   - catalog numbers, record numbers, who entered the entry into the system, etc
@@ -28,12 +28,9 @@ The insertion form for a single entry is split up into 7 pages, with a confirmat
   - genus, species, family, order, etc
 - Record-level Information
   - collectors, date of collection, sampling information, storage information, etc
-- Record-level Information
 - Text Responses
   - remarks and notes about the entry
 - Locality
   - country, state/province, longitude/latitude, etc
-- Locality
 - Loan
   - if the entry is loaned somewhere and the corresponding information
-- Confirmation

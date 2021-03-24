@@ -39,3 +39,11 @@ Please see the <a href='advancedbuilder'>Advanced Query Builder</a> section for 
 ## Advanced Query Option
 
 If you are familiar with SQL queries, there is an input available for you to issue requests directly. Please keep in mind, these are restricted to the query type whenever you see these options. For example, this query form would only accept SELECT statements, you cannot attempt to issue an UPDATE.
+
+## Basic Demo
+
+<img
+src={require('./assets/selectdemo.gif').default}
+alt="Select Query Form"
+class="shadow round"
+/>

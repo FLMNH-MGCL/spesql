@@ -8,12 +8,22 @@ title: Specimen View
 The Specimen View will render a list of all existing / non-NULL fields of a on the selection of a tuple in the Specimen Table. By default, the list excludes fields which are NULL. As with the table, this list is a scrolling list. An example of the Specimen View when populated with a selection would be:
 
 <img
-src={require('./assets/sview.png').default}
+src={require('./assets/specimenview.gif').default}
 alt="Example Specimen View"
 class="shadow round"
 />
 
 ## Availble Actions
+
+### Single Insert
+
+<img
+src={require('./assets/addbtn.png').default}
+alt="Add Button"
+class="shadow round-full"
+/>
+
+If you haven't selected a row in the table body to populate the Specimen View, the bottom left will have a plus button which will render the Sinlge Insert form. This is where you may insert a single, new record into the database. Please see the <a href='insertsingle'>Single Insert</a> section for more information.
 
 ### Update
 

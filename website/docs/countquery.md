@@ -42,3 +42,11 @@ Please see the <a href='advancedbuilder'>Advanced Query Builder</a> section for 
 If you are familiar with SQL queries, there is an input available for you to issue requests directly. Please keep in mind, these are restricted to the query type whenever you see these options.
 
 For example, this query form would only accept SELECT statements with <b>only</b> a COUNT aggregate function in the selection, you cannot attempt to issue an UPDATE or a traditional SELECT statement here.
+
+## Basic Demo
+
+<img
+src={require('./assets/countdemo.gif').default}
+alt="Select Query Form"
+class="shadow round"
+/>
