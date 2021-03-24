@@ -125,16 +125,32 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
       query = queryString;
       conditions = conditionalPairs;
 
+      console.log(query, conditions);
+
       if (!query) {
         off();
-        // TODO: notify
+
+        notify({
+          title: 'Update Unsuccessful',
+          message: 'Please create a bug report on GitHub',
+          level: 'error',
+        });
+
         return;
       }
 
       const queryStringRet = await update(query, conditions, updates);
 
       if (queryStringRet) {
-        await logUpdate(queryStringRet, null, databaseTable, null);
+        const { queryStr, message } = queryStringRet;
+
+        notify({
+          title: 'Update Successful',
+          message,
+          level: 'success',
+        });
+
+        await logUpdate(queryStr, null, databaseTable, null);
       }
 
       off();

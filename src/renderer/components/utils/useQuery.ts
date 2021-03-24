@@ -732,7 +732,7 @@ export default function useQuery() {
         query: string,
         conditions: any[],
         updates: any
-      ): Promise<string | undefined> {
+      ): Promise<any | undefined> {
         const updateResponse = await axios
           .post(BACKEND_URL + '/api/update', {
             query,
@@ -743,17 +743,17 @@ export default function useQuery() {
 
         if (updateResponse.status === 200 && updateResponse.data) {
           const { message } = updateResponse.data.result;
-          const queryString = updateResponse.data.query;
+          const queryStr = updateResponse.data.query;
 
-          notify({
-            title: 'Update Successful',
-            message,
-            level: 'success',
-          });
+          // notify({
+          //   title: 'Update Successful',
+          //   message,
+          //   level: 'success',
+          // });
 
           await queries.refresh();
 
-          return queryString;
+          return { queryStr, message };
         } else if (updateResponse.status === 401) {
           expireSession();
 
