@@ -286,8 +286,6 @@ export default function useQuery() {
             level: 'error',
           });
 
-          console.log(creationResponse);
-
           return {
             status: creationResponse.status,
             data: creationResponse.data,
@@ -299,8 +297,6 @@ export default function useQuery() {
         id: number,
         table: string
       ): Promise<any | undefined> {
-        console.log(id, table);
-
         const deleteResponse = await axios.post(BACKEND_URL + '/api/delete', {
           id,
           table,
@@ -556,7 +552,6 @@ export default function useQuery() {
       },
 
       async runChartQuery(query: string): Promise<any> {
-        console.log(query);
         const selectResponse = await axios
           .post(BACKEND_URL + '/api/select', {
             query,
@@ -682,8 +677,6 @@ export default function useQuery() {
             let pattern = /^.* from (?<first>[a-zA-z_-]+)/i;
 
             const table = query.match(pattern)?.groups?.first;
-
-            console.log(table, query, query.match(pattern));
 
             if (table) {
               setTable(table);

@@ -53,7 +53,7 @@ export default function SelectForm({ onChange }: Props) {
           options={fieldOptions}
           register={{ validate: validateFieldSelection }}
           searchable
-          onChange={(e) => onChange('fields', e.target.value)}
+          updateControlled={(newVal) => onChange('fields', newVal)}
         />
 
         <Form.Select
@@ -63,7 +63,7 @@ export default function SelectForm({ onChange }: Props) {
           options={tables}
           searchable
           register={{ validate: validateTableSelection }}
-          onChange={(e) => onChange('databaseTable', e.target.value)}
+          updateControlled={(newVal) => onChange('databaseTable', newVal)}
         />
       </Form.Group>
 
