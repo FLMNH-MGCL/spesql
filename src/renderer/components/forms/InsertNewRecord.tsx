@@ -43,6 +43,8 @@ import {
   validateTableSelection,
   validateTribe,
   validateTubeSize,
+  validateVerbatimLatitude,
+  validateVerbatimLongitude,
 } from '../../functions/validation';
 import {
   BooleanField,
@@ -644,12 +646,14 @@ function Locality() {
           <Form.Input
             label="verbatimLatitude"
             name="verbatimLatitude"
+            register={{ validate: validateVerbatimLatitude }}
             placeholder=""
           />
 
           <Form.Input
             label="verbatimLongitude"
             name="verbatimLongitude"
+            register={{ validate: validateVerbatimLongitude }}
             placeholder=""
           />
 

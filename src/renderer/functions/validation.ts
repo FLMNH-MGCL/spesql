@@ -789,6 +789,14 @@ export function validateFixedLengthField(
   }
 }
 
+export function validateVerbatimLatitude(value: any) {
+  return validateFixedLengthField('verbatimLatitude', value, 20);
+}
+
+export function validateVerbatimLongitude(value: any) {
+  return validateFixedLengthField('verbatimLongitude', value, 20);
+}
+
 function isNumeric(n: string) {
   const parsed = parseFloat(n);
   return !isNaN(parsed) && isFinite(parsed);
@@ -872,8 +880,8 @@ const validators = {
   decimalLongitude: alwaysTrue,
   geodeticDatum: validateGeodeticDatum,
   coordinateUncertainty: alwaysTrue,
-  verbatimLatitude: alwaysTrue,
-  verbatimLongitude: alwaysTrue,
+  verbatimLatitude: validateVerbatimLatitude, // keep?
+  verbatimLongitude: validateVerbatimLongitude, // keep?
   georeferencedBy: alwaysTrue,
   disposition: validateDisposition,
   isLoaned: alwaysTrue,

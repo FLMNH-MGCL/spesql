@@ -33,6 +33,8 @@ import {
   validateSuperFamily,
   validateTribe,
   validateTubeSize,
+  validateVerbatimLatitude,
+  validateVerbatimLongitude,
 } from '../../functions/validation';
 import {
   BooleanField,
@@ -97,10 +99,6 @@ export function stringListToArray(
 export function getFormElementForField(key: string, currentValue: any) {
   // TODO: complete missing fields
   // TODO: null values
-
-  // if (currentValue === null) {
-  //   console.log(key);
-  // }
 
   const formElementForField = {
     catalogNumber: () => (
@@ -425,7 +423,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="verbatimLatitude"
-        // register={{ validate: validateProperNoun }}
+        register={{ validate: validateVerbatimLatitude }}
         defaultValue={currentValue}
       />
     ),
@@ -433,7 +431,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="verbatimLongitude"
-        // register={{ validate: validateProperNoun }}
+        register={{ validate: validateVerbatimLongitude }}
         defaultValue={currentValue}
       />
     ),

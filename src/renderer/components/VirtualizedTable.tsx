@@ -49,6 +49,18 @@ type FooterProps = {
 // TODO: CONSIDER https://medium.com/better-programming/an-introduction-to-react-table-6ebd34d8059e
 
 function TableFooter({ disableInteractables, count }: FooterProps) {
+  const { isEditing, isInserting } = useStore(
+    (state) => ({
+      isInserting: state.isInsertingRecord,
+      isEditing: state.isEditingRecord,
+    }),
+    shallow
+  );
+
+  // todo: delete option?
+  const watch = isEditing ? 'update' : isInserting ? 'singleInsert' : 'global';
+  const initialTab = isEditing ? 3 : isInserting ? 2 : 0;
+
   return (
     <div className={TABLE_CLASSES.footerFixed}>
       <div className="flex space-x-2">
@@ -65,7 +77,11 @@ function TableFooter({ disableInteractables, count }: FooterProps) {
         {count > 0 && (
           <Text className="self-center px-1 dark:text-dark-200">{`Count: ${count}`}</Text>
         )}
-        <CreateLogModal />
+        <CreateLogModal
+          watch={watch}
+          variant="single"
+          initialTab={initialTab}
+        />
         <CreateHelpModal variant="global" />
       </div>
     </div>
