@@ -11,7 +11,8 @@
     "icon": "src/main/icon/icon.icns"
   },
   "win": {
-    "icon": "src/main/icon/icon.icns"
+    "target": "nsis",
+    "icon": "src/main/icon/win.png"
   },
   "publish": [
     {
@@ -21,5 +22,5 @@
       "releaseType": "release"
     }
   ],
-  "files": ["src/main/icon/flmnhLogo.png"]
+  "files": ["src/main/icon/win.png", "src/main/icon/icon.icns"]
 }

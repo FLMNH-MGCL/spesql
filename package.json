@@ -19,7 +19,8 @@
     "package": "electron-builder",
     "build": "yarn compile && yarn package",
     "release": "yarn version && git push && git push --tags",
-    "server": "ts-node-dev src/main/server/server.ts"
+    "server": "ts-node-dev src/main/server/server.ts",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.10.4",
