@@ -4,9 +4,7 @@ import {
   ActionWithRulesProps,
   CombinatorSelectorProps,
   default as Builder,
-  // Field,
   FieldSelectorProps,
-  // NameLabelPair,
   QueryBuilderProps,
   ValueEditorProps,
 } from 'react-querybuilder';
@@ -22,11 +20,6 @@ import { Button } from '@flmnh-mgcl/ui';
  * Most of this file will consist of me creating wrapper components around my UI form elements to work alongside
  * this library, and then overriding the QueryBuilder's control elements with these
  */
-
-// function convertFieldSelectOptions(options: Field[]) {
-//   // return options.map((opt) => {
-//   // })
-// }
 
 export function convertCombinatorSelectorOptions(
   options: { name: string; label: string }[]
@@ -45,7 +38,6 @@ export function convertToQBCombinatorOptions(
 }
 
 export function operatorRequiresList(operator: string) {
-  console.log(operator);
   return operator === 'in' || operator === 'notIn';
 }
 
@@ -57,7 +49,6 @@ function AddRuleButton({
 }: // rules,
 // level,
 ActionWithRulesProps) {
-  // console.log(rules, level);
   return <Button onClick={handleOnClick}>{title}</Button>;
 }
 
@@ -67,8 +58,6 @@ function AddGroupButton({
 }: // rules,
 // level,
 ActionWithRulesProps) {
-  // console.log(rules, level);
-
   return <Button onClick={handleOnClick}>{title}</Button>;
 }
 

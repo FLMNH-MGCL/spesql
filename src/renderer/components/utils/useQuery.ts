@@ -286,8 +286,6 @@ export default function useQuery() {
             level: 'error',
           });
 
-          console.log(creationResponse);
-
           return {
             status: creationResponse.status,
             data: creationResponse.data,
@@ -299,8 +297,6 @@ export default function useQuery() {
         id: number,
         table: string
       ): Promise<any | undefined> {
-        console.log(id, table);
-
         const deleteResponse = await axios.post(BACKEND_URL + '/api/delete', {
           id,
           table,
@@ -556,7 +552,6 @@ export default function useQuery() {
       },
 
       async runChartQuery(query: string): Promise<any> {
-        console.log(query);
         const selectResponse = await axios
           .post(BACKEND_URL + '/api/select', {
             query,
@@ -683,8 +678,6 @@ export default function useQuery() {
 
             const table = query.match(pattern)?.groups?.first;
 
-            console.log(table, query, query.match(pattern));
-
             if (table) {
               setTable(table);
             } else {
@@ -739,7 +732,7 @@ export default function useQuery() {
         query: string,
         conditions: any[],
         updates: any
-      ): Promise<string | undefined> {
+      ): Promise<any | undefined> {
         const updateResponse = await axios
           .post(BACKEND_URL + '/api/update', {
             query,
@@ -750,17 +743,17 @@ export default function useQuery() {
 
         if (updateResponse.status === 200 && updateResponse.data) {
           const { message } = updateResponse.data.result;
-          const queryString = updateResponse.data.query;
+          const queryStr = updateResponse.data.query;
 
-          notify({
-            title: 'Update Successful',
-            message,
-            level: 'success',
-          });
+          // notify({
+          //   title: 'Update Successful',
+          //   message,
+          //   level: 'success',
+          // });
 
           await queries.refresh();
 
-          return queryString;
+          return { queryStr, message };
         } else if (updateResponse.status === 401) {
           expireSession();
 

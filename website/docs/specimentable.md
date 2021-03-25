@@ -7,9 +7,21 @@ title: Specimen Table
 
 Clicking a header cell will sort the corresponding column in a logical order, ascending on the first click and descending on the second. A small arrow icon will be rendered to aid in the visualization of the currently selected order direction. When there are multiple datatypes in a column, numerical values take order precedence over alphabetical ordering (i.e. 1234 is 'less than' abcd). A third click will reset the ordering.
 
+<img
+src={require('./assets/headersort.gif').default}
+alt="Example banner"
+class="shadow round"
+/>
+
 ## Table Body
 
 Selecting a row will trigger the Specimen View to render the corresponding tuple's data. Apart from this, there is no further functionality in the Table Body.
+
+<img
+src={require('./assets/tablebody.gif').default}
+alt="Example banner"
+class="shadow round"
+/>
 
 ## Footer Row
 
@@ -36,7 +48,7 @@ The Filter and Filter Search are a paired functionality. The Filter defines the 
 For example, if you were to narrow the filter to only match `id` and input a non-numerical value, then there would be no filtered results. You may construct the Filtered Fields by clicking the Filter button, which will launch the corresponding modal (see below).
 
 <img
-src={require('./assets/filtermodal.png').default}
+src={require('./assets/filter.gif').default}
 alt="Filtered Search Modal"
 class="shadow round object-scale-down"
 />
@@ -127,14 +139,10 @@ alt="Header Adjust Icon"
 class="shadow round-full object-scale-down"
 />
 
-The Adjust Table Headers button will open a modal in which you may alter the visible columns on the table. The default visible columns are: `catalogNumber,otherCatalogNumber,order_,genus,specificEpithet`. Similar to the Filter modal, you may drag and drop fields to the Selected and Available columns, and reorder the fields in the Selected Column. All changes will be immediately reflected on the Specimen Table. Below, you will find an example of the default configuration, and then the default configuration plus the addition of the `id` field as the first visible column. Please notice, after the `id` label is dragged over to the Selected column, you see it in the Specimen Table behind the modal.
+The Adjust Table Headers button will open a modal in which you may alter the visible columns on the table. The default visible columns are: `catalogNumber,otherCatalogNumber,order_,genus,specificEpithet`. Similar to the Filter modal, you may drag and drop fields to the Selected and Available columns, and reorder the fields in the Selected Column. All changes will be immediately reflected on the Specimen Table. Below, you will find an example of the default configuration, and then the default configuration plus the addition of the `id` and `family` fields:
 
 <img
-src={require('./assets/headerconfigdefault.png').default}
-alt="Refresh Icon"
-class="shadow round object-scale-down"
-/><img
-src={require('./assets/headerconfigid.png').default}
+src={require('./assets/headerconfig.gif').default}
 alt="Refresh Icon"
 class="shadow round object-scale-down"
 />

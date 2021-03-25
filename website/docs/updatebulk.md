@@ -45,3 +45,13 @@ These refer to the conditions for which tuples in the database must match in ord
 There is a toggle between AND and OR in the conditional section of the query builder forms, this is where you are able to select how your conditions are grouped together. The selection applies for all conditions, however, so if you were to select AND then all the conditions would be AND'ed together.
 
 Please see the <a href='advancedbuilder'>Advanced Query Builder</a> section for more complex conditional statement options
+
+## Basic Demo
+
+<img
+src={require('./assets/updatebulkdemo.gif').default}
+alt="Select Query Form"
+class="shadow round"
+/>
+
+_This demo does not actually change anything (0 matched/changed rows), since the LEP1234567 does not exist, this is just for demonstrative purposes._
