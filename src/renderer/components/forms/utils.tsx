@@ -118,12 +118,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       />
     ),
     recordNumber: () => (
-      <Form.Input
-        slim
-        name="recordNumber"
-        // register={{ validate: validateRecordNumber }}
-        defaultValue={currentValue}
-      />
+      <Form.Input slim name="recordNumber" defaultValue={currentValue} />
     ),
     projectNumber: () => (
       <Form.Input slim name="projectNumber" defaultValue={currentValue} />
@@ -199,7 +194,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="infraspecificEpithet"
-        register={{ validate: validateProperNoun }} // FIXME: ?? pronoun or lowercase
+        register={{ validate: validateLowerCase }}
         defaultValue={currentValue}
       />
     ),

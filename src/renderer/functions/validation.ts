@@ -850,7 +850,7 @@ const validators = {
   family: validateFamily,
   subfamily: validateSubFamily,
   tribe: validateTribe,
-  genus: validateLowerCase,
+  genus: validateProperNoun,
   subgenus: validateProperNoun,
   specificEpithet: validateLowerCase,
   infraspecificEpithet: alwaysTrue,

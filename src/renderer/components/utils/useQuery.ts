@@ -728,6 +728,7 @@ export default function useQuery() {
         }
       },
 
+      // TODO: handle update where errors bc duplicate keys
       async update(
         query: string,
         conditions: any[],

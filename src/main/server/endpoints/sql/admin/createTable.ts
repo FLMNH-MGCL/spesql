@@ -20,7 +20,7 @@ function getCreationString(name: string) {
     \`recordedBy\` varchar(255) DEFAULT NULL,
     \`identifiedBy\` varchar(255) DEFAULT NULL,
     \`dateIdentified\` varchar(10) DEFAULT NULL,
-    \`verbatimDate\` varchar(25) DEFAULT NULL,
+    \`verbatimDate\` varchar(30) DEFAULT NULL,
     \`collectedYear\` varchar(4) DEFAULT NULL,
     \`collectedMonth\` varchar(2) DEFAULT NULL,
     \`collectedDay\` varchar(2) DEFAULT NULL,
