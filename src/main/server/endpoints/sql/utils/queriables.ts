@@ -9,7 +9,7 @@ export function getQueriables(_req: Request, res: Response) {
         // TODO: what should this be
         res.status(503).send(error);
       } else {
-        const forbiddens = ['logs', 'users'];
+        const forbiddens = ['logs', 'users', 'user_requests'];
 
         const tables = data
           .map((packet: any) => {

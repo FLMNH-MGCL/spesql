@@ -13,7 +13,7 @@ type Props = {
   userInfo?: User;
 };
 
-function PasswordField() {
+export function PasswordField() {
   const { notify } = useNotify();
   const { setValue } = useFormContext();
 

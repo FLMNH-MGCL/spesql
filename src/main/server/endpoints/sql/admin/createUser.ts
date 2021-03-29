@@ -7,7 +7,7 @@ export default function createUser(req: Request, res: Response) {
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
   } else {
-    const { newUser } = req.body;
+    const { newUser, shouldHash } = req.body;
 
     if (!newUser) {
       res.status(400).send('Missing newUser object in req.body');
@@ -21,7 +21,7 @@ export default function createUser(req: Request, res: Response) {
         .send(
           'Missing either name, username, password, access_role (or all) from newUser'
         );
-    } else {
+    } else if (shouldHash) {
       bcrypt
         .hash(password, parseInt(process.env.ELECTRON_WEBPACK_APP_SALT!, 10))
         .then((hash) => {
@@ -38,6 +38,22 @@ export default function createUser(req: Request, res: Response) {
             }
           );
         });
+    } else {
+      // TODO: check that password is hashed, shouldHash does not mean I will allow the storage of plain-text passwords just
+      // that the password is already hashed!
+
+      connection?.query(
+        `INSERT INTO users(name, username, password, role) VALUES ("${name}", "${username}", "${password}", "${access_role}");`,
+        (err, data) => {
+          if (err) {
+            res.status(503);
+            res.json({ err: err });
+          } else {
+            console.log('sucessfully created user');
+            res.status(201).send(data);
+          }
+        }
+      );
     }
   }
 }

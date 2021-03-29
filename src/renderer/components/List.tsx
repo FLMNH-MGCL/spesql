@@ -20,6 +20,10 @@ function Item({ fullWidth, img, label, value, editable }: ItemProps) {
     <li className="py-2 flex space-x-3">
       {img}
       <div className={clsx(fullWidth && 'w-full', 'flex flex-col space-y-2')}>
+        <span className="text-sm leading-5 text-gray-500 dark:text-dark-300">
+          {label}
+        </span>
+
         {editable ? (
           getFormElementForField(label, value)
         ) : (
@@ -27,10 +31,6 @@ function Item({ fullWidth, img, label, value, editable }: ItemProps) {
             {value}
           </span>
         )}
-
-        <span className="text-sm leading-5 text-gray-500 dark:text-dark-300">
-          {label}
-        </span>
       </div>
     </li>
   );

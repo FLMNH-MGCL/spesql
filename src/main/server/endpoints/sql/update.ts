@@ -22,8 +22,6 @@ export default function update(req: Request, res: Response) {
         console.log(error);
         res.status(503).send(error);
       } else {
-        // const ret = { specimen: data, query };
-
         res.send({ result: data, query });
       }
     });

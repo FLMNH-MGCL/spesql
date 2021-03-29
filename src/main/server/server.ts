@@ -42,6 +42,10 @@ import checkConnection from './endpoints/sql/utils/checkConnection';
 import createTable from './endpoints/sql/admin/createTable';
 import editTable from './endpoints/sql/admin/editTable';
 import deleteTable from './endpoints/sql/admin/deleteTable';
+import requestAccount from './endpoints/requestAccount';
+import getRequests from './endpoints/sql/admin/getRequests';
+import changeRequestStatus from './endpoints/sql/admin/changeRequestStatus';
+import clearCompletedRequests from './endpoints/sql/admin/clearCompletedRequests';
 
 require('dotenv').config();
 
@@ -102,20 +106,6 @@ async function bootstrap() {
     }
   });
 
-  // connection.getConnection(function (err, connection) {
-  //   if (connection) {
-  //     console.log('Connected to MySQL Server');
-  //   } else if (err) {
-  //     console.log(err);
-  //     // tell react what's up
-  //     // win?.webContents.send('NO CONNECTION');
-  //     // sendStatusToWindow({
-  //     //   type: 'error',
-  //     //   message: 'Failed to connected to the Database. Please check the VPN',
-  //     // });
-  //   }
-  // });
-
   // GLOBAL / GUEST ROUTES
   app.get('/api/viewer', viewer);
   app.get('/api/check-connection', checkConnection);
@@ -129,6 +119,10 @@ async function bootstrap() {
 
   app.post('/api/log/update', validateSession, logUpdate);
   app.post('/api/log/delete', validateSession, logDelete);
+
+  app.post('/api/request-account', requestAccount);
+
+  app.get('/api/admin/user/generatePassword', generatePassword);
   // END GLOBAL / GUEST ROUTES
 
   // MANAGER ROUTES
@@ -189,16 +183,28 @@ async function bootstrap() {
     adminRoute,
     queriablesStats
   );
+
   app.get('/api/admin/users', validateSession, adminRoute, getUsers);
+  app.get('/api/admin/reqests', validateSession, adminRoute, getRequests);
+
+  app.post(
+    '/api/admin/request-status',
+    validateSession,
+    adminRoute,
+    changeRequestStatus
+  );
+
+  app.post(
+    '/api/admin/clear-requests',
+    validateSession,
+    adminRoute,
+    clearCompletedRequests
+  );
+
   app.post('/api/admin/user/create', validateSession, adminRoute, createUser);
   app.post('/api/admin/user/edit', validateSession, adminRoute, editUser);
   app.post('/api/admin/user/delete', validateSession, adminRoute, deleteUser);
-  app.get(
-    '/api/admin/user/generatePassword',
-    validateSession,
-    adminRoute,
-    generatePassword
-  );
+
   app.post('/api/admin/table/logs', validateSession, adminRoute, getTableLogs);
   app.post('/api/admin/table/create', validateSession, adminRoute, createTable);
   app.post('/api/admin/table/edit', validateSession, adminRoute, editTable);
@@ -211,11 +217,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-
-// fs.readFile(CONFIG_FILE, (err, data) => {
-//   if (err) {
-//     bootstrap(null);
-//   } else {
-//     bootstrap(JSON.parse(data.toString()) as Partial<MySqlCredentials>);
-//   }
-// });

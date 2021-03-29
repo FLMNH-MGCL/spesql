@@ -1,5 +1,33 @@
 import { GoogleChartTicks } from 'react-google-charts/dist/types';
 
+export enum RequestType {
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
+  // INSERT,
+  ACCOUNTCREATION = 'ACCOUNTCREATION',
+}
+
+export enum RequestStatus {
+  PENDING = 'PENDING',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
+  FAILED = 'FAILED',
+}
+
+export type UserRequest = {
+  id?: number;
+  _type: RequestType;
+  status: RequestStatus;
+  from: string; // username OR name (if not registered user)
+  email?: string;
+  username?: string;
+  institution?: string;
+  title: string; // title of request
+  description?: string; // optional explanation for request
+  query?: string;
+  password?: string;
+};
+
 export type Values = Record<string, any>;
 
 type StringOrNull = string | null;

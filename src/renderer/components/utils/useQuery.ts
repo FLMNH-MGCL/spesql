@@ -186,9 +186,12 @@ export default function useQuery() {
         }
       },
 
-      async createUser(newUser: Partial<User>) {
+      async createUser(newUser: Partial<User>, hash = true) {
         const creationResponse = await axios
-          .post(BACKEND_URL + '/api/admin/user/create', { newUser })
+          .post(BACKEND_URL + '/api/admin/user/create', {
+            newUser,
+            shouldHash: hash,
+          })
           .catch((error) => error.response);
 
         if (creationResponse.status === 201) {

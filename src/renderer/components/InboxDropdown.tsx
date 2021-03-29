@@ -1,11 +1,15 @@
-import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 import useKeyboard from './utils/useKeyboard';
 import useToggle from './utils/useToggle';
 
-export default function InboxDropdown() {
+type Props = {
+  onViewClick(): void;
+  onReject(): void;
+};
+
+export default function InboxDropdown({ onViewClick, onReject }: Props) {
   const [visible, { toggle, off }] = useToggle(false);
 
   useKeyboard('Escape', () => {
@@ -18,7 +22,7 @@ export default function InboxDropdown() {
         {/* TRIGGER */}
         <button
           type="button"
-          className="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          className="w-8 h-8 bg-white dark:bg-dark-600 inline-flex items-center justify-center text-gray-400 dark:text-dark-200 rounded-full hover:text-gray-500 dark:hover:text-dark-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
           id="project-options-menu-0"
           aria-expanded="false"
           aria-haspopup="true"
@@ -44,15 +48,16 @@ export default function InboxDropdown() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.1, ease: 'easeInOut' }}
-              className="mx-3 origin-top-right absolute right-7 top-0 w-48 mt-1 rounded-md shadow-around-lg z-10 bg-white dark:bg-dark-600 ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none"
+              className="mx-3 origin-top-right absolute right-7 top-0 w-48 mt-1 rounded-md shadow-around-lg z-10 bg-white dark:bg-dark-500 ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 dark:divide-dark-400 focus:outline-none"
             >
               <div className="py-1" role="none">
                 <span
-                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 dark:text-dark-200 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 dark:hover:text-dark-200"
                   role="menuitem"
+                  onClick={onViewClick}
                 >
                   <svg
-                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    className="mr-3 h-5 w-5 text-gray-400 dark:text-dark-200 group-hover:text-gray-500 dark:group-hover:text-dark-200"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -76,11 +81,11 @@ export default function InboxDropdown() {
               </div>
               <div className="py-1" role="none">
                 <span
-                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 dark:text-dark-200 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 dark:hover:text-dark-200"
                   role="menuitem"
                 >
                   <svg
-                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    className="mr-3 h-5 w-5 text-gray-400 dark:text-dark-200 group-hover:text-gray-500 dark:group-hover:text-dark-200"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -96,11 +101,12 @@ export default function InboxDropdown() {
                   Approve
                 </span>
                 <span
-                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 dark:text-dark-200 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 dark:hover:text-dark-200"
                   role="menuitem"
+                  onClick={onReject}
                 >
                   <svg
-                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    className="mr-3 h-5 w-5 text-gray-400 dark:text-dark-200 group-hover:text-gray-500 dark:group-hover:text-dark-200"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                     fill="currentColor"
@@ -112,7 +118,7 @@ export default function InboxDropdown() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  Delete
+                  Reject
                 </span>
               </div>
             </motion.div>
