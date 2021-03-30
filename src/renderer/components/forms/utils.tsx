@@ -48,7 +48,8 @@ import {
   sexControl,
   tubeSizeControl,
 } from '../utils/constants';
-import { Datepicker, Form } from '@flmnh-mgcl/ui';
+import { Form } from '@flmnh-mgcl/ui';
+import Datepicker from '../ui/Datepicker';
 
 export async function fetchTables(setTables: any) {
   const res = await axios
@@ -77,7 +78,6 @@ export function fixNull(value: string | number | null) {
 export function stringListToArray(
   value?: string
 ): string[] | string | undefined {
-  console.log(value);
   if (!value || !value.length) {
     return [];
   }
@@ -88,9 +88,8 @@ export function stringListToArray(
     valuesOnly = valuesOnly
       .filter((match) => match.trim() !== '')
       .map((match) => match.trim());
-    console.log(valuesOnly);
 
-    return valuesOnly;
+    return valuesOnly.length === 1 ? valuesOnly[0] : valuesOnly;
   } else {
     return value;
   }
@@ -238,7 +237,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         slim
         name="dateIdentified"
         register={{ validate: validateDateField }}
-        defaultValue={currentValue}
+        initialDate={currentValue}
       />
     ),
     verbatimDate: () => (
@@ -273,7 +272,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         slim
         name="dateEntered"
         register={{ validate: validateDateField }}
-        defaultValue={currentValue}
+        initialDate={currentValue}
       />
     ),
     sex: () => (
@@ -353,6 +352,7 @@ export function getFormElementForField(key: string, currentValue: any) {
       <Form.Input
         slim
         name="county"
+        defaultValue={currentValue}
         register={{ validate: validateProperNoun }}
       />
     ),
@@ -477,7 +477,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         slim
         name="loanDate"
         register={{ validate: validateDateField }}
-        defaultValue={currentValue}
+        initialDate={currentValue}
       />
     ),
     loanReturnDate: () => (
@@ -485,7 +485,7 @@ export function getFormElementForField(key: string, currentValue: any) {
         slim
         name="loanReturnDate"
         register={{ validate: validateDateField }}
-        defaultValue={currentValue}
+        initialDate={currentValue}
       />
     ),
     preparations: () => (

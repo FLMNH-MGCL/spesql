@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../stores';
 import DeleteButton from './buttons/DeleteButton';
@@ -23,6 +23,7 @@ import Resizable from './Resizable';
 import CreateRecordButton from './buttons/CreateRecordButton';
 import InsertNewRecord from './forms/InsertNewRecord';
 import { arrayFieldsToString, getSpecimenDefaults } from '../functions/util';
+import CreateRequestSingleUpdateModal from './modals/CreateRequestSingleUpdateModal';
 
 // TODO: remove ? where needed
 type OverviewProps = {
@@ -64,24 +65,27 @@ function SpecimenOverview({
   );
 }
 
-// TODO: make editing a global, zustand value... this will enable me to disallow
-// the user from selecting another specimen while already editing another!
-// TODO: once that is completed, send a notification when they attempt to do this so
-// they aren't clueless as to why their clicks aren't working
 export default function () {
   const { notify } = useNotify();
 
-  // const [editing, { on, off }] = useToggle(false);
   const [showMissing, missingToggles] = useToggle(false);
   const [loading, loadingToggles] = useToggle(false);
 
+  const [viewRequestModal, setViewRequestModal] = useState(false);
+  const [requestUpdate, setRequestUpdate] = useState<any>(null);
+
   const table = useStore((state) => state.queryData.table, shallow);
 
-  const { hasQueried } = useStore((state) => ({
-    hasQueried:
-      state.queryData.queryString !== undefined &&
-      state.queryData.queryString !== '',
-  }));
+  const { hasQueried } = useStore(
+    (state) => ({
+      hasQueried:
+        state.queryData.queryString !== undefined &&
+        state.queryData.queryString !== '',
+    }),
+    shallow
+  );
+
+  const user = useStore((state) => state.user, shallow);
 
   const { databaseTable, selectedSpecimen } = useStore(
     (state) => ({
@@ -107,6 +111,15 @@ export default function () {
     shallow
   );
 
+  // All form elements must be rendered when making an inline edit. Therefore,
+  // I am enforcing this in an effect hook, which will toggle on the show missing
+  // when editing
+  useEffect(() => {
+    if (isEditingRecord && !showMissing) {
+      missingToggles.on();
+    }
+  }, [isEditingRecord]);
+
   const { width } = useWindowDimensions();
 
   const { update, deleteSpecimen, logUpdate, logDelete, insert } = useQuery();
@@ -119,6 +132,17 @@ export default function () {
     setIsInsertingRecord(false);
   }
 
+  function requestEdit(query: string, conditions: any[], updates: any) {
+    console.log(updates);
+    setRequestUpdate({
+      query,
+      conditions,
+      updates,
+    });
+
+    setViewRequestModal(true);
+  }
+
   async function commitEdit(values: Values) {
     if (!selectedSpecimen) {
       return;
@@ -127,7 +151,6 @@ export default function () {
     loadingToggles.on();
 
     const correctedSpecimen = getSpecimenDefaults(selectedSpecimen);
-
     const updatedFieldArray = arrayFieldsToString(values as Specimen);
     const correctedUpdates = getSpecimenDefaults(updatedFieldArray);
 
@@ -143,38 +166,58 @@ export default function () {
       selectedSpecimen
     );
 
-    if (errors.length) {
-      notify({
-        title: 'Update Failed',
-        message: 'Please check logs to correct errors in the form',
-        level: 'error',
-      });
-
-      // TODO: write to log
-
-      // console.log(errors);
-    } else if (!updates || !Object.keys(updates).length) {
-      notify({
-        title: 'Update Failed',
-        message: 'No changes were detected in the form',
-        level: 'warning',
-      });
-    } else {
-      const conditions = ['id', selectedSpecimen.id];
-
-      const storedCatalogNumber = selectedSpecimen.catalogNumber ?? null;
-
-      const queryString = await update(query, conditions, updates);
-
-      if (queryString) {
-        await logUpdate(queryString, logUpdates, table, storedCatalogNumber);
-        setIsEditingRecord(false);
-      } else {
+    if (user && user.accessRole === 'guest') {
+      if (errors.length) {
         notify({
-          title: 'Update Failed',
-          message: 'Please check the corresponding logs',
+          title: 'Update Request Failed',
+          message: 'Please check logs to correct errors in the form',
           level: 'error',
         });
+      } else if (!updates || !Object.keys(updates).length) {
+        notify({
+          title: 'Update Failed',
+          message: 'No changes were detected in the form',
+          level: 'warning',
+        });
+      } else {
+        const conditions = ['id', selectedSpecimen.id];
+
+        requestEdit(query, conditions, updates);
+      }
+    } else {
+      if (errors.length) {
+        notify({
+          title: 'Update Failed',
+          message: 'Please check logs to correct errors in the form',
+          level: 'error',
+        });
+
+        // TODO: write to log
+
+        // console.log(errors);
+      } else if (!updates || !Object.keys(updates).length) {
+        notify({
+          title: 'Update Failed',
+          message: 'No changes were detected in the form',
+          level: 'warning',
+        });
+      } else {
+        const conditions = ['id', selectedSpecimen.id];
+
+        const storedCatalogNumber = selectedSpecimen.catalogNumber ?? null;
+
+        const queryString = await update(query, conditions, updates);
+
+        if (queryString) {
+          await logUpdate(queryString, logUpdates, table, storedCatalogNumber);
+          setIsEditingRecord(false);
+        } else {
+          notify({
+            title: 'Update Failed',
+            message: 'Please check the corresponding logs',
+            level: 'error',
+          });
+        }
       }
     }
 
@@ -286,7 +329,7 @@ export default function () {
         />
 
         <Radio
-          disabled={!hasQueried}
+          disabled={!hasQueried || isEditingRecord}
           checked={!hasQueried ? false : showMissing}
           onChange={missingToggles.toggle}
           stacked
@@ -330,22 +373,38 @@ export default function () {
   }
 
   return (
-    <div className="h-full overflow-hidden bg-white dark:bg-dark-800 shadow-around-lg rounded-md">
-      <Resizable defaultWidth={width * 0.25} leftConstraint={100} dragTo="left">
-        <div className="flex flex-col h-full">
-          <div className="flex-1 h-full px-3 py-1 overflow-y-scroll">
-            {renderBody()}
-          </div>
+    <React.Fragment>
+      {requestUpdate && (
+        <CreateRequestSingleUpdateModal
+          {...requestUpdate}
+          open={viewRequestModal}
+          onClose={() => {
+            setViewRequestModal(false);
+            setRequestUpdate(null);
+          }}
+        />
+      )}
+      <div className="h-full overflow-hidden bg-white dark:bg-dark-800 shadow-around-lg rounded-md">
+        <Resizable
+          defaultWidth={width * 0.25}
+          leftConstraint={100}
+          dragTo="left"
+        >
+          <div className="flex flex-col h-full">
+            <div className="flex-1 h-full px-3 py-1 overflow-y-scroll">
+              {renderBody()}
+            </div>
 
-          {/* FOOTER */}
-          <div className="bg-gray-50 dark:bg-dark-600 h-16 flex items-center px-4 justify-between">
-            {/* if inserting then render insert form, else if I had a selected specimen, render selected footer, 
+            {/* FOOTER */}
+            <div className="bg-gray-50 dark:bg-dark-600 h-16 flex items-center px-4 justify-between">
+              {/* if inserting then render insert form, else if I had a selected specimen, render selected footer, 
             and if I am currently editing show the confirm and cancel buttons. otherwise, just render the insert
             new record button */}
-            {renderFooter()}
+              {renderFooter()}
+            </div>
           </div>
-        </div>
-      </Resizable>
-    </div>
+        </Resizable>
+      </div>
+    </React.Fragment>
   );
 }

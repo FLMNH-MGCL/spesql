@@ -49,6 +49,25 @@ export function standardizeName(name: string) {
   }
 }
 
+function convertStringToDecimal(value: string) {
+  return parseFloat(value);
+}
+
+const properTypeConversions = {
+  decimalLatitude: convertStringToDecimal,
+  decimalLongitude: convertStringToDecimal,
+};
+
+// TODO: more fields
+export function convertFieldToProperType(value: any, field: string) {
+  const _key = field as keyof typeof properTypeConversions;
+  if (properTypeConversions[_key]) {
+    return properTypeConversions[_key](value);
+  } else {
+    return value;
+  }
+}
+
 export function arrayFieldsToString(partiallyCorrect: Specimen) {
   let corrected = partiallyCorrect;
 

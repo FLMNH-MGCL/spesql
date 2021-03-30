@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { SpecimenFields } from '../types';
+import { convertFieldToProperType } from './util';
 import { determineAndRunFieldValidator } from './validation';
 
 // TODO: alter all builders to account for new operators added!!
@@ -136,7 +137,21 @@ export function buildSingleUpdateQuery(
 
   Object.keys(updatedSpecimen).forEach((key) => {
     const _key = key as keyof SpecimenFields;
-    if (updatedSpecimen[_key] !== currentSpecimen[_key]) {
+
+    const updatedValCorrected = convertFieldToProperType(
+      updatedSpecimen[_key],
+      _key
+    );
+
+    if (updatedValCorrected !== currentSpecimen[_key]) {
+      console.log('FOUND DIFFERENCE AT:', _key);
+      console.log(
+        'UPDATE:',
+        updatedSpecimen[_key],
+        typeof updatedSpecimen[_key]
+      );
+      console.log('ORIG:', currentSpecimen[_key], typeof currentSpecimen[_key]);
+
       const valid = determineAndRunFieldValidator(key, updatedSpecimen[_key]);
 
       // valid: string | boolean

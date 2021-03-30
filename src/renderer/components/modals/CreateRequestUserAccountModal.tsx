@@ -3,9 +3,11 @@ import axios from 'axios';
 import React from 'react';
 import { BACKEND_URL, RequestType } from '../../types';
 import NewUserRequestForm from '../forms/NewUserRequestForm';
+import { useNotify } from '../utils/context';
 import useToggle from '../utils/useToggle';
 
 export default function CreateRequestUserAccountModal() {
+  const { notify } = useNotify();
   const [open, { on, off }] = useToggle(false);
   const [loading, { toggle }] = useToggle(false);
 
@@ -40,15 +42,27 @@ export default function CreateRequestUserAccountModal() {
       ...userRequest,
     });
 
-    console.log(res);
-
     toggle();
 
-    // post to db
-    // check if bad response
-    if (false) {
+    if (res.status !== 201) {
+      notify(
+        {
+          title: 'Account Request Failed',
+          message:
+            'An unknown error occurred, please create a bug report on GitHub and inform an admin.',
+          level: 'error',
+        },
+        'error'
+      );
     } else {
       // can close the modal on success
+      notify({
+        title: 'Account Request Sent',
+        message:
+          'An admin should review the request shortly and get back to you.',
+        level: 'success',
+      });
+
       off();
     }
   }

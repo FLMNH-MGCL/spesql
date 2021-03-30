@@ -1,5 +1,6 @@
 import {
   Button,
+  Code,
   Form,
   FormSubmitValues,
   Heading,
@@ -22,7 +23,13 @@ type Props = {
   onApprove(): void;
 };
 
+// removing this if I don't need specific props
 type NewAccountViewProps = {
+  request: UserRequest;
+  onApprove(): void;
+};
+
+type RequestViewProps = {
   request: UserRequest;
   onApprove(): void;
 };
@@ -183,6 +190,70 @@ function NewUserRequestView({ request, onApprove }: NewAccountViewProps) {
   );
 }
 
+function UpdateRequestView({ request, onApprove }: RequestViewProps) {
+  const { advancedUpdate, logUpdate } = useQuery();
+
+  const { from, username, description } = request;
+
+  async function doUpdate() {
+    const updateRet = await advancedUpdate(request.query!);
+
+    let pattern = /^.* from (?<first>[a-zA-z_-]+)/i;
+
+    const databaseTable = request.query!.match(pattern)?.groups?.first;
+
+    if (updateRet) {
+      // TODO: handle me better
+      await logUpdate(updateRet, null, databaseTable ?? '', null);
+
+      await changeRequestStatus(request.id!, RequestStatus.ACCEPTED).then(
+        () => {
+          onApprove();
+        }
+      );
+    } else {
+      // TODO: handle me better
+      changeRequestStatus(request.id!, RequestStatus.FAILED);
+    }
+  }
+
+  function handleSubmit(_values: FormSubmitValues) {
+    doUpdate();
+  }
+
+  return (
+    <div>
+      <Text>
+        {from} ({username}) has requested an update. The corresponding query is
+        below:
+      </Text>
+
+      <Code
+        language="sql"
+        rounded
+        codeString={request.query!}
+        maxHeight="12rem"
+      />
+
+      <div className="py-3 flex space-x-2">
+        <Heading>Request Status: </Heading>
+        <StatusBadge status={request.status} />
+      </div>
+
+      <div className="pb-3">
+        <Heading>Request Details</Heading>
+        <div className="mt-2 rounded-md bg-gray-50 dark:bg-dark-500 dark:text-dark-200 p-2">
+          <Text>
+            <b>Message</b>: {description}
+          </Text>
+        </div>
+      </div>
+
+      <Form onSubmit={handleSubmit} id="update-req-form"></Form>
+    </div>
+  );
+}
+
 export default function CreateViewRequestModal({
   request,
   open,
@@ -194,6 +265,8 @@ export default function CreateViewRequestModal({
   function renderView() {
     if (_type === RequestType.ACCOUNTCREATION) {
       return <NewUserRequestView request={request} onApprove={onApprove} />;
+    } else if (_type === RequestType.UPDATE) {
+      return <UpdateRequestView request={request} onApprove={onApprove} />;
     } else {
       return null;
     }
@@ -225,8 +298,18 @@ export default function CreateViewRequestModal({
         <Modal.Footer>
           <Button.Group>
             <Button onClick={onClose}>Close</Button>
-            <Button variant="danger">Reject</Button>
-            <Button variant="primary" form={formId} type="submit">
+            <Button
+              variant="danger"
+              disabled={request.status !== RequestStatus.PENDING}
+            >
+              Reject
+            </Button>
+            <Button
+              variant="primary"
+              form={formId}
+              type="submit"
+              disabled={request.status !== RequestStatus.PENDING}
+            >
               Accept
             </Button>
           </Button.Group>

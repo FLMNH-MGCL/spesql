@@ -589,9 +589,7 @@ export function validateDisposition(value: string) {
   }
 }
 
-// FIXME: this will short circuit true validation until data is resolved by researchers, there is conflict regarding how it should be formatted.
 export function validateFreezer(value: string) {
-  return true;
   if (!value || !value.length) {
     return true;
   }
@@ -610,16 +608,12 @@ export function validateFreezer(value: string) {
   return matches ? true : 'Must match Kawahara## or GRR';
 }
 
-// FIXME: this will short circuit true validation until data is resolved by researchers, there is conflict regarding how it should be formatted.
-// TODO: I have removed the short circuit for now
 export function validateRack(value: string) {
-  // return true;
   if (!value || !value.length) {
     return true;
   }
 
   if (value && value.length > 3) {
-    // console.log(value);
     return 'Must be 1-3 characters long';
   }
 
@@ -713,7 +707,7 @@ export function validateNameListField(list: string) {
 }
 
 export function validateDateField(date: string) {
-  let pattern = new RegExp(/^d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/g);
+  let pattern = new RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/g);
 
   if (!date || date.length < 1) {
     return true;

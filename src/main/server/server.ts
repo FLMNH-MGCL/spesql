@@ -46,6 +46,7 @@ import requestAccount from './endpoints/requestAccount';
 import getRequests from './endpoints/sql/admin/getRequests';
 import changeRequestStatus from './endpoints/sql/admin/changeRequestStatus';
 import clearCompletedRequests from './endpoints/sql/admin/clearCompletedRequests';
+import requestUpdate from './endpoints/requestUpdate';
 
 require('dotenv').config();
 
@@ -121,6 +122,7 @@ async function bootstrap() {
   app.post('/api/log/delete', validateSession, logDelete);
 
   app.post('/api/request-account', requestAccount);
+  app.post('/api/request-update', requestUpdate);
 
   app.get('/api/admin/user/generatePassword', generatePassword);
   // END GLOBAL / GUEST ROUTES

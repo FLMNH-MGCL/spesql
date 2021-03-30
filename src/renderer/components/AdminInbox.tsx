@@ -6,6 +6,7 @@ import { BACKEND_URL, RequestStatus, RequestType, UserRequest } from '../types';
 import InboxDropdown from './InboxDropdown';
 import CreateViewRequestModal from './modals/CreateViewRequestModal';
 import changeRequestStatus from './utils/changeRequestStatus';
+import { useNotify } from './utils/context';
 import useToggle from './utils/useToggle';
 
 type ListItemProps = {
@@ -82,20 +83,26 @@ function InboxListItem({
 }
 
 export default function AdminInbox() {
+  const { notify } = useNotify();
+
   const [inbox, setInbox] = useState<UserRequest[]>([]);
   const [tab, setTab] = useState(0);
   const [filter, setFilter] = useState('');
+  const [sortBy, setSortBy] = useState('at');
 
   async function fetchInbox() {
     const res = await axios.get(BACKEND_URL + '/api/admin/reqests');
-
-    console.log(res);
 
     if (res && res.status === 200) {
       const { requests } = res.data;
       setInbox(requests);
     } else {
-      // TODO: notify
+      notify({
+        title: 'Could not load inbox',
+        message:
+          'There was an error while trying to load the user requests. Please try refreshing the application.',
+        level: 'error',
+      });
     }
   }
 
@@ -125,7 +132,11 @@ export default function AdminInbox() {
     <div className="w-1/4 h-full flex flex-col">
       <div className="pb-3 flex space-x-2 items-center">
         <Heading>Requests</Heading>
-        <Input placeholder="Filter Requests" disabled={!items.length} />
+        <Input
+          placeholder="Filter Requests"
+          disabled={!items.length}
+          onChange={(e) => setFilter(e.target.value)}
+        />
         <Dropdown
           label="Sort"
           origin="right"
@@ -148,9 +159,12 @@ export default function AdminInbox() {
           }
         >
           <Dropdown.Section>
-            <Dropdown.Item text="Request Type" />
-            <Dropdown.Item text="Date" />
-            <Dropdown.Item text="User" />
+            <Dropdown.Item
+              text="Request Type"
+              onClick={() => setSortBy('type')}
+            />
+            <Dropdown.Item text="Date" onClick={() => setSortBy('at')} />
+            <Dropdown.Item text="User" onClick={() => setSortBy('user')} />
           </Dropdown.Section>
         </Dropdown>
       </div>

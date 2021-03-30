@@ -24,7 +24,7 @@ export default function UserTableDropdown({ onEdit, onDelete, last }: Props) {
         {/* TRIGGER */}
         <button
           type="button"
-          className="w-6 h-6 bg-white inline-flex items-center justify-center text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          className="w-6 h-6 bg-white dark:bg-dark-500 inline-flex items-center justify-center text-gray-400 dark:text-dark-200 rounded-full hover:text-gray-500 dark:hover:dark:text-dark-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
           id="project-options-menu-0"
           aria-expanded="false"
           aria-haspopup="true"
@@ -58,11 +58,11 @@ export default function UserTableDropdown({ onEdit, onDelete, last }: Props) {
               <div className="py-1" role="none">
                 <span
                   onClick={onEdit}
-                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 dark:text-dark-200 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 dark:hover:text-dark-200"
                   role="menuitem"
                 >
                   <svg
-                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    className="mr-3 h-5 w-5 text-gray-400 dark:text-dark-200 group-hover:text-gray-500 dark:group-hover:text-dark-200"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -78,12 +78,12 @@ export default function UserTableDropdown({ onEdit, onDelete, last }: Props) {
                   Edit
                 </span>
                 <span
-                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 dark:text-dark-200 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 dark:hover:text-dark-200"
                   role="menuitem"
                   onClick={onDelete}
                 >
                   <svg
-                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    className="mr-3 h-5 w-5 text-gray-400 dark:text-dark-200 group-hover:text-gray-500 dark:group-hover:text-dark-200"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                     fill="currentColor"
