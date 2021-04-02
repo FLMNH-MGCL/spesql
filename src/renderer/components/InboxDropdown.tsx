@@ -1,20 +1,45 @@
+import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { RequestStatus } from '../types';
 import useKeyboard from './utils/useKeyboard';
 import useToggle from './utils/useToggle';
 
 type Props = {
+  status: RequestStatus;
   onViewClick(): void;
-  onReject(): void;
+  onQuickAccept?(): void;
+  onQuickReject?(): void;
+  reopenRequest(): void;
 };
 
-export default function InboxDropdown({ onViewClick, onReject }: Props) {
+export default function InboxDropdown({
+  status,
+  onViewClick,
+  onQuickReject,
+  onQuickAccept,
+  reopenRequest,
+}: Props) {
   const [visible, { toggle, off }] = useToggle(false);
 
   useKeyboard('Escape', () => {
     off();
   });
+
+  function handleQuickAccept() {
+    if (onQuickAccept) {
+      onQuickAccept();
+      off();
+    }
+  }
+
+  function handleQuickReject() {
+    if (onQuickReject) {
+      onQuickReject();
+      off();
+    }
+  }
 
   return (
     <OutsideClickHandler onOutsideClick={off}>
@@ -80,46 +105,88 @@ export default function InboxDropdown({ onViewClick, onReject }: Props) {
                 </span>
               </div>
               <div className="py-1" role="none">
-                <span
-                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 dark:text-dark-200 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 dark:hover:text-dark-200"
-                  role="menuitem"
-                >
-                  <svg
-                    className="mr-3 h-5 w-5 text-gray-400 dark:text-dark-200 group-hover:text-gray-500 dark:group-hover:text-dark-200"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
+                {(status === RequestStatus.REJECTED ||
+                  status === RequestStatus.FAILED) && (
+                  <button
+                    className="hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 dark:hover:text-dark-200 cursor-pointer w-full group flex items-center px-4 py-2 text-sm text-gray-700 dark:text-dark-200 focus:outline-none"
+                    role="menuitem"
+                    onClick={reopenRequest}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                    />
-                  </svg>
-                  Approve
-                </span>
-                <span
-                  className="cursor-pointer group flex items-center px-4 py-2 text-sm text-gray-700 dark:text-dark-200 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 dark:hover:text-dark-200"
-                  role="menuitem"
-                  onClick={onReject}
-                >
-                  <svg
-                    className="mr-3 h-5 w-5 text-gray-400 dark:text-dark-200 group-hover:text-gray-500 dark:group-hover:text-dark-200"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Reject
-                </span>
+                    <svg
+                      className="mr-3 h-5 w-5 text-gray-400 dark:text-dark-200 group-hover:text-gray-500 dark:group-hover:text-dark-200"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"
+                      />
+                    </svg>
+                    Reopen
+                  </button>
+                )}
+
+                {status === RequestStatus.PENDING && (
+                  <React.Fragment>
+                    <button
+                      className={clsx(
+                        onQuickAccept
+                          ? 'hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 dark:hover:text-dark-200 cursor-pointer'
+                          : 'cursor-not-allowed',
+                        'w-full group flex items-center px-4 py-2 text-sm text-gray-700 dark:text-dark-200 focus:outline-none'
+                      )}
+                      role="menuitem"
+                      disabled={!onQuickAccept}
+                      onClick={handleQuickAccept}
+                    >
+                      <svg
+                        className="mr-3 h-5 w-5 text-gray-400 dark:text-dark-200 group-hover:text-gray-500 dark:group-hover:text-dark-200"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                        />
+                      </svg>
+                      Approve
+                    </button>
+                    <button
+                      className={clsx(
+                        onQuickReject
+                          ? 'hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-dark-700 dark:hover:text-dark-200 cursor-pointer'
+                          : 'cursor-not-allowed',
+                        'w-full group flex items-center px-4 py-2 text-sm text-gray-700 dark:text-dark-200 focus:outline-none'
+                      )}
+                      role="menuitem"
+                      disabled={!onQuickReject}
+                      onClick={handleQuickReject}
+                    >
+                      <svg
+                        className="mr-3 h-5 w-5 text-gray-400 dark:text-dark-200 group-hover:text-gray-500 dark:group-hover:text-dark-200"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      Reject
+                    </button>
+                  </React.Fragment>
+                )}
               </div>
             </motion.div>
           )}

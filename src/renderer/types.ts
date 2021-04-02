@@ -26,6 +26,7 @@ export type UserRequest = {
   description?: string; // optional explanation for request
   query?: string;
   password?: string;
+  at?: Date;
 };
 
 export type Values = Record<string, any>;

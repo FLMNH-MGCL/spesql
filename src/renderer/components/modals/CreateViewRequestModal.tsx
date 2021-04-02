@@ -13,6 +13,7 @@ import { RequestStatus, RequestType, UserRequest } from '../../types';
 import changeRequestStatus from '../utils/changeRequestStatus';
 import { accessRoles } from '../utils/constants';
 import { useNotify } from '../utils/context';
+import useKeyboard from '../utils/useKeyboard';
 import useLogError from '../utils/useLogError';
 import useQuery from '../utils/useQuery';
 
@@ -21,6 +22,7 @@ type Props = {
   open: boolean;
   onClose(): void;
   onApprove(): void;
+  refresh(): void;
 };
 
 // removing this if I don't need specific props
@@ -160,6 +162,7 @@ function NewUserRequestView({ request, onApprove }: NewAccountViewProps) {
             defaultValue={from}
             fullWidth
             required
+            disabled={request.status !== RequestStatus.PENDING}
             register={{ validate: NonNullValidator }}
           />
 
@@ -170,6 +173,7 @@ function NewUserRequestView({ request, onApprove }: NewAccountViewProps) {
             defaultValue={username}
             fullWidth
             required
+            disabled={request.status !== RequestStatus.PENDING}
             register={{ validate: NonNullValidator }}
           />
         </Form.Group>
@@ -182,6 +186,7 @@ function NewUserRequestView({ request, onApprove }: NewAccountViewProps) {
             defaultValue="guest"
             label="Access Role"
             options={accessRoles}
+            disabled={request.status !== RequestStatus.PENDING}
             register={{ validate: NonNullValidator }}
           />
         </Form.Group>
@@ -259,7 +264,10 @@ export default function CreateViewRequestModal({
   open,
   onClose,
   onApprove,
+  refresh,
 }: Props) {
+  const { notify } = useNotify();
+
   const { _type, title } = request;
 
   function renderView() {
@@ -284,12 +292,27 @@ export default function CreateViewRequestModal({
     }
   }
 
+  async function reopenRequest() {
+    await changeRequestStatus(request.id!, RequestStatus.PENDING).then(() => {
+      notify({
+        title: 'Reopened Request',
+        message: 'No further actions required',
+        level: 'info',
+      });
+      refresh();
+    });
+  }
+
   // this hook should NOT hit, but just in case...
   useEffect(() => {
     setFormId(getFormId());
   }, [_type]);
 
   const [formId, setFormId] = useState(getFormId());
+
+  useKeyboard('Escape', () => {
+    onClose();
+  });
 
   return (
     <React.Fragment>
@@ -298,20 +321,26 @@ export default function CreateViewRequestModal({
         <Modal.Footer>
           <Button.Group>
             <Button onClick={onClose}>Close</Button>
-            <Button
-              variant="danger"
-              disabled={request.status !== RequestStatus.PENDING}
-            >
-              Reject
-            </Button>
-            <Button
-              variant="primary"
-              form={formId}
-              type="submit"
-              disabled={request.status !== RequestStatus.PENDING}
-            >
-              Accept
-            </Button>
+            {/* You can only reopen rejected or failed requests, as accepted is already commited to the database */}
+            {request.status !== RequestStatus.PENDING &&
+              request.status !== RequestStatus.ACCEPTED && (
+                <Button
+                  variant="primary"
+                  title="This will set the status to Pending"
+                  onClick={reopenRequest}
+                >
+                  Reopen Request
+                </Button>
+              )}
+
+            {request.status === RequestStatus.PENDING && (
+              <React.Fragment>
+                <Button variant="danger">Reject</Button>
+                <Button variant="primary" form={formId} type="submit">
+                  Accept
+                </Button>
+              </React.Fragment>
+            )}
           </Button.Group>
         </Modal.Footer>
       </Modal>

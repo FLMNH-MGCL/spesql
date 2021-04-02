@@ -48,8 +48,8 @@ import {
   sexControl,
   tubeSizeControl,
 } from '../utils/constants';
-import { Form } from '@flmnh-mgcl/ui';
-import Datepicker from '../ui/Datepicker';
+import { Form, Datepicker } from '@flmnh-mgcl/ui';
+// import Datepicker from '../ui/Datepicker';
 
 export async function fetchTables(setTables: any) {
   const res = await axios

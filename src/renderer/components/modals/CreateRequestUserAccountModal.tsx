@@ -44,7 +44,30 @@ export default function CreateRequestUserAccountModal() {
 
     toggle();
 
-    if (res.status !== 201) {
+    // connection to database was lost
+    if (res.status === 502) {
+      notify(
+        {
+          title: 'Account Request Failed',
+          message:
+            'The server could not connect, please ensure you have your UF VPN enabled and connected and restart the app',
+          level: 'error',
+        },
+        'error'
+      );
+    } else if (res.status === 400) {
+      // bad params! hmm. this really should not hit unless pinging the endpoint directly but..
+      notify(
+        {
+          title: 'Account Request Failed',
+          message:
+            'The server found missing/invalid values in you request, please ensure the form was filled out entirely',
+          level: 'error',
+        },
+        'error'
+      );
+    } else if (res.status !== 201) {
+      // should not really be any other status at this point, so I consider this a bug.
       notify(
         {
           title: 'Account Request Failed',

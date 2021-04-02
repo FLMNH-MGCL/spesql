@@ -1,86 +1,10 @@
 import { Dropdown, Heading, Input, Tabs, Text } from '@flmnh-mgcl/ui';
 import axios from 'axios';
-import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import { BACKEND_URL, RequestStatus, RequestType, UserRequest } from '../types';
-import InboxDropdown from './InboxDropdown';
-import CreateViewRequestModal from './modals/CreateViewRequestModal';
+import { BACKEND_URL, RequestStatus, UserRequest } from '../types';
+import AdminInboxListItem from './AdminInboxListItem';
 import changeRequestStatus from './utils/changeRequestStatus';
 import { useNotify } from './utils/context';
-import useToggle from './utils/useToggle';
-
-type ListItemProps = {
-  onApprove(): void;
-  onReject(): void;
-  onOpen(): void;
-} & UserRequest;
-
-function InboxListItem({
-  onApprove,
-  onReject,
-  onOpen,
-  ...reqDetails
-}: ListItemProps) {
-  const { _type, status, from, email, title, description, query } = reqDetails;
-
-  const [viewing, { on, off }] = useToggle(false);
-
-  function getIdentifierColor() {
-    if (_type === RequestType.ACCOUNTCREATION) {
-      return 'bg-green-600';
-    } else if (_type === RequestType.DELETE) {
-      return 'bg-red-600';
-    } else {
-      return 'bg-purple-600';
-    }
-  }
-
-  function handleReject() {
-    // TODO
-    onReject();
-  }
-
-  function handleApprove() {
-    // TODO
-  }
-
-  function handleViewRequest() {
-    // TODO
-  }
-
-  return (
-    <React.Fragment>
-      <CreateViewRequestModal
-        request={reqDetails}
-        open={viewing}
-        onClose={off}
-        onApprove={onApprove}
-      />
-      <li className="py-2 px-4">
-        <div className="flex items-center space-x-4">
-          <div
-            className={clsx(
-              'flex-shrink-0 w-2.5 h-2.5 rounded-full',
-              getIdentifierColor()
-            )}
-            aria-hidden="true"
-          ></div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 dark:text-dark-200 truncate">
-              {title}
-            </p>
-            <p className="text-xs italix text-gray-500 dark:text-dark-200 truncate">
-              {from}
-            </p>
-          </div>
-          <div>
-            <InboxDropdown onViewClick={on} onReject={handleReject} />
-          </div>
-        </div>
-      </li>
-    </React.Fragment>
-  );
-}
 
 export default function AdminInbox() {
   const { notify } = useNotify();
@@ -88,7 +12,7 @@ export default function AdminInbox() {
   const [inbox, setInbox] = useState<UserRequest[]>([]);
   const [tab, setTab] = useState(0);
   const [filter, setFilter] = useState('');
-  const [sortBy, setSortBy] = useState('at');
+  // const [sortBy, setSortBy] = useState('at');
 
   async function fetchInbox() {
     const res = await axios.get(BACKEND_URL + '/api/admin/reqests');
@@ -111,7 +35,33 @@ export default function AdminInbox() {
   }
 
   async function onReject(id: number) {
-    await changeRequestStatus(id, RequestStatus.REJECTED).then(() => {
+    await changeRequestStatus(id, RequestStatus.REJECTED)
+      .then(() => {
+        notify({
+          title: 'Rejected Request',
+          message: 'No further actions required',
+          level: 'info',
+        });
+        fetchInbox();
+      })
+      .catch((err) =>
+        notify({
+          title: 'An unknown error occurred',
+          message: `Please make a bug report on GitHub ${
+            err ? JSON.stringify(err) : ''
+          }`,
+          level: 'error',
+        })
+      );
+  }
+
+  async function reopenRequest(request: UserRequest) {
+    await changeRequestStatus(request.id!, RequestStatus.PENDING).then(() => {
+      notify({
+        title: 'Reopened Request',
+        message: 'No further actions required',
+        level: 'info',
+      });
       fetchInbox();
     });
   }
@@ -136,8 +86,9 @@ export default function AdminInbox() {
           placeholder="Filter Requests"
           disabled={!items.length}
           onChange={(e) => setFilter(e.target.value)}
+          fullWidth
         />
-        <Dropdown
+        {/* <Dropdown
           label="Sort"
           origin="right"
           disabled={!items.length}
@@ -166,7 +117,7 @@ export default function AdminInbox() {
             <Dropdown.Item text="Date" onClick={() => setSortBy('at')} />
             <Dropdown.Item text="User" onClick={() => setSortBy('user')} />
           </Dropdown.Section>
-        </Dropdown>
+        </Dropdown> */}
       </div>
 
       <div className="w-full h-full bg-white dark:bg-dark-600 shadow rounded-md overflow-hidden">
@@ -187,13 +138,26 @@ export default function AdminInbox() {
                     return JSON.stringify(req).includes(filter);
                   } else return true;
                 })
+                // .sort((lhs, rhs) => {
+                //   if (sortBy === 'at') {
+                //     // the database will populate at
+                //     return lhs.at! > rhs.at! ? 1 : -1;
+                //   } else if (sortBy === 'user') {
+                //     return lhs.from > rhs.from ? 1 : -1;
+                //   } else {
+                //     // type
+                //     return lhs._type > rhs._type ? 1 : -1;
+                //   }
+                // })
                 .map((req, i) => (
-                  <InboxListItem
+                  <AdminInboxListItem
                     key={i}
                     {...req}
                     onApprove={onApprove}
                     onReject={() => onReject(req.id!)}
                     onOpen={() => alert('TODO')}
+                    refresh={fetchInbox}
+                    reopenRequest={() => reopenRequest(req)}
                   />
                 ))
             ) : (
