@@ -1,4 +1,4 @@
-import { Dropdown, Heading, Input, Tabs, Text } from '@flmnh-mgcl/ui';
+import { Heading, Input, Tabs, Text } from '@flmnh-mgcl/ui';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { BACKEND_URL, RequestStatus, UserRequest } from '../types';
