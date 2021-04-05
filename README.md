@@ -6,18 +6,17 @@ A portal for interacting with a remote MySQL database, written in TypeScript (Re
 
 ### About This Project
 
-This project is intended for use by the McGuire Center of Lepidoptera and Biodiversity (MGCL) at the Florida Museum of Natural History (FLMNH). As such, by default, the application is only compatible with institutions having identical, MySQL database schemes. It is possible to adapt this software to another institution's requirements, however the more closely structured to MGCL's configuration the more seamless the conversion. For more information regarding the structures neccessary for adopting this software,
-please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly. See the Database Schema section for more information, as well.
+This project was developed for the McGuire Center of Lepidoptera and Biodiversity (MGCL) at the Florida Museum of Natural History (FLMNH). It provides researchers a portal for managing their collection datasets, hosted on remote, MySQL servers, as well as tools for summary statistic analysis.
 
 ### Installation
 
-Please <a href="https://github.com/FLMNH-MGCL/spesql/releases" target='_blank'>select and download</a> a release for your platform (i.e. Linux, MacOS, Windows) and proceed with the traditional installation procedure for your platform.
-
-If you do not have these credentials or lost these credentials, please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly for eligibility. If you are an employee and need additional assistance, please refer to the instructional videos or contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly, as well.
+Please <a href="https://github.com/FLMNH-MGCL/spesql/releases" target='_blank'>select and download</a> a release for your platform (i.e. Linux, MacOS, Windows) and proceed with the traditional installation procedure for your platform. You'll need to install [UF's VPN Client](https://net-services.ufl.edu/provided-services/vpn/clients/), as well.
 
 ### Startup & Usage
 
-Ensure your UF VPN is enabled/connected and simply launch the application. For detailed information about usage, please read through the official documentation: [flmnh-mgcl.github.io/spesql/docs/](https://flmnh-mgcl.github.io/spesql/docs/). This will walk you through all the available features/functions in the software.
+Ensure your UF VPN is connected and launch the application. For detailed information about usage, please read through the official documentation: [flmnh-mgcl.github.io/spesql/docs/](https://flmnh-mgcl.github.io/spesql/docs/). This will walk you through all the available features/functions in the software.
+
+If you do not have access credentials you may request an account in the application directly and an admin will review. If you have any other issues or concerns, please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly for support. If you are an employee and need additional assistance, please refer to the instructional videos, website documentation or contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly, as well.
 
 ### Database Schema
 
