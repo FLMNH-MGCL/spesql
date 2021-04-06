@@ -798,6 +798,15 @@ function isNumeric(n: string) {
 
 // TODO: call all above validators, return an array of errors
 export function validateSpecimen(specimen: any) {
+  if (!specimen) {
+    return [
+      {
+        field: 'N/A',
+        message: 'EMPTY ENTRY',
+      },
+    ];
+  }
+
   let errors = [];
 
   if (!specimen.catalogNumber) {

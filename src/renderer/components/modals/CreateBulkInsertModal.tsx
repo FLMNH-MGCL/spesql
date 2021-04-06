@@ -33,7 +33,6 @@ function CSVParser({ onFileUpload }: UploadProps) {
   const updateBulkInsertLog = useStore((state) => state.updateBulkInsertLog);
 
   function handleOnFileLoad(data: any) {
-    console.log(data);
     if (!data || !data.length) {
       notify({
         title: 'Upload Error',
@@ -273,19 +272,21 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     let newCsv = [];
 
     for (let i = 0; i < rawData.length; i++) {
-      const currentSpecimen = rawData[i].data as Specimen;
+      // xlsx reader returns a slightly different structure than the Csv reader,
+      // so I have to collect the current specimen a little differently
+      const currentSpecimen = useCsv
+        ? (rawData[i].data as Specimen)
+        : (rawData[i] as Specimen);
 
       const specimenErrors = validateSpecimen(currentSpecimen);
 
       if (specimenErrors && specimenErrors.length) {
-        // console.log('ERROR OCCURRED:', currentSpecimen);
         allErrors.push({ index: i, row: i + 2, errors: specimenErrors });
 
         if (downloadFailures) {
           newCsv.push(currentSpecimen);
         }
       } else {
-        // console.log(fixPartiallyCorrect(currentSpecimen));
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
       }
     }
@@ -307,14 +308,12 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       const specimenErrors = validateSpecimen(currentSpecimen);
 
       if (specimenErrors && specimenErrors.length) {
-        // console.log('ERROR OCCURRED:'+, currentSpecimen);
         allErrors.push({ index: i, row: i + 2, errors: specimenErrors });
 
         if (downloadFailures) {
           newCsv.push(currentSpecimen);
         }
       } else {
-        // console.log(fixPartiallyCorrect(currentSpecimen));
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
       }
     }
@@ -328,7 +327,9 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
   async function bulkInsert(insertionValues: Partial<SpecimenFields>[]) {
     let errors = [];
-    const values = insertionValues.map((specimen) => specimenToArray(specimen));
+    const values = insertionValues
+      .map((specimen) => specimenToArray(specimen))
+      .filter((specimen) => !!specimen);
 
     const insertResponse = await axios
       .post(BACKEND_URL + '/api/insert/bulk', {
@@ -488,9 +489,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   }
 
   function downloadFailedRows() {
-    console.log('here');
     if (!failureRef.current || !failureRef.current.length) {
-      console.log('FAILED:', failureRef.current);
       return;
     }
 
@@ -511,7 +510,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     }
 
     if (downloadFailures) {
-      console.log('downloading...');
       downloadFailedRows();
     }
   }

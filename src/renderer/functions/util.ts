@@ -209,7 +209,11 @@ export function toProperNoun(noun: string) {
 
 // TODO: fix the bug with this!!!
 export function specimenToArray(specimen: Specimen) {
-  return Object.values(specimen as SpecimenFields);
+  if (!specimen) {
+    return undefined;
+  } else {
+    return Object.values(specimen as SpecimenFields);
+  }
 }
 
 export function defined(value: any) {

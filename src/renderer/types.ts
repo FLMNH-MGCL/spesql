@@ -29,6 +29,13 @@ export type UserRequest = {
   at?: Date;
 };
 
+export type EmailContent = {
+  from: string; // admin username OR name
+  toName: string; // name of person going to
+  toEmail: string; // email of person going to
+  userRequest: UserRequest; // request this is responding to
+};
+
 export type Values = Record<string, any>;
 
 type StringOrNull = string | null;

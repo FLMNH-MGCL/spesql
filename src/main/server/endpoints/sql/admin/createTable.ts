@@ -29,7 +29,7 @@ function getCreationString(name: string) {
     \`habitat\` varchar(50) DEFAULT NULL,
     \`occurrenceRemarks\` text,
     \`molecularOccurrenceRemarks\` text,
-    \`samplingProtocol\` varchar(20) DEFAULT NULL,
+    \`samplingProtocol\` varchar(30) DEFAULT NULL,
     \`country\` varchar(100) DEFAULT NULL,
     \`stateProvince\` varchar(100) DEFAULT NULL,
     \`county\` varchar(100) DEFAULT NULL,

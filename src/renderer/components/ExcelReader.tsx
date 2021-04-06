@@ -18,8 +18,7 @@ export default function ExcelReader({ onFileUpload }: Props) {
   const [hasError, setHasError] = useState(false);
 
   async function attemptLoad(filePath: string) {
-    console.log(filePath);
-    const workSheetsFromFile = await xlsx.parse(filePath);
+    const workSheetsFromFile = xlsx.parse(filePath);
 
     if (!workSheetsFromFile || !workSheetsFromFile.length) {
       notify({
@@ -49,9 +48,7 @@ export default function ExcelReader({ onFileUpload }: Props) {
         data,
       });
 
-      const parsed: any = await readString(csv, { header: true });
-
-      // console.log(parsed);
+      const parsed: any = readString(csv, { header: true });
 
       if (!parsed || !parsed.data || !parsed.data.length) {
         notify({
@@ -61,6 +58,7 @@ export default function ExcelReader({ onFileUpload }: Props) {
           level: 'error',
         });
       } else {
+        // FIXME: I think this needs refectoring
         const invalidFields = isSpecimen(parsed.data[0]);
 
         if (invalidFields.length > 0) {

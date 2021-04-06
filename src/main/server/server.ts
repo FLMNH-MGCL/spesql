@@ -47,6 +47,7 @@ import getRequests from './endpoints/sql/admin/getRequests';
 import changeRequestStatus from './endpoints/sql/admin/changeRequestStatus';
 import clearCompletedRequests from './endpoints/sql/admin/clearCompletedRequests';
 import requestUpdate from './endpoints/requestUpdate';
+import { sendEmail } from './endpoints/sendEmail';
 
 require('dotenv').config();
 
@@ -125,6 +126,8 @@ async function bootstrap() {
   app.post('/api/request-update', requestUpdate);
 
   app.get('/api/admin/user/generatePassword', generatePassword);
+
+  app.post('/api/send-email', sendEmail);
   // END GLOBAL / GUEST ROUTES
 
   // MANAGER ROUTES
