@@ -230,3 +230,9 @@ export function canUD(user?: User | null) {
     return false;
   }
 }
+
+export function getDatabaseTableFromAdvancedUpdate(query: string) {
+  let pattern = /^UPDATE (?<first>[a-zA-z_-]+).*/i;
+
+  return query.match(pattern)?.groups?.first;
+}

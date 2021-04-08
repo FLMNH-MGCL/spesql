@@ -6,6 +6,7 @@ const isMac = process.platform === 'darwin';
 
 const aboutMessage = `Developed by: Aaron Leopold
 Installed Version: ${VERSION}
+
 Electron: ${process.versions.electron}
 Chrome: ${process.versions.chrome}
 Node.js: ${process.versions.node}

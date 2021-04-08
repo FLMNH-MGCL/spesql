@@ -53,7 +53,9 @@ export default function useQuery() {
   // TODO: handle 403 error codes!!
   const queries = useMemo(
     () => ({
-      async advancedUpdate(query: string): Promise<string | undefined> {
+      async advancedUpdate(
+        query: string
+      ): Promise<{ queryString: string; message: string } | undefined> {
         const updateResponse = await axios
           .post(BACKEND_URL + '/api/update/advanced', {
             query,
@@ -72,7 +74,7 @@ export default function useQuery() {
 
           await queries.refresh();
 
-          return queryString;
+          return { queryString, message };
         } else if (updateResponse.status === 401) {
           expireSession();
 
@@ -749,11 +751,7 @@ export default function useQuery() {
           const { message } = updateResponse.data.result;
           const queryStr = updateResponse.data.query;
 
-          // notify({
-          //   title: 'Update Successful',
-          //   message,
-          //   level: 'success',
-          // });
+          console.log(typeof message, message);
 
           await queries.refresh();
 
