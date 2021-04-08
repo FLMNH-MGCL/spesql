@@ -241,7 +241,10 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     const updateRet = await advancedUpdate(queryString);
 
     if (updateRet) {
-      await logUpdate(updateRet, updates, queryClause.databaseTable, null);
+      // TODO: handle message from ret
+      const { queryString } = updateRet;
+
+      await logUpdate(queryString, updates, queryClause.databaseTable, null);
     }
   }
 

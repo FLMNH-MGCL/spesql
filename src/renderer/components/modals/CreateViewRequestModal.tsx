@@ -9,6 +9,7 @@ import {
 } from '@flmnh-mgcl/ui';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
+import { getDatabaseTableFromAdvancedUpdate } from '../../functions/util';
 import { RequestStatus, RequestType, UserRequest } from '../../types';
 import changeRequestStatus from '../utils/changeRequestStatus';
 import { accessRoles } from '../utils/constants';
@@ -203,13 +204,13 @@ function UpdateRequestView({ request, onApprove }: RequestViewProps) {
   async function doUpdate() {
     const updateRet = await advancedUpdate(request.query!);
 
-    let pattern = /^.* from (?<first>[a-zA-z_-]+)/i;
-
-    const databaseTable = request.query!.match(pattern)?.groups?.first;
+    const databaseTable = getDatabaseTableFromAdvancedUpdate(request.query!);
 
     if (updateRet) {
+      const { queryString } = updateRet;
+
       // TODO: handle me better
-      await logUpdate(updateRet, null, databaseTable ?? '', null);
+      await logUpdate(queryString, null, databaseTable ?? '', null);
 
       await changeRequestStatus(request.id!, RequestStatus.ACCEPTED).then(
         () => {
