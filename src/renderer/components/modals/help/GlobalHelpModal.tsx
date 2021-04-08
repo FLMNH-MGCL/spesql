@@ -18,7 +18,7 @@ const items = [
           If you have already restarted the app, you won't have access to the
           exact error that produced it, however feel free to submit a{' '}
           <a
-            href="https://github.com/FLMNH-MGCL/spesql/issues/new"
+            href="https://github.com/FLMNH-MGCL/spesql/issues/new/choose"
             target="_blank"
             className="text-indigo-600"
           >
