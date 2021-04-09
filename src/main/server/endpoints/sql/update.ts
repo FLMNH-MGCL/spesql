@@ -15,7 +15,6 @@ export default function update(req: Request, res: Response) {
       .send('Missing required body parameters: query, conditions or updates');
   } else {
     const query = mysql.format(template, [updates, ...conditions]);
-    console.log(query);
 
     connection.query(query, (error, data) => {
       if (error) {

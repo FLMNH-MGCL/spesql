@@ -42,26 +42,37 @@ function CSVParser({ onFileUpload }: UploadProps) {
       });
     }
 
+    console.log(data);
+
     const invalidFields = isSpecimen(data[0].data);
 
     if (invalidFields.length > 0) {
-      let message = 'Entries were found that are not valid specimen: ';
+      // if any invalid fields are just empty columns, notify to remove them
+      if (invalidFields.find((entry) => entry.includes('EMPTY COL'))) {
+        notify({
+          title: 'Empty Colmns Detected',
+          message: 'Please remove empty columns and retry upload',
+          level: 'error',
+        });
+      } else {
+        let message = 'Entries were found that are not valid specimen: ';
 
-      invalidFields.forEach((field, index) => {
-        if (index != invalidFields.length - 1) {
-          message += field + ', ';
-        } else {
-          message += field + '... ';
-        }
-      });
+        invalidFields.forEach((field, index) => {
+          if (index != invalidFields.length - 1) {
+            message += field + ', ';
+          } else {
+            message += field + '... ';
+          }
+        });
 
-      message += 'Please remove the selected file.';
+        message += 'Please remove the selected file.';
 
-      notify({
-        title: 'Upload Error',
-        message,
-        level: 'error',
-      });
+        notify({
+          title: 'Upload Error',
+          message,
+          level: 'error',
+        });
+      }
     } else {
       onFileUpload(data);
     }

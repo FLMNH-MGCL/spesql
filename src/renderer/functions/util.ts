@@ -236,3 +236,16 @@ export function getDatabaseTableFromAdvancedUpdate(query: string) {
 
   return query.match(pattern)?.groups?.first;
 }
+
+export function noChangesOccurred(message: string) {
+  if (!message) {
+    return true;
+  } else if (
+    message.includes('Changed: 0') ||
+    message.includes('Rows matched: 0')
+  ) {
+    return true;
+  }
+
+  return false;
+}

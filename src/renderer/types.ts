@@ -125,7 +125,7 @@ export function isSpecimen(obj: any) {
     const valid = correct_keys.includes(key);
 
     if (!valid) {
-      invalidFields.push(key);
+      invalidFields.push(key ? key : `EMPTY COLUMN AROUND ${i + 1}`);
     }
   }
 

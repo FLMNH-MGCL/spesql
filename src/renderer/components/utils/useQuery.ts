@@ -470,15 +470,20 @@ export default function useQuery() {
           })
           .catch((error) => error.respnse);
 
-        if (logResponse.status === 201) {
-          // good
-        } else if (logResponse.status === 401) {
+        if (logResponse?.status === 201) {
+          // good, I don't need to do anything here
+        } else if (logResponse?.status === 401) {
           expireSession();
 
           await awaitReauth();
           await queries.logUpdate(query, updates, table, catalogNumber);
         } else {
-          // TODO: notify of error
+          notify({
+            title: 'Could not log update',
+            message:
+              'There was a server error preventing the update from being logged into the system.',
+            level: 'warning',
+          });
         }
       },
 
@@ -747,16 +752,14 @@ export default function useQuery() {
           })
           .catch((error) => error.response);
 
-        if (updateResponse.status === 200 && updateResponse.data) {
+        if (updateResponse?.status === 200 && updateResponse?.data) {
           const { message } = updateResponse.data.result;
           const queryStr = updateResponse.data.query;
-
-          console.log(typeof message, message);
 
           await queries.refresh();
 
           return { queryStr, message };
-        } else if (updateResponse.status === 401) {
+        } else if (updateResponse?.status === 401) {
           expireSession();
 
           await awaitReauth();

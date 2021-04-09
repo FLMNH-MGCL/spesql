@@ -22,7 +22,11 @@ import useWindowDimensions from './utils/useWindowDimensions';
 import Resizable from './Resizable';
 import CreateRecordButton from './buttons/CreateRecordButton';
 import InsertNewRecord from './forms/InsertNewRecord';
-import { arrayFieldsToString, getSpecimenDefaults } from '../functions/util';
+import {
+  arrayFieldsToString,
+  getSpecimenDefaults,
+  noChangesOccurred,
+} from '../functions/util';
 import CreateRequestSingleUpdateModal from './modals/CreateRequestSingleUpdateModal';
 
 // TODO: remove ? where needed
@@ -157,7 +161,6 @@ export default function () {
     console.log('RAW VALUES (AS SPECIMEN):', values as Specimen);
     console.log('RAW VALUES (AS ARRAY):', updatedFieldArray);
     console.log('CORRECTED NULLS ON UPDATES:', correctedUpdates);
-
     console.log('\nCORRECTED NULLS ON SELECTED:', correctedSpecimen);
 
     const { errors, updates, query, logUpdates } = buildSingleUpdateQuery(
@@ -191,10 +194,6 @@ export default function () {
           message: 'Please check logs to correct errors in the form',
           level: 'error',
         });
-
-        // TODO: write to log
-
-        // console.log(errors);
       } else if (!updates || !Object.keys(updates).length) {
         notify({
           title: 'Update Failed',
@@ -206,10 +205,22 @@ export default function () {
 
         const storedCatalogNumber = selectedSpecimen.catalogNumber ?? null;
 
-        const queryString = await update(query, conditions, updates);
+        const ret = await update(query, conditions, updates);
 
-        if (queryString) {
-          await logUpdate(queryString, logUpdates, table, storedCatalogNumber);
+        if (ret) {
+          const { queryStr, message } = ret;
+
+          // THIS should NOT happen in a single insert
+          if (noChangesOccurred(message)) {
+            notify({
+              title: 'No matches found',
+              message: 'No changes were made',
+              level: 'info',
+            });
+          } else {
+            await logUpdate(queryStr, logUpdates, table, storedCatalogNumber);
+          }
+
           setIsEditingRecord(false);
         } else {
           notify({
