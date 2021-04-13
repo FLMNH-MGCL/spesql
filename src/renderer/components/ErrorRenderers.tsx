@@ -134,11 +134,6 @@ export function GeneralErrorLogRenderer({ list }: { list: LoggingError[] }) {
 
     const heading = sql ? 'SQL Error' : index ? 'Validation Error' : 'Error';
 
-    // TODO: FIXME
-    if (heading === 'Error') {
-      console.log('HANDLE ME PLZ', error);
-    }
-
     return (
       <React.Fragment>
         <Heading>{heading}</Heading>

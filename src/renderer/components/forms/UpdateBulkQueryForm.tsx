@@ -8,11 +8,7 @@ import {
   validateSetValue,
 } from '../../functions/validation';
 import numberParser from 'number-to-words';
-import {
-  conditionCountOptions,
-  operators,
-  updateFieldOptions,
-} from '../utils/constants';
+import { conditionCountOptions, updateFieldOptions } from '../utils/constants';
 import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
 import useExpiredSession from '../utils/useExpiredSession';
@@ -67,7 +63,7 @@ function SetForm({ advanced }: SetFormProps) {
 
             // TODO, pass to validateConditionalValue
             //@ts-ignore
-            const setOperator = getValues()[`setOperator_${numberInEnglish}`];
+            // const setOperator = getValues()[`setOperator_${numberInEnglish}`];
 
             return (
               <Form.Group flex key={index}>
@@ -83,14 +79,12 @@ function SetForm({ advanced }: SetFormProps) {
                   }}
                 />
 
-                {/* TODO: filter out new operators that don't work with this structure of update */}
-                <Form.Select
+                <Form.Input
                   name={`setOperator_${numberInEnglish}`}
                   label="Operator"
-                  disabled={advanced}
-                  options={operators}
+                  disabled
+                  value="="
                   fullWidth
-                  searchable
                   register={{
                     validate: setValidator(validateOperator),
                   }}

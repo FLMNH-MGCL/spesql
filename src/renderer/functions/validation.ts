@@ -13,6 +13,8 @@ import {
 } from '../components/utils/constants';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
 import { SelectOption } from '@flmnh-mgcl/ui';
+import { getSetsAndConditionsFromUpdateQuery } from './util';
+import { LoggingError } from '../../stores/logging';
 
 // TODO: ADD DOCUMENTATION
 
@@ -49,9 +51,48 @@ export function validateAdvancedCountQuery(query: string) {
   }
 }
 
-// FIXME: IMPLEMENT ME
-export function validateAdvancedUpdateQuery(_query: string) {
-  return 'Cannot do this yet';
+export function validateAdvancedUpdateQuery(
+  query: string
+): { errors: LoggingError[] | null } {
+  const { parsedSets, setErrors } = getSetsAndConditionsFromUpdateQuery(query);
+
+  console.log(parsedSets);
+
+  if (!parsedSets) {
+    return { errors: setErrors };
+  }
+
+  const valueErrors = parsedSets?.map((set) => {
+    const key = Object.keys(set)[0];
+    const value = set[key];
+
+    return determineAndRunFieldValidator(key, value);
+  });
+
+  if (valueErrors && valueErrors.length) {
+    if (setErrors) {
+      return {
+        errors: [
+          ...setErrors,
+          ...valueErrors
+            .filter((val) => val !== true)
+            .map((val) => {
+              return { message: val };
+            }),
+        ],
+      };
+    } else {
+      return {
+        errors: valueErrors
+          .filter((val) => val !== true)
+          .map((val) => {
+            return { message: val };
+          }),
+      };
+    }
+  }
+
+  return { errors: null };
 }
 
 export function validateFieldSelection(fields: string[]) {
@@ -913,7 +954,7 @@ export function determineAndRunFieldValidator(field: string, value: any) {
   const validator = validators[field as keyof typeof validators] ?? null;
 
   if (!validator) {
-    return false;
+    return `Could not find validator for ${field}`;
   }
 
   return validator(value);

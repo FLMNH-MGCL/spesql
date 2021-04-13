@@ -8,7 +8,6 @@ export default function logUpdate(req: Request, res: Response) {
   if (!connection) {
     res.status(502).send('Connection to the MySQL database was lost');
   } else if (!query || !username) {
-    console.log({ query, username, catalogNumber, updates, table });
     res
       .status(400)
       .send(

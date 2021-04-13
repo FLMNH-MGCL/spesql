@@ -1,6 +1,7 @@
 import { Specimen, SpecimenFields, SpecimenValidator } from '../types';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
 import { User } from '../../stores';
+import { LoggingError } from '../../stores/logging';
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -238,9 +239,8 @@ export function getDatabaseTableFromAdvancedUpdate(query: string) {
 }
 
 export function noChangesOccurred(message: string) {
-  if (!message) {
-    return true;
-  } else if (
+  if (
+    !message ||
     message.includes('Changed: 0') ||
     message.includes('Rows matched: 0')
   ) {
@@ -248,4 +248,84 @@ export function noChangesOccurred(message: string) {
   }
 
   return false;
+}
+
+function parseSets(sets: string) {
+  let setErrors: LoggingError[] = [];
+  let parsedSets: any[] = [];
+
+  let setPattern = /^.+ ?= ?.+$/;
+  let pattern = new RegExp(setPattern);
+  sets.split(',').forEach((pair) => {
+    const adjusted = pair.trim();
+
+    if (!pattern.test(adjusted)) {
+      setErrors.push({
+        message: `${adjusted} -> is not a valid set statement`,
+      });
+    } else {
+      let pieces = adjusted.split('=');
+
+      try {
+        const key = pieces[0]
+          .trim()
+          .replaceAll(/^['"]/g, '')
+          .replaceAll(/['"]$/g, '');
+        const val = pieces[1]
+          .trim()
+          .replaceAll(/^['"]/g, '')
+          .replaceAll(/['"]$/g, '');
+        parsedSets.push({
+          [key]: val,
+        });
+      } catch {
+        setErrors.push({
+          message: `${adjusted} -> is not a valid set statement`,
+        });
+      }
+    }
+  });
+
+  if (parsedSets.length < 1 || setErrors.length > 0) {
+    return { parsedSets: null, setErrors };
+  } else {
+    return { parsedSets, setErrors: null };
+  }
+}
+
+export function getSetsAndConditionsFromUpdateQuery(query: string) {
+  let pattern = /^UPDATE .+ SET (?<sets>.+) WHERE (?<conditions>.+)/i;
+
+  const matches = query.match(pattern)?.groups;
+
+  if (!matches) {
+    return {
+      parsedSets: null,
+      setErrors: [
+        {
+          message:
+            'Regex failed, please use UPDATE ... SET ... WHERE ... notation',
+        },
+      ] as LoggingError[],
+    };
+  } else if (!matches.sets || !matches.conditions) {
+    return {
+      parsedSets: null,
+      setErrors: [
+        {
+          message: 'Could not parse set or condition statements',
+        },
+      ] as LoggingError[],
+    };
+  } else {
+    const { sets } = matches; // I only really care aboute validating set statements
+
+    const { parsedSets, setErrors } = parseSets(sets);
+
+    if (setErrors) {
+      return { parsedSets: null, setErrors };
+    } else {
+      return { parsedSets, setErrors: null };
+    }
+  }
 }

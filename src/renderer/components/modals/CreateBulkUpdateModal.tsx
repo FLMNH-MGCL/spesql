@@ -8,9 +8,13 @@ import UpdateBulkQueryForm from '../forms/UpdateBulkQueryForm';
 import CreateHelpModal from './CreateHelpModal';
 import useToggle from '../utils/useToggle';
 import useQuery from '../utils/useQuery';
+import useLogError from '../utils/useLogError';
 import { Button, FormSubmitValues, Modal } from '@flmnh-mgcl/ui';
 import { getDatabaseTableFromAdvancedUpdate } from '../../functions/util';
 import { validateAdvancedUpdateQuery } from '../../functions/validation';
+import { useStore } from '../../../stores';
+
+const mysql = require('mysql');
 
 type Props = {
   open: boolean;
@@ -23,6 +27,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
   const [loading, { on, off }] = useToggle(false);
 
   const { update, advancedUpdate, logUpdate } = useQuery();
+  const updateUpdateLog = useStore((state) => state.updateUpdateLog);
 
   useKeyboard('Escape', () => {
     onClose();
@@ -106,8 +111,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
     const table = getDatabaseTableFromAdvancedUpdate(query);
 
     if (table) {
-      const errors = validateAdvancedUpdateQuery(query);
-
+      const { errors } = validateAdvancedUpdateQuery(query);
       if (errors) {
         notify({
           title: 'Update Failed',
@@ -115,6 +119,8 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
             'Your query failed validation, please view the corresponding logs.',
           level: 'error',
         });
+
+        updateUpdateLog(errors);
       } else {
         const ret = await advancedUpdate(query);
 
@@ -172,8 +178,6 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
 
       query = queryString;
       conditions = conditionalPairs;
-
-      console.log(query, conditions);
 
       if (!query) {
         off();
