@@ -9,8 +9,6 @@ import getContextMenu from './util/menu';
 
 import './server/server';
 
-// console.log(process.env.ELECTRON_WEBPACK_APP_SECRET_KEY);
-
 app.commandLine.appendSwitch('ignore-certificate-errors');
 
 console.log(path.resolve(__dirname, 'flmnhLogo.png'));

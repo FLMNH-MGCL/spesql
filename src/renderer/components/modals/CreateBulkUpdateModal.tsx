@@ -8,13 +8,10 @@ import UpdateBulkQueryForm from '../forms/UpdateBulkQueryForm';
 import CreateHelpModal from './CreateHelpModal';
 import useToggle from '../utils/useToggle';
 import useQuery from '../utils/useQuery';
-import useLogError from '../utils/useLogError';
 import { Button, FormSubmitValues, Modal } from '@flmnh-mgcl/ui';
 import { getDatabaseTableFromAdvancedUpdate } from '../../functions/util';
 import { validateAdvancedUpdateQuery } from '../../functions/validation';
 import { useStore } from '../../../stores';
-
-const mysql = require('mysql');
 
 type Props = {
   open: boolean;
@@ -61,7 +58,6 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
     return conditionals;
   }
 
-  // TODO: hard code '=' for operator, or just remove it
   function parseSets(count: any, values: FormSubmitValues) {
     const numSets = parseInt(count, 10);
 

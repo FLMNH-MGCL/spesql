@@ -133,6 +133,8 @@ export default function ConditionalForm({
             setConditionCount(newVal);
           }}
           register={{ validate: setValidator(validateConditionSelection) }}
+          toolTip="A condition is like: catalogNumber = 'LEP123456'. So this is just asking how many of those do you want to define"
+          toolTipOrigin="right"
         />
       </Form.Group>
 
@@ -146,16 +148,10 @@ export default function ConditionalForm({
                 `conditionalField_${numberInEnglish}`
               ];
 
-              // TODO, pass to validateConditionalValue
               //@ts-ignore
               const conditionalOperator = getValues()[
                 `conditionalOperator_${numberInEnglish}`
               ];
-
-              // console.log(conditionalOperator);
-              // console.log(conditionalOperator?.indexOf('BETWEEN'));
-
-              // TODO: render based on operator, too
 
               return (
                 <div key={index}>
@@ -170,6 +166,8 @@ export default function ConditionalForm({
                       register={{
                         validate: setValidator(validateFieldSelection),
                       }}
+                      toolTip="The LHS of the conditional statement"
+                      toolTipOrigin="right"
                     />
                     <Form.Select
                       name={`conditionalOperator_${numberInEnglish}`}
@@ -199,6 +197,8 @@ export default function ConditionalForm({
                           conditionalOperator
                         ),
                       }}
+                      toolTip="The RHS of the conditional statement"
+                      toolTipOrigin="right"
                     />
                   </Form.Group>
 
@@ -209,12 +209,16 @@ export default function ConditionalForm({
                         label="Left Bound"
                         disabled={advanced}
                         fullWidth
+                        toolTip="The lower bound of the range (must be numeric)"
+                        toolTipOrigin="right"
                       />
                       <Form.Input
                         name={`conditionalValue_${numberInEnglish}_to`}
                         label="Right Bound"
                         disabled={advanced}
                         fullWidth
+                        toolTip="The upper bound of the range (must be numeric)"
+                        toolTipOrigin="right"
                       />
                     </Form.Group>
                   )}
