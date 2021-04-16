@@ -8,7 +8,6 @@ export default async function createUser(req: Request, res: Response) {
 
   await bcrypt.hash(password, 12, (err, hash) => {
     if (err) {
-      // TODO: handle me better
       res.status(500).send(err);
     } else {
       em.persistAndFlush(

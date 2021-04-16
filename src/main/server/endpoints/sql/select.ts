@@ -10,6 +10,7 @@ export default async function select(req: Request, res: Response) {
   } else {
     // loadRelations example: -->
     // ['taxonomy', 'collectionEvent', 'collectionEvent.location', 'loan', 'storage']
+    // this is determined  manually if the user plucks a column(s)
 
     const lab = await em.findOne(Lab, { name: labName });
 
