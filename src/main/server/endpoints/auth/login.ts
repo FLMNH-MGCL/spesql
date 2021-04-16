@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Request, Response } from 'express';
 import { User } from '../../entities/User';
-import { em } from '../../server';
+import { em, initMikro } from '../../server';
 
 export default async function login(req: Request, res: Response) {
   const { username, password } = req.body;
@@ -16,9 +16,11 @@ export default async function login(req: Request, res: Response) {
     if (!user || !(await user.verifyPassword(password))) {
       res.status(401).send('Authorization either failed or denied');
     } else {
-      // VALID PASSWORD AND FOUND USER
+      await initMikro(user.role);
+
       // @ts-ignore: this will work I promise <3
       req.session.userId = user.id;
+
       req.session.save((err) => {
         if (err) {
           res.status(500).send(err);

@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { sessionConfig } from '../../config';
+import { initMikro } from '../../server';
 
 export default async function logout(req: Request, res: Response) {
-  // TODO: CHANGE USER!!
+  await initMikro('GUEST');
 
   req.session.destroy((error) => {
     if (error) {
