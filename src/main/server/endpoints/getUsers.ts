@@ -9,8 +9,9 @@ export default async function getUsers(_req: Request, res: Response) {
     .find(User, {})
     .then((fullUsers) => {
       const users = fullUsers.map((user) => {
-        const { firstName, lastName, role, username } = user; // remove password
-        return { firstName, lastName, role, username };
+        // select all but password
+        const { id, firstName, lastName, role, username } = user;
+        return { id, firstName, lastName, role, username };
       });
       res.status(200).send(users);
     })
