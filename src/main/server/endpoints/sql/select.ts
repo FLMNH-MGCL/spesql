@@ -1,39 +1,27 @@
 import { Request, Response } from 'express';
-import { connection } from '../../server';
-import mysql from 'mysql';
+import { Lab, Specimen } from '../../entities';
+import { em } from '../../server';
 
-export default function select(req: Request, res: Response) {
-  // it is no longer required to check for valid queries in the select
-  // function, as this is handled by the middleware validator
-  const template: string = req.body.query;
-  const { columns, conditions } = req.body;
+export default async function select(req: Request, res: Response) {
+  const { labName, conditions, loadRelations } = req.body;
 
-  if (!connection) {
-    res.status(502).send('Connection to the MySQL database was lost');
+  if (!labName) {
+    res.status(400).send('You must provide the target labName');
   } else {
-    if (columns || conditions) {
-      const query = mysql.format(template, [columns, ...conditions]);
-      console.log(query);
-      connection.query(query, (error, data) => {
-        if (error) {
-          res.status(503).send(error);
-        } else {
-          const ret = { specimen: data, query };
+    // loadRelations example: -->
+    // ['taxonomy', 'collectionEvent', 'collectionEvent.location', 'loan', 'storage']
 
-          res.send(ret);
-        }
-      });
+    const lab = await em.findOne(Lab, { name: labName });
+
+    if (lab) {
+      await em
+        .find(Specimen, { ...(conditions ?? {}), lab }, [
+          ...(loadRelations ?? []),
+        ])
+        .then((specimen) => res.send(specimen))
+        .catch((err) => res.status(500).send(err));
     } else {
-      const query = template;
-      connection.query(query, (error, data) => {
-        if (error) {
-          console.log(error);
-          res.status(503).send(error);
-        } else {
-          const ret = { specimen: data, query };
-          res.send(ret);
-        }
-      });
+      res.status(500).send('Could not location target lab.');
     }
   }
 }

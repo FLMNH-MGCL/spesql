@@ -1,25 +1,30 @@
 import { Request, Response } from 'express';
-import { connection } from '../../server';
+import { Lab, Specimen } from '../../entities';
+import { em } from '../../server';
+import getSpecimenEntity from './util/getSpecimenEntity';
 
-// TODO: I can use nested arrays for bulk inserts, should this go in here?
-export default function insert(req: Request, res: Response) {
-  const { table, values } = req.body;
+export default async function insert(req: Request, res: Response) {
+  const { specimen, labName } = req.body;
 
-  if (!connection) {
-    res.status(502).send('Connection to the MySQL database was lost');
-  } else if (!table || !values) {
-    res
-      .status(400)
-      .send('You must provide a table and valid entries to insert');
+  const lab = await em.findOne(Lab, { name: labName });
+
+  if (!lab) {
+    res.status(500).send('No lab was found with that name');
+  } else if (!Array.isArray(specimen)) {
+    res.status(500).send('Expected array of specimen objects');
   } else {
-    connection.query('INSERT INTO ?? SET ?', [table, values], (error, data) => {
-      if (error) {
-        console.log(error);
-        res.status(500).send(error);
-      } else {
-        console.log(data);
-        res.status(201).send(data);
-      }
-    });
+    let insertions: Specimen[] = [];
+    for (let i = 0; i < specimen.length; i++) {
+      await getSpecimenEntity(specimen[i], lab).then((dbSpecimen) =>
+        insertions.push(dbSpecimen)
+      );
+    }
+
+    await em
+      .persistAndFlush(insertions)
+      .then(() => res.sendStatus(201))
+      .catch((err) => {
+        res.status(500).send(err);
+      });
   }
 }
