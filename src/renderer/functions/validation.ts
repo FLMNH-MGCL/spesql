@@ -959,3 +959,11 @@ export function determineAndRunFieldValidator(field: string, value: any) {
 
   return validator(value);
 }
+
+export function validateNonEmptyField(value: any) {
+  if (!value || !value.length) {
+    return 'You must enter a value';
+  } else {
+    return true;
+  }
+}

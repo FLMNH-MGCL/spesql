@@ -673,7 +673,7 @@ export default function useQuery() {
         if (selectResponse.status === 200 && selectResponse.data) {
           const { specimen, query } = selectResponse.data;
 
-          if (!specimen.length) {
+          if (!specimen || !specimen.length) {
             notify({
               title: 'Empty Return',
               message: 'Query yielded no data',

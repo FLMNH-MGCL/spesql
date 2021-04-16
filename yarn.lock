@@ -968,8 +968,10 @@
     tailwindcss "^1.2.0"
     tailwindcss-textshadow "^2.1.3"
 
-"@flmnh-mgcl/ui@../ui":
-  version "1.0.26"
+"@flmnh-mgcl/ui@^1.0.27":
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/@flmnh-mgcl/ui/-/ui-1.0.27.tgz#9c764d4ff18f00d6e2d9735dec642e478e6716c8"
+  integrity sha512-tlbm+QLeb9ziX9dwObxPc5nFtl9TWKuMB/KLknPU3LewyA4UO6+2naRhFZZX91Nsy5G2hrBwfT8g7VHaeCXjHw==
   dependencies:
     "@tailwindcss/aspect-ratio" "^0.2.0"
     "@tailwindcss/forms" "^0.2.1"
