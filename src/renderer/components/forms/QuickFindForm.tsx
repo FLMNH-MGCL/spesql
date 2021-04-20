@@ -1,4 +1,4 @@
-import { Form, FormSubmitValues, SelectOption } from '@flmnh-mgcl/ui';
+import { Form, FormSubmitValues, Radio, SelectOption } from '@flmnh-mgcl/ui';
 import React, { useEffect, useState } from 'react';
 import { validateNonEmptyField } from '../../functions/validation';
 import useExpiredSession from '../utils/useExpiredSession';
@@ -10,6 +10,9 @@ type Props = {
 
 export default function QuickFindForm({ onSubmit }: Props) {
   const [tables, setTables] = useState<SelectOption[]>([]);
+  const [operator, setOperator] = useState<
+    'equals' | 'starts with' | 'ends with' | 'contains'
+  >('equals');
 
   const [expiredSession, { expireSession }] = useExpiredSession();
 
@@ -50,6 +53,38 @@ export default function QuickFindForm({ onSubmit }: Props) {
           toolTip="This is the database table from which the data will be queried"
           toolTipOrigin="right"
           register={{ validate: validateNonEmptyField }}
+        />
+      </Form.Group>
+
+      <Form.Group flex>
+        <Form.Input
+          name="operator"
+          className="hidden"
+          value={operator}
+          readOnly
+        />
+        <Radio
+          checked={operator === 'equals'}
+          label="Exact"
+          onChange={() => setOperator('equals')}
+        />
+
+        <Radio
+          checked={operator === 'starts with'}
+          label="Starts With"
+          onChange={() => setOperator('starts with')}
+        />
+
+        <Radio
+          checked={operator === 'ends with'}
+          label="Ends With"
+          onChange={() => setOperator('ends with')}
+        />
+
+        <Radio
+          checked={operator === 'contains'}
+          label="Contains"
+          onChange={() => setOperator('contains')}
         />
       </Form.Group>
     </Form>

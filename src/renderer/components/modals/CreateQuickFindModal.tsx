@@ -9,6 +9,7 @@ import CreateLogModal from './CreateLogModal';
 import CreateHelpModal from './CreateHelpModal';
 import QuickFindForm from '../forms/QuickFindForm';
 import mysql from 'mysql';
+import { useNotify } from '../utils/context';
 
 type Props = {
   open: boolean;
@@ -17,6 +18,7 @@ type Props = {
 
 export default function CreateQuickFindModal({ open, onClose }: Props) {
   const { advancedSelect } = useQuery();
+  const { notify } = useNotify();
 
   const toggleLoading = useStore((state) => state.toggleLoading);
 
@@ -29,17 +31,35 @@ export default function CreateQuickFindModal({ open, onClose }: Props) {
   async function handleSubmit(values: FormSubmitValues) {
     toggleLoading(true);
 
-    const { catalogNumber, databaseTable } = values;
+    const { catalogNumber, databaseTable, operator } = values;
 
     if (!catalogNumber || !databaseTable) {
-      // TODO: notify
+      notify({
+        title: 'Missing Form Elements',
+        message:
+          'The catalogNumber or table could not be parsed from the form input.',
+        level: 'error',
+      });
       return;
     }
 
-    const query = mysql.format(
-      clsx('SELECT * FROM', databaseTable, 'WHERE catalogNumber = ?'),
-      [catalogNumber]
-    );
+    let query;
+
+    if (operator !== 'equals') {
+      query = clsx(
+        'SELECT * FROM',
+        databaseTable,
+        'WHERE catalogNumber LIKE',
+        operator === 'starts with' && `'${catalogNumber}'%`,
+        operator === 'ends with' && `'%${catalogNumber}'`,
+        operator === 'contains' && `'%${catalogNumber}%'`
+      );
+    } else {
+      query = mysql.format(
+        clsx('SELECT * FROM', databaseTable, 'WHERE catalogNumber = ?'),
+        [catalogNumber]
+      );
+    }
 
     await advancedSelect(query, databaseTable, onClose);
 
