@@ -26,7 +26,7 @@ import {
 import { CSVLink } from 'react-csv';
 import ExcelReader from '../ExcelReader';
 
-function CSVParser({ onFileUpload }: UploadProps) {
+export function CSVParser({ onFileUpload }: UploadProps) {
   const { notify } = useNotify();
 
   const [isReset, setReset] = useState(false);

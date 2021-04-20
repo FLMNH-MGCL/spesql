@@ -128,28 +128,32 @@ export default function () {
 
   const toggleLoading = useStore((state) => state.toggleLoading);
 
-  function filterDisplay(display: Partial<SpecimenFields>[]) {
+  // FIXME
+  function filterDisplay(_display: Partial<SpecimenFields>[]) {
     if (filter === '') {
-      return display;
+      return _display;
     } else if (filterByFields === 'all') {
-      return display.filter((specimen) =>
+      return _display.filter((specimen) =>
         Object.values(specimen)
           .toString()
           .toLowerCase()
           .includes(filter.toLowerCase())
       );
     } else {
-      return display.filter((specimen) => {
+      return _display.filter((specimen) => {
         let compounded = true;
 
         filterByFields.forEach((field) => {
-          if (
+          if (!specimen[field]) {
+            compounded = false;
+          } else if (
             specimen[field] &&
-            !specimen[field]
-              ?.toString()
+            specimen[field]!.toString()
               .toLowerCase()
               .includes(filter.toLowerCase())
           ) {
+            compounded = true;
+          } else {
             compounded = false;
           }
         });

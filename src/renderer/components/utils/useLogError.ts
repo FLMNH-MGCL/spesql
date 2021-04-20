@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useStore } from '../../../stores';
 import shallow from 'zustand/shallow';
 import { useAdminStore } from '../../../stores/admin';
+import { cleanObject } from '../../functions/util';
 
 export default function useLogError() {
   const errors = useStore((state) => state.errors, shallow);
@@ -84,8 +85,25 @@ export default function useLogError() {
       const logs = errorsRef.current[logName];
       let error: any = {};
       try {
-        const { code, message } = data;
-        error = { code, message };
+        const {
+          code,
+          message,
+          sql,
+          field,
+          fieldValue,
+          catalogNumber,
+          level,
+        } = data;
+
+        error = cleanObject({
+          code,
+          message,
+          sql,
+          field,
+          fieldValue,
+          catalogNumber,
+          level,
+        });
       } catch {
         error = {
           code: 'CLIENTERR',

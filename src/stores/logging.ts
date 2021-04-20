@@ -6,6 +6,7 @@ export type LoggingError = {
   fieldValue?: any;
   catalogNumber?: string;
   message: string | boolean;
+  level?: string;
 };
 
 export type BulkInsertError = {

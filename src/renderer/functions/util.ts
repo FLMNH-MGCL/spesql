@@ -329,3 +329,31 @@ export function getSetsAndConditionsFromUpdateQuery(query: string) {
     }
   }
 }
+
+export function cleanObject(obj: any) {
+  var propNames = Object.getOwnPropertyNames(obj);
+  for (var i = 0; i < propNames.length; i++) {
+    var propName = propNames[i];
+    if (
+      obj[propName] === null ||
+      obj[propName] === undefined ||
+      obj[propName] === ''
+    ) {
+      delete obj[propName];
+    }
+  }
+
+  return obj;
+}
+
+export function toUpdateFormat(obj: any) {
+  const catalogNumber = obj.catalogNumber;
+  delete obj.catalogNumber;
+
+  return {
+    catalogNumber,
+    updates: {
+      ...obj,
+    },
+  };
+}

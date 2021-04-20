@@ -130,9 +130,14 @@ export function GeneralErrorLogRenderer({ list }: { list: LoggingError[] }) {
       fieldValue,
       catalogNumber,
       message,
+      level,
     } = error;
 
-    const heading = sql ? 'SQL Error' : index ? 'Validation Error' : 'Error';
+    const heading = sql
+      ? 'SQL Error'
+      : index
+      ? 'Validation Error'
+      : level ?? 'Error';
 
     return (
       <React.Fragment>
@@ -154,12 +159,15 @@ export function GeneralErrorLogRenderer({ list }: { list: LoggingError[] }) {
                 <Text>{field}</Text>
               </div>
             )}
-            {(fieldValue !== undefined || fieldValue !== null) && !sql && (
-              <div className="flex space-x-3">
-                <Label>Field Value:</Label>
-                <Text>{fieldValue}</Text>
-              </div>
-            )}
+            {(fieldValue !== undefined ||
+              fieldValue !== null ||
+              fieldValue !== '') &&
+              !sql && (
+                <div className="flex space-x-3">
+                  <Label>Field Value:</Label>
+                  <Text>{fieldValue}</Text>
+                </div>
+              )}
             {message && (
               <div className="flex space-x-3">
                 <Label>Message:</Label>
