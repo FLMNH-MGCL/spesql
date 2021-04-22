@@ -50,7 +50,7 @@ export default function CreateQuickFindModal({ open, onClose }: Props) {
         'SELECT * FROM',
         databaseTable,
         'WHERE catalogNumber LIKE',
-        operator === 'starts with' && `'${catalogNumber}'%`,
+        operator === 'starts with' && `'${catalogNumber}%'`,
         operator === 'ends with' && `'%${catalogNumber}'`,
         operator === 'contains' && `'%${catalogNumber}%'`
       );
