@@ -7,7 +7,7 @@ import {
   Tabs,
   Text,
 } from '@flmnh-mgcl/ui';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 import useKeyboard from '../utils/useKeyboard';
@@ -57,22 +57,36 @@ export default function CreateCsvUpdateModal({ open, onClose }: Props) {
 
   const [expiredSession, { expireSession }] = useExpiredSession();
 
+  const expiredRef = useRef(expiredSession);
+
+  const mountedRef = useRef(true);
+
   useEffect(() => {
     async function init() {
-      const errored = await fetchTables(setTables);
+      const errored = await fetchTables((data: any) => {
+        if (mountedRef.current === true) {
+          setTables(data);
+        }
+      });
 
       if (errored) {
         if (errored === 'BAD SESSION') {
           expireSession();
         } else {
-          console.log(errored);
           throw new Error('Some other error occurred!');
         }
       }
     }
 
-    init();
-  }, [expiredSession.current]);
+    expiredRef.current = expiredSession;
+    if (mountedRef.current === true) {
+      init();
+    }
+
+    return () => {
+      mountedRef.current = false;
+    };
+  }, [expiredSession]);
 
   useKeyboard('Escape', () => {
     onClose();

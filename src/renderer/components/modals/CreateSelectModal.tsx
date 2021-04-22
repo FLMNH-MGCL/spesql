@@ -67,7 +67,18 @@ export default function CreateSelectModal({ open, onClose }: Props) {
   async function handleSubmit(values: FormSubmitValues) {
     toggleLoading(true);
 
-    const { advancedQuery, conditionalCount, databaseTable, fields } = values;
+    const {
+      advancedQuery,
+      conditionalCount,
+      databaseTable,
+      fields,
+      orJoin,
+    } = values;
+
+    let joiner = 'AND';
+    if (orJoin) {
+      joiner = 'OR';
+    }
 
     let query: string = '';
     let columns = null;
@@ -96,7 +107,8 @@ export default function CreateSelectModal({ open, onClose }: Props) {
 
       const { queryString, queryArray } = buildSelectQuery(
         databaseTable,
-        conditionals
+        conditionals,
+        joiner
       );
 
       query = queryString;

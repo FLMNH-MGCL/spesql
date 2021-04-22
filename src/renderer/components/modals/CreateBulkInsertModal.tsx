@@ -42,8 +42,6 @@ export function CSVParser({ onFileUpload }: UploadProps) {
       });
     }
 
-    console.log(data);
-
     const invalidFields = isSpecimen(data[0].data);
 
     if (invalidFields.length > 0) {

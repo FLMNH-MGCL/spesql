@@ -5,7 +5,11 @@ import { determineAndRunFieldValidator } from './validation';
 
 // TODO: alter all builders to account for new operators added!!
 
-export function buildSelectQuery(table: string, conditionals?: any[]) {
+export function buildSelectQuery(
+  table: string,
+  conditionals?: any[],
+  joiner = 'AND'
+) {
   let queryString = clsx(
     'SELECT ?? FROM',
     table,
@@ -23,7 +27,7 @@ export function buildSelectQuery(table: string, conditionals?: any[]) {
         '??',
         operator,
         value,
-        index !== conditionals.length - 1 && 'AND'
+        index !== conditionals.length - 1 && joiner
       );
 
       queryArray.push(field);
@@ -32,7 +36,7 @@ export function buildSelectQuery(table: string, conditionals?: any[]) {
         queryString,
         '??',
         operator,
-        index !== conditionals.length - 1 && 'AND'
+        index !== conditionals.length - 1 && joiner
       );
 
       queryArray.push(field);
@@ -42,7 +46,7 @@ export function buildSelectQuery(table: string, conditionals?: any[]) {
         '??',
         operator,
         '?',
-        index !== conditionals.length - 1 && 'AND'
+        index !== conditionals.length - 1 && joiner
       );
 
       queryArray.push(field);

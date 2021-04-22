@@ -56,8 +56,6 @@ export function validateAdvancedUpdateQuery(
 ): { errors: LoggingError[] | null } {
   const { parsedSets, setErrors } = getSetsAndConditionsFromUpdateQuery(query);
 
-  console.log(parsedSets);
-
   if (!parsedSets) {
     return { errors: setErrors };
   }
@@ -109,8 +107,6 @@ export function validateOperator(_operator: string) {}
 
 // TODO: add ignore when REGEX
 export function validateConditionalValue(condition: string, field: string) {
-  console.log(field);
-
   return determineAndRunFieldValidator(field, condition);
 }
 

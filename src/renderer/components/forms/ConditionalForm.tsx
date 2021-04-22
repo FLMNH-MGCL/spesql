@@ -80,7 +80,6 @@ export default function ConditionalForm({
   }
 
   function update(name: string, value: any) {
-    console.log(name, value);
     setValue(name, value);
   }
 
@@ -99,9 +98,7 @@ export default function ConditionalForm({
               ? true
               : false
           }
-          onChange={() =>
-            setConditionalJoiner(conditionalJoiner === 'OR' ? 'AND' : 'AND')
-          }
+          onChange={() => setConditionalJoiner('AND')}
         />
 
         <Form.Radio
@@ -114,9 +111,7 @@ export default function ConditionalForm({
               ? true
               : false
           }
-          onChange={() =>
-            setConditionalJoiner(conditionalJoiner === 'AND' ? 'OR' : 'OR')
-          }
+          onChange={() => setConditionalJoiner('OR')}
         />
       </Form.Group>
 
