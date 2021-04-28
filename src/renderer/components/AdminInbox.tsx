@@ -1,6 +1,7 @@
 import { Heading, Input, Tabs, Text } from '@flmnh-mgcl/ui';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useStore } from '../../stores';
 import { BACKEND_URL, RequestStatus, UserRequest } from '../types';
 import AdminInboxListItem from './AdminInboxListItem';
 import changeRequestStatus from './utils/changeRequestStatus';
@@ -8,6 +9,8 @@ import { useNotify } from './utils/context';
 
 export default function AdminInbox() {
   const { notify } = useNotify();
+
+  const user = useStore((state) => state.user);
 
   const [inbox, setInbox] = useState<UserRequest[]>([]);
   const [tab, setTab] = useState(0);
@@ -34,14 +37,25 @@ export default function AdminInbox() {
     fetchInbox();
   }
 
-  async function onReject(id: number) {
-    await changeRequestStatus(id, RequestStatus.REJECTED)
-      .then(() => {
+  async function onReject(req: UserRequest) {
+    await changeRequestStatus(req.id!, RequestStatus.REJECTED)
+      .then(async () => {
+        await axios.post(BACKEND_URL + '/api/send-email', {
+          from: user!.fullName,
+          toName: req.from,
+          toEmail: req.email!,
+          userRequest: {
+            ...req,
+            status: RequestStatus.REJECTED,
+          },
+        });
+
         notify({
           title: 'Rejected Request',
           message: 'No further actions required',
           level: 'info',
         });
+
         fetchInbox();
       })
       .catch((err) =>
@@ -154,7 +168,7 @@ export default function AdminInbox() {
                     key={i}
                     {...req}
                     onApprove={onApprove}
-                    onReject={() => onReject(req.id!)}
+                    onReject={() => onReject(req)}
                     onOpen={() => alert('TODO')}
                     refresh={fetchInbox}
                     reopenRequest={() => reopenRequest(req)}

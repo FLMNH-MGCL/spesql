@@ -1,6 +1,7 @@
+import axios from 'axios';
 import clsx from 'clsx';
 import React from 'react';
-import { RequestStatus, RequestType, UserRequest } from '../types';
+import { BACKEND_URL, RequestStatus, RequestType, UserRequest } from '../types';
 import InboxDropdown from './InboxDropdown';
 import CreateViewRequestModal from './modals/CreateViewRequestModal';
 import changeRequestStatus from './utils/changeRequestStatus';
@@ -67,6 +68,16 @@ export default function AdminInboxListItem({
           onApprove();
         }
       );
+
+      await axios.post(BACKEND_URL + '/api/send-email', {
+        from: from,
+        toName: reqDetails.from,
+        toEmail: reqDetails.email!,
+        userRequest: {
+          ...reqDetails,
+          status: RequestStatus.ACCEPTED,
+        },
+      });
     }
   };
 

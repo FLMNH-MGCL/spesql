@@ -7,10 +7,17 @@ import {
   Modal,
   Text,
 } from '@flmnh-mgcl/ui';
+import axios from 'axios';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
+import { useStore } from '../../../stores';
 import { getDatabaseTableFromAdvancedUpdate } from '../../functions/util';
-import { RequestStatus, RequestType, UserRequest } from '../../types';
+import {
+  BACKEND_URL,
+  RequestStatus,
+  RequestType,
+  UserRequest,
+} from '../../types';
 import changeRequestStatus from '../utils/changeRequestStatus';
 import { accessRoles } from '../utils/constants';
 import { useNotify } from '../utils/context';
@@ -93,6 +100,16 @@ function NewUserRequestView({ request, onApprove }: NewAccountViewProps) {
           onApprove();
         }
       );
+
+      await axios.post(BACKEND_URL + '/api/send-email', {
+        from: from,
+        toName: request.from,
+        toEmail: request.email!,
+        userRequest: {
+          ...request,
+          status: RequestStatus.ACCEPTED,
+        },
+      });
     }
   }
 
@@ -271,6 +288,8 @@ export default function CreateViewRequestModal({
 
   const { _type, title } = request;
 
+  const user = useStore((state) => state.user);
+
   function renderView() {
     if (_type === RequestType.ACCOUNTCREATION) {
       return <NewUserRequestView request={request} onApprove={onApprove} />;
@@ -302,6 +321,39 @@ export default function CreateViewRequestModal({
       });
       refresh();
     });
+  }
+
+  async function rejectRequest() {
+    await changeRequestStatus(request.id!, RequestStatus.REJECTED)
+      .then(async () => {
+        await axios.post(BACKEND_URL + '/api/send-email', {
+          from: user!.fullName,
+          toName: request.from,
+          toEmail: request.email!,
+          userRequest: {
+            ...request,
+            status: RequestStatus.REJECTED,
+          },
+        });
+
+        notify({
+          title: 'Rejected Request',
+          message: 'No further actions required',
+          level: 'info',
+        });
+
+        refresh();
+        onClose();
+      })
+      .catch((err) =>
+        notify({
+          title: 'An unknown error occurred',
+          message: `Please make a bug report on GitHub ${
+            err ? JSON.stringify(err) : ''
+          }`,
+          level: 'error',
+        })
+      );
   }
 
   // this hook should NOT hit, but just in case...
@@ -336,7 +388,9 @@ export default function CreateViewRequestModal({
 
             {request.status === RequestStatus.PENDING && (
               <React.Fragment>
-                <Button variant="danger">Reject</Button>
+                <Button variant="danger" onClick={rejectRequest}>
+                  Reject
+                </Button>
                 <Button variant="primary" form={formId} type="submit">
                   Accept
                 </Button>

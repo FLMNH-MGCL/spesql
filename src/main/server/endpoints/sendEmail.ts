@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { Request, Response } from 'express';
+import { RequestStatus } from '../../../renderer/types';
 
 const acceptedUserAccountMessage =
   'You may now log in with the credentials you requested. If you have forgotten your credentials, you must reach out directly to a SpeSQL admin for account assistance.';
@@ -69,29 +70,16 @@ export async function sendEmail(req: Request, res: Response) {
           'This request was missing essential information from the request body.'
         );
     } else {
-      let testAccount = await nodemailer.createTestAccount();
-
       let transporter = nodemailer.createTransport({
-        // THIS IS A TEST TRANSPORTER
-        host: 'smtp.ethereal.email',
-        port: 587,
-        secure: false, // true for 465, false for other ports
+        service: 'gmail',
         auth: {
-          user: testAccount.user, // generated ethereal user
-          pass: testAccount.pass, // generated ethereal password
+          user: process.env.ELECTRON_WEBPACK_APP_EMAIL_USER,
+          pass: process.env.ELECTRON_WEBPACK_APP_EMAIL_PASS,
         },
       });
 
-      // create reusable transporter object using the default SMTP transport
-      // let transporter = nodemailer.createTransport({
-      //   service: "gmail",
-      //   auth: {
-      //     user: process.env.EMAIL_ACCOUNT,
-      //     pass: process.env.EMAIL_PASS,
-      //   },
-      // });
-
       const { _type, status } = userRequest;
+
       let requestString = getReqTypeMessage(_type);
       let statusString = getStatusMessage(status);
       let message = getCorrespondingMessage(status, _type);
@@ -100,18 +88,30 @@ export async function sendEmail(req: Request, res: Response) {
       const textMessage = `Hello ${toName}, Your request for ${requestString} ${statusString}. ${message}.`;
 
       const mailOptions = {
-        from: 'aaronleopold1221@gmail.com', // sender address (AKA MUSEUM EMAIL)
-        // to: process.env.EMAIL_ACCOUNT, // list of receivers
+        from: process.env.ELECTRON_WEBPACK_APP_EMAIL_USER!, // sender address (AKA MUSEUM EMAIL)
         to: toEmail,
         subject: getSubjectLine(status),
         text: textMessage,
         html,
       };
 
-      try {
-        let info = await transporter.sendMail(mailOptions);
+      const logOptions = {
+        ...mailOptions,
+        to: mailOptions.from,
+        text: `MESSAGE SENT TO ${toEmail}: ${textMessage}`,
+        html: `MESSAGE SENT TO ${toEmail}:<br /><br />${html}`,
+      };
 
-        console.log(nodemailer.getTestMessageUrl(info));
+      try {
+        await transporter
+          .sendMail(mailOptions)
+          .catch((err) => console.log(err));
+
+        if (status === RequestStatus.PENDING) {
+          await transporter
+            .sendMail(logOptions)
+            .catch((err) => console.log(err));
+        }
 
         res.sendStatus(200);
       } catch {

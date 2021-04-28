@@ -1,12 +1,4 @@
-import {
-  Button,
-  FormSubmitValues,
-  Modal,
-  Select,
-  SelectOption,
-  Tabs,
-  Text,
-} from '@flmnh-mgcl/ui';
+import { Button, Modal, Select, SelectOption, Tabs } from '@flmnh-mgcl/ui';
 import React, { useEffect, useRef, useState } from 'react';
 import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
@@ -52,8 +44,8 @@ export default function CreateCsvUpdateModal({ open, onClose }: Props) {
   const [rawData, setRawFile] = useState<any>();
   const [databaseTable, setDatabaseTable] = useState();
   const [tables, setTables] = useState<SelectOption[]>([]);
-  const [downloadFailures, setDownloadFailures] = useState<boolean>(true);
-  const [failures, setFailures] = useState<any>([]);
+  // const [downloadFailures, setDownloadFailures] = useState<boolean>(true);
+  // const [failures, setFailures] = useState<any>([]);
 
   const [expiredSession, { expireSession }] = useExpiredSession();
 
@@ -123,7 +115,7 @@ export default function CreateCsvUpdateModal({ open, onClose }: Props) {
   function parseRows() {
     let allErrors = [];
     let updateValues = [];
-    let newCsv = [];
+    // let newCsv = [];
     const useCsv = tab === 0;
 
     for (let i = 0; i < rawData.length; i++) {
@@ -138,18 +130,18 @@ export default function CreateCsvUpdateModal({ open, onClose }: Props) {
       if (specimenErrors && specimenErrors.length) {
         allErrors.push({ index: i, row: i + 2, errors: specimenErrors });
 
-        if (downloadFailures) {
-          newCsv.push(currentAsSpecimen);
-        }
+        // if (downloadFailures) {
+        //   newCsv.push(currentAsSpecimen);
+        // }
       } else {
         const cleanedObject = toUpdateFormat(cleanObject(currentAsSpecimen));
         updateValues.push(cleanedObject);
       }
     }
 
-    if (downloadFailures) {
-      setFailures(newCsv);
-    }
+    // if (downloadFailures) {
+    //   setFailures(newCsv);
+    // }
 
     return { allErrors, updateValues };
   }

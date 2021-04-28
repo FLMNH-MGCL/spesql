@@ -1,7 +1,7 @@
 import { Button, FormSubmitValues, Modal } from '@flmnh-mgcl/ui';
 import axios from 'axios';
 import React from 'react';
-import { BACKEND_URL, RequestType } from '../../types';
+import { BACKEND_URL, RequestStatus, RequestType } from '../../types';
 import NewUserRequestForm from '../forms/NewUserRequestForm';
 import { useNotify } from '../utils/context';
 import useToggle from '../utils/useToggle';
@@ -27,6 +27,7 @@ export default function CreateRequestUserAccountModal() {
 
     const userRequest = {
       _type: RequestType.ACCOUNTCREATION,
+      status: RequestStatus.PENDING,
       title: 'New Account Request',
       from: name,
       username,
@@ -78,6 +79,13 @@ export default function CreateRequestUserAccountModal() {
         'error'
       );
     } else {
+      await axios.post(BACKEND_URL + '/api/send-email', {
+        from: name,
+        toName: name,
+        toEmail: email,
+        userRequest,
+      });
+
       // can close the modal on success
       notify({
         title: 'Account Request Sent',
