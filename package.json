@@ -1,6 +1,6 @@
 {
   "name": "spesql",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "GPLv3",
   "private": true,
   "description": "An interactive, MYSQL database portal for performing CRUD operations. Created for the FLMNH at the University of Florida.",
