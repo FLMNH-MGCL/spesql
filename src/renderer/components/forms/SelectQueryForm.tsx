@@ -95,6 +95,8 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           options={fieldOptions}
           searchable
           register={{ validate: setValidator(validateFieldSelection) }}
+          toolTip="Fields are the pieces of data the represent a specimen, you may think of them as columns in a CSV."
+          toolTipOrigin="right"
         />
 
         <Form.Select
@@ -105,6 +107,8 @@ export default function SelectQueryForm({ onSubmit }: Props) {
           options={tables}
           searchable
           register={{ validate: setValidator(validateTableSelection) }}
+          toolTip="This is the database table from which the data will be queried"
+          toolTipOrigin="right"
         />
       </Form.Group>
 

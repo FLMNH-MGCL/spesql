@@ -1,6 +1,7 @@
 import { Specimen, SpecimenFields, SpecimenValidator } from '../types';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
 import { User } from '../../stores';
+import { LoggingError } from '../../stores/logging';
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -46,6 +47,25 @@ export function standardizeName(name: string) {
     });
 
     return fullName;
+  }
+}
+
+function convertStringToDecimal(value: string) {
+  return parseFloat(value);
+}
+
+const properTypeConversions = {
+  decimalLatitude: convertStringToDecimal,
+  decimalLongitude: convertStringToDecimal,
+};
+
+// TODO: more fields
+export function convertFieldToProperType(value: any, field: string) {
+  const _key = field as keyof typeof properTypeConversions;
+  if (properTypeConversions[_key]) {
+    return properTypeConversions[_key](value);
+  } else {
+    return value;
   }
 }
 
@@ -190,7 +210,11 @@ export function toProperNoun(noun: string) {
 
 // TODO: fix the bug with this!!!
 export function specimenToArray(specimen: Specimen) {
-  return Object.values(specimen as SpecimenFields);
+  if (!specimen) {
+    return undefined;
+  } else {
+    return Object.values(specimen as SpecimenFields);
+  }
 }
 
 export function defined(value: any) {
@@ -206,4 +230,130 @@ export function canUD(user?: User | null) {
   } else {
     return false;
   }
+}
+
+export function getDatabaseTableFromAdvancedUpdate(query: string) {
+  let pattern = /^UPDATE (?<first>[a-zA-z_-]+).*/i;
+
+  return query.match(pattern)?.groups?.first;
+}
+
+export function noChangesOccurred(message: string) {
+  if (
+    !message ||
+    message.includes('Changed: 0') ||
+    message.includes('Rows matched: 0')
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+function parseSets(sets: string) {
+  let setErrors: LoggingError[] = [];
+  let parsedSets: any[] = [];
+
+  let setPattern = /^.+ ?= ?.+$/;
+  let pattern = new RegExp(setPattern);
+  sets.split(',').forEach((pair) => {
+    const adjusted = pair.trim();
+
+    if (!pattern.test(adjusted)) {
+      setErrors.push({
+        message: `${adjusted} -> is not a valid set statement`,
+      });
+    } else {
+      let pieces = adjusted.split('=');
+
+      try {
+        const key = pieces[0]
+          .trim()
+          .replaceAll(/^['"]/g, '')
+          .replaceAll(/['"]$/g, '');
+        const val = pieces[1]
+          .trim()
+          .replaceAll(/^['"]/g, '')
+          .replaceAll(/['"]$/g, '');
+        parsedSets.push({
+          [key]: val,
+        });
+      } catch {
+        setErrors.push({
+          message: `${adjusted} -> is not a valid set statement`,
+        });
+      }
+    }
+  });
+
+  if (parsedSets.length < 1 || setErrors.length > 0) {
+    return { parsedSets: null, setErrors };
+  } else {
+    return { parsedSets, setErrors: null };
+  }
+}
+
+export function getSetsAndConditionsFromUpdateQuery(query: string) {
+  let pattern = /^UPDATE .+ SET (?<sets>.+) WHERE (?<conditions>.+)/i;
+
+  const matches = query.match(pattern)?.groups;
+
+  if (!matches) {
+    return {
+      parsedSets: null,
+      setErrors: [
+        {
+          message:
+            'Regex failed, please use UPDATE ... SET ... WHERE ... notation',
+        },
+      ] as LoggingError[],
+    };
+  } else if (!matches.sets || !matches.conditions) {
+    return {
+      parsedSets: null,
+      setErrors: [
+        {
+          message: 'Could not parse set or condition statements',
+        },
+      ] as LoggingError[],
+    };
+  } else {
+    const { sets } = matches; // I only really care aboute validating set statements
+
+    const { parsedSets, setErrors } = parseSets(sets);
+
+    if (setErrors) {
+      return { parsedSets: null, setErrors };
+    } else {
+      return { parsedSets, setErrors: null };
+    }
+  }
+}
+
+export function cleanObject(obj: any) {
+  var propNames = Object.getOwnPropertyNames(obj);
+  for (var i = 0; i < propNames.length; i++) {
+    var propName = propNames[i];
+    if (
+      obj[propName] === null ||
+      obj[propName] === undefined ||
+      obj[propName] === ''
+    ) {
+      delete obj[propName];
+    }
+  }
+
+  return obj;
+}
+
+export function toUpdateFormat(obj: any) {
+  const catalogNumber = obj.catalogNumber;
+  delete obj.catalogNumber;
+
+  return {
+    catalogNumber,
+    updates: {
+      ...obj,
+    },
+  };
 }

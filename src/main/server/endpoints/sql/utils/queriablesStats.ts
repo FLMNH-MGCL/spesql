@@ -12,7 +12,7 @@ SELECT
   round(((data_length + index_length)), 2) 'size'
 FROM information_schema.TABLES
 WHERE table_schema not in ('information_schema', 'mysql', 'performance_schema')
-AND table_name not in ('users', 'logs');`;
+AND table_name not in ('users', 'logs', 'user_requests');`;
 
     connection.query(queryString, (error, data) => {
       if (error) {

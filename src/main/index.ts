@@ -5,10 +5,9 @@ import url from 'url';
 import { app, BrowserWindow, Menu, Event } from 'electron';
 import is from 'electron-is';
 import { autoUpdater } from 'electron-updater';
+import getContextMenu from './util/menu';
 
 import './server/server';
-
-// console.log(process.env.ELECTRON_WEBPACK_APP_SECRET_KEY);
 
 app.commandLine.appendSwitch('ignore-certificate-errors');
 
@@ -29,41 +28,7 @@ app.on('ready', () => {
       );
   }
 
-  const customMenu: any = Menu.getApplicationMenu()?.items.map((item: any) => {
-    if (item.role === 'filemenu') {
-      const newItem = {
-        ...item,
-        submenu: [
-          {
-            label: 'Restart',
-            click() {
-              app.relaunch();
-              app.exit();
-            },
-          },
-          {
-            label: 'Exit',
-            click() {
-              app.exit();
-            },
-          },
-          { type: 'separator' },
-          {
-            label: 'Check for updates',
-            click() {
-              autoUpdater.checkForUpdates();
-            },
-          },
-        ],
-      };
-
-      return newItem;
-    }
-
-    return item;
-  });
-
-  Menu.setApplicationMenu(Menu.buildFromTemplate(customMenu as any));
+  Menu.setApplicationMenu(getContextMenu(app, autoUpdater));
 
   win = new BrowserWindow({
     width: 1600,
@@ -74,9 +39,9 @@ app.on('ready', () => {
     title: 'spesql',
   });
 
-  win.webContents.on('new-window', function (e: Event, url) {
+  win.webContents.on('new-window', function (e: Event, _url) {
     e.preventDefault();
-    require('electron').shell.openExternal(url);
+    require('electron').shell.openExternal(_url);
   });
 
   win.loadURL(
@@ -113,17 +78,6 @@ export function sendStatusToWindow(information: LoggingInformation) {
 
 autoUpdater.checkForUpdatesAndNotify();
 
-autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow({ type: 'logging', message: 'Checking for update...' });
-});
-
-autoUpdater.on('update-not-available', () => {
-  sendStatusToWindow({
-    type: 'logging',
-    message: 'No updates available, you are up to date!',
-  });
-});
-
 autoUpdater.on('update-available', (_info: any) => {
   sendStatusToWindow({
     type: 'logging',
@@ -132,9 +86,11 @@ autoUpdater.on('update-available', (_info: any) => {
 });
 
 autoUpdater.on('error', (error: any) => {
+  console.log(error);
   sendStatusToWindow({
     type: 'error',
-    message: `An update error occurred: ${error.toString()}`,
+    message:
+      'Could not automatically update. Please manually download the updated client.',
   });
 });
 
@@ -152,8 +108,7 @@ autoUpdater.on('update-downloaded', () => {
     type: 'logging',
     message: 'Update finished downloading and will install now',
   });
-});
 
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall();
+  // wait a second before quitting
+  setTimeout(() => autoUpdater.quitAndInstall(), 1000);
 });

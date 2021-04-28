@@ -13,6 +13,8 @@ import {
 } from '../components/utils/constants';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
 import { SelectOption } from '@flmnh-mgcl/ui';
+import { getSetsAndConditionsFromUpdateQuery } from './util';
+import { LoggingError } from '../../stores/logging';
 
 // TODO: ADD DOCUMENTATION
 
@@ -49,8 +51,46 @@ export function validateAdvancedCountQuery(query: string) {
   }
 }
 
-export function validateAdvancedUpdateQuery(_query: string) {
-  return 'Cannot do this yet';
+export function validateAdvancedUpdateQuery(
+  query: string
+): { errors: LoggingError[] | null } {
+  const { parsedSets, setErrors } = getSetsAndConditionsFromUpdateQuery(query);
+
+  if (!parsedSets) {
+    return { errors: setErrors };
+  }
+
+  const valueErrors = parsedSets?.map((set) => {
+    const key = Object.keys(set)[0];
+    const value = set[key];
+
+    return determineAndRunFieldValidator(key, value);
+  });
+
+  if (valueErrors && valueErrors.length) {
+    if (setErrors) {
+      return {
+        errors: [
+          ...setErrors,
+          ...valueErrors
+            .filter((val) => val !== true)
+            .map((val) => {
+              return { message: val };
+            }),
+        ],
+      };
+    } else {
+      return {
+        errors: valueErrors
+          .filter((val) => val !== true)
+          .map((val) => {
+            return { message: val };
+          }),
+      };
+    }
+  }
+
+  return { errors: null };
 }
 
 export function validateFieldSelection(fields: string[]) {
@@ -67,8 +107,6 @@ export function validateOperator(_operator: string) {}
 
 // TODO: add ignore when REGEX
 export function validateConditionalValue(condition: string, field: string) {
-  console.log(field);
-
   return determineAndRunFieldValidator(field, condition);
 }
 
@@ -589,9 +627,7 @@ export function validateDisposition(value: string) {
   }
 }
 
-// FIXME: this will short circuit true validation until data is resolved by researchers, there is conflict regarding how it should be formatted.
 export function validateFreezer(value: string) {
-  return true;
   if (!value || !value.length) {
     return true;
   }
@@ -610,16 +646,12 @@ export function validateFreezer(value: string) {
   return matches ? true : 'Must match Kawahara## or GRR';
 }
 
-// FIXME: this will short circuit true validation until data is resolved by researchers, there is conflict regarding how it should be formatted.
-// TODO: I have removed the short circuit for now
 export function validateRack(value: string) {
-  // return true;
   if (!value || !value.length) {
     return true;
   }
 
   if (value && value.length > 3) {
-    // console.log(value);
     return 'Must be 1-3 characters long';
   }
 
@@ -713,7 +745,7 @@ export function validateNameListField(list: string) {
 }
 
 export function validateDateField(date: string) {
-  let pattern = new RegExp(/^d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/g);
+  let pattern = new RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/g);
 
   if (!date || date.length < 1) {
     return true;
@@ -789,6 +821,14 @@ export function validateFixedLengthField(
   }
 }
 
+export function validateVerbatimLatitude(value: any) {
+  return validateFixedLengthField('verbatimLatitude', value, 20);
+}
+
+export function validateVerbatimLongitude(value: any) {
+  return validateFixedLengthField('verbatimLongitude', value, 20);
+}
+
 function isNumeric(n: string) {
   const parsed = parseFloat(n);
   return !isNaN(parsed) && isFinite(parsed);
@@ -796,6 +836,15 @@ function isNumeric(n: string) {
 
 // TODO: call all above validators, return an array of errors
 export function validateSpecimen(specimen: any) {
+  if (!specimen) {
+    return [
+      {
+        field: 'N/A',
+        message: 'EMPTY ENTRY',
+      },
+    ];
+  }
+
   let errors = [];
 
   if (!specimen.catalogNumber) {
@@ -842,7 +891,7 @@ const validators = {
   family: validateFamily,
   subfamily: validateSubFamily,
   tribe: validateTribe,
-  genus: validateLowerCase,
+  genus: validateProperNoun,
   subgenus: validateProperNoun,
   specificEpithet: validateLowerCase,
   infraspecificEpithet: alwaysTrue,
@@ -872,8 +921,8 @@ const validators = {
   decimalLongitude: alwaysTrue,
   geodeticDatum: validateGeodeticDatum,
   coordinateUncertainty: alwaysTrue,
-  verbatimLatitude: alwaysTrue,
-  verbatimLongitude: alwaysTrue,
+  verbatimLatitude: validateVerbatimLatitude, // keep?
+  verbatimLongitude: validateVerbatimLongitude, // keep?
   georeferencedBy: alwaysTrue,
   disposition: validateDisposition,
   isLoaned: alwaysTrue,
@@ -901,8 +950,16 @@ export function determineAndRunFieldValidator(field: string, value: any) {
   const validator = validators[field as keyof typeof validators] ?? null;
 
   if (!validator) {
-    return false;
+    return `Could not find validator for ${field}`;
   }
 
   return validator(value);
+}
+
+export function validateNonEmptyField(value: any) {
+  if (!value || !value.length) {
+    return 'You must enter a value';
+  } else {
+    return true;
+  }
 }

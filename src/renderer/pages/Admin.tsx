@@ -8,10 +8,11 @@ import { TableStats } from '../types';
 import useQuery from '../components/utils/useQuery';
 import CreateCreateTableModal from '../components/modals/CreateCreateTableModal';
 import { Heading } from '@flmnh-mgcl/ui';
+import AdminInbox from '../components/AdminInbox';
 
 function AdminHeader({ username }: { username?: string }) {
   return (
-    <div className="w-full flex h-16 items-center px-4 mb-4 bg-white dark:bg-dark-500 shadow">
+    <div className="w-full flex h-16 items-center px-4 bg-white dark:bg-dark-500 shadow">
       <BackButton to="/home" />
       <Heading className="flex-1" centered>
         Welcome, @{username}
@@ -47,25 +48,29 @@ export default function Admin() {
     <React.Fragment>
       <AdminHeader username={user?.username} />
 
-      <div className="h-minus-header flex flex-col px-4">
-        <div className="flex space-x-1">
-          <Heading>
-            Tables {tableStats && <span>({tableStats.length})</span>}
-          </Heading>
-          <span className="flex pl-3">
-            <CreateCreateTableModal refresh={getStats} />
-          </span>
-        </div>
-        <div className="flex space-x-3 flex-nowrap overflow-x-auto pt-3 pb-6">
-          {tableStats?.map((props) => (
-            <TableCard key={props.table_name} {...props} refresh={getStats} />
-          ))}
+      <div className="h-minus-header flex p-4 space-x-4">
+        <div className="h-full flex flex-col flex-1">
+          <div className="flex space-x-1">
+            <Heading>
+              Tables {tableStats && <span>({tableStats.length})</span>}
+            </Heading>
+            <span className="flex pl-3">
+              <CreateCreateTableModal refresh={getStats} />
+            </span>
+          </div>
+          <div className="flex space-x-3 flex-nowrap overflow-x-auto pt-3 pb-6">
+            {tableStats?.map((props) => (
+              <TableCard key={props.table_name} {...props} refresh={getStats} />
+            ))}
+          </div>
+
+          <Heading className="pb-3">Users</Heading>
+          <div className="bg-white dark:bg-dark-500 rounded-md overflow-hidden shadow-around-lg w-full flex-1 mb-16 h-full">
+            <UsersTable />
+          </div>
         </div>
 
-        <Heading className="pb-3">Users</Heading>
-        <div className="bg-white dark:bg-dark-500 rounded-md overflow-hidden shadow-around-lg w-full flex-1 mb-16">
-          <UsersTable />
-        </div>
+        <AdminInbox />
       </div>
     </React.Fragment>
   );

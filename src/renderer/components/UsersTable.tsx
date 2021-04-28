@@ -13,8 +13,9 @@ import CreateAdminLogModal from './modals/CreateAdminLogModal';
 import { usePersistedStore } from '../../stores/persisted';
 import RefreshButton from './buttons/RefreshButton';
 import { BACKEND_URL } from '../types';
-import { Badge, Spinner } from '@flmnh-mgcl/ui';
+import { Spinner } from '@flmnh-mgcl/ui';
 import { TABLE_CLASSES } from '@flmnh-mgcl/ui/lib/components/constants';
+import UserTableDropdown from './UserTableDropdown';
 
 export type User = {
   id: number;
@@ -87,23 +88,22 @@ const rowRenderer: TableRowRenderer = ({
       role="row"
       style={style}
     >
-      {columns.map((col: any, index) => {
-        if (index === 5) {
+      {columns.map((col: any, _index) => {
+        if (_index === 5) {
           return (
             <div
-              key={index}
+              key={_index}
               aria-colindex={7}
               className="ReactVirtualized__Table__rowColumn"
               role="gridcell"
-              title=""
-              style={{ overflow: 'hidden', flex: '1 1 330.6px' }}
+              title="Actions"
+              style={{ flex: '1 1 330.6px' }}
             >
-              <div className="flex justify-center space-x-2">
-                <Badge onClick={() => onEditClick(rowData.id)}>Edit</Badge>
-                <Badge color="red" onClick={() => onDeleteClick(rowData.id)}>
-                  Delete
-                </Badge>
-              </div>
+              <UserTableDropdown
+                onEdit={() => onEditClick(rowData.id)}
+                onDelete={() => onDeleteClick(rowData.id)}
+                last={index !== 0}
+              />
             </div>
           );
         } else {
@@ -121,6 +121,8 @@ export default function UsersTable() {
   const [editing, setEditing] = useState<number>();
   const [deleting, setDeleting] = useState<number>();
   const [loading, { on, off }] = useToggle(false);
+
+  const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
 
   const theme = usePersistedStore((state) => state.theme);
 
@@ -146,8 +148,18 @@ export default function UsersTable() {
     }
 
     // TODO: use query from data?
-    const { users } = response.data;
-    setUsers(users.map((user: any) => user as User));
+    const newUsers = response?.data?.users;
+    setUsers(
+      newUsers.map((user: any) => {
+        return {
+          ...user,
+          created_at: new Date(user.created_at).toLocaleDateString(
+            undefined,
+            dateOptions as any
+          ),
+        };
+      })
+    );
     off();
   }
 
@@ -301,45 +313,48 @@ export default function UsersTable() {
         />
       )}
 
-      <div className="w-full align-middle overflow-x-auto overflow-hidden table-height">
-        <Spinner active={loading} />
-        <AutoSizer>
-          {({ height, width }) => (
-            <Table
-              height={height}
-              width={width}
-              rowHeight={40}
-              headerHeight={60}
-              rowCount={display.length}
-              rowGetter={({ index }) => display[index]}
-              rowStyle={getRowStyle}
-              onHeaderClick={handleHeaderClick}
-              rowClassName={TABLE_CLASSES.row}
-              headerClassName={TABLE_CLASSES.headerRow}
-              gridClassName={TABLE_CLASSES.grid}
-              rowRenderer={(props) =>
-                rowRenderer({
-                  ...props,
-                  onEditClick: setEditing,
-                  onDeleteClick: setDeleting,
-                })
-              }
-            >
-              {getColumns()}
-            </Table>
-          )}
-        </AutoSizer>
+      <div className="w-full align-middle overflow-x-auto overflow-hidden h-full flex flex-col">
+        <div className="w-full h-full flex-1">
+          <Spinner active={loading} />
+
+          <AutoSizer>
+            {({ height, width }) => (
+              <Table
+                height={height}
+                width={width}
+                rowHeight={50}
+                headerHeight={60}
+                rowCount={display.length}
+                rowGetter={({ index }) => display[index]}
+                rowStyle={getRowStyle}
+                onHeaderClick={handleHeaderClick}
+                rowClassName={TABLE_CLASSES.row}
+                headerClassName={TABLE_CLASSES.headerRow}
+                gridClassName={TABLE_CLASSES.grid}
+                rowRenderer={(props) =>
+                  rowRenderer({
+                    ...props,
+                    onEditClick: setEditing,
+                    onDeleteClick: setDeleting,
+                  })
+                }
+              >
+                {getColumns()}
+              </Table>
+            )}
+          </AutoSizer>
+        </div>
+        <nav className={TABLE_CLASSES.footer}>
+          <div className="flex space-x-2 items-center">
+            <CreateCreateUserModal refresh={getUsers} />
+            <RefreshButton onClick={() => getUsers()} />
+          </div>
+          <div className="flex space-x-2 items-center">
+            <CreateAdminLogModal />
+            <CreateHelpModal variant="admin-user-table" />
+          </div>
+        </nav>
       </div>
-      <nav className={TABLE_CLASSES.footer}>
-        <div className="flex space-x-2 items-center">
-          <CreateCreateUserModal refresh={getUsers} />
-          <RefreshButton onClick={() => getUsers()} />
-        </div>
-        <div className="flex space-x-2 items-center">
-          <CreateAdminLogModal />
-          <CreateHelpModal variant="admin-user-table" />
-        </div>
-      </nav>
     </React.Fragment>
   );
 }

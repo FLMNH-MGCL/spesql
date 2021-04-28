@@ -22,9 +22,6 @@ export default function FilterFieldForm() {
 
   const [filters, setAvailableFilters] = useState<string[]>(getFilters());
 
-  // console.log('AVAILABLE:', filters);
-  // console.log('USING:', fieldsAsArray());
-
   function getFilters() {
     if (filterByFields === 'all') {
       return headerOptions;

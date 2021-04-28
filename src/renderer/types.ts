@@ -1,5 +1,41 @@
 import { GoogleChartTicks } from 'react-google-charts/dist/types';
 
+export enum RequestType {
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
+  // INSERT,
+  ACCOUNTCREATION = 'ACCOUNTCREATION',
+}
+
+export enum RequestStatus {
+  PENDING = 'PENDING',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
+  FAILED = 'FAILED',
+}
+
+export type UserRequest = {
+  id?: number;
+  _type: RequestType;
+  status: RequestStatus;
+  from: string; // username OR name (if not registered user)
+  email?: string;
+  username?: string;
+  institution?: string;
+  title: string; // title of request
+  description?: string; // optional explanation for request
+  query?: string;
+  password?: string;
+  at?: Date;
+};
+
+export type EmailContent = {
+  from: string; // admin username OR name
+  toName: string; // name of person going to
+  toEmail: string; // email of person going to
+  userRequest: UserRequest; // request this is responding to
+};
+
 export type Values = Record<string, any>;
 
 type StringOrNull = string | null;
@@ -89,7 +125,7 @@ export function isSpecimen(obj: any) {
     const valid = correct_keys.includes(key);
 
     if (!valid) {
-      invalidFields.push(key);
+      invalidFields.push(key ? key : `EMPTY COLUMN AROUND ${i + 1}`);
     }
   }
 

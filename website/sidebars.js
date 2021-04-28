@@ -17,8 +17,10 @@ module.exports = {
               label: 'Queries',
               items: [
                 'selectquery',
+                'quickselect',
                 'countquery',
                 'updatebulk',
+                'updatecsv',
                 'insertbulk',
                 'insertsingle',
                 'advancedbuilder',

@@ -26,14 +26,13 @@ import {
 import { CSVLink } from 'react-csv';
 import ExcelReader from '../ExcelReader';
 
-function CSVParser({ onFileUpload }: UploadProps) {
+export function CSVParser({ onFileUpload }: UploadProps) {
   const { notify } = useNotify();
 
   const [isReset, setReset] = useState(false);
   const updateBulkInsertLog = useStore((state) => state.updateBulkInsertLog);
 
   function handleOnFileLoad(data: any) {
-    console.log(data);
     if (!data || !data.length) {
       notify({
         title: 'Upload Error',
@@ -46,23 +45,32 @@ function CSVParser({ onFileUpload }: UploadProps) {
     const invalidFields = isSpecimen(data[0].data);
 
     if (invalidFields.length > 0) {
-      let message = 'Entries were found that are not valid specimen: ';
+      // if any invalid fields are just empty columns, notify to remove them
+      if (invalidFields.find((entry) => entry.includes('EMPTY COL'))) {
+        notify({
+          title: 'Empty Colmns Detected',
+          message: 'Please remove empty columns and retry upload',
+          level: 'error',
+        });
+      } else {
+        let message = 'Entries were found that are not valid specimen: ';
 
-      invalidFields.forEach((field, index) => {
-        if (index != invalidFields.length - 1) {
-          message += field + ', ';
-        } else {
-          message += field + '... ';
-        }
-      });
+        invalidFields.forEach((field, index) => {
+          if (index != invalidFields.length - 1) {
+            message += field + ', ';
+          } else {
+            message += field + '... ';
+          }
+        });
 
-      message += 'Please remove the selected file.';
+        message += 'Please remove the selected file.';
 
-      notify({
-        title: 'Upload Error',
-        message,
-        level: 'error',
-      });
+        notify({
+          title: 'Upload Error',
+          message,
+          level: 'error',
+        });
+      }
     } else {
       onFileUpload(data);
     }
@@ -273,19 +281,21 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     let newCsv = [];
 
     for (let i = 0; i < rawData.length; i++) {
-      const currentSpecimen = rawData[i].data as Specimen;
+      // xlsx reader returns a slightly different structure than the Csv reader,
+      // so I have to collect the current specimen a little differently
+      const currentSpecimen = useCsv
+        ? (rawData[i].data as Specimen)
+        : (rawData[i] as Specimen);
 
       const specimenErrors = validateSpecimen(currentSpecimen);
 
       if (specimenErrors && specimenErrors.length) {
-        // console.log('ERROR OCCURRED:', currentSpecimen);
         allErrors.push({ index: i, row: i + 2, errors: specimenErrors });
 
         if (downloadFailures) {
           newCsv.push(currentSpecimen);
         }
       } else {
-        // console.log(fixPartiallyCorrect(currentSpecimen));
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
       }
     }
@@ -307,14 +317,12 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
       const specimenErrors = validateSpecimen(currentSpecimen);
 
       if (specimenErrors && specimenErrors.length) {
-        // console.log('ERROR OCCURRED:'+, currentSpecimen);
         allErrors.push({ index: i, row: i + 2, errors: specimenErrors });
 
         if (downloadFailures) {
           newCsv.push(currentSpecimen);
         }
       } else {
-        // console.log(fixPartiallyCorrect(currentSpecimen));
         insertionValues.push(fixPartiallyCorrect(currentSpecimen));
       }
     }
@@ -328,7 +336,9 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
 
   async function bulkInsert(insertionValues: Partial<SpecimenFields>[]) {
     let errors = [];
-    const values = insertionValues.map((specimen) => specimenToArray(specimen));
+    const values = insertionValues
+      .map((specimen) => specimenToArray(specimen))
+      .filter((specimen) => !!specimen);
 
     const insertResponse = await axios
       .post(BACKEND_URL + '/api/insert/bulk', {
@@ -488,9 +498,7 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
   }
 
   function downloadFailedRows() {
-    console.log('here');
     if (!failureRef.current || !failureRef.current.length) {
-      console.log('FAILED:', failureRef.current);
       return;
     }
 
@@ -511,7 +519,6 @@ export default function CreateBulkInsertModal({ open, onClose }: Props) {
     }
 
     if (downloadFailures) {
-      console.log('downloading...');
       downloadFailedRows();
     }
   }

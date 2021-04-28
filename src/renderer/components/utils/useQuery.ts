@@ -53,7 +53,9 @@ export default function useQuery() {
   // TODO: handle 403 error codes!!
   const queries = useMemo(
     () => ({
-      async advancedUpdate(query: string): Promise<string | undefined> {
+      async advancedUpdate(
+        query: string
+      ): Promise<{ queryString: string; message: string } | undefined> {
         const updateResponse = await axios
           .post(BACKEND_URL + '/api/update/advanced', {
             query,
@@ -72,7 +74,7 @@ export default function useQuery() {
 
           await queries.refresh();
 
-          return queryString;
+          return { queryString, message };
         } else if (updateResponse.status === 401) {
           expireSession();
 
@@ -186,9 +188,12 @@ export default function useQuery() {
         }
       },
 
-      async createUser(newUser: Partial<User>) {
+      async createUser(newUser: Partial<User>, hash = true) {
         const creationResponse = await axios
-          .post(BACKEND_URL + '/api/admin/user/create', { newUser })
+          .post(BACKEND_URL + '/api/admin/user/create', {
+            newUser,
+            shouldHash: hash,
+          })
           .catch((error) => error.response);
 
         if (creationResponse.status === 201) {
@@ -465,15 +470,20 @@ export default function useQuery() {
           })
           .catch((error) => error.respnse);
 
-        if (logResponse.status === 201) {
-          // good
-        } else if (logResponse.status === 401) {
+        if (logResponse?.status === 201) {
+          // good, I don't need to do anything here
+        } else if (logResponse?.status === 401) {
           expireSession();
 
           await awaitReauth();
           await queries.logUpdate(query, updates, table, catalogNumber);
         } else {
-          // TODO: notify of error
+          notify({
+            title: 'Could not log update',
+            message:
+              'There was a server error preventing the update from being logged into the system.',
+            level: 'warning',
+          });
         }
       },
 
@@ -663,7 +673,7 @@ export default function useQuery() {
         if (selectResponse.status === 200 && selectResponse.data) {
           const { specimen, query } = selectResponse.data;
 
-          if (!specimen.length) {
+          if (!specimen || !specimen.length) {
             notify({
               title: 'Empty Return',
               message: 'Query yielded no data',
@@ -728,6 +738,7 @@ export default function useQuery() {
         }
       },
 
+      // TODO: handle update where errors bc duplicate keys
       async update(
         query: string,
         conditions: any[],
@@ -741,20 +752,14 @@ export default function useQuery() {
           })
           .catch((error) => error.response);
 
-        if (updateResponse.status === 200 && updateResponse.data) {
+        if (updateResponse?.status === 200 && updateResponse?.data) {
           const { message } = updateResponse.data.result;
           const queryStr = updateResponse.data.query;
-
-          // notify({
-          //   title: 'Update Successful',
-          //   message,
-          //   level: 'success',
-          // });
 
           await queries.refresh();
 
           return { queryStr, message };
-        } else if (updateResponse.status === 401) {
+        } else if (updateResponse?.status === 401) {
           expireSession();
 
           await awaitReauth();

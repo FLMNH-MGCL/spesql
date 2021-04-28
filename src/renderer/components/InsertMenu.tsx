@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CreateBulkInsertModal from './modals/CreateBulkInsertModal';
 import { Dropdown } from '@flmnh-mgcl/ui';
 import { useLocation } from 'react-router-dom';
+import { useStore } from '../../stores';
 
 type Props = {
   disableCrud: boolean;
@@ -9,6 +10,9 @@ type Props = {
 
 export default function InsertMenu({ disableCrud }: Props) {
   const [currentModal, setCurrentModal] = useState<string>();
+
+  const setIsInsertingRecord = useStore((state) => state.setIsInsertingRecord);
+
   const location = useLocation().pathname;
   const notHome = location !== '/home';
 
@@ -16,7 +20,7 @@ export default function InsertMenu({ disableCrud }: Props) {
     <React.Fragment>
       <Dropdown
         label="Insert"
-        disabled={notHome}
+        disabled={notHome || disableCrud}
         labelIcon={
           <svg
             className="w-4 h-4 mr-2"
@@ -39,6 +43,11 @@ export default function InsertMenu({ disableCrud }: Props) {
           <Dropdown.Item
             text="Bulk Insert"
             onClick={disableCrud ? undefined : () => setCurrentModal('bulk')}
+          />
+
+          <Dropdown.Item
+            text="Single Insert"
+            onClick={disableCrud ? undefined : () => setIsInsertingRecord(true)}
           />
         </Dropdown.Section>
       </Dropdown>

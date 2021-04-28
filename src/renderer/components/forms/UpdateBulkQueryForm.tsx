@@ -8,11 +8,7 @@ import {
   validateSetValue,
 } from '../../functions/validation';
 import numberParser from 'number-to-words';
-import {
-  conditionCountOptions,
-  operators,
-  updateFieldOptions,
-} from '../utils/constants';
+import { conditionCountOptions, updateFieldOptions } from '../utils/constants';
 import ConditionalForm from './ConditionalForm';
 import { fetchTables } from './utils';
 import useExpiredSession from '../utils/useExpiredSession';
@@ -54,7 +50,8 @@ function SetForm({ advanced }: SetFormProps) {
           updateControlled={(newVal: any) => {
             updateSetCount(newVal);
           }}
-          // register={{ validate: setValidator(validateSetSelection) }}
+          toolTip="A set is like an assigment operation, I am setting a field to a new value. So this just asks how many assignments you want."
+          toolTipOrigin="right"
         />
       </Form.Group>
 
@@ -67,7 +64,7 @@ function SetForm({ advanced }: SetFormProps) {
 
             // TODO, pass to validateConditionalValue
             //@ts-ignore
-            const setOperator = getValues()[`setOperator_${numberInEnglish}`];
+            // const setOperator = getValues()[`setOperator_${numberInEnglish}`];
 
             return (
               <Form.Group flex key={index}>
@@ -81,19 +78,21 @@ function SetForm({ advanced }: SetFormProps) {
                   register={{
                     validate: setValidator(validateFieldSelection),
                   }}
+                  toolTip="The field that will be updated"
+                  toolTipOrigin="right"
                 />
 
-                {/* TODO: filter out new operators that don't work with this structure of update */}
-                <Form.Select
+                <Form.Input
                   name={`setOperator_${numberInEnglish}`}
                   label="Operator"
-                  disabled={advanced}
-                  options={operators}
+                  disabled
+                  value="="
                   fullWidth
-                  searchable
                   register={{
                     validate: setValidator(validateOperator),
                   }}
+                  toolTip="This is set to =, since you're assigning a value to a field"
+                  toolTipOrigin="right"
                 />
                 <Form.Input
                   name={`setValue_${numberInEnglish}`}
@@ -105,6 +104,8 @@ function SetForm({ advanced }: SetFormProps) {
                       validateSetValue(value, setFieldVal)
                     ),
                   }}
+                  toolTip="The value that the field will be updated to"
+                  toolTipOrigin="right"
                 />
               </Form.Group>
             );
@@ -192,6 +193,8 @@ export default function UpdateBulkQueryForm({ onSubmit }: Props) {
           searchable
           options={tables}
           register={{ validate: setValidator(validateTableSelection) }}
+          toolTip="This is the database table from which the data will be queried"
+          toolTipOrigin="right"
         />
       </Form.Group>
 

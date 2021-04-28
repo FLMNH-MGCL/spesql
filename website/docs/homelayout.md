@@ -33,7 +33,9 @@ The Header has the following dropdown menus with corresponding internal options:
   - [Select Query Builder](/docs/selectquery)
   - [Count Query Builder](/docs/countquery)
   - [Update Query Builder](/docs/updatebulk)
+  - [CSV/XLSX Update](/docs/updatecsv)
   - [Advanced Query Builder](/docs/advancedbuilder)
+  - [Quick Select](/docs/quickselect)
 - Insert Menu
   - [Bulk Insert Form](/docs/insertbulk)
   - [Single Insert Form](/docs/insertsingle)
@@ -56,7 +58,7 @@ The Specimen table will populate with values once a Select query sucessfully ret
 
 <img
 src={require('./assets/table.png').default}
-alt="Example banner"
+alt="Example table filled"
 class="shadow round"
 />
 
@@ -66,6 +68,6 @@ The Specimen View will render a list of all existing / non-NULL fields of a on t
 
 <img
 src={require('./assets/specimenview.gif').default}
-alt="Example banner"
+alt="Example specimen view"
 class="shadow round"
 />

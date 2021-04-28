@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import { useNotify } from '../utils/context';
-import useKeyboard from '../utils/useKeyboard';
 import CreateLogModal from './CreateLogModal';
 import CreateHelpModal from './CreateHelpModal';
 import QueryBuilder from '../QueryBuilder';
@@ -29,11 +27,6 @@ import {
   Statistic,
   Text,
 } from '@flmnh-mgcl/ui';
-
-// IDEAS
-// https://reactjsexample.com/drag-and-drop-sortable-component-for-nested-data-and-hierarchies/
-//https://github.com/fridaymeng/react-sql-query-builder
-//https://sapientglobalmarkets.github.io/react-querybuilder/
 
 type BasicQueryClause = {
   queryType: string;
@@ -86,13 +79,10 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     defaultClause
   );
 
-  // const [helpTab, setHelpTab] = useState<number>(0);
   const [logModalConfig, setLogModalConfig] = useState<LogModalConfig>({
     initialTab: 0,
     watch: 'select',
   });
-
-  // const [sets, updateSets] = useState<Set[]>([]);
 
   const { queryType, sets } = queryClause;
 
@@ -103,14 +93,23 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     onClose();
   }
 
-  useKeyboard('Escape', () => {
-    handleClose();
-  });
+  // REMOVING ESCAPE CLOSE --> too many times I have accidentally closed this modal, and
+  // given how many things there are to configure I have decided that if you want to close
+  // this modal just click close or outside the bounds.
 
-  // @ts-ignore: I know it isnt called yet
-  async function runQuery(values: Values) {
-    console.log(values);
-  }
+  // CLEANUP EFFECT
+  useEffect(() => {
+    return () => {
+      setCodeString('');
+      setQueryPrefix('');
+      setQueryClause(defaultClause);
+      setLogModalConfig({
+        initialTab: 0,
+        watch: 'select',
+      });
+      setCountReturn(undefined);
+    };
+  }, [open]);
 
   function logQuery(query: any) {
     const formatted = formatQuery(query, 'sql');
@@ -236,12 +235,14 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
 
     // all is good! conditionals might be broken but that is okay send to server still
     const queryString = clsx(queryPrefix, 'WHERE', codeString);
-    console.log('SENDING QUERY TO SERVER:', queryString);
 
     const updateRet = await advancedUpdate(queryString);
 
     if (updateRet) {
-      await logUpdate(updateRet, updates, queryClause.databaseTable, null);
+      // TODO: handle message from ret
+      const { queryString } = updateRet;
+
+      await logUpdate(queryString, updates, queryClause.databaseTable, null);
     }
   }
 

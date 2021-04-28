@@ -8,6 +8,7 @@ import { useStore } from '../../stores';
 import { useNotify } from '../components/utils/context';
 import useToggle from '../components/utils/useToggle';
 import { Button, Divider, Form } from '@flmnh-mgcl/ui';
+import CreateRequestUserAccountModal from '../components/modals/CreateRequestUserAccountModal';
 
 export default function SignIn() {
   const { notify } = useNotify();
@@ -95,7 +96,7 @@ export default function SignIn() {
               src={flmnhLogo}
             />
           </div>
-          <Form onSubmit={handleSubmit}>
+          <Form id="login" onSubmit={handleSubmit}>
             <Form.Input
               name="username"
               label="Username"
@@ -113,35 +114,30 @@ export default function SignIn() {
               required
               icon="password"
             />
-
-            <div className="mt-6 flex text-sm leading-5">
-              <p className="font-medium mr-1 dark:text-dark-200">
-                Don't have an account?
-              </p>
-              <a
-                href="mailto:kawahara@flmnh.ufl.edu"
-                target="_blank"
-                rel="noopener"
-                className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
-              >
-                Request one here
-              </a>
-            </div>
-
-            <div className="mt-6">
-              <span className="block w-full rounded-md shadow-sm">
-                {/* TODO: change to UI button */}
-                <Button
-                  type="submit"
-                  variant="primary"
-                  fullWidth
-                  loading={loading}
-                >
-                  Sign in
-                </Button>
-              </span>
-            </div>
           </Form>
+
+          <div className="mt-6 flex text-sm leading-5">
+            <p className="font-medium mr-1 dark:text-dark-200">
+              Don't have an account?
+            </p>
+
+            <CreateRequestUserAccountModal />
+          </div>
+
+          <div className="mt-6">
+            <span className="block w-full rounded-md shadow-sm">
+              {/* TODO: change to UI button */}
+              <Button
+                type="submit"
+                form="login"
+                variant="primary"
+                fullWidth
+                loading={loading}
+              >
+                Sign in
+              </Button>
+            </span>
+          </div>
 
           <div className="mt-6">
             <Divider text="Or view" />

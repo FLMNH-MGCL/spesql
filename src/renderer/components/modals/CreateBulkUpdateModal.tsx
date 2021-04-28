@@ -9,6 +9,9 @@ import CreateHelpModal from './CreateHelpModal';
 import useToggle from '../utils/useToggle';
 import useQuery from '../utils/useQuery';
 import { Button, FormSubmitValues, Modal } from '@flmnh-mgcl/ui';
+import { getDatabaseTableFromAdvancedUpdate } from '../../functions/util';
+import { validateAdvancedUpdateQuery } from '../../functions/validation';
+import { useStore } from '../../../stores';
 
 type Props = {
   open: boolean;
@@ -21,6 +24,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
   const [loading, { on, off }] = useToggle(false);
 
   const { update, advancedUpdate, logUpdate } = useQuery();
+  const updateUpdateLog = useStore((state) => state.updateUpdateLog);
 
   useKeyboard('Escape', () => {
     onClose();
@@ -54,7 +58,6 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
     return conditionals;
   }
 
-  // TODO: hard code '=' for operator, or just remove it
   function parseSets(count: any, values: FormSubmitValues) {
     const numSets = parseInt(count, 10);
 
@@ -83,6 +86,61 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
     return sets;
   }
 
+  function checkNumChanges(message: string) {
+    if (message.includes('Changed: 0') || message.includes('Rows matched: 0')) {
+      notify({
+        title: 'No matches found',
+        message:
+          'No tuples matched your conditions for the update, and therefore no changes were made.',
+        level: 'info',
+      });
+    } else {
+      notify({
+        title: 'Update Successful',
+        message,
+        level: 'success',
+      });
+    }
+  }
+
+  async function runAdvancedQuery(query: string) {
+    const table = getDatabaseTableFromAdvancedUpdate(query);
+
+    if (table) {
+      const { errors } = validateAdvancedUpdateQuery(query);
+      if (errors) {
+        notify({
+          title: 'Update Failed',
+          message:
+            'Your query failed validation, please view the corresponding logs.',
+          level: 'error',
+        });
+
+        updateUpdateLog(errors);
+      } else {
+        const ret = await advancedUpdate(query);
+
+        if (ret) {
+          const { queryString, message } = ret;
+
+          checkNumChanges(message);
+
+          if (queryString) {
+            await logUpdate(queryString, null, table, null);
+          }
+
+          off();
+        }
+      }
+    } else {
+      notify({
+        title: 'Could not determine table',
+        message: "Please ensure you use 'UPDATE tablename SET' notation.",
+        level: 'error',
+      });
+    }
+  }
+
   async function handleSubmit(values: FormSubmitValues) {
     on();
 
@@ -92,15 +150,7 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
     let conditions = null;
 
     if (advancedQuery) {
-      query = advancedQuery;
-
-      const queryStringRet = await advancedUpdate(query);
-
-      if (queryStringRet) {
-        await logUpdate(queryStringRet, null, databaseTable, null);
-      }
-
-      off();
+      await runAdvancedQuery(advancedQuery);
     } else {
       const conditionals = parseConditions(conditionalCount, values);
 
@@ -125,8 +175,6 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
       query = queryString;
       conditions = conditionalPairs;
 
-      console.log(query, conditions);
-
       if (!query) {
         off();
 
@@ -144,17 +192,15 @@ export default function CreateBulkUpdateModal({ open, onClose }: Props) {
       if (queryStringRet) {
         const { queryStr, message } = queryStringRet;
 
-        notify({
-          title: 'Update Successful',
-          message,
-          level: 'success',
-        });
+        checkNumChanges(message);
 
         await logUpdate(queryStr, null, databaseTable, null);
       }
 
       off();
     }
+
+    off();
   }
 
   return (

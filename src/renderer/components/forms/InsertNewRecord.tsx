@@ -43,6 +43,8 @@ import {
   validateTableSelection,
   validateTribe,
   validateTubeSize,
+  validateVerbatimLatitude,
+  validateVerbatimLongitude,
 } from '../../functions/validation';
 import {
   BooleanField,
@@ -383,7 +385,7 @@ function RecordLevelInformation() {
             label="habitat"
             name="habitat"
             fullWidth
-            placeholder="Sannava"
+            placeholder="Fangorn Forest"
           />
         </Form.Group>
 
@@ -577,14 +579,14 @@ function Locality() {
           <Form.Input
             label="county"
             name="county"
-            placeholder=""
+            placeholder="Osgiliath"
             register={{ validate: validateProperNoun }}
             fullWidth
           />
           <Form.Input
             label="municipality"
             name="municipality"
-            placeholder=""
+            placeholder="Gondor"
             register={{ validate: validateProperNoun }}
             fullWidth
           />
@@ -594,14 +596,14 @@ function Locality() {
           <Form.Input
             label="decimalLatitude"
             name="decimalLatitude"
-            placeholder=""
+            placeholder="23.13698"
             register={{ validate: validateLatitude }}
             fullWidth
           />
           <Form.Input
             label="decimalLongitude"
             name="decimalLongitude"
-            placeholder=""
+            placeholder="-178.63840"
             register={{ validate: validateLongitude }}
             fullWidth
           />
@@ -644,13 +646,15 @@ function Locality() {
           <Form.Input
             label="verbatimLatitude"
             name="verbatimLatitude"
-            placeholder=""
+            register={{ validate: validateVerbatimLatitude }}
+            placeholder="-71.31979"
           />
 
           <Form.Input
             label="verbatimLongitude"
             name="verbatimLongitude"
-            placeholder=""
+            register={{ validate: validateVerbatimLongitude }}
+            placeholder="-59.01199"
           />
 
           <Form.Input

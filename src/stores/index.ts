@@ -25,7 +25,6 @@ export const defaultTableConfig = {
   ],
 };
 
-// TODO: change naming scheme for some of these fields, they don't make sense
 type SpesqlSession = {
   user?: User | null;
 
@@ -72,6 +71,16 @@ type SpesqlSession = {
   logout(): void;
 };
 
+const defaultSession: Partial<SpesqlSession> = {
+  user: null,
+  expiredSession: true,
+  isEditingRecord: false,
+  isInsertingRecord: false,
+  prefersSound: true,
+  selectedSpecimen: null,
+  loading: false,
+};
+
 export const useStore = create<SpesqlSession>((set) => ({
   user: null,
 
@@ -99,8 +108,6 @@ export const useStore = create<SpesqlSession>((set) => ({
     }));
   },
 
-  // TODO: should i add a queue for functions to be rerun on expired session?
-
   prefersSound: true,
   toggleSoundPreference: (newVal?: boolean) =>
     set((state) => ({
@@ -116,7 +123,12 @@ export const useStore = create<SpesqlSession>((set) => ({
     })),
 
   logout: () =>
-    set((state) => ({ ...state, user: null, expiredSession: true })),
+    set((state) => ({
+      ...state,
+      ...defaultSession,
+      queryData: { ...state.queryData, ...defaultQueryConfig },
+      tableConfig: { ...state.tableConfig, ...defaultTableConfig },
+    })),
 
   // QUERY CONFIGS
   queryData: {

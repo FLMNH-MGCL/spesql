@@ -5,6 +5,8 @@ import CreateBulkUpdateModal from './modals/CreateBulkUpdateModal';
 import { Dropdown } from '@flmnh-mgcl/ui';
 import CreateQueryBuilderModal from './modals/CreateQueryBuilderModal';
 import { useLocation } from 'react-router-dom';
+import CreateQuickFindModal from './modals/CreateQuickFindModal';
+import CreateCsvUpdateModal from './modals/CreateCsvUpdateModal';
 
 type Props = {
   disableCrud: boolean;
@@ -49,15 +51,30 @@ export default function QueryMenu({ disableCrud }: Props) {
             text="Count"
             onClick={() => setCurrentModal('count')}
           />
+        </Dropdown.Section>
+        <Dropdown.Section>
           <Dropdown.Item
             text="Update"
             onClick={disableCrud ? undefined : () => setCurrentModal('update')}
           />
           <Dropdown.Item
+            text="CSV Update"
+            onClick={
+              disableCrud ? undefined : () => setCurrentModal('csvUpdate')
+            }
+          />
+        </Dropdown.Section>
+
+        <Dropdown.Section>
+          <Dropdown.Item
             text="Advanced"
             onClick={
               disableCrud ? undefined : () => setCurrentModal('advanced')
             }
+          />
+          <Dropdown.Item
+            text="Quick Find"
+            onClick={() => setCurrentModal('quick')}
           />
         </Dropdown.Section>
       </Dropdown>
@@ -75,6 +92,14 @@ export default function QueryMenu({ disableCrud }: Props) {
       />
       <CreateQueryBuilderModal
         open={disableCrud ? false : currentModal === 'advanced'}
+        onClose={() => setCurrentModal(undefined)}
+      />
+      <CreateQuickFindModal
+        open={currentModal === 'quick'}
+        onClose={() => setCurrentModal(undefined)}
+      />
+      <CreateCsvUpdateModal
+        open={currentModal === 'csvUpdate'}
         onClose={() => setCurrentModal(undefined)}
       />
     </React.Fragment>
