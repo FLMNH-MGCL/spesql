@@ -11,12 +11,10 @@ export default function count(req: Request, res: Response) {
   } else {
     if (conditions) {
       const query = mysql.format(template, conditions);
-      console.log(query);
       connection.query(query, (error, data) => {
         if (error) {
           res.status(503).send(error);
         } else {
-          console.log(data[0][Object.keys(data[0])[0]]);
           const ret = { count: data[0][Object.keys(data[0])[0]], query };
 
           res.send(ret);

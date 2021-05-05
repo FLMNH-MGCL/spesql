@@ -18,7 +18,6 @@ export default function update(req: Request, res: Response) {
 
     connection.query(query, (error, data) => {
       if (error) {
-        console.log(error);
         res.status(503).send(error);
       } else {
         res.send({ result: data, query });
@@ -37,7 +36,6 @@ export function advancedUpdate(req: Request, res: Response) {
   } else {
     connection.query(query, (error, data) => {
       if (error) {
-        console.log(error);
         res.status(503).send(error);
       } else {
         res.send({ result: data, query });

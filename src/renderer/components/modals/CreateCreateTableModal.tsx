@@ -91,8 +91,6 @@ export default function CreateCreateTableModal({
   const { logAdminTableError } = useLogError();
 
   async function handleSubmit(values: FormSubmitValues) {
-    console.log(values);
-
     const res = await createTable(values.tableName);
 
     if (res) {

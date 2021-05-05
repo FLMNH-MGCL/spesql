@@ -16,9 +16,7 @@ export default function logout(req: Request, res: Response) {
       function (err) {
         if (err) {
           connectionError = err;
-        } else {
-          console.log('restored default user priviledge...');
-        }
+        } 
       }
     );
   }

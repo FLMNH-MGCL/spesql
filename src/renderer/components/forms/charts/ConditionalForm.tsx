@@ -21,8 +21,7 @@ export default function ConditionalForm({ codeString, setCodeString }: Props) {
     if (typeof formatted === 'string') {
       setCodeString(formatted);
     } else {
-      const { sql, params } = formatted;
-      console.log('what is this:', params);
+      const { sql } = formatted;
       setCodeString(sql);
     }
   }

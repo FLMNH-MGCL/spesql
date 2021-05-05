@@ -48,8 +48,6 @@ export default function CreateRequestSingleUpdateModal({
       query: mysql.format(query, [updates, ...conditions]),
     };
 
-    console.log(userRequest);
-
     const res = await axios.post(BACKEND_URL + '/api/request-update', {
       ...userRequest,
     });

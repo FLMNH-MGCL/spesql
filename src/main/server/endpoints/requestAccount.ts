@@ -45,10 +45,8 @@ export default function requestAccount(req: Request, res: Response) {
           val,
           (error, data) => {
             if (error) {
-              console.log(error);
               res.status(503).send(error);
             } else {
-              console.log(data);
               res.status(201).send(data);
             }
           }

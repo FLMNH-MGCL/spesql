@@ -13,7 +13,6 @@ export default function select(req: Request, res: Response) {
   } else {
     if (columns || conditions) {
       const query = mysql.format(template, [columns, ...conditions]);
-      console.log(query);
       connection.query(query, (error, data) => {
         if (error) {
           res.status(503).send(error);
@@ -27,7 +26,6 @@ export default function select(req: Request, res: Response) {
       const query = template;
       connection.query(query, (error, data) => {
         if (error) {
-          console.log(error);
           res.status(503).send(error);
         } else {
           const ret = { specimen: data, query };

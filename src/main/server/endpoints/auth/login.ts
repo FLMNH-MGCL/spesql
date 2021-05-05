@@ -51,7 +51,6 @@ export default function login(req: Request, res: Response) {
                       if (error) {
                         res.status(500).send(error);
                       } else {
-                        console.log('switched to admin account...');
                         res
                           .status(200)
                           .send({ fullName, username, id, accessRole });
@@ -68,7 +67,6 @@ export default function login(req: Request, res: Response) {
                       if (error) {
                         res.status(500).send(error);
                       } else {
-                        console.log('switched to manager account...');
                         res
                           .status(200)
                           .send({ fullName, username, id, accessRole });

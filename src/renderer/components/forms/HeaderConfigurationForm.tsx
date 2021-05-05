@@ -69,8 +69,6 @@ export default function HeaderConfigurationForm() {
     const { source, destination } = result;
 
     if (source.droppableId === destination.droppableId) {
-      console.log('moving WITHIN lists...');
-
       const items = reorder(
         source.droppableId === 'selectedHeaders'
           ? tableConfig.headers
@@ -85,7 +83,6 @@ export default function HeaderConfigurationForm() {
         setAvailableHeaders(items);
       }
     } else {
-      console.log('moving ACROSS lists...');
       const result = move(
         source.droppableId === 'selectedHeaders'
           ? tableConfig.headers

@@ -149,8 +149,6 @@ export default function useLogError() {
       const logs = adminErrorsRef.current?.tableErrors;
       let error: any = {};
 
-      console.log(responseData);
-
       try {
         const { status, data } = responseData;
         const { code, sqlMessage } = data;

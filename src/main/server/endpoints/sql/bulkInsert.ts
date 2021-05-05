@@ -32,10 +32,8 @@ export default function bulkInsert(req: Request, res: Response) {
 
     connection.query(prefix + ' VALUES ?', [values], (error, data) => {
       if (error) {
-        console.log(error);
         res.status(503).send(error);
       } else {
-        console.log(data);
         res.status(201).send(data);
       }
     });

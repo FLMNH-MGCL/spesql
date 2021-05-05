@@ -11,8 +11,6 @@ import './server/server';
 
 app.commandLine.appendSwitch('ignore-certificate-errors');
 
-console.log(path.resolve(__dirname, 'flmnhLogo.png'));
-
 export let win: BrowserWindow | null = null;
 
 app.on('ready', () => {
@@ -86,7 +84,6 @@ autoUpdater.on('update-available', (_info: any) => {
 });
 
 autoUpdater.on('error', (error: any) => {
-  console.log(error);
   sendStatusToWindow({
     type: 'error',
     message:

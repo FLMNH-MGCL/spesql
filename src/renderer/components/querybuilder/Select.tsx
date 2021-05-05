@@ -248,7 +248,6 @@ export default forwardRef<HTMLSelectElement, Props>(
     useEffect(() => {
       const element = document.getElementById(id);
       if (element) {
-        // console.log('found element');
         element.dispatchEvent(new Event('change'));
       }
     }, [selected]);
@@ -276,9 +275,7 @@ export default forwardRef<HTMLSelectElement, Props>(
       return false;
     }
 
-    function handleChange(e: any) {
-      console.log(e);
-      console.log('CHANGED', selected);
+    function handleChange(_e: any) {
       onChange(selected);
     }
 

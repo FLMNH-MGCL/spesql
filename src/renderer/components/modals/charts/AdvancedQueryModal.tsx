@@ -25,8 +25,6 @@ export default function AdvancedQueryModal() {
   }
 
   async function handleSubmit() {
-    console.log(code);
-
     const data = await runChartQuery(code);
 
     if (data) {

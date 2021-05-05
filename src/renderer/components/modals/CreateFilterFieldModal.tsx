@@ -1,5 +1,6 @@
 import { Button, Modal, Text } from '@flmnh-mgcl/ui';
-import React from 'react';
+import React, { useEffect } from 'react';
+import shallow from 'zustand/shallow';
 import { useStore } from '../../../stores';
 import RefreshButton from '../buttons/RefreshButton';
 import FilterFieldForm from '../forms/FilterFieldForm';
@@ -12,17 +13,26 @@ type Props = {
 export default function CreateFilterFieldModal({ disabled }: Props) {
   const [open, { on, off }] = useToggle(false);
 
+  const filterByFields = useStore(
+    (state) => state.queryData.filterByFields,
+    shallow
+  );
+
   const setFilterByFields = useStore(
     (state) => state.queryData.setFilterByFields
   );
 
-  const hasFiltered = useStore(
-    (state) => state.queryData.filterByFields !== 'all'
-  );
+  const hasFiltered = filterByFields !== 'all';
 
   function reset() {
     setFilterByFields('all');
   }
+
+  useEffect(() => {
+    if (filterByFields.length === 0) {
+      reset();
+    }
+  }, [filterByFields]);
 
   return (
     <div>

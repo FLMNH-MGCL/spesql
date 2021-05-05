@@ -40,15 +40,17 @@ export default function AdminInbox() {
   async function onReject(req: UserRequest) {
     await changeRequestStatus(req.id!, RequestStatus.REJECTED)
       .then(async () => {
-        await axios.post(BACKEND_URL + '/api/send-email', {
-          from: user!.fullName,
-          toName: req.from,
-          toEmail: req.email!,
-          userRequest: {
-            ...req,
-            status: RequestStatus.REJECTED,
-          },
-        });
+        if (req.email) {
+          await axios.post(BACKEND_URL + '/api/send-email', {
+            from: user!.fullName,
+            toName: req.from,
+            toEmail: req.email,
+            userRequest: {
+              ...req,
+              status: RequestStatus.REJECTED,
+            },
+          });
+        }
 
         notify({
           title: 'Rejected Request',

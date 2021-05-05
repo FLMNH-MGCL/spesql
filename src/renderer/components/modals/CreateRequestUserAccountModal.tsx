@@ -37,8 +37,6 @@ export default function CreateRequestUserAccountModal() {
       password,
     };
 
-    console.log(userRequest);
-
     const res = await axios.post(BACKEND_URL + '/api/request-account', {
       ...userRequest,
     });

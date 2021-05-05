@@ -82,8 +82,6 @@ export default function FilterFieldForm() {
     const { source, destination } = result;
 
     if (source.droppableId === destination.droppableId) {
-      console.log('moving WITHIN lists...');
-
       const items = reorder(
         source.droppableId === 'selectedHeaders' ? fieldsAsArray() : filters,
         source.index,
@@ -94,7 +92,6 @@ export default function FilterFieldForm() {
         setFilterByFields(items as any);
       }
     } else {
-      console.log('moving ACROSS lists...');
       const result = move(
         source.droppableId === 'selectedHeaders' ? fieldsAsArray() : filters,
         destination.droppableId === 'selectedHeaders'

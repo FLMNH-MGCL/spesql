@@ -137,7 +137,6 @@ export default function () {
   }
 
   function requestEdit(query: string, conditions: any[], updates: any) {
-    console.log(updates);
     setRequestUpdate({
       query,
       conditions,
@@ -154,14 +153,14 @@ export default function () {
 
     loadingToggles.on();
 
-    const correctedSpecimen = getSpecimenDefaults(selectedSpecimen);
-    const updatedFieldArray = arrayFieldsToString(values as Specimen);
-    const correctedUpdates = getSpecimenDefaults(updatedFieldArray);
+    // const correctedSpecimen = getSpecimenDefaults(selectedSpecimen);
+    // const updatedFieldArray = arrayFieldsToString(values as Specimen);
+    // const correctedUpdates = getSpecimenDefaults(updatedFieldArray);
 
-    console.log('RAW VALUES (AS SPECIMEN):', values as Specimen);
-    console.log('RAW VALUES (AS ARRAY):', updatedFieldArray);
-    console.log('CORRECTED NULLS ON UPDATES:', correctedUpdates);
-    console.log('\nCORRECTED NULLS ON SELECTED:', correctedSpecimen);
+    // console.log('RAW VALUES (AS SPECIMEN):', values as Specimen);
+    // console.log('RAW VALUES (AS ARRAY):', updatedFieldArray);
+    // console.log('CORRECTED NULLS ON UPDATES:', correctedUpdates);
+    // console.log('\nCORRECTED NULLS ON SELECTED:', correctedSpecimen);
 
     const { errors, updates, query, logUpdates } = buildSingleUpdateQuery(
       databaseTable,

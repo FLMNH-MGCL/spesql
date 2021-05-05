@@ -125,7 +125,6 @@ export default function UpdateForm({ onChange, onSubmit, sets }: Props) {
         if (errored === 'BAD SESSION') {
           expireSession();
         } else {
-          console.log(errored);
           throw new Error('Some other error occurred!');
         }
       }
@@ -133,10 +132,6 @@ export default function UpdateForm({ onChange, onSubmit, sets }: Props) {
 
     init();
   }, [expiredSession]);
-
-  // function handleChange(values: Values) {
-  //   console.log(values);
-  // }
 
   return (
     <div>

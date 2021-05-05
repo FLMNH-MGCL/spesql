@@ -326,15 +326,17 @@ export default function CreateViewRequestModal({
   async function rejectRequest() {
     await changeRequestStatus(request.id!, RequestStatus.REJECTED)
       .then(async () => {
-        await axios.post(BACKEND_URL + '/api/send-email', {
-          from: user!.fullName,
-          toName: request.from,
-          toEmail: request.email!,
-          userRequest: {
-            ...request,
-            status: RequestStatus.REJECTED,
-          },
-        });
+        if (request.email) {
+          await axios.post(BACKEND_URL + '/api/send-email', {
+            from: user!.fullName,
+            toName: request.from,
+            toEmail: request.email,
+            userRequest: {
+              ...request,
+              status: RequestStatus.REJECTED,
+            },
+          });
+        }
 
         notify({
           title: 'Rejected Request',

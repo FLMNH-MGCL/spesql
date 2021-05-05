@@ -119,7 +119,6 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     } else {
       const { sql, params } = formatted;
 
-      console.log('what is this:', params);
       setCodeString(sql);
     }
   }
@@ -169,7 +168,6 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
       }
     });
 
-    console.log(updates);
     setQueryPrefix(mysql.format(prefix, updates));
   }
 
@@ -192,8 +190,6 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
   }
 
   async function handleUpdateSubmit(values: FormSubmitValues) {
-    console.log(values);
-
     // double check validation
     // this should not pick up any errors, as validation is ran on submit...
     // TODO: should I remove this double checking??

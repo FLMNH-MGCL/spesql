@@ -14,10 +14,8 @@ export default function insert(req: Request, res: Response) {
   } else {
     connection.query('INSERT INTO ?? SET ?', [table, values], (error, data) => {
       if (error) {
-        console.log(error);
         res.status(500).send(error);
       } else {
-        console.log(data);
         res.status(201).send(data);
       }
     });

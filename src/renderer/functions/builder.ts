@@ -123,8 +123,6 @@ export function buildUpdateQuery(
     updates[statement.field] = statement.value;
   });
 
-  console.log(queryString, conditionalPairs, updates);
-
   return { queryString, conditionalPairs, updates };
 }
 
@@ -148,14 +146,6 @@ export function buildSingleUpdateQuery(
     );
 
     if (updatedValCorrected !== currentSpecimen[_key]) {
-      console.log('FOUND DIFFERENCE AT:', _key);
-      console.log(
-        'UPDATE:',
-        updatedSpecimen[_key],
-        typeof updatedSpecimen[_key]
-      );
-      console.log('ORIG:', currentSpecimen[_key], typeof currentSpecimen[_key]);
-
       const valid = determineAndRunFieldValidator(key, updatedSpecimen[_key]);
 
       // valid: string | boolean

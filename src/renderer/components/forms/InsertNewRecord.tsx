@@ -82,7 +82,6 @@ function Cataloging() {
         if (errored === 'BAD SESSION') {
           expireSession();
         } else {
-          console.log(errored);
           throw new Error('Some other error occurred!');
         }
       }
@@ -680,7 +679,6 @@ function LoanInfo() {
   const { isLoaned } = getValues();
 
   function toggle(newVal?: any) {
-    console.log(newVal);
     if (isLoaned === 'Y') {
       setValue('isLoaned', 'N');
     } else if (newVal === undefined) {

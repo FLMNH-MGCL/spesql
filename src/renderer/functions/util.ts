@@ -28,8 +28,6 @@ export function standardizeName(name: string) {
 
   const nameParts = name.match(wordsRegex)?.filter((part) => part !== '');
 
-  console.log(nameParts);
-
   if (!nameParts || nameParts.length < 2) {
     return null;
   }

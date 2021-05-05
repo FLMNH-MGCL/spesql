@@ -46,7 +46,6 @@ export default function SelectQueryForm({ onSubmit }: Props) {
         if (errored === 'BAD SESSION') {
           expireSession();
         } else {
-          console.log(errored);
           throw new Error('Some other error occurred!');
         }
       }
