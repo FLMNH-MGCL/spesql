@@ -82,21 +82,22 @@ export default function App() {
     });
   });
 
-  useEffect(() => {
-    async function checkConnection() {
-      const res = await axios.get(BACKEND_URL + '/api/check-connection');
-      if (res.status !== 200) {
-        notify({
-          title: 'Connection Error',
-          message:
-            'Could not establish a connection with the database, please check internet and VPN connections',
-          level: 'error',
-        });
-      }
-    }
+  // useEffect(() => {
+  //   async function checkConnection() {
+  //     const res = await axios.get(BACKEND_URL + '/api/check-connection');
+  //     if (res.status !== 200) {
+  //       notify({
+  //         title: 'Connection Error',
+  //         message:
+  //           'Could not establish a connection with the database, please check internet and VPN connections',
+  //         level: 'error',
+  //       });
+  //     }
+  //   }
 
-    checkConnection();
-  }, []);
+  //   checkConnection();
+  // }, []);
+
   return (
     <MemoryRouter initialEntries={['/home']}>
       <ErrorBoundary>

@@ -3,7 +3,30 @@ import { SpecimenFields } from '../types';
 import { convertFieldToProperType } from './util';
 import { determineAndRunFieldValidator } from './validation';
 
-// TODO: alter all builders to account for new operators added!!
+import * as _ from 'lodash';
+import { fieldToConditionalKey } from '../components/utils/constants';
+
+// TOOD: add support for the nots
+export function buildConditionalObjects(conditionals?: any[]) {
+  if (!conditionals || Object.keys(conditionals).length === 0) {
+    return {};
+  } else {
+    let conditionalObject: any = {};
+
+    conditionals.forEach((conditional, i) => {
+      const { field, operator, value } = conditional;
+
+      const key =
+        fieldToConditionalKey[field as keyof typeof fieldToConditionalKey];
+
+      if (key) {
+        _.set(conditionalObject, key, value);
+      }
+    });
+
+    return conditionalObject;
+  }
+}
 
 export function buildSelectQuery(table: string, conditionals?: any[]) {
   let queryString = clsx(

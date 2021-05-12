@@ -6,7 +6,7 @@ import getSpecimenEntity from './util/getSpecimenEntity';
 export default async function insert(req: Request, res: Response) {
   const { specimen, labName } = req.body;
 
-  const lab = await em.findOne(Lab, { name: labName });
+  const lab = await em.findOne(Lab, { labName });
 
   if (!lab) {
     res.status(500).send('No lab was found with that name');

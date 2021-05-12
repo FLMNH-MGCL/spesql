@@ -28,7 +28,7 @@ export default async function singleInsert(req: Request, res: Response) {
 
   const { labName } = specimen;
 
-  const lab = await em.findOneOrFail(Lab, { name: labName }).catch(() => null);
+  const lab = await em.findOneOrFail(Lab, { labName }).catch(() => null);
 
   // all specimen must be associated with a lab
   if (!lab) {

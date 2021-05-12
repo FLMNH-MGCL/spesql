@@ -2,6 +2,8 @@ import { Specimen, SpecimenFields, SpecimenValidator } from '../types';
 import Qty from 'js-quantities'; //https://github.com/gentooboontoo/js-quantities
 import { User } from '../../stores';
 import { LoggingError } from '../../stores/logging';
+import { FormSubmitValues } from '@flmnh-mgcl/ui';
+import numberParser from 'number-to-words';
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -328,4 +330,24 @@ export function getSetsAndConditionsFromUpdateQuery(query: string) {
       return { parsedSets, setErrors: null };
     }
   }
+}
+
+export function collectConditionalsFromForm(values: FormSubmitValues) {
+  let conditionals = [];
+  const { conditionalCount } = values;
+
+  const numConditions = parseInt(conditionalCount, 10);
+
+  for (let i = 0; i < numConditions; i++) {
+    const current = numberParser.toWords(i);
+
+    // FIXME: doesn't account for all operator structures
+    conditionals.push({
+      field: values[`conditionalField_${current}`],
+      operator: values[`conditionalOperator_${current}`],
+      value: values[`conditionalValue_${current}`],
+    });
+  }
+
+  return conditionals;
 }

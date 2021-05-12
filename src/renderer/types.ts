@@ -40,6 +40,86 @@ export type Values = Record<string, any>;
 
 type StringOrNull = string | null;
 
+export type DBLab = {
+  id: number;
+  labName: string;
+};
+
+export type DBTaxonomy = {
+  id: number;
+  order: StringOrNull;
+  superfamily: StringOrNull;
+  family: StringOrNull;
+  subfamily: StringOrNull;
+  tribe: StringOrNull;
+  genus: StringOrNull;
+  subgenus: StringOrNull;
+  specificEpithet: StringOrNull;
+  infraspecificEpithet: StringOrNull;
+};
+
+export type DBCollectionEventLocation = {
+  id: number;
+  stateProvince: StringOrNull;
+  country: StringOrNull;
+  municipality: StringOrNull;
+  locality: StringOrNull;
+  elevationInMeters: StringOrNull;
+  decimalLatitude: number | null;
+  decimalLongitude: number | null;
+  geodeticDatum: StringOrNull;
+  corrdinateUncertainty: StringOrNull;
+  verbatimLatitude: StringOrNull;
+  verbatimLongitude: StringOrNull;
+};
+
+export type DBCollectionEvent = {
+  id: number;
+  recordedBy: StringOrNull;
+  identifiedBy: StringOrNull;
+  dateIdentified: StringOrNull;
+  verbatimDate: StringOrNull;
+  collectedYear: StringOrNull;
+  collectedMonth: StringOrNull;
+  collectedDay: StringOrNull;
+  fieldNotes: StringOrNull;
+  otherCollectors: StringOrNull;
+  location: DBCollectionEventLocation;
+};
+
+export type DBLoan = {
+  id: number;
+  to: string;
+  at: Date;
+  returnDate: Date | null;
+};
+
+export type DBStorage = {
+  id: number;
+  rack: StringOrNull;
+  freezer: StringOrNull;
+  box: StringOrNull;
+  tubeSize: StringOrNull;
+};
+
+export type DBSpecimen = {
+  id: number;
+  catalogNumber: string;
+  otherCatalogNumber: StringOrNull;
+  recordNumber: StringOrNull;
+  projectNumber: StringOrNull;
+  otherIdentifier: StringOrNull;
+  reared?: boolean;
+  withholdData?: boolean;
+
+  //=== RELATIONS ===//
+  lab: DBLab;
+  taxonomy: DBTaxonomy | null;
+  collectionEvent: DBCollectionEvent | null;
+  loan: DBLoan | null;
+  storage: DBStorage | null;
+};
+
 // TODO: otherIdentifier AND projectNumber
 export type SpecimenFields = {
   id: number;

@@ -82,9 +82,7 @@ export default function () {
 
   const { hasQueried } = useStore(
     (state) => ({
-      hasQueried:
-        state.queryData.queryString !== undefined &&
-        state.queryData.queryString !== '',
+      hasQueried: state.queryData.data && state.queryData.data.length,
     }),
     shallow
   );

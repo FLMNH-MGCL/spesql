@@ -19,7 +19,7 @@ export const defaultTableConfig = {
   headers: [
     'catalogNumber',
     'otherCatalogNumber',
-    'order',
+    'order_',
     'genus',
     'specificEpithet',
   ],

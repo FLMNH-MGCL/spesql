@@ -14,6 +14,7 @@ import {
 } from '../utils/constants';
 import numberParser from 'number-to-words';
 import { Form, Heading, Label, Text } from '@flmnh-mgcl/ui';
+import clsx from 'clsx';
 
 type ConditionalFormProps = {
   advanced: boolean;
@@ -52,17 +53,13 @@ export default function ConditionalForm({
 
   const { getValues, watch, setValue } = form;
 
-  const [conditionCount, setConditionCount] = useState(min ?? 0);
+  watch();
 
-  const [conditionalJoiner, setConditionalJoiner] = useState('AND');
+  const [conditionCount, setConditionCount] = useState(min ?? 0);
 
   const conditionalCounts = min
     ? conditionCountOptions.filter((el) => el.value >= min)
     : conditionCountOptions;
-
-  // I want it to update the form state when this form changes, so it
-  // picks up new fields on the conditional count changes
-  watch();
 
   function setValidator(validator: any, operator?: string) {
     if (!advanced) {
@@ -74,13 +71,12 @@ export default function ConditionalForm({
   }
 
   function disableValue(condition: string) {
-    return ['IS NOT NULL', 'IS NULL', 'BETWEEN', 'NOT BETWEEN'].includes(
+    return ['in', 'is not null', 'is null', 'between', 'not between'].includes(
       condition
     );
   }
 
   function update(name: string, value: any) {
-    console.log(name, value);
     setValue(name, value);
   }
 
@@ -88,7 +84,7 @@ export default function ConditionalForm({
     <React.Fragment>
       <Heading className="pt-3 pb-1">Conditions</Heading>
 
-      <Label className="pt-2">Conditional Joiner:</Label>
+      {/* <Label className="pt-2">Conditional Joiner:</Label>
       <Form.Group flex>
         <Form.Radio
           name="andJoin"
@@ -99,9 +95,7 @@ export default function ConditionalForm({
               ? true
               : false
           }
-          onChange={() =>
-            setConditionalJoiner(conditionalJoiner === 'OR' ? 'AND' : 'AND')
-          }
+          onChange={() => setConditionalJoiner('AND')}
         />
 
         <Form.Radio
@@ -114,11 +108,9 @@ export default function ConditionalForm({
               ? true
               : false
           }
-          onChange={() =>
-            setConditionalJoiner(conditionalJoiner === 'AND' ? 'OR' : 'OR')
-          }
+          onChange={() => setConditionalJoiner('OR')}
         />
-      </Form.Group>
+      </Form.Group> */}
 
       <Form.Group flex>
         <Form.Select
@@ -144,14 +136,12 @@ export default function ConditionalForm({
             Array.from({ length: conditionCount }).map((_, index) => {
               const numberInEnglish = numberParser.toWords(index);
 
-              const conditionalFieldVal = getValues()[
-                `conditionalField_${numberInEnglish}`
-              ];
+              const conditionalFieldVal =
+                getValues()[`conditionalField_${numberInEnglish}`];
 
               //@ts-ignore
-              const conditionalOperator = getValues()[
-                `conditionalOperator_${numberInEnglish}`
-              ];
+              const conditionalOperator =
+                getValues()[`conditionalOperator_${numberInEnglish}`];
 
               return (
                 <div key={index}>
@@ -185,6 +175,9 @@ export default function ConditionalForm({
                     <Form.Input
                       name={`conditionalValue_${numberInEnglish}`}
                       label="Value"
+                      className={clsx(
+                        disableValue(conditionalOperator) && 'hidden'
+                      )}
                       disabled={advanced || disableValue(conditionalOperator)}
                       fullWidth
                       register={{
@@ -202,7 +195,7 @@ export default function ConditionalForm({
                     />
                   </Form.Group>
 
-                  {conditionalOperator?.indexOf('BETWEEN') >= 0 && (
+                  {conditionalOperator?.indexOf('between') >= 0 && (
                     <Form.Group flex>
                       <Form.Input
                         name={`conditionalValue_${numberInEnglish}_from`}
@@ -219,6 +212,18 @@ export default function ConditionalForm({
                         fullWidth
                         toolTip="The upper bound of the range (must be numeric)"
                         toolTipOrigin="right"
+                      />
+                    </Form.Group>
+                  )}
+
+                  {(conditionalOperator === 'in' ||
+                    conditionalOperator === 'not in') && (
+                    <Form.Group flex>
+                      <Form.Area
+                        name={`conditionalValue_${numberInEnglish}_list`}
+                        label="List of Values"
+                        disabled={advanced}
+                        fullWidth
                       />
                     </Form.Group>
                   )}

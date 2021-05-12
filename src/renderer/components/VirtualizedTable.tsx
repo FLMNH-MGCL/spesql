@@ -96,7 +96,6 @@ export default function () {
   const {
     headers,
     data,
-    hasQueried,
     selectedSpecimen,
     setSelectedSpecimen,
     loading,
@@ -108,9 +107,6 @@ export default function () {
     (state) => ({
       headers: state.tableConfig.headers,
       data: state.queryData.data,
-      hasQueried:
-        state.queryData.queryString !== undefined &&
-        state.queryData.queryString !== '',
       selectedSpecimen: state.selectedSpecimen,
       setSelectedSpecimen: state.setSelectedSpecimen,
       loading: state.loading,
@@ -278,24 +274,21 @@ export default function () {
   }
 
   function getColumns() {
-    const columns =
-      !data || !data.length
-        ? []
-        : Array.from(headers).map((header) => {
-            return (
-              <Column
-                key={header}
-                label={header}
-                dataKey={header}
-                flexGrow={1}
-                flexShrink={1}
-                width={width / headers.length}
-                headerRenderer={renderHeader}
-              />
-            );
-          });
-
-    return columns;
+    return !data || !data.length
+      ? []
+      : Array.from(headers).map((header) => {
+          return (
+            <Column
+              key={header}
+              label={header}
+              dataKey={header}
+              flexGrow={1}
+              flexShrink={1}
+              width={width / headers.length}
+              headerRenderer={renderHeader}
+            />
+          );
+        });
   }
 
   return (
@@ -303,11 +296,10 @@ export default function () {
       <div className="table-height">
         <Spinner active={loading} />
 
-        {!hasQueried && !loading && <EmptyTableArt />}
+        {(!data || !data.length) && !loading && <EmptyTableArt />}
 
         <AutoSizer>
           {({ height, width }) => (
-            // Should I capitalize the header row??
             <SortableTable
               height={height}
               width={width}

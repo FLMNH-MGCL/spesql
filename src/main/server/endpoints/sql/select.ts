@@ -6,13 +6,18 @@ export default async function select(req: Request, res: Response) {
   const { labName, conditions, loadRelations } = req.body;
 
   if (!labName) {
-    res.status(400).send('You must provide the target labName');
+    res.status(400).send('You must provide a target labName(s)');
+  } else if (labName === 'any') {
+    await em
+      .find(Specimen, { ...(conditions ?? {}) }, [...(loadRelations ?? [])])
+      .then((specimen) => res.send(specimen))
+      .catch((err) => res.status(500).send(err));
   } else {
     // loadRelations example: -->
     // ['taxonomy', 'collectionEvent', 'collectionEvent.location', 'loan', 'storage']
     // this is determined  manually if the user plucks a column(s)
 
-    const lab = await em.findOne(Lab, { name: labName });
+    const lab = await em.findOne(Lab, { labName });
 
     if (lab) {
       await em
@@ -22,7 +27,7 @@ export default async function select(req: Request, res: Response) {
         .then((specimen) => res.send(specimen))
         .catch((err) => res.status(500).send(err));
     } else {
-      res.status(500).send('Could not location target lab.');
+      res.status(500).send('Could not location target lab: ' + labName);
     }
   }
 }

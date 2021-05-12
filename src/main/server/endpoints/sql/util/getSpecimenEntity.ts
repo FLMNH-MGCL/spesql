@@ -1,4 +1,4 @@
-import { Lab, Loan, Specimen, Storage } from '../../../entities';
+import { Lab, Loan, Specimen, Storage, Taxonomy } from '../../../entities';
 import { em } from '../../../server';
 import addCollectionEvent from './addCollectionEvent';
 
@@ -26,7 +26,7 @@ export default async function getSpecimenEntity(specimen: any, lab: Lab) {
 
   dbSpecimen.lab = lab;
 
-  const { collectionEvent, loan, storage } = specimen;
+  const { collectionEvent, loan, storage, taxonomy } = specimen;
 
   if (collectionEvent) {
     addCollectionEvent(dbSpecimen, collectionEvent);
@@ -38,6 +38,16 @@ export default async function getSpecimenEntity(specimen: any, lab: Lab) {
 
   if (storage) {
     dbSpecimen.storage = em.create(Storage, { ...storage });
+  }
+
+  if (taxonomy) {
+    const dBTaxonomy = await em.findOne(Taxonomy, { ...taxonomy });
+
+    if (dBTaxonomy) {
+      dbSpecimen.taxonomy = dBTaxonomy;
+    } else {
+      dbSpecimen.taxonomy = em.create(Taxonomy, { ...taxonomy });
+    }
   }
 
   return dbSpecimen;

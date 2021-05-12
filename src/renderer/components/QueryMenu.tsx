@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import CreateCountModal from './modals/CreateCountModal';
-import CreateSelectModal from './modals/CreateSelectModal';
+// import CreateSelectModal from './modals/CreateSelectModal';
 import CreateBulkUpdateModal from './modals/CreateBulkUpdateModal';
 import { Dropdown } from '@flmnh-mgcl/ui';
 import CreateQueryBuilderModal from './modals/CreateQueryBuilderModal';
 import { useLocation } from 'react-router-dom';
+import SelectModal from './modals/SelectModal';
 
 type Props = {
   disableCrud: boolean;
@@ -61,11 +62,11 @@ export default function QueryMenu({ disableCrud }: Props) {
           />
         </Dropdown.Section>
       </Dropdown>
-      <CreateSelectModal
+      <SelectModal
         open={currentModal === 'select'}
         onClose={() => setCurrentModal(undefined)}
       />
-      <CreateCountModal
+      {/* <CreateCountModal
         open={currentModal === 'count'}
         onClose={() => setCurrentModal(undefined)}
       />
@@ -76,7 +77,7 @@ export default function QueryMenu({ disableCrud }: Props) {
       <CreateQueryBuilderModal
         open={disableCrud ? false : currentModal === 'advanced'}
         onClose={() => setCurrentModal(undefined)}
-      />
+      /> */}
     </React.Fragment>
   );
 }

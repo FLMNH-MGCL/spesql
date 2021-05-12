@@ -51,9 +51,9 @@ export function validateAdvancedCountQuery(query: string) {
   }
 }
 
-export function validateAdvancedUpdateQuery(
-  query: string
-): { errors: LoggingError[] | null } {
+export function validateAdvancedUpdateQuery(query: string): {
+  errors: LoggingError[] | null;
+} {
   const { parsedSets, setErrors } = getSetsAndConditionsFromUpdateQuery(query);
 
   console.log(parsedSets);
@@ -109,8 +109,6 @@ export function validateOperator(_operator: string) {}
 
 // TODO: add ignore when REGEX
 export function validateConditionalValue(condition: string, field: string) {
-  console.log(field);
-
   return determineAndRunFieldValidator(field, condition);
 }
 

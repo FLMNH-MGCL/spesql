@@ -32,7 +32,7 @@ export class User {
 
   async verifyPassword(password: string) {
     if (this.password) {
-      return await bcrypt.compare(password, this.password.toString());
+      return bcrypt.compare(password, this.password.toString());
     } else {
       return false;
     }

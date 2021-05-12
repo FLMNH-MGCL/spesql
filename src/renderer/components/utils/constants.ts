@@ -18,7 +18,7 @@ export const headerOptions = [
   'otherCatalogNumber',
   'otherIdentifier',
   'projectNumber',
-  'order_',
+  'order',
   'genus',
   'specificEpithet',
   'recordNumber',
@@ -84,14 +84,89 @@ export const operators = [
   { label: '>', value: '>' },
   { label: '<=', value: '<=' },
   { label: '>=', value: '>=' },
-  { label: 'IS NOT NULL', value: 'IS NOT NULL' },
-  { label: 'IS NULL', value: 'IS NULL' },
-  { label: 'LIKE', value: 'LIKE' },
-  { label: 'BETWEEN', value: 'BETWEEN' },
-  { label: 'NOT BETWEEN', value: 'NOT BETWEEN' },
-  { label: 'REGEXP', value: 'REGEXP' },
-  { label: 'NOT REGEXP', value: 'NOT REGEXP' },
+  { label: 'in', value: 'in' },
+  { label: 'not in', value: 'not in' },
+  { label: 'is not null', value: 'is not null' },
+  { label: 'is null', value: 'is null' },
+  { label: 'like', value: 'like' },
+  { label: 'between', value: 'between' },
+  { label: 'not between', value: 'not between' },
+  { label: 'regexp', value: 'regexp' },
+  { label: 'not regexp', value: 'not regexp' },
 ];
+
+// nots are handled separately
+export const operatorToKey = {
+  '>': '$gt',
+  '>=': '$gte',
+  '<': '$lt',
+  '<=': '$lte',
+  '!=': '$ne',
+  in: '$in',
+  'not in': '$nin',
+  like: '$like',
+  regexp: '$re',
+};
+
+export const fieldToConditionalKey = {
+  id: 'id',
+  catalogNumber: 'catalogNumber',
+  otherCatalogNumber: 'otherCatalogNumber',
+  recordNumber: 'recordNumber',
+  projectNumber: 'projectNumber',
+  otherIdentifier: 'otherIdentifier',
+  reared: 'reared',
+  withholdData: 'withholdData',
+
+  //=== lab ===//
+  labName: 'lab.labName',
+
+  //=== taxonomy ===//
+  order: 'taxonomy.order',
+  superfamily: 'taxonomy.superfamily',
+  family: 'taxonomy.family',
+  subfamily: 'taxonomy.subfamily',
+  tribe: 'taxonomy.tribe',
+  genus: 'taxonomy.genus',
+  subgenus: 'taxonomy.subgenus',
+  specificEpithet: 'taxonomy.specificEpithet',
+  infraspecificEpithet: 'taxonomy.infraspecificEpithet',
+
+  //=== collectionEvent ===//
+  recordedBy: 'collectionEvent.recordedBy',
+  identifiedBy: 'collectionEvent.identifiedBy',
+  dateIdentified: 'collectionEvent.dateIdentified',
+  verbatimDate: 'collectionEvent.verbatimDate',
+  collectedYear: 'collectionEvent.collectedYear',
+  collectedMonth: 'collectionEvent.collectedMonth',
+  collectedDay: 'collectionEvent.collectedDay',
+  fieldNotes: 'collectionEvent.fieldNotes',
+  otherCollectors: 'collectionEvent.otherCollectors',
+
+  //=== collectionEvent.location ===//
+  stateProvince: 'collectionEvent.location.stateProvince',
+  country: 'collectionEvent.location.country',
+  municipality: 'collectionEvent.location.municipality',
+  locality: 'collectionEvent.location.locality',
+  elevationInMeters: 'collectionEvent.location.elevationInMeters',
+  decimalLatitude: 'collectionEvent.location.decimalLatitude',
+  decimalLongitude: 'collectionEvent.location.decimalLongitude',
+  geodeticDatum: 'collectionEvent.location.geodeticDatum',
+  corrdinateUncertainty: 'collectionEvent.location.corrdinateUncertainty',
+  verbatimLatitude: 'collectionEvent.location.verbatimLatitude',
+  verbatimLongitude: 'collectionEvent.location.verbatimLongitude',
+
+  //=== loan ===//
+  to: 'loan.to',
+  at: 'loan.at',
+  returnDate: 'loan.returnDate',
+
+  //=== storage ===//
+  rack: 'storage.rack',
+  freezer: 'storage.freezer',
+  box: 'storage.box',
+  tubeSize: 'storage.tubeSize',
+};
 
 export const BooleanField = [
   { label: 'Yes', value: 'Y' },
@@ -396,4 +471,22 @@ export const trendLineTypes = [
   { label: 'Linear', value: 'linear' },
   { label: 'Polynomial', value: 'polynomial' },
   { label: 'Exponential', value: 'exponential' },
+];
+
+export const allRelations = [
+  'lab',
+  'taxonomy',
+  'collectionEvent',
+  'collectionEvent.location',
+  'loan',
+  'storage',
+];
+
+export const relationsOptions = [
+  { label: 'All', value: 'all' },
+  { label: 'Taxonomy', value: 'taxonomy' },
+  { label: 'Collection Event', value: 'collectionEvent' },
+  { label: 'Location', value: 'collectionEvent.location' },
+  { label: 'Loan', value: 'loan' },
+  { label: 'Storage', value: 'storage' },
 ];

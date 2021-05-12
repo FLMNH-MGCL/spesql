@@ -7,7 +7,7 @@ import shallow from 'zustand/shallow';
 function RouteElement({ element }: ComponentProps<typeof Route>) {
   const { user } = useStore((state) => ({ user: state.user }), shallow);
 
-  // console.log(user);
+  console.log(user);
 
   if (!user) {
     return <Navigate to="/signin" />;

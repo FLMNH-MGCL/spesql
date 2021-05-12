@@ -74,6 +74,8 @@ async function bootstrap() {
 
   await initMikro('GUEST');
 
+  // TODO: USE ROUTERS!!
+
   // GLOBAL ROUTES (some of these don't require a session)
   app.post('/api/login', login);
   app.post('/api/logout', logout);
@@ -81,7 +83,7 @@ async function bootstrap() {
   app.post('/api/requests/account', requestAccount);
   // app.post('/api/requests/update', requestUpdate);
 
-  app.get('/api/select', validateSession, select);
+  app.post('/api/select', validateSession, select);
   app.get('/api/count', validateSession, count); // post? or get?
   app.get('/api/labs', validateSession, getLabs);
   app.get('/api/user/generate-password', generatePassword);
@@ -99,7 +101,7 @@ async function bootstrap() {
 
   // ADMIN ROUTES
   app.post('/api/lab/create', validateSession, adminRoute, addNewLab);
-  app.post('/api/user/create', validateSession, adminRoute, createUser);
+  app.post('/api/user/create', createUser);
   app.post('/api/user/update', validateSession, adminRoute, updateUser);
   // app.post('/api/requests/clear-requests')
   // app.post('/api/requests/change-status')

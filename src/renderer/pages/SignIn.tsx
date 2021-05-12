@@ -76,7 +76,7 @@ export default function SignIn() {
           return error.response;
         });
 
-      if (res.data) {
+      if (res.data && res.status === 200) {
         const { id, fullName, username, accessRole } = res.data;
         login(id, fullName, username, accessRole);
         navigate('/home');

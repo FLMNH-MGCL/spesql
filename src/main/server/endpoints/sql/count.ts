@@ -6,7 +6,7 @@ export default async function count(req: Request, res: Response) {
   const { labName, conditions } = req.body;
 
   if (labName) {
-    const lab = await em.findOne(Lab, { name: labName });
+    const lab = await em.findOne(Lab, { labName });
 
     if (lab) {
       await em

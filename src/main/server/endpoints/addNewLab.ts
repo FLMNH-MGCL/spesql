@@ -3,10 +3,10 @@ import { Lab } from '../entities';
 import { em } from '../server';
 
 export default async function addNewLab(req: Request, res: Response) {
-  const { name } = req.body;
+  const { labName } = req.body;
 
   await em
-    .persistAndFlush(em.create(Lab, { name }))
+    .persistAndFlush(em.create(Lab, { labName }))
     .then(() => res.sendStatus(201))
     .catch((err) => {
       res.status(500).send(err);

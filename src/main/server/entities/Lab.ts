@@ -7,9 +7,9 @@ export class Lab {
 
   @Unique()
   @Property({ nullable: false })
-  name!: string;
+  labName!: string;
 
   constructor(name: string) {
-    this.name = name;
+    this.labName = name;
   }
 }
