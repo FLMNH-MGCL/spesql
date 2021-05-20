@@ -41,10 +41,9 @@ yarn dev
 
 ### Builds and Releases
 
-To create a build, you need only to run the following FOR EACH platform (i.e. Windows and MacOS):
+To create a build, you need only to run `yarn release` once on any machine, and then the following FOR EACH platform (i.e. Windows and MacOS):
 
 ```bash
-yarn release
 yarn build
 ```
 
