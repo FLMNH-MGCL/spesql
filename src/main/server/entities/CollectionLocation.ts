@@ -37,8 +37,4 @@ export class CollectionLocation {
 
   @Property({ nullable: true })
   verbatimLongitude?: string;
-
-  constructor() {
-    // TODO:
-  }
 }

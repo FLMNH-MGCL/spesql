@@ -25,7 +25,8 @@ export default async function login(req: Request, res: Response) {
         if (err) {
           res.status(500).send(err);
         } else {
-          // TODO: CHANGE CREDENTIALS
+          // TODO: CHANGE CREDENTIALS -> change the logged in database user
+          // (i.e. reinitialize the orm and entitymanager)
           const fullName = clsx(user.firstName, user.lastName);
           res.status(200).send({
             fullName,

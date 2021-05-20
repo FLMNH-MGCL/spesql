@@ -56,8 +56,4 @@ export class Specimen {
 
   @OneToOne({ nullable: true }) // FIXME: this might not be the correct relation
   storage?: Storage;
-
-  constructor() {
-    // TODO:
-  }
 }

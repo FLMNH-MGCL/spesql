@@ -74,7 +74,8 @@ async function bootstrap() {
 
   await initMikro('GUEST');
 
-  // TODO: USE ROUTERS!!
+  // TODO: USE ROUTERS!! like this:
+  //  app.use('/api', ApiController);
 
   // GLOBAL ROUTES (some of these don't require a session)
   app.post('/api/login', login);

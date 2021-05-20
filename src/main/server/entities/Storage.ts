@@ -16,8 +16,4 @@ export class Storage {
 
   @Property()
   tubeSize?: string;
-
-  constructor() {
-    // TODO
-  }
 }

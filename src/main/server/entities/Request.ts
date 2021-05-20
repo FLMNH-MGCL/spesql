@@ -48,8 +48,4 @@ export class Request {
 
   @Property()
   query!: string;
-
-  constructor() {
-    // TODO
-  }
 }
