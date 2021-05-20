@@ -6,32 +6,79 @@ A portal for interacting with a remote MySQL database, written in TypeScript (Re
 
 ## THIS BRANCH IS NOT MEANT FOR USAGE
 
-This is an extremely experimental branch that employs an entirely different database structure.
+This is an extremely experimental branch that employs an entirely different database structure. It utilizes an ORM. This would be a major upgrade for SpeSQL, however it is not within my timeframe to complete this before the end of my employment. I have however provided a decent starting point for others to finish. The backend is nearly completed, and the frontend query systems need to be reworked to match the new backend structure.
 
-### About This Project
+## About This Project
 
 This project is intended for use by the McGuire Center of Lepidoptera and Biodiversity (MGCL) at the Florida Museum of Natural History (FLMNH). As such, by default, the application is only compatible with institutions having identical, MySQL database schemes. It is possible to adapt this software to another institution's requirements, however the more closely structured to MGCL's configuration the more seamless the conversion. For more information regarding the structures neccessary for adopting this software,
 please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly. See the Database Schema section for more information, as well.
 
-### Installation
+## Installation
 
 Please <a href="https://github.com/FLMNH-MGCL/spesql/releases" target='_blank'>select and download</a> a release for your platform (i.e. Linux, MacOS, Windows) and proceed with the traditional installation procedure for your platform.
 
 If you do not have these credentials or lost these credentials, please contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly for eligibility. If you are an employee and need additional assistance, please refer to the instructional videos or contact the <a href='https://www.floridamuseum.ufl.edu/kawahara-lab/contact/' target='_blank'>Kawahara Lab</a> directly, as well.
 
-### Startup & Usage
+## Startup & Usage
 
 Ensure your UF VPN is enabled/connected and simply launch the application. For detailed information about usage, please read through the official documentation: [flmnh-mgcl.github.io/spesql/docs/](https://flmnh-mgcl.github.io/spesql/docs/). This will walk you through all the available features/functions in the software.
 
-### Database Schema
+## Development Information
+
+You will need [LTS Node](https://nodejs.org/en/download/) and [Yarn](https://classic.yarnpkg.com/en/docs/install/) installed on your machine. Be sure to obtain an `.env` file from the lab in order to run the application in a development environment. Once you have these completed, you can install the dependencies by running the following in the project root directory:
+
+```bash
+yarn
+```
+
+### Startup
+
+To start the app in development mode:
+
+```bash
+yarn dev
+```
+
+### Builds and Releases
+
+To create a build, you need only to run the following FOR EACH platform (i.e. Windows and MacOS):
+
+```bash
+yarn release
+yarn build
+```
+
+`yarn release` will prompt for an updated version and create release tags on GitHub.
+
+`yarn build` will create a `dist` folder in the project root directory. You can use previous releases as examples for what needs to be uploaded, however the itemized list is:
+
+- MacOS
+  - latest-mac.yml
+  - spesql-VERSION-mac.zip
+  - spesql-VERSION-mac.dmg
+  - spesql-VERSION-mac.dmg.blockmap
+- Windows
+  - latest.yml
+  - spesql.Setup.VERSION.exe
+  - spesql.Setup.VERSION.blockmap
+
+### Website Deployment
+
+To deploy changes to the documentation website, you will need to run the following:
+
+```bash
+GIT_USER=<GITHUB_USERNAME> yarn deploy
+```
+
+## Database Schema
 
 The main database schema that the client assumes is largely structured from [Darwin Core](https://dwc.tdwg.org/terms/) principles.
 
-### Known Issues / Bugs
+## Known Issues / Bugs
 
 Please refer to issues labeled with [`bug`](https://github.com/FLMNH-MGCL/spesql/issues?q=is%3Aissue+is%3Aopen+label%3Abug) to view the current list of issues that may or may not affect your usage of spesql.
 
-### Contact / Issue Reporting
+## Contact / Issue Reporting
 
 <a href='http://www.aaronbleopold.com' target="_blank">Aaron Leopold</a> developed this software. If there are any questions regarding the usage of the application, please contact him via email (aaronleopold1221@gmail.com). Additionally, if you are an employee of the FLMNH, refer to the recorded instructional videos (check `#database` in the Slack workspace) for more in-depth demonstrations. For issues relating to software bugs, glitches or unexpected errors, please submit a <a href='https://github.com/FLMNH-MGCL/spesql/issues/new/choose' target="_blank">GitHub issue</a>. Be sure to describe in
 detail the errors, bugs or glitches that have occurred, and include the steps to reproduce the error. Feel free to submit issues for feature requests, as well, for any features you think should be added or changed.
