@@ -61,12 +61,8 @@ type LogModalConfig = {
 
 export default function CreateQueryBuilderModal({ open, onClose }: Props) {
   const { notify } = useNotify();
-  const {
-    advancedUpdate,
-    logUpdate,
-    advancedSelect,
-    advancedCount,
-  } = useQuery();
+  const { advancedUpdate, logUpdate, advancedSelect, advancedCount } =
+    useQuery();
 
   const toggleLoading = useStore((state) => state.toggleLoading);
   const loading = useStore((state) => state.loading, shallow);
@@ -75,9 +71,8 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
 
   const [codeString, setCodeString] = useState<string>('');
   const [queryPrefix, setQueryPrefix] = useState<string>('');
-  const [queryClause, setQueryClause] = useState<BasicQueryClause>(
-    defaultClause
-  );
+  const [queryClause, setQueryClause] =
+    useState<BasicQueryClause>(defaultClause);
 
   const [logModalConfig, setLogModalConfig] = useState<LogModalConfig>({
     initialTab: 0,
@@ -117,7 +112,7 @@ export default function CreateQueryBuilderModal({ open, onClose }: Props) {
     if (typeof formatted === 'string') {
       setCodeString(formatted);
     } else {
-      const { sql, params } = formatted;
+      const { sql } = formatted;
 
       setCodeString(sql);
     }

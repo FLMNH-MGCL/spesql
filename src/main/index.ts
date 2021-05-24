@@ -83,7 +83,7 @@ autoUpdater.on('update-available', (_info: any) => {
   });
 });
 
-autoUpdater.on('error', (error: any) => {
+autoUpdater.on('error', (_error: any) => {
   sendStatusToWindow({
     type: 'error',
     message:
